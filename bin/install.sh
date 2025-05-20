@@ -10,6 +10,60 @@
 # Strict Mode: Exit on error, exit on unset variables, pipe failure check
 set -euo pipefail
 
+# --- Terminal Colors ---
+# Define color codes for terminal output
+RESET="\033[0m"          # Reset to default color
+RED="\033[0;31m"         # Red for errors
+GREEN="\033[0;32m"       # Green for success
+YELLOW="\033[0;33m"      # Yellow for warnings
+BLUE="\033[0;34m"        # Blue for information
+MAGENTA="\033[0;35m"     # Magenta for important actions
+CYAN="\033[0;36m"        # Cyan for prompts
+BOLD="\033[1m"           # Bold text
+UNDERLINE="\033[4m"      # Underlined text
+
+# Color output functions
+print_info() {
+  echo -e "${BLUE}${1}${RESET}"
+}
+
+print_success() {
+  echo -e "${GREEN}${1}${RESET}"
+}
+
+print_warning() {
+  echo -e "${YELLOW}Warning: ${1}${RESET}"
+}
+
+print_error() {
+  echo -e "${RED}Error: ${1}${RESET}" >&2
+}
+
+print_header() {
+  echo -e "${BOLD}${MAGENTA}${1}${RESET}"
+}
+
+print_prompt() {
+  echo -e "${CYAN}${1}${RESET}"
+}
+
+# Check if terminal supports colors
+if [[ -t 1 ]] && [[ -n "${TERM:-}" ]] && [[ "${TERM:-}" != "dumb" ]]; then
+  COLOR_SUPPORT=true
+else
+  # Disable colors if terminal doesn't support them
+  COLOR_SUPPORT=false
+  RESET=""
+  RED=""
+  GREEN=""
+  YELLOW=""
+  BLUE=""
+  MAGENTA=""
+  CYAN=""
+  BOLD=""
+  UNDERLINE=""
+fi
+
 # --- Configuration ---
 
 # URLs to fetch Chrome for Testing versions and download links
@@ -52,25 +106,24 @@ UNINSTALL_MODE=false
 
 # Function to clean up all files created by this script
 cleanup() {
-  echo "Cleaning up..."
+  print_info "Cleaning up..."
 
   # Delete Chrome installation directory
   if [[ -d "$INSTALL_DIR" ]]; then
-    echo "Removing Chrome installation directory: $INSTALL_DIR"
-    rm -rf "$INSTALL_DIR" || echo "Warning: Failed to remove installation directory: $INSTALL_DIR"
+    print_info "Removing Chrome installation directory: $INSTALL_DIR"
+    rm -rf "$INSTALL_DIR" || print_warning "Failed to remove installation directory: $INSTALL_DIR"
   fi
 
   # Delete launcher script
   if [[ -f "$ALIAS_SCRIPT_PATH" ]]; then
-    echo "Removing launcher script: $ALIAS_SCRIPT_PATH"
-    rm -f "$ALIAS_SCRIPT_PATH" || echo "Warning: Failed to remove launcher script: $ALIAS_SCRIPT_PATH"
+    print_info "Removing launcher script: $ALIAS_SCRIPT_PATH"
+    rm -f "$ALIAS_SCRIPT_PATH" || print_warning "Failed to remove launcher script: $ALIAS_SCRIPT_PATH"
   fi
 
   # Delete cache directory
   local cache_dir="$HOME/.cache/chrome_for_testing"
   if [[ -d "$cache_dir" ]]; then
-    echo "Removing cache directory: $cache_dir"
-    rm -rf "$cache_dir" || echo "Warning: Failed to remove cache directory: $cache_dir"
+    rm -rf "$cache_dir" || print_warning "Failed to remove cache directory: $cache_dir"
   fi
 
   # Delete PSAT extension files
@@ -79,33 +132,22 @@ cleanup() {
   local psat_dirs=("$base_extension_dir"/ps-analysis-tool-*)
   local psat_zips=("$base_extension_dir"/extension-*.zip)
 
-  # Check if there are any matching directories
-  if [[ -d "${psat_dirs[0]}" ]]; then
-    echo "Removing PSAT extension directories from: $base_extension_dir"
-    for dir in "${psat_dirs[@]}"; do
-      echo "  - Removing: $dir"
-      rm -rf "$dir" || echo "Warning: Failed to remove extension directory: $dir"
-    done
+  # Check if there are any matching directories or files and remove them
+  if [[ -d "${psat_dirs[0]}" || -f "${psat_zips[0]}" ]]; then
+    print_info "Removing PSAT extension files from temporary directory"
+    rm -rf "$base_extension_dir"/ps-analysis-tool-* 2>/dev/null
+    rm -f "$base_extension_dir"/extension-*.zip 2>/dev/null
   fi
 
-  # Check if there are any matching zip files
-  if [[ -f "${psat_zips[0]}" ]]; then
-    echo "Removing PSAT extension zip files from: $base_extension_dir"
-    for zip in "${psat_zips[@]}"; do
-      echo "  - Removing: $zip"
-      rm -f "$zip" || echo "Warning: Failed to remove extension zip: $zip"
-    done
-  fi
-
-  echo "Cleanup complete."
+  print_success "Cleanup complete."
 }
 
 # Function to display error messages and exit
 # Input: $1 - Error message string
 error_exit() {
   echo ""
-  echo "Error: Line ${BASH_LINENO[0]}: $1" >&2
-  echo "Exiting." >&2
+  print_error "Line ${BASH_LINENO[0]}: $1"
+  echo -e "${RED}Exiting.${RESET}" >&2
   exit 1
 }
 
@@ -176,35 +218,33 @@ parse_arguments() {
 
 # Displays an introductory message to the user
 display_intro() {
-  echo "=============================================="
-  echo " Chrome for Testing Setup Script"
-  echo "=============================================="
-  echo "Installing Chrome for Testing..."
+  print_header "=============================================="
+  print_header "       Chrome for Testing Setup Script        "
+  print_header "=============================================="
+  print_info "Installing Chrome for Testing..."
   echo ""
 }
 
 # Checks if required command-line tools (curl, unzip, jq) are installed
 check_prerequisites() {
-  echo "Checking prerequisites..."
+  print_info "Checking prerequisites..."
   local tool
   for tool in curl unzip jq; do
     if ! command -v "$tool" &> /dev/null; then
       error_exit "Tool '$tool' not found. Please install it and try again."
     fi
   done
-  echo "Prerequisites met."
+  print_success "Prerequisites met."
   echo ""
 }
 
 # Fetches the latest PSAT version from the GitHub repository
 # Updates the global LATEST_PSAT_VERSION variable
 fetch_latest_psat_version() {
-  echo "Fetching latest PSAT version..."
+  print_info "Fetching latest PSAT version..."
 
   # Skip if version was overridden via command line argument
   if [[ -n "$OVERRIDE_PSAT_VERSION" ]]; then
-    echo "Using specified PSAT version: $OVERRIDE_PSAT_VERSION"
-
     # Ensure version has 'v' prefix for download URL
     local download_version="$OVERRIDE_PSAT_VERSION"
     if [[ "$download_version" != v* ]]; then
@@ -213,24 +253,22 @@ fetch_latest_psat_version() {
 
     # Check if the extension URL is valid (only if version was overridden)
     local extension_url="https://github.com/GoogleChromeLabs/ps-analysis-tool/releases/download/$download_version/extension-$download_version.zip"
-    echo "Checking if PSAT extension URL is valid: $extension_url"
 
     # Use curl to check if the URL exists (returns 404 if not)
     if ! curl --output /dev/null --silent --head --fail "$extension_url"; then
-      error_exit "PSAT version $OVERRIDE_PSAT_VERSION is invalid. The extension URL returns 404 Not Found: $extension_url"
+      error_exit "PSAT version $OVERRIDE_PSAT_VERSION is invalid. The extension URL returns 404 Not Found."
     fi
 
-    echo "PSAT extension URL is valid."
     LATEST_PSAT_VERSION="$OVERRIDE_PSAT_VERSION"
+    print_success "Using specified PSAT version: $LATEST_PSAT_VERSION"
     return 0
   fi
 
   # Fetch the package.json from GitHub repository
   local package_url="https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/packages/extension/package.json"
-  echo "Fetching PSAT package.json from: $package_url"
   local package_json
   package_json=$(curl -s -f -L "$package_url") || {
-    echo "Warning: Failed to fetch package.json from $package_url for PSAT. Using default version: $LATEST_PSAT_VERSION"
+    print_warning "Failed to fetch PSAT version info. Using default version: $LATEST_PSAT_VERSION"
     return 0
   }
 
@@ -239,24 +277,21 @@ fetch_latest_psat_version() {
   latest_version=$(echo "$package_json" | jq -r '.version')
 
   if [[ -z "$latest_version" || "$latest_version" == "null" ]]; then
-    echo "Warning: Could not determine latest PSAT version. Using default version."
+    print_warning "Could not determine latest PSAT version. Using default version: $LATEST_PSAT_VERSION"
     return 0
   fi
 
   # Add 'v' prefix to match the format used in the current version
   LATEST_PSAT_VERSION="v$latest_version"
-
-  echo "Latest PSAT version: $LATEST_PSAT_VERSION"
-  echo ""
+  print_success "Latest PSAT version: $LATEST_PSAT_VERSION"
 }
 
 # Fetches the JSON data containing version information from the specified URL
 # Stores result in global FETCHED_JSON_DATA
 fetch_json_data() {
-  echo "Fetching version data from: $JSON_URL"
+  print_info "Fetching version data from: $JSON_URL"
 
   # Fetch JSON data using curl: Silent (-s), Fail fast (-f), Follow redirects (-L)
-  # Use a temporary variable to check curl's success before assigning to global
   local fetched_data
   fetched_data=$(curl -s -f -L "$JSON_URL") || error_exit "Failed to fetch data from $JSON_URL"
 
@@ -266,8 +301,7 @@ fetch_json_data() {
   fi
 
   FETCHED_JSON_DATA="$fetched_data"
-  echo "Data fetched successfully from: $JSON_URL"
-  echo ""
+  print_success "Chrome version data fetched successfully"
 }
 
 # Parse channels from JSON data
@@ -276,12 +310,10 @@ fetch_json_data() {
 parse_channels() {
   local json_data="$1"
 
-  echo "Parsing channels or milestones..."
+  print_info "Parsing channels or milestones..."
 
   # Check if we're using the milestone-specific JSON format
   if [[ -n "$OVERRIDE_CHROME_VERSION" ]]; then
-    echo "Using milestone-specific format."
-
     # Check if the milestone exists in the JSON data
     local milestone_exists
     milestone_exists=$(echo "$json_data" | jq -r --arg milestone "$OVERRIDE_CHROME_VERSION" '.milestones | has($milestone)')
@@ -293,20 +325,17 @@ parse_channels() {
     # For milestone-specific JSON, we don't need to parse channels
     # Just create a dummy channel array with the milestone
     AVAILABLE_CHANNELS=("Milestone-$OVERRIDE_CHROME_VERSION")
-
-    echo "Using Chrome milestone: $OVERRIDE_CHROME_VERSION"
-    echo ""
+    print_success "Using Chrome milestone: $OVERRIDE_CHROME_VERSION"
     return
   fi
 
   # For channel-based JSON, extract channel keys using jq
   local parsed_channels
-  # Capture jq output, check exit status, don't suppress stderr
   parsed_channels=$(echo "$json_data" | jq -r '.channels | keys[]')
   local jq_exit_code=$?
 
   if [[ $jq_exit_code -ne 0 ]]; then
-    error_exit "jq failed to parse channels. Check JSON format or jq installation. jq stderr might contain details."
+    error_exit "Failed to parse channels. Check JSON format or jq installation."
   fi
   if [[ -z "$parsed_channels" ]]; then
     error_exit "No channels found in the JSON data."
@@ -325,12 +354,10 @@ parse_channels() {
       done < <(echo "$parsed_channels")
   fi
 
-  echo "Found ${#AVAILABLE_CHANNELS[@]} channels."
-  echo "Available channels: ${AVAILABLE_CHANNELS[*]}"
-  echo ""
+  print_success "Found ${#AVAILABLE_CHANNELS[@]} channels: ${AVAILABLE_CHANNELS[*]}"
 }
 
-# Prompts the user to select a channel from the available list or uses the override
+# Selects a channel from the available list or uses the override
 # Input: $@ - Array of available channel strings
 # Stores result in global SELECTED_CHANNEL and SELECTED_VERSION
 prompt_user_for_channel() {
@@ -338,8 +365,6 @@ prompt_user_for_channel() {
 
   # Handle chrome-version override (milestone)
   if [[ -n "$OVERRIDE_CHROME_VERSION" ]]; then
-    echo "Processing Chrome milestone version: $OVERRIDE_CHROME_VERSION"
-
     # Check if the milestone exists in the JSON data
     local milestone_exists
     milestone_exists=$(echo "$FETCHED_JSON_DATA" | jq -r --arg milestone "$OVERRIDE_CHROME_VERSION" '.milestones | has($milestone)')
@@ -348,7 +373,7 @@ prompt_user_for_channel() {
       # Get the version for this milestone
       SELECTED_VERSION=$(echo "$FETCHED_JSON_DATA" | jq -r --arg milestone "$OVERRIDE_CHROME_VERSION" '.milestones[$milestone].version')
       SELECTED_CHANNEL="Milestone-$OVERRIDE_CHROME_VERSION"
-      echo "Using Chrome milestone $OVERRIDE_CHROME_VERSION (version: $SELECTED_VERSION)"
+      print_success "Using Chrome milestone $OVERRIDE_CHROME_VERSION (version: $SELECTED_VERSION)"
       return
     else
       error_exit "Chrome milestone $OVERRIDE_CHROME_VERSION not found in available versions. Please check the milestone number and try again."
@@ -376,7 +401,7 @@ prompt_user_for_channel() {
     if [[ "$channel_found" == "true" ]]; then
       SELECTED_CHANNEL="$actual_channel"
       SELECTED_VERSION=$(echo "$FETCHED_JSON_DATA" | jq -r --arg channel "$SELECTED_CHANNEL" '.channels[$channel].version')
-      echo "Using specified channel: $SELECTED_CHANNEL (version: $SELECTED_VERSION)"
+      print_success "Using specified channel: $SELECTED_CHANNEL (version: $SELECTED_VERSION)"
     else
       # If the channel is not valid, exit with an error
       error_exit "Invalid channel name: '$OVERRIDE_CHANNEL'. Valid channels are: ${channels[*]}"
@@ -385,16 +410,14 @@ prompt_user_for_channel() {
     # If no override, automatically select the Stable channel
     SELECTED_CHANNEL="Stable"
     SELECTED_VERSION=$(echo "$FETCHED_JSON_DATA" | jq -r --arg channel "$SELECTED_CHANNEL" '.channels[$channel].version')
-    echo "Automatically selected channel: $SELECTED_CHANNEL (version: $SELECTED_VERSION)"
+    print_success "Automatically selected channel: $SELECTED_CHANNEL (version: $SELECTED_VERSION)"
   fi
-
-  echo ""
 }
 
 # Detects the operating system and architecture to determine the platform string
 # Stores result in global DETECTED_PLATFORM
 detect_platform() {
-  echo "Detecting platform (OS and Architecture)..."
+  print_info "Detecting platform (OS and Architecture)..."
   local os
   local arch
   os=$(uname -s)
@@ -405,7 +428,10 @@ detect_platform() {
       case "$arch" in
         x86_64) DETECTED_PLATFORM="linux64";;
         # Note: Support for linux-arm64 depends on it being available in the JSON source
-        arm64|aarch64) DETECTED_PLATFORM="linux-arm64"; echo "Note: linux-arm64 support depends on availability in JSON source.";;
+        arm64|aarch64)
+          DETECTED_PLATFORM="linux-arm64"
+          print_warning "linux-arm64 support depends on availability in JSON source."
+          ;;
         *) error_exit "Unsupported Linux architecture: $arch";;
       esac
       ;;
@@ -419,8 +445,7 @@ detect_platform() {
     *)
       error_exit "Unsupported Operating System: $os";;
   esac
-  echo "Detected platform: $DETECTED_PLATFORM"
-  echo ""
+  print_success "Detected platform: $DETECTED_PLATFORM"
 }
 
 # Constructs the download URL for the selected version and platform
@@ -430,24 +455,20 @@ detect_platform() {
 get_download_url() {
   local version="$1"
   local platform="$2"
-  echo "Constructing download URL for version $version on $platform..."
+  print_info "Constructing download URL for version $version on $platform..."
 
   # Construct the URL based on the version and platform
   # Format: https://storage.googleapis.com/chrome-for-testing-public/[VERSION]/[PLATFORM]/chrome-[PLATFORM].zip
-  local url="https://storage.googleapis.com/chrome-for-testing-public/${version}/${platform}/chrome-${platform}.zip"
+  DOWNLOAD_URL="https://storage.googleapis.com/chrome-for-testing-public/${version}/${platform}/chrome-${platform}.zip"
 
-  DOWNLOAD_URL="$url"
-  echo "Download URL constructed."
-  echo "Download URL: $DOWNLOAD_URL"
-  echo ""
+  print_success "Download URL: $DOWNLOAD_URL"
 }
 
 # Creates the target installation directory if it doesn't exist
 prepare_install_dir() {
-  echo "Preparing installation directory: $INSTALL_DIR"
+  print_info "Preparing installation directory: $INSTALL_DIR"
   mkdir -p "$INSTALL_DIR" || error_exit "Failed to create directory: $INSTALL_DIR"
-  echo "Directory ready: $INSTALL_DIR"
-  echo ""
+  print_success "Directory ready"
 }
 
 # Downloads the Chrome for Testing archive
@@ -466,13 +487,13 @@ download_chrome() {
   DOWNLOADED_ZIP_FILENAME="chrome-${platform}-${channel}-${version}.zip"
   local target_zip_path="${target_dir}/${DOWNLOADED_ZIP_FILENAME}"
 
-  echo "Downloading Chrome for Testing (version: $version, platform: $platform, channel: $channel)..."
-  echo "Downloading from: $url"
-  echo "Saving to: $target_zip_path"
+  print_info "Downloading Chrome for Testing (version: $version, platform: $platform, channel: $channel)..."
+  print_info "Downloading from: $url"
+  print_info "Saving to: $target_zip_path"
+
   # Download using curl with progress bar (-#)
   curl -L -# -o "$target_zip_path" "$url" || error_exit "Download failed for: $url"
-  echo "Download complete: $target_zip_path"
-  echo ""
+  print_success "Download complete"
 }
 
 # Extracts the downloaded Chrome archive
@@ -483,12 +504,10 @@ extract_chrome() {
   local zip_filename="$2"
   local target_zip_path="${target_dir}/${zip_filename}"
 
-  echo "Extracting archive: $target_zip_path"
-  echo "Extracting to directory: $target_dir"
+  print_info "Extracting archive: $target_zip_path"
   # Use unzip: overwrite (-o), quiet (-q)
   unzip -oq "$target_zip_path" -d "$target_dir" || error_exit "Extraction failed for archive: $target_zip_path. Archive might be corrupted."
-  echo "Extraction complete to: $target_dir"
-  echo ""
+  print_success "Extraction complete"
 }
 
 # Finds the path to the main Chrome executable within the extracted files
@@ -498,7 +517,7 @@ extract_chrome() {
 find_chrome_executable() {
   local target_dir="$1"
   local platform="$2"
-  echo "Locating Chrome executable..."
+  print_info "Locating Chrome executable..."
 
   local found_path=""
   local search_path_pattern="" # Store pattern for error message
@@ -528,8 +547,7 @@ find_chrome_executable() {
   # Ensure the path is absolute using realpath
   CHROME_EXECUTABLE_PATH=$(realpath "$found_path") || error_exit "Failed to resolve absolute path for '$found_path'."
 
-  echo "Executable found: $CHROME_EXECUTABLE_PATH"
-  echo ""
+  print_success "Executable found: $CHROME_EXECUTABLE_PATH"
 }
 
 # Removes the downloaded zip archive after extraction
@@ -540,10 +558,9 @@ cleanup_download() {
   local zip_filename="$2"
   local target_zip_path="${target_dir}/${zip_filename}"
 
-  echo "Cleaning up downloaded archive: $target_zip_path"
-  rm -f "$target_zip_path" || echo "Warning: Failed to remove archive: $target_zip_path"
-  echo "Cleanup of downloaded archive complete."
-  echo ""
+  print_info "Cleaning up downloaded archive"
+  rm -f "$target_zip_path" || print_warning "Failed to remove archive: $target_zip_path"
+  print_success "Cleanup complete"
 }
 
 # Generates the alias/function script file with the correct Chrome path embedded
@@ -560,11 +577,6 @@ generate_alias_script() {
   if [[ ! -x "$chrome_exec_path" ]]; then
       error_exit "Internal error: Chrome executable path '$chrome_exec_path' is not valid or not executable."
   fi
-
-  # IMPORTANT: Use the comprehensive alias structure provided initially.
-  # Escape the chrome path for use within the here-document if it contains special chars
-  # Although unlikely for realpath output, it's safer.
-  # However, direct substitution should be fine here.
 
   # Create or overwrite the target script file using a Heredoc
 cat > "$alias_file_path" << EOF
@@ -699,18 +711,28 @@ check_chrome_update() {
     echo "Latest:  \$latest_version"
 
     # Prompt user to update
-    read -p "Would you like to update Chrome for Testing now? (y/n) " -n 1 -r
+    echo -n "Would you like to update Chrome for Testing now? (y/n) "
+
+    # Read a single character in raw mode, depending on the shell
+    if [ -n "\$ZSH_VERSION" ]; then
+      # We are in Zsh: use -k 1
+      read -k 1 -r
+    else
+      # We are in Bash or Sh: use -n 1
+      read -n 1 -r
+    fi
+
     echo
     if [[ \$REPLY =~ ^[Yy]$ ]]; then
       echo "Downloading and executing the latest setup script to update Chrome..."
       # Download the latest setup script from the repository
       local temp_script="/tmp/setup_chrome_testing_latest.sh"
 
-      # TODO: Update this URL from `launcher-update` to `main` after testing and before merging to `main`
+      # TODO: Update this URL from launcher-update to main after testing and before merging to main
       echo "Downloading latest script from: https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/launcher-update/bin/install.sh"
       echo "Saving to: \$temp_script"
 
-      # TODO: Update this URL from `launcher-update` to `main` after testing and before merging to `main`
+      # TODO: Update this URL from launcher-update to main after testing and before merging to main
       curl -s -f -L "https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/launcher-update/bin/install.sh" -o "\$temp_script" || {
         echo "Error: Failed to download the latest setup script. Update aborted."
         return 1
@@ -799,7 +821,17 @@ check_psat_update() {
     echo "Latest:  \$latest_version"
 
     # Prompt user to update
-    read -p "Would you like to update PSAT now? (y/n) " -n 1 -r
+    echo -n "Would you like to update PSAT now? (y/n) "
+
+    # Read a single character in raw mode, depending on the shell
+    if [ -n "\$ZSH_VERSION" ]; then
+      # We are in Zsh: use -k 1
+      read -k 1 -r
+    else
+      # We are in Bash or Sh: use -n 1
+      read -n 1 -r
+    fi
+
     echo
     if [[ \$REPLY =~ ^[Yy]$ ]]; then
       echo "Updating PSAT version to \$latest_version..."
@@ -928,7 +960,7 @@ launch_chrome_testing() {
       --no-first-run
       --silent-debugger-extension-api # Needed for PS Analysis Tool
       --disable-infobars
-      --force-device-scale-factor=1.5
+      --force-device-scale-factor=1
       # --enable-features=NetworkServiceInProcess # May be needed for some extension interactions
       --start-maximized # Optional: Start maximized
   )
@@ -1092,72 +1124,61 @@ chrome-pat-ps() {
 EOF
 
   # Make the generated script executable
-  chmod +x "$alias_file_path" || echo "Warning: Failed to make alias script '$alias_file_path' executable."
+  chmod +x "$alias_file_path" || print_warning "Failed to make alias script '$alias_file_path' executable."
 
-  echo "Alias/function script generated successfully."
-  echo ""
+  print_success "Launcher script generated successfully"
 }
 
 # Displays final instructions to the user on how to activate the aliases/functions
 display_outro() {
-  echo "=============================================="
-  echo " Setup Complete!"
-  echo "=============================================="
+  print_header "=============================================="
+  print_header "              Setup Complete!                 "
+  print_header "=============================================="
 
+  # Display installation summary
   if [[ -n "$OVERRIDE_CHROME_VERSION" ]]; then
-    echo "Chrome for Testing (milestone $OVERRIDE_CHROME_VERSION, version $SELECTED_VERSION) installed to: $INSTALL_DIR"
+    print_success "Chrome for Testing (milestone $OVERRIDE_CHROME_VERSION, version $SELECTED_VERSION) installed"
   else
-    echo "Chrome for Testing ($SELECTED_CHANNEL channel, version $SELECTED_VERSION) installed to: $INSTALL_DIR"
+    print_success "Chrome for Testing ($SELECTED_CHANNEL channel, version $SELECTED_VERSION) installed"
   fi
+  print_info "Installation directory: $INSTALL_DIR"
+  print_info "PSAT version: $LATEST_PSAT_VERSION"
 
-  echo "Executable path: $CHROME_EXECUTABLE_PATH"
-  echo "PSAT version: $LATEST_PSAT_VERSION"
-  echo ""
-  echo "Helper functions generated in: $ALIAS_SCRIPT_PATH"
-  echo ""
-  echo "Launch functions have been automatically added to your shell configuration."
-  echo "After restarting your terminal or running 'source $ALIAS_SCRIPT_PATH',"
-  echo "you'll be able to use the commands listed below."
-  echo ""
-  echo "To manually activate the launch functions in other environments, you can run:"
-  echo "  source \"$ALIAS_SCRIPT_PATH\""
-  echo ""
+  # Display launcher information
+  print_info "Launcher script: $ALIAS_SCRIPT_PATH"
+  print_prompt "To use Chrome in current session, run: ${BOLD}source \"$ALIAS_SCRIPT_PATH\"${RESET}"
 
-  echo -e "\nNew commands that will be available in new terminal session:"
-  echo -e "\tchrome-default     : Opens a Chrome instance with default settings."
-  echo -e "\tchrome-3pcd        : Opens a Chrome instance with Third-Party Cookie Deprecation (3PCD) enabled."
-  echo -e "\tchrome-default-ps  : Opens a Chrome instance with default settings and the PSAT extension installed."
-  echo -e "\tchrome-3pcd-ps     : Opens a Chrome instance with 3PCD enabled and the PSAT extension installed."
-  echo -e "\tchrome-pat         : Opens a Chrome instance with Private Advertising Testing enabled."
-  echo -e "\tchrome-pat-ps      : Opens a Chrome instance with Private Advertising Testing enabled and the PSAT extension installed."
+  # Display available commands
+  print_header "Available commands after sourcing the launcher script:"
+  echo -e "${CYAN}chrome-default     ${RESET}: Chrome with default settings"
+  echo -e "${CYAN}chrome-3pcd        ${RESET}: Chrome with Third-Party Cookie Deprecation enabled"
+  echo -e "${CYAN}chrome-default-ps  ${RESET}: Chrome with PSAT extension"
+  echo -e "${CYAN}chrome-3pcd-ps     ${RESET}: Chrome with 3PCD and PSAT extension"
+  echo -e "${CYAN}chrome-pat         ${RESET}: Chrome with Private Advertising Testing"
+  echo -e "${CYAN}chrome-pat-ps      ${RESET}: Chrome with Private Advertising Testing and PSAT"
 
-  echo ""
-  echo "=============================================="
-  echo ""
+  print_header "=============================================="
 }
 
 # Function to automatically source the alias script or provide instructions
 auto_source_alias_script() {
   local script_path="$1"
 
-  echo "Setting up Chrome launcher aliases from script: $script_path"
-
   # Check if the script exists
   if [[ ! -f "$script_path" ]]; then
-    error_exit "Alias script at $script_path does not exist."
+    error_exit "Launcher script at $script_path does not exist."
   fi
 
-  # Determine shell config file
+  # Determine shell config file based on shell name
   local shell_config=""
-  if [[ -n "$BASH_VERSION" ]]; then
-    if [[ -f "$HOME/.bashrc" ]]; then
+  case "$SHELL" in
+    */bash)
       shell_config="$HOME/.bashrc"
-    elif [[ -f "$HOME/.bash_profile" ]]; then
-      shell_config="$HOME/.bash_profile"
-    fi
-  elif [[ -n "$ZSH_VERSION" ]]; then
-    shell_config="$HOME/.zshrc"
-  fi
+    ;;
+    */zsh)
+      shell_config="$HOME/.zshrc"
+    ;;
+  esac
 
   # If we found a config file, try to add source command
   if [[ -n "$shell_config" ]]; then
@@ -1167,20 +1188,13 @@ auto_source_alias_script() {
       echo "# Auto-added by Chrome for Testing setup script" >> "$shell_config"
       echo "if [ -f \"$script_path\" ]; then source \"$script_path\"; fi" >> "$shell_config"
       echo "" >> "$shell_config"
-      echo "Added source command to shell config file: $shell_config"
-      echo "Chrome aliases will be available in new shell sessions after restarting your terminal."
+      print_success "Added launcher script to shell config: $shell_config"
     else
-      echo "Source command for $script_path already exists in shell config file: $shell_config"
+      print_info "Source command for $script_path already exists in shell config file: $shell_config"
     fi
-
-    echo "To use Chrome aliases in current session without restarting terminal, run:"
-    echo "  source \"$script_path\""
   else
-    echo "Could not determine shell configuration file."
-    echo "To use Chrome aliases, add the following to your shell config file:"
-    echo "  source \"$script_path\""
-    echo "Or run this command to use in current session:"
-    echo "  source \"$script_path\""
+    print_warning "Could not determine shell configuration file."
+    print_info "To use Chrome aliases, add this to your shell config: source \"$script_path\""
   fi
 }
 
@@ -1195,7 +1209,7 @@ main() {
   # If uninstall mode is enabled, clean up and exit
   if [[ "$UNINSTALL_MODE" == "true" ]]; then
     cleanup
-    echo "Uninstall complete."
+    print_success "Uninstall complete."
     exit 0
   fi
 
