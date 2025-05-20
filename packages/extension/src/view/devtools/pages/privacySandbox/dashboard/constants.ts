@@ -63,8 +63,7 @@ export const FEATURE_LIST = [
     name: I18n.getMessage('trackingProtection'),
     icon: PSTrackingProtectionIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description:
-      'Features and capabilities designed to limit specific covert tracking techniques such as fingerprinting and network-level tracking.',
+    description: 'Limit covert tracking techniques.',
     buttons: [
       {
         name: 'IP Protection',
@@ -88,7 +87,7 @@ export const FEATURE_LIST = [
     name: I18n.getMessage('siteBoundaries'),
     icon: PSSiteBoundriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
-    description: I18n.getMessage('siteBoundariesDescription'),
+    description: 'Prevent unintended data sharing across sites.',
     buttons: [
       {
         name: 'Cookies',
@@ -116,8 +115,7 @@ export const FEATURE_LIST = [
     name: I18n.getMessage('privateAdvertising'),
     icon: PSPrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
-    description:
-      'Private-preserving APIs supporting critical advertising use cases without relying on cross-site tracking, while providing accurate relevance information and measurement data for digital ads.',
+    description: 'Privacy-preserving relevance and measurement APIs.',
     buttons: [
       {
         name: I18n.getMessage('topics'),
@@ -141,8 +139,7 @@ export const FEATURE_LIST = [
     name: 'Learning',
     icon: PSLearningIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
-    description:
-      'Explore and learn everything about the Privacy Sandbox through the Help Center, developer documentation, and case studies. You can also learn about PSAT via the wiki and demos.',
+    description: 'Learn everything about the Privacy Sandbox.',
     buttons: [
       {
         name: 'Help Center',
