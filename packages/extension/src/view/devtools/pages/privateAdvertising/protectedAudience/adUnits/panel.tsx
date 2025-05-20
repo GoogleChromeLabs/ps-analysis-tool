@@ -92,7 +92,7 @@ const AdUnitsPanel = ({
           />
         </div>
       )}
-      <div className="flex flex-col flex-1 w-full">
+      <div className="flex flex-col flex-1 w-full overflow-auto">
         {Object.keys(adsAndBidders || {}).length ||
         Object.keys(auctionEvents || {}).length ? (
           <>
