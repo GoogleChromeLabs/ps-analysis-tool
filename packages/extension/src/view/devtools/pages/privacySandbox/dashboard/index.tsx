@@ -62,6 +62,7 @@ const Dashboard = () => {
       <CardsPanel
         featuredItems={FEATURE_LIST}
         onFeaturedButtonClick={handleButtonClick}
+        centered={true}
       />
     </div>
   );
