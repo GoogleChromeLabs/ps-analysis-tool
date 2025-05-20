@@ -15,8 +15,8 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "webpack serve --config ../../ee.webpack.config.cjs --open --mode development",
-    "build": "webpack --config ../../ee.webpack.config.cjs --mode production"
+    "dev": "vite dev --open --port 8085 --config ../../vite.ee.config.mts",
+    "build": "vite build --emptyOutDir --config ../../vite.ee.config.mts"
   },
   "repository": {
     "type": "git",

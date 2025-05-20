@@ -875,7 +875,6 @@ app.createCanvas = () => {
     app.handleControls();
     // eslint-disable-next-line no-new
     new p5(sketch);
-
     // eslint-disable-next-line no-new
     new p5(interestGroupSketch);
     // eslint-disable-next-line no-new
