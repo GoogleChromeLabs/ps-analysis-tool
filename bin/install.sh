@@ -1146,7 +1146,7 @@ display_outro() {
 
   # Display launcher information
   print_info "Launcher script: $ALIAS_SCRIPT_PATH"
-  print_prompt "To use Chrome in current session, run: ${BOLD}source \"$ALIAS_SCRIPT_PATH\"${RESET}"
+  print_prompt "To use Chrome in current session, run: \n\t ${BOLD}source \"$ALIAS_SCRIPT_PATH\"${RESET}"
 
   # Display available commands
   print_header "Available commands after sourcing the launcher script:"
