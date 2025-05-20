@@ -59,13 +59,10 @@ const Dashboard = () => {
 
   return (
     <div className="flex justify-center w-full">
-      <div>
-        <CardsPanel
-          featuredItems={FEATURE_LIST}
-          onFeaturedButtonClick={handleButtonClick}
-          hasTitle={false}
-        />
-      </div>
+      <CardsPanel
+        featuredItems={FEATURE_LIST}
+        onFeaturedButtonClick={handleButtonClick}
+      />
     </div>
   );
 };

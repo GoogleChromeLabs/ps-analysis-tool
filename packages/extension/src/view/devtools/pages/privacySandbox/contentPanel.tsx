@@ -29,7 +29,7 @@ const ContentPanel = () => {
     <div>
       <div
         data-testid="privacy-sandbox-content"
-        className="text-raisin-black dark:text-bright-gray min-h-[70vh] flex items-center justify-center"
+        className="text-raisin-black dark:text-bright-gray flex items-center justify-center mb-10"
       >
         <section className="flex justify-center">
           <div className="max-w-(--breakpoint-md) text-center">

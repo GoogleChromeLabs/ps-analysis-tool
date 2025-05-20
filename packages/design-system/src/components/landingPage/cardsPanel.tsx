@@ -23,13 +23,10 @@ import React, { ComponentType, SVGProps } from 'react';
  */
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
-type PinnedItem = {
+type FeatureItem = {
   name: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   sidebarKey: SIDEBAR_ITEMS_KEYS;
-};
-
-type FeatureItem = PinnedItem & {
   description: string;
   colorClasses?: {
     heading?: string;
@@ -41,9 +38,7 @@ type FeatureItem = PinnedItem & {
 };
 
 type CardsPanelProps = {
-  pinnedItems?: PinnedItem[];
   featuredItems: FeatureItem[];
-  hasTitle?: boolean;
   onFeaturedButtonClick: (
     event: React.MouseEvent,
     sidebarKey: SIDEBAR_ITEMS_KEYS
@@ -51,9 +46,7 @@ type CardsPanelProps = {
 };
 
 const CardsPanel = ({
-  pinnedItems,
   featuredItems,
-  hasTitle = true,
   onFeaturedButtonClick,
 }: CardsPanelProps) => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
@@ -64,34 +57,8 @@ const CardsPanel = ({
       className="h-full w-full overflow-auto text-raisin-black dark:text-bright-gray px-2 pb-14"
     >
       <div className="min-w-[45.75rem]">
-        {pinnedItems && pinnedItems.length > 0 && (
-          <section className="border-b border-gray-200 dark:border-quartz mb-5 pb-5">
-            {hasTitle && <h3 className="text-base">Quick Access</h3>}
-            <div className="flex gap-x-5 gap-y-4 flex-wrap mt-2">
-              {pinnedItems.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <div
-                    key={item.name}
-                    className="w-[366px] border-2 border-gray-300 dark:border-quartz px-3 py-4 flex gap-2 justify-start rounded hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow-sm hover:scale-[1.03] transition-all duration-150 ease-in-out"
-                    onClick={() => navigateTo(item.sidebarKey)}
-                  >
-                    <Icon
-                      width={22}
-                      height={22}
-                      className="fill-gray dark:fill-bright-gray"
-                    />
-                    <span className="text-base">{item.name}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
         {featuredItems.length > 0 && (
           <section>
-            {hasTitle && <h3 className="text-base">Features</h3>}
             <div className="flex gap-5 flex-wrap mt-2">
               {featuredItems.map((item) => {
                 const Icon = item.icon;
