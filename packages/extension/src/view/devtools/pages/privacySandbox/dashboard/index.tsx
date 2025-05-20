@@ -16,22 +16,57 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage } from '@google-psat/design-system';
+import React, { useCallback, useEffect } from 'react';
+import {
+  CardsPanel,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import ContentPanel from './contentPanel';
+import { FEATURE_LIST } from './constants';
+import { useCookie } from '../../../stateProviders';
 
 const Dashboard = () => {
+  const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
+  const { tabFrames } = useCookie(({ state }) => ({
+    tabFrames: state.tabFrames,
+  }));
+
+  const handleButtonClick = useCallback(
+    (event: React.MouseEvent, sidebarKey: string) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const firstFrame =
+        Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX;
+
+      navigateTo(sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey);
+    },
+    [navigateTo, tabFrames]
+  );
+
+  useEffect(() => {
+    if (FEATURE_LIST[0].buttons.length === 1) {
+      FEATURE_LIST[0].buttons.push({
+        name: 'Cookies Table',
+        sidebarKey: 'FIRST_COOKIE_TABLE' as SIDEBAR_ITEMS_KEYS,
+      });
+    }
+  }, []);
+
   return (
-    <LandingPage
-      title="Dashboard"
-      showSupportLink={true}
-      contentPanel={<ContentPanel />}
-      showQuickLinks={false}
-    />
+    <div className="flex justify-center w-full">
+      <div>
+        <CardsPanel
+          featuredItems={FEATURE_LIST}
+          onFeaturedButtonClick={handleButtonClick}
+          hasTitle={false}
+        />
+      </div>
+    </div>
   );
 };
 

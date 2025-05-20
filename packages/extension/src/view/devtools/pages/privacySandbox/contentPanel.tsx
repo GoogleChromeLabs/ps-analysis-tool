@@ -18,23 +18,18 @@
  */
 import React from 'react';
 import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
-import { Resizable } from 're-resizable';
+
+/**
+ * Internal dependencies.
+ */
+import Dashboard from './dashboard';
 
 const ContentPanel = () => {
   return (
-    <div
-      data-testid="privacy-sandbox-content"
-      className="text-raisin-black dark:text-bright-gray min-h-[70vh] flex items-center justify-center"
-    >
-      <Resizable
-        defaultSize={{
-          height: 500,
-        }}
-        enable={{
-          bottom: true,
-        }}
-        minHeight={350}
-        className="flex items-center h-full w-full justify-center py-10"
+    <div>
+      <div
+        data-testid="privacy-sandbox-content"
+        className="text-raisin-black dark:text-bright-gray min-h-[70vh] flex items-center justify-center"
       >
         <section className="flex justify-center">
           <div className="max-w-(--breakpoint-md) text-center">
@@ -46,16 +41,10 @@ const ContentPanel = () => {
             <h2 className="text-5xl mb-5 font-semibold">
               Protecting your privacy online
             </h2>
-            <p className="text-base">
-              The Privacy Sandbox initiative aims to create technologies that
-              both protect people&apos;s privacy online and give companies and
-              developers tools to build thriving digital businesses. The Privacy
-              Sandbox reduces cross-site and cross-app tracking while helping to
-              keep online content and services free for all.
-            </p>
           </div>
         </section>
-      </Resizable>
+      </div>
+      <Dashboard />
     </div>
   );
 };
