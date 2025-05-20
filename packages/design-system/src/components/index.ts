@@ -73,4 +73,4 @@ export { default as CardsPanel } from './landingPage/cardsPanel';
 export { default as FrameContent } from './frameContent';
 export { default as JsonView } from './jsonView/jsonView';
 export { default as MultiSelectDropDown } from './multiSelectDropDown';
-export { default as Dropdown } from './dropdown';
+export { default as Dropdown, type OptGroup } from './dropdown';

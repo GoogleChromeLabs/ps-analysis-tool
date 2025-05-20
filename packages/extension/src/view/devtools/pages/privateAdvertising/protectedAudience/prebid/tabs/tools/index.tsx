@@ -22,8 +22,9 @@ import { Button } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
-import { matchRuleTargets } from './constants';
+import { matchRuleTargets, replaceRuleTargets } from './constants';
 import RuleWhen from './ruleWhen';
+import RuleThen from './ruleThen';
 
 const Tools = () => {
   const [debuggingModuleConfig, setDebuggingModuleConfig] =
@@ -32,7 +33,35 @@ const Tools = () => {
       intercept: [],
     });
 
-  const addMatchRule = useCallback(
+  const addThenRule = useCallback(
+    (ruleWhen: PrebidDebugModuleConfigRule['when'], ruleIndex: number) => {
+      const firstDifferent = (input: string[], excludes: string[]): string => {
+        const [first] = input.filter((item) => !excludes?.includes(item));
+        return first;
+      };
+
+      const newMatchRuleTarget = firstDifferent(
+        replaceRuleTargets.map(({ value }) => value),
+        Object.keys(ruleWhen)
+      );
+
+      if (!newMatchRuleTarget) {
+        return;
+      }
+
+      setDebuggingModuleConfig((prevState) => {
+        const newState = structuredClone(prevState);
+        newState.intercept[ruleIndex].then = {
+          ...newState.intercept[ruleIndex].then,
+          [newMatchRuleTarget]: '',
+        };
+        return newState;
+      });
+    },
+    []
+  );
+
+  const addWhenRule = useCallback(
     (ruleWhen: PrebidDebugModuleConfigRule['when'], ruleIndex: number) => {
       const firstDifferent = (input: string[], excludes: string[]): string => {
         const [first] = input.filter((item) => !excludes?.includes(item));
@@ -80,9 +109,29 @@ const Tools = () => {
     []
   );
 
+  const changeThenRule = useCallback(
+    (ruleKey: string, ruleIndex: number, newValue: any, _delete = false) => {
+      if (_delete) {
+        setDebuggingModuleConfig((prevState) => {
+          const newState = structuredClone(prevState);
+          delete newState.intercept[ruleIndex].then[ruleKey];
+          return newState;
+        });
+        return;
+      }
+
+      setDebuggingModuleConfig((prevState) => {
+        const newState = structuredClone(prevState);
+        newState.intercept[ruleIndex].then[ruleKey] = newValue;
+        return newState;
+      });
+    },
+    []
+  );
+
   return (
     <div className="flex flex-col w-full h-full px-3 relative">
-      <div className="flex flex-row w-full h-fit shadow-lg px-3 items-center">
+      <div className="flex flex-row w-full h-fit shadow-lg px-3 gap-10 items-center">
         {debuggingModuleConfig.intercept.map((rule, ruleIndex) => {
           return (
             <>
@@ -91,7 +140,7 @@ const Tools = () => {
                 {Object.keys(rule.when).map((ruleKey, index) => {
                   return (
                     <RuleWhen
-                      addMatchRule={addMatchRule}
+                      addMatchRule={addWhenRule}
                       handleChange={changeWhenRule}
                       key={index}
                       ruleKey={ruleKey}
@@ -103,17 +152,18 @@ const Tools = () => {
                 })}
               </div>
               <div className="w-1/2">
-                <p className="text-raisin-black dark:text-bright-gray">then</p>
+                <p className="text-raisin-black dark:text-bright-gray gap-1">
+                  then
+                </p>
                 {Object.keys(rule.then).map((ruleKey, index) => {
                   return (
-                    <RuleWhen
-                      addMatchRule={addMatchRule}
-                      handleChange={changeWhenRule}
+                    <RuleThen
+                      addMatchRule={addThenRule}
+                      handleChange={changeThenRule}
                       key={index}
                       ruleKey={ruleKey}
                       rule={rule}
                       ruleIndex={ruleIndex}
-                      options={matchRuleTargets}
                     />
                   );
                 })}

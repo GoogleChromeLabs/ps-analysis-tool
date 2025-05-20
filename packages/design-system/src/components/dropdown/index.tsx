@@ -27,7 +27,7 @@ interface Option {
   label: string;
 }
 
-interface OptGroup {
+export interface OptGroup {
   label: string;
   options: Option[];
   disabled?: boolean;

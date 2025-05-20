@@ -17,15 +17,19 @@
 /**
  * External dependencies
  */
-import { Dropdown, Equal, Plus } from '@google-psat/design-system';
+import {
+  Dropdown,
+  Equal,
+  Plus,
+  type OptGroup,
+} from '@google-psat/design-system';
 import { useRef } from 'react';
 /**
  * Internal dependencies
  */
-import { useProtectedAudience } from '../../../../../../stateProviders';
+import { replaceRuleTargets } from './constants';
 
 interface RuleProps {
-  options: { label: string; value: string }[];
   ruleIndex: number;
   ruleKey: string;
   rule: PrebidDebugModuleConfigRule;
@@ -41,8 +45,26 @@ interface RuleProps {
   ) => void;
 }
 
-const Rule = ({
-  options,
+const mediaTypes = replaceRuleTargets.reduce((acc, cur) => {
+  if (!acc.find(({ label }) => label === cur.mediaType)) {
+    acc.push({ label: cur.mediaType, options: [] });
+  }
+
+  const _labels =
+    acc
+      .find(({ label }) => label === cur.mediaType)
+      ?.options?.map(({ label }) => label) ?? [];
+
+  if (!_labels.includes(cur.label)) {
+    acc.find(({ label }) => label === cur.mediaType)?.options.push(cur);
+  } else {
+    return acc;
+  }
+
+  return acc;
+}, [] as OptGroup[]);
+
+const RuleThen = ({
   ruleKey,
   rule,
   addMatchRule,
@@ -50,32 +72,13 @@ const Rule = ({
   ruleIndex,
 }: RuleProps) => {
   const dropdownRef = useRef<HTMLSelectElement | null>(null);
-  const ruleValueOptions = useProtectedAudience(({ state }) => {
-    const prebidAdunits = Object.values(state.prebidResponse.adUnits);
 
-    const _bidders = prebidAdunits.reduce((prev, adUnit) => {
-      const newBidders = adUnit.bidders?.reduce((prevValue, bidder) => {
-        if (!bidder) {
-          return prevValue;
-        }
-
-        return Array.from(new Set([...prevValue, bidder]));
-      }, [] as string[]);
-
-      return Array.from(new Set([...prev, ...newBidders]));
-    }, [] as string[]);
-
-    return {
-      adUnitCode: Object.keys(state.prebidResponse.adUnits),
-      bidder: _bidders,
-    };
-  });
   return (
     <div className="flex flex-row gap-2 items-center gap-1">
       <div className="w-1/2">
         <Dropdown
           ref={dropdownRef}
-          options={options}
+          groups={mediaTypes}
           onChange={(value) => {
             handleChange(ruleKey, ruleIndex, '', true);
             handleChange(value, ruleIndex, '');
@@ -87,18 +90,19 @@ const Rule = ({
         <Equal className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
       </div>
       <div className="w-1/2">
-        <Dropdown
-          onChange={(value) => {
-            handleChange(ruleKey, ruleIndex, value);
-          }}
-          options={ruleValueOptions[
-            ruleKey as keyof typeof ruleValueOptions
-          ].map((adUnit) => ({
-            label: adUnit,
-            value: adUnit,
-          }))}
-          value={rule.when[ruleKey].toString()}
-        />
+        {ruleKey === 'mediaType' ? (
+          <Dropdown
+            onChange={(value) => {
+              handleChange(ruleKey, ruleIndex, value);
+            }}
+            options={replaceRuleTargets
+              .find((target) => target.value === ruleKey)
+              ?.options?.map((option) => ({ label: option, value: option }))}
+            value={rule.then[ruleKey].toString()}
+          />
+        ) : (
+          <></>
+        )}
       </div>
       <div
         className="w-4 h-4 cursor-pointer"
@@ -110,4 +114,4 @@ const Rule = ({
   );
 };
 
-export default Rule;
+export default RuleThen;
