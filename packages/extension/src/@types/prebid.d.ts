@@ -352,6 +352,19 @@ declare global {
     type: AuctionDebugEventType;
     arguments: string[];
   }
+
+  interface PrebidDebugModuleConfig {
+    enabled?: boolean;
+    intercept: PrebidDebugModuleConfigRule[];
+  }
+  interface PrebidDebugModuleConfigRule {
+    when: { [key: string]: string | number };
+    then: {
+      [key: string]: string | number | INativeRules;
+      native?: INativeRules;
+      video?: IVideoRules;
+    };
+  }
   interface PrebidConfig {
     debug?: boolean;
     bidderTimeout?: number;

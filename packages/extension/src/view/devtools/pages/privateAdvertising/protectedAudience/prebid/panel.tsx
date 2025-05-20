@@ -26,6 +26,7 @@ import React, { useMemo, useState } from 'react';
 import ConfigContainer from './tabs/config';
 import type { PrebidEvents } from '../../../../../../store';
 import EventsContainer from './tabs/events';
+import ToolsContainer from './tabs/tools';
 
 enum PillToggleOptions {
   Config = 'Config',
@@ -56,12 +57,7 @@ const Panel = ({ prebidResponse }: PanelProps) => {
       case PillToggleOptions.Events:
         return <EventsContainer errorEvents={prebidResponse.errorEvents} />;
       case PillToggleOptions.Tools:
-        return (
-          <ConfigContainer
-            config={prebidResponse.config}
-            installedModules={[]}
-          />
-        );
+        return <ToolsContainer />;
       case PillToggleOptions.UserId:
         return (
           <ConfigContainer
@@ -84,7 +80,12 @@ const Panel = ({ prebidResponse }: PanelProps) => {
           />
         );
     }
-  }, [prebidResponse.config, prebidResponse.installedModules, pillToggle]);
+  }, [
+    pillToggle,
+    prebidResponse.config,
+    prebidResponse.installedModules,
+    prebidResponse.errorEvents,
+  ]);
 
   return (
     <div className="flex flex-col pt-4 h-full w-full">

@@ -123,4 +123,5 @@ export { default as Buildings } from './buildings.svg';
 export { default as Server } from './server.svg';
 export { default as Error } from './error-icon.svg';
 export { default as WarningColored } from './warning-icon.svg';
+export { default as Equal } from './equal.svg';
 export * from './ps-icons';
