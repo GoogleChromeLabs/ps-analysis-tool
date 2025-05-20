@@ -35,7 +35,6 @@ import {
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
-  DashboardIcon,
   WikiIcon,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
@@ -75,7 +74,6 @@ import {
   Settings,
   ProtectedAudience,
   PrivateAggregation,
-  Dashboard,
   WebStories,
   Learning,
   DevSite,
@@ -532,27 +530,6 @@ const TABS: SidebarItems = {
     },
     containerClassName: 'h-6',
     addDivider: true,
-  },
-  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
-    title: () => 'Dashboard',
-    panel: {
-      Element: Dashboard,
-    },
-    icon: {
-      Element: DashboardIcon,
-      props: {
-        className: 'fill-granite-gray',
-      },
-    },
-    selectedIcon: {
-      Element: DashboardIcon,
-      props: {
-        className: 'fill-bright-gray',
-      },
-    },
-    dropdownOpen: false,
-    children: {},
-    containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),

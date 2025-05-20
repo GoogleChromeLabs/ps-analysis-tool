@@ -27,7 +27,7 @@ import {
  * Internal dependencies.
  */
 import { PINNED_ITEMS, FEATURE_LIST } from './constants';
-import { useCookie } from '../../stateProviders';
+import { useCookie } from '../../../stateProviders';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);

@@ -17,18 +17,10 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  PrivacySandboxColoredIcon,
-  useSidebar,
-  SIDEBAR_ITEMS_KEYS,
-  Link,
-} from '@google-psat/design-system';
-import { addUTMParams } from '@google-psat/common';
+import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 
 const ContentPanel = () => {
-  const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
-
   return (
     <div
       data-testid="privacy-sandbox-content"
@@ -61,20 +53,6 @@ const ContentPanel = () => {
               Sandbox reduces cross-site and cross-app tracking while helping to
               keep online content and services free for all.
             </p>
-            <div className="flex gap-6 justify-center mt-5">
-              <Link
-                href={addUTMParams('https://privacysandbox.com')}
-                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver flex"
-              >
-                <span>Learn More</span>
-              </Link>
-              <button
-                onClick={() => navigateTo(SIDEBAR_ITEMS_KEYS.DASHBOARD)}
-                className="bg-cultured-grey text-raisin-black py-2 px-9 rounded border border-dark-grey text-base hover:bg-light-gray hover:border-american-silver"
-              >
-                Dashboard
-              </button>
-            </div>
           </div>
         </section>
       </Resizable>
