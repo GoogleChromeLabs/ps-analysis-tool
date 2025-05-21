@@ -85,10 +85,6 @@ class PrebidInterface {
    * Checks if the Prebid.js library exists on the current webpage and initializes
    * the provided Prebid interface class accordingly. The function continuously scans
    * for the presence of Prebid.js until it is found or a timeout occurs.
-   * @param classToInstantiate - A class that implements the `PrebidInterfaceType` interface.
-   *                             This class will be instantiated and used to interact with
-   *                             the Prebid.js library if it is found on the page.
-   *
    * The function performs the following steps:
    * 1. Instantiates the provided class and starts scanning for the Prebid.js library.
    * 2. If the Prebid.js library is detected, it initializes the `prebidInterface` property
@@ -105,7 +101,12 @@ class PrebidInterface {
   static doesPrebidExist() {
     let stopLoop = false;
     const pbjsClass = new this();
-
+    /**
+     * Timing is 60 seconds because the script runs at document_start where in all scripts are
+     * loaded but not run. So when prebidInterface is loaded it will check for instantation of
+     * prebid window global.
+     * Other scripts run after this script is inserted.
+     */
     const timeout = setTimeout(() => {
       stopLoop = true;
       pbjsClass.scanningStatus = true;
