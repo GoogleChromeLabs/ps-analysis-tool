@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
@@ -30,7 +30,7 @@ import { FEATURED_ITEMS } from './constants';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
-  const onButtonClick = React.useCallback(
+  const onButtonClick = useCallback(
     (event: React.MouseEvent, sidebarKey: SIDEBAR_ITEMS_KEYS) => {
       event.preventDefault();
       event.stopPropagation();
@@ -43,7 +43,6 @@ const ContentPanel = () => {
     <CardsPanel
       featuredItems={FEATURED_ITEMS}
       onFeaturedButtonClick={onButtonClick}
-      hasTitle={false}
     />
   );
 };

@@ -64,6 +64,7 @@ export const FEATURE_LIST = [
     icon: PSTrackingProtectionIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
     description: 'Limit covert tracking techniques.',
+    url: 'https://privacysandbox.google.com/protections',
     buttons: [
       {
         name: 'IP Protection',
@@ -88,6 +89,7 @@ export const FEATURE_LIST = [
     icon: PSSiteBoundriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description: 'Prevent unintended data sharing across sites.',
+    url: 'https://privacysandbox.google.com/cookies',
     buttons: [
       {
         name: 'Cookies',
@@ -113,6 +115,7 @@ export const FEATURE_LIST = [
   },
   {
     name: I18n.getMessage('privateAdvertising'),
+    url: 'https://privacysandbox.google.com/private-advertising',
     icon: PSPrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
     description: 'Privacy-preserving relevance and measurement APIs.',
@@ -140,6 +143,7 @@ export const FEATURE_LIST = [
     icon: PSLearningIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
     description: 'Learn everything about the Privacy Sandbox.',
+    url: 'https://privacysandbox.google.com',
     buttons: [
       {
         name: 'Help Center',
