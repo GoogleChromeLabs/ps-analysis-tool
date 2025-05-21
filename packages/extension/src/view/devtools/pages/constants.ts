@@ -23,6 +23,11 @@ import {
   PSSiteBoundriesIcon,
   PSPrivateAdvertisingIcon,
   PSLearningIcon,
+  PSHelpCenterIcon,
+  PSDevSiteIcon,
+  PSStoriesIcon,
+  PSDemosIcon,
+  PSWikiIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -168,5 +173,137 @@ export const PRIVACY_PROTECTION_CONTENT = [
     storyUrl:
       'https://privacysandbox-stories.com/web-stories/private-state-tokens/',
     sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
+  },
+];
+
+export const PRIVATE_ADVERTISING_CONTENT = [
+  {
+    title: () => I18n.getMessage('topics'),
+    description: () => I18n.getMessage('topicsDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
+    storyUrl: 'https://privacysandbox-stories.com/web-stories/the-topics-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.TOPICS,
+  },
+  {
+    title: () => I18n.getMessage('protectedAudience'),
+    description: () => I18n.getMessage('protectedAudienceDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/the-protected-audience-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
+  },
+  {
+    title: () => I18n.getMessage('attributionReporting'),
+    description: () => I18n.getMessage('attributionReportingDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/the-attribution-reporting-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
+  },
+  {
+    title: () => I18n.getMessage('privateAggregation'),
+    description: () => I18n.getMessage('privateAggregationDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/private-aggregation-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
+  },
+];
+
+export const SITE_BOUNDARIES_CONTENT = [
+  {
+    title: () => 'Cookies',
+    description: () =>
+      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
+    url: 'https://developers.google.com/privacy-sandbox/cookies',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/chrome-shifts-to-user-choice-for-third-party-cookies/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+  },
+  {
+    title: () => I18n.getMessage('chips'),
+    description: () => I18n.getMessage('chipsDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
+    storyUrl: 'https://privacysandbox-stories.com/web-stories/chips/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.CHIPS,
+  },
+  {
+    title: () => I18n.getMessage('storageAccessAPI'),
+    description: () => I18n.getMessage('storageAccessAPIDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/storage-access-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS,
+  },
+  {
+    title: () => I18n.getMessage('rws'),
+    description: () => I18n.getMessage('rwsDescription'),
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/related-website-sets/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
+  },
+  {
+    title: () => 'FedCM',
+    description: () =>
+      'The Federated Credential Management API enables privacy-preserving identity federation.',
+    url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
+    storyUrl:
+      'https://privacysandbox-stories.com/web-stories/federated-credential-management-api/',
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL,
+  },
+];
+
+export const LEARNING_BOX_ITEMS = [
+  {
+    name: 'Help Center',
+    icon: PSHelpCenterIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
+    title: 'Need help with Privacy Sandbox?',
+    description:
+      'The Privacy Sandbox Help Center is your comprehensive resource for finding quick answers and effective learning. Explore a wealth of information, FAQs, and guidance directly in the current browser tab to the left.',
+  },
+  {
+    name: 'Dev Site',
+    icon: PSDevSiteIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
+    title: 'Ready to start developing with the Privacy Sandbox?',
+    description:
+      'Privacy Sandbox Dev Site is your central hub for all developer resources.  Dive deep into comprehensive documentation covering every aspect of the Privacy Sandbox, from foundational concepts to advanced API usage.  Go on exploring in the current browser tab to the left.',
+    colorClasses: {
+      heading: 'text-red-700',
+    },
+  },
+  {
+    name: 'Stories',
+    icon: PSStoriesIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.STORIES,
+    description:
+      'Explore interactive web stories to grasp the fundamental concepts of the Privacy Sandbox and its impact on the web.',
+    colorClasses: {
+      heading: 'text-yellow-500',
+    },
+  },
+  {
+    name: 'Demos',
+    icon: PSDemosIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.DEMOS,
+    title: 'Want to see Privacy Sandbox APIs in action?',
+    description:
+      'Explore and test Privacy Sandbox APIs firsthand using the PSAT extension. Gain hands-on insights by interacting with real-world scenarios and experimenting directly within your browser.',
+    colorClasses: {
+      heading: 'text-green-700',
+    },
+  },
+  {
+    name: 'Wiki',
+    icon: PSWikiIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
+    title: 'Looking for in-depth guidance on using PSAT?',
+    description:
+      "The PSAT Wiki Page is your dedicated resource where you'll find detailed explanations of the extension's features, practical guidance on how to leverage its tools effectively, and answers to frequently asked questions about its functionality.  Explore the PSAT Wiki in the current browser tab to the left of PSAT.",
+    colorClasses: {
+      heading: 'text-blue-600',
+    },
   },
 ];

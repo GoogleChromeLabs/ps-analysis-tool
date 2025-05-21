@@ -26,7 +26,7 @@ import {
 /**
  * Internal dependencies
  */
-import { FEATURED_ITEMS } from './constants';
+import { LEARNING_BOX_ITEMS } from '../constants';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
@@ -41,7 +41,7 @@ const ContentPanel = () => {
 
   return (
     <CardsPanel
-      featuredItems={FEATURED_ITEMS}
+      featuredItems={LEARNING_BOX_ITEMS}
       onFeaturedButtonClick={onButtonClick}
     />
   );
