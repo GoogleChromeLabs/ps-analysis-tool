@@ -28,7 +28,7 @@ import Header from './header';
 type EventsPanelProps = {
   errorEvents: PrebidEvents['errorEvents'];
 };
-const Events = ({ errorEvents }: EventsPanelProps) => {
+const Events = ({ errorEvents = [] }: EventsPanelProps) => {
   const [searchValue, setSearchValue] = useState('');
   const [selectedDropDownValues, setSelectedDropdownValues] = useState([
     'ALL',
@@ -62,7 +62,7 @@ const Events = ({ errorEvents }: EventsPanelProps) => {
   }, [selectedDropDownValues, errorEvents, searchValue]);
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="flex flex-col mx-4 border border-hex-gray dark:border-quartz">
       <Header
         errorEvents={errorEvents}
         filteredErrorEvents={errorEvents}

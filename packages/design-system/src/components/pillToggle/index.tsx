@@ -39,7 +39,7 @@ const PillToggle = ({
           <button
             key={option}
             className={classNames(
-              `h-full rounded-full text-raisin-black dark:text-bright-gray w-1/${options.length}`,
+              `h-full border-r border-hex-gray dark:border-quartz rounded-full text-raisin-black dark:text-bright-gray w-1/${options.length}`,
               {
                 'bg-gray-200 dark:bg-gray-500 ': pillToggle === option,
                 'bg-transparent': pillToggle !== option,
