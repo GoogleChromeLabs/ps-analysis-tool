@@ -26,10 +26,10 @@ import {
 /**
  * Internal dependencies.
  */
-import { FEATURE_LIST } from './constants';
-import { useCookie } from '../../../stateProviders';
+import { PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES } from '../constants';
+import { useCookie } from '../../stateProviders';
 
-const Dashboard = () => {
+const Boxes = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
@@ -49,8 +49,8 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    if (FEATURE_LIST[0].buttons.length === 1) {
-      FEATURE_LIST[0].buttons.push({
+    if (PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES[0].buttons.length === 1) {
+      PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES[0].buttons.push({
         name: 'Cookies Table',
         sidebarKey: 'FIRST_COOKIE_TABLE' as SIDEBAR_ITEMS_KEYS,
       });
@@ -60,7 +60,7 @@ const Dashboard = () => {
   return (
     <div className="flex justify-center w-full">
       <CardsPanel
-        featuredItems={FEATURE_LIST}
+        featuredItems={PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES}
         onFeaturedButtonClick={handleButtonClick}
         centered={true}
       />
@@ -68,4 +68,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Boxes;

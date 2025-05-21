@@ -22,7 +22,7 @@ import { PrivacySandboxColoredIcon } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import Dashboard from './dashboard';
+import Boxes from './boxes';
 
 const ContentPanel = () => {
   return (
@@ -44,7 +44,7 @@ const ContentPanel = () => {
           </div>
         </section>
       </div>
-      <Dashboard />
+      <Boxes />
     </div>
   );
 };

@@ -18,45 +18,10 @@
  * External Dependencies
  */
 import React from 'react';
-import {
-  LandingPageContainer,
-  SIDEBAR_ITEMS_KEYS,
-} from '@google-psat/design-system';
+import { LandingPageContainer } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const content = [
-  {
-    title: () => I18n.getMessage('ipProtection'),
-    description: () => I18n.getMessage('ipProtectionDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
-    storyUrl: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
-  },
-  {
-    title: () => I18n.getMessage('bounceTrackingMitigations'),
-    description: () => I18n.getMessage('bounceTrackingMitigationsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/bounce-tracking-mitigations/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
-  },
-  {
-    title: () => I18n.getMessage('userAgentReduction'),
-    description: () => I18n.getMessage('userAgentReductionDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/user-agent-reduction/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
-  },
-  {
-    title: () => I18n.getMessage('privateStateTokens'),
-    description: () => I18n.getMessage('privateStateTokensDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/private-state-tokens/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
-  },
-];
+import { PRIVACY_PROTECTION_CONTENT } from '../constants';
 
 const PrivacyProtection = () => {
   return (
@@ -64,7 +29,7 @@ const PrivacyProtection = () => {
       title="Tracking Protection"
       extraClasses="min-h-[78vh] w-full"
       contentPanelTitle={I18n.getMessage('antiCovertTrackingDescription')}
-      content={content}
+      content={PRIVACY_PROTECTION_CONTENT}
       titleStyles="text-blue-600"
     />
   );
