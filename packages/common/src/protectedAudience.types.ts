@@ -36,7 +36,8 @@ export interface singleAuctionEvent {
     | 'interestGroupAuctionEventOccurred'
     | 'interestGroupAuctionNetworkRequestCompleted'
     | 'interestGroupAuctionNetworkRequestCreated'
-    | 'interestGroupAccessed';
+    | 'interestGroupAccessed'
+    | 'BidAvailable';
 }
 
 export interface auctionData {
@@ -65,6 +66,15 @@ export type NoBidsType = {
   [auctionId: string]: {
     ownerOrigin: string;
     name: string;
+    uniqueAuctionId: string;
+    adUnitCode?: string;
+    mediaContainerSize?: number[][];
+  };
+};
+
+export type PrebidNoBidsType = {
+  [auctionId: string]: {
+    bidder: string[];
     uniqueAuctionId: string;
     adUnitCode?: string;
     mediaContainerSize?: number[][];

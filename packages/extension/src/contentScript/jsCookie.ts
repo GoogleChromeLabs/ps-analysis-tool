@@ -37,7 +37,7 @@ import processAndStoreDocumentCookies from '../utils/processAndStoreDocumentCook
 /**
  * Represents the webpage's content script functionalities.
  */
-class WebpageContentScript {
+class WebpageContentScriptJSCookie {
   /**
    * TabId of the current Tab
    */
@@ -67,7 +67,7 @@ class WebpageContentScript {
     // Message once on initialize, to let the devtool know that content script has loaded.
     if (chrome.runtime?.id) {
       chrome.runtime.sendMessage({
-        setInPage: true,
+        setInPageJSCookie: true,
       });
     }
 
@@ -216,4 +216,4 @@ class WebpageContentScript {
 }
 
 // eslint-disable-next-line no-new
-new WebpageContentScript();
+new WebpageContentScriptJSCookie();
