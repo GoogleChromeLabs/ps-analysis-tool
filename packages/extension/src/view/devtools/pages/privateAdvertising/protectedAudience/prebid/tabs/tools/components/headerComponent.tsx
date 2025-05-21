@@ -18,7 +18,7 @@
  * External dependencies
  */
 import { Button, Plus, ToggleSwitch } from '@google-psat/design-system';
-import { noop } from '@google-psat/common';
+import { noop, type PrebidDebugModuleConfig } from '@google-psat/common';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface HeaderComponentProps {

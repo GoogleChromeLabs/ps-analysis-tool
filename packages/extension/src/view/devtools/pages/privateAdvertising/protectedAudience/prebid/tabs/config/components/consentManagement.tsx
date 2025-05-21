@@ -124,7 +124,7 @@ const ConsentManagement = ({ config }: ConsentManagementPanelProps) => {
           }}
           onRowContextMenu={noop}
           getRowObjectKey={(row) =>
-            (row as unknown as PrebidConsentManagementTableData)?.platform
+            (row.originalData as PrebidConsentManagementTableData)?.platform
           }
         >
           <Table

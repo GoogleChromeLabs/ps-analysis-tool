@@ -17,6 +17,10 @@
  * External dependencies
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import type {
+  PrebidDebugModuleConfig,
+  PrebidDebugModuleConfigRule,
+} from '@google-psat/common';
 /**
  * Internal dependencies
  */

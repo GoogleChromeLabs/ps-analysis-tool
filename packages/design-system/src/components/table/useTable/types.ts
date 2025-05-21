@@ -55,6 +55,12 @@ export type PrebidUserIdsTableData = {
   storageName?: string;
 };
 
+export type UserEID = {
+  userId: string;
+  aType: number;
+  source: string;
+};
+
 export type TableData = (
   | CookieTableData
   | InterestGroups
@@ -68,6 +74,7 @@ export type TableData = (
   | PrebidPriceGranularityTableData
   | PrebidConsentManagementTableData
   | PrebidUserIdsTableData
+  | UserEID
 ) & {
   highlighted?: boolean;
 };

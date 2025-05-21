@@ -25,6 +25,7 @@ import {
   type OptGroup,
 } from '@google-psat/design-system';
 import { useRef } from 'react';
+import type { PrebidDebugModuleConfigRule } from '@google-psat/common';
 /**
  * Internal dependencies
  */

@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import type { PrebidDebugModuleConfigRule } from '@google-psat/common';
+/**
  * Internal dependencies
  */
 import { matchRuleTargets } from '../constants';

@@ -27,6 +27,7 @@ import ConfigContainer from './tabs/config';
 import type { PrebidEvents } from '../../../../../../store';
 import EventsContainer from './tabs/events';
 import ToolsContainer from './tabs/tools';
+import UserIdsContainer from './tabs/userIds';
 
 enum PillToggleOptions {
   Config = 'Config',
@@ -59,12 +60,7 @@ const Panel = ({ prebidResponse }: PanelProps) => {
       case PillToggleOptions.Tools:
         return <ToolsContainer />;
       case PillToggleOptions.UserId:
-        return (
-          <ConfigContainer
-            config={prebidResponse.config}
-            installedModules={[]}
-          />
-        );
+        return <UserIdsContainer config={prebidResponse.config} />;
       case PillToggleOptions.Version:
         return (
           <ConfigContainer

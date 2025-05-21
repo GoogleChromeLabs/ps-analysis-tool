@@ -29,11 +29,11 @@ import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
 import { useState, useMemo, useCallback } from 'react';
 
-type ConsentManagementPanelProps = {
+type UserConfigPanelProps = {
   config: UserIdConfig[];
 };
 
-const UserIds = ({ config }: ConsentManagementPanelProps) => {
+const UserConfig = ({ config }: UserConfigPanelProps) => {
   const [selectedKey, setSelectedKey] = useState<string>('');
   const [selectedRow, setSelectedRow] = useState<Partial<UserIdConfig> | null>(
     null
@@ -127,7 +127,9 @@ const UserIds = ({ config }: ConsentManagementPanelProps) => {
             }
           }}
           onRowContextMenu={noop}
-          getRowObjectKey={(row) => (row.originalData as UserIdConfig)?.name}
+          getRowObjectKey={(row) =>
+            (row.originalData as PrebidUserIdsTableData)?.name
+          }
         >
           <Table
             hideTableTopBar={true}
@@ -153,4 +155,4 @@ const UserIds = ({ config }: ConsentManagementPanelProps) => {
   );
 };
 
-export default UserIds;
+export default UserConfig;

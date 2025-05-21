@@ -78,6 +78,7 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
       pbjsClass.prebidData.config = {
         ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
         bidderSettings,
+        eids: pbjsClass.prebidInterface.getUserIdsAsEids() ?? [],
       };
 
       stopLoop = true;
