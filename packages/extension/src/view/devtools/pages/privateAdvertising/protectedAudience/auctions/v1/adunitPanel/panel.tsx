@@ -29,7 +29,7 @@ import type {
  * Internal dependencies
  */
 import Tile from './tile';
-import type { AdUnitLiteral } from '../../explorableExplanation';
+import type { AdUnitLiteral } from '../../../explorableExplanation';
 import MatrixHOC from './matrixContainer';
 
 interface PanelProps {

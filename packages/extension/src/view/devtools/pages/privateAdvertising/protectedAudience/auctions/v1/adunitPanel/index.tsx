@@ -23,7 +23,10 @@ import { useTabs } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
-import { useCookie, useProtectedAudience } from '../../../../../stateProviders';
+import {
+  useCookie,
+  useProtectedAudience,
+} from '../../../../../../stateProviders';
 import Panel from './panel';
 
 interface AdunitPanelProps {

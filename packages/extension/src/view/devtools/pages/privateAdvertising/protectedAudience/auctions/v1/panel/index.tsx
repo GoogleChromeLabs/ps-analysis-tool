@@ -35,11 +35,11 @@ import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies.
  */
-import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
+import type { AuctionEventsType } from '../../../../../../stateProviders/protectedAudience/context';
 import AuctionTable from '../table';
 import AdunitPanel from '../adunitPanel';
 import AdunitSubPanel from '../adunitPanel/panel';
-import SortButton from '../../../../sortButton';
+import SortButton from '../../../../../sortButton';
 
 interface AuctionPanelProps {
   auctionEvents: {

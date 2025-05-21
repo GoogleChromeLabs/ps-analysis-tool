@@ -23,7 +23,7 @@ import { MatrixComponent } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
-import { useProtectedAudience } from '../../../../../stateProviders';
+import { useProtectedAudience } from '../../../../../../stateProviders';
 
 interface MatrixData {
   adUnitCode: string;

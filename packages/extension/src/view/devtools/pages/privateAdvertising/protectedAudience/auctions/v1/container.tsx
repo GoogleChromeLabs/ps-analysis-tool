@@ -30,7 +30,7 @@ import React from 'react';
  * Internal dependencies.
  */
 import AuctionPanel from './panel';
-import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
+import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 
 interface AuctionsContainerProps {
   auctionEvents: {

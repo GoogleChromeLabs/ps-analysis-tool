@@ -26,10 +26,13 @@ import {
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import {
+  useProtectedAudience,
+  useSettings,
+} from '../../../../../stateProviders';
 import AuctionsContainer from './container';
-import AdUnits from '../adUnits';
-import EvaluationEnvironment from '../evaluationEnvironment';
+import AdUnits from '../../adUnits';
+import EvaluationEnvironment from '../../evaluationEnvironment';
 
 const Auctions = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
