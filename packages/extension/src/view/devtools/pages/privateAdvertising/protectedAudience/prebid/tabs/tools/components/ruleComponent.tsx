@@ -76,7 +76,7 @@ const RuleComponent = ({
             })
           }
         >
-          <DeleteForever className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+          <DeleteForever className="w-6 h-6 text-raisin-black dark:text-bright-gray" />
         </div>
       </div>
       <div

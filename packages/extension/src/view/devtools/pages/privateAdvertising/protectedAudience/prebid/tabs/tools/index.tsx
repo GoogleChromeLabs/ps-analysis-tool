@@ -31,12 +31,14 @@ const Tools = () => {
     changeRule,
     addRule,
     storeRulesInLocalStorage,
+    openGoogleManagerConsole,
     handleChangeStoreRulesInLocalStorage,
   } = usePrebidTool();
 
   return (
     <div className="flex flex-col w-full h-full px-4 relative">
       <HeaderComponent
+        openGoogleManagerConsole={openGoogleManagerConsole}
         handleChangeStoreRulesInLocalStorage={
           handleChangeStoreRulesInLocalStorage
         }

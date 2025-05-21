@@ -18,7 +18,7 @@
  * External dependencies
  */
 import { Button, ToggleSwitch } from '@google-psat/design-system';
-import { noop, type PrebidDebugModuleConfig } from '@google-psat/common';
+import { type PrebidDebugModuleConfig } from '@google-psat/common';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface HeaderComponentProps {
@@ -26,19 +26,21 @@ interface HeaderComponentProps {
   storeRulesInLocalStorage: boolean;
   debuggingEnabled: boolean;
   handleChangeStoreRulesInLocalStorage: (value: boolean) => void;
+  openGoogleManagerConsole: () => void;
 }
 const HeaderComponent = ({
   setDebuggingModuleConfig,
   storeRulesInLocalStorage,
   debuggingEnabled,
   handleChangeStoreRulesInLocalStorage,
+  openGoogleManagerConsole,
 }: HeaderComponentProps) => {
   return (
     <div className="flex justify-between mt-6">
       <Button
         text="Open Google Ad Manager Console"
         extraClasses="text-base"
-        onClick={noop}
+        onClick={openGoogleManagerConsole}
       />
       <div className="flex flex-row items-center">
         <ToggleSwitch

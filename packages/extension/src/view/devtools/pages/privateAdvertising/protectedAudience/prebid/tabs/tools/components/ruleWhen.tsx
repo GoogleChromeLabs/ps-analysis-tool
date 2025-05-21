@@ -88,7 +88,7 @@ const RuleWhen = ({
       )}
       <div className="flex flex-row gap-2 items-center gap-1">
         <div className="w-1/2 relative">
-          <fieldset className="absolute border inset-x-0 inset-y-0 inset-y-[-5px] m-0 min-w-0 px-2 text-left">
+          <fieldset className="absolute border inset-x-0 inset-y-0 inset-y-[-5px] m-0 min-w-0 px-2 text-left pointer-events-none">
             <legend className="block float-none max-w-full text-[0.75em]">
               MatchRule Target:
             </legend>
@@ -107,11 +107,6 @@ const RuleWhen = ({
           <Equal className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
         </div>
         <div className="w-1/2 relative">
-          <fieldset className="absolute border inset-x-0 inset-y-0 inset-y-[-5px] m-0 min-w-0 px-2 text-left">
-            <legend className="block float-none max-w-full text-[0.75em]">
-              MatchRule Value:
-            </legend>
-          </fieldset>
           <Dropdown
             onChange={(value) => {
               handleChange(ruleKey, 'when', ruleIndex, value);
@@ -124,6 +119,11 @@ const RuleWhen = ({
             }))}
             value={rule.when[ruleKey].toString()}
           />
+          <fieldset className="absolute border inset-x-0 inset-y-0 inset-y-[-5px] m-0 min-w-0 px-2 text-left pointer-events-none">
+            <legend className="block float-none max-w-full text-[0.75em]">
+              MatchRule Value:
+            </legend>
+          </fieldset>
         </div>
         {Object.keys(rule.when).length > 1 && (
           <div

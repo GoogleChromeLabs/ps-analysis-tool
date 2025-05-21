@@ -96,6 +96,17 @@ const usePrebidTool = () => {
     [pbjsNamespace, storeRulesInLocalStorage]
   );
 
+  const openGoogleManagerConsole = useCallback(async () => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
+
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      //@ts-ignore
+      func: () => googletag.cmd.push(() => googletag.openConsole()),
+      world: 'MAIN',
+    });
+  }, []);
+
   useEffect(() => {
     if (!initialStateFetched.current) {
       return;
@@ -205,10 +216,12 @@ const usePrebidTool = () => {
       addRule,
       handleChangeStoreRulesInLocalStorage,
       storeRulesInLocalStorage,
+      openGoogleManagerConsole,
     };
   }, [
     addRule,
     changeRule,
+    openGoogleManagerConsole,
     handleChangeStoreRulesInLocalStorage,
     debuggingModuleConfig,
     storeRulesInLocalStorage,
