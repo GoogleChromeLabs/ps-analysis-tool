@@ -55,21 +55,30 @@ const Button = ({
         'rounded flex items-center text-center py-1 px-2 font-medium',
         {
           'bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
-            variant === 'primary',
+            variant === 'primary' && typeof text === 'string',
           'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
-            variant === 'secondary',
-          'text-white dark:text-raisin-black bg-red-500': variant === 'danger',
+            variant === 'secondary' && typeof text === 'string',
+          'text-white dark:text-raisin-black bg-red-500':
+            variant === 'danger' && typeof text === 'string',
           'text-white dark:text-raisin-black bg-green-500':
-            variant === 'success',
+            variant === 'success' && typeof text === 'string',
         },
         {
           'opacity-70 cursor-default': disabled,
           'hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue':
-            !disabled && size === 'small' && variant === 'primary',
+            !disabled &&
+            size === 'small' &&
+            variant === 'primary' &&
+            typeof text === 'string',
           'hover:bg-beteleguese dark:hover:bg-bright-navy-blue':
-            !disabled && size === 'large' && variant === 'primary',
-          'hover:opacity-80': !disabled && variant === 'secondary',
-          'hover:bg-red-600': !disabled && variant === 'danger',
+            !disabled &&
+            size === 'large' &&
+            variant === 'primary' &&
+            typeof text === 'string',
+          'hover:opacity-80':
+            !disabled && variant === 'secondary' && typeof text === 'string',
+          'hover:bg-red-600':
+            !disabled && variant === 'danger' && typeof text === 'string',
         },
         {
           'py-0.5 px-1.5 text-xs': size === 'small',

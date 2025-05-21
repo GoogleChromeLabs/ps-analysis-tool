@@ -57,6 +57,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},
+    pbjsNamespace: '',
   });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =

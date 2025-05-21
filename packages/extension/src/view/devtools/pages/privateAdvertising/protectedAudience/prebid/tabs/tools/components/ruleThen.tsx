@@ -28,18 +28,20 @@ import { useRef } from 'react';
 /**
  * Internal dependencies
  */
-import { replaceRuleTargets } from './constants';
+import { replaceRuleTargets } from '../constants';
 
 interface RuleProps {
   ruleIndex: number;
   ruleKey: string;
   rule: PrebidDebugModuleConfigRule;
   addMatchRule: (
-    ruleWhen: PrebidDebugModuleConfigRule['when'],
+    ruleWhen: PrebidDebugModuleConfigRule,
+    ruleType: 'when' | 'then',
     ruleIndex: number
   ) => void;
   handleChange: (
     ruleKey: string,
+    ruleType: 'when' | 'then',
     ruleIndex: number,
     newValue: any,
     _delete?: boolean
@@ -87,8 +89,8 @@ const RuleThen = ({
             ref={dropdownRef}
             groups={mediaTypes}
             onChange={(value) => {
-              handleChange(ruleKey, ruleIndex, '', true);
-              handleChange(value, ruleIndex, '');
+              handleChange(ruleKey, 'then', ruleIndex, '', true);
+              handleChange(value, 'then', ruleIndex, '');
             }}
             value={ruleKey}
           />
@@ -100,7 +102,7 @@ const RuleThen = ({
           {ruleKey === 'mediaType' ? (
             <Dropdown
               onChange={(value) => {
-                handleChange(ruleKey, ruleIndex, value);
+                handleChange(ruleKey, 'then', ruleIndex, value);
               }}
               options={replaceRuleTargets
                 .find((target) => target.value === ruleKey)
@@ -114,7 +116,7 @@ const RuleThen = ({
         {Object.keys(rule.then).length > 1 && (
           <div
             className="w-4 h-4 cursor-pointer"
-            onClick={() => handleChange(ruleKey, ruleIndex, null, true)}
+            onClick={() => handleChange(ruleKey, 'then', ruleIndex, null, true)}
           >
             <DeleteForever className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
           </div>
@@ -122,7 +124,7 @@ const RuleThen = ({
         {Object.keys(rule.then).length < 5 && (
           <div
             className="w-4 h-4 cursor-pointer"
-            onClick={() => addMatchRule(rule.when, ruleIndex)}
+            onClick={() => addMatchRule(rule, 'then', ruleIndex)}
           >
             <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
           </div>

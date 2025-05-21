@@ -61,6 +61,7 @@ class PrebidInterface {
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},
+    pbjsNamespace: '',
   };
 
   /**
@@ -113,6 +114,7 @@ class PrebidInterface {
       this.prebidInterface = null;
       this.prebidData = {
         adUnits: {},
+        pbjsNamespace: '',
         noBids: {},
         receivedBids: [],
         errorEvents: [],

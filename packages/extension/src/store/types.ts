@@ -67,4 +67,5 @@ export type PrebidEvents = {
   auctionEvents: { [auctionId: string]: any[] };
   installedModules: string[];
   config: PrebidConfig;
+  pbjsNamespace: string;
 };

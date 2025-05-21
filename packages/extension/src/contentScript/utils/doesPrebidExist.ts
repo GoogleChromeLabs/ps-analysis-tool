@@ -35,15 +35,19 @@ function doesPrebidExist(classToInstantiate: PrebidInterfaceType) {
   const isPrebidInPage = () => {
     //@ts-ignore
     const pbjsGlobals = window._pbjsGlobals ?? [];
+
     if (pbjsGlobals?.length > 0) {
       pbjsClass.prebidInterface = window[
         pbjsGlobals[0]
       ] as unknown as typeof window.pbjs;
+
       pbjsClass.prebidExists = true;
       pbjsClass.scanningStatus = true;
 
       pbjsClass.sendInitialData();
       pbjsClass.initPrebidListener();
+
+      pbjsClass.prebidData.pbjsNamespace = pbjsGlobals[0];
 
       pbjsClass.prebidData.versionInfo =
         pbjsClass.prebidInterface.version ?? '';
