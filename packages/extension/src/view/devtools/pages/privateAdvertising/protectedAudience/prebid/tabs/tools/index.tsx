@@ -131,7 +131,7 @@ const Tools = () => {
 
   return (
     <div className="flex flex-col w-full h-full px-3 relative">
-      <div className="flex flex-row w-full h-fit shadow-lg px-3 gap-10 items-center">
+      <div className="flex flex-row w-full h-fit shadow-lg px-3 gap-10 items-start mt-6">
         {debuggingModuleConfig.intercept.map((rule, ruleIndex) => {
           return (
             <>
@@ -145,22 +145,22 @@ const Tools = () => {
                       key={index}
                       ruleKey={ruleKey}
                       rule={rule}
+                      groupIndex={index}
                       ruleIndex={ruleIndex}
                       options={matchRuleTargets}
                     />
                   );
                 })}
               </div>
-              <div className="w-1/2">
-                <p className="text-raisin-black dark:text-bright-gray gap-1">
-                  then
-                </p>
+              <div className="w-1/2 flex flex-col gap-1">
+                <p className="text-raisin-black dark:text-bright-gray">then</p>
                 {Object.keys(rule.then).map((ruleKey, index) => {
                   return (
                     <RuleThen
                       addMatchRule={addThenRule}
                       handleChange={changeThenRule}
                       key={index}
+                      groupIndex={index}
                       ruleKey={ruleKey}
                       rule={rule}
                       ruleIndex={ruleIndex}

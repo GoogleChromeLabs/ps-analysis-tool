@@ -17,12 +17,18 @@
 /**
  * External dependencies
  */
-import { Dropdown, Equal, Plus } from '@google-psat/design-system';
+import {
+  DeleteForever,
+  Dropdown,
+  Equal,
+  Plus,
+} from '@google-psat/design-system';
 import { useRef } from 'react';
 /**
  * Internal dependencies
  */
 import { useProtectedAudience } from '../../../../../../stateProviders';
+import { matchRuleTargets } from './constants';
 
 interface RuleProps {
   options: { label: string; value: string }[];
@@ -39,6 +45,7 @@ interface RuleProps {
     newValue: any,
     _delete?: boolean
   ) => void;
+  groupIndex: number;
 }
 
 const RuleWhen = ({
@@ -48,6 +55,7 @@ const RuleWhen = ({
   addMatchRule,
   handleChange,
   ruleIndex,
+  groupIndex,
 }: RuleProps) => {
   const dropdownRef = useRef<HTMLSelectElement | null>(null);
   const ruleValueOptions = useProtectedAudience(({ state }) => {
@@ -71,40 +79,55 @@ const RuleWhen = ({
     };
   });
   return (
-    <div className="flex flex-row gap-2 items-center gap-1">
-      <div className="w-1/2">
-        <Dropdown
-          ref={dropdownRef}
-          options={options}
-          onChange={(value) => {
-            handleChange(ruleKey, ruleIndex, '', true);
-            handleChange(value, ruleIndex, '');
-          }}
-          value={ruleKey}
-        />
-      </div>
-      <div className="w-4 h-4">
-        <Equal className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
-      </div>
-      <div className="w-1/2">
-        <Dropdown
-          onChange={(value) => {
-            handleChange(ruleKey, ruleIndex, value);
-          }}
-          options={ruleValueOptions[
-            ruleKey as keyof typeof ruleValueOptions
-          ].map((adUnit) => ({
-            label: adUnit,
-            value: adUnit,
-          }))}
-          value={rule.when[ruleKey].toString()}
-        />
-      </div>
-      <div
-        className="w-4 h-4 cursor-pointer"
-        onClick={() => addMatchRule(rule.when, ruleIndex)}
-      >
-        <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+    <div className="flex flex-col gap-1">
+      {groupIndex !== 0 && (
+        <p className="text-raisin-black dark:text-bright-gray">and</p>
+      )}
+      <div className="flex flex-row gap-2 items-center gap-1">
+        <div className="w-1/2">
+          <Dropdown
+            ref={dropdownRef}
+            options={options}
+            onChange={(value) => {
+              handleChange(ruleKey, ruleIndex, '', true);
+              handleChange(value, ruleIndex, '');
+            }}
+            value={ruleKey}
+          />
+        </div>
+        <div className="w-4 h-4">
+          <Equal className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+        </div>
+        <div className="w-1/2">
+          <Dropdown
+            onChange={(value) => {
+              handleChange(ruleKey, ruleIndex, value);
+            }}
+            options={ruleValueOptions[
+              ruleKey as keyof typeof ruleValueOptions
+            ].map((adUnit) => ({
+              label: adUnit,
+              value: adUnit,
+            }))}
+            value={rule.when[ruleKey].toString()}
+          />
+        </div>
+        {Object.keys(rule.when).length > 1 && (
+          <div
+            className="w-4 h-4 cursor-pointer"
+            onClick={() => handleChange(ruleKey, ruleIndex, null, true)}
+          >
+            <DeleteForever className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+          </div>
+        )}
+        {Object.keys(rule.when).length < matchRuleTargets.length && (
+          <div
+            className="w-4 h-4 cursor-pointer"
+            onClick={() => addMatchRule(rule.when, ruleIndex)}
+          >
+            <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+          </div>
+        )}
       </div>
     </div>
   );
