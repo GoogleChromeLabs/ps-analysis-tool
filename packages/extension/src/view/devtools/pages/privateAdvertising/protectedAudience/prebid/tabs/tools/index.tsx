@@ -46,15 +46,16 @@ const Tools = () => {
         debuggingEnabled={debuggingModuleConfig.enabled ?? false}
         setDebuggingModuleConfig={setDebuggingModuleConfig}
       />
-      <div className="flex flex-col w-full h-fit gap-10 items-start mt-2 rounded-sm border px-4 py-3">
+      <div className="flex flex-col w-full h-fit items-start mt-2 rounded-sm border border-hex-gray dark:border-quartz px-4 py-3">
         <Button
+          extraClasses="mb-8"
           title="Add rule"
           type="button"
           text={
             <div className="cursor-pointer flex flex-row gap-1 items-center">
-              <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
-              <span className="text-base text-raisin-black dark:text-bright-gray">
-                Add rule
+              <Plus className="w-4 h-4 text-sapphire dark:text-baby-blue-eyes" />
+              <span className="text-xs text-sapphire dark:text-baby-blue-eyes">
+                ADD RULE
               </span>
             </div>
           }
@@ -72,14 +73,19 @@ const Tools = () => {
         />
         {debuggingModuleConfig.intercept.map((rule, ruleIndex) => {
           return (
-            <RuleComponent
-              setDebuggingModuleConfig={setDebuggingModuleConfig}
-              key={ruleIndex}
-              changeRule={changeRule}
-              addRule={addRule}
-              ruleIndex={ruleIndex}
-              rule={rule}
-            />
+            <div className="w-full h-full mt-4" key={ruleIndex}>
+              <RuleComponent
+                setDebuggingModuleConfig={setDebuggingModuleConfig}
+                key={ruleIndex}
+                changeRule={changeRule}
+                addRule={addRule}
+                ruleIndex={ruleIndex}
+                rule={rule}
+              />
+              {debuggingModuleConfig.intercept.length > 1 && (
+                <div className="h-px bg-gray-200 dark:bg-quartz my-5 w-full" />
+              )}
+            </div>
           );
         })}
       </div>

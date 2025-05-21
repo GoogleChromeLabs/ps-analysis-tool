@@ -56,13 +56,13 @@ const RuleComponent = ({
 }: RuleComponentProps) => {
   return (
     <div
-      className="flex flex-col w-full h-fit items-start mt-6 gap-4"
+      className="flex flex-col w-full h-fit items-start gap-4"
       key={ruleIndex}
     >
-      <p className="text-sm font-bold text-raisin-black dark:text-bright-gray">
-        Rule #{ruleIndex + 1}
-      </p>
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-between">
+        <span className="text-base font-bold text-raisin-black dark:text-bright-gray">
+          Rule #{ruleIndex + 1}
+        </span>
         <div
           title="Delete Rule"
           className="w-4 h-4 cursor-pointer"
@@ -76,11 +76,11 @@ const RuleComponent = ({
             })
           }
         >
-          <DeleteForever className="w-6 h-6 text-raisin-black dark:text-bright-gray" />
+          <DeleteForever className="w-6 h-4 text-raisin-black dark:text-bright-gray" />
         </div>
       </div>
       <div
-        className="flex flex-row w-full h-fit items-start mt-6 gap-4"
+        className="flex flex-row w-full h-fit items-start gap-4"
         key={ruleIndex}
       >
         <div key={ruleIndex} className="w-1/2 flex flex-col gap-1">
