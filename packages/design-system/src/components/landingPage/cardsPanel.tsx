@@ -54,9 +54,12 @@ const CardsPanel = ({
   centered = false,
 }: CardsPanelProps) => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
-  const internalContainer = classNames('flex gap-5 flex-wrap mt-2', {
-    'justify-center': centered,
-  });
+  const internalContainer = classNames(
+    'flex gap-5 flex-wrap mt-2 min-w-[752px]',
+    {
+      'justify-center': centered,
+    }
+  );
 
   const clickHandler = (sidebarKey: string, url = '') => {
     navigateTo(sidebarKey);
@@ -69,7 +72,7 @@ const CardsPanel = ({
   return (
     <div
       data-testid="cards-panel"
-      className="overflow-auto text-raisin-black dark:text-bright-gray pb-14 px-4"
+      className="text-raisin-black dark:text-bright-gray pb-14 px-4"
     >
       {featuredItems.length > 0 && (
         <div className={internalContainer}>
