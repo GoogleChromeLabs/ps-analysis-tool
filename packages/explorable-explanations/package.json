@@ -32,7 +32,7 @@
   "homepage": "https://github.com/GoogleChromeLabs/ps-analysis-tool",
   "dependencies": {
     "just-throttle": "^4.2.0",
-    "p5": "^1.11.5",
+    "p5": "^1.11.7",
     "queue": "^7.0.0"
   },
   "devDependencies": {
