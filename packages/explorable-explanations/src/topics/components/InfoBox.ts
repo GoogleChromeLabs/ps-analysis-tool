@@ -40,7 +40,7 @@ export const InfoBox = ({
   adTechs,
 }: InfoBoxProps) => {
   p.push();
-  p.rectMode(p.CENTER);
+  p.rectMode(p5.CENTER);
   p.fill(245);
   p.stroke(0);
   p.strokeWeight(1);
@@ -49,14 +49,16 @@ export const InfoBox = ({
   p.strokeWeight(1);
   p.fill(0);
   p.textSize(12);
-  p.textAlign(p.LEFT, p.CENTER);
-  p.textStyle(p.BOLD);
+  p.textAlign(p5.LEFT, p5.CENTER);
+  p.textStyle(p5.BOLD);
   p.text(
     'Topic(s) Observed:',
     position.x - 120,
-    position.y + diameter / 2 + 75
+    position.y + diameter / 2 + 75,
+    0,
+    0
   );
-  p.textStyle(p.NORMAL);
+  p.textStyle(p5.NORMAL);
   topics.forEach((topic, i) => {
     const _topic = topic.split('/').slice(-1)[0];
     p.text(_topic, position.x - 115, position.y + diameter / 2 + 95 + i * 20);
@@ -66,13 +68,13 @@ export const InfoBox = ({
 
   const numAdTechs = adTechs.length;
 
-  p.textStyle(p.BOLD);
+  p.textStyle(p5.BOLD);
   p.text(
     'Observed-by Context Domain(s):',
     position.x - 120,
     position.y + diameter / 2 + 85 + startingPointAdTechs
   );
-  p.textStyle(p.NORMAL);
+  p.textStyle(p5.NORMAL);
   for (let i = 0; i < numAdTechs; i++) {
     const adTech = adTechs[i];
     const adTechColor = getAdtechsColors(p)[adTech];
@@ -113,7 +115,7 @@ export const clearInfoBox = (
   p.push();
   p.fill(255);
   p.stroke(255);
-  p.rectMode(p.CENTER);
+  p.rectMode(p5.CENTER);
   p.rect(position.x, position.y + diameter / 2 + 175, 300, 250);
   p.strokeWeight(5);
   p.line(

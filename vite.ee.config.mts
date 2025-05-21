@@ -19,10 +19,10 @@ import path from 'path';
 import baseConfig from './vite.shared.config.mjs';
 
 export default mergeConfig(baseConfig, {
-  root: path.resolve(__dirname, 'packages/explorable-explanations/src'),
+  root: path.resolve(__dirname, 'packages/explorable-explanations'),
   build: {
     emptyOutDir: true,
-    outDir: '../dist',
+    outDir: './dist',
     rollupOptions: {
       input: {
         index: './src/index.ts',
