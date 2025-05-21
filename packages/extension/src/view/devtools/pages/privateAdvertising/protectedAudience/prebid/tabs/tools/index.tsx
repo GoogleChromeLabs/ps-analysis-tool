@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import { Button, Plus } from '@google-psat/design-system';
+/**
  * Internal dependencies
  */
 import usePrebidTool from './hooks/usePrebidTool';
@@ -31,18 +35,43 @@ const Tools = () => {
   } = usePrebidTool();
 
   return (
-    <div className="flex flex-col w-full h-full px-3 relative">
+    <div className="flex flex-col w-full h-full px-4 relative">
       <HeaderComponent
         handleChangeStoreRulesInLocalStorage={
           handleChangeStoreRulesInLocalStorage
         }
         storeRulesInLocalStorage={storeRulesInLocalStorage}
+        debuggingEnabled={debuggingModuleConfig.enabled ?? false}
         setDebuggingModuleConfig={setDebuggingModuleConfig}
       />
-      <div className="flex flex-col w-full h-fit shadow-lg px-3 gap-10 items-start mt-6 py-3 rounded-sm">
+      <div className="flex flex-col w-full h-fit gap-10 items-start mt-2 rounded-sm border px-4 py-3">
+        <Button
+          title="Add rule"
+          type="button"
+          text={
+            <div className="cursor-pointer flex flex-row gap-1 items-center">
+              <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+              <span className="text-base text-raisin-black dark:text-bright-gray">
+                Add rule
+              </span>
+            </div>
+          }
+          onClick={() =>
+            setDebuggingModuleConfig((prevState) => {
+              return {
+                ...prevState,
+                intercept: [
+                  ...prevState.intercept,
+                  { when: { adUnitCode: '' }, then: { cpm: 20 } },
+                ],
+              };
+            })
+          }
+        />
         {debuggingModuleConfig.intercept.map((rule, ruleIndex) => {
           return (
             <RuleComponent
+              setDebuggingModuleConfig={setDebuggingModuleConfig}
               key={ruleIndex}
               changeRule={changeRule}
               addRule={addRule}

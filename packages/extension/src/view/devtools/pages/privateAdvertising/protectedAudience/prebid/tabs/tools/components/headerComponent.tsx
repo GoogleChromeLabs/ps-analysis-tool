@@ -17,18 +17,20 @@
 /**
  * External dependencies
  */
-import { Button, Plus, ToggleSwitch } from '@google-psat/design-system';
+import { Button, ToggleSwitch } from '@google-psat/design-system';
 import { noop, type PrebidDebugModuleConfig } from '@google-psat/common';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface HeaderComponentProps {
   setDebuggingModuleConfig: Dispatch<SetStateAction<PrebidDebugModuleConfig>>;
   storeRulesInLocalStorage: boolean;
+  debuggingEnabled: boolean;
   handleChangeStoreRulesInLocalStorage: (value: boolean) => void;
 }
 const HeaderComponent = ({
   setDebuggingModuleConfig,
   storeRulesInLocalStorage,
+  debuggingEnabled,
   handleChangeStoreRulesInLocalStorage,
 }: HeaderComponentProps) => {
   return (
@@ -40,6 +42,22 @@ const HeaderComponent = ({
       />
       <div className="flex flex-row items-center">
         <ToggleSwitch
+          enabled={debuggingEnabled}
+          setEnabled={(value) =>
+            setDebuggingModuleConfig((prevState) => {
+              return {
+                ...prevState,
+                enabled: value,
+              };
+            })
+          }
+        />
+        <span className="text-base text-raisin-black dark:text-bright-gray">
+          Enable Debugging
+        </span>
+      </div>
+      <div className="flex flex-row items-center">
+        <ToggleSwitch
           enabled={storeRulesInLocalStorage}
           setEnabled={handleChangeStoreRulesInLocalStorage}
         />
@@ -47,29 +65,6 @@ const HeaderComponent = ({
           Store rules in local storage
         </span>
       </div>
-      <Button
-        title="Add rule"
-        type="button"
-        text={
-          <div className="cursor-pointer flex flex-row gap-1 items-center">
-            <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
-            <span className="text-base text-raisin-black dark:text-bright-gray">
-              Add rule
-            </span>
-          </div>
-        }
-        onClick={() =>
-          setDebuggingModuleConfig((prevState) => {
-            return {
-              ...prevState,
-              intercept: [
-                ...prevState.intercept,
-                { when: { adUnitCode: '' }, then: { cpm: 20 } },
-              ],
-            };
-          })
-        }
-      />
     </div>
   );
 };

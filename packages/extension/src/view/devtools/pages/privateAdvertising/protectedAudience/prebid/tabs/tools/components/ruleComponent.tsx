@@ -16,13 +16,18 @@
 /**
  * External dependencies
  */
-import type { PrebidDebugModuleConfigRule } from '@google-psat/common';
+import type {
+  PrebidDebugModuleConfig,
+  PrebidDebugModuleConfigRule,
+} from '@google-psat/common';
+import { DeleteForever } from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
 import { matchRuleTargets } from '../constants';
 import RuleWhen from './ruleWhen';
 import RuleThen from './ruleThen';
+import type { Dispatch, SetStateAction } from 'react';
 
 interface RuleComponentProps {
   changeRule: (
@@ -39,6 +44,7 @@ interface RuleComponentProps {
   ) => void;
   ruleIndex: number;
   rule: PrebidDebugModuleConfigRule;
+  setDebuggingModuleConfig: Dispatch<SetStateAction<PrebidDebugModuleConfig>>;
 }
 
 const RuleComponent = ({
@@ -46,44 +52,74 @@ const RuleComponent = ({
   addRule,
   ruleIndex,
   rule,
+  setDebuggingModuleConfig,
 }: RuleComponentProps) => {
   return (
     <div
-      className="flex flex-row w-full h-fit items-start mt-6"
+      className="flex flex-col w-full h-fit items-start mt-6 gap-4"
       key={ruleIndex}
     >
-      <div key={ruleIndex} className="w-1/2 flex flex-col gap-1">
-        <p className="text-raisin-black dark:text-bright-gray">when</p>
-        {Object.keys(rule.when).map((ruleKey, index) => {
-          return (
-            <RuleWhen
-              addMatchRule={addRule}
-              handleChange={changeRule}
-              key={index}
-              ruleKey={ruleKey}
-              rule={rule}
-              groupIndex={index}
-              ruleIndex={ruleIndex}
-              options={matchRuleTargets}
-            />
-          );
-        })}
+      <p className="text-sm font-bold text-raisin-black dark:text-bright-gray">
+        Rule #{ruleIndex + 1}
+      </p>
+      <div className="w-full flex justify-end">
+        <div
+          title="Delete Rule"
+          className="w-4 h-4 cursor-pointer"
+          onClick={() =>
+            setDebuggingModuleConfig((prevState) => {
+              const newState = structuredClone(prevState);
+              newState.intercept = newState.intercept.filter(
+                (_, index) => index !== ruleIndex
+              );
+              return newState;
+            })
+          }
+        >
+          <DeleteForever className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+        </div>
       </div>
-      <div className="w-1/2 flex flex-col gap-1">
-        <p className="text-raisin-black dark:text-bright-gray">then</p>
-        {Object.keys(rule.then).map((ruleKey, index) => {
-          return (
-            <RuleThen
-              addMatchRule={addRule}
-              handleChange={changeRule}
-              key={index}
-              groupIndex={index}
-              ruleKey={ruleKey}
-              rule={rule}
-              ruleIndex={ruleIndex}
-            />
-          );
-        })}
+      <div
+        className="flex flex-row w-full h-fit items-start mt-6 gap-4"
+        key={ruleIndex}
+      >
+        <div key={ruleIndex} className="w-1/2 flex flex-col gap-1">
+          <p className="text-sm font-bold text-raisin-black dark:text-bright-gray">
+            when
+          </p>
+          {Object.keys(rule.when).map((ruleKey, index) => {
+            return (
+              <RuleWhen
+                addMatchRule={addRule}
+                handleChange={changeRule}
+                key={index}
+                ruleKey={ruleKey}
+                rule={rule}
+                groupIndex={index}
+                ruleIndex={ruleIndex}
+                options={matchRuleTargets}
+              />
+            );
+          })}
+        </div>
+        <div className="w-1/2 flex flex-col gap-1">
+          <p className="text-sm font-bold text-raisin-black dark:text-bright-gray">
+            then
+          </p>
+          {Object.keys(rule.then).map((ruleKey, index) => {
+            return (
+              <RuleThen
+                addMatchRule={addRule}
+                handleChange={changeRule}
+                key={index}
+                groupIndex={index}
+                ruleKey={ruleKey}
+                rule={rule}
+                ruleIndex={ruleIndex}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

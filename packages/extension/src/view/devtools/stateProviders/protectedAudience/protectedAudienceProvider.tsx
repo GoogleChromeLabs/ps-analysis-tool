@@ -280,6 +280,7 @@ const Provider = ({ children }: PropsWithChildren) => {
               versionInfo,
               installedModules,
               config,
+              pbjsNamespace,
             } = message.payload.prebidEvents;
 
             const newState: Partial<PrebidEvents> = {};
@@ -312,6 +313,9 @@ const Provider = ({ children }: PropsWithChildren) => {
             }
             if (!isEqual(versionInfo, prevState.versionInfo)) {
               newState.versionInfo = versionInfo;
+            }
+            if (!isEqual(pbjsNamespace, prevState.pbjsNamespace)) {
+              newState.pbjsNamespace = pbjsNamespace;
             }
 
             return Object.keys(newState).length > 0

@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type {
   PrebidDebugModuleConfig,
   PrebidDebugModuleConfigRule,
@@ -35,6 +35,9 @@ const usePrebidTool = () => {
       enabled: false,
       intercept: [],
     });
+
+  const initialStateFetched = useRef(false);
+
   const [storeRulesInLocalStorage, setStoreRulesInLocalStorage] =
     useState<boolean>(false);
 
@@ -57,7 +60,13 @@ const usePrebidTool = () => {
   const handleWriteRulesToStorage = useCallback(
     async (input: PrebidDebugModuleConfig) => {
       setDebuggingModuleConfig(input);
+
       const tabId = chrome.devtools.inspectedWindow.tabId;
+
+      if (!pbjsNamespace) {
+        return;
+      }
+
       await chrome.scripting.executeScript({
         target: { tabId },
         func: (namespace: string, _input: object) => {
@@ -87,8 +96,20 @@ const usePrebidTool = () => {
     [pbjsNamespace, storeRulesInLocalStorage]
   );
 
+  useEffect(() => {
+    if (!initialStateFetched.current) {
+      return;
+    }
+
+    handleWriteRulesToStorage(debuggingModuleConfig);
+  }, [debuggingModuleConfig, handleWriteRulesToStorage]);
+
   const getInitialState = useCallback(async () => {
     const tabId = chrome.devtools.inspectedWindow.tabId;
+
+    if (!pbjsNamespace) {
+      return;
+    }
 
     let [first] = await chrome.scripting.executeScript({
       target: { tabId },
@@ -113,6 +134,7 @@ const usePrebidTool = () => {
     const savedConfig: PrebidDebugModuleConfig = JSON.parse(first.result);
     setDebuggingModuleConfig(savedConfig);
     handleWriteRulesToStorage(savedConfig);
+    initialStateFetched.current = true;
   }, [pbjsNamespace, handleWriteRulesToStorage]);
 
   useEffect(() => {

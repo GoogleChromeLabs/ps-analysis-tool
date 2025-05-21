@@ -53,7 +53,7 @@ const Dropdown = ({
   return (
     <select
       ref={ref}
-      className="border rounded px-3 py-2 w-full text-sm text-raisin-black dark:text-bright-gray"
+      className="rounded px-3 py-2 w-full text-sm text-raisin-black dark:text-bright-gray"
       value={value}
       onChange={(e) => onChange(e.target.value)}
     >

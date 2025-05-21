@@ -82,10 +82,15 @@ const RuleThen = ({
   return (
     <div className="flex flex-col gap-1">
       {groupIndex !== 0 && (
-        <p className="text-raisin-black dark:text-bright-gray">and</p>
+        <p className="text-sm text-raisin-black dark:text-bright-gray">and</p>
       )}
       <div className="flex flex-row gap-2 items-center gap-1">
-        <div className="w-1/2">
+        <div className="w-1/2 relative">
+          <fieldset className="absolute border inset-x-0 inset-y-0 inset-y-[-5px] m-0 min-w-0 px-2 text-left">
+            <legend className="block float-none max-w-full text-[0.75em]">
+              Replace-rule Key:
+            </legend>
+          </fieldset>
           <Dropdown
             ref={dropdownRef}
             groups={mediaTypes}
@@ -99,7 +104,12 @@ const RuleThen = ({
         <div className="w-4 h-4">
           <Equal className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
         </div>
-        <div className="w-1/2">
+        <div className="w-1/2 relative">
+          <fieldset className="absolute border inset-x-0 inset-y-0 inset-y-[-5px] m-0 min-w-0 px-2 text-left">
+            <legend className="block float-none max-w-full text-[0.75em]">
+              Replace-rule Value:
+            </legend>
+          </fieldset>
           {ruleKey === 'mediaType' ? (
             <Dropdown
               onChange={(value) => {
@@ -111,7 +121,17 @@ const RuleThen = ({
               value={rule.then[ruleKey].toString()}
             />
           ) : (
-            <></>
+            <input
+              className="rounded px-3 py-2 w-full text-sm text-raisin-black dark:text-bright-gray"
+              onChange={(element) => {
+                handleChange(ruleKey, 'then', ruleIndex, element.target.value);
+              }}
+              value={rule.then[ruleKey]}
+              type={
+                replaceRuleTargets.find((target) => target.value === ruleKey)
+                  ?.type ?? 'text'
+              }
+            />
           )}
         </div>
         {Object.keys(rule.then).length > 1 && (
