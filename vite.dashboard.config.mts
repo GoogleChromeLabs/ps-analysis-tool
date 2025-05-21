@@ -21,12 +21,12 @@ import path from 'path';
 import baseConfig from './vite.shared.config.mjs';
 
 export default mergeConfig(baseConfig, {
-  root: path.resolve(__dirname, 'packages/cli-dashboard/src'),
+  root: path.resolve(__dirname, 'packages/cli-dashboard'),
   build: {
-    outDir: '../dist',
+    outDir: './dist',
     rollupOptions: {
       input: {
-        index: './src/index.html',
+        index: './index.html',
       },
     },
   },
@@ -35,8 +35,8 @@ export default mergeConfig(baseConfig, {
     viteStaticCopy({
       targets: [
         {
-          src: '../../i18n/_locales/messages/*',
-          dest: '../dist/_locales/',
+          src: '../i18n/_locales/messages/*',
+          dest: './dist/_locales/',
         },
       ],
     }),
