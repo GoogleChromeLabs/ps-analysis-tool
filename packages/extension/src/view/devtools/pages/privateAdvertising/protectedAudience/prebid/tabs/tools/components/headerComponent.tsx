@@ -42,30 +42,32 @@ const HeaderComponent = ({
         extraClasses="text-base"
         onClick={openGoogleManagerConsole}
       />
-      <div className="flex flex-row items-center">
-        <ToggleSwitch
-          enabled={debuggingEnabled}
-          setEnabled={(value) =>
-            setDebuggingModuleConfig((prevState) => {
-              return {
-                ...prevState,
-                enabled: value,
-              };
-            })
-          }
-        />
-        <span className="text-base text-raisin-black dark:text-bright-gray">
-          Enable Debugging
-        </span>
-      </div>
-      <div className="flex flex-row items-center">
-        <ToggleSwitch
-          enabled={storeRulesInLocalStorage}
-          setEnabled={handleChangeStoreRulesInLocalStorage}
-        />
-        <span className="text-base text-raisin-black dark:text-bright-gray">
-          Store rules in local storage
-        </span>
+      <div className="flex flex-row items-center gap-4">
+        <div className="flex flex-row items-center">
+          <ToggleSwitch
+            enabled={debuggingEnabled}
+            setEnabled={(value) =>
+              setDebuggingModuleConfig((prevState) => {
+                return {
+                  ...prevState,
+                  enabled: value,
+                };
+              })
+            }
+          />
+          <span className="text-base text-raisin-black dark:text-bright-gray">
+            Enable Debugging
+          </span>
+        </div>
+        <div className="flex flex-row items-center">
+          <ToggleSwitch
+            enabled={storeRulesInLocalStorage}
+            setEnabled={handleChangeStoreRulesInLocalStorage}
+          />
+          <span className="text-base text-raisin-black dark:text-bright-gray">
+            Store rules in local storage
+          </span>
+        </div>
       </div>
     </div>
   );
