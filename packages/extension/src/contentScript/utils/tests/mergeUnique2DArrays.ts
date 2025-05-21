@@ -75,8 +75,8 @@ describe('mergeUnique2DArrays', () => {
   });
 
   it('should handle arrays with complex inner arrays', () => {
-    const arr1 = [[{ a: 1 }], [{ b: 2 }]];
-    const arr2 = [[{ b: 2 }], [{ c: 3 }]];
+    const arr1: Array<Array<Record<string, number>>> = [[{ a: 1 }], [{ b: 2 }]];
+    const arr2: Array<Array<Record<string, number>>> = [[{ b: 2 }], [{ c: 3 }]];
     const result = mergeUnique2DArrays(arr1, arr2);
     expect(result).toEqual([[{ a: 1 }], [{ b: 2 }], [{ c: 3 }]]);
   });
