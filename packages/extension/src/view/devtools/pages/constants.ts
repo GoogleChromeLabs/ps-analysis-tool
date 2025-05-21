@@ -31,13 +31,191 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
+const LINKS = {
+  IP_PROTECTION: {
+    doc: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
+    story: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
+  },
+  BOUNCE_TRACKING: {
+    doc: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking',
+    story:
+      'https://privacysandbox-stories.com/web-stories/bounce-tracking-mitigations/',
+  },
+  USER_AGENT_REDUCTION: {
+    doc: 'https://developers.google.com/privacy-sandbox/protections/user-agent-reduction',
+    story:
+      'https://privacysandbox-stories.com/web-stories/user-agent-reduction/',
+  },
+  PRIVATE_STATE_TOKENS: {
+    doc: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
+    story:
+      'https://privacysandbox-stories.com/web-stories/private-state-tokens/',
+  },
+  TOPICS: {
+    doc: 'https://developers.google.com/privacy-sandbox/relevance/topics',
+    story: 'https://privacysandbox-stories.com/web-stories/the-topics-api/',
+  },
+  PROTECTED_AUDIENCE: {
+    doc: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
+    story:
+      'https://privacysandbox-stories.com/web-stories/the-protected-audience-api/',
+  },
+  ATTRIBUTION_REPORTING: {
+    doc: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
+    story:
+      'https://privacysandbox-stories.com/web-stories/the-attribution-reporting-api/',
+  },
+  PRIVATE_AGGREGATION: {
+    doc: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
+    story:
+      'https://privacysandbox-stories.com/web-stories/private-aggregation-api/',
+  },
+  COOKIES: {
+    doc: 'https://developers.google.com/privacy-sandbox/cookies',
+    story:
+      'https://privacysandbox-stories.com/web-stories/chrome-shifts-to-user-choice-for-third-party-cookies/',
+  },
+  CHIPS: {
+    doc: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
+    story: 'https://privacysandbox-stories.com/web-stories/chips/',
+  },
+  STORAGE_ACCESS: {
+    doc: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
+    story: 'https://privacysandbox-stories.com/web-stories/storage-access-api/',
+  },
+  RELATED_WEBSITE_SETS: {
+    doc: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
+    story:
+      'https://privacysandbox-stories.com/web-stories/related-website-sets/',
+  },
+  FEDERATED_CREDENTIAL: {
+    doc: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
+    story:
+      'https://privacysandbox-stories.com/web-stories/federated-credential-management-api/',
+  },
+  PS_TRACKING_PROTECTION: {
+    doc: 'https://privacysandbox.google.com/protections',
+  },
+  PS_SITE_BOUNDARIES: {
+    doc: 'https://privacysandbox.google.com/cookies',
+  },
+  PS_PRIVATE_ADVERTISING: {
+    doc: 'https://privacysandbox.google.com/private-advertising',
+  },
+  PS_LEARNING: {
+    doc: 'https://privacysandbox.google.com',
+  },
+};
+
+export const PRIVACY_PROTECTION_CONTENT = [
+  {
+    title: () => I18n.getMessage('ipProtection'),
+    description: () => I18n.getMessage('ipProtectionDescription'),
+    url: LINKS.IP_PROTECTION.doc,
+    storyUrl: LINKS.IP_PROTECTION.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
+  },
+  {
+    title: () => I18n.getMessage('bounceTrackingMitigations'),
+    description: () => I18n.getMessage('bounceTrackingMitigationsDescription'),
+    url: LINKS.BOUNCE_TRACKING.doc,
+    storyUrl: LINKS.BOUNCE_TRACKING.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
+  },
+  {
+    title: () => I18n.getMessage('userAgentReduction'),
+    description: () => I18n.getMessage('userAgentReductionDescription'),
+    url: LINKS.USER_AGENT_REDUCTION.doc,
+    storyUrl: LINKS.USER_AGENT_REDUCTION.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
+  },
+  {
+    title: () => I18n.getMessage('privateStateTokens'),
+    description: () => I18n.getMessage('privateStateTokensDescription'),
+    url: LINKS.PRIVATE_STATE_TOKENS.doc,
+    storyUrl: LINKS.PRIVATE_STATE_TOKENS.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
+  },
+];
+
+export const PRIVATE_ADVERTISING_CONTENT = [
+  {
+    title: () => I18n.getMessage('topics'),
+    description: () => I18n.getMessage('topicsDescription'),
+    url: LINKS.TOPICS.doc,
+    storyUrl: LINKS.TOPICS.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.TOPICS,
+  },
+  {
+    title: () => I18n.getMessage('protectedAudience'),
+    description: () => I18n.getMessage('protectedAudienceDescription'),
+    url: LINKS.PROTECTED_AUDIENCE.doc,
+    storyUrl: LINKS.PROTECTED_AUDIENCE.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
+  },
+  {
+    title: () => I18n.getMessage('attributionReporting'),
+    description: () => I18n.getMessage('attributionReportingDescription'),
+    url: LINKS.ATTRIBUTION_REPORTING.doc,
+    storyUrl: LINKS.ATTRIBUTION_REPORTING.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
+  },
+  {
+    title: () => I18n.getMessage('privateAggregation'),
+    description: () => I18n.getMessage('privateAggregationDescription'),
+    url: LINKS.PRIVATE_AGGREGATION.doc,
+    storyUrl: LINKS.PRIVATE_AGGREGATION.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
+  },
+];
+
+export const SITE_BOUNDARIES_CONTENT = [
+  {
+    title: () => 'Cookies',
+    description: () =>
+      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
+    url: LINKS.COOKIES.doc,
+    storyUrl: LINKS.COOKIES.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.COOKIES,
+  },
+  {
+    title: () => I18n.getMessage('chips'),
+    description: () => I18n.getMessage('chipsDescription'),
+    url: LINKS.CHIPS.doc,
+    storyUrl: LINKS.CHIPS.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.CHIPS,
+  },
+  {
+    title: () => I18n.getMessage('storageAccessAPI'),
+    description: () => I18n.getMessage('storageAccessAPIDescription'),
+    url: LINKS.STORAGE_ACCESS.doc,
+    storyUrl: LINKS.STORAGE_ACCESS.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS,
+  },
+  {
+    title: () => I18n.getMessage('rws'),
+    description: () => I18n.getMessage('rwsDescription'),
+    url: LINKS.RELATED_WEBSITE_SETS.doc,
+    storyUrl: LINKS.RELATED_WEBSITE_SETS.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
+  },
+  {
+    title: () => 'FedCM',
+    description: () =>
+      'The Federated Credential Management API enables privacy-preserving identity federation.',
+    url: LINKS.FEDERATED_CREDENTIAL.doc,
+    storyUrl: LINKS.FEDERATED_CREDENTIAL.story,
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL,
+  },
+];
+
 export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
   {
     name: I18n.getMessage('trackingProtection'),
     icon: PSTrackingProtectionIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
     description: 'Limit covert tracking techniques.',
-    url: 'https://privacysandbox.google.com/protections',
+    url: LINKS.PS_TRACKING_PROTECTION.doc,
     buttons: [
       {
         name: 'IP Protection',
@@ -62,7 +240,7 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
     icon: PSSiteBoundriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
     description: 'Prevent unintended data sharing across sites.',
-    url: 'https://privacysandbox.google.com/cookies',
+    url: LINKS.PS_SITE_BOUNDARIES.doc,
     buttons: [
       {
         name: 'Cookies',
@@ -88,7 +266,7 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
   },
   {
     name: I18n.getMessage('privateAdvertising'),
-    url: 'https://privacysandbox.google.com/private-advertising',
+    url: LINKS.PS_PRIVATE_ADVERTISING.doc,
     icon: PSPrivateAdvertisingIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_ADVERTISING,
     description: 'Privacy-preserving relevance and measurement APIs.',
@@ -116,7 +294,7 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
     icon: PSLearningIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.LEARNING,
     description: 'Learn everything about the Privacy Sandbox.',
-    url: 'https://privacysandbox.google.com',
+    url: LINKS.PS_LEARNING.doc,
     buttons: [
       {
         name: 'Help Center',
@@ -139,118 +317,6 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
         sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
       },
     ],
-  },
-];
-
-export const PRIVACY_PROTECTION_CONTENT = [
-  {
-    title: () => I18n.getMessage('ipProtection'),
-    description: () => I18n.getMessage('ipProtectionDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
-    storyUrl: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
-  },
-  {
-    title: () => I18n.getMessage('bounceTrackingMitigations'),
-    description: () => I18n.getMessage('bounceTrackingMitigationsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking-mitigations',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/bounce-tracking-mitigations/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
-  },
-  {
-    title: () => I18n.getMessage('userAgentReduction'),
-    description: () => I18n.getMessage('userAgentReductionDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/user-agent',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/user-agent-reduction/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
-  },
-  {
-    title: () => I18n.getMessage('privateStateTokens'),
-    description: () => I18n.getMessage('privateStateTokensDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/protections/private-state-tokens',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/private-state-tokens/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
-  },
-];
-
-export const PRIVATE_ADVERTISING_CONTENT = [
-  {
-    title: () => I18n.getMessage('topics'),
-    description: () => I18n.getMessage('topicsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
-    storyUrl: 'https://privacysandbox-stories.com/web-stories/the-topics-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.TOPICS,
-  },
-  {
-    title: () => I18n.getMessage('protectedAudience'),
-    description: () => I18n.getMessage('protectedAudienceDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/the-protected-audience-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
-  },
-  {
-    title: () => I18n.getMessage('attributionReporting'),
-    description: () => I18n.getMessage('attributionReportingDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/the-attribution-reporting-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
-  },
-  {
-    title: () => I18n.getMessage('privateAggregation'),
-    description: () => I18n.getMessage('privateAggregationDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/private-aggregation-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
-  },
-];
-
-export const SITE_BOUNDARIES_CONTENT = [
-  {
-    title: () => 'Cookies',
-    description: () =>
-      'Insights into the distribution and behavior of cookies on web pages while users navigate across sites during browsing sessions.',
-    url: 'https://developers.google.com/privacy-sandbox/cookies',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/chrome-shifts-to-user-choice-for-third-party-cookies/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.COOKIES,
-  },
-  {
-    title: () => I18n.getMessage('chips'),
-    description: () => I18n.getMessage('chipsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
-    storyUrl: 'https://privacysandbox-stories.com/web-stories/chips/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.CHIPS,
-  },
-  {
-    title: () => I18n.getMessage('storageAccessAPI'),
-    description: () => I18n.getMessage('storageAccessAPIDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/storage-access-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS,
-  },
-  {
-    title: () => I18n.getMessage('rws'),
-    description: () => I18n.getMessage('rwsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/related-website-sets/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
-  },
-  {
-    title: () => 'FedCM',
-    description: () =>
-      'The Federated Credential Management API enables privacy-preserving identity federation.',
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/federated-credential-management-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL,
   },
 ];
 
