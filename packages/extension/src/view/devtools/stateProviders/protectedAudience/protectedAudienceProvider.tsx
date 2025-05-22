@@ -266,64 +266,35 @@ const Provider = ({ children }: PropsWithChildren) => {
         message.payload.prebidEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
-          setPrebidResponse((prevState) => {
-            if (!message.payload?.prebidEvents) {
-              return prevState;
+          setPrebidResponse((prev) => {
+            const data = message.payload?.prebidEvents ?? null;
+
+            if (!data) {
+              return prev;
             }
 
-            const {
-              adUnits,
-              receivedBids: prebidReceivedBids,
-              noBids: prebidNoBids,
-              auctionEvents: prebidAuctionEvents,
-              errorEvents,
-              versionInfo,
-              installedModules,
-              config,
-              pbjsNamespace,
-            } = message.payload.prebidEvents;
+            const keys: (keyof PrebidEvents)[] = [
+              'adUnits',
+              'receivedBids',
+              'noBids',
+              'auctionEvents',
+              'errorEvents',
+              'config',
+              'installedModules',
+              'versionInfo',
+              'pbjsNamespace',
+            ];
 
-            const newState: Partial<PrebidEvents> = {};
+            const updates = Object.fromEntries(
+              keys
+                .map((key) => [key, data[key]])
+                .filter(([key, value]) => {
+                  const _key = key as keyof PrebidEvents;
+                  return !isEqual(value, prev[_key]);
+                })
+            );
 
-            if (!isEqual(adUnits, prevState.adUnits)) {
-              newState.adUnits = adUnits;
-            }
-
-            if (!isEqual(prebidReceivedBids, prevState.receivedBids)) {
-              newState.receivedBids = prebidReceivedBids;
-            }
-
-            if (!isEqual(prebidNoBids, prevState.noBids)) {
-              newState.noBids = prebidNoBids;
-            }
-
-            if (!isEqual(prebidAuctionEvents, prevState.auctionEvents)) {
-              newState.auctionEvents = prebidAuctionEvents;
-            }
-
-            if (!isEqual(errorEvents, prevState.errorEvents)) {
-              newState.errorEvents = errorEvents;
-            }
-
-            if (!isEqual(config, prevState.config)) {
-              newState.config = config;
-            }
-            if (!isEqual(installedModules, prevState.installedModules)) {
-              newState.installedModules = installedModules;
-            }
-            if (!isEqual(versionInfo, prevState.versionInfo)) {
-              newState.versionInfo = versionInfo;
-            }
-            if (!isEqual(pbjsNamespace, prevState.pbjsNamespace)) {
-              newState.pbjsNamespace = pbjsNamespace;
-            }
-
-            return Object.keys(newState).length > 0
-              ? {
-                  ...prevState,
-                  ...newState,
-                }
-              : prevState;
+            return Object.keys(updates).length ? { ...prev, ...updates } : prev;
           });
         }
       }
