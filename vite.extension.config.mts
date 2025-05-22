@@ -101,6 +101,7 @@ export default defineConfig(() => {
     });
   }
 
+  // devtools
   return mergeConfig(commonConfig, {
     root: path.resolve(__dirname, 'packages/extension/src/view/devtools'),
     build: {
@@ -111,5 +112,15 @@ export default defineConfig(() => {
         },
       },
     },
+    plugins: [
+      viteStaticCopy({
+        targets: [
+          {
+            src: '../../../../../node_modules/p5/lib/p5.min.js',
+            dest: './',
+          },
+        ],
+      }),
+    ],
   });
 });
