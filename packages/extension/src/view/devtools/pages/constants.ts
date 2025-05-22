@@ -37,7 +37,7 @@ const LINKS = {
     story: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
   },
   BOUNCE_TRACKING: {
-    doc: 'https://developers.google.com/privacy-sandbox/protections/bounce-tracking',
+    doc: 'https://privacysandbox.google.com/protections/bounce-tracking-mitigations',
     story:
       'https://privacysandbox-stories.com/web-stories/bounce-tracking-mitigations/',
   },
