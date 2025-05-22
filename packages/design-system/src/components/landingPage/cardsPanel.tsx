@@ -43,7 +43,8 @@ type CardsPanelProps = {
   featuredItems: FeatureItem[];
   onFeaturedButtonClick: (
     event: React.MouseEvent,
-    sidebarKey: SIDEBAR_ITEMS_KEYS
+    sidebarKey: SIDEBAR_ITEMS_KEYS,
+    url?: string
   ) => void;
   centered?: boolean;
 };
@@ -97,7 +98,11 @@ const CardsPanel = ({
                         className="bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
                         key={button.name}
                         onClick={(event) =>
-                          onFeaturedButtonClick(event, button.sidebarKey)
+                          onFeaturedButtonClick(
+                            event,
+                            button.sidebarKey,
+                            button?.url
+                          )
                         }
                       >
                         {button.name}

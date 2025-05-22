@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import {
   CardsPanel,
   SIDEBAR_ITEMS_KEYS,
@@ -36,26 +36,21 @@ const Boxes = () => {
   }));
 
   const handleButtonClick = useCallback(
-    (event: React.MouseEvent, sidebarKey: string) => {
+    (event: React.MouseEvent, sidebarKey: string, url = '') => {
       event.preventDefault();
       event.stopPropagation();
 
       const firstFrame =
         Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX;
 
+      if (url) {
+        chrome.tabs.update({ url });
+      }
+
       navigateTo(sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey);
     },
     [navigateTo, tabFrames]
   );
-
-  useEffect(() => {
-    if (PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES[0].buttons.length === 1) {
-      PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES[0].buttons.push({
-        name: 'Cookies Table',
-        sidebarKey: 'FIRST_COOKIE_TABLE' as SIDEBAR_ITEMS_KEYS,
-      });
-    }
-  }, []);
 
   return (
     <div className="flex justify-center w-full">
