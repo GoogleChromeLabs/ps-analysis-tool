@@ -305,7 +305,7 @@ const TABS: SidebarItems = {
         },
       },
       [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
-        title: () => 'Tracking Protection',
+        title: () => 'Privacy Protection',
         panel: {
           Element: PrivacyProtection,
         },

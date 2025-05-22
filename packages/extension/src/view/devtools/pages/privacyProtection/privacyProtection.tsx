@@ -26,7 +26,7 @@ import { PRIVACY_PROTECTION_CONTENT } from '../constants';
 const PrivacyProtection = () => {
   return (
     <LandingPageContainer
-      title="Tracking Protection"
+      title="Privacy Protection"
       extraClasses="min-h-[78vh] w-full"
       contentPanelTitle={I18n.getMessage('antiCovertTrackingDescription')}
       content={PRIVACY_PROTECTION_CONTENT}

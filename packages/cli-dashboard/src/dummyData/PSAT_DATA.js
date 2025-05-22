@@ -18439,7 +18439,7 @@ export default {
       message: 'Attribution',
     },
     trackingProtection: {
-      message: 'Tracking Protection',
+      message: 'Privacy Protection',
     },
     bounceTracking: {
       message: 'Bounce Tracking',
