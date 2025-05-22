@@ -36,6 +36,7 @@ type FeatureItem = {
   buttons?: {
     name: string;
     sidebarKey: SIDEBAR_ITEMS_KEYS;
+    url?: string;
   }[];
 };
 
