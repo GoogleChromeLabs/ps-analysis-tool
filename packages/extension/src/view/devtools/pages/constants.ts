@@ -211,35 +211,6 @@ export const SITE_BOUNDARIES_CONTENT = [
 
 export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
   {
-    name: I18n.getMessage('trackingProtection'),
-    icon: PSTrackingProtectionIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description: 'Limit covert tracking techniques.',
-    url: LINKS.PS_TRACKING_PROTECTION.doc,
-    buttons: [
-      {
-        name: 'IP Protection',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
-        url: LINKS.IP_PROTECTION.doc,
-      },
-      {
-        name: I18n.getMessage('bounceTracking'),
-        sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
-        url: LINKS.BOUNCE_TRACKING.doc,
-      },
-      {
-        name: 'User Agent Reduction',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
-        url: LINKS.USER_AGENT_REDUCTION.doc,
-      },
-      {
-        name: 'Private State Tokens',
-        sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
-        url: LINKS.PRIVATE_STATE_TOKENS.doc,
-      },
-    ],
-  },
-  {
     name: I18n.getMessage('siteBoundaries'),
     icon: PSSiteBoundriesIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES,
@@ -296,6 +267,35 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
         name: I18n.getMessage('privateAggregation'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
         url: LINKS.PRIVATE_AGGREGATION.doc,
+      },
+    ],
+  },
+  {
+    name: I18n.getMessage('trackingProtection'),
+    icon: PSTrackingProtectionIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
+    description: 'Limit covert tracking techniques.',
+    url: LINKS.PS_TRACKING_PROTECTION.doc,
+    buttons: [
+      {
+        name: 'IP Protection',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
+        url: LINKS.IP_PROTECTION.doc,
+      },
+      {
+        name: I18n.getMessage('bounceTracking'),
+        sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
+        url: LINKS.BOUNCE_TRACKING.doc,
+      },
+      {
+        name: 'User Agent Reduction',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
+        url: LINKS.USER_AGENT_REDUCTION.doc,
+      },
+      {
+        name: 'Private State Tokens',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
+        url: LINKS.PRIVATE_STATE_TOKENS.doc,
       },
     ],
   },
