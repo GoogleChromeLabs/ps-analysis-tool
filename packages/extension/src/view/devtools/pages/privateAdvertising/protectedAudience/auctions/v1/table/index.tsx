@@ -31,7 +31,7 @@ import { Resizable } from 're-resizable';
 /**
  * Internal dependencies.
  */
-import BottomTray from './bottomTray';
+import BottomTray from '../../components/bottomTray';
 
 interface AuctionTableProps {
   auctionEvents: singleAuctionEvent[];
