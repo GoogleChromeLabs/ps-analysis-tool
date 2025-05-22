@@ -249,7 +249,6 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
       {
         name: 'Cookies',
         sidebarKey: SIDEBAR_ITEMS_KEYS.COOKIES,
-        url: LINKS.COOKIES.doc,
       },
       {
         name: I18n.getMessage('chips'),
@@ -288,12 +287,10 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
       {
         name: I18n.getMessage('protectedAudience'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
-        url: LINKS.PROTECTED_AUDIENCE.doc,
       },
       {
         name: 'Attribution Reporting',
         sidebarKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
-        url: LINKS.ATTRIBUTION_REPORTING.doc,
       },
       {
         name: I18n.getMessage('privateAggregation'),
