@@ -58,7 +58,7 @@ describe('PrivacyProtection Landing Pages', () => {
 
     I18n.initMessages({
       trackingProtection: {
-        message: 'Tracking Protection',
+        message: 'Privacy Protection',
       },
     });
 
@@ -88,7 +88,7 @@ describe('PrivacyProtection Landing Pages', () => {
     act(() => {
       render(<PrivacyProtection />);
     });
-    expect(await screen.findByText('Tracking Protection')).toBeInTheDocument();
+    expect(await screen.findByText('Privacy Protection')).toBeInTheDocument();
   });
 
   it('should render IPProtection', async () => {

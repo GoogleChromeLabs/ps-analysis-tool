@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
@@ -26,11 +26,11 @@ import {
 /**
  * Internal dependencies
  */
-import { FEATURED_ITEMS } from './constants';
+import { LEARNING_BOX_ITEMS } from '../constants';
 
 const ContentPanel = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
-  const onButtonClick = React.useCallback(
+  const onButtonClick = useCallback(
     (event: React.MouseEvent, sidebarKey: SIDEBAR_ITEMS_KEYS) => {
       event.preventDefault();
       event.stopPropagation();
@@ -41,9 +41,8 @@ const ContentPanel = () => {
 
   return (
     <CardsPanel
-      featuredItems={FEATURED_ITEMS}
+      featuredItems={LEARNING_BOX_ITEMS}
       onFeaturedButtonClick={onButtonClick}
-      hasTitle={false}
     />
   );
 };

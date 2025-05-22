@@ -35,7 +35,6 @@ import {
   type SidebarItems,
   SIDEBAR_ITEMS_KEYS,
   GroupsIcon,
-  DashboardIcon,
   WikiIcon,
   type CollapsedSidebarItems,
   Settings as SettingsIcon,
@@ -75,7 +74,6 @@ import {
   Settings,
   ProtectedAudience,
   PrivateAggregation,
-  Dashboard,
   WebStories,
   Learning,
   DevSite,
@@ -101,103 +99,6 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: true,
     children: {
-      [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
-        title: () => 'Tracking Protection',
-        panel: {
-          Element: PrivacyProtection,
-        },
-        icon: {
-          Element: PrivacyProtectionIcon,
-          props: {
-            className: '[&_path]:fill-granite-gray',
-          },
-        },
-        selectedIcon: {
-          Element: PrivacyProtectionIcon,
-          props: {
-            className: '[&_path]:fill-bright-gray',
-          },
-        },
-        children: {
-          [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
-            title: () => I18n.getMessage('ipProtection'),
-            panel: {
-              Element: IPProtection,
-            },
-            icon: {
-              Element: ProtectionIcon,
-              props: {
-                className: 'fill-granite-gray relative right-[3px]',
-              },
-            },
-            selectedIcon: {
-              Element: ProtectionIcon,
-              props: {
-                className: 'fill-bright-gray relative right-[3px]',
-              },
-            },
-            children: {},
-          },
-          [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
-            title: () => I18n.getMessage('bounceTracking'),
-            panel: {
-              Element: BounceTracking,
-            },
-            icon: {
-              Element: BounceTrackingIcon,
-              props: {
-                className: 'relative top-[2px]',
-              },
-            },
-            selectedIcon: {
-              Element: BounceTrackingIconWhite,
-              props: {
-                className: 'relative top-[2px]',
-              },
-            },
-            children: {},
-          },
-          [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
-            title: () => 'User Agent Reduction',
-            panel: {
-              Element: UserAgentReduction,
-            },
-            icon: {
-              Element: UserAgentReductionIcon,
-              props: {
-                className: 'relative top-[2px]',
-              },
-            },
-            selectedIcon: {
-              Element: UserAgentReductionIconWhite,
-              props: {
-                className: 'relative top-[2px]',
-              },
-            },
-            children: {},
-          },
-
-          [SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS]: {
-            title: () => I18n.getMessage('privateStateTokens'),
-            panel: {
-              Element: PrivateStateTokens,
-            },
-            icon: {
-              Element: TokenIcon,
-              props: {
-                className: 'fill-granite-gray relative right-[3px]',
-              },
-            },
-            selectedIcon: {
-              Element: TokenIcon,
-              props: {
-                className: 'fill-bright-gray relative right-[3px]',
-              },
-            },
-            children: {},
-          },
-        },
-      },
       [SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES]: {
         title: () => I18n.getMessage('siteBoundaries'),
         panel: {
@@ -403,6 +304,103 @@ const TABS: SidebarItems = {
           },
         },
       },
+      [SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING]: {
+        title: () => 'Privacy Protection',
+        panel: {
+          Element: PrivacyProtection,
+        },
+        icon: {
+          Element: PrivacyProtectionIcon,
+          props: {
+            className: '[&_path]:fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: PrivacyProtectionIcon,
+          props: {
+            className: '[&_path]:fill-bright-gray',
+          },
+        },
+        children: {
+          [SIDEBAR_ITEMS_KEYS.IP_PROTECTION]: {
+            title: () => I18n.getMessage('ipProtection'),
+            panel: {
+              Element: IPProtection,
+            },
+            icon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-granite-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: ProtectionIcon,
+              props: {
+                className: 'fill-bright-gray relative right-[3px]',
+              },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
+            title: () => I18n.getMessage('bounceTracking'),
+            panel: {
+              Element: BounceTracking,
+            },
+            icon: {
+              Element: BounceTrackingIcon,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            selectedIcon: {
+              Element: BounceTrackingIconWhite,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.FINGERPRINTING]: {
+            title: () => 'User Agent Reduction',
+            panel: {
+              Element: UserAgentReduction,
+            },
+            icon: {
+              Element: UserAgentReductionIcon,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            selectedIcon: {
+              Element: UserAgentReductionIconWhite,
+              props: {
+                className: 'relative top-[2px]',
+              },
+            },
+            children: {},
+          },
+
+          [SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS]: {
+            title: () => I18n.getMessage('privateStateTokens'),
+            panel: {
+              Element: PrivateStateTokens,
+            },
+            icon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-granite-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: TokenIcon,
+              props: {
+                className: 'fill-bright-gray relative right-[3px]',
+              },
+            },
+            children: {},
+          },
+        },
+      },
     },
     addDivider: true,
   },
@@ -532,27 +530,6 @@ const TABS: SidebarItems = {
     },
     containerClassName: 'h-6',
     addDivider: true,
-  },
-  [SIDEBAR_ITEMS_KEYS.DASHBOARD]: {
-    title: () => 'Dashboard',
-    panel: {
-      Element: Dashboard,
-    },
-    icon: {
-      Element: DashboardIcon,
-      props: {
-        className: 'fill-granite-gray',
-      },
-    },
-    selectedIcon: {
-      Element: DashboardIcon,
-      props: {
-        className: 'fill-bright-gray',
-      },
-    },
-    dropdownOpen: false,
-    children: {},
-    containerClassName: 'h-6',
   },
   [SIDEBAR_ITEMS_KEYS.SETTINGS]: {
     title: () => I18n.getMessage('settings'),

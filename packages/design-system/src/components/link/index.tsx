@@ -20,13 +20,24 @@ import React, { useCallback } from 'react';
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
+  stopPropogation?: boolean;
   children: React.ReactElement | string;
 }
 
-const Link = ({ href, children, ...rest }: LinkProps) => {
+const Link = ({
+  href,
+  children,
+  stopPropogation = false,
+  ...rest
+}: LinkProps) => {
   const onClick = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       event.preventDefault();
+
+      if (stopPropogation) {
+        event.stopPropagation();
+      }
+
       chrome.tabs.update({ url: href });
     },
     [href]

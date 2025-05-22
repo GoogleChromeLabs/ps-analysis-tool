@@ -16,13 +16,24 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { FrameContent, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
+import React, { type FunctionComponent, type SVGProps } from 'react';
+import { SIDEBAR_ITEMS_KEYS, FrameContent } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { FEATURED_ITEMS, type FeaturedItems } from './constants';
+import { LEARNING_BOX_ITEMS } from '../constants';
+
+export interface FeaturedItems {
+  name: string;
+  icon: FunctionComponent<SVGProps<SVGSVGElement>>;
+  sidebarKey: SIDEBAR_ITEMS_KEYS;
+  title?: string;
+  description: string;
+  colorClasses?: {
+    heading: string;
+  };
+}
 
 interface LandingPageProps {
   sidebarKey: SIDEBAR_ITEMS_KEYS;
@@ -31,7 +42,7 @@ interface LandingPageProps {
 }
 
 const LandingPage = ({ sidebarKey, icon, frameColor }: LandingPageProps) => {
-  const page = FEATURED_ITEMS.find(
+  const page = LEARNING_BOX_ITEMS.find(
     (item) => item.sidebarKey === sidebarKey
   ) as FeaturedItems;
   const { description, title } = page;
