@@ -34,7 +34,7 @@ import AuctionsContainer from './container';
 import AdUnits from '../../adUnits';
 import EvaluationEnvironment from '../../evaluationEnvironment';
 
-const Auctions = () => {
+const AuctionsV1 = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
@@ -147,4 +147,4 @@ const Auctions = () => {
   );
 };
 
-export default Auctions;
+export default AuctionsV1;
