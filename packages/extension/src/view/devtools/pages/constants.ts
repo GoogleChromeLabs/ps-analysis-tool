@@ -332,14 +332,6 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
 
 export const LEARNING_BOX_ITEMS = [
   {
-    name: 'Help Center',
-    icon: PSHelpCenterIcon,
-    sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
-    title: 'Need help with Privacy Sandbox?',
-    description:
-      'The Privacy Sandbox Help Center is your comprehensive resource for finding quick answers and effective learning. Explore a wealth of information, FAQs, and guidance directly in the current browser tab to the left.',
-  },
-  {
     name: 'Dev Site',
     icon: PSDevSiteIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.DEV_SITE,
@@ -349,6 +341,14 @@ export const LEARNING_BOX_ITEMS = [
     colorClasses: {
       heading: 'text-red-700',
     },
+  },
+  {
+    name: 'Help Center',
+    icon: PSHelpCenterIcon,
+    sidebarKey: SIDEBAR_ITEMS_KEYS.HELP_CENTER,
+    title: 'Need help with Privacy Sandbox?',
+    description:
+      'The Privacy Sandbox Help Center is your comprehensive resource for finding quick answers and effective learning. Explore a wealth of information, FAQs, and guidance directly in the current browser tab to the left.',
   },
   {
     name: 'Stories',
