@@ -27,7 +27,7 @@ import {
  * Internal dependencies.
  */
 import InterestGroups from './interestGroups';
-import Auctions from './auctions/v1';
+import Auctions from './auctions';
 import Bids from './bids';
 import Panel from './panel';
 import AdUnits from './adUnits';
