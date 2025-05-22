@@ -17,13 +17,12 @@
  * External dependencies
  */
 import React from 'react';
-
-interface Option {
+export interface Option {
   value: string;
   label: string;
 }
 
-interface OptGroup {
+export interface OptGroup {
   label: string;
   options: Option[];
   disabled?: boolean;

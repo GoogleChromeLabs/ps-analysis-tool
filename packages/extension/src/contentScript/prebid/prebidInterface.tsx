@@ -142,9 +142,9 @@ class PrebidInterface {
             bidderSettings[bidder] = {};
 
             const {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
               bidCpmAdjustment = noop,
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
               adserverTargeting = [],
               ...rest
             } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};

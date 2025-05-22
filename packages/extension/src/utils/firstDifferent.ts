@@ -13,6 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Returns the first string in `input` that is not in `excludes`.
+ * @param input Array of strings to check
+ * @param excludes Array of strings to exclude
+ * @returns The first string in input that is not in excludes, or undefined if none found
+ */
 const firstDifferent = (input: string[], excludes: string[]): string => {
   const [first] = input.filter((item) => !excludes?.includes(item));
   return first;

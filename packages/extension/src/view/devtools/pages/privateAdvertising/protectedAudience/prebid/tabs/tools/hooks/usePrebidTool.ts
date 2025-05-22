@@ -29,6 +29,7 @@ import { useProtectedAudience } from '../../../../../../../stateProviders';
 import { STORE_RULES_TOGGLE } from '../../../../../../../../../constants';
 import firstDifferent from '../../../../../../../../../utils/firstDifferent';
 
+//@todo -- Move this and other states used in prebid into a provider for better readability and modularity in follow-up PR.
 const usePrebidTool = () => {
   const [debuggingModuleConfig, setDebuggingModuleConfig] =
     useState<PrebidDebugModuleConfig>({

@@ -71,7 +71,9 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
         selectedDropDownValues={selectedDropDownValues}
         searchValue={searchValue}
       />
-      <div className="h-px bg-gray-200 dark:bg-quartz mb-1" />
+      {filteredErrorEvents.length > 0 && (
+        <div className="h-px bg-gray-200 dark:bg-quartz mb-1" />
+      )}
       <div className="flex flex-col divide-y divide-gray-200 dark:divide-gray-500 gap-3 px-4">
         {filteredErrorEvents.map((event, index) => {
           return (

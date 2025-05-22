@@ -25,6 +25,7 @@ import type {
   ErroredOutUrlsData,
   SourcesData,
 } from '@google-psat/common';
+
 export type PrebidConfigTableData = {
   name: string;
   value: string | number | boolean;

@@ -69,12 +69,7 @@ const Panel = ({ prebidResponse }: PanelProps) => {
           />
         );
       default:
-        return (
-          <ConfigContainer
-            config={prebidResponse.config}
-            installedModules={[]}
-          />
-        );
+        return <></>;
     }
   }, [
     pillToggle,
@@ -94,7 +89,7 @@ const Panel = ({ prebidResponse }: PanelProps) => {
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
-        <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+        <div className="w-full h-full border-american-silver dark:border-quartz overflow-auto">
           {containerToShow}
         </div>
       </div>

@@ -45,6 +45,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     if (!tabs) {
       return;
     }
+
     try {
       await Promise.all(
         tabs.map(async (tab) => {

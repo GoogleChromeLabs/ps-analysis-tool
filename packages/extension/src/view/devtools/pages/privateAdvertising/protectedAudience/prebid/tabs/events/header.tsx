@@ -77,7 +77,11 @@ const Header = ({
   );
 
   return (
-    <div className="flex flex-row px-4 items-center gap-1.5 divide-x divide-gray-200 dark:divide-gray-500">
+    <div
+      className={`flex flex-row px-4 items-center gap-1.5 divide-x divide-gray-200 dark:divide-gray-500 ${
+        filteredErrorEvents.length === 0 ? 'mb-1' : ''
+      }`}
+    >
       <div className="w-[50%] h-full">
         <SearchInput
           value={searchValue}

@@ -32,12 +32,14 @@ import { useState, useMemo, useCallback } from 'react';
 type ConsentManagementPanelProps = {
   config: PrebidConfig['consentManagement'];
 };
+
 type SelectedJSON = {
   cmpApi: 'iab' | 'static' | 'iabnonsupport' | 'none';
   timeout?: number;
   allowAuctionWithoutConsent?: boolean;
   defaultGdprScope?: boolean;
 };
+
 type PlatformKeys = 'gdpr' | 'usp';
 
 const ConsentManagement = ({ config }: ConsentManagementPanelProps) => {

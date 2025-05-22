@@ -18,6 +18,9 @@
  */
 import { SidebarProvider } from '@google-psat/design-system';
 import React from 'react';
+/**
+ * Internal dependencies
+ */
 import ConfigPanel from './container';
 import useConfigContainer from './hooks/useConfigContainer';
 

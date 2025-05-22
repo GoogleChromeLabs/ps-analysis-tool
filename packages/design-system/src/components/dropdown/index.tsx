@@ -20,18 +20,7 @@ import React from 'react';
 /**
  * Internal dependencies
  */
-import OptionsComponent from './options';
-
-interface Option {
-  value: string;
-  label: string;
-}
-
-export interface OptGroup {
-  label: string;
-  options: Option[];
-  disabled?: boolean;
-}
+import OptionsComponent, { type OptGroup, type Option } from './options';
 
 interface DropdownProps {
   groups?: OptGroup[];

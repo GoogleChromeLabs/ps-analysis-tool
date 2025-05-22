@@ -17,16 +17,14 @@
  * External dependencies
  */
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+/**
+ * Internal dependencies
+ */
 import { ArrowDown } from '../../icons';
-
-export interface FilterOption {
-  value: string;
-  label: string;
-  icon?: React.ReactNode;
-}
+import { Option } from '../dropdown/options';
 
 interface MultiSelectDropdownProps {
-  options: FilterOption[];
+  options: Option[];
   selected: string[];
   onChange: (selected: string[]) => void;
   placeholder?: string;
