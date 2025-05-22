@@ -104,6 +104,7 @@ export interface PrebidDebugModuleConfig {
   enabled?: boolean;
   intercept: PrebidDebugModuleConfigRule[];
 }
+
 export interface PrebidDebugModuleConfigRule {
   when: { [key: string]: string | number };
   then: {

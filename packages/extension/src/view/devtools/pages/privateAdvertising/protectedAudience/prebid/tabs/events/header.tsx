@@ -105,11 +105,15 @@ const Header = ({
         </div>
         <div className="h-full flex flex-row gap-1 items-center text-raisin-black dark:text-bright-gray">
           <Error />
-          <span>{eventsCount.errors}</span>
+          <span title={`${eventsCount.errors} errors`}>
+            {eventsCount.errors}
+          </span>
         </div>
         <div className="h-full flex flex-row gap-1 items-center text-raisin-black dark:text-bright-gray">
           <WarningColored />
-          <span>{eventsCount.warnings}</span>
+          <span title={`${eventsCount.errors} warnings`}>
+            {eventsCount.warnings}
+          </span>
         </div>
       </div>
       <div className="flex h-full items-center w-max px-1.5 text-raisin-black dark:text-bright-gray">

@@ -54,13 +54,15 @@ export type AllowedDomainStorage = {
   allowList: AllowedDomainObject[];
 };
 
+export type PrebidWarningTypes = 'WARNING' | 'ERROR' | 'INFO';
+
 export type PrebidEvents = {
   adUnits: AdsAndBiddersType;
   noBids: PrebidNoBidsType;
   versionInfo: string;
   receivedBids: ReceivedBids[];
   errorEvents: {
-    type: 'WARNING' | 'ERROR' | 'INFO';
+    type: PrebidWarningTypes;
     message: string[];
     time: string;
   }[];

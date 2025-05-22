@@ -46,6 +46,7 @@ describe('PrebidInterface', () => {
       versionInfo: '',
       installedModules: [],
       config: {},
+      pbjsNamespace: '',
       receivedBids: [],
       errorEvents: [],
       auctionEvents: {},

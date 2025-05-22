@@ -33,7 +33,7 @@ export interface OptGroup {
   disabled?: boolean;
 }
 
-interface GroupedDropdownProps {
+interface DropdownProps {
   groups?: OptGroup[];
   options?: Option[];
   value: string;
@@ -49,7 +49,7 @@ const Dropdown = ({
   onChange,
   ref,
   placeholder = '',
-}: GroupedDropdownProps) => {
+}: DropdownProps) => {
   return (
     <select
       ref={ref}

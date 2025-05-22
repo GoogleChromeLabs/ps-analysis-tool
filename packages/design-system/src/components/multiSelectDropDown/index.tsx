@@ -25,7 +25,7 @@ export interface FilterOption {
   icon?: React.ReactNode;
 }
 
-interface ConsoleFilterDropdownProps {
+interface MultiSelectDropdownProps {
   options: FilterOption[];
   selected: string[];
   onChange: (selected: string[]) => void;
@@ -33,13 +33,13 @@ interface ConsoleFilterDropdownProps {
   specialValue?: string;
 }
 
-const ConsoleFilterDropdown: React.FC<ConsoleFilterDropdownProps> = ({
+const MultiSelectDropdown = ({
   options,
   selected,
   onChange,
   placeholder = 'Default levels',
   specialValue = options[0].value,
-}) => {
+}: MultiSelectDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -142,4 +142,4 @@ const ConsoleFilterDropdown: React.FC<ConsoleFilterDropdownProps> = ({
   );
 };
 
-export default ConsoleFilterDropdown;
+export default MultiSelectDropdown;

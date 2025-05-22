@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import type { AdsAndBiddersType } from '@google-psat/common';
+import { noop, type AdsAndBiddersType } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -120,10 +120,47 @@ class PrebidInterface {
         pbjsClass.prebidInterface = window[
           pbjsGlobals[0]
         ] as unknown as typeof window.pbjs;
+
         pbjsClass.prebidExists = true;
         pbjsClass.scanningStatus = true;
+
         pbjsClass.sendInitialData();
         pbjsClass.initPrebidListener();
+
+        pbjsClass.prebidData.pbjsNamespace = pbjsGlobals[0];
+
+        pbjsClass.prebidData.versionInfo =
+          pbjsClass.prebidInterface.version ?? '';
+
+        pbjsClass.prebidData.installedModules =
+          pbjsClass.prebidInterface.installedModules ?? [];
+
+        const bidderSettings: Record<string, SingleBidderSetting> = {};
+
+        Object.keys(pbjsClass?.prebidInterface?.bidderSettings ?? {}).forEach(
+          (bidder) => {
+            bidderSettings[bidder] = {};
+
+            const {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              bidCpmAdjustment = noop,
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              adserverTargeting = [],
+              ...rest
+            } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};
+
+            bidderSettings[bidder] = {
+              ...rest,
+            };
+          }
+        );
+
+        pbjsClass.prebidData.config = {
+          ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
+          bidderSettings,
+          eids: pbjsClass.prebidInterface.getUserIdsAsEids() ?? [],
+        };
+
         stopLoop = true;
         clearTimeout(timeout);
       }

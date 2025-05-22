@@ -75,6 +75,7 @@ const SearchInput = ({
       }`}
     >
       <input
+        role="textbox"
         ref={inputRef}
         type="text"
         className="h-[14px] w-full outline-hidden bg-transparent"
