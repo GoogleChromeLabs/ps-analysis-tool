@@ -36,7 +36,7 @@ const UserIdsContainer = ({ config }: ConfigContainerPanelProps) => {
       panel: {
         Element: UserIds,
         props: {
-          config: config?.eids ?? {},
+          config: config?.eids,
         },
       },
       children: {},
@@ -46,7 +46,7 @@ const UserIdsContainer = ({ config }: ConfigContainerPanelProps) => {
       panel: {
         Element: UserConfig,
         props: {
-          config: config?.userSync?.userIds ?? {},
+          config: config?.userSync?.userIds,
         },
       },
       children: {},

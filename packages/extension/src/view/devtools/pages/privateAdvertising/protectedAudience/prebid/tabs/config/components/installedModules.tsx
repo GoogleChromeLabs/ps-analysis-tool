@@ -161,6 +161,7 @@ const InstalledModules = ({ installedModules }: InstalledModulesPanelProps) => {
             hideTableTopBar={true}
             selectedKey={selectedKey}
             minWidth="70%"
+            showOverflow={false}
           />
         </TableProvider>
       </Resizable>

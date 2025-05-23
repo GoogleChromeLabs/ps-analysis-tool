@@ -66,7 +66,7 @@ const PrebidConfig = ({ configObject }: PrebidConfigPanelProps) => {
   );
 
   return (
-    <div className="flex-1 w-[70%] flex flex-col border border-american-silver dark:border-quartz border-t-0 overflow-hidden">
+    <div className="mx-8 my-6 flex-1 w-[70%] flex flex-col border border-american-silver dark:border-quartz overflow-hidden">
       <TableProvider
         data={Object.entries(configObject).map(([key, value], index) => {
           return {
@@ -89,6 +89,7 @@ const PrebidConfig = ({ configObject }: PrebidConfigPanelProps) => {
           hideTableTopBar={true}
           selectedKey={selectedKey}
           minWidth="70%"
+          showOverflow={false}
         />
       </TableProvider>
     </div>

@@ -30,7 +30,7 @@ type UserIdsProps = {
   config: EID[];
 };
 
-const UserIds = ({ config }: UserIdsProps) => {
+const UserIds = ({ config = [] }: UserIdsProps) => {
   const [selectedKey, setSelectedKey] = useState<string>('');
 
   const userEids = useMemo(() => {
@@ -110,6 +110,7 @@ const UserIds = ({ config }: UserIdsProps) => {
           hideTableTopBar={true}
           selectedKey={selectedKey}
           minWidth="70%"
+          showOverflow={false}
         />
       </TableProvider>
     </div>

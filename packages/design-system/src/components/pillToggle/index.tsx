@@ -41,16 +41,16 @@ const PillToggle = ({
   });
 
   return (
-    <div className="h-8 rounded-full w-max border-gray-300 dark:border-quartz text-sm">
+    <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">
       {options.map((option, index) => {
         return (
           <button
             key={option}
             className={classNames(
-              `border px-5 h-full border-r border-hex-gray dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
+              `px-5 h-full border-r border-gray-silver dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
               {
-                'bg-gray-200 dark:bg-gray-500 ': pillToggle === option,
-                'bg-white backdrop-blur-[1px]':
+                'bg-anti-flash-white dark:bg-gray-500 ': pillToggle === option,
+                'bg-white dark:bg-raisin-black backdrop-opacity-1':
                   selectedIndexRef.current && index < selectedIndexRef.current,
                 'bg-transparent':
                   selectedIndexRef.current && index > selectedIndexRef.current,

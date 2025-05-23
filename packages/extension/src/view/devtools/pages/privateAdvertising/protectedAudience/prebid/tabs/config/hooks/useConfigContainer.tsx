@@ -56,7 +56,7 @@ const useConfigContainer = (
           Element: Settings,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -87,7 +87,7 @@ const useConfigContainer = (
           Element: FourSquares,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -115,7 +115,7 @@ const useConfigContainer = (
           Element: Ruler,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -142,7 +142,7 @@ const useConfigContainer = (
           Element: Settings,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -169,7 +169,7 @@ const useConfigContainer = (
           Element: Buildings,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -196,7 +196,7 @@ const useConfigContainer = (
           Element: Person,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -223,7 +223,7 @@ const useConfigContainer = (
           Element: FourSquares,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -250,7 +250,7 @@ const useConfigContainer = (
           Element: DoubleUser,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -277,7 +277,7 @@ const useConfigContainer = (
           Element: Server,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {

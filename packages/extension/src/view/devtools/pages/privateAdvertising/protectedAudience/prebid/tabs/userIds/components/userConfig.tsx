@@ -135,6 +135,7 @@ const UserConfig = ({ config }: UserConfigPanelProps) => {
             hideTableTopBar={true}
             selectedKey={selectedKey}
             minWidth="70%"
+            showOverflow={false}
           />
         </TableProvider>
       </Resizable>
