@@ -57,10 +57,10 @@ const useSidebarProcessing = () => {
       const adUnitContainerChildren = { ...newSidebarData.adunits.children };
 
       adUnits.forEach((adUnit) => {
-        const mediaContainerSize = adUnitsMediaContainerSize[adUnit];
-        const bidders = adUnitsBidders[adUnit];
+        const mediaContainerSize = adUnitsMediaContainerSize?.[adUnit] || [];
+        const bidders = adUnitsBidders?.[adUnit] || [];
         const biddersCount = bidders.length;
-        const bidsCount = adUnitsBidsCount[adUnit];
+        const bidsCount = adUnitsBidsCount?.[adUnit] || 0;
         const noBidsCount = adUnitsNoBidsCount[adUnit] || 0;
 
         adUnitContainerChildren[adUnit] = {
@@ -91,6 +91,7 @@ const useSidebarProcessing = () => {
           const timeChildren = {
             ...adUnitChildren[`${time}||${adUnit}`].children,
           };
+
           timeChildren['Prebid'] = {
             title: 'Prebid',
             panel: {
@@ -107,13 +108,10 @@ const useSidebarProcessing = () => {
             children: {},
           };
 
-          const PAData = getPAData(
-            adUnit,
-            time,
-            adUnitsAuctionId[adUnit][time]
-          );
+          const parentAuctionId = adUnitsAuctionId?.[adUnit]?.[time] || '';
+          const PAData = getPAData(adUnit, time, parentAuctionId);
 
-          const key = `${time}||${adUnitsAuctionId[adUnit][time]}||${adUnit}`;
+          const key = `${time}||${parentAuctionId}||${adUnit}`;
 
           timeChildren[key] = {
             title: 'PAAPI',

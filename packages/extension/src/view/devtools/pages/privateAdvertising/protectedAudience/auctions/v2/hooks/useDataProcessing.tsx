@@ -40,7 +40,7 @@ const useDataProcessing = () => {
       return Object.keys(prebidResponse.adUnits);
     }
 
-    return Object.keys(paapi.adsAndBidders);
+    return Object.keys(paapi?.adsAndBidders || {});
   }, [paapi.adsAndBidders, prebidResponse.adUnits]);
 
   const adUnitsTimestamp = useMemo(() => {
@@ -59,7 +59,7 @@ const useDataProcessing = () => {
       });
     }
 
-    if (Object.keys(paapi.adsAndBidders).length > 0) {
+    if (Object.keys(paapi?.adsAndBidders).length > 0) {
       const _adUnits = Object.keys(paapi.adsAndBidders);
 
       _adUnits.forEach((adUnit) => {
@@ -87,7 +87,7 @@ const useDataProcessing = () => {
   const adUnitsAuctionId = useMemo(() => {
     const _adUnitsAuctionId: Record<string, Record<string, string>> = {};
 
-    if (Object.keys(prebidResponse.adUnits).length > 0) {
+    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.auctionEvents).forEach((events) => {
         const _adUnits = events[0].adUnitCodes as string[];
         const time = new Date(events[0].timestamp).toISOString();
@@ -100,7 +100,7 @@ const useDataProcessing = () => {
           _adUnitsAuctionId[adUnit][time] = events[0].auctionId;
         });
       });
-    } else if (Object.keys(paapi.adsAndBidders).length > 0) {
+    } else if (Object.keys(paapi?.adsAndBidders || {}).length > 0) {
       const _adUnits = Object.keys(paapi.adsAndBidders);
 
       _adUnits.forEach((adUnit) => {
@@ -130,7 +130,7 @@ const useDataProcessing = () => {
   const adUnitsMediaContainerSize = useMemo(() => {
     const _adUnitsMediaContainerSizeStore: Record<string, Set<string>> = {};
 
-    if (Object.keys(prebidResponse.adUnits).length > 0) {
+    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.adUnits).forEach((data) => {
         const mediaContainerSize = data.mediaContainerSize as number[][];
 
@@ -146,7 +146,7 @@ const useDataProcessing = () => {
       });
     }
 
-    if (Object.keys(paapi.adsAndBidders).length > 0) {
+    if (Object.keys(paapi?.adsAndBidders || {}).length > 0) {
       Object.values(paapi.adsAndBidders).forEach((data) => {
         const mediaContainerSize = data.mediaContainerSize as number[][];
 
@@ -189,7 +189,7 @@ const useDataProcessing = () => {
 
   const adUnitsBidders = useMemo(() => {
     const _adUnitBidders: Record<string, string[]> = {};
-    if (Object.keys(prebidResponse.adUnits).length > 0) {
+    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.adUnits).forEach((data) => {
         const bidders = data.bidders as string[];
 
@@ -199,7 +199,7 @@ const useDataProcessing = () => {
       });
     }
 
-    if (Object.keys(paapi.adsAndBidders).length > 0) {
+    if (Object.keys(paapi?.adsAndBidders || {}).length > 0) {
       Object.values(paapi.adsAndBidders).forEach((data) => {
         const bidders = data.bidders as string[];
 
@@ -215,7 +215,7 @@ const useDataProcessing = () => {
   const adUnitsBidsCount = useMemo(() => {
     const _adUnitBidsCount: Record<string, number> = {};
 
-    if (Object.keys(prebidResponse.receivedBids).length > 0) {
+    if (Object.keys(prebidResponse?.receivedBids || {}).length > 0) {
       Object.values(prebidResponse.receivedBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
@@ -225,7 +225,7 @@ const useDataProcessing = () => {
       });
     }
 
-    if (Object.keys(paapi.receivedBids).length > 0) {
+    if (Object.keys(paapi?.receivedBids || {}).length > 0) {
       Object.values(paapi.receivedBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
@@ -241,7 +241,7 @@ const useDataProcessing = () => {
   const adUnitsNoBidsCount = useMemo(() => {
     const _adUnitNoBidsCount: Record<string, number> = {};
 
-    if (Object.keys(prebidResponse.noBids).length > 0) {
+    if (Object.keys(prebidResponse?.noBids || {}).length > 0) {
       Object.values(prebidResponse.noBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
@@ -251,7 +251,7 @@ const useDataProcessing = () => {
       });
     }
 
-    if (Object.keys(paapi.noBids).length > 0) {
+    if (Object.keys(paapi?.noBids || {}).length > 0) {
       Object.values(paapi.noBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
@@ -266,7 +266,7 @@ const useDataProcessing = () => {
 
   const getPrebidData = useCallback(
     (adUnit: string, time: string) => {
-      const auction = Object.entries(prebidResponse.auctionEvents).find(
+      const auction = Object.entries(prebidResponse?.auctionEvents || {}).find(
         ([, events]) => {
           return (
             events[0].adUnitCodes.includes(adUnit) &&
@@ -285,12 +285,12 @@ const useDataProcessing = () => {
       const adUnitEvents =
         paapi.auctionEvents?.[adUnit]?.[time + '||' + parentAuctionId] || {};
 
-      const sellerUrl = Object.keys(adUnitEvents)[0];
+      const sellerUrl = Object.keys(adUnitEvents)?.[0];
 
       const nonSplittedSellerUrl =
         Object.keys(adUnitEvents?.[sellerUrl] || {})?.[0] || '';
 
-      const entries = Object.entries(adUnitEvents[sellerUrl] || {})
+      const entries = Object.entries(adUnitEvents?.[sellerUrl] || {})
         .filter(([url]) => {
           const splittedUrl = url.split('||');
 
