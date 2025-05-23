@@ -67,6 +67,13 @@ const Timeline = () => {
           ))}
         </div>
 
+        <div className="absolute flex w-full h-full top-0 right-0">
+          <div className="w-[840px] h-full"></div>
+          <div className="bg-[#E90303] opacity-[9%] h-full relative flex-1">
+            <span className="absolute left-0 top-30">Timeout: 420ms</span>
+          </div>
+        </div>
+
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative">
             {bars.map((bar, index) => {
