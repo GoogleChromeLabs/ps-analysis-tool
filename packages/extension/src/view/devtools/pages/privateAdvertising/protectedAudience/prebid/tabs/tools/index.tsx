@@ -36,7 +36,7 @@ const Tools = () => {
   } = usePrebidTool();
 
   return (
-    <div className="flex flex-col w-full h-full px-4 relative">
+    <div className="flex flex-col w-full h-full relative">
       <HeaderComponent
         openGoogleManagerConsole={openGoogleManagerConsole}
         handleChangeStoreRulesInLocalStorage={

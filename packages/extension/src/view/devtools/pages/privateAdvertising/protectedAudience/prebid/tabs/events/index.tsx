@@ -46,7 +46,12 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
 
     if (searchValue) {
       filteredEvents = errorEvents.filter((event) => {
-        return Object.values(event.message).join(' ').includes(searchValue);
+        return Object.values(event.message)
+          .map((value) =>
+            typeof value === 'object' ? JSON.stringify(value) : value
+          )
+          .join(' ')
+          .includes(searchValue);
       });
     }
 
@@ -62,7 +67,7 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
   }, [selectedDropDownValues, errorEvents, searchValue]);
 
   return (
-    <div className="flex flex-col mx-4 border border-hex-gray dark:border-quartz">
+    <div className="flex flex-col border border-hex-gray dark:border-quartz">
       <Header
         errorEvents={errorEvents}
         filteredErrorEvents={errorEvents}
