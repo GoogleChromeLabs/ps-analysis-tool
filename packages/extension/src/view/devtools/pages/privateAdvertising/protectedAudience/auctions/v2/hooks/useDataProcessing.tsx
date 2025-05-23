@@ -140,7 +140,7 @@ const useDataProcessing = () => {
           }
 
           _adUnitsMediaContainerSizeStore[data.adUnitCode].add(
-            mediaContainerSize.join('x')
+            mediaContainerSize.map((size) => size.join('x')).join(',')
           );
         }
       });
@@ -156,7 +156,7 @@ const useDataProcessing = () => {
           }
 
           _adUnitsMediaContainerSizeStore[data.adUnitCode].add(
-            mediaContainerSize.join('x')
+            mediaContainerSize.map((size) => size.join('x')).join(',')
           );
         }
       });
@@ -165,8 +165,13 @@ const useDataProcessing = () => {
     const _adUnitsMediaContainerSize = Object.entries(
       _adUnitsMediaContainerSizeStore
     ).reduce((acc, [adunit, sizes]) => {
-      const parsedSizes = Array.from(sizes).map((size) => {
+      const _sizes = Array.from(sizes)
+        .map((size) => size.split(','))
+        .flat();
+
+      const parsedSizes = _sizes.map((size) => {
         const [width, height] = size.split('x').map(Number);
+
         return [width, height];
       });
 
@@ -320,7 +325,7 @@ const useDataProcessing = () => {
               ?.seller || '',
           startDate: time,
           children: entries,
-          isBlurred: !adUnitEvents[sellerUrl]?.[sellerUrl]?.length,
+          isBlurred: !adUnitEvents[sellerUrl]?.[nonSplittedSellerUrl]?.length,
         },
       };
 

@@ -22,6 +22,8 @@ import AdUnits from '../../../adUnits';
 import { useEffect, useState } from 'react';
 import useDataProcessing from './useDataProcessing';
 import AdunitPanel from '../../components/adunitPanel';
+import PrebidTable from '../prebidTable';
+import AuctionTable from '../../components/table';
 
 const useSidebarProcessing = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
@@ -59,7 +61,7 @@ const useSidebarProcessing = () => {
         const bidders = adUnitsBidders[adUnit];
         const biddersCount = bidders.length;
         const bidsCount = adUnitsBidsCount[adUnit];
-        const noBidsCount = adUnitsNoBidsCount[adUnit];
+        const noBidsCount = adUnitsNoBidsCount[adUnit] || 0;
 
         adUnitContainerChildren[adUnit] = {
           title: adUnit,
@@ -92,6 +94,7 @@ const useSidebarProcessing = () => {
           timeChildren['Prebid'] = {
             title: 'Prebid',
             panel: {
+              Element: PrebidTable,
               props: {
                 auctionEvents: getPrebidData(adUnit, time),
               },
@@ -115,19 +118,21 @@ const useSidebarProcessing = () => {
           timeChildren[key] = {
             title: 'PAAPI',
             panel: {
+              Element: AuctionTable,
               props: {
                 auctionEvents: PAData[key].auctionEvents,
                 parentOrigin: PAData[key].parentOrigin,
                 startDate: PAData[key].startDate,
-                isBlurred: PAData[key].isBlurred,
               },
             },
+            isBlurred: PAData[key].isBlurred,
             children: {
               ...Object.entries(PAData[key].children).reduce(
                 (acc, [childKey, childValue]: [string, any]) => {
                   acc[childKey] = {
                     title: childValue.title,
                     panel: {
+                      Element: AuctionTable,
                       props: {
                         auctionEvents: childValue.auctionEvents,
                         parentOrigin: childValue.parentOrigin,

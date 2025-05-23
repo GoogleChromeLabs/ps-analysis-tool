@@ -30,7 +30,7 @@ import { Resizable } from 're-resizable';
 /**
  * Internal dependencies.
  */
-import BottomTray from '../../components/bottomTray';
+import BottomTray from '../../components/table/bottomTray';
 import type { PrebidEvents } from '../../../../../../../../store';
 
 interface PrebidTableProps {
@@ -84,6 +84,9 @@ const PrebidTable = ({ auctionEvents }: PrebidTableProps) => {
 
   const tableFilters = useMemo<TableFilter>(() => ({}), []);
 
+  const startTime = new Date(auctionEvents[1][0].timestamp).toISOString();
+  const timeout = auctionEvents[1][0].timeout;
+
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -98,11 +101,17 @@ const PrebidTable = ({ auctionEvents }: PrebidTableProps) => {
         maxHeight="90%"
         className="w-full flex flex-col"
       >
-        {auctionEvents.length > 0 ? (
+        {auctionEvents?.length ? (
           <>
-            <div className="flex justify-between items-center p-2">
-              <p>Auction Id: {auctionEvents[0]}</p>
-              <p></p>
+            <div className="flex flex-col gap-2 p-2">
+              <div className="flex justify-between items-center">
+                <p>Auction Id: {auctionEvents[0]}</p>
+                <p>Start Time: {startTime}</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <p>Timeout: {timeout}</p>
+                {/* <p>Auction Time: {auctionEnd}ms</p> */}
+              </div>
             </div>
             <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
               <TableProvider
