@@ -120,6 +120,7 @@ const usePrebidTool = () => {
     const tabId = chrome.devtools.inspectedWindow.tabId;
 
     if (!pbjsNamespace) {
+      initialStateFetched.current = true;
       return;
     }
 
@@ -140,6 +141,7 @@ const usePrebidTool = () => {
     }
 
     if (!first || !first.result) {
+      initialStateFetched.current = true;
       return;
     }
 
