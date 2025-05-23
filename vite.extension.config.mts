@@ -21,6 +21,7 @@ import path from 'path';
 const page = process.env.PAGE;
 const isDev = process.env.NODE_ENV === 'development';
 
+// TODO: use vite plugin for hot reload
 export default defineConfig(() => {
   if (page === 'root') {
     return mergeConfig(baseConfig, {
