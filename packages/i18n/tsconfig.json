@@ -2,9 +2,9 @@
   "compilerOptions": {
     "jsx": "preserve",
     "rootDir": "src",
-    "target": "es6",
-    "lib": ["es2021"],
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
     "outDir": "dist",
     "declarationDir": "dist-types",
     "composite": true,

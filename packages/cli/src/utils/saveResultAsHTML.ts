@@ -30,7 +30,6 @@ import fs from 'fs';
 import getOutputFilePath from './getOutputFilePath';
 import packageJson from '../../package.json';
 
-const isProduction = process.env.NODE_ENV === 'production';
 /**
  * This function will return the HTML file.
  * @param outDir The path to the output.
@@ -67,28 +66,11 @@ const saveResultsAsHTML = async (
       ),
       'utf-8'
     );
-
-    if (!isProduction) {
-      fs.copyFileSync(
-        path.resolve(
-          __dirname +
-            '../../node_modules/@google-psat/cli-dashboard/dist/index.js'
-        ),
-        outDir + '/index.js'
-      );
-    }
   } else {
     htmlText = fs.readFileSync(
       path.resolve(__dirname + '../../../cli-dashboard/dist/index.html'),
       'utf-8'
     );
-
-    if (!isProduction) {
-      fs.copyFileSync(
-        path.resolve(__dirname + '../../../cli-dashboard/dist/index.js'),
-        outDir + '/index.js'
-      );
-    }
   }
 
   const messages = I18n.getMessages();
@@ -118,6 +100,7 @@ const saveResultsAsHTML = async (
   const htmlBlob = new Blob([html]);
   const buffer = Buffer.from(await htmlBlob.arrayBuffer());
 
+  // @ts-ignore
   writeFile(outputFilePath, buffer, () => {
     if (!fileName) {
       if (

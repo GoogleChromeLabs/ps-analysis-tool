@@ -236,6 +236,7 @@ program.parse();
     text: 'Analyzing cookies on the first site visit',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cookieAnalysisAndFetchedResourceData: any;
 
   // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = function (api) {
-  const isProduction = api.env('production');
+import { mergeConfig } from 'vite';
+import path from 'path';
 
-  return {
-    presets: [
-      ['@babel/preset-env'],
-      [
-        '@babel/preset-react',
-        {
-          runtime: 'automatic',
-          development: !isProduction,
-        },
-      ],
-      '@babel/preset-typescript',
-    ],
-    plugins: [
-      ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }],
-      ['babel-plugin-styled-components'],
-    ],
-    sourceMaps: true,
-  };
-};
+import baseConfig from './vite.shared.config.mjs';
+
+export default mergeConfig(baseConfig, {
+  root: path.resolve(__dirname, 'packages/explorable-explanations'),
+  build: {
+    emptyOutDir: true,
+    outDir: './dist',
+    rollupOptions: {
+      input: {
+        index: './src/index.ts',
+      },
+      output: {
+        entryFileNames: 'index.js',
+      },
+    },
+  },
+  define: {
+    'process.env.IS_RUNNING_STANDALONE': JSON.stringify(true),
+  },
+});

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "target": "es6",
-    "lib": ["es2021"],
-    "module": "commonjs",
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "ESNext",
     "outDir": "dist",
     "declarationDir": "dist-types",
     "composite": true,
@@ -12,6 +12,5 @@
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
-  "include": ["../common/src/@types/index.d.ts"]
+  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"]
 }

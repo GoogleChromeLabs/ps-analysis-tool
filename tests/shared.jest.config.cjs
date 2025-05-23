@@ -45,6 +45,7 @@ module.exports = {
     mermaid: join(__dirname, '/mermaidMock.js'),
     '^lodash-es$': 'lodash',
     'lodash-es/isEqual': 'lodash/isEqual',
+    p5: join(__dirname, '/p5Mock.js'),
   },
   testMatch: [
     '**/tests/**/*.{js,jsx,ts,tsx}',

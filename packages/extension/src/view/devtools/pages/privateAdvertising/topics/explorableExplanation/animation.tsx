@@ -18,7 +18,6 @@
  * External dependencies.
  */
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
-import p5 from 'p5';
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
 
 const epochTransitionDelay = 2000;
