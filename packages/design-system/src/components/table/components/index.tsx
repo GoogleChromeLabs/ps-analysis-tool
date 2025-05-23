@@ -30,6 +30,7 @@ import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
 import TableChipsBar from './filtersSidebar/chips';
 import TableFiltersSidebar from './filtersSidebar';
+import classNames from 'classnames';
 interface TableProps {
   selectedKey: string | undefined | null;
   isFiltersSidebarOpen?: boolean;
@@ -40,6 +41,7 @@ interface TableProps {
   hideTableTopBar?: boolean;
   rowHeightClass?: string;
   shouldScroll?: boolean;
+  showOverflow?: boolean;
 }
 
 const Table = ({
@@ -52,6 +54,7 @@ const Table = ({
   hideTableTopBar,
   rowHeightClass,
   shouldScroll = false,
+  showOverflow = true,
 }: TableProps) => {
   const {
     filters,
@@ -193,7 +196,9 @@ const Table = ({
         )}
         <div
           ref={tableContainerRef}
-          className="relative h-full w-full flex-1 overflow-auto"
+          className={classNames('relative h-full w-full flex-1', {
+            'overflow-auto': showOverflow,
+          })}
           onScroll={scrollListener}
         >
           <ColumnMenu

@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import type { AdsAndBiddersType } from '@google-psat/common';
+import { noop, type AdsAndBiddersType } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -60,6 +60,7 @@ class PrebidInterface {
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},
+    pbjsNamespace: '',
   };
 
   /**
@@ -119,10 +120,47 @@ class PrebidInterface {
         pbjsClass.prebidInterface = window[
           pbjsGlobals[0]
         ] as unknown as typeof window.pbjs;
+
         pbjsClass.prebidExists = true;
         pbjsClass.scanningStatus = true;
+
         pbjsClass.sendInitialData();
         pbjsClass.initPrebidListener();
+
+        pbjsClass.prebidData.pbjsNamespace = pbjsGlobals[0];
+
+        pbjsClass.prebidData.versionInfo =
+          pbjsClass.prebidInterface.version ?? '';
+
+        pbjsClass.prebidData.installedModules =
+          pbjsClass.prebidInterface.installedModules ?? [];
+
+        const bidderSettings: Record<string, SingleBidderSetting> = {};
+
+        Object.keys(pbjsClass?.prebidInterface?.bidderSettings ?? {}).forEach(
+          (bidder) => {
+            bidderSettings[bidder] = {};
+
+            const {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
+              bidCpmAdjustment = noop,
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
+              adserverTargeting = [],
+              ...rest
+            } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};
+
+            bidderSettings[bidder] = {
+              ...rest,
+            };
+          }
+        );
+
+        pbjsClass.prebidData.config = {
+          ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
+          bidderSettings,
+          eids: pbjsClass.prebidInterface.getUserIdsAsEids() ?? [],
+        };
+
         stopLoop = true;
         clearTimeout(timeout);
       }
@@ -154,18 +192,6 @@ class PrebidInterface {
     };
 
     this.setIntervalValue = setInterval(() => {
-      if (
-        this.prebidExists &&
-        this.prebidData.installedModules.length === 0 &&
-        this.prebidData.versionInfo &&
-        Object.keys(this.prebidData.config).length === 0
-      ) {
-        this.prebidData.versionInfo = this.prebidInterface?.version ?? '';
-        this.prebidData.installedModules =
-          this.prebidInterface?.installedModules ?? [];
-        this.prebidData.config = this.prebidInterface?.getConfig() ?? {};
-      }
-
       if (this.updateCounter > 0) {
         this.sendInitialData();
         this.updateCounter = 0;
@@ -178,6 +204,7 @@ class PrebidInterface {
       this.prebidInterface = null;
       this.prebidData = {
         adUnits: {},
+        pbjsNamespace: '',
         noBids: {},
         receivedBids: [],
         errorEvents: [],
@@ -244,9 +271,13 @@ class PrebidInterface {
     });
 
     this.prebidInterface?.onEvent('auctionDebug', (args) => {
+      const events = this.prebidInterface?.getEvents();
+      const lastEvent = events?.[events.length - 1];
+
       this.prebidData.errorEvents.push({
         type: args.type,
         message: args.arguments,
+        time: `${Math.round(lastEvent?.elapsedTime ?? 0)}ms`,
       });
       this.updateCounter++;
     });

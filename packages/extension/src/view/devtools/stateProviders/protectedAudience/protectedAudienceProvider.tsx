@@ -51,12 +51,13 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
     adUnits: {},
     noBids: {},
-    receivedBids: [],
-    errorEvents: [],
-    auctionEvents: {},
     versionInfo: '',
     installedModules: [],
     config: {},
+    receivedBids: [],
+    errorEvents: [],
+    auctionEvents: {},
+    pbjsNamespace: '',
   });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
@@ -241,7 +242,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
-        prebidData: PrebidEvents;
+        prebidEvents: PrebidEvents;
         propertyName: string;
       };
     }) => {
@@ -262,11 +263,12 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (
         incomingMessageType === 'AUCTION_EVENTS' &&
-        message.payload.auctionEvents
+        message.payload.prebidEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
           setPrebidResponse((prev) => {
-            const data = message.payload?.prebidData;
+            const data = message.payload?.prebidEvents ?? null;
+
             if (!data) {
               return prev;
             }
@@ -277,9 +279,10 @@ const Provider = ({ children }: PropsWithChildren) => {
               'noBids',
               'auctionEvents',
               'errorEvents',
-              'versionInfo',
-              'installedModules',
               'config',
+              'installedModules',
+              'versionInfo',
+              'pbjsNamespace',
             ];
 
             const updates = Object.fromEntries(
@@ -293,7 +296,14 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             return Object.keys(updates).length ? { ...prev, ...updates } : prev;
           });
+        }
+      }
 
+      if (
+        incomingMessageType === 'AUCTION_EVENTS' &&
+        message.payload.auctionEvents
+      ) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
