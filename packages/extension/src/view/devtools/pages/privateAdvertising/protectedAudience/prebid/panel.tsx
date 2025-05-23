@@ -28,6 +28,7 @@ import type { PrebidEvents } from '../../../../../../store';
 import EventsContainer from './tabs/events';
 import ToolsContainer from './tabs/tools';
 import UserIdsContainer from './tabs/userIds';
+import VersionComponent from './tabs/version';
 
 enum PillToggleOptions {
   Config = 'Config',
@@ -62,12 +63,7 @@ const Panel = ({ prebidResponse }: PanelProps) => {
       case PillToggleOptions.UserId:
         return <UserIdsContainer config={prebidResponse.config} />;
       case PillToggleOptions.Version:
-        return (
-          <ConfigContainer
-            config={prebidResponse.config}
-            installedModules={[]}
-          />
-        );
+        return <VersionComponent prebidVersion={prebidResponse.versionInfo} />;
       default:
         return <></>;
     }
@@ -76,10 +72,11 @@ const Panel = ({ prebidResponse }: PanelProps) => {
     prebidResponse.config,
     prebidResponse.installedModules,
     prebidResponse.errorEvents,
+    prebidResponse.versionInfo,
   ]);
 
   return (
-    <div className="flex flex-col pt-4 h-full w-full">
+    <div className="flex flex-col pt-4 h-full w-full bg-lotion dark:bg-raisin-black">
       <div className="px-4 pb-4">
         <PillToggle
           options={Object.values(PillToggleOptions)}
