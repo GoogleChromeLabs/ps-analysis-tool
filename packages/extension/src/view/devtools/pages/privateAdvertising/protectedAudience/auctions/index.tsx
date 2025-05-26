@@ -33,7 +33,10 @@ const Auctions = () => {
     })
   );
 
-  if (!isMultiSeller && Object.keys(prebidResponse?.adUnits).length === 0) {
+  if (
+    !isMultiSeller &&
+    Object.keys(prebidResponse?.adUnits || {}).length === 0
+  ) {
     return <AuctionsV1 />;
   }
 
