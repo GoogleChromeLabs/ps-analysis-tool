@@ -43,6 +43,7 @@ const bars: { name: string; duration: string; type: BarType }[] = [
   { name: 'ix', duration: '380.1', type: BarType.NO_BID },
   { name: 'Rubicon', duration: '125.51', type: BarType.WON },
   { name: 'Criteo', duration: '470.05', type: BarType.TIMED_OUT },
+  { name: 'Rubicon', duration: '125.51', type: BarType.WON },
 ];
 
 const Timeline = () => {
@@ -73,8 +74,10 @@ const Timeline = () => {
       </header>
       <div
         ref={containerRef}
-        className="h-[300px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
+        className="m-h-[200px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
+        style={{ height: bars.length * 50 }}
       >
+        {/*Bars block*/}
         <div className="flex h-full">
           {lines.map((_, index) => {
             const verticalLineClasses = `border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] basis-[100px] relative`;
@@ -99,6 +102,7 @@ const Timeline = () => {
           </div>
         </div>
 
+        {/*Metadata block*/}
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative">
             {bars.map((bar, index) => {
