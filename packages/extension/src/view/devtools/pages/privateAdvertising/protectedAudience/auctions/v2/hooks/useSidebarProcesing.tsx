@@ -106,6 +106,7 @@ const useSidebarProcessing = () => {
           timeChildren[`${time}||${adUnit} Adserver`] = {
             title: 'Adserver',
             children: {},
+            isBlurred: true,
           };
 
           const parentAuctionId = adUnitsAuctionId?.[adUnit]?.[time] || '';
