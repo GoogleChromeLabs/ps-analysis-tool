@@ -108,18 +108,20 @@ const Timeline = () => {
             {bars.map((bar, index) => {
               const fullWidth = parseFloat(bar.duration) * 2;
               return (
-                <div
-                  key={index}
-                  className="absolute left-0 h-[10px] transition-all duration-700 ease-out"
-                  style={{
-                    width: animate ? `${fullWidth}px` : `0px`,
-                    backgroundColor: BAR_COLORS[bar.type],
-                    top: `${(index + 1) * 40}px`,
-                  }}
-                >
-                  <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1">
-                    <span className="pr-2 block text-xs">{bar.name}</span>
-                    <span className="text-xs">{bar.duration}ms</span>
+                <div key={index} className="relative group ">
+                  <div
+                    className="absolute left-0 h-[10px] transition-all duration-300 ease-out group-hover:scale-101 group-hover:border group-hover:border-grey transform origin-left cursor-pointer"
+                    style={{
+                      width: animate ? `${fullWidth}px` : `0px`,
+                      backgroundColor: BAR_COLORS[bar.type],
+                      top: `${(index + 1) * 40}px`,
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1">
+                      <span className="pr-2 block text-xs">{bar.name}</span>
+                      <span className="text-xs">{bar.duration}ms</span>
+                    </div>
                   </div>
                 </div>
               );
