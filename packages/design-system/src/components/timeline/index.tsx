@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const LINE_COUNT = 12;
 const INITIAL_TIME = 50;
@@ -48,6 +48,8 @@ const bars: { name: string; duration: string; type: BarType }[] = [
 const Timeline = () => {
   const [animate, setAnimate] = useState(false);
   const lines = Array.from({ length: LINE_COUNT });
+  const [scrollWidth, setScrollWidth] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -57,13 +59,22 @@ const Timeline = () => {
     return () => clearTimeout(timeout);
   }, []);
 
+  useEffect(() => {
+    if (containerRef.current) {
+      setScrollWidth(containerRef.current.scrollWidth);
+    }
+  }, [containerRef]);
+
   return (
     <div>
       <header className="flex justify-between">
         <p>Auction Start: 12:18:27</p>
         <p>Auction Time: 380ms</p>
       </header>
-      <div className="h-[300px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto">
+      <div
+        ref={containerRef}
+        className="h-[300px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
+      >
         <div className="flex h-full">
           {lines.map((_, index) => {
             const verticalLineClasses = `border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] basis-[100px] relative`;
@@ -78,9 +89,12 @@ const Timeline = () => {
         </div>
 
         {/*Timeout block*/}
-        <div className="absolute flex w-full h-full top-0 right-0">
+        <div className="absolute flex w-fit h-full top-0">
           <div className="w-[840px] h-full"></div>
-          <div className="bg-[#E90303] opacity-[9%] h-full relative flex-1">
+          <div
+            className="bg-[#E90303] opacity-[9%] h-full relative flex-1"
+            style={{ width: `${scrollWidth - 840}px` }}
+          >
             <span className="absolute left-0 top-30">Timeout: 420ms</span>
           </div>
         </div>
