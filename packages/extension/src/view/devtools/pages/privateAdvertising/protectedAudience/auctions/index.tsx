@@ -26,11 +26,14 @@ import AuctionsV1 from './v1';
 import AuctionsV2 from './v2';
 
 const Auctions = () => {
-  const { isMultiSeller } = useProtectedAudience(({ state }) => ({
-    isMultiSeller: state.isMultiSellerAuction,
-  }));
+  const { isMultiSeller, prebidResponse } = useProtectedAudience(
+    ({ state }) => ({
+      isMultiSeller: state.isMultiSellerAuction,
+      prebidResponse: state.prebidResponse,
+    })
+  );
 
-  if (!isMultiSeller) {
+  if (!isMultiSeller && Object.keys(prebidResponse?.adUnits).length === 0) {
     return <AuctionsV1 />;
   }
 
