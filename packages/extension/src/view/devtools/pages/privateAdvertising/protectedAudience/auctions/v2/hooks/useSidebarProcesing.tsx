@@ -92,7 +92,7 @@ const useSidebarProcessing = () => {
             ...adUnitChildren[`${time}||${adUnit}`].children,
           };
 
-          timeChildren['Prebid'] = {
+          timeChildren[`${time}||${adUnit} Prebid`] = {
             title: 'Prebid',
             panel: {
               Element: PrebidTable,
@@ -103,7 +103,7 @@ const useSidebarProcessing = () => {
             children: {},
           };
 
-          timeChildren['Adserver'] = {
+          timeChildren[`${time}||${adUnit} Adserver`] = {
             title: 'Adserver',
             children: {},
           };
