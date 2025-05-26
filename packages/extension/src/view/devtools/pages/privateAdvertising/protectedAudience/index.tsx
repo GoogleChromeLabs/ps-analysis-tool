@@ -63,7 +63,7 @@ const ProtectedAudience = () => {
           },
         },
       ],
-      Analysis: [
+      Observability: [
         {
           title: 'Interest Groups',
           content: {
