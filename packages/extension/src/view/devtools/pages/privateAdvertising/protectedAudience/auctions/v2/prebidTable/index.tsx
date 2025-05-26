@@ -24,6 +24,7 @@ import {
   type TableFilter,
   type TableColumn,
   type TableRow,
+  Hammer,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 
@@ -48,13 +49,13 @@ const PrebidTable = ({ auctionEvents }: PrebidTableProps) => {
     () => [
       {
         header: 'Elapsed Time',
-        accessorKey: 'time',
+        accessorKey: 'elapsedTime',
         cell: (info) => info,
         enableHiding: false,
       },
       {
         header: 'Event',
-        accessorKey: 'type',
+        accessorKey: 'eventType',
         cell: (info) => info,
         sortingComparator: (a, b) => {
           const aString = (a as string).toLowerCase().trim();
@@ -66,7 +67,16 @@ const PrebidTable = ({ auctionEvents }: PrebidTableProps) => {
       {
         header: 'Bidder Name',
         accessorKey: 'bidderCode',
-        cell: (info) => info,
+        cell: (info, details) => {
+          const eventType = details?.eventType;
+
+          return (
+            <div className="flex items-center gap-2">
+              {eventType === 'bidWon' && <Hammer className="h-4 w-4" />}
+              {info}
+            </div>
+          );
+        },
       },
       {
         header: 'Bid CPM',
