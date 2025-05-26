@@ -373,7 +373,7 @@ class PrebidInterface {
   }
 
   addEvent(key: string, args: any) {
-    const event = structuredClone(this.prebidInterface?.getEvents())?.pop();
+    const event = this.prebidInterface?.getEvents().pop();
 
     if (!event) {
       return;
