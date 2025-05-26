@@ -27,6 +27,7 @@ import {
   Hammer,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -73,7 +74,13 @@ const PrebidTable = ({ auctionEvents }: PrebidTableProps) => {
           return (
             <div className="flex items-center gap-2">
               {eventType === 'bidWon' && <Hammer className="h-4 w-4" />}
-              {info}
+              <span
+                className={classNames({
+                  'text-[#5AAD6A] font-semibold': eventType === 'bidWon',
+                })}
+              >
+                {info}
+              </span>
             </div>
           );
         },
