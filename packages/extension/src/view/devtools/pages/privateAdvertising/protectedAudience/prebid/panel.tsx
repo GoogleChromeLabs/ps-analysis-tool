@@ -19,12 +19,16 @@
  */
 import { PillToggle } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
-import ConfigContainer from './tabs';
-import type { PrebidEvents } from '../../../../../../store';
 
 /**
  * Internal dependencies.
  */
+import ConfigContainer from './tabs/config';
+import type { PrebidEvents } from '../../../../../../store';
+import EventsContainer from './tabs/events';
+import ToolsContainer from './tabs/tools';
+import UserIdsContainer from './tabs/userIds';
+import VersionComponent from './tabs/version';
 
 enum PillToggleOptions {
   Config = 'Config',
@@ -35,10 +39,10 @@ enum PillToggleOptions {
 }
 
 interface PanelProps {
-  config: PrebidEvents;
+  prebidResponse: PrebidEvents;
 }
 
-const Panel = ({ config }: PanelProps) => {
+const Panel = ({ prebidResponse }: PanelProps) => {
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.Config
   );
@@ -48,25 +52,31 @@ const Panel = ({ config }: PanelProps) => {
       case PillToggleOptions.Config:
         return (
           <ConfigContainer
-            config={config.config}
-            installedModules={config.installedModules}
+            config={prebidResponse.config}
+            installedModules={prebidResponse.installedModules ?? []}
           />
         );
       case PillToggleOptions.Events:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return <EventsContainer errorEvents={prebidResponse.errorEvents} />;
       case PillToggleOptions.Tools:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return <ToolsContainer />;
       case PillToggleOptions.UserId:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return <UserIdsContainer config={prebidResponse.config} />;
       case PillToggleOptions.Version:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return <VersionComponent prebidVersion={prebidResponse.versionInfo} />;
       default:
-        return <ConfigContainer config={config.config} installedModules={[]} />;
+        return <></>;
     }
-  }, [config.config, config.installedModules, pillToggle]);
+  }, [
+    pillToggle,
+    prebidResponse.config,
+    prebidResponse.installedModules,
+    prebidResponse.errorEvents,
+    prebidResponse.versionInfo,
+  ]);
 
   return (
-    <div className="flex flex-col pt-4 h-full w-full">
+    <div className="flex flex-col pt-4 h-full w-full bg-lotion dark:bg-raisin-black">
       <div className="px-4 pb-4">
         <PillToggle
           options={Object.values(PillToggleOptions)}
@@ -76,7 +86,7 @@ const Panel = ({ config }: PanelProps) => {
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
-        <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+        <div className="ml-4 w-full h-full border-american-silver dark:border-quartz overflow-auto">
           {containerToShow}
         </div>
       </div>

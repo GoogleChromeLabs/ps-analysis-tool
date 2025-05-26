@@ -22,32 +22,27 @@ import {
   FourSquares,
   Person,
   Ruler,
+  Server,
   Settings,
-  SidebarProvider,
   type SidebarItems,
 } from '@google-psat/design-system';
-import React, { useMemo } from 'react';
-import PrebidConfig from './components/prebidConfig';
-import InstalledModules from './components/installedModules';
-import PriceGranularity from './components/priceGranularity';
-import BidderSettings from './components/bidderSettings';
-import ConsentManagement from './components/consentManagement';
-import UserIds from './components/userIds';
-import GPTPreAuction from './components/gptPreAuction';
-import UserSync from './components/userSync';
-import ConfigPanel from './container';
+import { useMemo } from 'react';
+/**
+ * Internal dependencies
+ */
+import PrebidConfig from '../components/prebidConfig';
+import InstalledModules from '../components/installedModules';
+import PriceGranularity from '../components/priceGranularity';
+import JsonViewerWrapper from '../components/jsonViewerWrapper';
+import ConsentManagement from '../components/consentManagement';
+import UserIds from '../components/userIds';
 
-type ConfigContainerPanelProps = {
-  config: PrebidConfig;
-  installedModules: string[];
-};
-
-const ConfigContainer = ({
-  config,
-  installedModules,
-}: ConfigContainerPanelProps) => {
-  const sidebarData = useMemo<SidebarItems>(
-    () => ({
+const useConfigContainer = (
+  config: PrebidConfig,
+  installedModules: string[]
+) => {
+  const sidebarData = useMemo<SidebarItems>(() => {
+    const baseSidebarItems: SidebarItems = {
       prebidConfig: {
         title: 'PrebidConfig',
         icon: {
@@ -61,7 +56,7 @@ const ConfigContainer = ({
           Element: Settings,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -78,34 +73,8 @@ const ConfigContainer = ({
           },
         },
         children: {},
-        dropdownOpen: true,
       },
-      installedmodules: {
-        title: 'Installed Modules',
-        icon: {
-          Element: Ruler,
-          props: {
-            className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
-          },
-        },
-        selectedIcon: {
-          Element: Ruler,
-          props: {
-            className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
-          },
-        },
-        panel: {
-          Element: InstalledModules,
-          props: {
-            installedModules,
-          },
-        },
-        children: {},
-        dropdownOpen: true,
-      },
-      pricegranularity: {
+      pricegGanularity: {
         title: 'Price Granularity',
         icon: {
           Element: FourSquares,
@@ -118,7 +87,7 @@ const ConfigContainer = ({
           Element: FourSquares,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -129,9 +98,38 @@ const ConfigContainer = ({
           },
         },
         children: {},
-        dropdownOpen: true,
       },
-      biddersettings: {
+    };
+
+    if (installedModules.length > 0) {
+      baseSidebarItems['installedModules'] = {
+        title: 'Installed Modules',
+        icon: {
+          Element: Ruler,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Ruler,
+          props: {
+            className:
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        panel: {
+          Element: InstalledModules,
+          props: {
+            installedModules,
+          },
+        },
+        children: {},
+      };
+    }
+
+    if (config?.bidderSettings) {
+      baseSidebarItems['bidderSettings'] = {
         title: 'Bidder Settings',
         icon: {
           Element: Settings,
@@ -144,19 +142,21 @@ const ConfigContainer = ({
           Element: Settings,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
-          Element: BidderSettings,
+          Element: JsonViewerWrapper,
           props: {
-            bidderSettings: config?.bidderSettings ?? {},
+            config: config?.bidderSettings ?? {},
           },
         },
         children: {},
-        dropdownOpen: true,
-      },
-      consentmanagement: {
+      };
+    }
+
+    if (config?.consentManagement) {
+      baseSidebarItems['consentManagement'] = {
         title: 'Consent Management',
         icon: {
           Element: Buildings,
@@ -169,7 +169,7 @@ const ConfigContainer = ({
           Element: Buildings,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -179,9 +179,11 @@ const ConfigContainer = ({
           },
         },
         children: {},
-        dropdownOpen: true,
-      },
-      userids: {
+      };
+    }
+
+    if (config?.userSync?.userIds) {
+      baseSidebarItems['userIds'] = {
         title: 'User Ids',
         icon: {
           Element: Person,
@@ -194,7 +196,7 @@ const ConfigContainer = ({
           Element: Person,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
@@ -204,9 +206,11 @@ const ConfigContainer = ({
           },
         },
         children: {},
-        dropdownOpen: true,
-      },
-      gptpreauction: {
+      };
+    }
+
+    if (config?.gptPreAuction) {
+      baseSidebarItems['gptPreAuction'] = {
         title: 'GPT Pre-Auction Module',
         icon: {
           Element: FourSquares,
@@ -219,17 +223,21 @@ const ConfigContainer = ({
           Element: FourSquares,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
-          Element: GPTPreAuction,
-          props: {},
+          Element: JsonViewerWrapper,
+          props: {
+            config: config?.gptPreAuction ?? {},
+          },
         },
         children: {},
-        dropdownOpen: true,
-      },
-      usersync: {
+      };
+    }
+
+    if (config?.userSync) {
+      baseSidebarItems['userSync'] = {
         title: 'UserSync',
         icon: {
           Element: DoubleUser,
@@ -242,40 +250,63 @@ const ConfigContainer = ({
           Element: DoubleUser,
           props: {
             className:
-              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         panel: {
-          Element: UserSync,
-          props: {},
+          Element: JsonViewerWrapper,
+          props: {
+            config: config?.userSync ?? [],
+          },
         },
         children: {},
-        dropdownOpen: true,
-      },
-    }),
-    [
-      config.userSync?.userIds,
-      config.consentManagement,
-      config.bidderSequence,
-      config.bidderSettings,
-      config.bidderTimeout,
-      config.customPriceBucket,
-      config.enableSendAllBids,
-      config.maxBid,
-      config.maxNestedIframes,
-      config.priceGranularity,
-      config.useBidCache,
-      installedModules,
-    ]
-  );
-  return (
-    <SidebarProvider
-      data={sidebarData}
-      defaultSelectedItemKey={Object.keys(sidebarData)?.[0]}
-    >
-      <ConfigPanel />
-    </SidebarProvider>
-  );
+      };
+    }
+
+    if (config?.s2sConfig) {
+      baseSidebarItems['prebidServerConfig'] = {
+        title: 'Prebid Server Config',
+        icon: {
+          Element: Server,
+          props: {
+            className:
+              '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        selectedIcon: {
+          Element: Server,
+          props: {
+            className:
+              '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
+          },
+        },
+        panel: {
+          Element: JsonViewerWrapper,
+          props: {
+            config: config?.s2sConfig ?? [],
+          },
+        },
+        children: {},
+      };
+    }
+    return baseSidebarItems;
+  }, [
+    config?.s2sConfig,
+    config?.gptPreAuction,
+    config?.bidderTimeout,
+    config?.bidderSequence,
+    config?.maxNestedIframes,
+    config?.maxBid,
+    config?.useBidCache,
+    config?.enableSendAllBids,
+    config?.priceGranularity,
+    config?.customPriceBucket,
+    config?.bidderSettings,
+    config?.consentManagement,
+    config?.userSync,
+    installedModules,
+  ]);
+  return sidebarData;
 };
 
-export default ConfigContainer;
+export default useConfigContainer;

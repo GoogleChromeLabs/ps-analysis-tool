@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Merges two 2D arrays and returns a new 2D array containing only unique inner arrays.
  * Uniqueness is determined by the stringified content of each inner array.
@@ -20,12 +21,12 @@
  * @param {any[][]} arr2 - The second 2D array.
  * @returns {any[][]} A new 2D array containing unique inner arrays from both inputs.
  */
-export default function mergeUnique2DArrays(
-  arr1: any[][],
-  arr2: any[][]
-): any[][] {
+export default function mergeUnique2DArrays<T>(
+  arr1: T[][],
+  arr2: T[][]
+): T[][] {
   const seen = new Set<string>();
-  const result: any[][] = [];
+  const result: T[][] = [];
 
   for (const row of [...arr1, ...arr2]) {
     const key = JSON.stringify(row);

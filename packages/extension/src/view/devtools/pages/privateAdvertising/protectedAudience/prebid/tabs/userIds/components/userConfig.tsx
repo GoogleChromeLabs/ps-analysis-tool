@@ -23,45 +23,45 @@ import {
   JsonView,
   Table,
   noop,
-  type PrebidConsentManagementTableData,
+  type PrebidUserIdsTableData,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
 import { useState, useMemo, useCallback } from 'react';
 
-type ConsentManagementPanelProps = {
-  config: PrebidConfig['consentManagement'];
+type UserConfigPanelProps = {
+  config: UserIdConfig[];
 };
-type SelectedJSON = {
-  cmpApi: 'iab' | 'static' | 'iabnonsupport' | 'none';
-  timeout?: number;
-  allowAuctionWithoutConsent?: boolean;
-  defaultGdprScope?: boolean;
-};
-type PlatformKeys = 'gdpr' | 'usp';
 
-const ConsentManagement = ({ config }: ConsentManagementPanelProps) => {
+const UserConfig = ({ config }: UserConfigPanelProps) => {
   const [selectedKey, setSelectedKey] = useState<string>('');
-  const [selectedRow, setSelectedRow] = useState<Partial<SelectedJSON> | null>(
+  const [selectedRow, setSelectedRow] = useState<Partial<UserIdConfig> | null>(
     null
   );
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
-        header: 'Platform',
-        accessorKey: 'platform',
+        header: 'Name',
+        accessorKey: 'name',
         cell: (info) => info,
         enableHiding: false,
       },
       {
-        header: 'api',
-        accessorKey: 'api',
+        header: 'Storage Type',
+        accessorKey: 'type',
         cell: (info) => info,
         enableHiding: false,
       },
       {
-        header: 'timeout',
-        accessorKey: 'timeout',
+        header: 'Expires',
+        accessorKey: 'expires',
+        cell: (info) => info,
+        enableHiding: false,
+      },
+      {
+        header: 'Storage Name',
+        accessorKey: 'storageName',
         cell: (info) => info,
         enableHiding: false,
       },
@@ -74,30 +74,31 @@ const ConsentManagement = ({ config }: ConsentManagementPanelProps) => {
       return [];
     }
 
-    return Object.keys(config).map((platformKey) => {
+    return config.map((storage) => {
       return {
-        platform: platformKey as PlatformKeys,
-        api: config?.[platformKey as PlatformKeys]?.cmpApi ?? 'none',
-        timeout: config?.[platformKey as PlatformKeys]?.timeout ?? 0,
+        name: storage.name,
+        type: storage.storage?.type,
+        expires: storage.storage?.expires,
+        storageName: storage.storage?.name,
       };
     });
   }, [config]);
 
   const isRowSelected = useCallback(
     (data: TableData | null) => {
-      const _data = data as PrebidConsentManagementTableData;
+      const _data = data as PrebidUserIdsTableData;
 
       if (!_data) {
         return true;
       }
 
-      return _data.platform === selectedKey;
+      return _data.name === selectedKey;
     },
     [selectedKey]
   );
 
   return (
-    <div className="w-[70%] h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
+    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
       <Resizable
         defaultSize={{
           width: '100%',
@@ -114,23 +115,27 @@ const ConsentManagement = ({ config }: ConsentManagementPanelProps) => {
           tableColumns={tableColumns}
           isRowSelected={isRowSelected}
           onRowClick={(row) => {
-            const platform =
-              (row as PrebidConsentManagementTableData)?.platform ?? '';
-            setSelectedKey(platform);
+            const _selectedKey = (row as PrebidUserIdsTableData)?.name ?? '';
+            setSelectedKey(_selectedKey);
 
-            if (platform && config) {
-              setSelectedRow(config[platform] as SelectedJSON);
+            if (_selectedKey && row) {
+              setSelectedRow(
+                config.find(
+                  (storage) => storage.name === _selectedKey
+                ) as UserIdConfig
+              );
             }
           }}
           onRowContextMenu={noop}
           getRowObjectKey={(row) =>
-            (row as unknown as PrebidConsentManagementTableData)?.platform
+            (row.originalData as PrebidUserIdsTableData)?.name
           }
         >
           <Table
             hideTableTopBar={true}
             selectedKey={selectedKey}
             minWidth="70%"
+            showOverflow={false}
           />
         </TableProvider>
       </Resizable>
@@ -151,4 +156,4 @@ const ConsentManagement = ({ config }: ConsentManagementPanelProps) => {
   );
 };
 
-export default ConsentManagement;
+export default UserConfig;

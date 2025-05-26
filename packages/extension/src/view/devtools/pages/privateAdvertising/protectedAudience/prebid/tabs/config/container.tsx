@@ -21,10 +21,6 @@ import React from 'react';
 import { Resizable } from 're-resizable';
 import { Sidebar, useSidebar } from '@google-psat/design-system';
 
-/**
- * Internal dependencies.
- */
-
 const ConfigPanel = () => {
   const { activePanel } = useSidebar(({ state }) => ({
     activePanel: state.activePanel,

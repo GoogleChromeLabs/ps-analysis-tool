@@ -44,7 +44,7 @@ const Prebid = () => {
     );
   }
 
-  return <Panel config={prebidResponse} />;
+  return <Panel prebidResponse={prebidResponse} />;
 };
 
 export default Prebid;

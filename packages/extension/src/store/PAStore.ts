@@ -51,6 +51,7 @@ class PAStore extends DataStore {
         adUnits: AdsAndBiddersType;
         noBids: NoBidsType;
         receivedBids: ReceivedBids[];
+        pbjsNameSpace: string;
         errorEvents: {
           type: 'WARNING' | 'ERROR' | 'INFO';
           message: string[];
