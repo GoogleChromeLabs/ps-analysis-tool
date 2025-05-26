@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { ProgressBar } from '@google-psat/design-system';
+import { Link, ProgressBar } from '@google-psat/design-system';
 import { useCallback, useEffect, useState } from 'react';
 
 interface VersionComponentProps {
@@ -57,14 +57,22 @@ const VersionComponent = ({ prebidVersion }: VersionComponentProps) => {
       )}
       {!loading && (
         <>
-          <h2>Version Information</h2>
-          <p>
+          <h2 className="font-bold">Version Information</h2>
+          <p className="text-raisin-black dark:text-bright-gray">
             Installed Version:{' '}
             <span className="font-bold">{prebidVersion}</span>
           </p>
-          <p>
+          <p className="text-raisin-black dark:text-bright-gray">
             Latest Version: <span className="font-bold">v{latestVersion}</span>
           </p>
+          <Link
+            rel="noreferrer"
+            target="_blank"
+            href="https://github.com/prebid/Prebid.js/releases"
+            className="text-bright-navy-blue dark:text-jordy-blue"
+          >
+            View full release changelog
+          </Link>
         </>
       )}
     </div>

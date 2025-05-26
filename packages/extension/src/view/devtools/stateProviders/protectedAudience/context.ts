@@ -71,6 +71,7 @@ const initialState: ProtectedAudienceContextType = {
       noBids: {},
       versionInfo: '',
       installedModules: [],
+      pbjsNamespace: '',
       config: {},
       receivedBids: [],
       errorEvents: [],
