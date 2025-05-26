@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
@@ -56,18 +55,23 @@ const InstalledModules = ({ installedModules }: InstalledModulesPanelProps) => {
     ],
     []
   );
-  const sortedAdapters = useMemo(() => {
+
+  //This function calculates the adapters based on their name.
+  const calculatedAdapters = useMemo(() => {
     const bidAdapters = installedModules
       .filter((module) => module.includes('BidAdapter'))
       .sort();
+
     const analyticsAdapters = installedModules
       .filter((module) => module.includes('AnalyticsAdapter'))
       .sort();
+
     const idSystems = installedModules
       .filter(
         (module) => module.includes('IdSystem') || module.includes('UserID')
       )
       .sort();
+
     const miscellaneous = installedModules
       .filter(
         (module) =>
@@ -157,6 +161,7 @@ const InstalledModules = ({ installedModules }: InstalledModulesPanelProps) => {
             hideTableTopBar={true}
             selectedKey={selectedKey}
             minWidth="70%"
+            showOverflow={false}
           />
         </TableProvider>
       </Resizable>
@@ -164,7 +169,9 @@ const InstalledModules = ({ installedModules }: InstalledModulesPanelProps) => {
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">
             <JsonView
-              src={sortedAdapters[selectedRow as InstalledModulesTypes] ?? {}}
+              src={
+                calculatedAdapters[selectedRow as InstalledModulesTypes] ?? {}
+              }
             />
           </div>
         ) : (

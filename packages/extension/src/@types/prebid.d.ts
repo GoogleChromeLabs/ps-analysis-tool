@@ -335,6 +335,16 @@ declare global {
 
   type AuctionDebugEventType = 'INFO' | 'WARNING' | 'ERROR';
 
+  interface EID {
+    source: string;
+    uids: UID[];
+  }
+  interface UID {
+    id: string;
+    atype: number;
+    ext?: Record<string, any>;
+  }
+
   interface UserIdConfig {
     name: string;
     storage?: {
@@ -358,6 +368,7 @@ declare global {
     enableSendAllBids?: boolean;
     bidderSequence?: string;
     useBidCache?: boolean;
+    eids?: EID[];
     priceGranularity?: 'low' | 'medium' | 'high' | 'auto' | 'dense' | 'custom';
     currency?: {
       adServerCurrency: string;
@@ -584,6 +595,7 @@ declare global {
     maxNestedIframes?: number;
     disableAjaxTimeout?: boolean;
     enableTIDs?: boolean;
+    gptPreAuction?: GptPreAuctionConfig;
     allowActivities?: {
       [activity: string]: {
         rules: Array<{
@@ -601,6 +613,15 @@ declare global {
     }>;
     bidderSettings?: Record<string, SingleBidderSetting>;
     [key: string]: any;
+  }
+
+  interface GptPreAuctionConfig {
+    enabled: boolean;
+    timeout?: number; // in milliseconds
+    setTargeting?: boolean;
+    suppressInitialLoad?: boolean;
+    auctionDelay?: number;
+    requestBidsHook?: () => void;
   }
 
   type SingleBidderSetting = {
@@ -654,7 +675,7 @@ declare global {
     getAllPrebidWinningBids(): BidResponse[];
     renderAd(document: Document, adId: string): void;
     getUserIds(): Record<string, any>;
-    getUserIdsAsEids(): any[];
+    getUserIdsAsEids(): EID[];
     getUserIdsAsync(): void;
     setBidderConfig(config: object): void;
     aliasBidder(

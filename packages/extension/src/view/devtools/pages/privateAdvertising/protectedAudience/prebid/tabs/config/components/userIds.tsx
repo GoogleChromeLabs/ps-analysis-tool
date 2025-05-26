@@ -23,7 +23,6 @@ import {
   JsonView,
   Table,
   noop,
-  type PrebidConsentManagementTableData,
   type PrebidUserIdsTableData,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
@@ -128,14 +127,13 @@ const UserIds = ({ config }: ConsentManagementPanelProps) => {
             }
           }}
           onRowContextMenu={noop}
-          getRowObjectKey={(row) =>
-            (row as unknown as PrebidConsentManagementTableData)?.platform
-          }
+          getRowObjectKey={(row) => (row.originalData as UserIdConfig)?.name}
         >
           <Table
             hideTableTopBar={true}
             selectedKey={selectedKey}
             minWidth="70%"
+            showOverflow={false}
           />
         </TableProvider>
       </Resizable>

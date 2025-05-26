@@ -30,6 +30,7 @@ export const CDP_WARNING_MESSAGE =
   'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
 export const RELOAD_WARNING_MESSAGE =
   'Settings changed, reload all tabs to apply changes?';
+export const STORE_RULES_TOGGLE = 'globalPersistDebuggingRules';
 
 export const DEVTOOLS_CLOSE = 'DEVTOOLS_STATE_CLOSE';
 export const DEVTOOLS_OPEN = 'DEVTOOLS_STATE_OPEN';

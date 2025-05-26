@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import classNames from 'classnames';
-import React from 'react';
+import React, { useRef } from 'react';
 
 interface PillToggleProps {
   options: string[];
@@ -32,18 +32,31 @@ const PillToggle = ({
   setPillToggle,
   eeAnimatedTab,
 }: PillToggleProps) => {
+  const selectedIndexRef = useRef<number | null>(null);
+
+  options.forEach((option, index) => {
+    if (pillToggle === option) {
+      selectedIndexRef.current = index;
+    }
+  });
+
   return (
-    <div className="w-96 h-8 rounded-full border border-gray-300 dark:border-quartz text-sm">
-      {options.map((option) => {
+    <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">
+      {options.map((option, index) => {
         return (
           <button
             key={option}
             className={classNames(
-              `h-full rounded-full text-raisin-black dark:text-bright-gray w-1/${options.length}`,
+              `px-5 h-full border-r border-gray-silver dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
               {
-                'bg-gray-200 dark:bg-gray-500 ': pillToggle === option,
-                'bg-transparent': pillToggle !== option,
+                'bg-anti-flash-white dark:bg-gray-500 ': pillToggle === option,
+                'bg-white dark:bg-raisin-black backdrop-opacity-1':
+                  selectedIndexRef.current && index < selectedIndexRef.current,
+                'bg-transparent':
+                  selectedIndexRef.current && index > selectedIndexRef.current,
                 'text-xs': eeAnimatedTab,
+                'rounded-r-full -ml-[10px]': index > 0,
+                'rounded-full': index === 0,
               }
             )}
             onClick={() => setPillToggle(option)}

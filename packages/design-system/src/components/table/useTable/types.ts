@@ -25,6 +25,7 @@ import type {
   ErroredOutUrlsData,
   SourcesData,
 } from '@google-psat/common';
+
 export type PrebidConfigTableData = {
   name: string;
   value: string | number | boolean;
@@ -55,6 +56,12 @@ export type PrebidUserIdsTableData = {
   storageName?: string;
 };
 
+export type UserEID = {
+  userId: string;
+  aType: number;
+  source: string;
+};
+
 export type TableData = (
   | CookieTableData
   | InterestGroups
@@ -68,6 +75,7 @@ export type TableData = (
   | PrebidPriceGranularityTableData
   | PrebidConsentManagementTableData
   | PrebidUserIdsTableData
+  | UserEID
 ) & {
   highlighted?: boolean;
 };

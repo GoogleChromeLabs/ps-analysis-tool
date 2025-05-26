@@ -55,7 +55,7 @@
         "report/index.html",
         "prebid-interface.js"
       ],
-      "matches": ["*://*/*", "http://*/*", "https://*/*"]
+      "matches": ["*://*/*"]
     }
   ]
 }
