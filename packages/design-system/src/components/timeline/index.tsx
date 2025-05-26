@@ -13,26 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
 import React, { useEffect, useState } from 'react';
 
 const LINE_COUNT = 12;
 const INITIAL_TIME = 50;
 const TIME_DURATION = 50;
 
-const BAR_COLORS = {
-  bid: '#7CACF8',
-  'no-bid': '#EC7159',
-  won: '#5CC971',
-  'timed-out': '#FC2D04',
+enum BarType {
+  BID = 'bid',
+  NO_BID = 'no-bid',
+  WON = 'won',
+  TIMED_OUT = 'timed-out',
+}
+
+const BAR_COLORS: Record<BarType, string> = {
+  [BarType.BID]: '#7CACF8',
+  [BarType.NO_BID]: '#EC7159',
+  [BarType.WON]: '#5CC971',
+  [BarType.TIMED_OUT]: '#FC2D04',
 };
 
-const bars = [
-  { name: 'Pubmattic', duration: '270.1', type: 'bid' },
-  { name: 'Sharethrough', duration: '210.4', type: 'no-bid' },
-  { name: 'appnexus', duration: '240.0', type: 'no-bid' },
-  { name: 'ix', duration: '380.1', type: 'no-bid' },
-  { name: 'Rubicon', duration: '125.51', type: 'won' },
-  { name: 'Criteo', duration: '470.05', type: 'timed-out' },
+const bars: { name: string; duration: string; type: BarType }[] = [
+  { name: 'Pubmattic', duration: '270.1', type: BarType.BID },
+  { name: 'Sharethrough', duration: '210.4', type: BarType.NO_BID },
+  { name: 'appnexus', duration: '240.0', type: BarType.NO_BID },
+  { name: 'ix', duration: '380.1', type: BarType.NO_BID },
+  { name: 'Rubicon', duration: '125.51', type: BarType.WON },
+  { name: 'Criteo', duration: '470.05', type: BarType.TIMED_OUT },
 ];
 
 const Timeline = () => {
@@ -53,18 +63,18 @@ const Timeline = () => {
         <p>Auction Start: 12:18:27</p>
         <p>Auction Time: 380ms</p>
       </header>
-      <div className="h-[300px] border-pale-cornflower-blue border-1 mt-2 relative">
+      <div className="h-[300px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto">
         <div className="flex h-full">
-          {lines.map((_, index) => (
-            <div
-              className="border-pale-cornflower-blue border-r-1 h-full w-[100px] relative"
-              key={index}
-            >
-              <span className="absolute right-0 pr-2 block text-xs">
-                {INITIAL_TIME + index * TIME_DURATION}ms
-              </span>
-            </div>
-          ))}
+          {lines.map((_, index) => {
+            const verticalLineClasses = `border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] basis-[100px] relative`;
+            return (
+              <div className={verticalLineClasses} key={index}>
+                <span className="absolute right-0 pr-2 block text-xs">
+                  {INITIAL_TIME + index * TIME_DURATION}ms
+                </span>
+              </div>
+            );
+          })}
         </div>
 
         <div className="absolute flex w-full h-full top-0 right-0">
