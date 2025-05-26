@@ -29,6 +29,9 @@ import { useProtectedAudience } from '../../../../../../../stateProviders';
 import { STORE_RULES_TOGGLE } from '../../../../../../../../../constants';
 import firstDifferent from '../../../../../../../../../utils/firstDifferent';
 
+// Source: Github Repository (https://github.com/prebid/professor-prebid/tree/master)
+// Modified by @amovar18 use hook and directly execute google tag script using chrome.scripting.
+
 //@todo -- Move this and other states used in prebid into a provider for better readability and modularity in follow-up PR.
 const usePrebidTool = () => {
   const [debuggingModuleConfig, setDebuggingModuleConfig] =
