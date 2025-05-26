@@ -265,7 +265,7 @@ class PrebidInterface {
     this.prebidInterface?.onEvent('auctionInit', (args) => {
       this.prebidData.auctionEvents = {
         ...this.prebidData.auctionEvents,
-        [args.auctionId]: [args],
+        [args.auctionId]: [{ ...args, eventType: 'auctionInit' }],
       };
       this.updateCounter++;
     });
@@ -283,59 +283,89 @@ class PrebidInterface {
     });
 
     this.prebidInterface?.onEvent('beforeRequestBids', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'beforeRequestBids',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidRequested', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'bidRequested',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('beforeBidderHttp', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'beforeBidderHttp',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidResponse', (args) => {
       this.calculateBidResponse(args);
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'BidResponse',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidAccepted', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'bidAccepted',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidRejected', (args) => {
       if (args.bid?.auctionId) {
-        this.prebidData.auctionEvents[args.bid?.auctionId].push(args);
+        this.prebidData.auctionEvents[args.bid?.auctionId].push({
+          ...args,
+          eventType: 'bidRejected',
+        });
         this.updateCounter++;
       }
     });
 
     this.prebidInterface?.onEvent('bidTimeout', (args) => {
       args.forEach((arg) => {
-        this.prebidData.auctionEvents[arg.auctionId].push(args);
+        this.prebidData.auctionEvents[arg?.auctionId].push({
+          ...args,
+          eventType: 'bidTimeout',
+        });
       });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidWon', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'bidWon',
+      });
       this.calculateAdUnit(args);
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('noBid', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'noBid',
+      });
       this.calculateNoBid(args);
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('auctionEnd', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.prebidData.auctionEvents[args.auctionId].push({
+        ...args,
+        eventType: 'auctionEnd',
+      });
       this.sendInitialData();
       this.updateCounter++;
     });
