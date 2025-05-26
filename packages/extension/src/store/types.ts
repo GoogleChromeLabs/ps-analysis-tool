@@ -16,7 +16,12 @@
 /**
  * External dependencies.
  */
-import type { CookieData } from '@google-psat/common';
+import type {
+  AdsAndBiddersType,
+  CookieData,
+  PrebidNoBidsType,
+  ReceivedBids,
+} from '@google-psat/common';
 
 export type PreferenceKeyValues =
   | 'columnSorting'
@@ -47,4 +52,15 @@ export type AllowedDomainObject = {
 
 export type AllowedDomainStorage = {
   allowList: AllowedDomainObject[];
+};
+
+export type PrebidEvents = {
+  adUnits: AdsAndBiddersType;
+  noBids: PrebidNoBidsType;
+  versionInfo: string;
+  receivedBids: ReceivedBids[];
+  errorEvents: { type: 'WARNING' | 'ERROR' | 'INFO'; message: string[] }[];
+  auctionEvents: { [auctionId: string]: any[] };
+  installedModules: string[];
+  config: PrebidConfig;
 };

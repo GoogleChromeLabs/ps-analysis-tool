@@ -34,6 +34,7 @@ import AdUnits from './adUnits';
 import ExplorableExplanation from './explorableExplanation';
 import WorkletBreakpoints from './workletBreakpoints';
 import Overview from './overview';
+import PrebidPanel from './prebid';
 
 const ProtectedAudience = () => {
   const tabItems = useMemo<TabItems>(
@@ -87,6 +88,12 @@ const ProtectedAudience = () => {
         title: 'Worklet Breakpoints',
         content: {
           Element: WorkletBreakpoints,
+        },
+      },
+      {
+        title: 'Prebid',
+        content: {
+          Element: PrebidPanel,
         },
       },
     ],
