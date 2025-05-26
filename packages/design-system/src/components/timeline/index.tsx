@@ -77,6 +77,7 @@ const Timeline = () => {
           })}
         </div>
 
+        {/*Timeout block*/}
         <div className="absolute flex w-full h-full top-0 right-0">
           <div className="w-[840px] h-full"></div>
           <div className="bg-[#E90303] opacity-[9%] h-full relative flex-1">
