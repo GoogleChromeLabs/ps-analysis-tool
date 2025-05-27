@@ -38,6 +38,8 @@ interface PanelProps {
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   setStorage?: (data: string, index?: number) => void;
   setActiveTab?: (tab: number) => void;
+  winnerBid?: string | null;
+  winnerContainerSize?: number[];
 }
 
 const Panel = ({
@@ -52,6 +54,8 @@ const Panel = ({
   setSelectedAdUnit,
   setStorage,
   setActiveTab,
+  winnerBid = null,
+  winnerContainerSize = [],
 }: PanelProps) => {
   const items = useMemo(
     () => [
@@ -77,9 +81,16 @@ const Panel = ({
         name: 'Ad Container Sizes',
         Icon: ScreenIcon,
         buttons: [
-          ...(mediaContainerSize || []).map((size) => ({
-            name: `${size?.[0]}x${size?.[1]}`,
-          })),
+          ...(mediaContainerSize || []).map((size) => {
+            return {
+              name: `${size?.[0]}x${size?.[1]}`,
+              className:
+                winnerContainerSize?.[0] === size?.[0] &&
+                winnerContainerSize?.[1] === size?.[1]
+                  ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
+                  : '',
+            };
+          }),
         ],
       },
       {
@@ -97,19 +108,25 @@ const Panel = ({
               );
               setActiveTab?.(5);
             },
+            className:
+              winnerBid === bidder
+                ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
+                : '',
           })),
         ],
       },
     ],
     [
       adunit,
-      bidders,
       mediaContainerSize,
+      bidders,
       isInspecting,
-      setActiveTab,
       setIsInspecting,
       setSelectedAdUnit,
+      winnerContainerSize,
+      winnerBid,
       setStorage,
+      setActiveTab,
     ]
   );
 

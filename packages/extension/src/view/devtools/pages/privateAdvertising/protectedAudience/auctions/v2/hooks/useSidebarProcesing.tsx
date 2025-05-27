@@ -46,6 +46,8 @@ const useSidebarProcessing = () => {
     adUnitsNoBidsCount,
     adUnitsBidders,
     adUnitsTimestamp,
+    adUnitsWinnerBid,
+    adUnitsWinnerContainerSize,
     getPAData,
     getPrebidData,
   } = useDataProcessing();
@@ -74,6 +76,8 @@ const useSidebarProcessing = () => {
               biddersCount,
               bidsCount,
               noBidsCount,
+              winnerBid: adUnitsWinnerBid?.[adUnit] || null,
+              winnerContainerSize: adUnitsWinnerContainerSize?.[adUnit] || [],
             },
           },
           children: {},
@@ -173,6 +177,8 @@ const useSidebarProcessing = () => {
     adUnitsMediaContainerSize,
     adUnitsNoBidsCount,
     adUnitsTimestamp,
+    adUnitsWinnerBid,
+    adUnitsWinnerContainerSize,
     getPAData,
     getPrebidData,
   ]);

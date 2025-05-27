@@ -100,12 +100,12 @@ const AdTable = ({
                       className={classNames(
                         'rounded-xl bg-[#F5F5F5] px-2 py-0.5 border text-xs',
                         {
-                          'bg-[#5AAD6A] text-white border-[#5AAD6A]':
+                          'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
                             winningContainerSize?.[0] === size[0] &&
                             winningContainerSize?.[1] === size[1],
                         },
                         {
-                          'border-[#E0E0E0] text-[#323232]':
+                          'border-gray-400 dark:border-dark-gray-x11':
                             winningContainerSize?.[0] !== size[0] ||
                             winningContainerSize?.[1] !== size[1],
                         }

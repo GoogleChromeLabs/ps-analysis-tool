@@ -36,6 +36,8 @@ interface AdunitPanelProps {
   biddersCount: number;
   bidsCount: number;
   noBidsCount: number;
+  winnerBid: string | null;
+  winnerContainerSize?: number[];
 }
 
 const AdunitPanel = ({
@@ -45,6 +47,8 @@ const AdunitPanel = ({
   biddersCount,
   bidsCount,
   noBidsCount,
+  winnerBid = null,
+  winnerContainerSize = [],
 }: AdunitPanelProps) => {
   const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
@@ -73,6 +77,8 @@ const AdunitPanel = ({
       setSelectedAdUnit={setSelectedAdUnit}
       setStorage={setStorage}
       setActiveTab={setActiveTab}
+      winnerBid={winnerBid}
+      winnerContainerSize={winnerContainerSize}
     />
   );
 };

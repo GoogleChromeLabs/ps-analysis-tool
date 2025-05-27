@@ -264,6 +264,57 @@ const useDataProcessing = () => {
     return _adUnitNoBidsCount;
   }, [paapi.noBids, prebidResponse.noBids]);
 
+  const adUnitsWinnerBid = useMemo(() => {
+    const _adUnitWinnerBid: Record<string, string> = {};
+
+    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
+      Object.values(prebidResponse.adUnits).forEach((data) => {
+        const winnerBid = data.winningBidder as string;
+
+        if (winnerBid) {
+          _adUnitWinnerBid[data.adUnitCode] = winnerBid;
+        }
+      });
+    }
+
+    if (Object.keys(paapi?.adsAndBidders || {}).length > 0) {
+      Object.values(paapi.adsAndBidders).forEach((data) => {
+        const winnerBid = data.winningBidder as string;
+
+        if (winnerBid) {
+          _adUnitWinnerBid[data.adUnitCode] = winnerBid;
+        }
+      });
+    }
+
+    return _adUnitWinnerBid;
+  }, [paapi.adsAndBidders, prebidResponse.adUnits]);
+
+  const adUnitsWinnerContainerSize = useMemo(() => {
+    const _adUnitWinnerContainerSize: Record<string, number[]> = {};
+
+    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
+      Object.values(prebidResponse.adUnits).forEach((data: any) => {
+        const mediaContainerSize = data?.winningMediaContainerSize as number[];
+
+        if (mediaContainerSize) {
+          _adUnitWinnerContainerSize[data.adUnitCode] = mediaContainerSize;
+        }
+      });
+    }
+    if (Object.keys(paapi?.adsAndBidders || {}).length > 0) {
+      Object.values(paapi.adsAndBidders).forEach((data: any) => {
+        const mediaContainerSize = data?.winningMediaContainerSize as number[];
+
+        if (mediaContainerSize) {
+          _adUnitWinnerContainerSize[data.adUnitCode] = mediaContainerSize;
+        }
+      });
+    }
+
+    return _adUnitWinnerContainerSize;
+  }, [paapi.adsAndBidders, prebidResponse.adUnits]);
+
   const getPrebidData = useCallback(
     (adUnit: string, time: string) => {
       const auction = Object.entries(prebidResponse?.auctionEvents || {}).find(
@@ -342,6 +393,8 @@ const useDataProcessing = () => {
     adUnitsBidsCount,
     adUnitsNoBidsCount,
     adUnitsBidders,
+    adUnitsWinnerBid,
+    adUnitsWinnerContainerSize,
     getPrebidData,
     getPAData,
   };

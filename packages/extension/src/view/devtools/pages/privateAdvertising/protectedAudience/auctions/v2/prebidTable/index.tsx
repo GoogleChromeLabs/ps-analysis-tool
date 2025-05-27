@@ -102,9 +102,6 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
 
   const tableFilters = useMemo<TableFilter>(() => ({}), []);
 
-  const startTime = new Date(auctionEvents[1][0].timestamp).toISOString();
-  const timeout = auctionEvents[1][0].timeout;
-
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -124,10 +121,13 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
             <div className="flex flex-col gap-2 p-2">
               <div className="flex justify-between items-center">
                 <p>Auction Id: {auctionEvents[0]}</p>
-                <p>Start Time: {startTime}</p>
+                <p>
+                  Start Time:{' '}
+                  {new Date(auctionEvents[1][0].timestamp).toISOString()}
+                </p>
               </div>
               <div className="flex justify-between items-center">
-                <p>Timeout: {timeout}</p>
+                <p>Timeout: {auctionEvents[1][0].timeout}</p>
                 {/* <p>Auction Time: {auctionEnd}ms</p> */}
               </div>
             </div>
