@@ -85,7 +85,7 @@ const CardsPanel = ({
               <div
                 role="button"
                 key={item.name}
-                className="w-[366px] min-h-[285px] rounded border-2 border-gray-300 dark:border-quartz px-3 py-4 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
+                className="w-[366px] min-h-[260px] rounded border-2 border-gray-300 dark:border-quartz px-3 py-4 hover:cursor-pointer hover:bg-light-gray dark:hover:bg-charleston-green hover:shadow hover:scale-[1.03] transition-all duration-150 ease-in-out"
                 onClick={() => clickHandler(item.sidebarKey, item?.url)}
               >
                 <div className="mb-3 flex items-center flex-col gap-2">
