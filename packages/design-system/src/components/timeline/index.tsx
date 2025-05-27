@@ -43,7 +43,6 @@ const bars: { name: string; duration: string; type: BarType }[] = [
   { name: 'ix', duration: '380.1', type: BarType.NO_BID },
   { name: 'Rubicon', duration: '125.51', type: BarType.WON },
   { name: 'Criteo', duration: '470.05', type: BarType.TIMED_OUT },
-  { name: 'Rubicon', duration: '125.51', type: BarType.WON },
 ];
 
 const Timeline = () => {
@@ -118,7 +117,6 @@ const Timeline = () => {
                       width: animate ? `${fullWidth}px` : `0px`,
                       backgroundColor: BAR_COLORS[bar.type],
                       top: `${(index + 1) * 40}px`,
-                      borderRadius: '4px',
                     }}
                   >
                     <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1">
