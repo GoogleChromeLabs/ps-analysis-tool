@@ -55,11 +55,15 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
   }, [setActiveTab, activeEpoch]);
 
   useEffect(() => {
-    topicsDispatch({
-      type: 'setActiveEpoch',
-      payload: { activeEpoch: activeTab },
-    });
-  }, [activeTab, topicsDispatch]);
+    const legendTab = activeTab === epochs.length;
+
+    if (!legendTab) {
+      topicsDispatch({
+        type: 'setActiveEpoch',
+        payload: { activeEpoch: activeTab },
+      });
+    }
+  }, [activeTab, epochs.length, topicsDispatch]);
 
   const handlePlay = useCallback(() => {
     topicsDispatch({
