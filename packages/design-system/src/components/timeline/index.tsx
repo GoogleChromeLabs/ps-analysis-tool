@@ -16,16 +16,18 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 
 /**
  * Internal dependencies.
  */
 import { BidderType } from './types';
+import findMaximumBidderDuration from './utils/findMaximumBidderDuration';
 
-const LINE_COUNT = 12;
 const INITIAL_TIME = 50;
 const TIME_DURATION = 50;
+const ZOOM_LEVEL = 1;
+const BAR_HEIGHT = 50;
 
 const BAR_COLORS: Record<BidderType, string> = {
   [BidderType.BID]: '#7CACF8',
@@ -50,9 +52,16 @@ const Timeline = ({
   bidders,
 }: TimelineProps) => {
   const [animate, setAnimate] = useState(false);
-  const lines = Array.from({ length: LINE_COUNT });
   const [scrollWidth, setScrollWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const lineCount = useMemo(() => {
+    const maxDuration = findMaximumBidderDuration(bidders);
+    return maxDuration / TIME_DURATION + 2;
+  }, [bidders]);
+
+  const lines = Array.from({ length: lineCount });
+  const timeoutBlockWidth = scrollWidth - auctionTimeout * ZOOM_LEVEL;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -66,7 +75,7 @@ const Timeline = ({
     if (containerRef.current) {
       setScrollWidth(containerRef.current.scrollWidth);
     }
-  }, [containerRef]);
+  }, [containerRef, bidders, auctionTimeout]);
 
   return (
     <div>
@@ -77,14 +86,17 @@ const Timeline = ({
       <div
         ref={containerRef}
         className="m-h-[200px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
-        style={{ height: bidders.length * 50 }}
+        style={{ height: bidders.length * BAR_HEIGHT }}
       >
-        {/*Bars block*/}
+        {/*Vertical Columns*/}
         <div className="flex h-full">
           {lines.map((_, index) => {
-            const verticalLineClasses = `border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] basis-[100px] relative`;
             return (
-              <div className={verticalLineClasses} key={index}>
+              <div
+                className="border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] relative"
+                style={{ flexBasis: `${TIME_DURATION * ZOOM_LEVEL}px` }}
+                key={index}
+              >
                 <span className="absolute right-0 pr-2 block text-xs mt-1">
                   {INITIAL_TIME + index * TIME_DURATION}ms
                 </span>
@@ -95,10 +107,13 @@ const Timeline = ({
 
         {/*Timeout block*/}
         <div className="absolute flex w-fit h-full top-0">
-          <div className="w-[840px] h-full"></div>
+          <div
+            style={{ width: `${auctionTimeout * ZOOM_LEVEL}px` }}
+            className="h-full"
+          ></div>
           <div
             className="h-full relative flex-1"
-            style={{ width: `${scrollWidth - 840}px` }}
+            style={{ width: `${timeoutBlockWidth}px` }}
           >
             <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
             <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282]">
@@ -111,7 +126,7 @@ const Timeline = ({
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative">
             {bidders.map((bidder, index) => {
-              const fullWidth = parseFloat(bidder.duration) * 2;
+              const fullWidth = parseFloat(bidder.duration) * ZOOM_LEVEL;
               return (
                 <div key={index} className="relative group ">
                   <div
