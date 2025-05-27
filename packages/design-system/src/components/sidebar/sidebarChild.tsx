@@ -126,6 +126,8 @@ const SidebarChild = ({
 
             // Blur state
             'opacity-50': sidebarItem.isBlurred,
+
+            'hover:underline': sidebarItem?.panel?.skipPanelDisplay,
           },
           sidebarItem.containerClassName
         )}
