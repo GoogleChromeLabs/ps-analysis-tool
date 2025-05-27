@@ -17,9 +17,8 @@
  * Internal dependencies.
  */
 import {
-  CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA,
   CS_GET_PREBID_DATA_RESPONSE,
-  DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA,
+  PREBID_SCANNING_STATUS,
   SCRIPT_GET_PREBID_DATA_RESPONSE,
   SCRIPT_PREBID_INITIAL_SYNC,
   TABID_STORAGE,
@@ -57,7 +56,18 @@ class PrebidContentScript {
         chrome.runtime.sendMessage({
           type: CS_GET_PREBID_DATA_RESPONSE,
           payload: {
+            prebidExists: event.data.prebidExists,
             prebidData: event.data.prebidData,
+            tabId: this.tabId,
+          },
+        });
+      }
+
+      if (event.data?.type === PREBID_SCANNING_STATUS) {
+        chrome.runtime.sendMessage({
+          type: CS_GET_PREBID_DATA_RESPONSE,
+          payload: {
+            prebidExists: event.data.prebidExists,
             tabId: this.tabId,
           },
         });
@@ -76,20 +86,6 @@ class PrebidContentScript {
           tabId: this.tabId,
         });
       }
-
-      if (
-        message?.payload?.type === DEVTOOLS_TO_CONTENT_SCRIPT_GET_PREBID_DATA
-      ) {
-        this.getAndProcessPrebidData(message.payload.propertyName);
-      }
-    });
-  }
-
-  getAndProcessPrebidData(propertyName: string) {
-    window.top?.postMessage({
-      type: CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA,
-      tabId: this.tabId,
-      propertyName,
     });
   }
 }

@@ -66,6 +66,7 @@ export const runtimeOnMessageListener = async (request: any) => {
       //Silence error
     }
   }
+
   if (!request.type) {
     return;
   }
@@ -183,6 +184,12 @@ export const runtimeOnMessageListener = async (request: any) => {
   }
 
   if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
+    if (request?.payload?.prebidExists === false) {
+      PAStore.prebidEvents[incomingMessageTabId.toString()] = null;
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
+      return;
+    }
+
     PAStore.prebidEvents[incomingMessageTabId.toString()] = {
       ...request.payload.prebidData,
     };

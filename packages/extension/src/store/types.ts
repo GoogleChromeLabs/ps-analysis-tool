@@ -57,6 +57,7 @@ export type AllowedDomainStorage = {
 export type PrebidWarningTypes = 'WARNING' | 'ERROR' | 'INFO';
 
 export type PrebidEvents = {
+  prebidExists: boolean;
   adUnits: AdsAndBiddersType;
   noBids: PrebidNoBidsType;
   versionInfo: string;

@@ -49,6 +49,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
 
   const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
+    prebidExists: false,
     adUnits: {},
     noBids: {},
     versionInfo: '',
@@ -263,14 +264,20 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (
         incomingMessageType === 'AUCTION_EVENTS' &&
-        message.payload.prebidEvents
+        typeof message.payload.prebidEvents !== 'undefined'
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
           setPrebidResponse((prev) => {
             const data = message.payload?.prebidEvents ?? null;
+            if (
+              typeof message?.payload?.prebidEvents?.prebidExists !==
+              'undefined'
+            ) {
+              data.prebidExists = message.payload.prebidEvents.prebidExists;
+            }
 
             if (!data) {
-              return prev;
+              return data;
             }
 
             const keys: (keyof PrebidEvents)[] = [

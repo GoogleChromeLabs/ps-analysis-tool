@@ -22,7 +22,7 @@ import { noop, type AdsAndBiddersType } from '@google-psat/common';
  * Internal dependencies.
  */
 import {
-  CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA,
+  PREBID_SCANNING_STATUS,
   SCRIPT_GET_PREBID_DATA_RESPONSE,
   SCRIPT_PREBID_INITIAL_SYNC,
 } from '../../constants';
@@ -111,6 +111,11 @@ class PrebidInterface {
     const timeout = setTimeout(() => {
       stopLoop = true;
       pbjsClass.scanningStatus = true;
+      window.top?.postMessage({
+        type: PREBID_SCANNING_STATUS,
+        tabId: pbjsClass.tabId,
+        prebidExists: pbjsClass.prebidExists,
+      });
     }, 60000);
 
     const isPrebidInPage = () => {
@@ -158,9 +163,14 @@ class PrebidInterface {
         pbjsClass.prebidData.config = {
           ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
           bidderSettings,
-          eids: pbjsClass.prebidInterface.getUserIdsAsEids() ?? [],
+          eids: pbjsClass.prebidInterface?.getUserIdsAsEids() ?? [],
         };
 
+        window.top?.postMessage({
+          type: PREBID_SCANNING_STATUS,
+          tabId: pbjsClass.tabId,
+          prebidExists: pbjsClass.prebidExists,
+        });
         stopLoop = true;
         clearTimeout(timeout);
       }
@@ -184,10 +194,6 @@ class PrebidInterface {
       ) {
         this.tabId = event.data.tabId;
         this.sendInitialData();
-      }
-
-      if (event.data?.type === CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA) {
-        this.tabId = event.data.tabId;
       }
     };
 
@@ -227,7 +233,10 @@ class PrebidInterface {
     window.top?.postMessage({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
       tabId: this.tabId,
-      prebidData: JSON.parse(decycle(this.prebidData)),
+      prebidExists: this.prebidExists,
+      prebidData: this.prebidExists
+        ? JSON.parse(decycle(this.prebidData))
+        : null,
     });
   }
 
