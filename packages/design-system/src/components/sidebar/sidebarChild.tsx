@@ -94,7 +94,11 @@ const SidebarChild = ({
         tabIndex={0}
         title={sidebarItem.popupTitle}
         onClick={() => {
-          updateSelectedItemKey(itemKey);
+          updateSelectedItemKey(
+            itemKey,
+            '',
+            sidebarItem?.panel?.skipPanelDisplay
+          );
           setDidUserInteract(true);
           setIsSidebarFocused(true);
         }}
