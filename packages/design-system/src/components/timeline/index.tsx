@@ -82,7 +82,7 @@ const Timeline = () => {
             const verticalLineClasses = `border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] basis-[100px] relative`;
             return (
               <div className={verticalLineClasses} key={index}>
-                <span className="absolute right-0 pr-2 block text-xs">
+                <span className="absolute right-0 pr-2 block text-xs mt-1">
                   {INITIAL_TIME + index * TIME_DURATION}ms
                 </span>
               </div>
