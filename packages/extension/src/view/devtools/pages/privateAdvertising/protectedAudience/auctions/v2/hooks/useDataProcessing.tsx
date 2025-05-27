@@ -196,6 +196,10 @@ const useDataProcessing = () => {
         if (bidders) {
           _adUnitBidders[data.adUnitCode] = bidders;
         }
+
+        _adUnitBidders[data.adUnitCode] = [
+          ...new Set(_adUnitBidders[data.adUnitCode]),
+        ];
       });
     }
 
@@ -206,6 +210,10 @@ const useDataProcessing = () => {
         if (bidders) {
           _adUnitBidders[data.adUnitCode] = bidders;
         }
+
+        _adUnitBidders[data.adUnitCode] = [
+          ...new Set(_adUnitBidders[data.adUnitCode]),
+        ];
       });
     }
 
