@@ -40,9 +40,10 @@ interface PrebidTableProps {
     keyof PrebidEvents['auctionEvents'],
     PrebidEvents['auctionEvents'][keyof PrebidEvents['auctionEvents']]
   ];
+  adUnit: string;
 }
 
-const PrebidTable = ({ auctionEvents }: PrebidTableProps) => {
+const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
     null
   );
@@ -132,10 +133,23 @@ const PrebidTable = ({ auctionEvents }: PrebidTableProps) => {
             </div>
             <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
               <TableProvider
-                data={auctionEvents[1].map((event, index) => ({
-                  ...event,
-                  index,
-                }))}
+                data={auctionEvents[1]
+                  .filter((event) => {
+                    return (
+                      event.adUnitCode === adUnit ||
+                      event.adUnitCodes?.includes(adUnit) ||
+                      event.bids?.some((bid) => bid.adUnitCode === adUnit) ||
+                      event.bidderRequests?.some((request) =>
+                        request.bids.some((bid) => bid.adUnitCode === adUnit)
+                      ) ||
+                      (Array.isArray(event) &&
+                        event.some((_event) => _event.adUnitCode === adUnit))
+                    );
+                  })
+                  .map((event, index) => ({
+                    ...event,
+                    index,
+                  }))}
                 tableColumns={tableColumns}
                 tableFilterData={tableFilters}
                 tableSearchKeys={undefined}

@@ -98,6 +98,7 @@ const useSidebarProcessing = () => {
               Element: PrebidTable,
               props: {
                 auctionEvents: getPrebidData(adUnit, time),
+                adUnit,
               },
             },
             children: {},
