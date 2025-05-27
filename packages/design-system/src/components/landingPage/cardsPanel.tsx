@@ -24,7 +24,7 @@ import classNames from 'classnames';
  */
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '../sidebar';
 
-type FeatureItem = {
+type FeaturedItem = {
   name: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   sidebarKey: SIDEBAR_ITEMS_KEYS;
@@ -41,7 +41,7 @@ type FeatureItem = {
 };
 
 type CardsPanelProps = {
-  featuredItems: FeatureItem[];
+  featuredItems: FeaturedItem[];
   onFeaturedButtonClick: (
     event: React.MouseEvent,
     sidebarKey: SIDEBAR_ITEMS_KEYS,
