@@ -98,6 +98,7 @@ const ExplorableExplanation = () => {
   const isLastEpoch = topicsState.activeEpoch === topicsState.epochs.length - 1;
 
   // move to next epoch when current epoch is completed
+  // or pause if last epoch is reached
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     const currentEpochCompleted = topicsState.completedEpochs.has(

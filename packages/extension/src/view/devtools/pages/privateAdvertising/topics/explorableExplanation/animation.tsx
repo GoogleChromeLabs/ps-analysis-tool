@@ -77,7 +77,7 @@ const Animation = ({
     }
   }, [topicsDispatch, topicsState.activeEpoch, animation, handleUserVisit]);
 
-  /* sync animation with state start */
+  /* sync animation with state/callbacks - start */
   useEffect(() => {
     animation?.togglePlay(isPlaying);
   }, [isPlaying, animation]);
@@ -115,7 +115,7 @@ const Animation = ({
   useEffect(() => {
     animation?.setInspectedCircles(sitesVisited);
   }, [animation, sitesVisited]);
-  /* sync animation with state end */
+  /* sync animation with state/callbacks - end */
 
   return (
     <div className="relative h-full">

@@ -56,7 +56,7 @@ class TopicsAnimation {
   canvas: p5.Renderer | null = null;
   smallCirclePositions: Record<number, { x: number; y: number }[]> = {};
   inspectedCircles: Set<number> = new Set();
-  inInitialized = false;
+  isInitialized = false;
   isInteractive: boolean;
   webVisits: Epoch['webVisits'] = [];
   visitedSites: Set<number>;
@@ -97,8 +97,8 @@ class TopicsAnimation {
   };
 
   private draw = () => {
-    if (!this.inInitialized) {
-      this.inInitialized = true;
+    if (!this.isInitialized) {
+      this.isInitialized = true;
       this.onReady?.();
       return;
     }
@@ -487,7 +487,7 @@ class TopicsAnimation {
   };
 
   public reset = () => {
-    this.inInitialized = false;
+    this.isInitialized = false;
     this.inspectedCircleIndex = -1;
     this.circlePositions = {};
     this.smallCirclePositions = {};
