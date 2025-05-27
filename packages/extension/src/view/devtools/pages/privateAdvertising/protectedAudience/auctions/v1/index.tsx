@@ -141,6 +141,7 @@ const AuctionsV1 = () => {
           setSidebarData={setSidebarData}
           sortOrder={sortOrder}
           setSortOrder={setSortOrder}
+          adsAndBidders={adsAndBidders}
         />
       </div>
     </div>

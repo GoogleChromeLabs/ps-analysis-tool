@@ -37,8 +37,8 @@ import { isEqual } from 'lodash-es';
  */
 import type { AuctionEventsType } from '../../../../../../stateProviders/protectedAudience/context';
 import AuctionTable from '../../components/table';
-import AdunitPanel from '../adunitPanel';
-import AdunitSubPanel from '../adunitPanel/panel';
+import AdunitPanel from '../../components/adunitPanel';
+import AdunitSubPanel from '../../components/adunitPanel/panel';
 import SortButton from '../../../../../sortButton';
 
 interface AuctionPanelProps {
@@ -47,6 +47,7 @@ interface AuctionPanelProps {
     receivedBids?: Record<string, singleAuctionEvent[]> | ReceivedBids[];
     noBids: NoBidsType;
   };
+  adsAndBidders?: AdsAndBiddersType;
   isEE?: boolean;
   customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -67,6 +68,7 @@ const AuctionPanel = ({
   isEE = true,
   sortOrder,
   setSortOrder,
+  adsAndBidders,
 }: AuctionPanelProps) => {
   const changedValue = useRef({ oldAuctionEvents: {}, oldSortOrder: '' });
 
@@ -198,15 +200,37 @@ const AuctionPanel = ({
           };
         });
 
+        const adunit = adUnit;
+        const mediaContainerSize = customAdsAndBidders
+          ? customAdsAndBidders[adunit]?.mediaContainerSize ?? []
+          : adsAndBidders?.[adunit]?.mediaContainerSize ?? [];
+        const bidders = customAdsAndBidders
+          ? customAdsAndBidders[adunit]?.bidders ?? []
+          : adsAndBidders?.[adunit]?.bidders ?? [];
+        const biddersCount = bidders.length;
+        const bidsCount =
+          Object.values(auctionEvents.receivedBids || {})?.length ?? 0;
+        const noBidsCount =
+          Object.values(auctionEvents.noBids || {}).reduce<
+            Record<string, number>
+          >((countObj, bid) => {
+            const _adUnit = bid.adUnitCode || '';
+
+            countObj[adUnit] = (countObj[_adUnit] || 0) + 1;
+            return countObj;
+          }, {}) || 0;
+
         data[adUnit] = {
           title: adUnit,
           panel: {
             Element: Panel,
             props: {
-              adunit: adUnit,
-              adsAndBidders: customAdsAndBidders,
-              receivedBids: auctionEvents?.receivedBids ?? {},
-              noBids: auctionEvents?.noBids ?? {},
+              adunit,
+              mediaContainerSize,
+              bidders,
+              biddersCount,
+              bidsCount,
+              noBidsCount: noBidsCount[adUnit] || 0,
             },
           },
           children: adUnitChildren,

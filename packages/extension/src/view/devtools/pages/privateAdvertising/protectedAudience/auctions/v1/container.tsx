@@ -38,6 +38,7 @@ interface AuctionsContainerProps {
     receivedBids?: Record<string, singleAuctionEvent[]> | ReceivedBids[];
     noBids: NoBidsType;
   };
+  adsAndBidders?: AdsAndBiddersType;
   sidebarData: SidebarItems;
   customAdsAndBidders?: AdsAndBiddersType;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -60,6 +61,7 @@ const AuctionsContainer = ({
   isEE = true,
   sortOrder,
   setSortOrder,
+  adsAndBidders,
 }: AuctionsContainerProps) => {
   return (
     <SidebarProvider
@@ -76,6 +78,7 @@ const AuctionsContainer = ({
         auctionEvents={auctionEvents}
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
+        adsAndBidders={adsAndBidders}
       />
     </SidebarProvider>
   );
