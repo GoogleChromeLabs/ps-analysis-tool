@@ -17,6 +17,8 @@
  * External dependencies.
  */
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
+
 /**
  * Internal dependencies.
  */
@@ -110,15 +112,23 @@ const SidebarChild = ({
           }
           setIsSidebarFocused(true);
         }}
-        className={`w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray ${
-          isKeySelected(itemKey)
-            ? isSidebarFocused
-              ? 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver'
-              : 'bg-gainsboro dark:bg-outer-space'
-            : 'bg-lotion dark:bg-raisin-black'
-        } cursor-pointer ${sidebarItem.isBlurred ? 'opacity-50' : ''} ${
+        className={classNames(
+          'w-full flex items-center py-0.5 outline-0 text-xs dark:text-bright-gray cursor-pointer',
+          {
+            // Selected state
+            'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver':
+              isKeySelected(itemKey) && isSidebarFocused,
+            'bg-gainsboro dark:bg-outer-space':
+              isKeySelected(itemKey) && !isSidebarFocused,
+
+            // Unselected state
+            'bg-lotion dark:bg-raisin-black': !isKeySelected(itemKey),
+
+            // Blur state
+            'opacity-50': sidebarItem.isBlurred,
+          },
           sidebarItem.containerClassName
-        }`}
+        )}
         style={{ paddingLeft: recursiveStackIndex * 16 + 12 }}
         data-testid="sidebar-child"
       >
