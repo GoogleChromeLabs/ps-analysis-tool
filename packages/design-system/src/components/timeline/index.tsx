@@ -95,10 +95,13 @@ const Timeline = () => {
         <div className="absolute flex w-fit h-full top-0">
           <div className="w-[840px] h-full"></div>
           <div
-            className="bg-[#E90303] opacity-[9%] h-full relative flex-1"
+            className="h-full relative flex-1"
             style={{ width: `${scrollWidth - 840}px` }}
           >
-            <span className="absolute left-0 top-30">Timeout: 420ms</span>
+            <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
+            <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282]">
+              Timeout: 420ms
+            </span>
           </div>
         </div>
 
