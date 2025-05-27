@@ -67,7 +67,7 @@ const Timeline = () => {
 
   return (
     <div>
-      <header className="flex justify-between">
+      <header className="flex justify-between text-sm">
         <p>Auction Start: 12:18:27</p>
         <p>Auction Time: 380ms</p>
       </header>
@@ -130,6 +130,14 @@ const Timeline = () => {
           </div>
         </div>
       </div>
+      <footer>
+        <p className="text-sm text-right mt-1">
+          Auction ID:{' '}
+          <a className="underline" href="#">
+            23949b7f-b733-4a58-b3b0-e72deed12e61
+          </a>
+        </p>
+      </footer>
     </div>
   );
 };
