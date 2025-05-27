@@ -18,7 +18,7 @@
  * External dependencies
  */
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -80,20 +80,22 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
 
   useEffect(() => {
     setGroupsExpanded(
-      Object.keys(groupedTitles).reduce((acc, group, index) => {
-        acc[group] = {
+      Object.keys(groupedTitles).reduce((groupsStore, group, index) => {
+        groupsStore[group] = {
           hidden: true,
           animating: false,
         };
 
         if (index === 0) {
-          acc[group].hidden = false;
+          groupsStore[group].hidden = false;
         }
 
-        return acc;
+        return groupsStore;
       }, {} as Record<string, { hidden: boolean; animating: boolean }>)
     );
   }, [groupedTitles]);
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleGroupClick = useCallback((group: string) => {
     let shouldUnhideInstantly = false;
@@ -112,7 +114,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       };
     });
 
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setGroupsExpanded((prevState) => ({
         ...prevState,
         [group]: {
@@ -123,6 +125,14 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         },
       }));
     }, 300);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -142,19 +152,14 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
           return (
             <div
               key={group}
-              className={classNames(
-                'flex',
-                {
-                  'border-b-2 border-bright-navy-blue': group === activeGroup,
-                  'border-b-2 border-steel-blue/50':
-                    group !== activeGroup && Object.keys(data).length > 1,
-                },
-                {
-                  'gap-4':
-                    Object.keys(data).length > 1 &&
-                    !groupsExpanded[group]?.animating,
-                }
-              )}
+              className={classNames('flex', {
+                'border-b-2 border-bright-navy-blue': group === activeGroup,
+                'border-b-2 border-steel-blue/50':
+                  group !== activeGroup && Object.keys(data).length > 1,
+                'gap-4':
+                  Object.keys(data).length > 1 &&
+                  !groupsExpanded[group]?.animating,
+              })}
             >
               {Object.keys(data).length > 1 && (
                 <button
@@ -217,9 +222,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                             <button
                               onClick={() => setActiveTab(index)}
                               onKeyDown={handleKeyDown}
-                              className={classNames(
-                                'px-1.5 hover:opacity-80 outline-none text-nowrap'
-                              )}
+                              className="px-1.5 hover:opacity-80 outline-none text-nowrap"
                             >
                               {title}
                             </button>

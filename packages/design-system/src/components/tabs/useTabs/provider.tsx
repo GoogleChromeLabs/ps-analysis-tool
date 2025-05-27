@@ -28,7 +28,7 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { TabItems, TabsProviderProps } from './types';
+import type { TabItems, TabsProviderProps } from './types';
 import { TabsContext, TabsStoreContext } from './context';
 
 export const TabsProvider = ({
