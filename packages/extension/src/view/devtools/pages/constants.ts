@@ -42,7 +42,7 @@ const LINKS = {
       'https://privacysandbox-stories.com/web-stories/bounce-tracking-mitigations/',
   },
   USER_AGENT_REDUCTION: {
-    doc: 'https://developers.google.com/privacy-sandbox/protections/user-agent-reduction',
+    doc: 'https://privacysandbox.google.com/protections/user-agent',
     story:
       'https://privacysandbox-stories.com/web-stories/user-agent-reduction/',
   },
