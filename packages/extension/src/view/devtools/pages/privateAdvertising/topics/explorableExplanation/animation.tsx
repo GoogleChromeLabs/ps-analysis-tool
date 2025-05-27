@@ -26,8 +26,6 @@ import type {
   TopicsExplorableExplanationState,
 } from './useTopicsExplorableExplanation';
 
-// const epochTransitionDelay = 1500;
-
 const Animation = ({
   topicsState,
   topicsDispatch,
@@ -38,7 +36,7 @@ const Animation = ({
   const node = useRef<HTMLDivElement>(null);
   const loadingTextCoverRef = useRef<HTMLDivElement>(null);
   const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
-  const { isPlay, epochSiteVisited, epochs, activeEpoch } = topicsState;
+  const { isPlaying, epochSiteVisited, epochs, activeEpoch } = topicsState;
 
   const sitesVisited = epochSiteVisited[activeEpoch];
   const currentVisitedIndex = sitesVisited.size;
@@ -81,8 +79,8 @@ const Animation = ({
 
   /* sync animation with state start */
   useEffect(() => {
-    animation?.togglePlay(isPlay);
-  }, [isPlay, animation]);
+    animation?.togglePlay(isPlaying);
+  }, [isPlaying, animation]);
 
   useEffect(() => {
     animation?.setCurrentVisitIndex(currentVisitedIndex);
@@ -113,6 +111,10 @@ const Animation = ({
   useEffect(() => {
     animation?.setHandleUserVisit(handleUserVisit);
   }, [animation, handleUserVisit]);
+
+  useEffect(() => {
+    animation?.setInspectedCircles(sitesVisited);
+  }, [animation, sitesVisited]);
   /* sync animation with state end */
 
   return (

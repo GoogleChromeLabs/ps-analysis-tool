@@ -45,7 +45,7 @@ export type TopicsExplorableExplanationState = {
   highlightAdTech: string | null;
   completedEpochs: Set<number>;
   activeEpoch: number;
-  isPlay: boolean;
+  isPlaying: boolean;
   isInteractive: boolean;
   sliderStep: number;
   siteAdTechs: Record<string, string[]>;
@@ -74,9 +74,9 @@ type SetActiveEpochAction = {
 };
 
 type SetIsPlayAction = {
-  type: 'setIsPlay';
+  type: 'setIsPlaying';
   payload: {
-    isPlay: boolean;
+    isPlaying: boolean;
   };
 };
 
@@ -140,7 +140,7 @@ const initialState: TopicsExplorableExplanationState = {
   highlightAdTech: null,
   completedEpochs: new Set(),
   activeEpoch: 0,
-  isPlay: false,
+  isPlaying: false,
   isInteractive: false,
   sliderStep: 1,
   siteAdTechs: {},
@@ -172,13 +172,13 @@ export const useTopicsExplorableExplanation = (
           return { ...state, highlightAdTech: action.payload.highlightAdTech };
         case 'setActiveEpoch':
           return { ...state, activeEpoch: action.payload.activeEpoch };
-        case 'setIsPlay':
-          return { ...state, isPlay: action.payload.isPlay };
+        case 'setIsPlaying':
+          return { ...state, isPlaying: action.payload.isPlaying };
         case 'setIsInteractive':
           return {
             ...state,
             isInteractive: action.payload.isInteractive,
-            isPlay: !action.payload.isInteractive,
+            isPlaying: !action.payload.isInteractive,
             activeEpoch: 0,
             // reset visited sites when interactive mode is toggled
             epochSiteVisited: initialState.epochSiteVisited,
@@ -197,12 +197,18 @@ export const useTopicsExplorableExplanation = (
         case 'reset':
           return {
             ...state,
+            epochs: JSON.parse(tabStorage[EE_TAB_INDEX] || '{}').epochs,
             activeEpoch: 0,
-            epochSiteVisited: initialState.epochSiteVisited,
-            completedEpochs: initialState.completedEpochs,
-            topicsTableData: initialState.topicsTableData,
+            epochSiteVisited: {
+              0: new Set(),
+              1: new Set(),
+              2: new Set(),
+              3: new Set(),
+            } as Record<number, Set<number>>,
+            completedEpochs: new Set<number>(),
+            topicsTableData: {},
             highlightAdTech: null,
-            isPlay: true,
+            isPlaying: !state.isInteractive,
           };
         default:
           return state;

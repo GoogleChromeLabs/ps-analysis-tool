@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   TabsProvider,
   useTabs,
@@ -33,6 +33,7 @@ import Legend from './legend';
 import { useTopicsExplorableExplanation } from './useTopicsExplorableExplanation';
 
 const TOPICS_NAVIGATOR_TAB_INDEX = 2;
+const EPOCH_TRANSITION_DURATION = 5000;
 
 const ExplorableExplanation = () => {
   const { tabStorage, setPAActiveTab, setPAStorage } = useTabs(
@@ -93,26 +94,47 @@ const ExplorableExplanation = () => {
     return items;
   }, [highlightAdTech, topicsDispatch, topicsNavigator, topicsTableData]);
 
+  // last epoch/tab is legend tab
+  const isLastEpoch = topicsState.activeEpoch === topicsState.epochs.length - 1;
+
   // move to next epoch when current epoch is completed
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     const currentEpochCompleted = topicsState.completedEpochs.has(
       topicsState.activeEpoch
     );
-    // only do it if the animation is playing
-    if (currentEpochCompleted && topicsState.isPlay) {
-      setTimeout(() => {
+
+    if (currentEpochCompleted) {
+      // only do it if the animation is playing
+      if (topicsState.isPlaying && !isLastEpoch) {
+        timerRef.current = setTimeout(() => {
+          topicsDispatch({
+            type: 'setActiveEpoch',
+            payload: { activeEpoch: topicsState.activeEpoch + 1 },
+          });
+        }, EPOCH_TRANSITION_DURATION / topicsState.sliderStep);
+      }
+
+      if (isLastEpoch && topicsState.isPlaying) {
         topicsDispatch({
-          type: 'setActiveEpoch',
-          payload: { activeEpoch: topicsState.activeEpoch + 1 },
+          type: 'setIsPlaying',
+          payload: { isPlaying: false },
         });
-      }, 3000);
+      }
     }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, [
     topicsState.activeEpoch,
     topicsState.completedEpochs,
-    topicsState.isPlay,
-    topicsDispatch,
+    topicsState.isPlaying,
     topicsState.sliderStep,
+    isLastEpoch,
+    topicsDispatch,
   ]);
 
   return (

@@ -37,7 +37,7 @@ interface PanelProps {
 const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
   const {
     isInteractive,
-    isPlay,
+    isPlaying,
     sliderStep,
     activeEpoch,
     epochs,
@@ -62,8 +62,11 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
   }, [activeTab, topicsDispatch]);
 
   const handlePlay = useCallback(() => {
-    topicsDispatch({ type: 'setIsPlay', payload: { isPlay: !isPlay } });
-  }, [topicsDispatch, isPlay]);
+    topicsDispatch({
+      type: 'setIsPlaying',
+      payload: { isPlaying: !isPlaying },
+    });
+  }, [topicsDispatch, isPlaying]);
 
   const handleSliderStep = useCallback(
     (step: number) => {
@@ -130,7 +133,7 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
   return (
     <div className="flex flex-col h-full">
       <Header
-        play={isPlay}
+        play={isPlaying}
         setPlay={handlePlay}
         sliderStep={sliderStep}
         setSliderStep={handleSliderStep}
