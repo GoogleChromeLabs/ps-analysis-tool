@@ -57,7 +57,7 @@ const CardsPanel = ({
 }: CardsPanelProps) => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
   const internalContainer = classNames(
-    'flex gap-5 flex-wrap mt-2 min-w-[752px]',
+    'flex gap-5 flex-wrap mt-2 min-w-[784px] overflow-x-hidden p-4',
     {
       'justify-center': centered,
     }

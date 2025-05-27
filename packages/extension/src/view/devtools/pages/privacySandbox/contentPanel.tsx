@@ -26,24 +26,22 @@ import Boxes from './boxes';
 
 const ContentPanel = () => {
   return (
-    <div>
-      <div
-        data-testid="privacy-sandbox-content"
-        className="text-raisin-black dark:text-bright-gray flex items-center justify-center mb-10"
-      >
-        <section className="flex justify-center">
-          <div className="max-w-(--breakpoint-md) text-center">
-            <PrivacySandboxColoredIcon
-              width="120"
-              height="120"
-              className="inline-block mb-5"
-            />
-            <h2 className="text-5xl mb-5 font-semibold">
-              Protecting your privacy online
-            </h2>
-          </div>
-        </section>
-      </div>
+    <div
+      data-testid="privacy-sandbox-content"
+      className="text-raisin-black dark:text-bright-gray mb-10"
+    >
+      <section className="flex justify-center">
+        <div className="max-w-(--breakpoint-md) text-center">
+          <PrivacySandboxColoredIcon
+            width="120"
+            height="120"
+            className="inline-block mb-5"
+          />
+          <h2 className="text-5xl mb-5 font-semibold">
+            Protecting your privacy online
+          </h2>
+        </div>
+      </section>
       <Boxes />
     </div>
   );
