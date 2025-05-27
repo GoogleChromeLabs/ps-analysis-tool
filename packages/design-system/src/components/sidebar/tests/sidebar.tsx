@@ -120,7 +120,11 @@ describe('Sidebar', () => {
 
     // Assert
     expect(initialState.updateSelectedItemKey).toHaveBeenCalled();
-    expect(initialState.updateSelectedItemKey).toHaveBeenCalledWith('item1');
+    expect(initialState.updateSelectedItemKey).toHaveBeenCalledWith(
+      'item1',
+      '',
+      undefined
+    );
 
     // Act
     const dropdown = await screen.findByTestId('sidebar-child-dropdown');
