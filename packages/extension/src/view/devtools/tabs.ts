@@ -427,6 +427,7 @@ const TABS: SidebarItems = {
         title: () => 'Help Center',
         panel: {
           Element: HelpCenter,
+          skipPanelDisplay: true,
           href: 'https://support.google.com/privacysandbox',
         },
         icon: {
@@ -449,6 +450,7 @@ const TABS: SidebarItems = {
         title: () => 'Dev Site',
         panel: {
           Element: DevSite,
+          skipPanelDisplay: true,
           href: 'https://developers.google.com/privacy-sandbox',
         },
         icon: {
@@ -486,6 +488,7 @@ const TABS: SidebarItems = {
         title: () => 'Demos',
         panel: {
           Element: Demos,
+          skipPanelDisplay: true,
           href: 'https://domain-aaa.com/',
         },
         icon: {
@@ -508,6 +511,7 @@ const TABS: SidebarItems = {
         title: () => 'PSAT Wiki',
         panel: {
           Element: Wiki,
+          skipPanelDisplay: true,
           href: 'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki',
         },
         icon: {

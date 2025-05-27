@@ -98,7 +98,7 @@ export const SidebarProvider = ({
      */
     const findActivePanel = (items: SidebarItems, key: string) => {
       Object.entries(items).forEach(([itemKey, item]) => {
-        if (keyFound) {
+        if (keyFound || item.panel?.skipPanelDisplay) {
           return;
         }
 
