@@ -22,6 +22,7 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import Timeline from '..';
+import { BidderType } from '../types';
 
 const meta: Meta<typeof Timeline> = {
   title: 'DesignSystem/Timeline',
@@ -32,8 +33,21 @@ const meta: Meta<typeof Timeline> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const bidders: { name: string; duration: string; type: BidderType }[] = [
+  { name: 'Pubmattic', duration: '270.1', type: BidderType.BID },
+  { name: 'Sharethrough', duration: '210.4', type: BidderType.NO_BID },
+  { name: 'appnexus', duration: '240.0', type: BidderType.NO_BID },
+  { name: 'ix', duration: '380.1', type: BidderType.NO_BID },
+  { name: 'Rubicon', duration: '125.51', type: BidderType.WON },
+  { name: 'Criteo', duration: '470.05', type: BidderType.TIMED_OUT },
+];
+
 export const Primary: Story = {
   args: {
-    title: 'Timeline',
+    auctionTimeout: 420,
+    auctionId: '23949b7f-b733-4a58-b3b0-e72deed12e61',
+    auctionStartTime: '12:18:27',
+    auctionTime: '380.1',
+    bidders,
   },
 };
