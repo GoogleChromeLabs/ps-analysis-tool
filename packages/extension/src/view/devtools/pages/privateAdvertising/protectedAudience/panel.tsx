@@ -51,12 +51,14 @@ const Panel = () => {
     receivedBids,
     noBids,
     auctionEvents,
+    prebidResponse,
   } = useProtectedAudience(({ state }) => ({
     interestGroupDetails: state.interestGroupDetails,
     adsAndBidders: state.adsAndBidders,
     receivedBids: state.receivedBids,
     noBids: state.noBids,
     auctionEvents: state.auctionEvents ?? {},
+    prebidResponse: state.prebidResponse,
   }));
 
   const data = useRef<{
@@ -65,6 +67,7 @@ const Panel = () => {
     receivedBids?: typeof receivedBids;
     noBids?: typeof noBids;
     auctionEvents?: typeof auctionEvents;
+    prebidResponse?: typeof prebidResponse;
   } | null>(null);
 
   useEffect(() => {
@@ -140,6 +143,35 @@ const Panel = () => {
       };
     }
 
+    if (
+      !isEqual(data.current?.prebidResponse?.adUnits, prebidResponse?.adUnits)
+    ) {
+      if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
+        highlightTab(3);
+      }
+
+      store = {
+        ...store,
+        prebidResponse,
+      };
+    }
+
+    if (
+      !isEqual(
+        data.current?.prebidResponse?.auctionEvents,
+        prebidResponse?.auctionEvents
+      )
+    ) {
+      if (Object.keys(prebidResponse?.auctionEvents || {}).length > 0) {
+        highlightTab(4);
+      }
+
+      store = {
+        ...store,
+        prebidResponse,
+      };
+    }
+
     data.current = store;
   }, [
     adsAndBidders,
@@ -148,6 +180,7 @@ const Panel = () => {
     interestGroupDetails,
     noBids,
     receivedBids,
+    prebidResponse,
   ]);
 
   useEffect(() => {
