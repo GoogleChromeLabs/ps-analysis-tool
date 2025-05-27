@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   TabsProvider,
   useTabs,
@@ -27,23 +27,28 @@ import {
 /**
  * Internal dependencies.
  */
-import TopicsTable, { type TopicsTableType } from './topicsTable';
+import TopicsTable from './topicsTable';
 import Panel from './panel';
 import Legend from './legend';
+import { useTopicsExplorableExplanation } from './useTopicsExplorableExplanation';
+
+const TOPICS_NAVIGATOR_TAB_INDEX = 2;
 
 const ExplorableExplanation = () => {
-  const [topicsTableData, setTopicsTableData] = useState<
-    Record<number, TopicsTableType[]>
-  >({});
-  const [highlightAdTech, setHighlightAdTech] = useState<string | null>(null);
-  // These are the actions that are being used in the PA panel tabs provider not the animation component.
-  const { PAstorage, setPAActiveTab, setPAStorage } = useTabs(
+  const { tabStorage, setPAActiveTab, setPAStorage } = useTabs(
     ({ state, actions }) => ({
-      PAstorage: state.storage,
+      tabStorage: state.storage,
       setPAActiveTab: actions.setActiveTab,
       setPAStorage: actions.setStorage,
+      activeTab: state.activeTab,
     })
   );
+
+  const [topicsState, topicsDispatch] = useTopicsExplorableExplanation(
+    tabStorage,
+    setPAStorage
+  );
+  const { topicsTableData, highlightAdTech } = topicsState;
 
   const topicsNavigator = useCallback(
     (topic: string) => {
@@ -51,10 +56,9 @@ const ExplorableExplanation = () => {
         JSON.stringify({
           taxonomy: topic,
         }),
-        2
+        TOPICS_NAVIGATOR_TAB_INDEX
       );
-
-      setPAActiveTab(2);
+      setPAActiveTab(TOPICS_NAVIGATOR_TAB_INDEX);
     },
     [setPAActiveTab, setPAStorage]
   );
@@ -68,7 +72,11 @@ const ExplorableExplanation = () => {
           props: {
             data: topicsTableData,
             highlightAdTech,
-            setHighlightAdTech,
+            setHighlightAdTech: (value: string) =>
+              topicsDispatch({
+                type: 'setHighlightAdTech',
+                payload: { highlightAdTech: value },
+              }),
             topicsNavigator,
           },
         },
@@ -83,19 +91,33 @@ const ExplorableExplanation = () => {
     });
 
     return items;
-  }, [highlightAdTech, topicsNavigator, topicsTableData]);
+  }, [highlightAdTech, topicsDispatch, topicsNavigator, topicsTableData]);
+
+  // move to next epoch when current epoch is completed
+  useEffect(() => {
+    const currentEpochCompleted = topicsState.completedEpochs.has(
+      topicsState.activeEpoch
+    );
+    // only do it if the animation is playing
+    if (currentEpochCompleted && topicsState.isPlay) {
+      setTimeout(() => {
+        topicsDispatch({
+          type: 'setActiveEpoch',
+          payload: { activeEpoch: topicsState.activeEpoch + 1 },
+        });
+      }, 3000);
+    }
+  }, [
+    topicsState.activeEpoch,
+    topicsState.completedEpochs,
+    topicsState.isPlay,
+    topicsDispatch,
+    topicsState.sliderStep,
+  ]);
 
   return (
     <TabsProvider items={tabItems} name="topics-ee">
-      <Panel
-        topicsTableData={topicsTableData}
-        setTopicsTableData={setTopicsTableData}
-        PAstorage={PAstorage}
-        setPAActiveTab={setPAActiveTab}
-        setPAStorage={setPAStorage}
-        highlightAdTech={highlightAdTech}
-        setHighlightAdTech={setHighlightAdTech}
-      />
+      <Panel topicsState={topicsState} topicsDispatch={topicsDispatch} />
     </TabsProvider>
   );
 };
