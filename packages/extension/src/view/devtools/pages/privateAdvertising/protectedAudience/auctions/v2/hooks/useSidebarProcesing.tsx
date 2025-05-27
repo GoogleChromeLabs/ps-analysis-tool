@@ -96,15 +96,18 @@ const useSidebarProcessing = () => {
             ...adUnitChildren[`${time}||${adUnit}`].children,
           };
 
+          const auctionEvents = getPrebidData(adUnit, time);
+
           timeChildren[`${time}||${adUnit} Prebid`] = {
             title: 'Prebid',
             panel: {
               Element: PrebidTable,
               props: {
-                auctionEvents: getPrebidData(adUnit, time),
+                auctionEvents,
                 adUnit,
               },
             },
+            isBlurred: Object.keys(auctionEvents || {}).length === 0,
             children: {},
           };
 
