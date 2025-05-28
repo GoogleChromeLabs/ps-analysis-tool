@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { LandingPage } from '@google-psat/design-system';
 
 /**
@@ -25,14 +25,6 @@ import { LandingPage } from '@google-psat/design-system';
 import ContentPanel from './contentPanel';
 
 const PrivacySandbox = () => {
-  useEffect(() => {
-    (async () => {
-      await chrome.storage.sync.set({
-        psLandingPageViewed: true,
-      });
-    })();
-  }, []);
-
   return (
     <LandingPage
       title="Privacy Sandbox"

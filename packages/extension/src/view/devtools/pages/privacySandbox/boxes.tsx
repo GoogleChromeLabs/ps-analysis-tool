@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import {
   CardsPanel,
   SIDEBAR_ITEMS_KEYS,
@@ -26,44 +26,41 @@ import {
 /**
  * Internal dependencies.
  */
-import { PINNED_ITEMS, FEATURE_LIST } from './constants';
+import { PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES } from '../constants';
 import { useCookie } from '../../stateProviders';
 
-const ContentPanel = () => {
+const Boxes = () => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
   }));
 
   const handleButtonClick = useCallback(
-    (event: React.MouseEvent, sidebarKey: string) => {
+    (event: React.MouseEvent, sidebarKey: string, url = '') => {
       event.preventDefault();
       event.stopPropagation();
 
       const firstFrame =
         Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX;
 
+      if (url) {
+        chrome.tabs.update({ url });
+      }
+
       navigateTo(sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey);
     },
     [navigateTo, tabFrames]
   );
 
-  useEffect(() => {
-    if (FEATURE_LIST[0].buttons.length === 1) {
-      FEATURE_LIST[0].buttons.push({
-        name: 'Cookies Table',
-        sidebarKey: 'FIRST_COOKIE_TABLE' as SIDEBAR_ITEMS_KEYS,
-      });
-    }
-  }, []);
-
   return (
-    <CardsPanel
-      pinnedItems={PINNED_ITEMS}
-      featuredItems={FEATURE_LIST}
-      onFeaturedButtonClick={handleButtonClick}
-    />
+    <div className="flex justify-center w-full">
+      <CardsPanel
+        featuredItems={PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES}
+        onFeaturedButtonClick={handleButtonClick}
+        centered={true}
+      />
+    </div>
   );
 };
 
-export default ContentPanel;
+export default Boxes;
