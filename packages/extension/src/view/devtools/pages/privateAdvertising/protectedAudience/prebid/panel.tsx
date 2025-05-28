@@ -87,7 +87,7 @@ const Panel = ({ prebidResponse }: PanelProps) => {
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
-        <div className="ml-4 w-full h-full border-american-silver dark:border-quartz overflow-auto">
+        <div className="px-4 w-full h-full border-american-silver dark:border-quartz overflow-auto">
           {containerToShow}
         </div>
       </div>

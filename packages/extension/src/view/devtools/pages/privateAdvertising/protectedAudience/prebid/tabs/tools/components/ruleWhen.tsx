@@ -62,7 +62,7 @@ const RuleWhen = ({
 }: RuleProps) => {
   const dropdownRef = useRef<HTMLSelectElement | null>(null);
   const ruleValueOptions = useProtectedAudience(({ state }) => {
-    const prebidAdunits = Object.values(state.prebidResponse.adUnits);
+    const prebidAdunits = Object.values(state?.prebidResponse?.adUnits ?? {});
 
     const _bidders = prebidAdunits.reduce((prev, adUnit) => {
       const newBidders = adUnit.bidders?.reduce((prevValue, bidder) => {
@@ -77,7 +77,7 @@ const RuleWhen = ({
     }, [] as string[]);
 
     return {
-      adUnitCode: Object.keys(state.prebidResponse.adUnits),
+      adUnitCode: Object.keys(state?.prebidResponse?.adUnits ?? {}),
       bidder: _bidders,
     };
   });
