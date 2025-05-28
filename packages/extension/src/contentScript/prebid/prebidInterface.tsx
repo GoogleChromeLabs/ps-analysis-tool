@@ -199,30 +199,6 @@ class PrebidInterface {
         this.updateCounter = 0;
       }
     }, 1200);
-
-    document.addEventListener('unload', () => {
-      this.scanningStatus = false;
-      this.prebidInterface = null;
-      this.prebidData = {
-        adUnits: {},
-        pbjsNamespace: '',
-        noBids: {},
-        receivedBids: [],
-        errorEvents: [],
-        versionInfo: '',
-        config: {},
-        auctionEvents: {},
-        installedModules: [],
-        prebidExists: null,
-      };
-
-      if (this.setIntervalValue) {
-        clearInterval(this.setIntervalValue);
-      }
-
-      this.updateCounter = 0;
-      this.setIntervalValue = null;
-    });
   }
 
   sendInitialData() {
