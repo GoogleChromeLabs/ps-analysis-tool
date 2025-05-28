@@ -138,6 +138,23 @@ const ExplorableExplanation = () => {
     topicsDispatch,
   ]);
 
+  useEffect(() => {
+    if (
+      topicsState.epochs.length > 0 &&
+      topicsState.completedEpochs.size === topicsState.epochs.length
+    ) {
+      topicsDispatch({
+        type: 'setHasAnimationFinished',
+        payload: { hasAnimationFinished: true },
+      });
+    }
+  }, [
+    topicsState.isInteractive,
+    topicsState.completedEpochs.size,
+    topicsState.epochs.length,
+    topicsDispatch,
+  ]);
+
   return (
     <TabsProvider items={tabItems} name="topics-ee">
       <Panel topicsState={topicsState} topicsDispatch={topicsDispatch} />

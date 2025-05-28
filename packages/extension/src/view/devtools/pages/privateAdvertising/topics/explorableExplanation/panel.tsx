@@ -42,6 +42,7 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
     activeEpoch,
     epochs,
     highlightAdTech,
+    hasAnimationFinished,
   } = topicsState;
 
   const { setActiveTab, activeTab } = useTabs(({ actions, state }) => ({
@@ -145,7 +146,7 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
         reset={handleReset}
         extraInterface={extraInterface}
         showNextPrevButtons={false}
-        disablePlayButton={isInteractive}
+        disablePlayButton={isInteractive || hasAnimationFinished}
       />
       <div className="flex-1 overflow-auto">
         <Animation topicsState={topicsState} topicsDispatch={topicsDispatch} />

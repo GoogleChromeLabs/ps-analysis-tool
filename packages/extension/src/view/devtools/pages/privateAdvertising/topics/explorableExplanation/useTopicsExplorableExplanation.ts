@@ -50,6 +50,7 @@ export type TopicsExplorableExplanationState = {
   sliderStep: number;
   siteAdTechs: Record<string, string[]>;
   epochSiteVisited: Record<number, Set<number>>;
+  hasAnimationFinished: boolean;
 };
 
 type SetTopicsTableDataAction = {
@@ -120,6 +121,13 @@ type SetEpochSiteVisitedAction = {
   };
 };
 
+type SetHasAnimationFinishedAction = {
+  type: 'setHasAnimationFinished';
+  payload: {
+    hasAnimationFinished: boolean;
+  };
+};
+
 export type TopicsExplorableExplanationAction =
   | SetTopicsTableDataAction
   | SetHighlightAdTechAction
@@ -130,7 +138,8 @@ export type TopicsExplorableExplanationAction =
   | ResetAction
   | SetSiteAdTechsAction
   | SetInitialStateAction
-  | SetEpochSiteVisitedAction;
+  | SetEpochSiteVisitedAction
+  | SetHasAnimationFinishedAction;
 
 const initialState: TopicsExplorableExplanationState = {
   isTabStorageLoaded: false,
@@ -151,6 +160,7 @@ const initialState: TopicsExplorableExplanationState = {
     2: new Set(),
     3: new Set(),
   },
+  hasAnimationFinished: false,
 };
 
 const EE_TAB_INDEX = 1; // use for tab storage
@@ -190,6 +200,11 @@ export const useTopicsExplorableExplanation = (
           return { ...state, siteAdTechs: action.payload.siteAdTechs };
         case 'setEpochSiteVisited':
           return setEpochSiteVisited(state, action);
+        case 'setHasAnimationFinished':
+          return {
+            ...state,
+            hasAnimationFinished: action.payload.hasAnimationFinished,
+          };
         case 'setInitialState':
           return {
             ...state,
