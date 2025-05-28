@@ -17,7 +17,12 @@
 /**
  * External dependencies.
  */
-import { JsonView, PillToggle, Timeline } from '@google-psat/design-system';
+import {
+  JsonView,
+  PillToggle,
+  Timeline,
+  useTabs,
+} from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
@@ -53,6 +58,9 @@ const Panel = ({
   const { receivedBids, noBids } = useProtectedAudience(({ state }) => ({
     receivedBids: state.receivedBids,
     noBids: state.noBids,
+  }));
+  const { setPAActiveTab } = useTabs(({ actions }) => ({
+    setPAActiveTab: actions.setActiveTab,
   }));
   const [selectedRow, setSelectedRow] = useState<
     ReceivedBids | NoBidsType[keyof NoBidsType] | null
@@ -105,7 +113,11 @@ const Panel = ({
   } else if (pillToggle === PillToggleOptions.TimelineName) {
     activePage = (
       <div className="w-full px-5">
-        <Timeline {...timeline} setSelectedRow={setSelectedRow} />
+        <Timeline
+          {...timeline}
+          setSelectedRow={setSelectedRow}
+          navigateToAuction={() => setPAActiveTab(4)}
+        />
       </div>
     );
   }

@@ -43,6 +43,7 @@ interface TimelineProps {
   bidders: { name: string; duration: string; type: BidderType }[];
   zoomLevel?: number;
   setSelectedRow: (row: any) => void;
+  navigateToAuction: (auctionId: string) => void;
 }
 
 const Timeline = ({
@@ -53,6 +54,7 @@ const Timeline = ({
   bidders,
   zoomLevel = 2,
   setSelectedRow,
+  navigateToAuction,
 }: TimelineProps) => {
   const [animate, setAnimate] = useState(false);
   const [scrollWidth, setScrollWidth] = useState(0);
@@ -158,7 +160,14 @@ const Timeline = ({
       <footer>
         <p className="text-sm text-right mt-1">
           Auction ID:{' '}
-          <a className="underline" href="#">
+          <a
+            onClick={(event) => {
+              event.preventDefault();
+              navigateToAuction(auctionId);
+            }}
+            className="underline"
+            href="#"
+          >
             {auctionId}
           </a>
         </p>
