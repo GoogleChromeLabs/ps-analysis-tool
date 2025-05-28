@@ -275,7 +275,6 @@ const Provider = ({ children }: PropsWithChildren) => {
             ) {
               data.prebidExists = message.payload.prebidEvents.prebidExists;
             }
-
             if (!data) {
               return data;
             }
@@ -300,6 +299,8 @@ const Provider = ({ children }: PropsWithChildren) => {
                   return !isEqual(value, prev[_key]);
                 })
             );
+
+            updates['prebidExists'] = data.prebidExists ?? prev.prebidExists;
 
             return Object.keys(updates).length ? { ...prev, ...updates } : prev;
           });
