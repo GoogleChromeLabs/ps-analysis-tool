@@ -31,6 +31,7 @@ import type {
   SingleSellerAuction,
   MultiSellerAuction,
 } from '@google-psat/common';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -40,11 +41,23 @@ import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
-import { isEqual } from 'lodash-es';
+import { CS_GET_PREBID_DATA_RESPONSE } from '../../../../constants';
+import type { PrebidEvents } from '../../../../store';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
+
+  const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
+    adUnits: {},
+    noBids: {},
+    receivedBids: [],
+    errorEvents: [],
+    auctionEvents: {},
+    versionInfo: '',
+    installedModules: [],
+    config: {},
+  });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
     useState<boolean>(false);
@@ -228,11 +241,15 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
+        prebidData: PrebidEvents;
+        propertyName: string;
       };
     }) => {
       let didAuctionEventsChange = false;
 
-      if (!['AUCTION_EVENTS'].includes(message.type)) {
+      if (
+        !['AUCTION_EVENTS', CS_GET_PREBID_DATA_RESPONSE].includes(message.type)
+      ) {
         return;
       }
 
@@ -248,6 +265,35 @@ const Provider = ({ children }: PropsWithChildren) => {
         message.payload.auctionEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
+          setPrebidResponse((prev) => {
+            const data = message.payload?.prebidData;
+            if (!data) {
+              return prev;
+            }
+
+            const keys: (keyof PrebidEvents)[] = [
+              'adUnits',
+              'receivedBids',
+              'noBids',
+              'auctionEvents',
+              'errorEvents',
+              'versionInfo',
+              'installedModules',
+              'config',
+            ];
+
+            const updates = Object.fromEntries(
+              keys
+                .map((key) => [key, data[key]])
+                .filter(([key, value]) => {
+                  const _key = key as keyof PrebidEvents;
+                  return !isEqual(value, prev[_key]);
+                })
+            );
+
+            return Object.keys(updates).length ? { ...prev, ...updates } : prev;
+          });
+
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
@@ -421,6 +467,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         adsAndBidders,
         selectedAdUnit,
         sortOrder,
+        prebidResponse,
       },
       actions: {
         setSelectedAdUnit,
@@ -428,6 +475,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    prebidResponse,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,
