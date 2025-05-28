@@ -23,6 +23,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
  */
 import { BidderType } from './types';
 import findMaximumBidderDuration from './utils/findMaximumBidderDuration';
+import { HammerIcon } from '../../icons';
 
 const INITIAL_TIME = 50;
 const TIME_DURATION = 50;
@@ -147,7 +148,22 @@ const Timeline = ({
                   >
                     {/*Metadata*/}
                     <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1">
-                      <span className="pr-2 block text-xs">{bidder.name}</span>
+                      <span className="pr-2 text-xs flex">
+                        {String(bidder.name)}
+                        <span className="text-granite-gray ml-1">
+                          {bidder.type === BidderType.NO_BID && ' (no bid)'}
+                          {bidder.type === BidderType.TIMED_OUT &&
+                            ' (timed out)'}
+                        </span>
+                        {bidder.type === BidderType.WON && (
+                          <span className="flex text-granite-gray">
+                            <span>(won)</span>
+                            <span>
+                              <HammerIcon />
+                            </span>
+                          </span>
+                        )}
+                      </span>
                       <span className="text-xs">{bidder.duration}ms</span>
                     </div>
                   </div>
