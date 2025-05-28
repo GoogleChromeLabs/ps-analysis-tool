@@ -66,8 +66,9 @@ const Timeline = ({
     return maxDuration / TIME_DURATION + 2;
   }, [bidders]);
 
+  const zoom = zoomLevel < 1 ? 1 : zoomLevel;
   const lines = Array.from({ length: lineCount });
-  const timeoutBlockWidth = scrollWidth - auctionTimeout * zoomLevel;
+  const timeoutBlockWidth = scrollWidth - auctionTimeout * zoom;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -99,8 +100,8 @@ const Timeline = ({
           {lines.map((_, index) => {
             return (
               <div
-                className="border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] relative"
-                style={{ flexBasis: `${TIME_DURATION * zoomLevel}px` }}
+                className="border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] relative transition-all duration-300 ease-out"
+                style={{ flexBasis: `${TIME_DURATION * zoom}px` }}
                 key={index}
               >
                 <span className="absolute right-0 pr-2 block text-xs mt-1">
@@ -114,7 +115,7 @@ const Timeline = ({
         {/*Timeout block*/}
         <div className="absolute flex w-fit h-full top-0">
           <div
-            style={{ width: `${auctionTimeout * zoomLevel}px` }}
+            style={{ width: `${auctionTimeout * zoom}px` }}
             className="h-full"
           ></div>
           <div
@@ -132,7 +133,7 @@ const Timeline = ({
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative">
             {bidders.map((bidder, index) => {
-              const fullWidth = parseFloat(bidder.duration) * zoomLevel;
+              const fullWidth = parseFloat(bidder.duration) * zoom;
               return (
                 <div key={index} className="relative group ">
                   {/*Bar*/}
