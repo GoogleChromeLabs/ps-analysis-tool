@@ -399,6 +399,7 @@ class PrebidInterface {
         winningBid: bid?.cpm,
         bidCurrency: bid.currency,
         winningBidder: bid.bidder,
+        winningMediaContainerSize: [[bid.width, bid.height]],
       };
       return;
     }
