@@ -27,15 +27,10 @@ import {
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import { useSettings } from '../../../../stateProviders';
 import Panel from './panel';
 
 const Bids = () => {
-  const { receivedBids, noBids } = useProtectedAudience(({ state }) => ({
-    receivedBids: state.receivedBids,
-    noBids: state.noBids,
-  }));
-
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
@@ -71,14 +66,7 @@ const Bids = () => {
     );
   }
 
-  return (
-    <Panel
-      receivedBids={receivedBids}
-      noBids={noBids}
-      storage={storage}
-      setStorage={setStorage}
-    />
-  );
+  return <Panel storage={storage} setStorage={setStorage} />;
 };
 
 export default Bids;

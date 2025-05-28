@@ -17,7 +17,12 @@
 /**
  * External dependencies.
  */
-import { JsonView, PillToggle } from '@google-psat/design-system';
+import {
+  JsonView,
+  PillToggle,
+  Timeline,
+  BidderType,
+} from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
@@ -29,28 +34,34 @@ import classNames from 'classnames';
  */
 import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
+import { useProtectedAudience } from '../../../../stateProviders';
 
 enum PillToggleOptions {
   ReceivedBids = 'Received Bids',
   NoBids = 'No Bids',
-  Timeline = 'Timeline',
+  TimelineName = 'Timeline',
 }
 
+const bidders: { name: string; duration: string; type: BidderType }[] = [
+  { name: 'Pubmattic', duration: '270.1', type: BidderType.BID },
+  { name: 'Sharethrough', duration: '210.4', type: BidderType.NO_BID },
+  { name: 'appnexus', duration: '240.0', type: BidderType.NO_BID },
+  { name: 'ix', duration: '380.1', type: BidderType.NO_BID },
+  { name: 'Rubicon', duration: '125.51', type: BidderType.WON },
+  { name: 'Criteo', duration: '470.05', type: BidderType.TIMED_OUT },
+];
+
 interface PanelProps {
-  receivedBids: ReceivedBids[];
-  noBids: NoBidsType;
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
   eeAnimatedTab?: boolean;
 }
 
-const Panel = ({
-  receivedBids,
-  noBids,
-  storage,
-  setStorage,
-  eeAnimatedTab = false,
-}: PanelProps) => {
+const Panel = ({ storage, setStorage, eeAnimatedTab = false }: PanelProps) => {
+  const { receivedBids, noBids } = useProtectedAudience(({ state }) => ({
+    receivedBids: state.receivedBids,
+    noBids: state.noBids,
+  }));
   const [selectedRow, setSelectedRow] = useState<
     ReceivedBids | NoBidsType[keyof NoBidsType] | null
   >(null);
@@ -66,6 +77,52 @@ const Panel = ({
     return Object.keys(noBids).length > 0;
   }, [noBids, pillToggle, receivedBids.length]);
 
+  let activePage = null;
+
+  if (pillToggle === PillToggleOptions.ReceivedBids) {
+    activePage = (
+      <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+        <ReceivedBidsTable
+          setSelectedRow={setSelectedRow}
+          selectedRow={selectedRow}
+          receivedBids={receivedBids}
+          storage={storage}
+          setStorage={setStorage}
+          showEvaluationPlaceholder={!eeAnimatedTab}
+        />
+      </div>
+    );
+  } else if (pillToggle === PillToggleOptions.NoBids) {
+    activePage = (
+      <div
+        className={classNames(
+          'h-full border-r border-t border-american-silver dark:border-quartz',
+          Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
+        )}
+      >
+        <NoBidsTable
+          setSelectedRow={setSelectedRow}
+          selectedRow={selectedRow}
+          noBids={noBids}
+          showEvaluationPlaceholder={!eeAnimatedTab}
+        />
+      </div>
+    );
+  } else if (pillToggle === PillToggleOptions.TimelineName) {
+    activePage = (
+      <div className="w-full px-5 pb-10">
+        <Timeline
+          auctionTimeout={420}
+          auctionId="23949b7f-b733-4a58-b3b0-e72deed12e61"
+          auctionStartTime="12:18:27"
+          auctionTime="380.1"
+          bidders={bidders}
+          zoomLevel={2}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col pt-4 h-full w-full">
       <div className="px-4 pb-4">
@@ -73,7 +130,7 @@ const Panel = ({
           options={[
             PillToggleOptions.ReceivedBids,
             PillToggleOptions.NoBids,
-            PillToggleOptions.Timeline,
+            PillToggleOptions.TimelineName,
           ]}
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
@@ -81,32 +138,7 @@ const Panel = ({
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
-        {pillToggle === PillToggleOptions.ReceivedBids ? (
-          <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
-            <ReceivedBidsTable
-              setSelectedRow={setSelectedRow}
-              selectedRow={selectedRow}
-              receivedBids={receivedBids}
-              storage={storage}
-              setStorage={setStorage}
-              showEvaluationPlaceholder={!eeAnimatedTab}
-            />
-          </div>
-        ) : (
-          <div
-            className={classNames(
-              'h-full border-r border-t border-american-silver dark:border-quartz',
-              Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
-            )}
-          >
-            <NoBidsTable
-              setSelectedRow={setSelectedRow}
-              selectedRow={selectedRow}
-              noBids={noBids}
-              showEvaluationPlaceholder={!eeAnimatedTab}
-            />
-          </div>
-        )}
+        {activePage}
       </div>
       {showBottomTray && (
         <Resizable
