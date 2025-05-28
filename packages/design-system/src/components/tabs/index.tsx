@@ -106,7 +106,12 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       }
 
       return {
-        ...prevState,
+        ...Object.fromEntries(
+          Object.entries(prevState).map(([groupKey]) => [
+            groupKey,
+            { hidden: false, animating: true },
+          ])
+        ),
         [group]: {
           hidden: shouldUnhideInstantly ? false : prevState[group].hidden,
           animating: shouldUnhideInstantly ? false : true,
@@ -116,7 +121,12 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
 
     timeoutRef.current = setTimeout(() => {
       setGroupsExpanded((prevState) => ({
-        ...prevState,
+        ...Object.fromEntries(
+          Object.entries(prevState).map(([groupKey]) => [
+            groupKey,
+            { hidden: true, animating: false },
+          ])
+        ),
         [group]: {
           hidden: shouldUnhideInstantly
             ? prevState[group].hidden
