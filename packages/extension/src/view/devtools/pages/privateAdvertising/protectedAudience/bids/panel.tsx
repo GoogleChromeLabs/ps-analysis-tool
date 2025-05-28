@@ -33,6 +33,7 @@ import NoBidsTable from './noBidsTable';
 enum PillToggleOptions {
   ReceivedBids = 'Received Bids',
   NoBids = 'No Bids',
+  Timeline = 'Timeline',
 }
 
 interface PanelProps {
@@ -69,8 +70,11 @@ const Panel = ({
     <div className="flex flex-col pt-4 h-full w-full">
       <div className="px-4 pb-4">
         <PillToggle
-          firstOption={PillToggleOptions.ReceivedBids}
-          secondOption={PillToggleOptions.NoBids}
+          options={[
+            PillToggleOptions.ReceivedBids,
+            PillToggleOptions.NoBids,
+            PillToggleOptions.Timeline,
+          ]}
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={eeAnimatedTab}
