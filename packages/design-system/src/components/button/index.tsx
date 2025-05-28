@@ -30,6 +30,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'danger' | 'success';
   extraClasses?: string;
   disabled?: boolean;
+  dontShowBackground?: boolean;
 }
 const Button = ({
   title = '',
@@ -41,6 +42,7 @@ const Button = ({
   size = 'small',
   extraClasses = '',
   disabled = false,
+  dontShowBackground = false,
 }: ButtonProps) => {
   return (
     <button
@@ -55,13 +57,12 @@ const Button = ({
         'rounded flex items-center text-center py-1 px-2 font-medium',
         {
           'bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
-            variant === 'primary' && typeof text === 'string',
+            variant === 'primary' && !dontShowBackground,
           'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
-            variant === 'secondary' && typeof text === 'string',
-          'text-white dark:text-raisin-black bg-red-500':
-            variant === 'danger' && typeof text === 'string',
+            variant === 'secondary' && !dontShowBackground,
+          'text-white dark:text-raisin-black bg-red-500': variant === 'danger',
           'text-white dark:text-raisin-black bg-green-500':
-            variant === 'success' && typeof text === 'string',
+            variant === 'success',
         },
         {
           'opacity-70 cursor-default': disabled,
@@ -69,16 +70,16 @@ const Button = ({
             !disabled &&
             size === 'small' &&
             variant === 'primary' &&
-            typeof text === 'string',
+            !dontShowBackground,
           'hover:bg-beteleguese dark:hover:bg-bright-navy-blue':
             !disabled &&
             size === 'large' &&
             variant === 'primary' &&
-            typeof text === 'string',
+            !dontShowBackground,
           'hover:opacity-80':
-            !disabled && variant === 'secondary' && typeof text === 'string',
+            !disabled && variant === 'secondary' && !dontShowBackground,
           'hover:bg-red-600':
-            !disabled && variant === 'danger' && typeof text === 'string',
+            !disabled && variant === 'danger' && !dontShowBackground,
         },
         {
           'py-0.5 px-1.5 text-xs': size === 'small',
