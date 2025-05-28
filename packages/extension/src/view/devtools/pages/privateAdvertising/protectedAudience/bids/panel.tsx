@@ -112,7 +112,7 @@ const Panel = ({
 
   return (
     <div className="flex flex-col pt-4 h-full w-full">
-      <div className="px-4 pb-4">
+      <div className="absolute top-[16px] left-[270px]">
         <PillToggle
           options={[
             PillToggleOptions.ReceivedBids,

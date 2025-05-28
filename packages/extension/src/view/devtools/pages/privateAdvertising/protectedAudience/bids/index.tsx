@@ -22,6 +22,7 @@ import {
   useSidebar,
   useTabs,
   PillToggle,
+  DoubleArrowRightIcon,
 } from '@google-psat/design-system';
 
 /**
@@ -76,14 +77,15 @@ const Bids = () => {
   }
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <div className="px-4 pb-2 pt-4">
+    <div className="flex flex-col h-full w-full relative">
+      <div className="px-4 pb-2 pt-4 flex gap-6 items-center ">
         <PillToggle
           options={[PillToggleOptions.PREBID, PillToggleOptions.PAAPI]}
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={false}
         />
+        <DoubleArrowRightIcon width="30px" height="30px" />
       </div>
       {pillToggle === PillToggleOptions.PREBID ? (
         <PrebidBidsPanel storage={storage} setStorage={setStorage} />
