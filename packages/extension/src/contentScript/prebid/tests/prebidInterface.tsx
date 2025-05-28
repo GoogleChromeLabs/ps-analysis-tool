@@ -152,6 +152,8 @@ describe('PrebidInterface', () => {
       cpm: 5.0,
       currency: 'USD',
       bidder: 'bidder1',
+      height: 200,
+      width: 200,
     };
 
     prebidInterface.calculateAdUnit(bid as any);
@@ -161,6 +163,7 @@ describe('PrebidInterface', () => {
         winningBid: 5.0,
         bidCurrency: 'USD',
         winningBidder: 'bidder1',
+        winningMediaContainerSize: [[200, 200]],
       },
     });
   });
