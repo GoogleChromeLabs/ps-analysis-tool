@@ -33,7 +33,7 @@ import Legend from './legend';
 import { useTopicsExplorableExplanation } from './useTopicsExplorableExplanation';
 
 const TOPICS_NAVIGATOR_TAB_INDEX = 2;
-const EPOCH_TRANSITION_DURATION = 3000;
+const EPOCH_TRANSITION_DURATION = 2000;
 
 const ExplorableExplanation = () => {
   const { tabStorage, setPAActiveTab, setPAStorage } = useTabs(
