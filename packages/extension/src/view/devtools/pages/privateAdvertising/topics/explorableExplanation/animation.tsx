@@ -66,6 +66,11 @@ const Animation = ({
     const init = (sketch: p5) => {
       const instance = new TopicsAnimation({
         p: sketch,
+        onReady: () => {
+          if (loadingTextCoverRef.current) {
+            loadingTextCoverRef.current.remove();
+          }
+        },
       });
       setAnimation(instance);
     };
@@ -120,6 +125,7 @@ const Animation = ({
   return (
     <div className="relative h-full">
       <div ref={node} className="overflow-auto bg-white h-full" />
+      {/* used for covering loading text when loading */}
       <div
         ref={loadingTextCoverRef}
         id="loading-text-cover"

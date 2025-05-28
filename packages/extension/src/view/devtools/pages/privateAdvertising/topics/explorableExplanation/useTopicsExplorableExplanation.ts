@@ -182,6 +182,7 @@ export const useTopicsExplorableExplanation = (
             activeEpoch: 0,
             // reset visited sites when interactive mode is toggled
             epochSiteVisited: initialState.epochSiteVisited,
+            topicsTableData: initialState.topicsTableData,
           };
         case 'setSliderStep':
           return { ...state, sliderStep: action.payload.sliderStep };
@@ -345,15 +346,17 @@ const setEpochSiteVisited = (
   const { epochIndex, siteIndex } = action.payload;
   const currentEpoch = state.epochs[state.activeEpoch];
   const visited = new Set([...state.epochSiteVisited[epochIndex], siteIndex]);
-  const isCompleted = visited.size === currentEpoch.webVisits.length;
+
+  // the animation has the concept of "user visit" and "user visit done"
+  // it means that when index [6] is visited, [5] is actually done, so we need to add 1 to the length
+  const isCompleted = visited.size === currentEpoch.webVisits.length + 1;
 
   const hasSiteBeenVisited = state.epochSiteVisited[epochIndex].has(siteIndex);
-  // the animation has the concept of "user visit" and "user visit done" if the site index is bigger than current epoch web visits length,
-  // it means it is marking "user visit done" to the last website and we should not try calculate any data
-  const isVisitDone = siteIndex >= state.epochs[epochIndex].webVisits.length;
+  const isLastVisitDone = siteIndex === currentEpoch.webVisits.length;
 
+  // only calculate topics table data for unvisited or not done sites
   const topicsTableData =
-    hasSiteBeenVisited || isVisitDone
+    hasSiteBeenVisited || isLastVisitDone
       ? state.topicsTableData
       : calculateTopicsTableData(state, epochIndex, siteIndex);
 

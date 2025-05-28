@@ -33,7 +33,7 @@ import Legend from './legend';
 import { useTopicsExplorableExplanation } from './useTopicsExplorableExplanation';
 
 const TOPICS_NAVIGATOR_TAB_INDEX = 2;
-const EPOCH_TRANSITION_DURATION = 5000;
+const EPOCH_TRANSITION_DURATION = 3000;
 
 const ExplorableExplanation = () => {
   const { tabStorage, setPAActiveTab, setPAStorage } = useTabs(
@@ -94,7 +94,7 @@ const ExplorableExplanation = () => {
     return items;
   }, [highlightAdTech, topicsDispatch, topicsNavigator, topicsTableData]);
 
-  // last epoch/tab is legend tab
+  // last tab is legend tab, so last epoch is length - 1
   const isLastEpoch = topicsState.activeEpoch === topicsState.epochs.length - 1;
 
   // move to next epoch when current epoch is completed
