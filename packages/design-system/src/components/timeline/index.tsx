@@ -86,7 +86,7 @@ const Timeline = ({
 
   return (
     <div>
-      <header className="flex justify-between text-sm">
+      <header className="flex justify-between text-sm font-semibold">
         <p>Auction Start: {auctionStartTime}</p>
         <p>Auction Time: {auctionTime}ms</p>
       </header>

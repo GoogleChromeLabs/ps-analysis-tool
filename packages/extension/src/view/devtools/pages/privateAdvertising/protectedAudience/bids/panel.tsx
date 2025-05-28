@@ -44,14 +44,14 @@ enum PillToggleOptions {
 interface PanelProps {
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
-  timeline: any;
+  timelines: any[];
   eeAnimatedTab?: boolean;
 }
 
 const Panel = ({
   storage,
   setStorage,
-  timeline,
+  timelines,
   eeAnimatedTab = false,
 }: PanelProps) => {
   const { receivedBids, noBids } = useProtectedAudience(({ state }) => ({
@@ -112,11 +112,15 @@ const Panel = ({
   } else if (pillToggle === PillToggleOptions.TimelineName) {
     activePage = (
       <div className="w-full px-5">
-        <Timeline
-          {...timeline}
-          setSelectedRow={setSelectedRow}
-          navigateToAuction={() => setPAActiveTab(4)}
-        />
+        {timelines.map((timeline, index) => (
+          <div key={index} className="mb-4">
+            <Timeline
+              {...timeline}
+              setSelectedRow={setSelectedRow}
+              navigateToAuction={() => setPAActiveTab(4)}
+            />
+          </div>
+        ))}
       </div>
     );
   }
