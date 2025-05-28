@@ -107,7 +107,7 @@ const RuleWhen = ({
           />
         </div>
         <div className="w-4 h-4">
-          <Equal className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+          <Equal className="w-4 h-4 text-sapphire dark:text-baby-blue-eyes" />
         </div>
         <div className="w-1/2 relative">
           <div
@@ -133,7 +133,7 @@ const RuleWhen = ({
         </div>
         {Object.keys(rule.when).length > 1 && (
           <div
-            className="w-4 h-4 cursor-pointer"
+            className="cursor-pointer"
             onClick={() => handleChange(ruleKey, 'when', ruleIndex, null, true)}
           >
             <DeleteForever className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
@@ -141,10 +141,10 @@ const RuleWhen = ({
         )}
         {Object.keys(rule.when).length < matchRuleTargets.length && (
           <div
-            className="w-4 h-4 cursor-pointer"
+            className="w-3 h-3 cursor-pointer"
             onClick={() => addMatchRule(rule, 'when', ruleIndex)}
           >
-            <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+            <Plus className="w-3 h-3 text-sapphire dark:text-baby-blue-eyes" />
           </div>
         )}
       </div>
