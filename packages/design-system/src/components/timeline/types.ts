@@ -24,4 +24,5 @@ export interface Bidder {
   name: string;
   duration: string;
   type: BidderType;
+  data?: any;
 }

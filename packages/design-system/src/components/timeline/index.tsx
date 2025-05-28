@@ -42,6 +42,7 @@ interface TimelineProps {
   auctionTime: string;
   bidders: { name: string; duration: string; type: BidderType }[];
   zoomLevel?: number;
+  setSelectedRow: (row: any) => void;
 }
 
 const Timeline = ({
@@ -51,6 +52,7 @@ const Timeline = ({
   auctionTime,
   bidders,
   zoomLevel = 2,
+  setSelectedRow,
 }: TimelineProps) => {
   const [animate, setAnimate] = useState(false);
   const [scrollWidth, setScrollWidth] = useState(0);
@@ -123,21 +125,25 @@ const Timeline = ({
           </div>
         </div>
 
-        {/*Metadata block*/}
+        {/*Bars Block*/}
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative">
             {bidders.map((bidder, index) => {
               const fullWidth = parseFloat(bidder.duration) * zoomLevel;
               return (
                 <div key={index} className="relative group ">
+                  {/*Bar*/}
                   <div
                     className="absolute left-0 h-[10px] transition-all duration-300 ease-out group-hover:scale-101 group-hover:border group-hover:border-grey transform origin-left cursor-pointer"
+                    role="button"
+                    onClick={() => setSelectedRow(bidder?.data)}
                     style={{
                       width: animate ? `${fullWidth}px` : `0px`,
                       backgroundColor: BAR_COLORS[bidder.type],
                       top: `${(index + 1) * 40}px`,
                     }}
                   >
+                    {/*Metadata*/}
                     <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1">
                       <span className="pr-2 block text-xs">{bidder.name}</span>
                       <span className="text-xs">{bidder.duration}ms</span>

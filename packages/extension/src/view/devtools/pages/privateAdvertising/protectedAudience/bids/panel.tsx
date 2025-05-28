@@ -22,6 +22,7 @@ import {
   PillToggle,
   Timeline,
   BidderType,
+  type Bidder,
 } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
@@ -42,13 +43,54 @@ enum PillToggleOptions {
   TimelineName = 'Timeline',
 }
 
-const bidders: { name: string; duration: string; type: BidderType }[] = [
-  { name: 'Pubmattic', duration: '270.1', type: BidderType.BID },
-  { name: 'Sharethrough', duration: '210.4', type: BidderType.NO_BID },
-  { name: 'appnexus', duration: '240.0', type: BidderType.NO_BID },
-  { name: 'ix', duration: '380.1', type: BidderType.NO_BID },
-  { name: 'Rubicon', duration: '125.51', type: BidderType.WON },
-  { name: 'Criteo', duration: '470.05', type: BidderType.TIMED_OUT },
+const preBidData = {
+  uniqueAuctionId: 'A17572BD290E03586F266F2C95675C07',
+  name: 'books',
+  index: 10,
+  ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
+  formattedTime: '77.95ms',
+  type: 'bid',
+  time: 1748410268.854791,
+  eventType: 'interestGroupAccessed',
+  bid: 14,
+  bidCurrency: 'USD',
+  mediaContainerSize: [],
+  adUnitCode: 'ad-container',
+  adType: 'image',
+};
+
+const bidders: Bidder[] = [
+  {
+    name: 'Pubmattic',
+    duration: '270.1',
+    type: BidderType.BID,
+    data: preBidData,
+  },
+  {
+    name: 'Sharethrough',
+    duration: '210.4',
+    type: BidderType.NO_BID,
+    data: preBidData,
+  },
+  {
+    name: 'appnexus',
+    duration: '240.0',
+    type: BidderType.NO_BID,
+    data: preBidData,
+  },
+  { name: 'ix', duration: '380.1', type: BidderType.NO_BID, data: preBidData },
+  {
+    name: 'Rubicon',
+    duration: '125.51',
+    type: BidderType.WON,
+    data: preBidData,
+  },
+  {
+    name: 'Criteo',
+    duration: '470.05',
+    type: BidderType.TIMED_OUT,
+    data: preBidData,
+  },
 ];
 
 interface PanelProps {
@@ -72,9 +114,11 @@ const Panel = ({ storage, setStorage, eeAnimatedTab = false }: PanelProps) => {
   const showBottomTray = useMemo(() => {
     if (pillToggle === PillToggleOptions.ReceivedBids) {
       return receivedBids.length > 0;
+    } else if (pillToggle === PillToggleOptions.NoBids) {
+      return Object.keys(noBids).length > 0;
+    } else {
+      return true; // Always show for Timeline
     }
-
-    return Object.keys(noBids).length > 0;
   }, [noBids, pillToggle, receivedBids.length]);
 
   let activePage = null;
@@ -118,6 +162,7 @@ const Panel = ({ storage, setStorage, eeAnimatedTab = false }: PanelProps) => {
           auctionTime="380.1"
           bidders={bidders}
           zoomLevel={2}
+          setSelectedRow={setSelectedRow}
         />
       </div>
     );
