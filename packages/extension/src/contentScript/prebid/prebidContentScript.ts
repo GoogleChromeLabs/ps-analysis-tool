@@ -56,7 +56,7 @@ class PrebidContentScript {
         chrome.runtime.sendMessage({
           type: CS_GET_PREBID_DATA_RESPONSE,
           payload: {
-            prebidExists: event.data.prebidExists,
+            prebidExists: event.data.prebidData?.prebidExists,
             prebidData: event.data.prebidData,
             tabId: this.tabId,
           },

@@ -38,11 +38,6 @@ class PrebidInterface {
    * TabId of the current Tab
    */
   tabId: number | null = null;
-
-  /**
-   * Boolean which indicates if prebid exists on the page.
-   */
-  prebidExists: boolean | null = null;
   /**
    * Prebid interface.
    */
@@ -61,6 +56,7 @@ class PrebidInterface {
     errorEvents: [],
     auctionEvents: {},
     pbjsNamespace: '',
+    prebidExists: null,
   };
 
   /**
@@ -114,7 +110,7 @@ class PrebidInterface {
       window.top?.postMessage({
         type: PREBID_SCANNING_STATUS,
         tabId: pbjsClass.tabId,
-        prebidExists: pbjsClass.prebidExists,
+        prebidExists: pbjsClass.prebidData.prebidExists,
       });
     }, 60000);
 
@@ -126,7 +122,7 @@ class PrebidInterface {
           pbjsGlobals[0]
         ] as unknown as typeof window.pbjs;
 
-        pbjsClass.prebidExists = true;
+        pbjsClass.prebidData.prebidExists = true;
         pbjsClass.scanningStatus = true;
 
         pbjsClass.sendInitialData();
@@ -169,7 +165,7 @@ class PrebidInterface {
         window.top?.postMessage({
           type: PREBID_SCANNING_STATUS,
           tabId: pbjsClass.tabId,
-          prebidExists: pbjsClass.prebidExists,
+          prebidExists: pbjsClass.prebidData.prebidExists,
         });
         stopLoop = true;
         clearTimeout(timeout);
@@ -205,7 +201,6 @@ class PrebidInterface {
     }, 1200);
 
     document.addEventListener('unload', () => {
-      this.prebidExists = false;
       this.scanningStatus = false;
       this.prebidInterface = null;
       this.prebidData = {
@@ -218,6 +213,7 @@ class PrebidInterface {
         config: {},
         auctionEvents: {},
         installedModules: [],
+        prebidExists: null,
       };
 
       if (this.setIntervalValue) {
@@ -233,36 +229,10 @@ class PrebidInterface {
     window.top?.postMessage({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
       tabId: this.tabId,
-      prebidExists: this.prebidExists,
-      prebidData: this.prebidExists
+      prebidData: this.prebidData.prebidExists
         ? JSON.parse(decycle(this.prebidData))
         : null,
     });
-  }
-
-  async getAndProcessPrebidData(propertyName: string) {
-    //@ts-ignore
-    if (
-      this.prebidExists &&
-      !Object.keys(this.prebidInterface ?? {}).includes(propertyName)
-    ) {
-      return;
-    }
-
-    //@ts-ignore
-    const prebidCaller = this.prebidInterface?.[propertyName];
-
-    const prebidData =
-      typeof prebidCaller === 'function' ? await prebidCaller() : prebidCaller;
-
-    if (prebidData) {
-      // Send the prebid data to contentscript so that it can be sent to the devtools
-      window.top?.postMessage({
-        type: SCRIPT_GET_PREBID_DATA_RESPONSE,
-        tabId: this.tabId,
-        prebidData: JSON.parse(decycle(prebidData)),
-      });
-    }
   }
 
   initPrebidListener() {
