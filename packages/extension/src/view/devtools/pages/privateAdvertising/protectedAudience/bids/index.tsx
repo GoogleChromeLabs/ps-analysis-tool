@@ -75,8 +75,6 @@ const Bids = () => {
     );
   }
 
-  // <Panel storage={storage} setStorage={setStorage} />
-
   return (
     <div className="flex flex-col h-full w-full">
       <div className="px-4 pb-2 pt-4">

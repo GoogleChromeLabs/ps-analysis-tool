@@ -17,13 +17,7 @@
 /**
  * External dependencies.
  */
-import {
-  JsonView,
-  PillToggle,
-  Timeline,
-  BidderType,
-  type Bidder,
-} from '@google-psat/design-system';
+import { JsonView, PillToggle, Timeline } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
@@ -43,116 +37,19 @@ enum PillToggleOptions {
   TimelineName = 'Timeline',
 }
 
-const preBidData = {
-  name: 'books',
-  index: 10,
-  ownerOrigin: 'https://privacysandboxdemos-buyer-1.domain-aaa.com',
-  uniqueAuctionId: 'A17572BD290E03586F266F2C95675C07',
-  formattedTime: '77.95ms',
-  type: 'bid',
-  time: 1748410268.854791,
-  eventType: 'interestGroupAccessed',
-  bid: 14,
-  bidCurrency: 'USD',
-  mediaContainerSize: [],
-  adUnitCode: 'ad-container',
-  adType: 'image',
-};
-
-const bidders: Bidder[] = [
-  {
-    name: 'Pubmattic',
-    duration: '270.1',
-    type: BidderType.BID,
-    data: {
-      ...preBidData,
-      name: 'sports',
-      index: 1,
-      bid: 12,
-      formattedTime: '70.23ms',
-      time: 1748410210.123,
-      ownerOrigin: 'https://pubmattic.bidder.com',
-    },
-  },
-  {
-    name: 'Sharethrough',
-    duration: '210.4',
-    type: BidderType.NO_BID,
-    data: {
-      ...preBidData,
-      name: 'news',
-      index: 2,
-      bid: 0,
-      formattedTime: '80.11ms',
-      time: 1748410220.456,
-      ownerOrigin: 'https://sharethrough.bidder.com',
-    },
-  },
-  {
-    name: 'appnexus',
-    duration: '240.0',
-    type: BidderType.NO_BID,
-    data: {
-      ...preBidData,
-      name: 'tech',
-      index: 3,
-      bid: 0,
-      formattedTime: '85.76ms',
-      time: 1748410230.789,
-      ownerOrigin: 'https://appnexus.bidder.com',
-    },
-  },
-  {
-    name: 'ix',
-    duration: '380.1',
-    type: BidderType.NO_BID,
-    data: {
-      ...preBidData,
-      name: 'gaming',
-      index: 4,
-      bid: 0,
-      formattedTime: '90.50ms',
-      time: 1748410241.321,
-      ownerOrigin: 'https://ix.bidder.com',
-    },
-  },
-  {
-    name: 'Rubicon',
-    duration: '125.51',
-    type: BidderType.WON,
-    data: {
-      ...preBidData,
-      name: 'travel',
-      index: 5,
-      bid: 18,
-      formattedTime: '65.33ms',
-      time: 1748410252.654,
-      ownerOrigin: 'https://rubicon.bidder.com',
-    },
-  },
-  {
-    name: 'Criteo',
-    duration: '470.05',
-    type: BidderType.TIMED_OUT,
-    data: {
-      ...preBidData,
-      name: 'fashion',
-      index: 6,
-      bid: 0,
-      formattedTime: '100.22ms',
-      time: 1748410263.987,
-      ownerOrigin: 'https://criteo.bidder.com',
-    },
-  },
-];
-
 interface PanelProps {
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
+  timeline: any;
   eeAnimatedTab?: boolean;
 }
 
-const Panel = ({ storage, setStorage, eeAnimatedTab = false }: PanelProps) => {
+const Panel = ({
+  storage,
+  setStorage,
+  timeline,
+  eeAnimatedTab = false,
+}: PanelProps) => {
   const { receivedBids, noBids } = useProtectedAudience(({ state }) => ({
     receivedBids: state.receivedBids,
     noBids: state.noBids,
@@ -207,16 +104,8 @@ const Panel = ({ storage, setStorage, eeAnimatedTab = false }: PanelProps) => {
     );
   } else if (pillToggle === PillToggleOptions.TimelineName) {
     activePage = (
-      <div className="w-full px-5 pb-10">
-        <Timeline
-          auctionTimeout={420}
-          auctionId="23949b7f-b733-4a58-b3b0-e72deed12e61"
-          auctionStartTime="12:18:27"
-          auctionTime="380.1"
-          bidders={bidders}
-          zoomLevel={2}
-          setSelectedRow={setSelectedRow}
-        />
+      <div className="w-full px-5">
+        <Timeline {...timeline} setSelectedRow={setSelectedRow} />
       </div>
     );
   }
