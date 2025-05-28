@@ -77,4 +77,92 @@ describe('Tabs', () => {
 
     expect(setActiveTab).toHaveBeenCalledWith(1);
   });
+
+  it('should handle grouped tabs', () => {
+    const setActiveTab = jest.fn();
+
+    mockUseTabs.mockReturnValue({
+      activeTab: 0,
+      activeGroup: 'group-1',
+      titles: ['title1', 'title2', 'title3', 'title4'],
+      groupedTitles: {
+        'group-1': [
+          {
+            title: 'title1',
+            index: 0,
+          },
+          {
+            title: 'title2',
+            index: 1,
+          },
+        ],
+        'group-2': [
+          {
+            title: 'title3',
+            index: 2,
+          },
+          {
+            title: 'title4',
+            index: 3,
+          },
+        ],
+      },
+      setActiveTab,
+      shouldAddSpacer: jest.fn(() => false),
+      isTabHighlighted: jest.fn(() => false),
+    });
+
+    render(<Tabs showBottomBorder={false} />);
+
+    expect(screen.getByText('group-1')).toBeInTheDocument();
+    expect(screen.getByText('title1')).toBeInTheDocument();
+    expect(screen.getByText('title2')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('group-2'));
+
+    render(<Tabs showBottomBorder={false} />);
+
+    expect(screen.getByText('title3')).toBeInTheDocument();
+    expect(screen.getByText('title4')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('title3'));
+    expect(setActiveTab).toHaveBeenCalledWith(2);
+
+    mockUseTabs.mockReturnValue({
+      activeTab: 2,
+      activeGroup: 'group-2',
+      titles: ['title1', 'title2', 'title3', 'title4'],
+      groupedTitles: {
+        'group-1': [
+          {
+            title: 'title1',
+            index: 0,
+          },
+          {
+            title: 'title2',
+            index: 1,
+          },
+        ],
+        'group-2': [
+          {
+            title: 'title3',
+            index: 2,
+          },
+          {
+            title: 'title4',
+            index: 3,
+          },
+        ],
+      },
+      setActiveTab,
+      shouldAddSpacer: jest.fn(() => false),
+      isTabHighlighted: jest.fn(() => false),
+    });
+
+    render(<Tabs showBottomBorder={false} />);
+
+    expect(screen.getAllByTestId('group-2')[2]).toHaveClass(
+      'border-b-2 border-bright-navy-blue'
+    );
+  });
 });

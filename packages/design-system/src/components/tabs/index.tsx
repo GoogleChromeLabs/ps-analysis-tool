@@ -152,6 +152,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
           return (
             <div
               key={group}
+              data-testid={`${group}`}
               className={classNames('flex', {
                 'border-b-2 border-bright-navy-blue': group === activeGroup,
                 'border-b-2 border-steel-blue/50':
@@ -207,6 +208,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                       return (
                         <React.Fragment key={index}>
                           <div
+                            data-testid={`tab-${index}`}
                             className={classNames(
                               'flex duration-200 ease-in-out relative',
                               {
