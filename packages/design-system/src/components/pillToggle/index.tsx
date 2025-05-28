@@ -47,8 +47,9 @@ const PillToggle = ({
           <button
             key={option}
             className={classNames(
-              `px-5 h-full border-r border-gray-silver dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
+              `px-5 h-full border-r border-[#B6B6B6] dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
               {
+                'px-8': index > 0,
                 'bg-anti-flash-white dark:bg-gray-500 ': pillToggle === option,
                 'bg-white dark:bg-raisin-black backdrop-opacity-1':
                   selectedIndexRef.current && index < selectedIndexRef.current,
