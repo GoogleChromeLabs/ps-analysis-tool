@@ -184,10 +184,12 @@ export const useTopicsExplorableExplanation = (
           return {
             ...state,
             activeEpoch: action.payload.activeEpoch,
-            epochSiteVisited: {
-              ...state.epochSiteVisited,
-              [action.payload.activeEpoch]: new Set<number>(),
-            },
+            epochSiteVisited: state.isInteractive
+              ? {
+                  ...state.epochSiteVisited,
+                  [action.payload.activeEpoch]: new Set<number>(),
+                }
+              : state.epochSiteVisited,
           };
         case 'setIsPlaying':
           return { ...state, isPlaying: action.payload.isPlaying };
