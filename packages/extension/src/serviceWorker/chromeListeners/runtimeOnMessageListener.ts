@@ -36,6 +36,7 @@ import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 import sendUpdatedData from '../../store/utils/sendUpdatedData';
 import PAStore from '../../store/PAStore';
+import { protectedAudienceInitialState } from '../../view/devtools/stateProviders';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (request: any) => {
@@ -185,12 +186,16 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
     if (request?.payload?.prebidExists === false) {
-      PAStore.prebidEvents[incomingMessageTabId.toString()] = null;
+      PAStore.prebidEvents[incomingMessageTabId.toString()] = {
+        ...protectedAudienceInitialState.state.prebidResponse,
+        prebidExists: false,
+      };
       DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
       return;
     }
 
     PAStore.prebidEvents[incomingMessageTabId.toString()] = {
+      prebidExists: true,
       ...request.payload.prebidData,
     };
     DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
