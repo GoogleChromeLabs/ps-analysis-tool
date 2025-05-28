@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
+import Panel from '../panel';
 
-const PrebidBidsPage = () => {
-  return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">Prebid Bids</h1>
-      <p className="text-gray-700">
-        This page displays the Prebid bids received during the auction.
-      </p>
-      {/* Additional content can be added here */}
-    </div>
-  );
+interface PrebidBidsPanelProps {
+  storage?: string[];
+  setStorage?: (data: string, index: number) => void;
+  eeAnimatedTab?: boolean;
+}
+
+const PrebidBidsPanel = ({ storage, setStorage }: PrebidBidsPanelProps) => {
+  return <Panel storage={storage} setStorage={setStorage} />;
 };
 
-export default PrebidBidsPage;
+export default PrebidBidsPanel;

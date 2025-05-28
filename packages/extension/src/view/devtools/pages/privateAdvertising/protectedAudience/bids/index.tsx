@@ -13,27 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
   useTabs,
+  PillToggle,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import { useSettings } from '../../../../stateProviders';
-import Panel from './panel';
+import PrebidBidsPanel from './prebid';
+import PaapiBidsPanel from './paapi';
+
+enum PillToggleOptions {
+  PREBID = 'Prebid',
+  PAAPI = 'PAAPI',
+}
 
 const Bids = () => {
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
+  const [pillToggle, setPillToggle] = useState<string>(
+    PillToggleOptions.PREBID
+  );
 
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
@@ -66,7 +75,25 @@ const Bids = () => {
     );
   }
 
-  return <Panel storage={storage} setStorage={setStorage} />;
+  // <Panel storage={storage} setStorage={setStorage} />
+
+  return (
+    <div className="flex flex-col h-full w-full">
+      <div className="px-4 pb-2 pt-4">
+        <PillToggle
+          options={[PillToggleOptions.PREBID, PillToggleOptions.PAAPI]}
+          pillToggle={pillToggle}
+          setPillToggle={setPillToggle}
+          eeAnimatedTab={false}
+        />
+      </div>
+      {pillToggle === PillToggleOptions.PREBID ? (
+        <PrebidBidsPanel storage={storage} setStorage={setStorage} />
+      ) : (
+        <PaapiBidsPanel storage={storage} setStorage={setStorage} />
+      )}
+    </div>
+  );
 };
 
 export default Bids;

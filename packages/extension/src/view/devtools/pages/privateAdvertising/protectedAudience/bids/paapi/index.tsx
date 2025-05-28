@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies.
+ */
+import Panel from '../panel';
 
-const PAAPIBidsPage = () => {
-  return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-2xl font-bold">PAAPI Bids</h1>
-      <p className="text-gray-700">
-        This page displays the PAAPI bids received during the auction.
-      </p>
-      {/* Additional content can be added here */}
-    </div>
-  );
+interface PaapiBidsPanelProps {
+  storage?: string[];
+  setStorage?: (data: string, index: number) => void;
+  eeAnimatedTab?: boolean;
+}
+
+const PaapiBidsPanel = ({ storage, setStorage }: PaapiBidsPanelProps) => {
+  return <Panel storage={storage} setStorage={setStorage} />;
 };
 
-export default PAAPIBidsPage;
+export default PaapiBidsPanel;
