@@ -26,7 +26,6 @@ import findMaximumBidderDuration from './utils/findMaximumBidderDuration';
 
 const INITIAL_TIME = 50;
 const TIME_DURATION = 50;
-const ZOOM_LEVEL = 1;
 const BAR_HEIGHT = 50;
 
 const BAR_COLORS: Record<BidderType, string> = {
@@ -42,6 +41,7 @@ interface TimelineProps {
   auctionStartTime: string;
   auctionTime: string;
   bidders: { name: string; duration: string; type: BidderType }[];
+  zoomLevel?: number;
 }
 
 const Timeline = ({
@@ -50,6 +50,7 @@ const Timeline = ({
   auctionStartTime,
   auctionTime,
   bidders,
+  zoomLevel = 2,
 }: TimelineProps) => {
   const [animate, setAnimate] = useState(false);
   const [scrollWidth, setScrollWidth] = useState(0);
@@ -61,7 +62,7 @@ const Timeline = ({
   }, [bidders]);
 
   const lines = Array.from({ length: lineCount });
-  const timeoutBlockWidth = scrollWidth - auctionTimeout * ZOOM_LEVEL;
+  const timeoutBlockWidth = scrollWidth - auctionTimeout * zoomLevel;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -94,7 +95,7 @@ const Timeline = ({
             return (
               <div
                 className="border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] relative"
-                style={{ flexBasis: `${TIME_DURATION * ZOOM_LEVEL}px` }}
+                style={{ flexBasis: `${TIME_DURATION * zoomLevel}px` }}
                 key={index}
               >
                 <span className="absolute right-0 pr-2 block text-xs mt-1">
@@ -108,7 +109,7 @@ const Timeline = ({
         {/*Timeout block*/}
         <div className="absolute flex w-fit h-full top-0">
           <div
-            style={{ width: `${auctionTimeout * ZOOM_LEVEL}px` }}
+            style={{ width: `${auctionTimeout * zoomLevel}px` }}
             className="h-full"
           ></div>
           <div
@@ -126,7 +127,7 @@ const Timeline = ({
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative">
             {bidders.map((bidder, index) => {
-              const fullWidth = parseFloat(bidder.duration) * ZOOM_LEVEL;
+              const fullWidth = parseFloat(bidder.duration) * zoomLevel;
               return (
                 <div key={index} className="relative group ">
                   <div

@@ -49,5 +49,6 @@ export const Primary: Story = {
     auctionStartTime: '12:18:27',
     auctionTime: '380.1',
     bidders,
+    zoomLevel: 2,
   },
 };
