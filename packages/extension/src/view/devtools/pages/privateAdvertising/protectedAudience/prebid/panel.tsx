@@ -83,6 +83,7 @@ const Panel = ({ prebidResponse }: PanelProps) => {
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={false}
+          width="w-24"
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
