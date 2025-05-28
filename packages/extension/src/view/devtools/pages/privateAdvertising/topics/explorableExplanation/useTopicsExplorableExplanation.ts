@@ -153,7 +153,7 @@ const initialState: TopicsExplorableExplanationState = {
   isInteractive: false,
   sliderStep: 1,
   siteAdTechs: {},
-  // TODO: set based on number of epochs
+  // TODO: set based on number of epochs and use array instead of object
   epochSiteVisited: {
     0: new Set(),
     1: new Set(),
@@ -181,7 +181,14 @@ export const useTopicsExplorableExplanation = (
         case 'setHighlightAdTech':
           return { ...state, highlightAdTech: action.payload.highlightAdTech };
         case 'setActiveEpoch':
-          return { ...state, activeEpoch: action.payload.activeEpoch };
+          return {
+            ...state,
+            activeEpoch: action.payload.activeEpoch,
+            epochSiteVisited: {
+              ...state.epochSiteVisited,
+              [action.payload.activeEpoch]: new Set<number>(),
+            },
+          };
         case 'setIsPlaying':
           return { ...state, isPlaying: action.payload.isPlaying };
         case 'setIsInteractive':
