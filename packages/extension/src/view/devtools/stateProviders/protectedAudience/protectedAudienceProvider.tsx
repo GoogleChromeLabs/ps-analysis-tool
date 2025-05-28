@@ -290,7 +290,6 @@ const Provider = ({ children }: PropsWithChildren) => {
               'installedModules',
               'versionInfo',
               'pbjsNamespace',
-              'prebidExists',
             ];
 
             const updates = Object.fromEntries(
