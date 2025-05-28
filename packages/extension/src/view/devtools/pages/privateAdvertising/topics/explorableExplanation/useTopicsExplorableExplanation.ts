@@ -183,6 +183,9 @@ export const useTopicsExplorableExplanation = (
         case 'setActiveEpoch':
           return {
             ...state,
+            topicsTableData: state.isInteractive
+              ? initialState.topicsTableData
+              : state.topicsTableData,
             activeEpoch: action.payload.activeEpoch,
             epochSiteVisited: state.isInteractive
               ? {
@@ -278,6 +281,7 @@ export const useTopicsExplorableExplanation = (
             completedEpochs || topicsState.completedEpochs
           ),
           epochs: epochs || createEpochs(),
+          isTabStorageLoaded: true,
         },
       },
     });
@@ -335,7 +339,10 @@ export const useTopicsExplorableExplanation = (
       topicsDispatch({
         type: 'setInitialState',
         payload: {
-          initialState: data,
+          initialState: {
+            ...data,
+            isSessionStorageLoaded: true,
+          },
         },
       });
 

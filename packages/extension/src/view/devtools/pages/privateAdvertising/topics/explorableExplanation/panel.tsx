@@ -43,6 +43,7 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
     epochs,
     highlightAdTech,
     hasAnimationFinished,
+    isTabStorageLoaded,
   } = topicsState;
 
   const { setActiveTab, activeTab } = useTabs(({ actions, state }) => ({
@@ -52,13 +53,18 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
 
   // keeps tab in sync with active epoch
   useEffect(() => {
-    setActiveTab(activeEpoch);
-  }, [setActiveTab, activeEpoch]);
+    if (isTabStorageLoaded) {
+      setActiveTab(activeEpoch);
+    }
+  }, [setActiveTab, activeEpoch, isTabStorageLoaded]);
 
+  // prevent circular dependency
+  const lastTab = useRef(activeTab);
+  // sync active epoch with active tab
   useEffect(() => {
     const legendTab = activeTab === epochs.length;
-
-    if (!legendTab) {
+    if (!legendTab && activeTab !== lastTab.current) {
+      lastTab.current = activeTab;
       topicsDispatch({
         type: 'setActiveEpoch',
         payload: { activeEpoch: activeTab },
