@@ -64,7 +64,7 @@ const RuleWhen = ({
   const ruleValueOptions = useProtectedAudience(({ state }) => {
     const prebidAdunits = Object.values(state?.prebidResponse?.adUnits ?? {});
 
-    const _bidders = prebidAdunits.reduce((prev, adUnit) => {
+    const _bidders = prebidAdunits?.reduce((prev, adUnit) => {
       const newBidders = adUnit.bidders?.reduce((prevValue, bidder) => {
         if (!bidder) {
           return prevValue;
