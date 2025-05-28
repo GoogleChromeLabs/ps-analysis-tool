@@ -49,6 +49,7 @@ describe('PrebidInterface', () => {
       pbjsNamespace: '',
       receivedBids: [],
       errorEvents: [],
+      prebidExists: null,
       auctionEvents: {},
     });
     expect(prebidInterface.updateCounter).toBe(0);
@@ -69,6 +70,7 @@ describe('PrebidInterface', () => {
     };
 
     prebidInterface.scanningStatus = true;
+    prebidInterface.prebidData.prebidExists = true;
     //@ts-ignore
     window.onmessage(mockEvent as MessageEvent);
 
@@ -86,6 +88,7 @@ describe('PrebidInterface', () => {
     window.top.postMessage = mockPostMessage;
 
     prebidInterface.tabId = 123;
+    prebidInterface.prebidData.prebidExists = true;
     prebidInterface.sendInitialData();
 
     expect(mockPostMessage).toHaveBeenCalledWith({
