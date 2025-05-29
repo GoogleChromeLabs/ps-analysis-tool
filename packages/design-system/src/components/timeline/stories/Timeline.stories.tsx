@@ -33,13 +33,33 @@ const meta: Meta<typeof Timeline> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const bidders: { name: string; duration: string; type: BidderType }[] = [
-  { name: 'Pubmattic', duration: '270.1', type: BidderType.BID },
-  { name: 'Sharethrough', duration: '210.4', type: BidderType.NO_BID },
-  { name: 'appnexus', duration: '240.0', type: BidderType.NO_BID },
+const bidders: {
+  name: string;
+  startTime?: number;
+  duration: string;
+  type: BidderType;
+}[] = [
+  { name: 'Pubmattic', startTime: 20, duration: '270.1', type: BidderType.BID },
+  {
+    name: 'Sharethrough',
+    startTime: 10,
+    duration: '210.4',
+    type: BidderType.NO_BID,
+  },
+  {
+    name: 'appnexus',
+    startTime: 5,
+    duration: '240.0',
+    type: BidderType.NO_BID,
+  },
   { name: 'ix', duration: '380.1', type: BidderType.NO_BID },
   { name: 'Rubicon', duration: '125.51', type: BidderType.WON },
-  { name: 'Criteo', duration: '470.05', type: BidderType.TIMED_OUT },
+  {
+    name: 'Criteo',
+    startTime: 25,
+    duration: '470.05',
+    type: BidderType.TIMED_OUT,
+  },
 ];
 
 export const Primary: Story = {

@@ -41,7 +41,12 @@ interface TimelineProps {
   auctionId: string;
   auctionStartTime: string;
   auctionTime: string;
-  bidders: { name: string; duration: string; type: BidderType }[];
+  bidders: {
+    name: string;
+    startTime: number;
+    duration: string;
+    type: BidderType;
+  }[];
   zoomLevel?: number;
   setSelectedRow: (row: any) => void;
   navigateToAuction: (auctionId: string) => void;
@@ -138,13 +143,16 @@ const Timeline = ({
                 <div key={index} className="relative group ">
                   {/*Bar*/}
                   <div
-                    className="absolute left-0 h-[10px] transition-all duration-300 ease-out group-hover:scale-101 group-hover:border group-hover:border-grey transform origin-left cursor-pointer"
+                    className="absolute h-[10px] transition-all duration-300 ease-out group-hover:scale-101 group-hover:border group-hover:border-grey transform origin-left cursor-pointer"
                     role="button"
                     onClick={() => setSelectedRow(bidder?.data)}
                     style={{
                       width: animate ? `${fullWidth}px` : `0px`,
                       backgroundColor: BAR_COLORS[bidder.type],
                       top: `${(index + 1) * 40}px`,
+                      left: `${
+                        bidder.startTime ? bidder.startTime * zoom : 0
+                      }px`,
                     }}
                   >
                     {/*Metadata*/}
