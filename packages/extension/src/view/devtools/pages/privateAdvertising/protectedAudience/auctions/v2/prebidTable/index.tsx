@@ -25,6 +25,7 @@ import {
   type TableColumn,
   type TableRow,
   Hammer,
+  type InfoType,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import classNames from 'classnames';
@@ -52,7 +53,7 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
       {
         header: 'Elapsed Time',
         accessorKey: 'elapsedTime',
-        cell: (info) => info,
+        cell: (info) => info + 'ms',
         enableHiding: false,
       },
       {
@@ -100,7 +101,61 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
     []
   );
 
-  const tableFilters = useMemo<TableFilter>(() => ({}), []);
+  const tableFilters = useMemo<TableFilter>(
+    () => ({
+      eventType: {
+        title: 'Event Type',
+        sortValues: true,
+      },
+      bidderCode: {
+        title: 'Bidder Code',
+        sortValues: true,
+      },
+      cpm: {
+        title: 'Bid CPM',
+        hasStaticFilterValues: true,
+        filterValues: {
+          ['0 - 20']: {
+            selected: false,
+          },
+          ['20 - 40']: {
+            selected: false,
+          },
+          ['40 - 60']: {
+            selected: false,
+          },
+          ['60 - 80']: {
+            selected: false,
+          },
+          ['80 - 100']: {
+            selected: false,
+          },
+          ['100+']: {
+            selected: false,
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          if (value === undefined || value === null) {
+            return false;
+          }
+
+          const bid = value as number;
+
+          if (filterValue === '100+') {
+            return bid > 100;
+          }
+
+          const [min, max] = filterValue.split(' - ').map(Number);
+
+          return bid >= min && bid <= max;
+        },
+      },
+      currency: {
+        title: 'Currency',
+      },
+    }),
+    []
+  );
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
