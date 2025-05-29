@@ -20,48 +20,44 @@ import classNames from 'classnames';
 import React from 'react';
 
 interface PillToggleProps {
-  firstOption: string;
-  secondOption: string;
+  options: string[];
   pillToggle: string;
   setPillToggle: (value: string) => void;
   eeAnimatedTab: boolean;
+  width?: string;
 }
 
 const PillToggle = ({
-  firstOption,
-  secondOption,
+  options,
   pillToggle,
   setPillToggle,
   eeAnimatedTab,
+  width = 'w-max',
 }: PillToggleProps) => {
   return (
-    <div className="w-80 h-8 rounded-full border border-gray-300 dark:border-quartz text-sm">
-      <button
-        className={classNames(
-          'w-1/2 h-full rounded-full text-raisin-black dark:text-bright-gray',
-          {
-            'bg-gray-200 dark:bg-gray-500 ': pillToggle === firstOption,
-            'bg-transparent': pillToggle !== firstOption,
-            'text-xs': eeAnimatedTab,
-          }
-        )}
-        onClick={() => setPillToggle(firstOption)}
-      >
-        {firstOption}
-      </button>
-      <button
-        className={classNames(
-          'w-1/2 h-full rounded-full text-raisin-black dark:text-bright-gray',
-          {
-            'bg-gray-200 dark:bg-gray-500': pillToggle === secondOption,
-            'bg-transparent': pillToggle !== secondOption,
-            'text-xs': eeAnimatedTab,
-          }
-        )}
-        onClick={() => setPillToggle(secondOption)}
-      >
-        {secondOption}
-      </button>
+    <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">
+      {options.map((option, index) => {
+        return (
+          <button
+            key={option}
+            style={{ zIndex: options.length - index }}
+            className={classNames(
+              `px-5 h-full border-r border-gray-silver dark:border-quartz text-raisin-black dark:text-bright-gray relative`,
+              width,
+              {
+                'bg-anti-flash-white dark:bg-gray-500 ': pillToggle === option,
+                'dark:bg-raisin-black bg-white': pillToggle !== option,
+                'text-xs': eeAnimatedTab,
+                'rounded-r-full -ml-[10px]': index > 0,
+                'rounded-full': index === 0,
+              }
+            )}
+            onClick={() => setPillToggle(option)}
+          >
+            {option}
+          </button>
+        );
+      })}
     </div>
   );
 };

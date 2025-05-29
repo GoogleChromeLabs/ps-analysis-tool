@@ -17,5 +17,6 @@ export { default as ProtectedAudienceContextProvider } from './protectedAudience
 export {
   default as ProtectedAudienceContext,
   type ProtectedAudienceContextType,
+  initialState as protectedAudienceInitialState,
 } from './context';
 export { default as useProtectedAudience } from './useProtectedAudience';
