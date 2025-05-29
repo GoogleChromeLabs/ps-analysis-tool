@@ -192,10 +192,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                 >
                   <div
                     className={classNames(
-                      'flex items-center duration-200 ease-in-out',
-                      {
-                        'gap-2': true,
-                      },
+                      'flex items-center duration-200 ease-in-out gap-2',
                       groupsExpanded[group]?.animating
                         ? 'opacity-0 -translate-x-10'
                         : 'opacity-100 translate-x-0'
