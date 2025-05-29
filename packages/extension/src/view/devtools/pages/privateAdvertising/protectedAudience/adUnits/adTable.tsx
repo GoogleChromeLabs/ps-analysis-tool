@@ -81,27 +81,38 @@ const AdTable = ({
       {
         header: 'Ad Container Sizes',
         accessorKey: 'mediaContainerSize',
-        cell: (info) => (
-          <div className="flex gap-4 items-center">
-            <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
-            <p className="truncate flex flex-wrap gap-2">
-              {(info as number[][])?.map((size: number[], index: number) => {
-                if (!size?.[0]) {
-                  return null;
-                }
+        cell: (info, details) => {
+          const winningMediaContainerSize = details?.winningMediaContainerSize;
 
-                return (
-                  <span
-                    key={index}
-                    className="rounded-xl bg-[#F5F5F5] px-2 py-0.5 border border-[#E0E0E0] text-xs text-[#323232]"
-                  >
-                    {size[0]}x{size[1]}
-                  </span>
-                );
-              })}
-            </p>
-          </div>
-        ),
+          return (
+            <div className="flex gap-4 items-center">
+              <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
+              <p className="truncate flex flex-wrap gap-2">
+                {(info as number[][])?.map((size: number[], index: number) => {
+                  if (!size?.[0]) {
+                    return null;
+                  }
+
+                  return (
+                    <span
+                      key={index}
+                      className={classNames(
+                        'rounded-xl bg-[#F5F5F5] px-2 py-0.5 border text-xs text-[#323232]',
+                        winningMediaContainerSize &&
+                          winningMediaContainerSize[0] === size[0] &&
+                          winningMediaContainerSize[1] === size[1]
+                          ? 'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]'
+                          : 'border-gray-400 dark:border-dark-gray-x11'
+                      )}
+                    >
+                      {size[0]}x{size[1]}
+                    </span>
+                  );
+                })}
+              </p>
+            </div>
+          );
+        },
         sortingComparator: (a, b) => {
           const aSizes = (a as number[][])
             .map((size: number[]) => `${size[0]}x${size[1]}`)
