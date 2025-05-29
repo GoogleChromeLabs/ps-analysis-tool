@@ -166,28 +166,24 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
               className={classNames('flex', {
                 'border-b-2 border-bright-navy-blue': group === activeGroup,
                 'border-b-2 border-steel-blue/50':
-                  group !== activeGroup && Object.keys(data).length > 1,
-                'gap-4':
-                  Object.keys(data).length > 1 &&
-                  !groupsExpanded[group]?.animating,
+                  group !== activeGroup && true,
+                'gap-4': !groupsExpanded[group]?.animating,
               })}
             >
-              {Object.keys(data).length > 1 && (
-                <button
-                  className={classNames(
-                    'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black outline-none',
-                    {
-                      'bg-steel-blue/50': group === activeGroup,
-                      'bg-steel-blue/20': group !== activeGroup,
-                    }
-                  )}
-                  onClick={() => handleGroupClick(group)}
-                >
-                  {group}
-                </button>
-              )}
-              {(!groupsExpanded[group]?.hidden ||
-                Object.keys(data).length === 1) && (
+              <button
+                className={classNames(
+                  'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black outline-none',
+                  {
+                    'bg-steel-blue/50': group === activeGroup,
+                    'bg-steel-blue/20': group !== activeGroup,
+                  }
+                )}
+                onClick={() => handleGroupClick(group)}
+              >
+                {group}
+              </button>
+
+              {!groupsExpanded[group]?.hidden && (
                 <div
                   className={classNames(
                     'transition-[width] duration-300 ease-in-out',
@@ -198,7 +194,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                     className={classNames(
                       'flex items-center duration-200 ease-in-out',
                       {
-                        'gap-2': Object.keys(data).length > 1,
+                        'gap-2': true,
                       },
                       groupsExpanded[group]?.animating
                         ? 'opacity-0 -translate-x-10'
