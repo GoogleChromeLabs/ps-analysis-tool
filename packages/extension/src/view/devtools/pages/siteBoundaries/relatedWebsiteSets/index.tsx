@@ -45,15 +45,17 @@ const RelatedWebsiteSets = () => {
           },
         },
         {
-          title: 'Membership',
-          content: {
-            Element: Insights,
-          },
-        },
-        {
           title: 'JSON Generator',
           content: {
             Element: RWSJsonGenerator,
+          },
+        },
+      ],
+      Observability: [
+        {
+          title: 'Membership',
+          content: {
+            Element: Insights,
           },
         },
       ],
