@@ -16,7 +16,15 @@
 /**
  * External dependencies
  */
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
+import classNames from 'classnames';
+import { createPortal } from 'react-dom';
 /**
  * Internal dependencies
  */
@@ -39,13 +47,36 @@ const MultiSelectDropdown = ({
   specialValue = options[0].value,
 }: MultiSelectDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const [startAnimation, setStartAnimation] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleClose = useCallback(() => {
+    document.body.style.overflow = isOpen ? 'auto' : 'hidden';
+    setStartAnimation(true);
+    timeoutRef.current = setTimeout(() => {
+      setIsOpen(!isOpen);
+      setStartAnimation(false);
+    }, 100);
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }
@@ -67,7 +98,6 @@ const MultiSelectDropdown = ({
         newSelected = [...selected, value];
       }
 
-      // Automatically select 'all' if all individual options are selected
       const allOption = options.find((o) => o.value === 'ALL');
       const individualOptions = options.filter((o) => o.value !== 'ALL');
       const allSelected = individualOptions.every((opt) =>
@@ -109,32 +139,73 @@ const MultiSelectDropdown = ({
       <button
         type="button"
         className="border border-gray-200 dark:border-quartz gap-1 inline-flex items-center px-1 rounded-md dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={(event) => {
+          setIsOpen((prev) => !prev);
+          setPosition({ x: event.clientX, y: event.clientY });
+        }}
       >
         {labelToDisplay}
         <ArrowDown />
       </button>
 
-      {isOpen && (
-        <div className="absolute z-10 mt-1 w-56 rounded-md border border-gray-200 dark:border-quartz bg-white dark:bg-raisin-black text-raisin-black dark:text-bright-gray shadow-lg">
-          {options.map((option) => (
-            <label
-              key={option.value}
-              onClick={() => toggleOption(option.value)}
-              className="flex items-center px-1 py-1 cursor-pointer"
+      {isOpen &&
+        createPortal(
+          <div
+            ref={wrapperRef}
+            className={classNames(
+              'transition duration-100',
+              startAnimation ? 'opacity-0' : 'opacity-100'
+            )}
+            data-testid="column-menu"
+          >
+            <div
+              className="absolute z-[100] text-raisin-black dark:text-bright-gray rounded-md backdrop-blur-2xl w-screen max-w-[13rem] p-1.5 mr-2 divide-y divide-neutral-300 dark:divide-neutral-500 max-h-[78vh] overflow-auto bg-stone-200 dark:bg-neutral-700 shadow-3xl"
+              style={{
+                left: 'min( calc( 100vw - 15rem),' + position.x + 'px )',
+                top: position.y + 'px',
+                border: '0.5px solid rgba(0, 0, 0, 0.20)',
+              }}
             >
-              {selected.includes(option.value) && (
-                <span className="mr-1  dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
-                  ✓
-                </span>
-              )}
-              <span className=" dark:bg-raisin-black text-raisin-black dark:text-bright-gray">
-                {option.label}
-              </span>
-            </label>
-          ))}
-        </div>
-      )}
+              <div>
+                <ul>
+                  {options.map((option) => (
+                    <li
+                      key={option.value}
+                      onClick={() => toggleOption(option.value)}
+                    >
+                      <button
+                        className="w-full text-xs rounded px-1 py-[3px] mb-1.5 flex items-center hover:bg-blueberry hover:text-white cursor-default"
+                        onClick={() => {
+                          toggleOption(option.value);
+                          handleClose();
+                        }}
+                      >
+                        <span
+                          className={classNames(
+                            'mr-2 font-semibold',
+                            selected.includes(option.value)
+                              ? 'opacity-100'
+                              : 'opacity-0'
+                          )}
+                        >
+                          ✓
+                        </span>
+                        <span>{option.label}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div
+              data-testid="column-menu-overlay"
+              onClick={handleClose}
+              className="absolute w-screen h-screen z-10 top-0 left-0"
+            />
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
