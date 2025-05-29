@@ -44,7 +44,7 @@ const useConfigContainer = (
   const sidebarData = useMemo<SidebarItems>(() => {
     const baseSidebarItems: SidebarItems = {
       prebidConfig: {
-        title: 'PrebidConfig',
+        title: 'Prebid Config',
         icon: {
           Element: Settings,
           props: {
@@ -77,14 +77,14 @@ const useConfigContainer = (
       pricegGanularity: {
         title: 'Price Granularity',
         icon: {
-          Element: FourSquares,
+          Element: Ruler,
           props: {
             className:
               '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         selectedIcon: {
-          Element: FourSquares,
+          Element: Ruler,
           props: {
             className:
               '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
@@ -104,24 +104,24 @@ const useConfigContainer = (
     if (installedModules.length > 0) {
       baseSidebarItems['installedModules'] = {
         title: 'Installed Modules',
+        panel: {
+          Element: InstalledModules,
+          props: {
+            installedModules,
+          },
+        },
         icon: {
-          Element: Ruler,
+          Element: FourSquares,
           props: {
             className:
               '[&_path]:fill-granite-gray dark:[&_path]:fill-bright-gray w-4 h-4',
           },
         },
         selectedIcon: {
-          Element: Ruler,
+          Element: FourSquares,
           props: {
             className:
               '[&_path]:fill-white dark:[&_path]:fill-bright-gray w-4 h-4',
-          },
-        },
-        panel: {
-          Element: InstalledModules,
-          props: {
-            installedModules,
           },
         },
         children: {},
@@ -238,7 +238,7 @@ const useConfigContainer = (
 
     if (config?.userSync) {
       baseSidebarItems['userSync'] = {
-        title: 'UserSync',
+        title: 'User Sync',
         icon: {
           Element: DoubleUser,
           props: {

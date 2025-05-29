@@ -48,6 +48,7 @@ const Tools = () => {
       />
       <div className="flex flex-col w-full h-fit items-start mt-2 rounded-sm border border-hex-gray dark:border-quartz px-4 py-3">
         <Button
+          dontShowBackground
           extraClasses="mb-8"
           title="Add rule"
           type="button"

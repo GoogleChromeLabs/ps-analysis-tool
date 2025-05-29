@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 /**
  * Internal dependencies
@@ -37,7 +37,7 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
     'ERROR',
   ]);
 
-  const filteredErrorEvents = useMemo(() => {
+  const filteredErrorEvents = () => {
     if (!searchValue && selectedDropDownValues.includes('ALL')) {
       return errorEvents;
     }
@@ -45,7 +45,7 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
     let filteredEvents = errorEvents;
 
     if (searchValue) {
-      filteredEvents = errorEvents.filter((event) => {
+      filteredEvents = filteredEvents.filter((event) => {
         return Object.values(event.message)
           .map((value) =>
             typeof value === 'object' ? JSON.stringify(value) : value
@@ -64,10 +64,10 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
     });
 
     return filteredEvents;
-  }, [selectedDropDownValues, errorEvents, searchValue]);
+  };
 
   return (
-    <div className="flex flex-col border border-hex-gray dark:border-quartz">
+    <div className="flex flex-col border border-hex-gray dark:border-quartz mb-3">
       <Header
         errorEvents={errorEvents}
         filteredErrorEvents={errorEvents}
@@ -76,11 +76,11 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
         selectedDropDownValues={selectedDropDownValues}
         searchValue={searchValue}
       />
-      {filteredErrorEvents.length > 0 && (
+      {filteredErrorEvents().length > 0 && (
         <div className="h-px bg-gray-200 dark:bg-quartz mb-1" />
       )}
       <div className="flex flex-col divide-y divide-gray-200 dark:divide-gray-500 gap-3 px-4">
-        {filteredErrorEvents.map((event, index) => {
+        {filteredErrorEvents().map((event, index) => {
           return (
             <SingleErrorRow
               key={event.time}

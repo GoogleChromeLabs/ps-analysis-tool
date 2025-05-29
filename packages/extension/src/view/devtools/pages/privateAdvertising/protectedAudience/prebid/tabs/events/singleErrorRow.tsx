@@ -40,7 +40,9 @@ const SingleErrorRow = ({
         {type === 'ERROR' ? <Error /> : <WarningColored />}
       </div>
       <div className="flex items-center justify-center">{time}:</div>
-      <div className="flex items-center justify-center">{message}</div>
+      <div className="flex items-center justify-center wrap-anywhere">
+        {message}
+      </div>
     </div>
   );
 };

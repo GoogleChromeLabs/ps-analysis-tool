@@ -56,7 +56,7 @@ export interface ProtectedAudienceContextType {
   };
 }
 
-const initialState: ProtectedAudienceContextType = {
+export const initialState: ProtectedAudienceContextType = {
   state: {
     auctionEvents: null,
     interestGroupDetails: [],
@@ -76,6 +76,7 @@ const initialState: ProtectedAudienceContextType = {
       receivedBids: [],
       errorEvents: [],
       auctionEvents: {},
+      prebidExists: false,
     },
   },
   actions: {

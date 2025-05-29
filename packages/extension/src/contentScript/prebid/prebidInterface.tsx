@@ -22,7 +22,7 @@ import { noop, type AdsAndBiddersType } from '@google-psat/common';
  * Internal dependencies.
  */
 import {
-  CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA,
+  PREBID_SCANNING_STATUS,
   SCRIPT_GET_PREBID_DATA_RESPONSE,
   SCRIPT_PREBID_INITIAL_SYNC,
 } from '../../constants';
@@ -38,11 +38,6 @@ class PrebidInterface {
    * TabId of the current Tab
    */
   tabId: number | null = null;
-
-  /**
-   * Boolean which indicates if prebid exists on the page.
-   */
-  prebidExists: boolean | null = null;
   /**
    * Prebid interface.
    */
@@ -61,6 +56,7 @@ class PrebidInterface {
     errorEvents: [],
     auctionEvents: {},
     pbjsNamespace: '',
+    prebidExists: null,
   };
 
   /**
@@ -111,6 +107,11 @@ class PrebidInterface {
     const timeout = setTimeout(() => {
       stopLoop = true;
       pbjsClass.scanningStatus = true;
+      window.top?.postMessage({
+        type: PREBID_SCANNING_STATUS,
+        tabId: pbjsClass.tabId,
+        prebidExists: pbjsClass.prebidData.prebidExists,
+      });
     }, 60000);
 
     const isPrebidInPage = () => {
@@ -121,7 +122,7 @@ class PrebidInterface {
           pbjsGlobals[0]
         ] as unknown as typeof window.pbjs;
 
-        pbjsClass.prebidExists = true;
+        pbjsClass.prebidData.prebidExists = true;
         pbjsClass.scanningStatus = true;
 
         pbjsClass.sendInitialData();
@@ -158,9 +159,14 @@ class PrebidInterface {
         pbjsClass.prebidData.config = {
           ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
           bidderSettings,
-          eids: pbjsClass.prebidInterface.getUserIdsAsEids() ?? [],
+          eids: pbjsClass.prebidInterface?.getUserIdsAsEids() ?? [],
         };
 
+        window.top?.postMessage({
+          type: PREBID_SCANNING_STATUS,
+          tabId: pbjsClass.tabId,
+          prebidExists: pbjsClass.prebidData.prebidExists,
+        });
         stopLoop = true;
         clearTimeout(timeout);
       }
@@ -185,10 +191,6 @@ class PrebidInterface {
         this.tabId = event.data.tabId;
         this.sendInitialData();
       }
-
-      if (event.data?.type === CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA) {
-        this.tabId = event.data.tabId;
-      }
     };
 
     this.setIntervalValue = setInterval(() => {
@@ -197,63 +199,16 @@ class PrebidInterface {
         this.updateCounter = 0;
       }
     }, 1200);
-
-    document.addEventListener('unload', () => {
-      this.prebidExists = false;
-      this.scanningStatus = false;
-      this.prebidInterface = null;
-      this.prebidData = {
-        adUnits: {},
-        pbjsNamespace: '',
-        noBids: {},
-        receivedBids: [],
-        errorEvents: [],
-        versionInfo: '',
-        config: {},
-        auctionEvents: {},
-        installedModules: [],
-      };
-
-      if (this.setIntervalValue) {
-        clearInterval(this.setIntervalValue);
-      }
-
-      this.updateCounter = 0;
-      this.setIntervalValue = null;
-    });
   }
 
   sendInitialData() {
     window.top?.postMessage({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
       tabId: this.tabId,
-      prebidData: JSON.parse(decycle(this.prebidData)),
+      prebidData: this.prebidData.prebidExists
+        ? JSON.parse(decycle(this.prebidData))
+        : null,
     });
-  }
-
-  async getAndProcessPrebidData(propertyName: string) {
-    //@ts-ignore
-    if (
-      this.prebidExists &&
-      !Object.keys(this.prebidInterface ?? {}).includes(propertyName)
-    ) {
-      return;
-    }
-
-    //@ts-ignore
-    const prebidCaller = this.prebidInterface?.[propertyName];
-
-    const prebidData =
-      typeof prebidCaller === 'function' ? await prebidCaller() : prebidCaller;
-
-    if (prebidData) {
-      // Send the prebid data to contentscript so that it can be sent to the devtools
-      window.top?.postMessage({
-        type: SCRIPT_GET_PREBID_DATA_RESPONSE,
-        tabId: this.tabId,
-        prebidData: JSON.parse(decycle(prebidData)),
-      });
-    }
   }
 
   initPrebidListener() {
@@ -444,6 +399,7 @@ class PrebidInterface {
         winningBid: bid?.cpm,
         bidCurrency: bid.currency,
         winningBidder: bid.bidder,
+        winningMediaContainerSize: [[bid.width, bid.height]],
       };
       return;
     }

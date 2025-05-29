@@ -82,8 +82,7 @@ const AdTable = ({
         header: 'Ad Container Sizes',
         accessorKey: 'mediaContainerSize',
         cell: (info, details) => {
-          const winningContainerSize =
-            details?.winningContainerSize as number[];
+          const winningMediaContainerSize = details?.winningMediaContainerSize;
 
           return (
             <div className="flex gap-4 items-center">
@@ -98,17 +97,12 @@ const AdTable = ({
                     <span
                       key={index}
                       className={classNames(
-                        'rounded-xl bg-[#F5F5F5] px-2 py-0.5 border text-xs',
-                        {
-                          'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
-                            winningContainerSize?.[0] === size[0] &&
-                            winningContainerSize?.[1] === size[1],
-                        },
-                        {
-                          'border-gray-400 dark:border-dark-gray-x11':
-                            winningContainerSize?.[0] !== size[0] ||
-                            winningContainerSize?.[1] !== size[1],
-                        }
+                        'rounded-xl bg-[#F5F5F5] px-2 py-0.5 border text-xs text-[#323232]',
+                        winningMediaContainerSize &&
+                          winningMediaContainerSize[0] === size[0] &&
+                          winningMediaContainerSize[1] === size[1]
+                          ? 'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]'
+                          : 'border-gray-400 dark:border-dark-gray-x11'
                       )}
                     >
                       {size[0]}x{size[1]}

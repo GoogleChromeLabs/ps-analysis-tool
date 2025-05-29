@@ -100,6 +100,7 @@ const Header = ({
             { value: 'WARNING', label: 'Warnings' },
             { value: 'ERROR', label: 'Errors' },
           ]}
+          placeholder="Hide All"
           onChange={onChange}
           selected={selectedDropDownValues}
         />
