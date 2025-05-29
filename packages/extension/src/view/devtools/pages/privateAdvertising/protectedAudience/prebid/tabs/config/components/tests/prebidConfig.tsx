@@ -46,12 +46,18 @@ describe('PrebidConfig', () => {
     act(() => render(<PrebidConfig configObject={mockConfigObject} />));
 
     const firstRow = screen.getByText('testKey1').closest('tr');
+    if (!firstRow) {
+      throw Error('Cannot find first row.');
+    }
     act(() => fireEvent.click(firstRow));
-    expect(firstRow).toHaveClass('bg-gainsboro dark:bg-outer-space');
+    expect(firstRow).toHaveClass('bg-lavender-sky dark:bg-midnight-slate');
 
     const secondRow = screen.getByText('testKey2').closest('tr');
+    if (!secondRow) {
+      throw Error('Cannot find second row.');
+    }
     act(() => fireEvent.click(secondRow));
-    expect(firstRow).not.toHaveClass('bg-gainsboro dark:bg-outer-space');
-    expect(secondRow).toHaveClass('bg-gainsboro dark:bg-outer-space');
+    expect(firstRow).not.toHaveClass('bg-lavender-sky dark:bg-midnight-slate');
+    expect(secondRow).toHaveClass('bg-lavender-sky dark:bg-midnight-slate');
   });
 });
