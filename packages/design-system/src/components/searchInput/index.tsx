@@ -31,6 +31,8 @@ interface SearchInputProps {
   clearInput: () => void;
   placeholder?: string;
   inputExtraClass?: string;
+  showIcon?: boolean;
+  icon?: React.JSX.Element;
 }
 
 const SearchInput = ({
@@ -39,6 +41,7 @@ const SearchInput = ({
   clearInput,
   placeholder,
   inputExtraClass,
+  icon = <></>, // Default icon if not provided
 }: SearchInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -76,6 +79,7 @@ const SearchInput = ({
           : 'border-chinese-silver dark:border-davys-grey hover:bg-eerie-black dark:hover:bg-outer-space'
       }`}
     >
+      {icon}
       <input
         role="textbox"
         ref={inputRef}

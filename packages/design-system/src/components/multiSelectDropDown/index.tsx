@@ -138,7 +138,7 @@ const MultiSelectDropdown = ({
     <div className="relative inline-block text-left text-sm" ref={dropdownRef}>
       <button
         type="button"
-        className="border border-gray-200 dark:border-quartz gap-1 inline-flex items-center px-1 rounded-md dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
+        className="gap-1 inline-flex items-center px-1 rounded-md dark:bg-raisin-black text-raisin-black dark:text-bright-gray"
         onClick={(event) => {
           setIsOpen((prev) => !prev);
           setPosition({ x: event.clientX, y: event.clientY });
