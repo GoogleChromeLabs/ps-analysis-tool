@@ -237,6 +237,7 @@ export const useTopicsExplorableExplanation = (
             topicsTableData: {},
             highlightAdTech: null,
             isPlaying: !state.isInteractive,
+            hasAnimationFinished: false,
           };
         default:
           return state;
