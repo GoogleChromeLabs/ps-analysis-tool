@@ -76,14 +76,14 @@ const RuleComponent = ({
             })
           }
         >
-          <DeleteForever className="w-6 h-4 text-raisin-black dark:text-bright-gray" />
+          <DeleteForever className="w-6 h-5 text-raisin-black dark:text-bright-gray" />
         </div>
       </div>
       <div
-        className="flex flex-row w-full h-fit items-start gap-4"
+        className="flex flex-row w-full h-fit items-start gap-10"
         key={ruleIndex}
       >
-        <div key={ruleIndex} className="w-1/2 flex flex-col gap-1">
+        <div key={ruleIndex} className="w-1/2 flex flex-col gap-2 mx-4">
           <p className="text-sm font-bold text-raisin-black dark:text-bright-gray">
             when
           </p>
@@ -102,7 +102,7 @@ const RuleComponent = ({
             );
           })}
         </div>
-        <div className="w-1/2 flex flex-col gap-1">
+        <div className="w-1/2 flex flex-col gap-2 mx-4">
           <p className="text-sm font-bold text-raisin-black dark:text-bright-gray">
             then
           </p>

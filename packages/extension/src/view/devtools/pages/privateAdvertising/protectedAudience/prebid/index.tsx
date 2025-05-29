@@ -28,17 +28,19 @@ const Prebid = () => {
     prebidResponse: state.prebidResponse,
   }));
 
-  if (Object.keys(prebidResponse).length === 0) {
+  if (!prebidResponse?.prebidExists) {
     return (
-      <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-baseline max-w-4xl">
-        <div>
-          <InfoIcon className="w-3 h-3 fill-granite-gray" />
-        </div>
-        <div
-          className="text-sm text-center text-gray dark:text-bright-gray"
-          style={{ whiteSpace: 'pre-line' }}
-        >
-          Prebid.js was not found on this page.
+      <div className="w-full h-full flex flex-col items-center justify-center">
+        <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-baseline max-w-4xl">
+          <div>
+            <InfoIcon className="w-3 h-3 fill-granite-gray" />
+          </div>
+          <div
+            className="text-sm text-center text-gray dark:text-bright-gray"
+            style={{ whiteSpace: 'pre-line' }}
+          >
+            Prebid.js was not found on this page.
+          </div>
         </div>
       </div>
     );

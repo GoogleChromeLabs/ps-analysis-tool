@@ -88,10 +88,10 @@ const MultiSelectDropdown = ({
 
   const labelToDisplay = useMemo(() => {
     if (selected.length === 0) {
-      placeholder;
+      return placeholder;
     } else {
       if (selected.includes(specialValue)) {
-        ('All levels');
+        return 'All levels';
       } else {
         if (selected.length > 1) {
           return 'Custom levels';
@@ -102,7 +102,6 @@ const MultiSelectDropdown = ({
         }
       }
     }
-    return placeholder;
   }, [options, placeholder, selected, specialValue]);
 
   return (

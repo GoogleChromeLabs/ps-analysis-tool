@@ -19,8 +19,8 @@
  */
 import {
   DeleteForever,
+  DoubleArrow,
   Dropdown,
-  Equal,
   Plus,
   type OptGroup,
 } from '@google-psat/design-system';
@@ -105,7 +105,7 @@ const RuleThen = ({
           />
         </div>
         <div className="w-4 h-4">
-          <Equal className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+          <DoubleArrow className="w-4 h-4 text-sapphire dark:text-baby-blue-eyes" />
         </div>
         <div className="w-1/2 relative">
           <div
@@ -128,7 +128,7 @@ const RuleThen = ({
             />
           ) : (
             <input
-              className="rounded px-3 py-2 w-full text-sm text-raisin-black dark:text-bright-gray"
+              className="border border-hex-gray dark:border-quartz rounded px-3 py-2 w-full text-sm text-raisin-black dark:text-bright-gray"
               onChange={(element) => {
                 handleChange(ruleKey, 'then', ruleIndex, element.target.value);
               }}
@@ -150,10 +150,10 @@ const RuleThen = ({
         )}
         {Object.keys(rule.then).length < 5 && (
           <div
-            className="w-4 h-4 cursor-pointer"
+            className="w-3 h-3 cursor-pointer"
             onClick={() => addMatchRule(rule, 'then', ruleIndex)}
           >
-            <Plus className="w-4 h-4 text-raisin-black dark:text-bright-gray" />
+            <Plus className="w-3 h-3 text-sapphire dark:text-baby-blue-eyes" />
           </div>
         )}
       </div>

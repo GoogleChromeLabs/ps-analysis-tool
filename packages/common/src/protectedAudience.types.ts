@@ -88,6 +88,7 @@ export type AdsAndBiddersTypeData = {
   winningBid: number;
   bidCurrency: string;
   winningBidder: string;
+  winningMediaContainerSize?: number[][];
 };
 
 export type AdsAndBiddersType = {

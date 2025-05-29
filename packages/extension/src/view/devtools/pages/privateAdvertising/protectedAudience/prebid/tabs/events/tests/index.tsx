@@ -70,7 +70,7 @@ describe('Events Component', () => {
       render(<Events errorEvents={mockErrorEvents} />);
     });
 
-    const dropdown = screen.getByText('Default levels');
+    const dropdown = screen.getByText('All levels');
     act(() => {
       dropdown.click();
     });

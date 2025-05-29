@@ -16,13 +16,7 @@
 /**
  * External dependencies.
  */
-import type {
-  AdsAndBiddersType,
-  auctionData,
-  NoBidsType,
-  ReceivedBids,
-  singleAuctionEvent,
-} from '@google-psat/common';
+import type { auctionData, singleAuctionEvent } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
 /**
@@ -31,6 +25,7 @@ import type { Protocol } from 'devtools-protocol';
 import networkTime from './utils/networkTime';
 import formatTime from './utils/formatTime';
 import { DataStore } from './dataStore';
+import type { PrebidEvents } from './types';
 
 class PAStore extends DataStore {
   /**
@@ -46,19 +41,7 @@ class PAStore extends DataStore {
    * The auction event of the tabs (Interest group access as well as interest group auction events).
    */
   prebidEvents: {
-    [tabId: string]: {
-      [uniqueAuctionId: string]: {
-        adUnits: AdsAndBiddersType;
-        noBids: NoBidsType;
-        receivedBids: ReceivedBids[];
-        pbjsNameSpace: string;
-        errorEvents: {
-          type: 'WARNING' | 'ERROR' | 'INFO';
-          message: string[];
-        }[];
-        auctionEvents: { [auctionId: string]: any[] };
-      };
-    };
+    [tabId: string]: PrebidEvents;
   } = {};
   /**
    * For tab 123456 auction events will have interestGroup accessed events as well as the interestGroupAuctionEvents.
@@ -128,7 +111,18 @@ class PAStore extends DataStore {
       globalEvents,
     };
     this.auctionDataForTabId[tabId] = {};
-    this.prebidEvents[tabId] = {};
+    this.prebidEvents[tabId] = {
+      prebidExists: false,
+      adUnits: {},
+      pbjsNamespace: '',
+      noBids: {},
+      receivedBids: [],
+      errorEvents: [],
+      versionInfo: '',
+      config: {},
+      auctionEvents: {},
+      installedModules: [],
+    };
     //@ts-ignore
     globalThis.PSAT = {
       //@ts-ignore
