@@ -74,68 +74,13 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     [activeTab, titles.length, setActiveTab]
   );
 
-  const [groupsExpanded, setGroupsExpanded] = useState<
-    Record<string, { hidden: boolean; animating: boolean }>
-  >({});
-
-  useEffect(() => {
-    setGroupsExpanded(
-      Object.keys(groupedTitles).reduce((groupsStore, group, index) => {
-        groupsStore[group] = {
-          hidden: true,
-          animating: false,
-        };
-
-        if (index === 0) {
-          groupsStore[group].hidden = false;
-        }
-
-        return groupsStore;
-      }, {} as Record<string, { hidden: boolean; animating: boolean }>)
-    );
-  }, [groupedTitles]);
-
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleGroupClick = useCallback((group: string) => {
-    let shouldUnhideInstantly = false;
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
-    setGroupsExpanded((prevState) => {
-      if (prevState[group]?.hidden) {
-        shouldUnhideInstantly = true;
-      }
-
-      return {
-        ...Object.fromEntries(
-          Object.entries(prevState).map(([groupKey]) => [
-            groupKey,
-            { hidden: false, animating: true },
-          ])
-        ),
-        [group]: {
-          hidden: shouldUnhideInstantly ? false : prevState[group].hidden,
-          animating: shouldUnhideInstantly ? false : true,
-        },
-      };
-    });
-
-    timeoutRef.current = setTimeout(() => {
-      setGroupsExpanded((prevState) => ({
-        ...Object.fromEntries(
-          Object.entries(prevState).map(([groupKey]) => [
-            groupKey,
-            { hidden: true, animating: false },
-          ])
-        ),
-        [group]: {
-          hidden: shouldUnhideInstantly
-            ? prevState[group].hidden
-            : !prevState[group].hidden,
-          animating: false,
-        },
-      }));
-    }, 300);
-  }, []);
+  useEffect(() => {
+    setExpandedGroup((groupedTitles && Object.keys(groupedTitles)[0]) || null);
+  }, [groupedTitles]);
 
   useEffect(() => {
     return () => {
@@ -144,6 +89,29 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       }
     };
   }, []);
+
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleGroupClick = useCallback(
+    (group: string) => {
+      if (isAnimating) {
+        return;
+      }
+
+      setIsAnimating(true);
+
+      if (expandedGroup === group) {
+        setExpandedGroup(null);
+      } else {
+        setExpandedGroup(group);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setIsAnimating(false);
+      }, 300);
+    },
+    [expandedGroup, isAnimating]
+  );
 
   return (
     <div
@@ -159,15 +127,16 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         )}
       >
         {Object.entries(groupedTitles).map(([group, data]) => {
+          const isExpanded = expandedGroup === group;
+
           return (
             <div
               key={group}
               data-testid={`${group}`}
               className={classNames('flex', {
                 'border-b-2 border-bright-navy-blue': group === activeGroup,
-                'border-b-2 border-steel-blue/50':
-                  group !== activeGroup && true,
-                'gap-4': !groupsExpanded[group]?.animating,
+                'border-b-2 border-steel-blue/50': group !== activeGroup,
+                'gap-4': isExpanded,
               })}
             >
               <button
@@ -183,78 +152,79 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                 {group}
               </button>
 
-              {!groupsExpanded[group]?.hidden && (
+              <div
+                className={classNames(
+                  'transition-all duration-300 ease-in-out overflow-hidden',
+                  {
+                    'w-0 opacity-0': !isExpanded,
+                    'w-fit opacity-100': isExpanded,
+                  }
+                )}
+              >
                 <div
                   className={classNames(
-                    'transition-[width] duration-300 ease-in-out',
-                    groupsExpanded[group]?.animating ? 'w-0' : 'w-fit'
+                    'flex items-center duration-300 ease-in-out gap-2 transform',
+                    !isExpanded
+                      ? 'opacity-0 -translate-x-4'
+                      : 'opacity-100 translate-x-0'
                   )}
                 >
-                  <div
-                    className={classNames(
-                      'flex items-center duration-200 ease-in-out gap-2',
-                      groupsExpanded[group]?.animating
-                        ? 'opacity-0 -translate-x-10'
-                        : 'opacity-100 translate-x-0'
-                    )}
-                  >
-                    {Object.values(data).map(({ title, index }) => {
-                      const addSpacer = shouldAddSpacer(index);
-                      const isHighlighted = isTabHighlighted(index);
-                      const isNumber = typeof isHighlighted === 'number';
-                      let count: string | number = '';
+                  {Object.values(data).map(({ title, index }) => {
+                    const addSpacer = shouldAddSpacer(index);
+                    const isHighlighted = isTabHighlighted(index);
+                    const isNumber = typeof isHighlighted === 'number';
+                    let count: string | number = '';
 
-                      if (isNumber) {
-                        count = isHighlighted > 9 ? '9+' : isHighlighted;
-                      }
+                    if (isNumber) {
+                      count = isHighlighted > 9 ? '9+' : isHighlighted;
+                    }
 
-                      return (
-                        <React.Fragment key={index}>
+                    return (
+                      <React.Fragment key={index}>
+                        <div
+                          data-testid={`tab-${index}`}
+                          className={classNames(
+                            'flex duration-200 ease-in-out relative',
+                            {
+                              ' text-bright-navy-blue dark:text-jordy-blue font-medium':
+                                index === activeTab,
+                            },
+                            {
+                              'text-raisin-black dark:text-bright-gray':
+                                index !== activeTab,
+                            }
+                          )}
+                        >
+                          <button
+                            onClick={() => setActiveTab(index)}
+                            onKeyDown={handleKeyDown}
+                            className="px-1.5 hover:opacity-80 outline-none text-nowrap"
+                          >
+                            {title}
+                          </button>
                           <div
-                            data-testid={`tab-${index}`}
                             className={classNames(
-                              'flex duration-200 ease-in-out relative',
+                              'absolute right-0 top-0 h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
                               {
-                                ' text-bright-navy-blue dark:text-jordy-blue font-medium':
-                                  index === activeTab,
+                                'bg-transparent': !isHighlighted,
                               },
                               {
-                                'text-raisin-black dark:text-bright-gray':
-                                  index !== activeTab,
+                                'bg-dark-blue dark:bg-celeste': isHighlighted,
+                              },
+                              {
+                                'h-4 w-4': isNumber,
                               }
                             )}
                           >
-                            <button
-                              onClick={() => setActiveTab(index)}
-                              onKeyDown={handleKeyDown}
-                              className="px-1.5 hover:opacity-80 outline-none text-nowrap"
-                            >
-                              {title}
-                            </button>
-                            <div
-                              className={classNames(
-                                'absolute right-0 top-0 h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
-                                {
-                                  'bg-transparent': !isHighlighted,
-                                },
-                                {
-                                  'bg-dark-blue dark:bg-celeste': isHighlighted,
-                                },
-                                {
-                                  'h-4 w-4': isNumber,
-                                }
-                              )}
-                            >
-                              {count}
-                            </div>
+                            {count}
                           </div>
-                          {addSpacer && <div className="flex-1" />}
-                        </React.Fragment>
-                      );
-                    })}
-                  </div>
+                        </div>
+                        {addSpacer && <div className="flex-1" />}
+                      </React.Fragment>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
