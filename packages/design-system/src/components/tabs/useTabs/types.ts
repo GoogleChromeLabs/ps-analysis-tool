@@ -15,7 +15,7 @@
  */
 export type TabsProviderProps = {
   children: React.ReactNode;
-  items: TabItems;
+  items: TabItems | TabItem[];
   name: string;
 };
 

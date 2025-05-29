@@ -38,7 +38,17 @@ export const TabsProvider = ({
   const [groupedItems, setGroupedItems] = useState<TabItems>({});
 
   useEffect(() => {
-    setGroupedItems(items);
+    if (Array.isArray(items)) {
+      setGroupedItems(
+        items.reduce<TabItems>((acc, item, index) => {
+          acc[`group-${index}`] = [item];
+
+          return acc;
+        }, {})
+      );
+    } else {
+      setGroupedItems(items);
+    }
   }, [items]);
 
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
