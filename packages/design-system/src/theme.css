@@ -729,6 +729,13 @@
   --background-color-mahogany: #cc3300;
   --background-color-blueberry: #4285fa;
   --background-color-celeste: #b1f8f2;
+	--background-color-steel-blue: #3A83AB;
+
+  --background-color-lavender-sky: #d3e3fd;
+  --background-color-silver-mist: #dcdcdc;
+
+  --background-color-midnight-slate: #44474e;
+  --background-color-dark-graphite: #3c3c3c;
 
   --border-color-*: initial;
   --border-color-inherit: inherit;
@@ -1023,6 +1030,7 @@
   --border-color-privacy-green: #3bd897;
   --border-color-privacy-purple: #dc9af8;
   --border-color-gray-silver: #B6B6B6;
+	--border-color-steel-blue: #3A83AB;
 
   --color-*: initial;
   --color-inherit: inherit;
