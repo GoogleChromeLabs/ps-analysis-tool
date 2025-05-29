@@ -28,18 +28,74 @@ import React, {
 /**
  * Internal dependencies.
  */
-import { TabsProviderProps } from './types';
-import { TabsContext } from './context';
+import type { TabItems, TabsProviderProps } from './types';
+import { TabsContext, TabsStoreContext } from './context';
 
 export const TabsProvider = ({
   children,
   items,
 }: PropsWithChildren<TabsProviderProps>) => {
-  const [tabItems, setTabItems] = useState(items);
-  const [activeTab, setActiveTab] = useState(0);
+  const [groupedItems, setGroupedItems] = useState<TabItems>({});
+
+  useEffect(() => {
+    if (Array.isArray(items)) {
+      setGroupedItems(
+        items.reduce<TabItems>((acc, item, index) => {
+          acc[`group-${index}`] = [item];
+
+          return acc;
+        }, {})
+      );
+    } else {
+      setGroupedItems(items);
+    }
+  }, [items]);
+
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveGroup((prev) =>
+      prev === null ? Object.keys(groupedItems)[0] ?? null : prev
+    );
+  }, [groupedItems]);
+
+  const [activeTab, _setActiveTab] = useState(0);
   const activeTabRef = useRef(activeTab);
+  const groupItemsRef = useRef(groupedItems);
+
+  useEffect(() => {
+    groupItemsRef.current = groupedItems;
+  }, [groupedItems]);
+
+  const setActiveTab = useCallback((tab: number) => {
+    activeTabRef.current = tab;
+    _setActiveTab(tab);
+
+    let trackedIndex = 0;
+    const group = Object.entries(groupItemsRef.current).find(([, _items]) => {
+      const groupTitles = _items.map((item) => {
+        return {
+          title: item.title,
+          index: trackedIndex++,
+        };
+      });
+
+      return groupTitles.some(({ index }) => index === tab);
+    });
+
+    if (group) {
+      setActiveGroup(group[0]);
+    } else {
+      setActiveGroup(null);
+    }
+  }, []);
+
+  const tabItems = useMemo(() => {
+    return Object.values(groupedItems).flat();
+  }, [groupedItems]);
+
   const [storage, _setStorage] = useState<string[]>(
-    Array(items.length).fill('')
+    Array(tabItems.length).fill('')
   );
   const [highlightedTabs, setHighlightedTabs] = useState<
     Record<number, number | boolean>
@@ -50,12 +106,29 @@ export const TabsProvider = ({
   }, [activeTab]);
 
   useEffect(() => {
-    setTabItems(items);
-    _setStorage(Array(items.length).fill(''));
-  }, [items]);
+    _setStorage(Array(tabItems.length).fill(''));
+  }, [tabItems.length]);
 
+  const groupedTitles = useMemo(() => {
+    let trackedIndex = 0;
+
+    return Object.entries(groupedItems).reduce<
+      TabsStoreContext['state']['groupedTitles']
+    >((acc, [group, _items]) => {
+      const groupTitles = _items.map((item) => {
+        return {
+          title: item.title,
+          index: trackedIndex++,
+        };
+      });
+
+      return { ...acc, [group]: groupTitles };
+    }, {});
+  }, [groupedItems]);
   const titles = useMemo(() => tabItems.map((item) => item.title), [tabItems]);
-  const panel = tabItems[activeTab].content;
+  const panel = tabItems?.[activeTab]?.content ?? {
+    Element: null,
+  };
 
   const setStorage = useCallback(
     (data: string, index?: number) => {
@@ -124,7 +197,7 @@ export const TabsProvider = ({
 
   const shouldAddSpacer = useCallback(
     (index: number) => {
-      return Boolean(tabItems[index].addSpacer);
+      return Boolean(tabItems[index]?.addSpacer);
     },
     [tabItems]
   );
@@ -134,6 +207,8 @@ export const TabsProvider = ({
       value={{
         state: {
           activeTab,
+          activeGroup,
+          groupedTitles,
           titles,
           panel,
           storage,

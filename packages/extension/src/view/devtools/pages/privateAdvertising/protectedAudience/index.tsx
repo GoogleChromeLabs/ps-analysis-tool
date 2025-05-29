@@ -38,65 +38,69 @@ import PrebidPanel from './prebid';
 
 const ProtectedAudience = () => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: Overview,
-          props: {
-            infoKey: PSInfoKey.ProtectedAudience,
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: Overview,
+            props: {
+              infoKey: PSInfoKey.ProtectedAudience,
+            },
+            className: 'p-4',
           },
-          className: 'p-4',
         },
-      },
-      {
-        title: 'Explorable Explanation',
-        content: {
-          Element: ExplorableExplanation,
-          className: 'overflow-hidden',
+        {
+          title: 'Explorable Explanation',
+          content: {
+            Element: ExplorableExplanation,
+            className: 'overflow-hidden',
+          },
         },
-      },
-      {
-        title: 'Interest Groups',
-        content: {
-          Element: InterestGroups,
-          className: 'overflow-hidden',
+        {
+          title: 'Worklet Breakpoints',
+          content: {
+            Element: WorkletBreakpoints,
+          },
         },
-      },
-      {
-        title: 'Ad Units',
-        content: {
-          Element: AdUnits,
-          className: 'overflow-hidden',
+      ],
+      Observability: [
+        {
+          title: 'Interest Groups',
+          content: {
+            Element: InterestGroups,
+            className: 'overflow-hidden',
+          },
         },
-      },
-      {
-        title: 'Auctions',
-        content: {
-          Element: Auctions,
-          className: 'overflow-hidden',
+        {
+          title: 'Ad Units',
+          content: {
+            Element: AdUnits,
+            className: 'overflow-hidden',
+          },
         },
-      },
-      {
-        title: 'Bids',
-        content: {
-          Element: Bids,
-          className: 'overflow-hidden',
+        {
+          title: 'Auctions',
+          content: {
+            Element: Auctions,
+            className: 'overflow-hidden',
+          },
         },
-      },
-      {
-        title: 'Worklet Breakpoints',
-        content: {
-          Element: WorkletBreakpoints,
+        {
+          title: 'Bids',
+          content: {
+            Element: Bids,
+            className: 'overflow-hidden',
+          },
         },
-      },
-      {
-        title: 'Prebid',
-        content: {
-          Element: PrebidPanel,
+        {
+          title: 'Prebid',
+          content: {
+            Element: PrebidPanel,
+          },
         },
-      },
-    ],
+      ],
+    }),
     []
   );
 
