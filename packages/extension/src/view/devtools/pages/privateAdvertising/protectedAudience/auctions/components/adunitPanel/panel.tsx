@@ -39,7 +39,7 @@ interface PanelProps {
   setStorage?: (data: string, index?: number) => void;
   setActiveTab?: (tab: number) => void;
   winnerBid?: string | null;
-  winnerContainerSize?: number[];
+  winningMediaContainer?: number[];
 }
 
 const Panel = ({
@@ -55,7 +55,7 @@ const Panel = ({
   setStorage,
   setActiveTab,
   winnerBid = null,
-  winnerContainerSize = [],
+  winningMediaContainer = [],
 }: PanelProps) => {
   const items = useMemo(
     () => [
@@ -85,8 +85,8 @@ const Panel = ({
             return {
               name: `${size?.[0]}x${size?.[1]}`,
               className:
-                winnerContainerSize?.[0] === size?.[0] &&
-                winnerContainerSize?.[1] === size?.[1]
+                winningMediaContainer?.[0] === size?.[0] &&
+                winningMediaContainer?.[1] === size?.[1]
                   ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
                   : '',
             };
@@ -123,7 +123,7 @@ const Panel = ({
       isInspecting,
       setIsInspecting,
       setSelectedAdUnit,
-      winnerContainerSize,
+      winningMediaContainer,
       winnerBid,
       setStorage,
       setActiveTab,

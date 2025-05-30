@@ -77,7 +77,7 @@ const useSidebarProcessing = () => {
               bidsCount,
               noBidsCount,
               winnerBid: adUnitsWinnerBid?.[adUnit] || null,
-              winnerContainerSize: adUnitsWinnerContainerSize?.[adUnit] || [],
+              winningMediaContainer: adUnitsWinnerContainerSize?.[adUnit] || [],
             },
           },
           children: {},

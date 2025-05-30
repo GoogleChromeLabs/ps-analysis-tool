@@ -303,7 +303,8 @@ const useDataProcessing = () => {
 
     if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.adUnits).forEach((data: any) => {
-        const mediaContainerSize = data?.winningMediaContainerSize as number[];
+        const mediaContainerSize = data
+          ?.winningMediaContainerSize?.[0] as number[];
 
         if (mediaContainerSize) {
           _adUnitWinnerContainerSize[data.adUnitCode] = mediaContainerSize;
