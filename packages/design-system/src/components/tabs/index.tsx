@@ -39,6 +39,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     titles,
     isTabHighlighted,
     shouldAddSpacer,
+    getTabGroup,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     activeGroup: state.activeGroup,
@@ -47,32 +48,8 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     titles: state.titles,
     isTabHighlighted: actions.isTabHighlighted,
     shouldAddSpacer: actions.shouldAddSpacer,
+    getTabGroup: actions.getTabGroup,
   }));
-
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-
-      if (event.key === 'Tab') {
-        const nextIndex = activeTab + 1;
-        if (nextIndex < titles.length) {
-          setActiveTab(nextIndex);
-        } else {
-          setActiveTab(0);
-        }
-      }
-
-      if (event.shiftKey && event.key === 'Tab') {
-        const previousIndex = activeTab - 1;
-        if (previousIndex >= 0) {
-          setActiveTab(previousIndex);
-        } else {
-          setActiveTab(titles.length - 1);
-        }
-      }
-    },
-    [activeTab, titles.length, setActiveTab]
-  );
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -113,6 +90,58 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     [expandedGroup, isAnimating]
   );
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+
+      if (event.key === 'Tab') {
+        const nextIndex = activeTab + 1;
+        if (nextIndex < titles.length) {
+          setActiveTab(nextIndex);
+
+          const group = getTabGroup(nextIndex);
+          if (expandedGroup !== group) {
+            handleGroupClick(group);
+          }
+        } else {
+          setActiveTab(0);
+
+          const group = getTabGroup(0);
+          if (expandedGroup !== group) {
+            handleGroupClick(group);
+          }
+        }
+      }
+
+      if (event.shiftKey && event.key === 'Tab') {
+        const previousIndex = activeTab - 1;
+        if (previousIndex >= 0) {
+          setActiveTab(previousIndex);
+
+          const group = getTabGroup(previousIndex);
+          if (expandedGroup !== group) {
+            handleGroupClick(group);
+          }
+        } else {
+          setActiveTab(titles.length - 1);
+
+          const group = getTabGroup(titles.length - 1);
+          if (expandedGroup !== group) {
+            handleGroupClick(group);
+          }
+        }
+      }
+    },
+    [
+      activeTab,
+      titles.length,
+      setActiveTab,
+      getTabGroup,
+      expandedGroup,
+      handleGroupClick,
+    ]
+  );
+
   return (
     <div
       className={classNames(
@@ -143,8 +172,10 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                 className={classNames(
                   'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black outline-none',
                   {
-                    'bg-steel-blue/50': group === activeGroup,
-                    'bg-steel-blue/20': group !== activeGroup,
+                    'bg-steel-blue/50 dark:bg-baby-blue-eyes':
+                      group === activeGroup,
+                    'bg-steel-blue/20 dark:bg-baby-blue-eyes/80':
+                      group !== activeGroup,
                   }
                 )}
                 onClick={() => handleGroupClick(group)}

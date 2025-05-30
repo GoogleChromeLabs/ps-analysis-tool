@@ -202,6 +202,30 @@ export const TabsProvider = ({
     [tabItems]
   );
 
+  const getTabGroup = useCallback(
+    (tab: number) => {
+      let group = '';
+      let tracker = 0;
+
+      Object.entries(groupedItems).forEach(([groupKey, data]) => {
+        if (group) {
+          return;
+        }
+
+        if (tracker + data.length < tab + 1) {
+          tracker += data.length;
+        } else {
+          group = groupKey;
+
+          return;
+        }
+      });
+
+      return group;
+    },
+    [groupedItems]
+  );
+
   return (
     <TabsContext.Provider
       value={{
@@ -219,6 +243,7 @@ export const TabsProvider = ({
           highlightTab,
           isTabHighlighted,
           shouldAddSpacer,
+          getTabGroup,
         },
       }}
     >

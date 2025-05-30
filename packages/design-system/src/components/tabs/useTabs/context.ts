@@ -52,6 +52,7 @@ export interface TabsStoreContext {
     ) => void;
     isTabHighlighted: (tab: number) => boolean | number;
     shouldAddSpacer: (tab: number) => boolean;
+    getTabGroup: (tab: number) => string;
   };
 }
 
@@ -73,6 +74,7 @@ const initialState: TabsStoreContext = {
     highlightTab: noop,
     isTabHighlighted: () => false,
     shouldAddSpacer: () => false,
+    getTabGroup: () => '',
   },
 };
 
