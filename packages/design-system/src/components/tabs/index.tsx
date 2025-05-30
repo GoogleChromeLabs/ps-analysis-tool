@@ -95,39 +95,40 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       event.preventDefault();
 
       if (event.key === 'Tab') {
-        const nextIndex = activeTab + 1;
-        if (nextIndex < titles.length) {
-          setActiveTab(nextIndex);
+        if (event.shiftKey) {
+          const previousIndex = activeTab - 1;
+          if (previousIndex >= 0) {
+            setActiveTab(previousIndex);
 
-          const group = getTabGroup(nextIndex);
-          if (expandedGroup !== group) {
-            handleGroupClick(group);
+            const group = getTabGroup(previousIndex);
+            if (expandedGroup !== group) {
+              console.log(group, expandedGroup);
+              handleGroupClick(group);
+            }
+          } else {
+            setActiveTab(titles.length - 1);
+
+            const group = getTabGroup(titles.length - 1);
+            if (expandedGroup !== group) {
+              handleGroupClick(group);
+            }
           }
         } else {
-          setActiveTab(0);
+          const nextIndex = activeTab + 1;
+          if (nextIndex < titles.length) {
+            setActiveTab(nextIndex);
 
-          const group = getTabGroup(0);
-          if (expandedGroup !== group) {
-            handleGroupClick(group);
-          }
-        }
-      }
+            const group = getTabGroup(nextIndex);
+            if (expandedGroup !== group) {
+              handleGroupClick(group);
+            }
+          } else {
+            setActiveTab(0);
 
-      if (event.shiftKey && event.key === 'Tab') {
-        const previousIndex = activeTab - 1;
-        if (previousIndex >= 0) {
-          setActiveTab(previousIndex);
-
-          const group = getTabGroup(previousIndex);
-          if (expandedGroup !== group) {
-            handleGroupClick(group);
-          }
-        } else {
-          setActiveTab(titles.length - 1);
-
-          const group = getTabGroup(titles.length - 1);
-          if (expandedGroup !== group) {
-            handleGroupClick(group);
+            const group = getTabGroup(0);
+            if (expandedGroup !== group) {
+              handleGroupClick(group);
+            }
           }
         }
       }
