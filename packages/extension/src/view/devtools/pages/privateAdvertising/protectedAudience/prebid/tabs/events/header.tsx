@@ -18,6 +18,7 @@
  */
 import {
   Error,
+  FilterIcon,
   MultiSelectDropDown,
   SearchInput,
   WarningColored,
@@ -84,7 +85,10 @@ const Header = ({
     >
       <div className="w-[50%] h-full">
         <SearchInput
-          inputExtraClass="rounded-full"
+          showIcon
+          icon={<FilterIcon className="text-mischka" />}
+          placeholder="Filter"
+          inputExtraClass="rounded-full w-auto"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           clearInput={() => {
@@ -92,7 +96,7 @@ const Header = ({
           }}
         />
       </div>
-      <div className="w-max h-full px-1.5">
+      <div className="w-max h-full pl-1.5 pr-0.5 mx-0.5">
         <MultiSelectDropDown
           options={[
             { value: 'ALL', label: 'Default levels' },

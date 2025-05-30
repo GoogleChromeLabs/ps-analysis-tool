@@ -104,7 +104,7 @@ const Table = ({
         tableRef.current &&
         !tableRef.current.contains(event.target as Node)
       ) {
-        setIsRowFocused(true);
+        setIsRowFocused(false);
       }
     };
     globalThis?.document?.addEventListener('click', handleClickOutside, true);

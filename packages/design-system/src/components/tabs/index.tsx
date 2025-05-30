@@ -18,7 +18,7 @@
  * External dependencies
  */
 import classNames from 'classnames';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -31,14 +31,23 @@ interface TabsProps {
 }
 
 const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
-  const { activeTab, setActiveTab, titles, isTabHighlighted, shouldAddSpacer } =
-    useTabs(({ state, actions }) => ({
-      activeTab: state.activeTab,
-      setActiveTab: actions.setActiveTab,
-      titles: state.titles,
-      isTabHighlighted: actions.isTabHighlighted,
-      shouldAddSpacer: actions.shouldAddSpacer,
-    }));
+  const {
+    activeTab,
+    activeGroup,
+    setActiveTab,
+    groupedTitles,
+    titles,
+    isTabHighlighted,
+    shouldAddSpacer,
+  } = useTabs(({ state, actions }) => ({
+    activeTab: state.activeTab,
+    activeGroup: state.activeGroup,
+    setActiveTab: actions.setActiveTab,
+    groupedTitles: state.groupedTitles,
+    titles: state.titles,
+    isTabHighlighted: actions.isTabHighlighted,
+    shouldAddSpacer: actions.shouldAddSpacer,
+  }));
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -65,6 +74,77 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     [activeTab, titles.length, setActiveTab]
   );
 
+  const [groupsExpanded, setGroupsExpanded] = useState<
+    Record<string, { hidden: boolean; animating: boolean }>
+  >({});
+
+  useEffect(() => {
+    setGroupsExpanded(
+      Object.keys(groupedTitles).reduce((groupsStore, group, index) => {
+        groupsStore[group] = {
+          hidden: true,
+          animating: false,
+        };
+
+        if (index === 0) {
+          groupsStore[group].hidden = false;
+        }
+
+        return groupsStore;
+      }, {} as Record<string, { hidden: boolean; animating: boolean }>)
+    );
+  }, [groupedTitles]);
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleGroupClick = useCallback((group: string) => {
+    let shouldUnhideInstantly = false;
+
+    setGroupsExpanded((prevState) => {
+      if (prevState[group]?.hidden) {
+        shouldUnhideInstantly = true;
+      }
+
+      return {
+        ...Object.fromEntries(
+          Object.entries(prevState).map(([groupKey]) => [
+            groupKey,
+            { hidden: false, animating: true },
+          ])
+        ),
+        [group]: {
+          hidden: shouldUnhideInstantly ? false : prevState[group].hidden,
+          animating: shouldUnhideInstantly ? false : true,
+        },
+      };
+    });
+
+    timeoutRef.current = setTimeout(() => {
+      setGroupsExpanded((prevState) => ({
+        ...Object.fromEntries(
+          Object.entries(prevState).map(([groupKey]) => [
+            groupKey,
+            { hidden: true, animating: false },
+          ])
+        ),
+        [group]: {
+          hidden: shouldUnhideInstantly
+            ? prevState[group].hidden
+            : !prevState[group].hidden,
+          animating: false,
+        },
+      }));
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div
       className={classNames(
@@ -74,59 +154,115 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     >
       <div
         className={classNames(
-          'flex gap-8 mx-4 w-full',
+          'flex gap-8 px-2 w-full overflow-x-auto',
           fontSizeClass ? fontSizeClass : 'text-sm'
         )}
       >
-        {titles.map((title, index) => {
-          const addSpacer = shouldAddSpacer(index);
-          const isHighlighted = isTabHighlighted(index);
-          const isNumber = typeof isHighlighted === 'number';
-          let count: string | number = '';
-
-          if (isNumber) {
-            count = isHighlighted > 9 ? '9+' : isHighlighted;
-          }
-
+        {Object.entries(groupedTitles).map(([group, data]) => {
           return (
-            <React.Fragment key={index}>
-              <div className="flex">
+            <div
+              key={group}
+              data-testid={`${group}`}
+              className={classNames('flex', {
+                'border-b-2 border-bright-navy-blue': group === activeGroup,
+                'border-b-2 border-steel-blue/50':
+                  group !== activeGroup && Object.keys(data).length > 1,
+                'gap-4':
+                  Object.keys(data).length > 1 &&
+                  !groupsExpanded[group]?.animating,
+              })}
+            >
+              {Object.keys(data).length > 1 && (
                 <button
-                  onClick={() => setActiveTab(index)}
-                  onKeyDown={handleKeyDown}
                   className={classNames(
-                    'pb-1.5 px-1.5 border-b-2 hover:opacity-80 outline-hidden text-nowrap',
+                    'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black outline-none',
                     {
-                      'border-bright-navy-blue dark:border-jordy-blue text-bright-navy-blue dark:text-jordy-blue':
-                        index === activeTab,
-                    },
-                    {
-                      'border-transparent text-raisin-black dark:text-bright-gray':
-                        index !== activeTab,
+                      'bg-steel-blue/50': group === activeGroup,
+                      'bg-steel-blue/20': group !== activeGroup,
                     }
                   )}
+                  onClick={() => handleGroupClick(group)}
                 >
-                  {title}
+                  {group}
                 </button>
+              )}
+              {(!groupsExpanded[group]?.hidden ||
+                Object.keys(data).length === 1) && (
                 <div
                   className={classNames(
-                    'h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
-                    {
-                      'bg-transparent': !isHighlighted,
-                    },
-                    {
-                      'bg-dark-blue dark:bg-celeste': isHighlighted,
-                    },
-                    {
-                      'h-4 w-4': isNumber,
-                    }
+                    'transition-[width] duration-300 ease-in-out',
+                    groupsExpanded[group]?.animating ? 'w-0' : 'w-fit'
                   )}
                 >
-                  {count}
+                  <div
+                    className={classNames(
+                      'flex items-center duration-200 ease-in-out',
+                      {
+                        'gap-2': Object.keys(data).length > 1,
+                      },
+                      groupsExpanded[group]?.animating
+                        ? 'opacity-0 -translate-x-10'
+                        : 'opacity-100 translate-x-0'
+                    )}
+                  >
+                    {Object.values(data).map(({ title, index }) => {
+                      const addSpacer = shouldAddSpacer(index);
+                      const isHighlighted = isTabHighlighted(index);
+                      const isNumber = typeof isHighlighted === 'number';
+                      let count: string | number = '';
+
+                      if (isNumber) {
+                        count = isHighlighted > 9 ? '9+' : isHighlighted;
+                      }
+
+                      return (
+                        <React.Fragment key={index}>
+                          <div
+                            data-testid={`tab-${index}`}
+                            className={classNames(
+                              'flex duration-200 ease-in-out relative',
+                              {
+                                ' text-bright-navy-blue dark:text-jordy-blue font-medium':
+                                  index === activeTab,
+                              },
+                              {
+                                'text-raisin-black dark:text-bright-gray':
+                                  index !== activeTab,
+                              }
+                            )}
+                          >
+                            <button
+                              onClick={() => setActiveTab(index)}
+                              onKeyDown={handleKeyDown}
+                              className="px-1.5 hover:opacity-80 outline-none text-nowrap"
+                            >
+                              {title}
+                            </button>
+                            <div
+                              className={classNames(
+                                'absolute right-0 top-0 h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
+                                {
+                                  'bg-transparent': !isHighlighted,
+                                },
+                                {
+                                  'bg-dark-blue dark:bg-celeste': isHighlighted,
+                                },
+                                {
+                                  'h-4 w-4': isNumber,
+                                }
+                              )}
+                            >
+                              {count}
+                            </div>
+                          </div>
+                          {addSpacer && <div className="flex-1" />}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-              {addSpacer && <div className="flex-1" />}
-            </React.Fragment>
+              )}
+            </div>
           );
         })}
       </div>

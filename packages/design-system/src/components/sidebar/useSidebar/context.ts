@@ -41,7 +41,11 @@ export interface SidebarStoreContext {
   };
   actions: {
     setIsSidebarFocused: React.Dispatch<boolean>;
-    updateSelectedItemKey: (key: string | null, queryString?: string) => void;
+    updateSelectedItemKey: (
+      key: string | null,
+      queryString?: string,
+      skipPanelDisplay?: boolean
+    ) => void;
     onKeyNavigation: (
       event: React.KeyboardEvent<HTMLDivElement>,
       key: string | null

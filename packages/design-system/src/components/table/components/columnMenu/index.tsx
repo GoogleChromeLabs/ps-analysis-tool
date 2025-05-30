@@ -69,6 +69,7 @@ const ColumnMenu = ({ position, open, onClose }: ColumnMenuProps) => {
   }, []);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
