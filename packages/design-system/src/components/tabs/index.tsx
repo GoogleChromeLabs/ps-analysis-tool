@@ -221,7 +221,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                         <div
                           data-testid={`tab-${index}`}
                           className={classNames(
-                            'flex duration-200 ease-in-out relative',
+                            'flex duration-200 ease-in-out relative pb-1',
                             {
                               ' text-bright-navy-blue dark:text-jordy-blue font-medium':
                                 index === activeTab,
