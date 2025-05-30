@@ -98,12 +98,12 @@ const AdTable = ({
                     <span
                       key={index}
                       className={classNames(
-                        'rounded-xl bg-[#F5F5F5] px-2 py-0.5 border text-xs',
+                        'rounded-xl px-2 py-0.5 border text-xs',
                         winningMediaContainerSize &&
                           winningMediaContainerSize[0] === size[0] &&
                           winningMediaContainerSize[1] === size[1]
                           ? 'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]'
-                          : 'border-gray-400 dark:border-dark-gray-x11 text-[#323232]'
+                          : 'border-gray-400 dark:border-dark-gray-x11'
                       )}
                     >
                       {size[0]}x{size[1]}
@@ -140,7 +140,7 @@ const AdTable = ({
                   {
                     <div
                       className={classNames(
-                        'h-fit px-2 py-0.5 dark:text-bright-gray border rounded-full flex justify-center items-center gap-1',
+                        'h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1',
                         {
                           'border-gray-400 dark:border-dark-gray-x11':
                             bidder !== winningBidder,
