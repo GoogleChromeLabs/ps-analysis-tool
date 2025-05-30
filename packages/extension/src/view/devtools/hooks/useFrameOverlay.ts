@@ -54,12 +54,12 @@ const useFrameOverlay = (
     canStartInspecting: state.canStartInspecting,
   }));
 
-  const { selectedAdUnit, adsAndBidders } = useProtectedAudience(
-    ({ state }) => ({
+  const { selectedAdUnit, adsAndBidders, prebidResponse } =
+    useProtectedAudience(({ state }) => ({
       selectedAdUnit: state.selectedAdUnit,
       adsAndBidders: state.adsAndBidders,
-    })
-  );
+      prebidResponse: state.prebidResponse,
+    }));
 
   const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
     useState(false);
@@ -266,6 +266,7 @@ const useFrameOverlay = (
     }
   }, [setIsInspecting]);
 
+  // eslint-disable-next-line complexity
   useEffect(() => {
     try {
       if (selectedFrame) {
@@ -292,11 +293,26 @@ const useFrameOverlay = (
         portRef.current?.postMessage({
           isForProtectedAudience: true,
           selectedAdUnit,
-          numberOfBidders: adsAndBidders[selectedAdUnit]?.bidders?.length,
-          bidders: adsAndBidders[selectedAdUnit]?.bidders,
-          winningBid: adsAndBidders[selectedAdUnit]?.winningBid,
-          bidCurrency: adsAndBidders[selectedAdUnit]?.bidCurrency,
-          winningBidder: adsAndBidders[selectedAdUnit]?.winningBidder,
+          numberOfBidders:
+            adsAndBidders[selectedAdUnit]?.bidders?.length ??
+            prebidResponse.adUnits[selectedAdUnit]?.bidders?.length ??
+            0,
+          bidders:
+            adsAndBidders[selectedAdUnit]?.bidders ??
+            prebidResponse.adUnits[selectedAdUnit]?.bidders ??
+            [],
+          winningBid:
+            adsAndBidders[selectedAdUnit]?.winningBid ??
+            prebidResponse.adUnits[selectedAdUnit]?.winningBid ??
+            null,
+          bidCurrency:
+            adsAndBidders[selectedAdUnit]?.bidCurrency ??
+            prebidResponse.adUnits[selectedAdUnit]?.bidCurrency ??
+            null,
+          winningBidder:
+            adsAndBidders[selectedAdUnit]?.winningBidder ??
+            prebidResponse.adUnits[selectedAdUnit]?.winningBidder ??
+            null,
           isInspecting,
         });
       }
@@ -311,6 +327,7 @@ const useFrameOverlay = (
     selectedFrame,
     selectedAdUnit,
     adsAndBidders,
+    prebidResponse.adUnits,
   ]);
 
   useEffect(() => {
