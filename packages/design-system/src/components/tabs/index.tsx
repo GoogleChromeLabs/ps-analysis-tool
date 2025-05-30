@@ -40,6 +40,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     isTabHighlighted,
     shouldAddSpacer,
     getTabGroup,
+    isGroup,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     activeGroup: state.activeGroup,
@@ -49,6 +50,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     isTabHighlighted: actions.isTabHighlighted,
     shouldAddSpacer: actions.shouldAddSpacer,
     getTabGroup: actions.getTabGroup,
+    isGroup: state.isGroup,
   }));
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -165,38 +167,41 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
               data-testid={`${group}`}
               className={classNames('flex', {
                 'border-b-2 border-bright-navy-blue': group === activeGroup,
-                'border-b-2 border-steel-blue/50': group !== activeGroup,
+                'border-b-2 border-steel-blue/50':
+                  group !== activeGroup && isGroup,
                 'gap-4': isExpanded,
               })}
             >
-              <button
-                className={classNames(
-                  'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black outline-none',
-                  {
-                    'bg-steel-blue/50 dark:bg-baby-blue-eyes':
-                      group === activeGroup,
-                    'bg-steel-blue/20 dark:bg-baby-blue-eyes/80':
-                      group !== activeGroup,
-                  }
-                )}
-                onClick={() => handleGroupClick(group)}
-              >
-                {group}
-              </button>
+              {isGroup && (
+                <button
+                  className={classNames(
+                    'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black outline-none',
+                    {
+                      'bg-steel-blue/50 dark:bg-baby-blue-eyes':
+                        group === activeGroup,
+                      'bg-steel-blue/20 dark:bg-baby-blue-eyes/80':
+                        group !== activeGroup,
+                    }
+                  )}
+                  onClick={() => handleGroupClick(group)}
+                >
+                  {group}
+                </button>
+              )}
 
               <div
                 className={classNames(
                   'transition-all duration-300 ease-in-out overflow-hidden',
                   {
-                    'w-0 opacity-0': !isExpanded,
-                    'w-fit opacity-100': isExpanded,
+                    'w-0 opacity-0': !isExpanded && isGroup,
+                    'w-fit opacity-100': isExpanded || !isGroup,
                   }
                 )}
               >
                 <div
                   className={classNames(
                     'flex items-center duration-300 ease-in-out gap-2 transform',
-                    !isExpanded
+                    !isExpanded && isGroup
                       ? 'opacity-0 -translate-x-4'
                       : 'opacity-100 translate-x-0'
                   )}

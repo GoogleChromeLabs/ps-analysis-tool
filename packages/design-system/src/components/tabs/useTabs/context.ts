@@ -41,6 +41,7 @@ export interface TabsStoreContext {
       className?: string;
     };
     storage: string[];
+    isGroup: boolean;
   };
   actions: {
     setStorage: (data: string, index?: number) => void;
@@ -67,6 +68,7 @@ const initialState: TabsStoreContext = {
       props: {},
     },
     storage: [],
+    isGroup: true,
   },
   actions: {
     setStorage: noop,

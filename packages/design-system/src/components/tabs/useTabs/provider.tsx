@@ -34,11 +34,12 @@ import { TabsContext, TabsStoreContext } from './context';
 export const TabsProvider = ({
   children,
   items,
+  isGroup = true,
 }: PropsWithChildren<TabsProviderProps>) => {
   const [groupedItems, setGroupedItems] = useState<TabItems>({});
 
   useEffect(() => {
-    if (Array.isArray(items)) {
+    if (!isGroup && Array.isArray(items)) {
       setGroupedItems(
         items.reduce<TabItems>((acc, item, index) => {
           acc[`group-${index}`] = [item];
@@ -47,9 +48,9 @@ export const TabsProvider = ({
         }, {})
       );
     } else {
-      setGroupedItems(items);
+      setGroupedItems(items as TabItems);
     }
-  }, [items]);
+  }, [isGroup, items]);
 
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
 
@@ -236,6 +237,7 @@ export const TabsProvider = ({
           titles,
           panel,
           storage,
+          isGroup,
         },
         actions: {
           setStorage,
