@@ -74,3 +74,6 @@ export { default as FrameContent } from './frameContent';
 export { default as JsonView } from './jsonView/jsonView';
 export { default as Timeline } from './timeline';
 export * from './timeline/types';
+export { default as MultiSelectDropDown } from './multiSelectDropDown';
+export { default as Dropdown } from './dropdown';
+export type { OptGroup, Option } from './dropdown/options';

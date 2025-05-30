@@ -26,6 +26,42 @@ import type {
   SourcesData,
 } from '@google-psat/common';
 
+export type PrebidConfigTableData = {
+  name: string;
+  value: string | number | boolean;
+  index: number;
+};
+
+export type PrebidPriceGranularityTableData = {
+  bucket: string;
+  precision: number;
+  minimum: number;
+  maximum: number;
+  increment: number;
+  index: number;
+};
+
+export type PrebidConsentManagementTableData = {
+  platform: 'gdpr' | 'usp';
+  api: 'iab' | 'static' | 'iabnonsupport' | 'none';
+  timeout?: number;
+  allowAuctionWithoutConsent?: boolean;
+  defaultGdprScope?: boolean;
+};
+
+export type PrebidUserIdsTableData = {
+  name: string;
+  type?: 'cookie' | 'html5';
+  expires?: number;
+  storageName?: string;
+};
+
+export type UserEID = {
+  userId: string;
+  aType: number;
+  source: string;
+};
+
 export type TableData = (
   | CookieTableData
   | InterestGroups
@@ -35,6 +71,11 @@ export type TableData = (
   | ErroredOutUrlsData
   | SourcesData
   | ClassificationResult
+  | PrebidConfigTableData
+  | PrebidPriceGranularityTableData
+  | PrebidConsentManagementTableData
+  | PrebidUserIdsTableData
+  | UserEID
 ) & {
   highlighted?: boolean;
 };

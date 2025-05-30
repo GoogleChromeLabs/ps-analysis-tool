@@ -54,13 +54,21 @@ export type AllowedDomainStorage = {
   allowList: AllowedDomainObject[];
 };
 
+export type PrebidWarningTypes = 'WARNING' | 'ERROR' | 'INFO';
+
 export type PrebidEvents = {
+  prebidExists: boolean | null;
   adUnits: AdsAndBiddersType;
   noBids: PrebidNoBidsType;
   versionInfo: string;
   receivedBids: ReceivedBids[];
-  errorEvents: { type: 'WARNING' | 'ERROR' | 'INFO'; message: string[] }[];
+  errorEvents: {
+    type: PrebidWarningTypes;
+    message: string[];
+    time: string;
+  }[];
   auctionEvents: { [auctionId: string]: any[] };
   installedModules: string[];
   config: PrebidConfig;
+  pbjsNamespace: string;
 };

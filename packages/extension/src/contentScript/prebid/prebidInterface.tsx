@@ -17,12 +17,12 @@
 /**
  * External dependencies.
  */
-import type { AdsAndBiddersType } from '@google-psat/common';
+import { noop, type AdsAndBiddersType } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
 import {
-  CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA,
+  PREBID_SCANNING_STATUS,
   SCRIPT_GET_PREBID_DATA_RESPONSE,
   SCRIPT_PREBID_INITIAL_SYNC,
 } from '../../constants';
@@ -38,11 +38,6 @@ class PrebidInterface {
    * TabId of the current Tab
    */
   tabId: number | null = null;
-
-  /**
-   * Boolean which indicates if prebid exists on the page.
-   */
-  prebidExists: boolean | null = null;
   /**
    * Prebid interface.
    */
@@ -60,6 +55,8 @@ class PrebidInterface {
     receivedBids: [],
     errorEvents: [],
     auctionEvents: {},
+    pbjsNamespace: '',
+    prebidExists: null,
   };
 
   /**
@@ -110,6 +107,11 @@ class PrebidInterface {
     const timeout = setTimeout(() => {
       stopLoop = true;
       pbjsClass.scanningStatus = true;
+      window.top?.postMessage({
+        type: PREBID_SCANNING_STATUS,
+        tabId: pbjsClass.tabId,
+        prebidExists: pbjsClass.prebidData.prebidExists,
+      });
     }, 60000);
 
     const isPrebidInPage = () => {
@@ -119,10 +121,52 @@ class PrebidInterface {
         pbjsClass.prebidInterface = window[
           pbjsGlobals[0]
         ] as unknown as typeof window.pbjs;
-        pbjsClass.prebidExists = true;
+
+        pbjsClass.prebidData.prebidExists = true;
         pbjsClass.scanningStatus = true;
+
         pbjsClass.sendInitialData();
         pbjsClass.initPrebidListener();
+
+        pbjsClass.prebidData.pbjsNamespace = pbjsGlobals[0];
+
+        pbjsClass.prebidData.versionInfo =
+          pbjsClass.prebidInterface.version ?? '';
+
+        pbjsClass.prebidData.installedModules =
+          pbjsClass.prebidInterface.installedModules ?? [];
+
+        const bidderSettings: Record<string, SingleBidderSetting> = {};
+
+        Object.keys(pbjsClass?.prebidInterface?.bidderSettings ?? {}).forEach(
+          (bidder) => {
+            bidderSettings[bidder] = {};
+
+            const {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
+              bidCpmAdjustment = noop,
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
+              adserverTargeting = [],
+              ...rest
+            } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};
+
+            bidderSettings[bidder] = {
+              ...rest,
+            };
+          }
+        );
+
+        pbjsClass.prebidData.config = {
+          ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
+          bidderSettings,
+          eids: pbjsClass.prebidInterface?.getUserIdsAsEids() ?? [],
+        };
+
+        window.top?.postMessage({
+          type: PREBID_SCANNING_STATUS,
+          tabId: pbjsClass.tabId,
+          prebidExists: pbjsClass.prebidData.prebidExists,
+        });
         stopLoop = true;
         clearTimeout(timeout);
       }
@@ -147,86 +191,24 @@ class PrebidInterface {
         this.tabId = event.data.tabId;
         this.sendInitialData();
       }
-
-      if (event.data?.type === CONTENT_SCRIPT_TO_SCRIPT_GET_PREBID_DATA) {
-        this.tabId = event.data.tabId;
-      }
     };
 
     this.setIntervalValue = setInterval(() => {
-      if (
-        this.prebidExists &&
-        this.prebidData.installedModules.length === 0 &&
-        this.prebidData.versionInfo &&
-        Object.keys(this.prebidData.config).length === 0
-      ) {
-        this.prebidData.versionInfo = this.prebidInterface?.version ?? '';
-        this.prebidData.installedModules =
-          this.prebidInterface?.installedModules ?? [];
-        this.prebidData.config = this.prebidInterface?.getConfig() ?? {};
-      }
-
       if (this.updateCounter > 0) {
         this.sendInitialData();
         this.updateCounter = 0;
       }
     }, 1200);
-
-    document.addEventListener('unload', () => {
-      this.prebidExists = false;
-      this.scanningStatus = false;
-      this.prebidInterface = null;
-      this.prebidData = {
-        adUnits: {},
-        noBids: {},
-        receivedBids: [],
-        errorEvents: [],
-        versionInfo: '',
-        config: {},
-        auctionEvents: {},
-        installedModules: [],
-      };
-
-      if (this.setIntervalValue) {
-        clearInterval(this.setIntervalValue);
-      }
-
-      this.updateCounter = 0;
-      this.setIntervalValue = null;
-    });
   }
 
   sendInitialData() {
     window.top?.postMessage({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
       tabId: this.tabId,
-      prebidData: JSON.parse(decycle(this.prebidData)),
+      prebidData: this.prebidData.prebidExists
+        ? JSON.parse(decycle(this.prebidData))
+        : null,
     });
-  }
-
-  async getAndProcessPrebidData(propertyName: string) {
-    //@ts-ignore
-    if (
-      this.prebidExists &&
-      !Object.keys(this.prebidInterface ?? {}).includes(propertyName)
-    ) {
-      return;
-    }
-
-    //@ts-ignore
-    const prebidCaller = this.prebidInterface?.[propertyName];
-
-    const prebidData =
-      typeof prebidCaller === 'function' ? await prebidCaller() : prebidCaller;
-
-    if (prebidData) {
-      // Send the prebid data to contentscript so that it can be sent to the devtools
-      window.top?.postMessage({
-        type: SCRIPT_GET_PREBID_DATA_RESPONSE,
-        tabId: this.tabId,
-        prebidData: JSON.parse(decycle(prebidData)),
-      });
-    }
   }
 
   initPrebidListener() {
@@ -238,75 +220,123 @@ class PrebidInterface {
     this.prebidInterface?.onEvent('auctionInit', (args) => {
       this.prebidData.auctionEvents = {
         ...this.prebidData.auctionEvents,
-        [args.auctionId]: [args],
+        [args.auctionId]: [],
       };
+      this.addEvent(args.auctionId, { ...args, eventType: 'auctionInit' });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('auctionDebug', (args) => {
+      const events = this.prebidInterface?.getEvents();
+      const lastEvent = events?.[events.length - 1];
+
       this.prebidData.errorEvents.push({
         type: args.type,
         message: args.arguments,
+        time: `${Math.round(lastEvent?.elapsedTime ?? 0)}ms`,
       });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('beforeRequestBids', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'beforeRequestBids',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidRequested', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'bidRequested',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('beforeBidderHttp', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'beforeBidderHttp',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidResponse', (args) => {
       this.calculateBidResponse(args);
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'BidResponse',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidAccepted', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'bidAccepted',
+      });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidRejected', (args) => {
       if (args.bid?.auctionId) {
-        this.prebidData.auctionEvents[args.bid?.auctionId].push(args);
+        this.addEvent(args.bid.auctionId, {
+          ...args,
+          eventType: 'bidRejected',
+        });
         this.updateCounter++;
       }
     });
 
     this.prebidInterface?.onEvent('bidTimeout', (args) => {
       args.forEach((arg) => {
-        this.prebidData.auctionEvents[arg.auctionId].push(args);
+        this.addEvent(arg.auctionId, {
+          ...args,
+          eventType: 'bidTimeout',
+        });
       });
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('bidWon', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'bidWon',
+      });
       this.calculateAdUnit(args);
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('noBid', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'noBid',
+      });
       this.calculateNoBid(args);
       this.updateCounter++;
     });
 
     this.prebidInterface?.onEvent('auctionEnd', (args) => {
-      this.prebidData.auctionEvents[args.auctionId].push(args);
+      this.addEvent(args.auctionId, {
+        ...args,
+        eventType: 'auctionEnd',
+      });
       this.sendInitialData();
       this.updateCounter++;
+    });
+  }
+
+  addEvent(key: string, args: any) {
+    const event = this.prebidInterface?.getEvents().pop();
+
+    if (!event) {
+      return;
+    }
+
+    this.prebidData.auctionEvents[key].push({
+      ...args,
+      elapsedTime: event.elapsedTime,
     });
   }
 
@@ -369,6 +399,7 @@ class PrebidInterface {
         winningBid: bid?.cpm,
         bidCurrency: bid.currency,
         winningBidder: bid.bidder,
+        winningMediaContainerSize: [[bid.width, bid.height]],
       };
       return;
     }

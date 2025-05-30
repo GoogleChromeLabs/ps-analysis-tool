@@ -49,14 +49,16 @@ const Provider = ({ children }: PropsWithChildren) => {
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
 
   const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
+    prebidExists: false,
     adUnits: {},
     noBids: {},
-    receivedBids: [],
-    errorEvents: [],
-    auctionEvents: {},
     versionInfo: '',
     installedModules: [],
     config: {},
+    receivedBids: [],
+    errorEvents: [],
+    auctionEvents: {},
+    pbjsNamespace: '',
   });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
@@ -241,7 +243,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
-        prebidData: PrebidEvents;
+        prebidEvents: PrebidEvents;
         propertyName: string;
       };
     }) => {
@@ -262,13 +264,19 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (
         incomingMessageType === 'AUCTION_EVENTS' &&
-        message.payload.auctionEvents
+        typeof message.payload.prebidEvents !== 'undefined'
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
           setPrebidResponse((prev) => {
-            const data = message.payload?.prebidData;
+            const data = message.payload?.prebidEvents ?? null;
+            if (
+              typeof message?.payload?.prebidEvents?.prebidExists !==
+              'undefined'
+            ) {
+              data.prebidExists = message.payload.prebidEvents.prebidExists;
+            }
             if (!data) {
-              return prev;
+              return data;
             }
 
             const keys: (keyof PrebidEvents)[] = [
@@ -277,9 +285,10 @@ const Provider = ({ children }: PropsWithChildren) => {
               'noBids',
               'auctionEvents',
               'errorEvents',
-              'versionInfo',
-              'installedModules',
               'config',
+              'installedModules',
+              'versionInfo',
+              'pbjsNamespace',
             ];
 
             const updates = Object.fromEntries(
@@ -291,9 +300,18 @@ const Provider = ({ children }: PropsWithChildren) => {
                 })
             );
 
+            updates['prebidExists'] = data.prebidExists ?? prev.prebidExists;
+
             return Object.keys(updates).length ? { ...prev, ...updates } : prev;
           });
+        }
+      }
 
+      if (
+        incomingMessageType === 'AUCTION_EVENTS' &&
+        message.payload.auctionEvents
+      ) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,

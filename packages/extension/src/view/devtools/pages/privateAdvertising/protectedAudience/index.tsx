@@ -34,7 +34,7 @@ import AdUnits from './adUnits';
 import ExplorableExplanation from './explorableExplanation';
 import WorkletBreakpoints from './workletBreakpoints';
 import Overview from './overview';
-import PrebidPanel from './prebid';
+import Prebid from './prebid';
 
 const ProtectedAudience = () => {
   const tabItems = useMemo<TabItems>(
@@ -96,7 +96,7 @@ const ProtectedAudience = () => {
         {
           title: 'Prebid',
           content: {
-            Element: PrebidPanel,
+            Element: Prebid,
           },
         },
       ],

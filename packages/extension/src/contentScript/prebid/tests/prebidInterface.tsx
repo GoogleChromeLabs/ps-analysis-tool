@@ -38,7 +38,7 @@ describe('PrebidInterface', () => {
 
   it('should initialize with default values', () => {
     expect(prebidInterface.tabId).toBeNull();
-    expect(prebidInterface.prebidExists).toBeNull();
+    expect(prebidInterface.prebidData.prebidExists).toBeNull();
     expect(prebidInterface.prebidInterface).toBeNull();
     expect(prebidInterface.prebidData).toEqual({
       adUnits: {},
@@ -46,8 +46,10 @@ describe('PrebidInterface', () => {
       versionInfo: '',
       installedModules: [],
       config: {},
+      pbjsNamespace: '',
       receivedBids: [],
       errorEvents: [],
+      prebidExists: null,
       auctionEvents: {},
     });
     expect(prebidInterface.updateCounter).toBe(0);
@@ -68,6 +70,7 @@ describe('PrebidInterface', () => {
     };
 
     prebidInterface.scanningStatus = true;
+    prebidInterface.prebidData.prebidExists = true;
     //@ts-ignore
     window.onmessage(mockEvent as MessageEvent);
 
@@ -85,6 +88,7 @@ describe('PrebidInterface', () => {
     window.top.postMessage = mockPostMessage;
 
     prebidInterface.tabId = 123;
+    prebidInterface.prebidData.prebidExists = true;
     prebidInterface.sendInitialData();
 
     expect(mockPostMessage).toHaveBeenCalledWith({
@@ -92,38 +96,6 @@ describe('PrebidInterface', () => {
       tabId: 123,
       prebidData: JSON.parse(decycle(prebidInterface.prebidData)),
     });
-  });
-
-  it('should process prebid data if property exists', async () => {
-    const mockPostMessage = jest.fn();
-    //@ts-ignore
-    window.top.postMessage = mockPostMessage;
-
-    prebidInterface.prebidExists = true;
-    prebidInterface.prebidInterface = {
-      getConfig: jest.fn().mockResolvedValue({ test: 'data' }),
-    } as any;
-
-    await prebidInterface.getAndProcessPrebidData('getConfig');
-
-    expect(mockPostMessage).toHaveBeenCalledWith({
-      type: SCRIPT_GET_PREBID_DATA_RESPONSE,
-      tabId: null,
-      prebidData: JSON.parse(decycle({ test: 'data' })),
-    });
-  });
-
-  it('should not process prebid data if property does not exist', async () => {
-    const mockPostMessage = jest.fn();
-    //@ts-ignore
-    window.top.postMessage = mockPostMessage;
-
-    prebidInterface.prebidExists = true;
-    prebidInterface.prebidInterface = {} as any;
-
-    await prebidInterface.getAndProcessPrebidData('nonExistentProperty');
-
-    expect(mockPostMessage).not.toHaveBeenCalled();
   });
 
   it('should calculate bid response correctly', () => {
@@ -180,6 +152,8 @@ describe('PrebidInterface', () => {
       cpm: 5.0,
       currency: 'USD',
       bidder: 'bidder1',
+      height: 200,
+      width: 200,
     };
 
     prebidInterface.calculateAdUnit(bid as any);
@@ -189,6 +163,7 @@ describe('PrebidInterface', () => {
         winningBid: 5.0,
         bidCurrency: 'USD',
         winningBidder: 'bidder1',
+        winningMediaContainerSize: [[200, 200]],
       },
     });
   });

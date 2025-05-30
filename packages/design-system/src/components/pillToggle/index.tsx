@@ -24,6 +24,7 @@ interface PillToggleProps {
   pillToggle: string;
   setPillToggle: (value: string) => void;
   eeAnimatedTab: boolean;
+  width?: string;
 }
 
 const PillToggle = ({
@@ -31,6 +32,7 @@ const PillToggle = ({
   pillToggle,
   setPillToggle,
   eeAnimatedTab,
+  width = 'w-max',
 }: PillToggleProps) => {
   const selectedIndexRef = useRef<number | null>(null);
 
@@ -46,8 +48,10 @@ const PillToggle = ({
         return (
           <button
             key={option}
+            style={{ zIndex: options.length - index }}
             className={classNames(
               `px-5 h-full border-r border-[#B6B6B6] dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
+              width,
               {
                 'px-8': index > 0,
                 'bg-anti-flash-white dark:bg-gray-500 ': pillToggle === option,
