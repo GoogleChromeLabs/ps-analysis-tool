@@ -19,6 +19,7 @@
  */
 import dataStore, { DataStore } from '../../store/dataStore';
 import {
+  CS_GET_PREBID_DATA_RESPONSE,
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
@@ -27,15 +28,46 @@ import {
   POPUP_OPEN,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
+  TABID_STORAGE,
 } from '../../constants';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 import sendUpdatedData from '../../store/utils/sendUpdatedData';
+import PAStore from '../../store/PAStore';
+import { protectedAudienceInitialState } from '../../view/devtools/stateProviders';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (request: any) => {
+  if (request.setInPagePrebidInterface) {
+    const tabs = await chrome.tabs.query({});
+
+    if (!tabs) {
+      return;
+    }
+
+    try {
+      await Promise.all(
+        tabs.map(async (tab) => {
+          if (!tab.id) {
+            return;
+          }
+          await chrome.tabs.sendMessage(tab.id, {
+            tabId: tab.id,
+            payload: {
+              type: TABID_STORAGE,
+              tabId: tab.id,
+              frameId: 0,
+            },
+          });
+        })
+      );
+    } catch (error) {
+      //Silence error
+    }
+  }
+
   if (!request.type) {
     return;
   }
@@ -150,5 +182,22 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
     cookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
+  }
+
+  if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
+    if (request?.payload?.prebidExists === false) {
+      PAStore.prebidEvents[incomingMessageTabId.toString()] = {
+        ...protectedAudienceInitialState.state.prebidResponse,
+        prebidExists: false,
+      };
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
+      return;
+    }
+
+    PAStore.prebidEvents[incomingMessageTabId.toString()] = {
+      prebidExists: true,
+      ...request.payload.prebidData,
+    };
+    DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
   }
 };

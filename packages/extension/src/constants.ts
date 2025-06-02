@@ -30,6 +30,7 @@ export const CDP_WARNING_MESSAGE =
   'Enabling CDP with more than 5 tabs open will impact your browser performance and all tabs will be reloaded. Are you sure you want to enable CDP?';
 export const RELOAD_WARNING_MESSAGE =
   'Settings changed, reload all tabs to apply changes?';
+export const STORE_RULES_TOGGLE = 'globalPersistDebuggingRules';
 
 export const DEVTOOLS_CLOSE = 'DEVTOOLS_STATE_CLOSE';
 export const DEVTOOLS_OPEN = 'DEVTOOLS_STATE_OPEN';
@@ -45,3 +46,9 @@ export const SERVICE_WORKER_TABS_RELOAD_COMMAND =
   'ServiceWorker::REOLAD_ALL_TABS';
 export const GET_JS_COOKIES = 'DEVTOOL::WEBPAGE::GET_JS_COOKIES';
 export const TABID_STORAGE = 'SERVICEWORKER::WEBPAGE::TABID_STORAGE';
+export const SCRIPT_GET_PREBID_DATA_RESPONSE =
+  'SCRIPT:CS:GET_PREBID_DATA_RESPONSE';
+export const CS_GET_PREBID_DATA_RESPONSE = 'CS:DEVTOOLS:GET_PREBID_DATA';
+export const SCRIPT_PREBID_INITIAL_SYNC = 'SCRIPT_PREBID_INITIAL_SYNC';
+export const CONTENT_SCRIPT_PREBID_INITIAL_SYNC = 'SCRIPT_PREBID_INITIAL_SYNC';
+export const PREBID_SCANNING_STATUS = 'PREBID_SCANNING_STATUS';

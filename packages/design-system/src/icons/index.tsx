@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 export { default as ArrowDown } from './arrow-down.svg?react';
 export { default as ArrowUp } from './arrow-up.svg?react';
 export { default as ArrowDownWhite } from './arrow-down-white.svg?react';
@@ -84,7 +83,6 @@ export { default as DashboardIconWhite } from './dashboard-white.svg?react';
 export { default as WikiIcon } from './wiki.svg?react';
 export { default as WikiIconWhite } from './wiki-white.svg?react';
 export { default as ExternalLinkIcon } from './external-link.svg?react';
-export { default as DoubleArrowIcon } from './double-arrow-icon.svg?react';
 export { default as Settings } from './settings.svg?react';
 export { default as MenuOpenIcon } from './menu-open-icon.svg?react';
 export { default as PlayIcon } from './play.svg?react';
@@ -116,4 +114,15 @@ export { default as SearchIcon } from './search.svg?react';
 export { default as Tick } from './tick.svg?react';
 export { default as Plus } from './add-simple.svg?react';
 export { default as DescendingOrder } from './arrow-upward-with-line.svg?react';
+export { default as Person } from './person.svg?react';
+export { default as Ruler } from './ruler.svg?react';
+export { default as DoubleUser } from './double-user.svg?react';
+export { default as FourSquares } from './four-squares.svg?react';
+export { default as Buildings } from './buildings.svg?react';
+export { default as Server } from './server.svg?react';
+export { default as Error } from './error-icon.svg?react';
+export { default as WarningColored } from './warning-icon.svg?react';
+export { default as Equal } from './equal.svg?react';
+export { default as DeleteForever } from './delete-forever.svg?react';
+export { default as DoubleArrow } from './double-arrow.svg?react';
 export * from './ps-icons';
