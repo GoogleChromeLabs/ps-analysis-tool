@@ -29,117 +29,11 @@ import {
 /**
  * Internal dependencies.
  */
-import type { TopicsTableType } from './topicsTable';
-
-type TopicsTableData = Record<number, TopicsTableType[]>;
-
-export type Epoch = {
-  webVisits: { website: string; datetime: string; topics: string[] }[];
-};
-
-export type TopicsExplorableExplanationState = {
-  isTabStorageLoaded: boolean;
-  isSessionStorageLoaded: boolean;
-  epochs: Epoch[];
-  topicsTableData: TopicsTableData;
-  highlightAdTech: string | null;
-  completedEpochs: Set<number>;
-  activeEpoch: number;
-  isPlaying: boolean;
-  isInteractive: boolean;
-  sliderStep: number;
-  siteAdTechs: Record<string, string[]>;
-  epochSiteVisited: Record<number, Set<number>>;
-  hasAnimationFinished: boolean;
-};
-
-type SetTopicsTableDataAction = {
-  type: 'setTopicsTableData';
-  payload: {
-    topicsTableData: TopicsTableData;
-  };
-};
-
-type SetHighlightAdTechAction = {
-  type: 'setHighlightAdTech';
-  payload: {
-    highlightAdTech: string | null;
-  };
-};
-
-type SetActiveEpochAction = {
-  type: 'setActiveEpoch';
-  payload: {
-    activeEpoch: number;
-  };
-};
-
-type SetIsPlayAction = {
-  type: 'setIsPlaying';
-  payload: {
-    isPlaying: boolean;
-  };
-};
-
-type SetIsInteractiveAction = {
-  type: 'setIsInteractive';
-  payload: {
-    isInteractive: boolean;
-  };
-};
-
-type SetSliderStepAction = {
-  type: 'setSliderStep';
-  payload: {
-    sliderStep: number;
-  };
-};
-
-type ResetAction = {
-  type: 'reset';
-};
-
-type SetSiteAdTechsAction = {
-  type: 'setSiteAdTechs';
-  payload: {
-    siteAdTechs: Record<string, string[]>;
-  };
-};
-
-type SetInitialStateAction = {
-  type: 'setInitialState';
-  payload: {
-    initialState: Partial<TopicsExplorableExplanationState>;
-  };
-};
-
-type SetEpochSiteVisitedAction = {
-  type: 'setEpochSiteVisited';
-  payload: {
-    epochIndex: number;
-    siteIndex: number;
-  };
-};
-
-type SetHasAnimationFinishedAction = {
-  type: 'setHasAnimationFinished';
-  payload: {
-    hasAnimationFinished: boolean;
-  };
-};
-
-export type TopicsExplorableExplanationAction =
-  | SetTopicsTableDataAction
-  | SetHighlightAdTechAction
-  | SetActiveEpochAction
-  | SetIsPlayAction
-  | SetIsInteractiveAction
-  | SetSliderStepAction
-  | ResetAction
-  | SetSiteAdTechsAction
-  | SetInitialStateAction
-  | SetEpochSiteVisitedAction
-  | SetHasAnimationFinishedAction;
+import type {
+  TopicsExplorableExplanationState,
+  TopicsExplorableExplanationAction,
+} from './types';
+import { setEpochSiteVisited } from './helpers';
 
 const initialState: TopicsExplorableExplanationState = {
   isTabStorageLoaded: false,
@@ -205,6 +99,7 @@ export const useTopicsExplorableExplanation = (
             // reset visited sites when interactive mode is toggled
             epochSiteVisited: initialState.epochSiteVisited,
             topicsTableData: initialState.topicsTableData,
+            completedEpochs: initialState.completedEpochs,
           };
         case 'setSliderStep':
           return { ...state, sliderStep: action.payload.sliderStep };
@@ -255,7 +150,6 @@ export const useTopicsExplorableExplanation = (
     }
 
     const storage = tabStorage[EE_TAB_INDEX] || '{}';
-
     const {
       siteAdTechs,
       topicsTableData: tableData,
@@ -334,7 +228,6 @@ export const useTopicsExplorableExplanation = (
       if (hasDataBeenFetchedFromSessionStorage.current) {
         return;
       }
-
       const data = (await getSessionStorage(STORAGE_KEY)) || {};
 
       topicsDispatch({
@@ -346,7 +239,6 @@ export const useTopicsExplorableExplanation = (
           },
         },
       });
-
       hasDataBeenFetchedFromSessionStorage.current = true;
     })();
   }, []);
@@ -369,76 +261,4 @@ export const useTopicsExplorableExplanation = (
   }, [topicsState.isInteractive, topicsState.sliderStep]);
 
   return [topicsState, topicsDispatch] as const;
-};
-
-const setEpochSiteVisited = (
-  state: TopicsExplorableExplanationState,
-  action: SetEpochSiteVisitedAction
-) => {
-  const { epochIndex, siteIndex } = action.payload;
-  const currentEpoch = state.epochs[state.activeEpoch];
-  const visited = new Set([...state.epochSiteVisited[epochIndex], siteIndex]);
-
-  // the animation has the concept of "user visit" and "user visit done"
-  // it means that when index [6] is visited, [5] is actually done, so we need to add 1 to the length
-  const isCompleted = visited.size === currentEpoch.webVisits.length + 1;
-
-  const hasSiteBeenVisited = state.epochSiteVisited[epochIndex].has(siteIndex);
-  const isLastVisitDone = siteIndex === currentEpoch.webVisits.length;
-
-  // only calculate topics table data for unvisited or not done sites
-  const topicsTableData =
-    hasSiteBeenVisited || isLastVisitDone
-      ? state.topicsTableData
-      : calculateTopicsTableData(state, epochIndex, siteIndex);
-
-  return {
-    ...state,
-    topicsTableData,
-    completedEpochs: isCompleted
-      ? new Set([...state.completedEpochs, epochIndex])
-      : state.completedEpochs,
-    epochSiteVisited: {
-      ...state.epochSiteVisited,
-      [epochIndex]: visited,
-    },
-  };
-};
-
-const calculateTopicsTableData = (
-  state: TopicsExplorableExplanationState,
-  epochIndex: number,
-  siteIndex: number
-) => {
-  const { siteAdTechs, topicsTableData } = state;
-  const epoch = state.epochs[epochIndex];
-  const { website, topics } = epoch.webVisits[siteIndex];
-
-  const newTopicsTableData = topics.reduce(
-    (acc, topic) => {
-      const existingTopic = acc.find((t) => t.topicName === topic);
-      if (existingTopic) {
-        existingTopic.count += 1;
-        existingTopic.observedByContextDomains = [
-          ...new Set([
-            ...existingTopic.observedByContextDomains,
-            ...siteAdTechs[website],
-          ]),
-        ];
-      } else {
-        acc.push({
-          topicName: topic,
-          count: 1,
-          observedByContextDomains: siteAdTechs[website] || [],
-        });
-      }
-      return acc;
-    },
-    [...(topicsTableData[epochIndex] || [])]
-  );
-
-  return {
-    ...state.topicsTableData,
-    [epochIndex]: newTopicsTableData,
-  };
 };
