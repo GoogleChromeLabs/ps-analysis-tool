@@ -327,7 +327,7 @@ const useFrameOverlay = (
     selectedFrame,
     selectedAdUnit,
     adsAndBidders,
-    prebidResponse.adUnits,
+    prebidResponse?.adUnits,
   ]);
 
   useEffect(() => {
