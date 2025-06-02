@@ -147,7 +147,7 @@ const Panel = () => {
       !isEqual(data.current?.prebidResponse?.adUnits, prebidResponse?.adUnits)
     ) {
       if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-        highlightTab(3);
+        highlightTab(4);
       }
 
       store = {
@@ -163,7 +163,7 @@ const Panel = () => {
       )
     ) {
       if (Object.keys(prebidResponse?.auctionEvents || {}).length > 0) {
-        highlightTab(4);
+        highlightTab(5);
       }
 
       store = {
