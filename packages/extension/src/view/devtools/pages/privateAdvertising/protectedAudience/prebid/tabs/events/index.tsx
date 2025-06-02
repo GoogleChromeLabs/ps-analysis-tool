@@ -83,7 +83,7 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
         {filteredErrorEvents().map((event, index) => {
           return (
             <SingleErrorRow
-              key={event.time}
+              key={index}
               message={Object.values(event.message)
                 .map((value) =>
                   typeof value === 'object' ? JSON.stringify(value) : value

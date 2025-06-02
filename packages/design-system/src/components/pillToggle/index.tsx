@@ -23,7 +23,7 @@ interface PillToggleProps {
   options: string[];
   pillToggle: string;
   setPillToggle: (value: string) => void;
-  eeAnimatedTab?: boolean;
+  eeAnimatedTab: boolean;
   width?: string;
 }
 

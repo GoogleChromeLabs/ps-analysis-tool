@@ -87,7 +87,7 @@ describe('Header Component', () => {
       />
     );
 
-    const dropdown = screen.getByText('Default levels');
+    const dropdown = screen.getByText('All levels');
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByText('Warnings'));
 

@@ -17,6 +17,7 @@
  * External dependencies
  */
 import { Button, Plus } from '@google-psat/design-system';
+import classNames from 'classnames';
 /**
  * Internal dependencies
  */
@@ -46,10 +47,20 @@ const Tools = () => {
         debuggingEnabled={debuggingModuleConfig.enabled ?? false}
         setDebuggingModuleConfig={setDebuggingModuleConfig}
       />
-      <div className="flex flex-col w-full h-fit items-start mt-2 rounded-sm border border-hex-gray dark:border-quartz px-4 py-3">
+      <div
+        className={classNames(
+          'flex flex-col w-full h-fit mt-2 rounded-sm border border-hex-gray dark:border-quartz px-4 py-3',
+          {
+            'items-start': debuggingModuleConfig.intercept.length > 0,
+            'items-center': debuggingModuleConfig.intercept.length === 0,
+          }
+        )}
+      >
         <Button
           dontShowBackground
-          extraClasses="mb-8"
+          extraClasses={`${
+            debuggingModuleConfig.intercept.length > 0 ? 'mb-8' : ''
+          }`}
           title="Add rule"
           type="button"
           text={

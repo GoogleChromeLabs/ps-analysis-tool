@@ -96,12 +96,9 @@ const App: React.FC = () => {
       }
 
       const data = await getSessionStorage('persistentSetting');
-      const syncData = await chrome.storage.sync.get();
 
       if (data?.selectedSidebarItem) {
         setDefaultSelectedItemKey(data?.selectedSidebarItem);
-      } else if (syncData?.psLandingPageViewed) {
-        setDefaultSelectedItemKey(SIDEBAR_ITEMS_KEYS.DASHBOARD);
       }
 
       if (data?.sidebarCollapsedState) {

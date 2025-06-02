@@ -406,6 +406,8 @@
   --background-color-black: #000;
   --background-color-white: #fff;
 
+  --background-color-slate-gray: #ECECEC;
+
   --background-color-slate-50: #f8fafc;
   --background-color-slate-100: #f1f5f9;
   --background-color-slate-200: #e2e8f0;
@@ -729,6 +731,13 @@
   --background-color-mahogany: #cc3300;
   --background-color-blueberry: #4285fa;
   --background-color-celeste: #b1f8f2;
+	--background-color-steel-blue: #3A83AB;
+
+  --background-color-lavender-sky: #d3e3fd;
+  --background-color-silver-mist: #dcdcdc;
+
+  --background-color-midnight-slate: #44474e;
+  --background-color-dark-graphite: #3c3c3c;
 
   --border-color-*: initial;
   --border-color-inherit: inherit;
@@ -1023,6 +1032,7 @@
   --border-color-privacy-green: #3bd897;
   --border-color-privacy-purple: #dc9af8;
   --border-color-gray-silver: #B6B6B6;
+	--border-color-steel-blue: #3A83AB;
 
   --color-*: initial;
   --color-inherit: inherit;
