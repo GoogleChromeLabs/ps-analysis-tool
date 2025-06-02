@@ -88,6 +88,7 @@ export type AdsAndBiddersTypeData = {
   winningBid: number;
   bidCurrency: string;
   winningBidder: string;
+  winningMediaContainerSize?: number[][];
 };
 
 export type AdsAndBiddersType = {
@@ -99,3 +100,15 @@ export type ReceivedBids = singleAuctionEvent & {
   mediaContainerSize?: number[][];
   adType?: string;
 };
+
+export interface PrebidDebugModuleConfig {
+  enabled?: boolean;
+  intercept: PrebidDebugModuleConfigRule[];
+}
+
+export interface PrebidDebugModuleConfigRule {
+  when: { [key: string]: string | number };
+  then: {
+    [key: string]: string | number;
+  };
+}

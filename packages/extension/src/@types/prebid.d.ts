@@ -335,6 +335,29 @@ declare global {
 
   type AuctionDebugEventType = 'INFO' | 'WARNING' | 'ERROR';
 
+  interface EID {
+    source: string;
+    uids: UID[];
+  }
+  interface UID {
+    id: string;
+    atype: number;
+    ext?: Record<string, any>;
+  }
+
+  interface UserIdConfig {
+    name: string;
+    storage?: {
+      type: 'cookie' | 'html5';
+      name: string;
+      expires?: number; // in days
+      refreshInSeconds?: number;
+    };
+    params?: Record<string, any>;
+    value?: any; // Used when identity is already available and set manually
+    bidders?: string[]; // Optional: only enable this ID for specific bidders
+  }
+
   interface AuctionDebugEvent {
     type: AuctionDebugEventType;
     arguments: string[];
@@ -343,14 +366,10 @@ declare global {
     debug?: boolean;
     bidderTimeout?: number;
     enableSendAllBids?: boolean;
+    bidderSequence?: string;
     useBidCache?: boolean;
-    priceGranularity?:
-      | 'low'
-      | 'medium'
-      | 'high'
-      | 'auto'
-      | 'dense'
-      | CustomPriceGranularity;
+    eids?: EID[];
+    priceGranularity?: 'low' | 'medium' | 'high' | 'auto' | 'dense' | 'custom';
     currency?: {
       adServerCurrency: string;
       granularityMultiplier?: number;
@@ -371,6 +390,7 @@ declare global {
       };
     };
     userSync?: {
+      userIds?: UserIdConfig[];
       syncEnabled?: boolean;
       filterSettings?: {
         all?: {
@@ -575,6 +595,7 @@ declare global {
     maxNestedIframes?: number;
     disableAjaxTimeout?: boolean;
     enableTIDs?: boolean;
+    gptPreAuction?: GptPreAuctionConfig;
     allowActivities?: {
       [activity: string]: {
         rules: Array<{
@@ -590,27 +611,38 @@ declare global {
       includeEvents?: string[];
       excludeEvents?: string[];
     }>;
-    bidderSettings?: Record<
-      string,
-      {
-        bidCpmAdjustment?: (bidCpm: number) => number;
-        alwaysUseBid?: boolean;
-        sendStandardTargeting?: boolean;
-        adserverTargeting?: Array<{
-          key: string;
-          val: (bidResponse: any) => string;
-        }>;
-      }
-    >;
+    bidderSettings?: Record<string, SingleBidderSetting>;
     [key: string]: any;
   }
 
-  type CustomPriceGranularity = {
-    buckets: Array<{
-      min: number;
-      max: number;
-      increment: number;
+  interface GptPreAuctionConfig {
+    enabled: boolean;
+    timeout?: number; // in milliseconds
+    setTargeting?: boolean;
+    suppressInitialLoad?: boolean;
+    auctionDelay?: number;
+    requestBidsHook?: () => void;
+  }
+
+  type SingleBidderSetting = {
+    bidCpmAdjustment?: (bidCpm: number) => number;
+    alwaysUseBid?: boolean;
+    sendStandardTargeting?: boolean;
+    adserverTargeting?: Array<{
+      key: string;
+      val: (bidResponse: any) => string;
     }>;
+  };
+
+  type PriceGranularityValue = Array<{
+    min: number;
+    max: number;
+    increment: number;
+    precision: number;
+  }>;
+
+  type CustomPriceGranularity = {
+    buckets: PriceGranularityValue;
   };
 
   interface PrebidJsGlobal {
@@ -643,7 +675,7 @@ declare global {
     getAllPrebidWinningBids(): BidResponse[];
     renderAd(document: Document, adId: string): void;
     getUserIds(): Record<string, any>;
-    getUserIdsAsEids(): any[];
+    getUserIdsAsEids(): EID[];
     getUserIdsAsync(): void;
     setBidderConfig(config: object): void;
     aliasBidder(
