@@ -126,15 +126,6 @@ const BodyRow = ({
       onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
-      {/* Vertical bar for for some indication, styles can also be made dynamic.*/}
-      {hasVerticalBar && (
-        <span
-          style={{
-            backgroundColor: verticalBarColorHash,
-          }}
-          className="absolute block top-0 bottom-0 left-0 w-1 h-full"
-        />
-      )}
       {columns.map(
         (
           {
@@ -157,6 +148,8 @@ const BodyRow = ({
             icon={bodyCellPrefixIcon ?? undefined}
             rowHeightClass={rowHeightClass}
             accessorKey={accessorKey}
+            hasVerticalBar={idx === 0 && hasVerticalBar}
+            verticalBarColorHash={verticalBarColorHash}
           />
         )
       )}
