@@ -100,6 +100,7 @@ export const useTopicsExplorableExplanation = (
             epochSiteVisited: initialState.epochSiteVisited,
             topicsTableData: initialState.topicsTableData,
             completedEpochs: initialState.completedEpochs,
+            hasAnimationFinished: false,
           };
         case 'setSliderStep':
           return { ...state, sliderStep: action.payload.sliderStep };
@@ -120,16 +121,10 @@ export const useTopicsExplorableExplanation = (
         case 'reset':
           return {
             ...state,
-            epochs: JSON.parse(tabStorage[EE_TAB_INDEX] || '{}').epochs,
             activeEpoch: 0,
-            epochSiteVisited: {
-              0: new Set(),
-              1: new Set(),
-              2: new Set(),
-              3: new Set(),
-            } as Record<number, Set<number>>,
-            completedEpochs: new Set<number>(),
-            topicsTableData: {},
+            epochSiteVisited: initialState.epochSiteVisited,
+            completedEpochs: initialState.completedEpochs,
+            topicsTableData: initialState.topicsTableData,
             highlightAdTech: null,
             isPlaying: !state.isInteractive,
             hasAnimationFinished: false,
