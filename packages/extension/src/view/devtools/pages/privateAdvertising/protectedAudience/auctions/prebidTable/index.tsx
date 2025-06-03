@@ -33,8 +33,8 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import BottomTray from '../../components/table/bottomTray';
-import type { PrebidEvents } from '../../../../../../../../store';
+import BottomTray from '../components/table/bottomTray';
+import type { PrebidEvents } from '../../../../../../../store';
 
 interface PrebidTableProps {
   auctionEvents: [

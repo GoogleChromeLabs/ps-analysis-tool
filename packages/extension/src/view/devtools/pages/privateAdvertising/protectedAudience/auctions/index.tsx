@@ -13,34 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
 import React from 'react';
+import { SidebarProvider } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience } from '../../../../stateProviders';
-import AuctionsV1 from './v1';
-import AuctionsV2 from './v2';
+import useSidebarProcessing from './hooks/useSidebarProcessing';
+import Panel from './panel';
 
 const Auctions = () => {
-  const { isMultiSeller, prebidResponse } = useProtectedAudience(
-    ({ state }) => ({
-      isMultiSeller: state.isMultiSellerAuction,
-      prebidResponse: state.prebidResponse,
-    })
+  const { sidebarData } = useSidebarProcessing();
+
+  return (
+    <SidebarProvider
+      data={sidebarData}
+      defaultSelectedItemKey={Object.keys(sidebarData)[0]}
+    >
+      <Panel />
+    </SidebarProvider>
   );
-
-  if (
-    !isMultiSeller &&
-    Object.keys(prebidResponse?.adUnits || {}).length === 0
-  ) {
-    return <AuctionsV1 />;
-  }
-
-  return <AuctionsV2 />;
 };
 
 export default Auctions;

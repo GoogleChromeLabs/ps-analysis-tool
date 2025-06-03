@@ -23,11 +23,11 @@ import { useEffect, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import AdUnits from '../../../adUnits';
+import AdUnits from '../../adUnits';
 import useDataProcessing from './useDataProcessing';
-import AdunitPanel from '../../components/adunitPanel';
+import AdunitPanel from '../components/adunitPanel';
 import PrebidTable from '../prebidTable';
-import AuctionTable from '../../components/table';
+import AuctionTable from '../components/table';
 
 const useSidebarProcessing = () => {
   const [sidebarData, setSidebarData] = useState<SidebarItems>({

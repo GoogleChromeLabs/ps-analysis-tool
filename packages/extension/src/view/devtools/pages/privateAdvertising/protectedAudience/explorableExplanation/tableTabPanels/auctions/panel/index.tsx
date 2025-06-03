@@ -35,11 +35,11 @@ import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies.
  */
-import type { AuctionEventsType } from '../../../../../../stateProviders/protectedAudience/context';
-import AuctionTable from '../../components/table';
-import AdunitPanel from '../../components/adunitPanel';
-import AdunitSubPanel from '../../components/adunitPanel/panel';
-import SortButton from '../../../../../sortButton';
+import type { AuctionEventsType } from '../../../../../../../stateProviders/protectedAudience/context';
+import AuctionTable from '../../../../auctions/components/table';
+import AdunitPanel from '../../../../auctions/components/adunitPanel';
+import AdunitSubPanel from '../../../../auctions/components/adunitPanel/panel';
+import SortButton from '../../../../../../sortButton';
 
 interface AuctionPanelProps {
   auctionEvents: {
@@ -308,6 +308,7 @@ const AuctionPanel = ({
     sortOrder,
     isSidebarFocused,
     isKeySelected,
+    adsAndBidders,
   ]);
 
   const { activePanel } = useSidebar(({ state }) => ({

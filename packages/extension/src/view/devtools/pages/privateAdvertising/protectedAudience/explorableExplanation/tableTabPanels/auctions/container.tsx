@@ -29,8 +29,8 @@ import React from 'react';
 /**
  * Internal dependencies.
  */
+import type { AuctionEventsType } from '../../../../../../stateProviders/protectedAudience/context';
 import AuctionPanel from './panel';
-import type { AuctionEventsType } from '../../../../../stateProviders/protectedAudience/context';
 
 interface AuctionsContainerProps {
   auctionEvents: {

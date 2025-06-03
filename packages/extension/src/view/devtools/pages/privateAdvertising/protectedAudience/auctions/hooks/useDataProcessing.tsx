@@ -22,7 +22,7 @@ import { useCallback, useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience } from '../../../../../../stateProviders';
+import { useProtectedAudience } from '../../../../../stateProviders';
 
 const useDataProcessing = () => {
   const { paapi, prebidResponse, isMultiSeller } = useProtectedAudience(
