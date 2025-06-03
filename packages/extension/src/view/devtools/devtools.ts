@@ -44,6 +44,6 @@ const callback = (panel: {
 chrome.devtools.panels.create(
   'Privacy Sandbox',
   'icons/icon.svg',
-  'devtools/index.html',
+  'devtools-panel.html',
   callback
 );

@@ -15,8 +15,8 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "vite dev --open --port 8085 --config ../../vite.ee.config.mts",
-    "build": "vite build --emptyOutDir --config ../../vite.ee.config.mts"
+    "dev": "vite dev --open --port 8085",
+    "build": "vite build --emptyOutDir"
   },
   "repository": {
     "type": "git",

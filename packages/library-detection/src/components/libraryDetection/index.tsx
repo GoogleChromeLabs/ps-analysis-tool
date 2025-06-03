@@ -42,6 +42,8 @@ const LibraryDetection = memo(function LibraryDetection() {
       isCurrentTabLoading: state.isCurrentTabLoading,
     }));
 
+  console.log({ errorOccured });
+
   const names = Object.keys(libraryMatches);
 
   const detectedLibraryNames = names.filter(

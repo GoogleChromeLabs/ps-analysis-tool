@@ -10,7 +10,8 @@
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "skipLibCheck": true
   },
   "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"]
 }

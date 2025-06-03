@@ -31,7 +31,7 @@ import InfoCard from '..';
 import { PSInfoKey } from '../fetchPSInfo';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
+import PSInfo from 'ps-analysis-tool/packages/extension/public/data/PSInfo.json';
 
 describe('should match the json file data with the component', () => {
   const tests = Object.values(PSInfoKey).map((infoKey) => {

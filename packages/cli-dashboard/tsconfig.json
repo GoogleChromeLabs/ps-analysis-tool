@@ -14,9 +14,6 @@
   "references": [
     { "path": "../common" },
     {
-      "path": "../design-system"
-    },
-    {
       "path": "../report"
     }
   ]

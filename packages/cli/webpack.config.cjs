@@ -35,8 +35,8 @@ module.exports = {
     new webpack.BannerPlugin({ banner: '#!/usr/bin/env node', raw: true }),
     new CopyPlugin({
       patterns: [
-        { from: '../../assets', to: 'assets' },
-        { from: '../../data', to: 'assets/data' },
+        { from: '../../packages/extension/public/assets', to: 'assets' },
+        { from: '../../packages/extension/public/data', to: 'assets/data' },
       ],
     }),
   ],

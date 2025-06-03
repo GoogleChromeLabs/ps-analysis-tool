@@ -18,6 +18,8 @@ Thumbs.db
 dist
 data/temp-cookies
 coverage
+.wxt
+packages/extension/public/_locales
 
 # output from cli
 out

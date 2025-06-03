@@ -25,6 +25,9 @@ import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 
 export class DataStore {
+  // @ts-ignore
+  static cookieDB: Record<string, CookieTableData> = {};
+
   /**
    * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
    */

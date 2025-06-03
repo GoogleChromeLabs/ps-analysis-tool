@@ -18,6 +18,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import path from 'path';
 
+// eslint-disable-next-line import/no-relative-packages
 import baseConfig from './vite.shared.config.mjs';
 
 export default mergeConfig(baseConfig, {

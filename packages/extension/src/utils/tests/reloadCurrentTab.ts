@@ -23,7 +23,7 @@ import SinonChrome from 'sinon-chrome';
 import reloadCurrentTab from '../reloadCurrentTab';
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import PSInfo from 'ps-analysis-tool/data/PSInfo.json';
+import PSInfo from 'ps-analysis-tool/packages/extension/public/data/PSInfo.json';
 
 describe('reloadCurrentTab : ', () => {
   beforeAll(() => {

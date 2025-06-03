@@ -21,7 +21,7 @@ import tabFrames, { targetInfo } from '../test-data/tabFrames';
 import getFramesForCurrentTab from '../getFramesForCurrentTab';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import RelatedWebsitesSets from 'ps-analysis-tool/data/related_website_sets.json';
+import RelatedWebsitesSets from 'ps-analysis-tool/packages/extension/public/data/related_website_sets.json';
 
 describe('getFramesForCurrentTab : ', () => {
   beforeAll(() => {

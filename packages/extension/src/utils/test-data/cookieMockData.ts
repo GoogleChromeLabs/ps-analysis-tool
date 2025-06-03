@@ -21,7 +21,7 @@ import { emptyAnalytics } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import { type CookieStoreContext } from '../../view/devtools/stateProviders/cookie';
+import { type CookieStoreContext } from '../../view/devtools-panel/stateProviders/cookie';
 
 const emptyCookie = {
   name: '',

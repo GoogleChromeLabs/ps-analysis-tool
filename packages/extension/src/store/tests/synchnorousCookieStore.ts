@@ -24,7 +24,7 @@ import { BlockedReason, CookieData } from '@google-psat/common';
  */
 //@ts-ignore
 // eslint-disable-next-line import/no-unresolved
-import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
+import OpenCookieDatabase from 'ps-analysis-tool/packages/extension/public/assets/data/open-cookie-database.json';
 import data from '../../utils/test-data/cookieMockData';
 import dataStore, { DataStore } from '../dataStore';
 import cookieStore from '../cookieStore';

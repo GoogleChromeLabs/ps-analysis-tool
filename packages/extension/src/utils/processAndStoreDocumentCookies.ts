@@ -26,9 +26,9 @@ import {
 /**
  * Internal dependencies.
  */
-import { createCookieObject } from '../serviceWorker/createCookieObject';
+import { createCookieObject } from '../view/background/createCookieObject';
 import { DEVTOOLS_SET_JAVASCSCRIPT_COOKIE } from '../constants';
-import type { CookieStoreCookie } from '../contentScript/types';
+import type { CookieStoreCookie } from '../view/content/types';
 
 interface ProcessAndStoreDucmentCookies {
   tabUrl: string;

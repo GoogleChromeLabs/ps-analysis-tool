@@ -22,9 +22,9 @@ import { type CookieData, type CookieDatabase } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import parseResponseCookieHeader from '../serviceWorker/parseResponseCookieHeader';
+import parseResponseCookieHeader from '../view/background/parseResponseCookieHeader';
 import canProcessCookies from './canProcessCookies';
-import parseRequestCookieHeader from '../serviceWorker/parseRequestCookieHeader';
+import parseRequestCookieHeader from '../view/background/parseRequestCookieHeader';
 
 type CDPCookiesType = { [cookies: string]: Protocol.Network.Cookie[] };
 

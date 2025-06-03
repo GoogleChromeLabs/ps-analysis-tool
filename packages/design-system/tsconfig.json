@@ -13,7 +13,8 @@
     "moduleResolution": "node",
     "jsx": "preserve",
     "noImplicitAny": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "**/tests/**/*.ts",
