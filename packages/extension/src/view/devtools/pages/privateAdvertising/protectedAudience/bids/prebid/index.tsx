@@ -14,10 +14,28 @@
  * limitations under the License.
  */
 /**
+ * External dependencies.
+ */
+import React, { useEffect, useMemo } from 'react';
+
+/**
  * Internal dependencies.
  */
 import Panel from '../panel';
 import { timelines } from '../dummy';
+import { useProtectedAudience } from '../../../../../stateProviders';
+import extractAuctionTimeline from '../utils/extractAuctionTimeline';
+
+const formatTimestampToIST = (timestamp) => {
+  const date = new Date(timestamp);
+  return date.toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    timeZoneName: 'short',
+  });
+};
 
 interface PrebidBidsPanelProps {
   storage?: string[];
@@ -26,8 +44,49 @@ interface PrebidBidsPanelProps {
 }
 
 const PrebidBidsPanel = ({ storage, setStorage }: PrebidBidsPanelProps) => {
+  const { prebidResponse } = useProtectedAudience(({ state }) => ({
+    isMultiSeller: state.isMultiSellerAuction,
+    prebidResponse: state.prebidResponse,
+  }));
+
+  const allTimelines = useMemo(() => {
+    const _timelines = [];
+
+    if (!prebidResponse?.auctionEvents) {
+      return _timelines;
+    }
+
+    Object.entries(prebidResponse.auctionEvents).forEach(
+      ([auctionId, auctionEvent]) => {
+        const auctionEnd = auctionEvent.find(
+          (event) => event.eventType === 'auctionEnd'
+        );
+
+        if (!auctionEnd) {
+          return;
+        }
+
+        _timelines.push({
+          auctionTimeout: auctionEnd.timeout,
+          auctionId,
+          auctionStartTime: formatTimestampToIST(auctionEnd.timestamp),
+          auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
+          bidders: timelines[0].bidders,
+          zoomLevel: 2,
+          adUnitCodes: auctionEnd.adUnitCodes,
+        });
+      }
+    );
+
+    return _timelines;
+  }, [prebidResponse]);
+
+  useEffect(() => {
+    console.log(prebidResponse, 'prebidResponse');
+  }, []);
+
   return (
-    <Panel storage={storage} setStorage={setStorage} timelines={timelines} />
+    <Panel storage={storage} setStorage={setStorage} timelines={allTimelines} />
   );
 };
 
