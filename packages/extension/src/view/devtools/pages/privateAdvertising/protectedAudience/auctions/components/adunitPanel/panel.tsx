@@ -81,16 +81,23 @@ const Panel = ({
         name: 'Ad Container Sizes',
         Icon: ScreenIcon,
         buttons: [
-          ...(mediaContainerSize || []).map((size) => {
-            return {
-              name: `${size?.[0]}x${size?.[1]}`,
-              className:
-                winningMediaContainer?.[0] === size?.[0] &&
-                winningMediaContainer?.[1] === size?.[1]
-                  ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
-                  : '',
-            };
-          }),
+          ...(mediaContainerSize || [])
+            .filter(
+              (size) =>
+                size?.length === 2 &&
+                typeof size[0] === 'number' &&
+                typeof size[1] === 'number'
+            )
+            .map((size) => {
+              return {
+                name: `${size?.[0]}x${size?.[1]}`,
+                className:
+                  winningMediaContainer?.[0] === size?.[0] &&
+                  winningMediaContainer?.[1] === size?.[1]
+                    ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
+                    : '',
+              };
+            }),
         ],
       },
       {
