@@ -349,7 +349,7 @@ const ExplorableExplanation = () => {
     color: string;
   } | null>(null);
 
-  const tabItems = useMemo<TabItems>(
+  const tabItems = useMemo<TabItems[keyof TabItems]>(
     () => [
       {
         title: 'Interest Groups',
@@ -417,7 +417,7 @@ const ExplorableExplanation = () => {
   );
 
   return (
-    <TabsProvider items={tabItems} name="explorableExplanation">
+    <TabsProvider items={tabItems} name="explorableExplanation" isGroup={false}>
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={_setCurrentSiteData}

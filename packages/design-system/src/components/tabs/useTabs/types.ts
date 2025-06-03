@@ -17,6 +17,7 @@ export type TabsProviderProps = {
   children: React.ReactNode;
   items: TabItems | TabItem[];
   name: string;
+  isGroup?: boolean;
 };
 
 export type TabItems = {

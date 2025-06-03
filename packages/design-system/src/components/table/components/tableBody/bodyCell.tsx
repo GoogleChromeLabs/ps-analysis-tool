@@ -35,6 +35,8 @@ interface BodyCellProps {
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   rowHeightClass?: string;
   accessorKey?: string;
+  hasVerticalBar?: boolean;
+  verticalBarColorHash?: string;
 }
 
 const BodyCell = ({
@@ -45,6 +47,8 @@ const BodyCell = ({
   icon,
   rowHeightClass,
   accessorKey,
+  hasVerticalBar = false,
+  verticalBarColorHash,
 }: BodyCellProps) => {
   const IconElement = icon?.Element;
   const cellValue = cell?.() ?? '';
@@ -68,6 +72,15 @@ const BodyCell = ({
         rowHeightClass ?? 'min-h-5'
       }`}
     >
+      {/* Vertical bar for some indication, styles can also be made dynamic.*/}
+      {hasVerticalBar && (
+        <span
+          style={{
+            backgroundColor: verticalBarColorHash,
+          }}
+          className="absolute block top-0 bottom-0 left-0 w-1 h-full"
+        />
+      )}
       <div
         className="block absolute right-[-2px] cursor-ew-resize h-full w-2 z-50 top-0"
         data-column-resize-handle={accessorKey}

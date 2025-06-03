@@ -55,6 +55,9 @@ describe('Tabs', () => {
       setActiveTab,
       isTabHighlighted: jest.fn((tab: number) => (tab === 0 ? 1 : 99)),
       shouldAddSpacer: jest.fn(() => false),
+      getTabGroup: jest.fn((tab: number) =>
+        tab === 0 ? 'group-1' : 'group-2'
+      ),
     });
 
     render(<Tabs />);
@@ -110,6 +113,7 @@ describe('Tabs', () => {
       setActiveTab,
       shouldAddSpacer: jest.fn(() => false),
       isTabHighlighted: jest.fn(() => false),
+      isGroup: true,
     });
 
     render(<Tabs showBottomBorder={false} />);
@@ -119,8 +123,6 @@ describe('Tabs', () => {
     expect(screen.getByText('title2')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('group-2'));
-
-    render(<Tabs showBottomBorder={false} />);
 
     expect(screen.getByText('title3')).toBeInTheDocument();
     expect(screen.getByText('title4')).toBeInTheDocument();
@@ -161,7 +163,7 @@ describe('Tabs', () => {
 
     render(<Tabs showBottomBorder={false} />);
 
-    expect(screen.getAllByTestId('group-2')[2]).toHaveClass(
+    expect(screen.getAllByTestId('group-2')[1]).toHaveClass(
       'border-b-2 border-bright-navy-blue'
     );
   });
