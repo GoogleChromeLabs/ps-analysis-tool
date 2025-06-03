@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
@@ -94,6 +94,11 @@ const AuctionsV1 = () => {
     };
   }, [auctionEvents, noBids, receivedBids]);
 
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+  }, [updateSelectedItemKey]);
+
   if (!isUsingCDP) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -101,12 +106,7 @@ const AuctionsV1 = () => {
           To view auctions, enable PSAT to use CDP via the{' '}
           <button
             className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={() => {
-              document
-                .getElementById('cookies-landing-scroll-container')
-                ?.scrollTo(0, 0);
-              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-            }}
+            onClick={cdpNavigation}
           >
             Settings Page
           </button>
