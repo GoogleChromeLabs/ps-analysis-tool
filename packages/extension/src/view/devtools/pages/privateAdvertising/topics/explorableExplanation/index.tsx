@@ -89,7 +89,7 @@ const ExplorableExplanation = () => {
   }, [highlightAdTech, topicsNavigator, topicsTableData]);
 
   return (
-    <TabsProvider items={tabItems} name="topics-ee">
+    <TabsProvider items={tabItems} name="topics-ee" isGroup={false}>
       <Panel
         topicsTableData={topicsTableData}
         setTopicsTableData={setTopicsTableData}

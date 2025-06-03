@@ -39,6 +39,8 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     titles,
     isTabHighlighted,
     shouldAddSpacer,
+    getTabGroup,
+    isGroup,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     activeGroup: state.activeGroup,
@@ -47,95 +49,17 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     titles: state.titles,
     isTabHighlighted: actions.isTabHighlighted,
     shouldAddSpacer: actions.shouldAddSpacer,
+    getTabGroup: actions.getTabGroup,
+    isGroup: state.isGroup,
   }));
-
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-
-      if (event.key === 'Tab') {
-        const nextIndex = activeTab + 1;
-        if (nextIndex < titles.length) {
-          setActiveTab(nextIndex);
-        } else {
-          setActiveTab(0);
-        }
-      }
-
-      if (event.shiftKey && event.key === 'Tab') {
-        const previousIndex = activeTab - 1;
-        if (previousIndex >= 0) {
-          setActiveTab(previousIndex);
-        } else {
-          setActiveTab(titles.length - 1);
-        }
-      }
-    },
-    [activeTab, titles.length, setActiveTab]
-  );
-
-  const [groupsExpanded, setGroupsExpanded] = useState<
-    Record<string, { hidden: boolean; animating: boolean }>
-  >({});
-
-  useEffect(() => {
-    setGroupsExpanded(
-      Object.keys(groupedTitles).reduce((groupsStore, group, index) => {
-        groupsStore[group] = {
-          hidden: true,
-          animating: false,
-        };
-
-        if (index === 0) {
-          groupsStore[group].hidden = false;
-        }
-
-        return groupsStore;
-      }, {} as Record<string, { hidden: boolean; animating: boolean }>)
-    );
-  }, [groupedTitles]);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleGroupClick = useCallback((group: string) => {
-    let shouldUnhideInstantly = false;
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
-    setGroupsExpanded((prevState) => {
-      if (prevState[group]?.hidden) {
-        shouldUnhideInstantly = true;
-      }
-
-      return {
-        ...Object.fromEntries(
-          Object.entries(prevState).map(([groupKey]) => [
-            groupKey,
-            { hidden: false, animating: true },
-          ])
-        ),
-        [group]: {
-          hidden: shouldUnhideInstantly ? false : prevState[group].hidden,
-          animating: shouldUnhideInstantly ? false : true,
-        },
-      };
-    });
-
-    timeoutRef.current = setTimeout(() => {
-      setGroupsExpanded((prevState) => ({
-        ...Object.fromEntries(
-          Object.entries(prevState).map(([groupKey]) => [
-            groupKey,
-            { hidden: true, animating: false },
-          ])
-        ),
-        [group]: {
-          hidden: shouldUnhideInstantly
-            ? prevState[group].hidden
-            : !prevState[group].hidden,
-          animating: false,
-        },
-      }));
-    }, 300);
-  }, []);
+  useEffect(() => {
+    setExpandedGroup((groupedTitles && Object.keys(groupedTitles)[0]) || null);
+  }, [groupedTitles]);
 
   useEffect(() => {
     return () => {
@@ -144,6 +68,82 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       }
     };
   }, []);
+
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleGroupClick = useCallback(
+    (group: string) => {
+      if (isAnimating) {
+        return;
+      }
+
+      setIsAnimating(true);
+
+      if (expandedGroup === group) {
+        setExpandedGroup(null);
+      } else {
+        setExpandedGroup(group);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setIsAnimating(false);
+      }, 300);
+    },
+    [expandedGroup, isAnimating]
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+
+      if (event.key === 'Tab') {
+        if (event.shiftKey) {
+          const previousIndex = activeTab - 1;
+          if (previousIndex >= 0) {
+            setActiveTab(previousIndex);
+
+            const group = getTabGroup(previousIndex);
+            if (expandedGroup !== group) {
+              console.log(group, expandedGroup);
+              handleGroupClick(group);
+            }
+          } else {
+            setActiveTab(titles.length - 1);
+
+            const group = getTabGroup(titles.length - 1);
+            if (expandedGroup !== group) {
+              handleGroupClick(group);
+            }
+          }
+        } else {
+          const nextIndex = activeTab + 1;
+          if (nextIndex < titles.length) {
+            setActiveTab(nextIndex);
+
+            const group = getTabGroup(nextIndex);
+            if (expandedGroup !== group) {
+              handleGroupClick(group);
+            }
+          } else {
+            setActiveTab(0);
+
+            const group = getTabGroup(0);
+            if (expandedGroup !== group) {
+              handleGroupClick(group);
+            }
+          }
+        }
+      }
+    },
+    [
+      activeTab,
+      titles.length,
+      setActiveTab,
+      getTabGroup,
+      expandedGroup,
+      handleGroupClick,
+    ]
+  );
 
   return (
     <div
@@ -159,6 +159,8 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         )}
       >
         {Object.entries(groupedTitles).map(([group, data]) => {
+          const isExpanded = expandedGroup === group;
+
           return (
             <div
               key={group}
@@ -166,19 +168,19 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
               className={classNames('flex', {
                 'border-b-2 border-bright-navy-blue': group === activeGroup,
                 'border-b-2 border-steel-blue/50':
-                  group !== activeGroup && Object.keys(data).length > 1,
-                'gap-4':
-                  Object.keys(data).length > 1 &&
-                  !groupsExpanded[group]?.animating,
+                  group !== activeGroup && isGroup,
+                'gap-4': isExpanded,
               })}
             >
-              {Object.keys(data).length > 1 && (
+              {isGroup && (
                 <button
                   className={classNames(
                     'border border-steel-blue rounded-lg flex items-center justify-center px-2 py-0.5 mb-2 font-medium text-xs hover:opacity-70 active:opacity-100 text-raisin-black outline-none',
                     {
-                      'bg-steel-blue/50': group === activeGroup,
-                      'bg-steel-blue/20': group !== activeGroup,
+                      'bg-steel-blue/50 dark:bg-baby-blue-eyes':
+                        group === activeGroup,
+                      'bg-steel-blue/20 dark:bg-baby-blue-eyes/80':
+                        group !== activeGroup,
                     }
                   )}
                   onClick={() => handleGroupClick(group)}
@@ -186,82 +188,80 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                   {group}
                 </button>
               )}
-              {(!groupsExpanded[group]?.hidden ||
-                Object.keys(data).length === 1) && (
+
+              <div
+                className={classNames(
+                  'transition-all duration-300 ease-in-out overflow-hidden',
+                  {
+                    'w-0 opacity-0': !isExpanded && isGroup,
+                    'w-fit opacity-100': isExpanded || !isGroup,
+                  }
+                )}
+              >
                 <div
                   className={classNames(
-                    'transition-[width] duration-300 ease-in-out',
-                    groupsExpanded[group]?.animating ? 'w-0' : 'w-fit'
+                    'flex items-center duration-300 ease-in-out gap-2 transform',
+                    !isExpanded && isGroup
+                      ? 'opacity-0 -translate-x-4'
+                      : 'opacity-100 translate-x-0'
                   )}
                 >
-                  <div
-                    className={classNames(
-                      'flex items-center duration-200 ease-in-out',
-                      {
-                        'gap-2': Object.keys(data).length > 1,
-                      },
-                      groupsExpanded[group]?.animating
-                        ? 'opacity-0 -translate-x-10'
-                        : 'opacity-100 translate-x-0'
-                    )}
-                  >
-                    {Object.values(data).map(({ title, index }) => {
-                      const addSpacer = shouldAddSpacer(index);
-                      const isHighlighted = isTabHighlighted(index);
-                      const isNumber = typeof isHighlighted === 'number';
-                      let count: string | number = '';
+                  {Object.values(data).map(({ title, index }) => {
+                    const addSpacer = shouldAddSpacer(index);
+                    const isHighlighted = isTabHighlighted(index);
+                    const isNumber = typeof isHighlighted === 'number';
+                    let count: string | number = '';
 
-                      if (isNumber) {
-                        count = isHighlighted > 9 ? '9+' : isHighlighted;
-                      }
+                    if (isNumber) {
+                      count = isHighlighted > 9 ? '9+' : isHighlighted;
+                    }
 
-                      return (
-                        <React.Fragment key={index}>
+                    return (
+                      <React.Fragment key={index}>
+                        <div
+                          data-testid={`tab-${index}`}
+                          className={classNames(
+                            'flex duration-200 ease-in-out relative pb-1',
+                            {
+                              ' text-bright-navy-blue dark:text-jordy-blue font-medium':
+                                index === activeTab,
+                            },
+                            {
+                              'text-raisin-black dark:text-bright-gray':
+                                index !== activeTab,
+                            }
+                          )}
+                        >
+                          <button
+                            onClick={() => setActiveTab(index)}
+                            onKeyDown={handleKeyDown}
+                            className="px-1.5 hover:opacity-80 outline-none text-nowrap"
+                          >
+                            {title}
+                          </button>
                           <div
-                            data-testid={`tab-${index}`}
                             className={classNames(
-                              'flex duration-200 ease-in-out relative',
+                              'absolute right-0 top-0 h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
                               {
-                                ' text-bright-navy-blue dark:text-jordy-blue font-medium':
-                                  index === activeTab,
+                                'bg-transparent': !isHighlighted,
                               },
                               {
-                                'text-raisin-black dark:text-bright-gray':
-                                  index !== activeTab,
+                                'bg-dark-blue dark:bg-celeste': isHighlighted,
+                              },
+                              {
+                                'h-4 w-4': isNumber,
                               }
                             )}
                           >
-                            <button
-                              onClick={() => setActiveTab(index)}
-                              onKeyDown={handleKeyDown}
-                              className="px-1.5 hover:opacity-80 outline-none text-nowrap"
-                            >
-                              {title}
-                            </button>
-                            <div
-                              className={classNames(
-                                'absolute right-0 top-0 h-1.5 w-1.5 rounded-full text-center text-xxxs font-bold text-bright-gray',
-                                {
-                                  'bg-transparent': !isHighlighted,
-                                },
-                                {
-                                  'bg-dark-blue dark:bg-celeste': isHighlighted,
-                                },
-                                {
-                                  'h-4 w-4': isNumber,
-                                }
-                              )}
-                            >
-                              {count}
-                            </div>
+                            {count}
                           </div>
-                          {addSpacer && <div className="flex-1" />}
-                        </React.Fragment>
-                      );
-                    })}
-                  </div>
+                        </div>
+                        {addSpacer && <div className="flex-1" />}
+                      </React.Fragment>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
