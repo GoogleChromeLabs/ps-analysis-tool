@@ -22,7 +22,7 @@ import { SidebarProvider } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import useSidebarProcessing from './hooks/useSidebarProcesing';
+import useSidebarProcessing from './hooks/useSidebarProcessing';
 import Panel from './panel';
 
 const AuctionsV2 = () => {
