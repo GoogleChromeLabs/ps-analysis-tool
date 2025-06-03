@@ -202,23 +202,26 @@ const AuctionPanel = ({
 
         const adunit = adUnit;
         const mediaContainerSize = customAdsAndBidders
-          ? customAdsAndBidders[adunit]?.mediaContainerSize ?? []
-          : adsAndBidders?.[adunit]?.mediaContainerSize ?? [];
-        const bidders = customAdsAndBidders
-          ? customAdsAndBidders[adunit]?.bidders ?? []
-          : adsAndBidders?.[adunit]?.bidders ?? [];
-        const biddersCount = bidders.length;
-        const bidsCount =
-          Object.values(auctionEvents.receivedBids || {})?.length ?? 0;
-        const noBidsCount =
-          Object.values(auctionEvents.noBids || {}).reduce<
-            Record<string, number>
-          >((countObj, bid) => {
-            const _adUnit = bid.adUnitCode || '';
+          ? customAdsAndBidders[adunit]?.mediaContainerSize
+          : adsAndBidders?.[adunit]?.mediaContainerSize;
 
-            countObj[adUnit] = (countObj[_adUnit] || 0) + 1;
-            return countObj;
-          }, {}) || 0;
+        const bidders = customAdsAndBidders
+          ? customAdsAndBidders[adunit]?.bidders
+          : adsAndBidders?.[adunit]?.bidders;
+
+        const biddersCount = bidders?.length;
+        const bidsCount = Object.values(
+          auctionEvents.receivedBids || {}
+        ).length;
+
+        const noBidsCount = Object.values(auctionEvents.noBids || {}).reduce<
+          Record<string, number>
+        >((countObj, bid) => {
+          const _adUnit = bid.adUnitCode || '';
+
+          countObj[adUnit] = (countObj[_adUnit] || 0) + 1;
+          return countObj;
+        }, {});
 
         data[adUnit] = {
           title: adUnit,
@@ -226,11 +229,11 @@ const AuctionPanel = ({
             Element: Panel,
             props: {
               adunit,
-              mediaContainerSize,
-              bidders,
-              biddersCount,
-              bidsCount,
-              noBidsCount: noBidsCount[adUnit] || 0,
+              mediaContainerSize: mediaContainerSize ?? [],
+              bidders: bidders ?? [],
+              biddersCount: biddersCount ?? 0,
+              bidsCount: bidsCount,
+              noBidsCount: noBidsCount[adUnit],
             },
           },
           children: adUnitChildren,

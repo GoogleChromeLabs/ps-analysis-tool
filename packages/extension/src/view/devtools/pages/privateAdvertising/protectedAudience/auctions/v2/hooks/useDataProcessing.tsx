@@ -18,6 +18,10 @@
  * External dependencies.
  */
 import { useCallback, useMemo } from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import { useProtectedAudience } from '../../../../../../stateProviders';
 
 const useDataProcessing = () => {

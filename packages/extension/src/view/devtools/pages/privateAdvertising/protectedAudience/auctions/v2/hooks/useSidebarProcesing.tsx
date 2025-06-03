@@ -18,8 +18,12 @@
  * External dependencies.
  */
 import type { SidebarItems } from '@google-psat/design-system';
-import AdUnits from '../../../adUnits';
 import { useEffect, useState } from 'react';
+
+/**
+ * Internal dependencies.
+ */
+import AdUnits from '../../../adUnits';
 import useDataProcessing from './useDataProcessing';
 import AdunitPanel from '../../components/adunitPanel';
 import PrebidTable from '../prebidTable';

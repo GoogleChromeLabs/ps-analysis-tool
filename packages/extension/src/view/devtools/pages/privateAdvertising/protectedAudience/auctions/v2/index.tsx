@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import React from 'react';
-import useSidebarProcessing from './hooks/useSidebarProcesing';
 import { SidebarProvider } from '@google-psat/design-system';
-import Panel from './panel';
 
 /**
  * Internal dependencies.
  */
+import useSidebarProcessing from './hooks/useSidebarProcesing';
+import Panel from './panel';
 
 const AuctionsV2 = () => {
   const { sidebarData } = useSidebarProcessing();

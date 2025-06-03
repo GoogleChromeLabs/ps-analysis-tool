@@ -24,7 +24,7 @@ import { FrameIcon, MoneyIcon, ScreenIcon } from '@google-psat/design-system';
  * Internal dependencies
  */
 import Tile from './tile';
-import MatrixHOC from './matrixContainer';
+import Matrix from './matrix';
 
 interface PanelProps {
   adunit: string;
@@ -139,7 +139,7 @@ const Panel = ({
 
   return (
     <>
-      <MatrixHOC
+      <Matrix
         biddersCount={biddersCount}
         bidsCount={bidsCount}
         noBidsCount={noBidsCount}
