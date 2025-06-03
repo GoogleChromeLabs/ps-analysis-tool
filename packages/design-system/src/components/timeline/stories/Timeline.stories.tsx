@@ -23,6 +23,8 @@ import type { Meta, StoryObj } from '@storybook/react';
  */
 import Timeline from '..';
 import { BidderType } from '../types';
+import prebidResponse from './dummy-data';
+import prepareTimelineData from '../utils/prepareTimelineData';
 
 const meta: Meta<typeof Timeline> = {
   title: 'DesignSystem/Timeline',
@@ -62,13 +64,19 @@ const bidders: {
   },
 ];
 
+prepareTimelineData(
+  prebidResponse.auctionEvents['40eb202e-d5fc-44db-b602-5be0a7b1f844']
+);
+
 export const Primary: Story = {
   args: {
     auctionTimeout: 420,
-    auctionId: '23949b7f-b733-4a58-b3b0-e72deed12e61',
+    auctionId: '40eb202e-d5fc-44db-b602-5be0a7b1f844',
     auctionStartTime: '12:18:27',
     auctionTime: '380.1',
     bidders,
     zoomLevel: 2,
+    auctionEvent:
+      prebidResponse.auctionEvents['40eb202e-d5fc-44db-b602-5be0a7b1f844'],
   },
 };
