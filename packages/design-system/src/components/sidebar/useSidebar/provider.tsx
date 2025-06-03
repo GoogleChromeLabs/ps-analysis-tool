@@ -177,7 +177,7 @@ export const SidebarProvider = ({
    * @param queryString Query string to pass to the new panel.
    */
   const updateSelectedItemKey = useCallback(
-    async (key: string | null, queryString = '') => {
+    async (key: string | null, queryString = '', skipPanelDisplay = false) => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
@@ -186,7 +186,7 @@ export const SidebarProvider = ({
       }
 
       const item = findItem(sidebarItems, key);
-      if (item?.panel?.href) {
+      if (item?.panel?.href || (skipPanelDisplay && item?.panel?.href)) {
         const tab = await chrome.tabs.get(
           chrome.devtools.inspectedWindow.tabId
         );
@@ -207,6 +207,10 @@ export const SidebarProvider = ({
               })
               .then(() => console.log('injected a function'));
           }
+        }
+
+        if (skipPanelDisplay) {
+          return;
         }
       }
 

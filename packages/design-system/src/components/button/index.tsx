@@ -30,6 +30,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'danger' | 'success';
   extraClasses?: string;
   disabled?: boolean;
+  dontShowBackground?: boolean;
 }
 const Button = ({
   title = '',
@@ -41,6 +42,7 @@ const Button = ({
   size = 'small',
   extraClasses = '',
   disabled = false,
+  dontShowBackground = false,
 }: ButtonProps) => {
   return (
     <button
@@ -55,9 +57,9 @@ const Button = ({
         'rounded flex items-center text-center py-1 px-2 font-medium',
         {
           'bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
-            variant === 'primary',
+            variant === 'primary' && !dontShowBackground,
           'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
-            variant === 'secondary',
+            variant === 'secondary' && !dontShowBackground,
           'text-white dark:text-raisin-black bg-red-500': variant === 'danger',
           'text-white dark:text-raisin-black bg-green-500':
             variant === 'success',
@@ -65,11 +67,19 @@ const Button = ({
         {
           'opacity-70 cursor-default': disabled,
           'hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue':
-            !disabled && size === 'small' && variant === 'primary',
+            !disabled &&
+            size === 'small' &&
+            variant === 'primary' &&
+            !dontShowBackground,
           'hover:bg-beteleguese dark:hover:bg-bright-navy-blue':
-            !disabled && size === 'large' && variant === 'primary',
-          'hover:opacity-80': !disabled && variant === 'secondary',
-          'hover:bg-red-600': !disabled && variant === 'danger',
+            !disabled &&
+            size === 'large' &&
+            variant === 'primary' &&
+            !dontShowBackground,
+          'hover:opacity-80':
+            !disabled && variant === 'secondary' && !dontShowBackground,
+          'hover:bg-red-600':
+            !disabled && variant === 'danger' && !dontShowBackground,
         },
         {
           'py-0.5 px-1.5 text-xs': size === 'small',

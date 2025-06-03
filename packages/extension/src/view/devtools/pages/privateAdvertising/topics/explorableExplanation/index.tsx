@@ -64,25 +64,28 @@ const ExplorableExplanation = () => {
     [setPAActiveTab, setPAStorage]
   );
 
-  const tabItems = useMemo<TabItems>(() => {
-    const items: TabItems = ['Epoch 1', 'Epoch 2', 'Epoch 3', 'Epoch 4'].map(
-      (item) => ({
-        title: item,
-        content: {
-          Element: TopicsTable,
-          props: {
-            data: topicsTableData,
-            highlightAdTech,
-            setHighlightAdTech: (value: string) =>
-              topicsDispatch({
-                type: 'setHighlightAdTech',
-                payload: { highlightAdTech: value },
-              }),
-            topicsNavigator,
-          },
+  const tabItems = useMemo<TabItems[keyof TabItems]>(() => {
+    const items: TabItems[keyof TabItems] = [
+      'Epoch 1',
+      'Epoch 2',
+      'Epoch 3',
+      'Epoch 4',
+    ].map((item) => ({
+      title: item,
+      content: {
+        Element: TopicsTable,
+        props: {
+          data: topicsTableData,
+          highlightAdTech,
+          setHighlightAdTech: (value: string) =>
+            topicsDispatch({
+              type: 'setHighlightAdTech',
+              payload: { highlightAdTech: value },
+            }),
+          topicsNavigator,
         },
-      })
-    );
+      },
+    }));
 
     items.push({
       title: 'Legend',
@@ -156,7 +159,7 @@ const ExplorableExplanation = () => {
   ]);
 
   return (
-    <TabsProvider items={tabItems} name="topics-ee">
+    <TabsProvider items={tabItems} name="topics-ee" isGroup={false}>
       <Panel topicsState={topicsState} topicsDispatch={topicsDispatch} />
     </TabsProvider>
   );

@@ -15,11 +15,16 @@
  */
 export type TabsProviderProps = {
   children: React.ReactNode;
-  items: TabItems;
+  items: TabItems | TabItem[];
   name: string;
+  isGroup?: boolean;
 };
 
-export type TabItems = Array<{
+export type TabItems = {
+  [group: string]: Array<TabItem>;
+};
+
+type TabItem = {
   title: string;
   content: {
     Element: (props: any) => React.JSX.Element;
@@ -27,4 +32,4 @@ export type TabItems = Array<{
     className?: string;
   };
   addSpacer?: boolean;
-}>;
+};

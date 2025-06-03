@@ -26,6 +26,14 @@ import { noop } from '../../../utils';
 export interface TabsStoreContext {
   state: {
     activeTab: number;
+    activeGroup: string | null;
+    groupedTitles: Record<
+      string,
+      {
+        title: string;
+        index: number;
+      }[]
+    >;
     titles: string[];
     panel: {
       Element: ((props: any) => React.JSX.Element) | null;
@@ -33,6 +41,7 @@ export interface TabsStoreContext {
       className?: string;
     };
     storage: string[];
+    isGroup: boolean;
   };
   actions: {
     setStorage: (data: string, index?: number) => void;
@@ -44,18 +53,22 @@ export interface TabsStoreContext {
     ) => void;
     isTabHighlighted: (tab: number) => boolean | number;
     shouldAddSpacer: (tab: number) => boolean;
+    getTabGroup: (tab: number) => string;
   };
 }
 
 const initialState: TabsStoreContext = {
   state: {
     activeTab: 0,
+    activeGroup: null,
+    groupedTitles: {},
     titles: [],
     panel: {
       Element: null,
       props: {},
     },
     storage: [],
+    isGroup: true,
   },
   actions: {
     setStorage: noop,
@@ -63,6 +76,7 @@ const initialState: TabsStoreContext = {
     highlightTab: noop,
     isTabHighlighted: () => false,
     shouldAddSpacer: () => false,
+    getTabGroup: () => '',
   },
 };
 

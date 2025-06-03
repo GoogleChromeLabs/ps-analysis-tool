@@ -80,10 +80,10 @@ const BodyRow = ({
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
-          : 'bg-gainsboro dark:bg-outer-space'
+          : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-blueberry text-white dark:bg-quartz dark:text-chinese-silver')
+        : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
 
@@ -126,15 +126,6 @@ const BodyRow = ({
       onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
-      {/* Vertical bar for for some indication, styles can also be made dynamic.*/}
-      {hasVerticalBar && (
-        <span
-          style={{
-            backgroundColor: verticalBarColorHash,
-          }}
-          className="absolute block top-0 bottom-0 left-0 w-1 h-full"
-        />
-      )}
       {columns.map(
         (
           {
@@ -157,6 +148,8 @@ const BodyRow = ({
             icon={bodyCellPrefixIcon ?? undefined}
             rowHeightClass={rowHeightClass}
             accessorKey={accessorKey}
+            hasVerticalBar={idx === 0 && hasVerticalBar}
+            verticalBarColorHash={verticalBarColorHash}
           />
         )
       )}
