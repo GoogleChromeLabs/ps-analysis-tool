@@ -21,7 +21,9 @@ import React from 'react';
 
 interface SliderProps {
   sliderStep: number;
-  setSliderStep: React.Dispatch<React.SetStateAction<number>>;
+  setSliderStep:
+    | React.Dispatch<React.SetStateAction<number>>
+    | ((step: number) => void);
 }
 
 const Slider = ({ sliderStep, setSliderStep }: SliderProps) => {

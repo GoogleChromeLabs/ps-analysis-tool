@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   TabsProvider,
   useTabs,
@@ -27,23 +27,29 @@ import {
 /**
  * Internal dependencies.
  */
-import TopicsTable, { type TopicsTableType } from './topicsTable';
+import TopicsTable from './topicsTable';
 import Panel from './panel';
 import Legend from './legend';
+import { useTopicsExplorableExplanation } from './useTopicsExplorableExplanation';
+
+const TOPICS_NAVIGATOR_TAB_INDEX = 2;
+const EPOCH_TRANSITION_DURATION = 2000;
 
 const ExplorableExplanation = () => {
-  const [topicsTableData, setTopicsTableData] = useState<
-    Record<number, TopicsTableType[]>
-  >({});
-  const [highlightAdTech, setHighlightAdTech] = useState<string | null>(null);
-  // These are the actions that are being used in the PA panel tabs provider not the animation component.
-  const { PAstorage, setPAActiveTab, setPAStorage } = useTabs(
+  const { tabStorage, setPAActiveTab, setPAStorage } = useTabs(
     ({ state, actions }) => ({
-      PAstorage: state.storage,
+      tabStorage: state.storage,
       setPAActiveTab: actions.setActiveTab,
       setPAStorage: actions.setStorage,
+      activeTab: state.activeTab,
     })
   );
+
+  const [topicsState, topicsDispatch] = useTopicsExplorableExplanation(
+    tabStorage,
+    setPAStorage
+  );
+  const { topicsTableData, highlightAdTech } = topicsState;
 
   const topicsNavigator = useCallback(
     (topic: string) => {
@@ -51,10 +57,9 @@ const ExplorableExplanation = () => {
         JSON.stringify({
           taxonomy: topic,
         }),
-        2
+        TOPICS_NAVIGATOR_TAB_INDEX
       );
-
-      setPAActiveTab(2);
+      setPAActiveTab(TOPICS_NAVIGATOR_TAB_INDEX);
     },
     [setPAActiveTab, setPAStorage]
   );
@@ -72,7 +77,11 @@ const ExplorableExplanation = () => {
         props: {
           data: topicsTableData,
           highlightAdTech,
-          setHighlightAdTech,
+          setHighlightAdTech: (value: string) =>
+            topicsDispatch({
+              type: 'setHighlightAdTech',
+              payload: { highlightAdTech: value },
+            }),
           topicsNavigator,
         },
       },
@@ -86,19 +95,72 @@ const ExplorableExplanation = () => {
     });
 
     return items;
-  }, [highlightAdTech, topicsNavigator, topicsTableData]);
+  }, [highlightAdTech, topicsDispatch, topicsNavigator, topicsTableData]);
+
+  // last tab is legend tab, so last epoch is length - 1
+  const isLastEpoch = topicsState.activeEpoch === topicsState.epochs.length - 1;
+
+  // move to next epoch when current epoch is completed
+  // or pause if last epoch is reached
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    const currentEpochCompleted = topicsState.completedEpochs.has(
+      topicsState.activeEpoch
+    );
+
+    if (currentEpochCompleted) {
+      // only do it if the animation is playing
+      if (topicsState.isPlaying && !isLastEpoch) {
+        timerRef.current = setTimeout(() => {
+          topicsDispatch({
+            type: 'setActiveEpoch',
+            payload: { activeEpoch: topicsState.activeEpoch + 1 },
+          });
+        }, EPOCH_TRANSITION_DURATION / topicsState.sliderStep);
+      }
+
+      if (isLastEpoch && topicsState.isPlaying) {
+        topicsDispatch({
+          type: 'setIsPlaying',
+          payload: { isPlaying: false },
+        });
+      }
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [
+    topicsState.activeEpoch,
+    topicsState.completedEpochs,
+    topicsState.isPlaying,
+    topicsState.sliderStep,
+    isLastEpoch,
+    topicsDispatch,
+  ]);
+
+  useEffect(() => {
+    if (
+      topicsState.epochs.length > 0 &&
+      topicsState.completedEpochs.size === topicsState.epochs.length
+    ) {
+      topicsDispatch({
+        type: 'setHasAnimationFinished',
+        payload: { hasAnimationFinished: true },
+      });
+    }
+  }, [
+    topicsState.isInteractive,
+    topicsState.completedEpochs.size,
+    topicsState.epochs.length,
+    topicsDispatch,
+  ]);
 
   return (
     <TabsProvider items={tabItems} name="topics-ee" isGroup={false}>
-      <Panel
-        topicsTableData={topicsTableData}
-        setTopicsTableData={setTopicsTableData}
-        PAstorage={PAstorage}
-        setPAActiveTab={setPAActiveTab}
-        setPAStorage={setPAStorage}
-        highlightAdTech={highlightAdTech}
-        setHighlightAdTech={setHighlightAdTech}
-      />
+      <Panel topicsState={topicsState} topicsDispatch={topicsDispatch} />
     </TabsProvider>
   );
 };
