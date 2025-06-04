@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type TabsProviderProps = {
-  children: React.ReactNode;
-  items: TabItems | TabItem[];
-  name: string;
-  isGroup?: boolean;
-};
-
-export type TabItems = {
-  [group: string]: Array<TabItem>;
-};
-
-type TabItem = {
-  title: string;
-  content: {
-    Element: (props: any) => React.JSX.Element;
-    props?: Record<string, any>;
-    className?: string;
-  };
-  addSpacer?: boolean;
-};
+export * from './useTopicsExplorableExplanation';
