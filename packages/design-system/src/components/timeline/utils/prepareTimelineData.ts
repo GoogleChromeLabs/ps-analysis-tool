@@ -26,57 +26,79 @@ const formatTimestampToIST = (timestamp: string) => {
 };
 
 // eslint-disable-next-line consistent-return
-const prepareTimelineData = (auctionEvent: any) => {
-  const auctionEnd = auctionEvent.find(
-    (item: any) => item.eventType === 'auctionEnd'
+const prepareTimelineData = (prebidResponse: any) => {
+  console.clear();
+  // console.log(prebidResponse, 'prebidResponse');
+
+  const auctions: any = {};
+
+  Object.entries(prebidResponse.auctionEvents).forEach(
+    ([auctionId, events]) => {
+      const bidders = [];
+      auctions[auctionId] = {};
+
+      events.forEach((event: any) => {
+        if (event.eventType === 'bidRequested') {
+          console.log(event, 'bidRequested');
+        }
+      });
+
+      const auctionEnd = events.find(
+        (item: any) => item.eventType === 'auctionEnd'
+      );
+
+      auctionEnd.bidsReceived.forEach((bid: any) => {
+        bidders.push({
+          name: bid.bidder,
+          startTime: bid.requestTimestamp,
+          endTime: bid.responseTimestamp,
+          duration: bid.responseTimestamp - bid.requestTimestamp,
+          type: 'BID',
+          data: bid,
+        });
+      });
+
+      auctionEnd.noBids.forEach((item: any) => {
+        const bid = {
+          name: item.bidder,
+          type: 'NO_BID',
+          adUnitCode: item.adUnitCode,
+          data: item,
+        };
+
+        auctionEnd.bidderRequests.forEach((bidderRequest) => {
+          if (bidderRequest.bidderRequestId === item.bidderRequestId) {
+            bid.startTime = bidderRequest.start;
+            bid.serverResponseTimeMs = bidderRequest.serverResponseTimeMs;
+          }
+        });
+
+        bidders.push(bid);
+      });
+
+      events.forEach((event: any) => {
+        if (event.eventType === 'bidWon') {
+          bidders.push({
+            name: event.bidder,
+            type: 'WON',
+          });
+        }
+      });
+
+      auctions[auctionId] = {
+        bidders,
+        auctionTimeout: auctionEnd.timeout,
+        auctionId: auctionEnd.auctionId,
+        auctionStartTime: auctionEnd.timestamp,
+        auctionStartTimeFormatted: formatTimestampToIST(auctionEnd.timestamp),
+        auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
+        zoomLevel: 2,
+        adUnitCodes: auctionEnd.adUnitCodes,
+      };
+    }
   );
 
-  console.clear();
-
-  let timeline = {};
-
-  if (!auctionEnd) {
-    return timeline;
-  }
-
-  const bidders: any = [];
-
-  auctionEvent.forEach((event: any) => {
-    if (event.eventType === 'bidWon') {
-      bidders.push({
-        name: event.bidder,
-        type: 'WON',
-      });
-    }
-  });
-
-  auctionEnd.bidsReceived.forEach((item: any) => {
-    bidders.push({
-      name: item.bidder,
-      type: 'BID',
-    });
-  });
-
-  auctionEnd.noBids.forEach((item: any) => {
-    bidders.push({
-      name: item.bidder,
-      type: 'NO_BID',
-    });
-  });
-
-  timeline = {
-    auctionTimeout: auctionEnd.timeout,
-    auctionId: auctionEnd.auctionId,
-    auctionStartTime: formatTimestampToIST(auctionEnd.timestamp),
-    auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
-    bidders: bidders,
-    zoomLevel: 2,
-    adUnitCodes: auctionEnd.adUnitCodes,
-  };
-
-  console.log(auctionEvent, 'auctionEvent');
-  console.log(auctionEnd, 'auctionEnd');
-  console.log(timeline, 'timeline');
+  console.log(auctions, 'auctions');
 };
 
 export default prepareTimelineData;

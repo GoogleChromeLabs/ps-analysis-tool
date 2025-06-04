@@ -64,9 +64,7 @@ const bidders: {
   },
 ];
 
-prepareTimelineData(
-  prebidResponse.auctionEvents['40eb202e-d5fc-44db-b602-5be0a7b1f844']
-);
+prepareTimelineData(prebidResponse);
 
 export const Primary: Story = {
   args: {
