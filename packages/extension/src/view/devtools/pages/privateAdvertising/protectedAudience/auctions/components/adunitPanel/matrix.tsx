@@ -31,21 +31,21 @@ const Matrix = ({ biddersCount, bidsCount, noBidsCount }: MatrixData) => {
     () => [
       {
         title: 'Bidders',
-        count: biddersCount,
+        count: biddersCount || 0,
         color: '#F3AE4E',
         description: 'Placeholder',
         countClassName: 'text-[#F3AE4E]',
       },
       {
         title: 'Bids',
-        count: bidsCount,
+        count: bidsCount || 0,
         color: '#4C79F4',
         description: 'Placeholder',
         countClassName: 'text-[#4C79F4]',
       },
       {
         title: 'No Bids',
-        count: noBidsCount,
+        count: noBidsCount || 0,
         color: '#EC7159',
         description: 'Placeholder',
         countClassName: 'text-[#EC7159]',

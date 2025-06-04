@@ -41,7 +41,7 @@ const Tile = ({ item }: TileProps) => {
         <h4>{item.name}</h4>
       </div>
       <div className="flex flex-wrap gap-x-3 gap-y-2 mt-6">
-        {item.buttons &&
+        {item.buttons?.length ? (
           item.buttons.map((button) => {
             return (
               <button
@@ -62,7 +62,12 @@ const Tile = ({ item }: TileProps) => {
                 {button.name}
               </button>
             );
-          })}
+          })
+        ) : (
+          <>
+            <p className="text-sm text-gray-500 py-1 px-4">No data available</p>
+          </>
+        )}
       </div>
     </div>
   );

@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { useTabs } from '@google-psat/design-system';
 
 /**
@@ -31,13 +31,13 @@ import Panel from './panel';
 
 interface AdunitPanelProps {
   adunit: string;
-  mediaContainerSize: number[][];
-  bidders: string[];
-  biddersCount: number;
-  bidsCount: number;
-  noBidsCount: number;
-  winnerBid: string | null;
-  winningMediaContainer?: number[];
+  mediaContainerSize: Record<string, number[][]>;
+  bidders: Record<string, string[]>;
+  biddersCount: Record<string, number>;
+  bidsCount: Record<string, number>;
+  noBidsCount: Record<string, number>;
+  winnerBid: Record<string, string | null> | null;
+  winningMediaContainer?: Record<string, number[]>;
 }
 
 const AdunitPanel = ({
@@ -48,7 +48,7 @@ const AdunitPanel = ({
   bidsCount,
   noBidsCount,
   winnerBid = null,
-  winningMediaContainer = [],
+  winningMediaContainer = {},
 }: AdunitPanelProps) => {
   const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
@@ -64,21 +64,27 @@ const AdunitPanel = ({
     setActiveTab: actions.setActiveTab,
   }));
 
+  const [pillToggle, setPillToggle] = useState('Prebid');
+
   return (
     <Panel
       adunit={adunit}
-      mediaContainerSize={mediaContainerSize}
-      bidders={bidders}
-      biddersCount={biddersCount}
-      bidsCount={bidsCount}
-      noBidsCount={noBidsCount}
+      mediaContainerSize={mediaContainerSize[pillToggle.toLowerCase()]}
+      bidders={bidders[pillToggle.toLowerCase()]}
+      biddersCount={biddersCount[pillToggle.toLowerCase()]}
+      bidsCount={bidsCount[pillToggle.toLowerCase()]}
+      noBidsCount={noBidsCount[pillToggle.toLowerCase()]}
       isInspecting={isInspecting}
       setIsInspecting={setIsInspecting}
       setSelectedAdUnit={setSelectedAdUnit}
       setStorage={setStorage}
       setActiveTab={setActiveTab}
-      winnerBid={winnerBid}
-      winningMediaContainer={winningMediaContainer}
+      winnerBid={winnerBid?.[pillToggle.toLowerCase()] || null}
+      winningMediaContainer={
+        winningMediaContainer[pillToggle.toLowerCase()] || []
+      }
+      pillToggle={pillToggle}
+      setPillToggle={setPillToggle}
     />
   );
 };

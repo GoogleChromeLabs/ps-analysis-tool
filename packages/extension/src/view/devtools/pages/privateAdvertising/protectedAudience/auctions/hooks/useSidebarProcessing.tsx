@@ -45,11 +45,11 @@ const useSidebarProcessing = () => {
   const {
     adUnits,
     adUnitsAuctionId,
+    adUnitsTimestamp,
     adUnitsMediaContainerSize,
     adUnitsBidsCount,
     adUnitsNoBidsCount,
     adUnitsBidders,
-    adUnitsTimestamp,
     adUnitsWinnerBid,
     adUnitsWinnerContainerSize,
     getPAData,
@@ -63,11 +63,27 @@ const useSidebarProcessing = () => {
       const adUnitContainerChildren = { ...newSidebarData.adunits.children };
 
       adUnits.forEach((adUnit) => {
-        const mediaContainerSize = adUnitsMediaContainerSize?.[adUnit] || [];
-        const bidders = adUnitsBidders?.[adUnit] || [];
-        const biddersCount = bidders.length;
-        const bidsCount = adUnitsBidsCount?.[adUnit] || 0;
-        const noBidsCount = adUnitsNoBidsCount[adUnit] || 0;
+        const mediaContainerSize = adUnitsMediaContainerSize?.[adUnit] || {
+          prebid: [],
+          paapi: [],
+        };
+
+        const bidders = adUnitsBidders?.[adUnit] || {
+          prebid: [],
+          paapi: [],
+        };
+        const biddersCount = {
+          prebid: bidders?.prebid?.length || 0,
+          paapi: bidders?.paapi?.length || 0,
+        };
+        const bidsCount = adUnitsBidsCount?.[adUnit] || {
+          prebid: 0,
+          paapi: 0,
+        };
+        const noBidsCount = adUnitsNoBidsCount[adUnit] || {
+          prebid: 0,
+          paapi: 0,
+        };
 
         adUnitContainerChildren[adUnit] = {
           title: adUnit,

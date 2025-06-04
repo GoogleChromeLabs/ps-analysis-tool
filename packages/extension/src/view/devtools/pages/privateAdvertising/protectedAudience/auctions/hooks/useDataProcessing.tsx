@@ -132,18 +132,24 @@ const useDataProcessing = () => {
   ]);
 
   const adUnitsMediaContainerSize = useMemo(() => {
-    const _adUnitsMediaContainerSizeStore: Record<string, Set<string>> = {};
+    const _adUnitsMediaContainerSizeStore: Record<
+      string,
+      Record<string, Set<string>>
+    > = {
+      prebid: {},
+      paapi: {},
+    };
 
     if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.adUnits).forEach((data) => {
         const mediaContainerSize = data.mediaContainerSize as number[][];
 
         if (mediaContainerSize) {
-          if (!_adUnitsMediaContainerSizeStore[data.adUnitCode]) {
-            _adUnitsMediaContainerSizeStore[data.adUnitCode] = new Set();
+          if (!_adUnitsMediaContainerSizeStore.prebid[data.adUnitCode]) {
+            _adUnitsMediaContainerSizeStore.prebid[data.adUnitCode] = new Set();
           }
 
-          _adUnitsMediaContainerSizeStore[data.adUnitCode].add(
+          _adUnitsMediaContainerSizeStore.prebid[data.adUnitCode].add(
             mediaContainerSize.map((size) => size.join('x')).join(',')
           );
         }
@@ -155,55 +161,70 @@ const useDataProcessing = () => {
         const mediaContainerSize = data.mediaContainerSize as number[][];
 
         if (mediaContainerSize) {
-          if (!_adUnitsMediaContainerSizeStore[data.adUnitCode]) {
-            _adUnitsMediaContainerSizeStore[data.adUnitCode] = new Set();
+          if (!_adUnitsMediaContainerSizeStore.paapi[data.adUnitCode]) {
+            _adUnitsMediaContainerSizeStore.paapi[data.adUnitCode] = new Set();
           }
 
-          _adUnitsMediaContainerSizeStore[data.adUnitCode].add(
+          _adUnitsMediaContainerSizeStore.paapi[data.adUnitCode].add(
             mediaContainerSize.map((size) => size.join('x')).join(',')
           );
         }
       });
     }
 
-    const _adUnitsMediaContainerSize = Object.entries(
-      _adUnitsMediaContainerSizeStore
-    ).reduce((acc, [adunit, sizes]) => {
-      const _sizes = Array.from(sizes)
-        .map((size) => size.split(','))
-        .flat();
+    const organize = (store: Record<string, Set<string>>, key: string) => {
+      return Object.entries(store).reduce((acc, [adunit, sizes]) => {
+        const _sizes = Array.from(sizes)
+          .map((size) => size.split(','))
+          .flat();
 
-      const parsedSizes = _sizes.map((size) => {
-        const [width, height] = size.split('x').map(Number);
+        const parsedSizes = _sizes.map((size) => {
+          const [width, height] = size.split('x').map(Number);
 
-        return [width, height];
-      });
+          return [width, height];
+        });
 
-      if (!acc[adunit]) {
-        acc[adunit] = [];
-      }
+        if (!acc[adunit]) {
+          acc[adunit] = {};
+        }
 
-      acc[adunit] = parsedSizes;
+        if (!acc[adunit][key]) {
+          acc[adunit][key] = [];
+        }
 
-      return acc;
-    }, {} as Record<string, number[][]>);
+        acc[adunit][key] = parsedSizes;
+
+        return acc;
+      }, {} as Record<string, Record<string, number[][]>>);
+    };
+
+    const _adUnitsMediaContainerSize: Record<
+      string,
+      Record<string, number[][]>
+    > = {
+      ...organize(_adUnitsMediaContainerSizeStore.prebid || {}, 'prebid'),
+      ...organize(_adUnitsMediaContainerSizeStore.paapi || {}, 'paapi'),
+    };
 
     return _adUnitsMediaContainerSize;
   }, [paapi.adsAndBidders, prebidResponse.adUnits]);
 
   const adUnitsBidders = useMemo(() => {
-    const _adUnitBidders: Record<string, string[]> = {};
+    const _adUnitBidders: Record<string, Record<string, string[]>> = {};
     if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.adUnits).forEach((data) => {
         const bidders = data.bidders as string[];
 
         if (bidders) {
-          _adUnitBidders[data.adUnitCode] = bidders;
+          _adUnitBidders[data.adUnitCode] = {
+            prebid: bidders,
+          };
         }
 
-        _adUnitBidders[data.adUnitCode] = [
-          ...new Set(_adUnitBidders[data.adUnitCode]),
-        ];
+        _adUnitBidders[data.adUnitCode] = {
+          ..._adUnitBidders[data.adUnitCode],
+          prebid: [...new Set(_adUnitBidders[data.adUnitCode].prebid)],
+        };
       });
     }
 
@@ -212,12 +233,16 @@ const useDataProcessing = () => {
         const bidders = data.bidders as string[];
 
         if (bidders) {
-          _adUnitBidders[data.adUnitCode] = bidders;
+          _adUnitBidders[data.adUnitCode] = {
+            ..._adUnitBidders[data.adUnitCode],
+            paapi: bidders,
+          };
         }
 
-        _adUnitBidders[data.adUnitCode] = [
-          ...new Set(_adUnitBidders[data.adUnitCode]),
-        ];
+        _adUnitBidders[data.adUnitCode] = {
+          ..._adUnitBidders[data.adUnitCode],
+          paapi: [...new Set(_adUnitBidders[data.adUnitCode].paapi)],
+        };
       });
     }
 
@@ -225,14 +250,17 @@ const useDataProcessing = () => {
   }, [paapi.adsAndBidders, prebidResponse.adUnits]);
 
   const adUnitsBidsCount = useMemo(() => {
-    const _adUnitBidsCount: Record<string, number> = {};
+    const _adUnitBidsCount: Record<string, Record<string, number>> = {};
 
     if (Object.keys(prebidResponse?.receivedBids || {}).length > 0) {
       Object.values(prebidResponse.receivedBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
         if (adUnit) {
-          _adUnitBidsCount[adUnit] = (_adUnitBidsCount[adUnit] || 0) + 1;
+          _adUnitBidsCount[adUnit] = {
+            ..._adUnitBidsCount[adUnit],
+            prebid: (_adUnitBidsCount[adUnit]?.prebid || 0) + 1,
+          };
         }
       });
     }
@@ -242,7 +270,10 @@ const useDataProcessing = () => {
         const adUnit = data.adUnitCode as string;
 
         if (adUnit) {
-          _adUnitBidsCount[adUnit] = (_adUnitBidsCount[adUnit] || 0) + 1;
+          _adUnitBidsCount[adUnit] = {
+            ..._adUnitBidsCount[adUnit],
+            paapi: (_adUnitBidsCount[adUnit]?.paapi || 0) + 1,
+          };
         }
       });
     }
@@ -251,14 +282,17 @@ const useDataProcessing = () => {
   }, [paapi.receivedBids, prebidResponse.receivedBids]);
 
   const adUnitsNoBidsCount = useMemo(() => {
-    const _adUnitNoBidsCount: Record<string, number> = {};
+    const _adUnitNoBidsCount: Record<string, Record<string, number>> = {};
 
     if (Object.keys(prebidResponse?.noBids || {}).length > 0) {
       Object.values(prebidResponse.noBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
         if (adUnit) {
-          _adUnitNoBidsCount[adUnit] = (_adUnitNoBidsCount[adUnit] || 0) + 1;
+          _adUnitNoBidsCount[adUnit] = {
+            ..._adUnitNoBidsCount[adUnit],
+            prebid: (_adUnitNoBidsCount[adUnit]?.prebid || 0) + 1,
+          };
         }
       });
     }
@@ -268,7 +302,10 @@ const useDataProcessing = () => {
         const adUnit = data.adUnitCode as string;
 
         if (adUnit) {
-          _adUnitNoBidsCount[adUnit] = (_adUnitNoBidsCount[adUnit] || 0) + 1;
+          _adUnitNoBidsCount[adUnit] = {
+            ..._adUnitNoBidsCount[adUnit],
+            paapi: (_adUnitNoBidsCount[adUnit]?.paapi || 0) + 1,
+          };
         }
       });
     }
@@ -277,14 +314,17 @@ const useDataProcessing = () => {
   }, [paapi.noBids, prebidResponse.noBids]);
 
   const adUnitsWinnerBid = useMemo(() => {
-    const _adUnitWinnerBid: Record<string, string> = {};
+    const _adUnitWinnerBid: Record<string, Record<string, string>> = {};
 
     if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.adUnits).forEach((data) => {
         const winnerBid = data.winningBidder as string;
 
         if (winnerBid) {
-          _adUnitWinnerBid[data.adUnitCode] = winnerBid;
+          _adUnitWinnerBid[data.adUnitCode] = {
+            ..._adUnitWinnerBid[data.adUnitCode],
+            prebid: winnerBid,
+          };
         }
       });
     }
@@ -294,7 +334,10 @@ const useDataProcessing = () => {
         const winnerBid = data.winningBidder as string;
 
         if (winnerBid) {
-          _adUnitWinnerBid[data.adUnitCode] = winnerBid;
+          _adUnitWinnerBid[data.adUnitCode] = {
+            ..._adUnitWinnerBid[data.adUnitCode],
+            paapi: winnerBid,
+          };
         }
       });
     }
@@ -303,7 +346,10 @@ const useDataProcessing = () => {
   }, [paapi.adsAndBidders, prebidResponse.adUnits]);
 
   const adUnitsWinnerContainerSize = useMemo(() => {
-    const _adUnitWinnerContainerSize: Record<string, number[]> = {};
+    const _adUnitWinnerContainerSize: Record<
+      string,
+      Record<string, number[]>
+    > = {};
 
     if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
       Object.values(prebidResponse.adUnits).forEach((data: any) => {
@@ -311,7 +357,10 @@ const useDataProcessing = () => {
           ?.winningMediaContainerSize?.[0] as number[];
 
         if (mediaContainerSize) {
-          _adUnitWinnerContainerSize[data.adUnitCode] = mediaContainerSize;
+          _adUnitWinnerContainerSize[data.adUnitCode] = {
+            ..._adUnitWinnerContainerSize[data.adUnitCode],
+            prebid: mediaContainerSize,
+          };
         }
       });
     }
@@ -320,7 +369,10 @@ const useDataProcessing = () => {
         const mediaContainerSize = data?.winningMediaContainerSize as number[];
 
         if (mediaContainerSize) {
-          _adUnitWinnerContainerSize[data.adUnitCode] = mediaContainerSize;
+          _adUnitWinnerContainerSize[data.adUnitCode] = {
+            ..._adUnitWinnerContainerSize[data.adUnitCode],
+            paapi: mediaContainerSize,
+          };
         }
       });
     }

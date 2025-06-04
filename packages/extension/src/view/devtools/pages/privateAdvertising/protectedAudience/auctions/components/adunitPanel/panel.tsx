@@ -18,7 +18,12 @@
  * External dependencies
  */
 import React, { useEffect, useMemo } from 'react';
-import { FrameIcon, MoneyIcon, ScreenIcon } from '@google-psat/design-system';
+import {
+  FrameIcon,
+  MoneyIcon,
+  PillToggle,
+  ScreenIcon,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies
@@ -40,6 +45,8 @@ interface PanelProps {
   setActiveTab?: (tab: number) => void;
   winnerBid?: string | null;
   winningMediaContainer?: number[];
+  pillToggle: string;
+  setPillToggle: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Panel = ({
@@ -56,6 +63,8 @@ const Panel = ({
   setActiveTab,
   winnerBid = null,
   winningMediaContainer = [],
+  pillToggle,
+  setPillToggle,
 }: PanelProps) => {
   const items = useMemo(
     () => [
@@ -145,7 +154,15 @@ const Panel = ({
   }, [setIsInspecting, setSelectedAdUnit, adunit]);
 
   return (
-    <>
+    <div className="flex flex-col h-full w-full ">
+      <div className="p-4">
+        <PillToggle
+          options={['Prebid', 'PAAPI']}
+          pillToggle={pillToggle}
+          setPillToggle={setPillToggle}
+          eeAnimatedTab={false}
+        />
+      </div>
       <Matrix
         biddersCount={biddersCount}
         bidsCount={bidsCount}
@@ -156,7 +173,7 @@ const Panel = ({
           <Tile key={item.name} item={item} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
