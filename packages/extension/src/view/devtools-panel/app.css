@@ -262,6 +262,6 @@ text {
   cursor: pointer;
 }
 
-body main .p5Canvas {
+body main > .p5Canvas {
   display: none;
 }
