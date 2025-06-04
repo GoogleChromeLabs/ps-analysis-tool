@@ -25,10 +25,13 @@ const formatTimestampToIST = (timestamp: string) => {
   });
 };
 
-const prepareTimelineData = (auctionEvent) => {
+// eslint-disable-next-line consistent-return
+const prepareTimelineData = (auctionEvent: any) => {
   const auctionEnd = auctionEvent.find(
-    (item) => item.eventType === 'auctionEnd'
+    (item: any) => item.eventType === 'auctionEnd'
   );
+
+  console.clear();
 
   let timeline = {};
 
@@ -36,30 +39,29 @@ const prepareTimelineData = (auctionEvent) => {
     return timeline;
   }
 
-  const bidders = [];
+  const bidders: any = [];
 
-  auctionEvent.forEach((event) => {
-    if (event.eventType === 'bid') {
+  auctionEvent.forEach((event: any) => {
+    if (event.eventType === 'bidWon') {
       bidders.push({
         name: event.bidder,
-        startTime: event.timestamp - auctionEnd.timestamp,
-        duration: (event.bidResponseTime || 0) / 1000, // Convert to seconds
-        type: 'BID',
-      });
-    } else if (event.eventType === 'noBid') {
-      bidders.push({
-        name: event.bidder,
-        startTime: event.timestamp - auctionEnd.timestamp,
-        duration: (event.noBidResponseTime || 0) / 1000, // Convert to seconds
-        type: 'NO_BID',
-      });
-    } else if (event.eventType === 'bidWon') {
-      bidders.push({
-        name: event.bidder,
-        duration: (event.bidResponseTime || 0) / 1000, // Convert to seconds
         type: 'WON',
       });
     }
+  });
+
+  auctionEnd.bidsReceived.forEach((item: any) => {
+    bidders.push({
+      name: item.bidder,
+      type: 'BID',
+    });
+  });
+
+  auctionEnd.noBids.forEach((item: any) => {
+    bidders.push({
+      name: item.bidder,
+      type: 'NO_BID',
+    });
   });
 
   timeline = {
@@ -72,8 +74,8 @@ const prepareTimelineData = (auctionEvent) => {
     adUnitCodes: auctionEnd.adUnitCodes,
   };
 
+  console.log(auctionEvent, 'auctionEvent');
   console.log(auctionEnd, 'auctionEnd');
-
   console.log(timeline, 'timeline');
 };
 
