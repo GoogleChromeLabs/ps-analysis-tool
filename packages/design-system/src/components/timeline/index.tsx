@@ -42,6 +42,7 @@ interface TimelineProps {
   auctionStartTime: string;
   auctionTime: string;
   bidders: {
+    data(data: any): void;
     name: string;
     startTime: number;
     duration: string;
