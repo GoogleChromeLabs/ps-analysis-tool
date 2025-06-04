@@ -157,6 +157,28 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
     []
   );
 
+  const tableData = useMemo(
+    () =>
+      auctionEvents[1]
+        .filter((event) => {
+          return (
+            event.adUnitCode === adUnit ||
+            event.adUnitCodes?.includes(adUnit) ||
+            event.bids?.some((bid) => bid.adUnitCode === adUnit) ||
+            event.bidderRequests?.some((request) =>
+              request.bids.some((bid) => bid.adUnitCode === adUnit)
+            ) ||
+            (Array.isArray(event) &&
+              event.some((_event) => _event.adUnitCode === adUnit))
+          );
+        })
+        .map((event, index) => ({
+          ...event,
+          index,
+        })),
+    [adUnit, auctionEvents]
+  );
+
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -183,28 +205,11 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
               </div>
               <div className="flex justify-between items-center">
                 <p>Timeout: {auctionEvents[1][0].timeout}</p>
-                {/* <p>Auction Time: {auctionEnd}ms</p> */}
               </div>
             </div>
             <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
               <TableProvider
-                data={auctionEvents[1]
-                  .filter((event) => {
-                    return (
-                      event.adUnitCode === adUnit ||
-                      event.adUnitCodes?.includes(adUnit) ||
-                      event.bids?.some((bid) => bid.adUnitCode === adUnit) ||
-                      event.bidderRequests?.some((request) =>
-                        request.bids.some((bid) => bid.adUnitCode === adUnit)
-                      ) ||
-                      (Array.isArray(event) &&
-                        event.some((_event) => _event.adUnitCode === adUnit))
-                    );
-                  })
-                  .map((event, index) => ({
-                    ...event,
-                    index,
-                  }))}
+                data={tableData}
                 tableColumns={tableColumns}
                 tableFilterData={tableFilters}
                 tableSearchKeys={undefined}

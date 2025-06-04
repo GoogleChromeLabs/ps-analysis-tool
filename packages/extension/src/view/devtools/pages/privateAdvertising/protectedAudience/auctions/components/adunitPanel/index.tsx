@@ -66,23 +66,23 @@ const AdunitPanel = ({
 
   const [pillToggle, setPillToggle] = useState('Prebid');
 
+  const pillLowerCase = pillToggle.toLowerCase();
+
   return (
     <Panel
       adunit={adunit}
-      mediaContainerSize={mediaContainerSize[pillToggle.toLowerCase()]}
-      bidders={bidders[pillToggle.toLowerCase()]}
-      biddersCount={biddersCount[pillToggle.toLowerCase()]}
-      bidsCount={bidsCount[pillToggle.toLowerCase()]}
-      noBidsCount={noBidsCount[pillToggle.toLowerCase()]}
+      mediaContainerSize={mediaContainerSize[pillLowerCase]}
+      bidders={bidders[pillLowerCase]}
+      biddersCount={biddersCount[pillLowerCase]}
+      bidsCount={bidsCount[pillLowerCase]}
+      noBidsCount={noBidsCount[pillLowerCase]}
       isInspecting={isInspecting}
       setIsInspecting={setIsInspecting}
       setSelectedAdUnit={setSelectedAdUnit}
       setStorage={setStorage}
       setActiveTab={setActiveTab}
-      winnerBid={winnerBid?.[pillToggle.toLowerCase()] || null}
-      winningMediaContainer={
-        winningMediaContainer[pillToggle.toLowerCase()] || []
-      }
+      winnerBid={winnerBid?.[pillLowerCase] || null}
+      winningMediaContainer={winningMediaContainer[pillLowerCase] || []}
       pillToggle={pillToggle}
       setPillToggle={setPillToggle}
     />
