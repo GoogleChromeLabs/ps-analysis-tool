@@ -19,6 +19,7 @@
 import {
   noop,
   type NoBidsType,
+  type PrebidNoBidsType,
   type singleAuctionEvent,
 } from '@google-psat/common';
 import {
@@ -38,7 +39,7 @@ interface NoBidsTableProps {
     >
   >;
   selectedRow: singleAuctionEvent | NoBidsType[keyof NoBidsType] | null;
-  noBids: NoBidsType;
+  noBids: NoBidsType | PrebidNoBidsType;
   showEvaluationPlaceholder?: boolean;
 }
 

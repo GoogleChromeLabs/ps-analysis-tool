@@ -17,11 +17,15 @@
 /**
  * External dependencies.
  */
-import { JsonView, PillToggle } from '@google-psat/design-system';
+import { JsonView } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
-import type { NoBidsType, ReceivedBids } from '@google-psat/common';
+import type {
+  NoBidsType,
+  PrebidNoBidsType,
+  ReceivedBids,
+} from '@google-psat/common';
 import classNames from 'classnames';
 
 /**
@@ -29,18 +33,15 @@ import classNames from 'classnames';
  */
 import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
-
-enum PillToggleOptions {
-  ReceivedBids = 'Received Bids',
-  NoBids = 'No Bids',
-}
+import { BidsPillOptions } from '.';
 
 interface PanelProps {
   receivedBids: ReceivedBids[];
-  noBids: NoBidsType;
+  noBids: NoBidsType | PrebidNoBidsType;
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
   eeAnimatedTab?: boolean;
+  bidsPillToggle: string;
 }
 
 const Panel = ({
@@ -49,34 +50,24 @@ const Panel = ({
   storage,
   setStorage,
   eeAnimatedTab = false,
+  bidsPillToggle,
 }: PanelProps) => {
   const [selectedRow, setSelectedRow] = useState<
     ReceivedBids | NoBidsType[keyof NoBidsType] | null
   >(null);
-  const [pillToggle, setPillToggle] = useState<string>(
-    PillToggleOptions.ReceivedBids
-  );
 
   const showBottomTray = useMemo(() => {
-    if (pillToggle === PillToggleOptions.ReceivedBids) {
+    if (bidsPillToggle === BidsPillOptions.ReceivedBids) {
       return receivedBids.length > 0;
     }
 
     return Object.keys(noBids).length > 0;
-  }, [noBids, pillToggle, receivedBids.length]);
+  }, [noBids, bidsPillToggle, receivedBids.length]);
 
   return (
-    <div className="flex flex-col pt-4 h-full w-full">
-      <div className="px-4 pb-4">
-        <PillToggle
-          options={[PillToggleOptions.ReceivedBids, PillToggleOptions.NoBids]}
-          pillToggle={pillToggle}
-          setPillToggle={setPillToggle}
-          eeAnimatedTab={eeAnimatedTab}
-        />
-      </div>
+    <>
       <div className="flex-1 overflow-auto text-outer-space-crayola">
-        {pillToggle === PillToggleOptions.ReceivedBids ? (
+        {bidsPillToggle === BidsPillOptions.ReceivedBids && (
           <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
             <ReceivedBidsTable
               setSelectedRow={setSelectedRow}
@@ -87,7 +78,9 @@ const Panel = ({
               showEvaluationPlaceholder={!eeAnimatedTab}
             />
           </div>
-        ) : (
+        )}
+
+        {bidsPillToggle === BidsPillOptions.NoBids && (
           <div
             className={classNames(
               'h-full border-r border-t border-american-silver dark:border-quartz',
@@ -102,8 +95,10 @@ const Panel = ({
             />
           </div>
         )}
+
+        {bidsPillToggle === BidsPillOptions.Timeline && <></>}
       </div>
-      {showBottomTray && (
+      {showBottomTray && bidsPillToggle !== BidsPillOptions.Timeline && (
         <Resizable
           defaultSize={{
             width: '100%',
@@ -130,7 +125,7 @@ const Panel = ({
           </div>
         </Resizable>
       )}
-    </div>
+    </>
   );
 };
 
