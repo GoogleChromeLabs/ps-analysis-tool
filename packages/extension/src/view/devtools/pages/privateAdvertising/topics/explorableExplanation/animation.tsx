@@ -19,142 +19,113 @@
  */
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import p5 from 'p5';
+// @ts-ignore package does not have types
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
-
-const epochTransitionDelay = 2000;
-
-interface AnimationProps {
-  epoch: { datetime: string; website: string; topics: string[] }[];
-  siteAdTechs: Record<string, string[]>;
-  visitIndexStart: number;
-  handleUserVisit: (visitIndex: number, updateTopics?: boolean) => void;
-  isPlaying: boolean;
-  resetAnimation: boolean;
-  speedMultiplier: number;
-  isInteractive: boolean;
-  setPAActiveTab: (tabIndex: number) => void;
-  setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
-  setCurrentVisitIndexCallback: React.Dispatch<
-    React.SetStateAction<(() => number) | undefined>
-  >;
-  isCompleted: boolean;
-}
+import type {
+  TopicsExplorableExplanationAction,
+  TopicsExplorableExplanationState,
+} from './useTopicsExplorableExplanation';
 
 const Animation = ({
-  epoch,
-  siteAdTechs,
-  visitIndexStart,
-  handleUserVisit,
-  isPlaying,
-  resetAnimation,
-  speedMultiplier,
-  isInteractive,
-  setPAActiveTab,
-  setHighlightAdTech,
-  setCurrentVisitIndexCallback,
-  isCompleted,
-}: AnimationProps) => {
-  const node = useRef(null);
+  topicsState,
+  topicsDispatch,
+}: {
+  topicsState: TopicsExplorableExplanationState;
+  topicsDispatch: React.Dispatch<TopicsExplorableExplanationAction>;
+}) => {
+  const node = useRef<HTMLDivElement>(null);
   const loadingTextCoverRef = useRef<HTMLDivElement>(null);
-  // animation instance
   const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
+  const { isPlaying, epochSiteVisited, epochs, activeEpoch } = topicsState;
 
-  const _handleUserVisit = useCallback(
+  const sitesVisited = epochSiteVisited[activeEpoch];
+  const currentVisitedIndex = sitesVisited.size;
+  const currentEpoch = epochs[activeEpoch];
+
+  const handleUserVisit = useCallback(
     (visitIndex: number) => {
-      setTimeout(
-        () => {
-          handleUserVisit(visitIndex, !isCompleted);
-        },
-        visitIndex === epoch.length ? epochTransitionDelay : 0
-      );
+      topicsDispatch({
+        type: 'setEpochSiteVisited',
+        payload: { epochIndex: topicsState.activeEpoch, siteIndex: visitIndex },
+      });
     },
-    [epoch.length, handleUserVisit, isCompleted]
+    [topicsDispatch, topicsState.activeEpoch]
+  );
+
+  const handleHighlightAdTech = useCallback(
+    (highlightAdTech: string | null) => {
+      topicsDispatch({
+        type: 'setHighlightAdTech',
+        payload: { highlightAdTech },
+      });
+    },
+    [topicsDispatch]
   );
 
   useEffect(() => {
-    if (animation) {
-      setCurrentVisitIndexCallback(() => animation.getCurrentVisitIndex);
-      animation.start();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animation]);
-
-  useEffect(() => {
-    if (animation) {
-      animation.setCurrentVisitIndex(visitIndexStart);
-    }
-  }, [animation, visitIndexStart]);
-
-  // initialize animation instance
-  useEffect(() => {
-    const init = (p: p5) => {
-      // hide loading text cover while animation is loading
-      if (loadingTextCoverRef.current) {
-        loadingTextCoverRef.current.style.display = 'block';
-      }
+    const init = (sketch: p5) => {
       const instance = new TopicsAnimation({
-        p,
-        epoch,
-        siteAdTechs,
-        handleUserVisit: _handleUserVisit,
-        setHighlightAdTech,
+        p: sketch,
         onReady: () => {
           if (loadingTextCoverRef.current) {
-            loadingTextCoverRef.current.style.display = 'none';
+            loadingTextCoverRef.current.remove();
           }
         },
       });
       setAnimation(instance);
     };
 
-    const p = node.current ? new p5(init, node.current) : null;
+    // keep only one instance of p5
+    if (node.current && !animation) {
+      // eslint-disable-next-line no-new
+      new p5(init, node.current);
+    }
+  }, [topicsDispatch, topicsState.activeEpoch, animation, handleUserVisit]);
 
-    return () => {
-      p?.remove();
-    };
-  }, [
-    _handleUserVisit,
-    epoch,
-    setCurrentVisitIndexCallback,
-    setHighlightAdTech,
-    setPAActiveTab,
-    siteAdTechs,
-  ]);
-
-  /* sync animation with state start */
+  /* sync animation with state/callbacks - start */
   useEffect(() => {
     animation?.togglePlay(isPlaying);
   }, [isPlaying, animation]);
 
   useEffect(() => {
-    if (resetAnimation) {
-      animation?.reset();
+    animation?.setCurrentVisitIndex(currentVisitedIndex);
+  }, [currentVisitedIndex, animation]);
+
+  useEffect(() => {
+    if (currentEpoch) {
+      animation?.setWebVisits(currentEpoch.webVisits);
     }
-  }, [resetAnimation, animation]);
+  }, [currentEpoch, animation]);
 
   useEffect(() => {
-    animation?.updateSpeedMultiplier(speedMultiplier);
-  }, [speedMultiplier, animation]);
+    animation?.setSiteAdTechs(topicsState.siteAdTechs);
+  }, [topicsState.siteAdTechs, animation]);
 
   useEffect(() => {
-    animation?.reset();
-    animation?.setInteractiveMode(isInteractive);
-  }, [isInteractive, animation]);
-
-  // useEffect(() => {
-  //   animation?.setVisitIndexStart(visitIndexStart);
-  // }, [visitIndexStart, animation]);
+    animation?.setInteractiveMode(topicsState.isInteractive);
+  }, [topicsState.isInteractive, animation]);
 
   useEffect(() => {
-    if (isCompleted) {
-      animation?.setVisitIndexStart(epoch.length - 1);
-    }
-  }, [isCompleted, animation, epoch]);
-  /* sync animation with state end */
+    animation?.updateSpeedMultiplier(topicsState.sliderStep);
+  }, [topicsState.sliderStep, animation]);
+
+  useEffect(() => {
+    animation?.setHandleHighlighTech(handleHighlightAdTech);
+  }, [animation, handleHighlightAdTech]);
+
+  useEffect(() => {
+    animation?.setHandleUserVisit(handleUserVisit);
+  }, [animation, handleUserVisit]);
+
+  useEffect(() => {
+    animation?.setInspectedCircles(sitesVisited);
+  }, [animation, sitesVisited]);
+  /* sync animation with state/callbacks - end */
 
   return (
     <div className="relative h-full">
       <div ref={node} className="overflow-auto bg-white h-full" />
+      {/* used for covering loading text when loading */}
       <div
         ref={loadingTextCoverRef}
         id="loading-text-cover"

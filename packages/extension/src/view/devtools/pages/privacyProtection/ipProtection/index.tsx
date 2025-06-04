@@ -28,26 +28,28 @@ import MDLTable from './mdlTable';
 
 const IPProtection = () => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: Overview,
-          props: {
-            infoKey: PSInfoKey.IPProtection,
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: Overview,
+            props: {
+              infoKey: PSInfoKey.IPProtection,
+            },
+            className: 'p-4',
           },
-          className: 'p-4',
         },
-      },
-      {
-        title: 'Masked Domain List',
-        content: {
-          Element: MDLTable,
-          props: {},
-          className: 'overflow-hidden',
+        {
+          title: 'Masked Domain List',
+          content: {
+            Element: MDLTable,
+            props: {},
+            className: 'overflow-hidden',
+          },
         },
-      },
-    ],
+      ],
+    }),
     []
   );
 
