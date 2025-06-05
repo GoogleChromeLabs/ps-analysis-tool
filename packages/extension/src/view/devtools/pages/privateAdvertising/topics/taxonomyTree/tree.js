@@ -50,7 +50,8 @@ const parseTaxonomy = (text) => {
 
 const Tree = async (
   data,
-  { width = 640, fill = '#C5D1EB', stroke = '#92DCE5' } = {}
+  { width = 640, fill = '#C5D1EB', stroke = '#92DCE5' } = {},
+  buildNodePath
 ) => {
   data = await parseTaxonomy(data);
 
@@ -141,6 +142,7 @@ const Tree = async (
       .on('click', (e, d) => {
         d.children = d.children ? null : d._children;
         update(e, d);
+        buildNodePath(d);
       });
 
     nodeEnter
