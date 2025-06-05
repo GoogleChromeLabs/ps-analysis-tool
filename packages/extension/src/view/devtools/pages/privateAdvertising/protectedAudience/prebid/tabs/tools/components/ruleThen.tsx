@@ -29,7 +29,7 @@ import type { PrebidDebugModuleConfigRule } from '@google-psat/common';
 /**
  * Internal dependencies
  */
-import { replaceRuleTargets } from '../constants';
+import { replaceRuleTargets } from '../../../../../../../stateProviders/prebid/constants';
 
 interface RuleProps {
   ruleIndex: number;

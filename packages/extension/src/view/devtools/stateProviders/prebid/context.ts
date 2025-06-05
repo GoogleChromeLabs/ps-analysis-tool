@@ -21,6 +21,9 @@ import {
   type ReceivedBids,
   type AdsAndBiddersType,
   type PrebidNoBidsType,
+  noop,
+  type PrebidDebugModuleConfig,
+  type PrebidDebugModuleConfigRule,
 } from '@google-psat/common';
 /**
  * Internal dependencies.
@@ -43,8 +46,31 @@ export interface PrebidContextType {
     config: PrebidConfig;
     pbjsNamespace: string;
     prebidExists: boolean | null;
+    debuggingModuleConfig: PrebidDebugModuleConfig;
+    storeRulesInLocalStorage: boolean;
   };
-  actions: Record<string, never>;
+  actions: {
+    setDebuggingModuleConfig: React.Dispatch<
+      React.SetStateAction<PrebidDebugModuleConfig>
+    >;
+    handleChangeStoreRulesInLocalStorage: (value: boolean) => void;
+    openGoogleManagerConsole: () => void;
+    changeRule: (
+      ruleKey: string,
+      ruleType: 'when' | 'then',
+      ruleIndex: number,
+      newValue: any,
+      _delete?: boolean
+    ) => void;
+    addRule: (
+      ruleWhen: PrebidDebugModuleConfigRule,
+      ruleType: 'when' | 'then',
+      ruleIndex: number
+    ) => void;
+    handleWriteRulesToStorage: (
+      input: PrebidDebugModuleConfig
+    ) => Promise<void>;
+  };
 }
 
 export const initialState: PrebidContextType = {
@@ -59,8 +85,20 @@ export const initialState: PrebidContextType = {
     prebidAuctionEvents: {},
     pbjsNamespace: '',
     prebidExists: null,
+    debuggingModuleConfig: {
+      enabled: false,
+      intercept: [],
+    },
+    storeRulesInLocalStorage: false,
   },
-  actions: {},
+  actions: {
+    setDebuggingModuleConfig: noop,
+    changeRule: noop,
+    addRule: noop,
+    handleWriteRulesToStorage: () => Promise.resolve(),
+    openGoogleManagerConsole: noop,
+    handleChangeStoreRulesInLocalStorage: noop,
+  },
 };
 
 export default createContext<PrebidContextType>(initialState);

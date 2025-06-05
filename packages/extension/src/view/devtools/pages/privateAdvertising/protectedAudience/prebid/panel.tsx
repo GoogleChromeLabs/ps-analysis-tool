@@ -24,11 +24,11 @@ import React, { useMemo, useState } from 'react';
  * Internal dependencies.
  */
 import ConfigContainer from './tabs/config';
-import type { PrebidEvents } from '../../../../../../store';
 import EventsContainer from './tabs/events';
 import ToolsContainer from './tabs/tools';
 import UserIdsContainer from './tabs/userIds';
 import VersionComponent from './tabs/version';
+import { usePrebid } from '../../../../stateProviders';
 
 enum PillToggleOptions {
   Config = 'Config',
@@ -38,13 +38,18 @@ enum PillToggleOptions {
   Version = 'Version',
 }
 
-interface PanelProps {
-  prebidResponse: PrebidEvents;
-}
-
-const Panel = ({ prebidResponse }: PanelProps) => {
+const Panel = () => {
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.Config
+  );
+
+  const { config, errorEvents, installedModules, prebidVersion } = usePrebid(
+    ({ state }) => ({
+      config: state.config,
+      installedModules: state.installedModules,
+      prebidVersion: state.versionInfo,
+      errorEvents: state.errorEvents,
+    })
   );
 
   const containerToShow = useMemo(() => {
@@ -52,28 +57,22 @@ const Panel = ({ prebidResponse }: PanelProps) => {
       case PillToggleOptions.Config:
         return (
           <ConfigContainer
-            config={prebidResponse.config}
-            installedModules={prebidResponse.installedModules ?? []}
+            config={config}
+            installedModules={installedModules}
           />
         );
       case PillToggleOptions.Events:
-        return <EventsContainer errorEvents={prebidResponse.errorEvents} />;
+        return <EventsContainer errorEvents={errorEvents} />;
       case PillToggleOptions.Tools:
         return <ToolsContainer />;
       case PillToggleOptions.UserId:
-        return <UserIdsContainer config={prebidResponse.config} />;
+        return <UserIdsContainer config={config} />;
       case PillToggleOptions.Version:
-        return <VersionComponent prebidVersion={prebidResponse.versionInfo} />;
+        return <VersionComponent prebidVersion={prebidVersion} />;
       default:
         return <></>;
     }
-  }, [
-    pillToggle,
-    prebidResponse.config,
-    prebidResponse.installedModules,
-    prebidResponse.errorEvents,
-    prebidResponse.versionInfo,
-  ]);
+  }, [pillToggle, config, installedModules, errorEvents, prebidVersion]);
 
   return (
     <div className="flex flex-col pt-4 h-full w-full bg-lotion dark:bg-raisin-black">

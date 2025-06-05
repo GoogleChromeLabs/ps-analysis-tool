@@ -22,14 +22,22 @@ import React, {
   useState,
   useCallback,
   useMemo,
+  useRef,
 } from 'react';
 import { isEqual } from 'lodash-es';
+import type {
+  PrebidDebugModuleConfig,
+  PrebidDebugModuleConfigRule,
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import Context, { type PrebidContextType } from './context';
 import type { PrebidEvents } from '../../../../store';
+import { STORE_RULES_TOGGLE } from '../../../../constants';
+import firstDifferent from '../../../../utils/firstDifferent';
+import { replaceRuleTargets, matchRuleTargets } from './constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [prebidAuctionEvents, setPrebidAuctionEvents] = useState<
@@ -68,6 +76,182 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const [versionInfo, setPrebidVersionInfo] =
     useState<PrebidContextType['state']['versionInfo']>('');
+
+  const [debuggingModuleConfig, setDebuggingModuleConfig] =
+    useState<PrebidDebugModuleConfig>({
+      enabled: false,
+      intercept: [],
+    });
+
+  const initialStateFetched = useRef(false);
+
+  const [storeRulesInLocalStorage, setStoreRulesInLocalStorage] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    chrome.storage.local.get(STORE_RULES_TOGGLE, (result) => {
+      const checked = result ? result[STORE_RULES_TOGGLE] : false;
+      setStoreRulesInLocalStorage(checked);
+    });
+  }, []);
+
+  const handleChangeStoreRulesInLocalStorage = useCallback((value: boolean) => {
+    chrome.storage.local.set({ [STORE_RULES_TOGGLE]: value });
+    setStoreRulesInLocalStorage(value);
+  }, []);
+
+  const handleWriteRulesToStorage = useCallback(
+    async (input: PrebidDebugModuleConfig) => {
+      setDebuggingModuleConfig(input);
+
+      const tabId = chrome.devtools.inspectedWindow.tabId;
+
+      if (!pbjsNamespace) {
+        return;
+      }
+
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        func: (namespace: string, _input: object) => {
+          sessionStorage.setItem(
+            `__${namespace}_debugging__`,
+            `${JSON.stringify(_input)}`
+          );
+        },
+        args: [pbjsNamespace, input],
+      });
+
+      if (!storeRulesInLocalStorage) {
+        return;
+      }
+
+      await chrome.scripting.executeScript({
+        target: { tabId },
+        func: (namespace: string, _input: object) => {
+          localStorage.setItem(
+            `__${namespace}_debugging__`,
+            `${JSON.stringify(_input)}`
+          );
+        },
+        args: [pbjsNamespace, input],
+      });
+    },
+    [pbjsNamespace, storeRulesInLocalStorage]
+  );
+
+  const openGoogleManagerConsole = useCallback(async () => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
+
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      //@ts-ignore
+      func: () => googletag.cmd.push(() => googletag.openConsole()),
+      world: 'MAIN',
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!initialStateFetched.current) {
+      return;
+    }
+
+    handleWriteRulesToStorage(debuggingModuleConfig);
+  }, [debuggingModuleConfig, handleWriteRulesToStorage]);
+
+  const getInitialState = useCallback(async () => {
+    const tabId = chrome.devtools.inspectedWindow.tabId;
+
+    if (!pbjsNamespace) {
+      initialStateFetched.current = true;
+      return;
+    }
+
+    let [first] = await chrome.scripting.executeScript({
+      target: { tabId },
+      func: (namespace: string) =>
+        sessionStorage.getItem(`__${namespace}_debugging__`),
+      args: [pbjsNamespace],
+    });
+
+    if (!first || !first.result) {
+      [first] = await chrome.scripting.executeScript({
+        target: { tabId },
+        func: (namespace: string) =>
+          localStorage.getItem(`__${namespace}_debugging__`),
+        args: [pbjsNamespace],
+      });
+    }
+
+    if (!first || !first.result) {
+      initialStateFetched.current = true;
+      return;
+    }
+
+    const savedConfig: PrebidDebugModuleConfig = JSON.parse(first.result);
+    setDebuggingModuleConfig(savedConfig);
+    handleWriteRulesToStorage(savedConfig);
+    initialStateFetched.current = true;
+  }, [pbjsNamespace, handleWriteRulesToStorage]);
+
+  useEffect(() => {
+    getInitialState();
+  }, [getInitialState]);
+
+  const addRule = useCallback(
+    (
+      ruleWhen: PrebidDebugModuleConfigRule,
+      ruleType: 'when' | 'then',
+      ruleIndex: number
+    ) => {
+      const targetsToUse =
+        ruleType === 'then' ? replaceRuleTargets : matchRuleTargets;
+
+      const newMatchRuleTarget = firstDifferent(
+        targetsToUse.map(({ value }) => value),
+        Object.keys(ruleWhen)
+      );
+
+      if (!newMatchRuleTarget) {
+        return;
+      }
+
+      setDebuggingModuleConfig((prevState) => {
+        const newState = structuredClone(prevState);
+        newState.intercept[ruleIndex][ruleType] = {
+          ...newState.intercept[ruleIndex][ruleType],
+          [newMatchRuleTarget]: '',
+        };
+        return newState;
+      });
+    },
+    []
+  );
+
+  const changeRule = useCallback(
+    (
+      ruleKey: string,
+      ruleType: 'when' | 'then',
+      ruleIndex: number,
+      newValue: any,
+      _delete = false
+    ) => {
+      if (_delete) {
+        setDebuggingModuleConfig((prevState) => {
+          const newState = structuredClone(prevState);
+          delete newState.intercept[ruleIndex][ruleType][ruleKey];
+          return newState;
+        });
+        return;
+      }
+
+      setDebuggingModuleConfig((prevState) => {
+        const newState = structuredClone(prevState);
+        newState.intercept[ruleIndex][ruleType][ruleKey] = newValue;
+        return newState;
+      });
+    },
+    []
+  );
 
   const messagePassingListener = useCallback(
     (message: {
@@ -171,10 +355,21 @@ const Provider = ({ children }: PropsWithChildren) => {
         prebidAuctionEvents,
         pbjsNamespace,
         prebidExists,
+        debuggingModuleConfig,
+        storeRulesInLocalStorage,
       },
-      actions: {},
+      actions: {
+        changeRule,
+        addRule,
+        handleWriteRulesToStorage,
+        openGoogleManagerConsole,
+        setDebuggingModuleConfig,
+        handleChangeStoreRulesInLocalStorage,
+      },
     };
   }, [
+    storeRulesInLocalStorage,
+    debuggingModuleConfig,
     prebidAdUnits,
     prebidNoBids,
     versionInfo,
@@ -185,6 +380,11 @@ const Provider = ({ children }: PropsWithChildren) => {
     prebidAuctionEvents,
     pbjsNamespace,
     prebidExists,
+    changeRule,
+    addRule,
+    handleWriteRulesToStorage,
+    openGoogleManagerConsole,
+    handleChangeStoreRulesInLocalStorage,
   ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
