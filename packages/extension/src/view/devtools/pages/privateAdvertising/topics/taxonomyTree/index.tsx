@@ -87,12 +87,18 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
 
       unHighlightLastClickedNode();
       lastClickedNodeId.current = path.join('/');
+      setStorage(
+        JSON.stringify({
+          taxonomy: lastClickedNodeId.current,
+        }),
+        2
+      );
 
       path.forEach((id) => {
         highlightNode(id.split(' ').join(''));
       });
     },
-    [highlightNode, unHighlightLastClickedNode]
+    [highlightNode, setStorage, unHighlightLastClickedNode]
   );
 
   const nodeClickHandler = useCallback((value: string) => {
@@ -136,6 +142,22 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   const storageRef = useRef(storage);
 
   useEffect(() => {
+    storageRef.current = storage;
+  }, [storage]);
+
+  useEffect(() => {
+    return () => {
+      setStorage(
+        JSON.stringify({
+          taxonomy: '',
+        }),
+        2
+      );
+    };
+    // Keep this effect empty to only make storage empty only on unmount, not active tab change
+  }, []);
+
+  useEffect(() => {
     const divContainer = divRef.current;
 
     (async () => {
@@ -168,13 +190,6 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
         }, 200);
 
         timeoutRef.current.push(timeout);
-
-        setStorage(
-          JSON.stringify({
-            taxonomy: '',
-          }),
-          2
-        );
       }
     })();
 
