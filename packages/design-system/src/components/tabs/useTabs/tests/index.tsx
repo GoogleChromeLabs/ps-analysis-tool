@@ -91,7 +91,7 @@ describe('useTabs', () => {
       { title: 'title2', content: 'content2' },
     ];
 
-    customRender({ items });
+    customRender({ items, isGroup: false });
 
     const title1 = screen.getByText('title1');
     const title2 = screen.getByText('title2');
@@ -183,7 +183,7 @@ describe('useTabs', () => {
       ],
     };
 
-    customRenderGrouped({ items });
+    customRenderGrouped({ items, isGroup: true });
 
     const group1 = screen.getByText('group-1');
     const group2 = screen.getByText('group-2');
