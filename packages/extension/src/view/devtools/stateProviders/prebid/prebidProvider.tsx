@@ -35,7 +35,7 @@ import type {
  */
 import Context, { type PrebidContextType } from './context';
 import type { PrebidEvents } from '../../../../store';
-import { STORE_RULES_TOGGLE } from '../../../../constants';
+import { PREBID_EVENTS, STORE_RULES_TOGGLE } from '../../../../constants';
 import firstDifferent from '../../../../utils/firstDifferent';
 import { replaceRuleTargets, matchRuleTargets } from './constants';
 
@@ -261,7 +261,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         prebidEvents: PrebidEvents;
       };
     }) => {
-      if (!['PREBID_EVENTS'].includes(message.type)) {
+      if (![PREBID_EVENTS].includes(message.type)) {
         return;
       }
 
@@ -271,9 +271,8 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       const tabId = chrome.devtools.inspectedWindow.tabId;
       const incomingMessageType = message.type;
-
       if (
-        incomingMessageType === 'PREBID_EVENTS' &&
+        incomingMessageType === PREBID_EVENTS &&
         typeof message.payload.prebidEvents !== 'undefined'
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {

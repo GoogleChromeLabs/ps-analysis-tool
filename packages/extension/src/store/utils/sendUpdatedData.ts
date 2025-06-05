@@ -17,6 +17,7 @@
 import ARAStore from '../ARAStore';
 import cookieStore from '../cookieStore';
 import PAStore from '../PAStore';
+import prebidStore from '../prebidStore';
 
 /**
  * Internal dependencies
@@ -27,6 +28,7 @@ function sendUpdatedData(tabId: string, overrideForInitialSync = false) {
   cookieStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
   PAStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
   ARAStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
+  prebidStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
 }
 
 export default sendUpdatedData;

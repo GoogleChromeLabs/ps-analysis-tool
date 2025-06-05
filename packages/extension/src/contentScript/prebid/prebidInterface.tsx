@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import { noop, type AdsAndBiddersType } from '@google-psat/common';
+import merge from 'lodash/merge';
 /**
  * Internal dependencies.
  */
@@ -34,10 +35,6 @@ import type { PrebidEvents } from '../../store';
  * Represents the webpage's content script functionalities.
  */
 class PrebidInterface {
-  /**
-   * TabId of the current Tab
-   */
-  tabId: number | null = null;
   /**
    * Prebid interface.
    */
@@ -109,7 +106,6 @@ class PrebidInterface {
       pbjsClass.scanningStatus = true;
       window.top?.postMessage({
         type: PREBID_SCANNING_STATUS,
-        tabId: pbjsClass.tabId,
         prebidExists: pbjsClass.prebidData.prebidExists,
       });
     }, 60000);
@@ -164,7 +160,6 @@ class PrebidInterface {
 
         window.top?.postMessage({
           type: PREBID_SCANNING_STATUS,
-          tabId: pbjsClass.tabId,
           prebidExists: pbjsClass.prebidData.prebidExists,
         });
         stopLoop = true;
@@ -188,7 +183,6 @@ class PrebidInterface {
         event.data?.type === SCRIPT_PREBID_INITIAL_SYNC &&
         this.scanningStatus
       ) {
-        this.tabId = event.data.tabId;
         this.sendInitialData();
       }
     };
@@ -204,7 +198,6 @@ class PrebidInterface {
   sendInitialData() {
     window.top?.postMessage({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
-      tabId: this.tabId,
       prebidData: this.prebidData.prebidExists
         ? JSON.parse(decycle(this.prebidData))
         : null,
@@ -212,17 +205,13 @@ class PrebidInterface {
   }
 
   initPrebidListener() {
-    this.prebidInterface?.onEvent('addAdUnits', () => {
-      this.calculateAdUnit();
-      this.updateCounter++;
-    });
-
     this.prebidInterface?.onEvent('auctionInit', (args) => {
       this.prebidData.auctionEvents = {
         ...this.prebidData.auctionEvents,
         [args.auctionId]: [],
       };
       this.addEvent(args.auctionId, { ...args, eventType: 'auctionInit' });
+      this.calculateAdUnit();
       this.updateCounter++;
     });
 
@@ -404,32 +393,68 @@ class PrebidInterface {
       return;
     }
 
-    this.prebidData.adUnits =
-      this.prebidInterface?.adUnits?.reduce(
-        (acc: AdsAndBiddersType, adUnit: AdUnit) => {
-          if (!adUnit.code) {
-            return acc;
-          }
+    const auctionInitEvents: AuctionEndEvent[] = [];
+    Object.values(this.prebidData.auctionEvents).forEach((events) => {
+      const auctionInitEvent = events.find(
+        (event) => event.eventType === 'auctionInit'
+      );
 
-          acc[adUnit.code] = {
-            mediaContainerSize:
-              adUnit?.sizes ??
-              (adUnit.mediaTypes?.banner?.sizes ?? []).map((config) => {
-                return config;
-              }),
-            adUnitCode: adUnit.code,
-            bidders: Array.from(
-              new Set<string>(adUnit.bids.map((_bid) => _bid.bidder ?? ''))
-            ),
-            winningBid: 0,
-            bidCurrency: '',
-            winningBidder: '',
-          };
+      if (auctionInitEvent) {
+        auctionInitEvents.push(auctionInitEvent);
+      }
+    });
 
+    const adUnitArray = auctionInitEvents
+      ?.reduce((previousValue, currentValue) => {
+        return [...previousValue, ...currentValue.adUnits];
+      }, [] as AdUnit[])
+      ?.reduce((acc, value) => {
+        let toUpdate = acc.find((adUnit) => {
+          const adUnitBids =
+            adUnit.bids.map(({ bidder, params }: any) => ({
+              bidder,
+              params,
+            })) || [];
+          const currentValueBids =
+            value.bids.map(({ bidder, params }: any) => ({
+              bidder,
+              params,
+            })) || [];
+          return (
+            adUnit.code === value.code &&
+            JSON.stringify(adUnit.mediaTypes) ===
+              JSON.stringify(value.mediaTypes) &&
+            JSON.stringify(adUnit.sizes) === JSON.stringify(value.sizes) &&
+            JSON.stringify(adUnitBids) === JSON.stringify(currentValueBids)
+          );
+        });
+
+        if (toUpdate) {
+          toUpdate = merge(toUpdate, value);
           return acc;
-        },
-        {}
-      ) ?? {};
+        } else {
+          return [...acc, value];
+        }
+      }, [] as AdUnit[]);
+
+    this.prebidData.adUnits =
+      adUnitArray?.reduce((acc, adUnit) => {
+        acc[adUnit.code] = {
+          mediaContainerSize:
+            adUnit?.sizes ??
+            (adUnit.mediaTypes?.banner?.sizes ?? []).map((config) => {
+              return config;
+            }),
+          adUnitCode: adUnit.code,
+          bidders: Array.from(
+            new Set<string>(adUnit.bids.map((_bid) => _bid.bidder ?? ''))
+          ),
+          winningBid: 0,
+          bidCurrency: '',
+          winningBidder: '',
+        };
+        return acc;
+      }, {} as AdsAndBiddersType) ?? {};
   }
 }
 
