@@ -53,7 +53,7 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
       {
         header: 'Elapsed Time',
         accessorKey: 'elapsedTime',
-        cell: (info) => info + 'ms',
+        cell: (info) => Number(info).toFixed(2) + 'ms',
         enableHiding: false,
       },
       {
@@ -90,7 +90,7 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
       {
         header: 'Bid CPM',
         accessorKey: 'cpm',
-        cell: (info) => info,
+        cell: (info) => (info ? Number(info).toFixed(2) : ''),
       },
       {
         header: 'Bid Currency',
@@ -179,6 +179,10 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
     [adUnit, auctionEvents]
   );
 
+  const auctionEndObject = auctionEvents[1].filter(
+    (event) => event.eventType === 'auctionEnd'
+  )[0];
+
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
       <Resizable
@@ -204,7 +208,11 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
                 </p>
               </div>
               <div className="flex justify-between items-center">
-                <p>Timeout: {auctionEvents[1][0].timeout}</p>
+                <p>Timeout: {auctionEvents[1][0].timeout}ms</p>
+                <p>
+                  Auction Time:{' '}
+                  {auctionEndObject.auctionEnd - auctionEndObject.timestamp}ms
+                </p>
               </div>
             </div>
             <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
