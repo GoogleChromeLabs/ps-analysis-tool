@@ -41,11 +41,59 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
   const divRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [taxonomyArray, setTaxonomyArray] = useState<string[]>([]);
+  const lastClickedNodeId = useRef<string | null>(null);
 
   const { storage, setStorage } = useTabs(({ state, actions }) => ({
     storage: state.storage,
     setStorage: actions.setStorage,
   }));
+
+  const highlightNode = useCallback((id: string) => {
+    const svgGroup = document.getElementById(id);
+
+    if (svgGroup) {
+      svgGroup.style.fill = 'orangered';
+      svgGroup.style.transition = 'fill 1s';
+    }
+  }, []);
+
+  const unHighlightLastClickedNode = useCallback(() => {
+    const ids = lastClickedNodeId.current?.split('/');
+
+    ids?.forEach((id) => {
+      const svgGroup = document.getElementById(id.trim().split(' ').join(''));
+
+      if (svgGroup) {
+        svgGroup.style.fill = '';
+        svgGroup.style.transition = 'fill 1s';
+      }
+    });
+  }, [lastClickedNodeId]);
+
+  const buildNodePathAndHighlight = useCallback(
+    (nodeData: any) => {
+      const path: string[] = [];
+
+      const builder = (_nodeData: any) => {
+        const nodeName = _nodeData.data.name;
+
+        if (nodeName) {
+          path.unshift(nodeName);
+          builder(_nodeData.parent);
+        }
+      };
+
+      builder(nodeData);
+
+      unHighlightLastClickedNode();
+      lastClickedNodeId.current = path.join('/');
+
+      path.forEach((id) => {
+        highlightNode(id.split(' ').join(''));
+      });
+    },
+    [highlightNode, unHighlightLastClickedNode]
+  );
 
   const nodeClickHandler = useCallback((value: string) => {
     const clicker = (id: string, nextId?: string) => {
@@ -63,17 +111,6 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
 
           svgGroup.dispatchEvent(clickEvent);
         }
-
-        svgGroup.style.fill = 'orangered';
-        svgGroup.style.transition = 'fill 1s';
-
-        const timeout = setTimeout(() => {
-          svgGroup.style.fill = '';
-          svgGroup.style.fontWeight = '';
-          svgGroup.style.transition = '';
-        }, 10000);
-
-        timeoutRef.current.push(timeout);
       }
     };
 
@@ -112,9 +149,9 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
         width: 2000,
       };
 
-      const chart = await Tree(taxonomy, treeConfig);
+      const chart = await Tree(taxonomy, treeConfig, buildNodePathAndHighlight);
 
-      if (divContainer) {
+      if (divContainer && chart) {
         divContainer.appendChild(chart);
       }
 
