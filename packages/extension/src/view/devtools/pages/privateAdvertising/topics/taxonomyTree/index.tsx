@@ -68,7 +68,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
         svgGroup.style.transition = 'fill 1s';
       }
     });
-  }, [lastClickedNodeId]);
+  }, []);
 
   const buildNodePathAndHighlight = useCallback(
     (nodeData: any) => {
@@ -183,7 +183,7 @@ const TaxonomyTree = ({ taxonomyUrl, githubUrl }: TaxonomyTreeProps) => {
         divContainer.innerHTML = '';
       }
     };
-  }, [nodeClickHandler, setStorage, taxonomyUrl]);
+  }, [buildNodePathAndHighlight, nodeClickHandler, setStorage, taxonomyUrl]);
 
   useEffect(() => {
     const timeouts = timeoutRef.current;
