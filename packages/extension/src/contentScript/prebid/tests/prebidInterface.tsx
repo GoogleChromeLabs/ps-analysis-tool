@@ -37,7 +37,6 @@ describe('PrebidInterface', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(prebidInterface.tabId).toBeNull();
     expect(prebidInterface.prebidData.prebidExists).toBeNull();
     expect(prebidInterface.prebidInterface).toBeNull();
     expect(prebidInterface.prebidData).toEqual({
@@ -65,7 +64,6 @@ describe('PrebidInterface', () => {
     const mockEvent = {
       data: {
         type: SCRIPT_PREBID_INITIAL_SYNC,
-        tabId: 123,
       },
     };
 
@@ -74,10 +72,8 @@ describe('PrebidInterface', () => {
     //@ts-ignore
     window.onmessage(mockEvent as MessageEvent);
 
-    expect(prebidInterface.tabId).toBe(123);
     expect(mockPostMessage).toHaveBeenCalledWith({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
-      tabId: 123,
       prebidData: JSON.parse(decycle(prebidInterface.prebidData)),
     });
   });
@@ -87,13 +83,11 @@ describe('PrebidInterface', () => {
     //@ts-ignore
     window.top.postMessage = mockPostMessage;
 
-    prebidInterface.tabId = 123;
     prebidInterface.prebidData.prebidExists = true;
     prebidInterface.sendInitialData();
 
     expect(mockPostMessage).toHaveBeenCalledWith({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
-      tabId: 123,
       prebidData: JSON.parse(decycle(prebidInterface.prebidData)),
     });
   });
