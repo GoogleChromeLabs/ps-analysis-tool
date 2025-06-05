@@ -188,7 +188,13 @@ const Tree = async (
       .attr('stroke', 'white')
       .attr('paint-order', 'stroke')
       .attr('font-size', '1.4rem')
-      .attr('style', (d) => `cursor: ${d._children ? 'pointer' : 'default'}`);
+      .attr(
+        'style',
+        (d) =>
+          `cursor: ${d._children ? 'pointer' : 'default'}; pointer-events: ${
+            d._children ? 'auto' : 'none'
+          };`
+      );
 
     node
       .merge(nodeEnter)
