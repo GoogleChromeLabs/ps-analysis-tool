@@ -26,12 +26,19 @@ const Panel = () => {
   }));
 
   const ActiveTabContent = panel.Element;
-  const { props } = panel;
+  const { props, className } = panel;
 
   return (
     <LandingPage
       title="IP Protection"
-      contentPanel={ActiveTabContent && <ActiveTabContent {...props} />}
+      contentPanel={
+        ActiveTabContent && (
+          <div className={className}>
+            <ActiveTabContent {...props} />
+          </div>
+        )
+      }
+      {...props}
     />
   );
 };

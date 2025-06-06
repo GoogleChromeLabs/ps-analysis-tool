@@ -27,7 +27,7 @@ const PrivacyProtection = () => {
   return (
     <LandingPageContainer
       title="Privacy Protection"
-      extraClasses="min-h-[78vh] w-full"
+      extraClasses="min-h-[78vh] w-full p-4"
       contentPanelTitle={I18n.getMessage('antiCovertTrackingDescription')}
       content={PRIVACY_PROTECTION_CONTENT}
       titleStyles="text-blue-600"

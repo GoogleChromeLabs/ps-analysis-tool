@@ -18,6 +18,7 @@
  */
 import React, { useMemo } from 'react';
 import {
+  InfoCard,
   PSInfoKey,
   TabsProvider,
   type TabItems,
@@ -27,7 +28,6 @@ import {
  * Internal dependencies.
  */
 import Panel from './panel';
-import Overview from './overview';
 import ActiveSources from './activeSources';
 import SourceRegistrations from './sourceRegistrations';
 import TriggerRegistrations from './triggerRegistrations';
@@ -39,9 +39,11 @@ const AttributionReporting = () => {
         {
           title: 'Overview',
           content: {
-            Element: Overview,
+            Element: InfoCard,
             props: {
               infoKey: PSInfoKey.AttributionReporting,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
             },
             className: 'p-4',
           },

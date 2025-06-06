@@ -18,6 +18,7 @@
  */
 import React, { useMemo } from 'react';
 import {
+  InfoCard,
   PSInfoKey,
   TabsProvider,
   type TabItems,
@@ -33,7 +34,6 @@ import Panel from './panel';
 import AdUnits from './adUnits';
 import ExplorableExplanation from './explorableExplanation';
 import WorkletBreakpoints from './workletBreakpoints';
-import Overview from './overview';
 import Prebid from './prebid';
 
 const ProtectedAudience = () => {
@@ -43,9 +43,11 @@ const ProtectedAudience = () => {
         {
           title: 'Overview',
           content: {
-            Element: Overview,
+            Element: InfoCard,
             props: {
               infoKey: PSInfoKey.ProtectedAudience,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
             },
             className: 'p-4',
           },

@@ -33,7 +33,7 @@ const Panel = () => {
   }));
 
   const ActiveTabContent = panel.Element;
-  const { props } = panel;
+  const { props, className } = panel;
 
   const {
     interestGroupDetails,
@@ -168,7 +168,14 @@ const Panel = () => {
   return (
     <LandingPage
       title="Protected Audience"
-      contentPanel={ActiveTabContent && <ActiveTabContent {...props} />}
+      contentPanel={
+        ActiveTabContent && (
+          <div className={className}>
+            <ActiveTabContent {...props} />
+          </div>
+        )
+      }
+      {...props}
     />
   );
 };

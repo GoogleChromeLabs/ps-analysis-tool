@@ -18,12 +18,12 @@
  */
 import React, { useMemo } from 'react';
 import {
+  InfoCard,
   PSInfoKey,
   TabsProvider,
   type TabItems,
 } from '@google-psat/design-system';
 import Panel from './panel';
-import Overview from './overview';
 import MDLTable from './mdlTable';
 
 const IPProtection = () => {
@@ -33,9 +33,11 @@ const IPProtection = () => {
         {
           title: 'Overview',
           content: {
-            Element: Overview,
+            Element: InfoCard,
             props: {
               infoKey: PSInfoKey.IPProtection,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
             },
             className: 'p-4',
           },

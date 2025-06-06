@@ -27,7 +27,7 @@ const PrivateStateTokens = () => {
         isLandingPageContainer
         title={I18n.getMessage('privateStateTokens')}
         psInfoKey={PSInfoKey.PrivateStateTokens}
-        extraClasses="max-w-2xl h-fit"
+        extraClasses="max-w-2xl h-fit p-4"
       />
     </div>
   );

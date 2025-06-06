@@ -32,7 +32,7 @@ const Panel = () => {
   }));
 
   const ActiveTabContent = panel.Element;
-  const { props } = panel;
+  const { props, className } = panel;
 
   const { sourcesRegistration, triggerRegistration, filter } =
     useAttributionReporting(({ state }) => ({
@@ -121,7 +121,14 @@ const Panel = () => {
   return (
     <LandingPage
       title="Attribution Reporting"
-      contentPanel={ActiveTabContent && <ActiveTabContent {...props} />}
+      contentPanel={
+        ActiveTabContent && (
+          <div className={className}>
+            <ActiveTabContent {...props} />
+          </div>
+        )
+      }
+      {...props}
     />
   );
 };

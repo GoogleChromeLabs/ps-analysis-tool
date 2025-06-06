@@ -22,12 +22,19 @@ import React from 'react';
 const Panel = () => {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
-  const { props } = panel;
+  const { props, className } = panel;
 
   return (
     <LandingPage
       title="Topics"
-      contentPanel={ActiveTabContent && <ActiveTabContent {...props} />}
+      contentPanel={
+        ActiveTabContent && (
+          <div className={className}>
+            <ActiveTabContent {...props} />
+          </div>
+        )
+      }
+      {...props}
     />
   );
 };

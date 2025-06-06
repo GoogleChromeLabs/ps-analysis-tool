@@ -30,7 +30,7 @@ const PrivacySandbox = () => {
       title="Privacy Sandbox"
       showSupportLink={true}
       contentPanel={<ContentPanel />}
-      extraClasses="py-0"
+      extraClasses="p-4"
     />
   );
 };

@@ -19,11 +19,9 @@
  */
 import React, { useMemo } from 'react';
 import {
-  InfoCard as InfoCardTemplate,
+  InfoCard,
   PSInfoKey,
-  QuickLinksList,
   TabsProvider,
-  type PSInfoKeyType,
   type TabItems,
 } from '@google-psat/design-system';
 
@@ -35,17 +33,6 @@ import TaxonomyTree from './taxonomyTree';
 import Panel from './panel';
 import TopicsClassifier from './topicsClassifier';
 
-const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
-  return (
-    <>
-      <InfoCardTemplate infoKey={infoKey} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </>
-  );
-};
-
 const Topics = () => {
   const tabItems = useMemo<TabItems>(
     () => ({
@@ -56,6 +43,8 @@ const Topics = () => {
             Element: InfoCard,
             props: {
               infoKey: PSInfoKey.Topics,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
             },
             className: 'p-4',
           },
