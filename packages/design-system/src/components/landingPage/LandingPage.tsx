@@ -41,6 +41,7 @@ export interface LandingPageProps {
   showQuickLinks?: boolean;
   showSupportLink?: boolean;
   isLandingPageContainer?: boolean;
+  extraClasses?: string;
 }
 
 const LandingPage = ({
@@ -53,6 +54,7 @@ const LandingPage = ({
   showQuickLinks = true,
   showSupportLink = false,
   isLandingPageContainer = false,
+  extraClasses = '',
 }: LandingPageProps) => {
   const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
     extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
@@ -85,7 +87,8 @@ const LandingPage = ({
             'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz',
             {
               'border-b border-american-silver dark:border-quartz': children,
-            }
+            },
+            extraClasses
           )}
         >
           {psInfoKey && <InfoCard infoKey={psInfoKey} />}
@@ -96,7 +99,8 @@ const LandingPage = ({
           <div
             id="#__psat-main-content"
             className={classNames(
-              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz'
+              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz',
+              extraClasses
             )}
           >
             {children}
