@@ -17,13 +17,7 @@
  * External dependencies.
  */
 import React from 'react';
-import {
-  Breadcrumbs,
-  Tabs,
-  useSidebar,
-  useTabs,
-} from '@google-psat/design-system';
-import classNames from 'classnames';
+import { LandingPage, useTabs } from '@google-psat/design-system';
 
 const Panel = () => {
   const { panel } = useTabs(({ state, actions }) => ({
@@ -32,34 +26,13 @@ const Panel = () => {
   }));
 
   const ActiveTabContent = panel.Element;
-  const { className, props } = panel;
-
-  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
-    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
-  }));
+  const { props } = panel;
 
   return (
-    <div
-      className="h-screen w-full flex flex-col overflow-hidden"
-      data-testid="ip-protection-content"
-    >
-      <div className="p-4 flex flex-col gap-1">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">IP Protection</h1>
-        </div>
-        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
-      </div>
-
-      <Tabs />
-      <div
-        className={classNames('overflow-auto', className)}
-        style={{
-          minHeight: 'calc(100% - 116px)',
-        }}
-      >
-        {ActiveTabContent && <ActiveTabContent {...props} />}
-      </div>
-    </div>
+    <LandingPage
+      title="IP Protection"
+      contentPanel={ActiveTabContent && <ActiveTabContent {...props} />}
+    />
   );
 };
 

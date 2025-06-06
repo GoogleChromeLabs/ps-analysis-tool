@@ -17,21 +17,10 @@
 /**
  * External dependencies.
  */
-import {
-  Breadcrumbs,
-  QuickLinksList,
-  Tabs,
-  useSidebar,
-  useTabs,
-} from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
+import { LandingPage, useTabs } from '@google-psat/design-system';
 import React from 'react';
 
 const Panel = () => {
-  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
-    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
-  }));
-
   const { panel } = useTabs(({ state }) => ({
     panel: state.panel,
   }));
@@ -40,21 +29,10 @@ const Panel = () => {
   const { props } = panel;
 
   return (
-    <div data-testid="related-website-sets-content" className="h-full w-full">
-      <div className="p-4 flex flex-col gap-1 mb-2">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">{I18n.getMessage('rws')}</h1>
-        </div>
-        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
-      </div>
-      <Tabs />
-      <div className="p-4 max-w-2xl">
-        {ActiveTabContent && <ActiveTabContent {...props} />}
-      </div>
-      <div className="mx-4 mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </div>
+    <LandingPage
+      title="Related Website Sets"
+      contentPanel={ActiveTabContent && <ActiveTabContent {...props} />}
+    />
   );
 };
 
