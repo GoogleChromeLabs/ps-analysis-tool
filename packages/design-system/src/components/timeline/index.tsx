@@ -69,7 +69,7 @@ const Timeline = ({
   const zoom = zoomLevel < 1 ? 1 : zoomLevel;
   const lines = Array.from({ length: lineCount });
   const timeoutBlockWidth = scrollWidth - auctionTimeout * zoom;
-
+  console.log(lines, lineCount);
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimate(true);

@@ -40,31 +40,9 @@ const bidders: {
   startTime?: number;
   duration: string;
   type: BidderType;
-}[] = [
-  { name: 'Pubmattic', startTime: 20, duration: '270.1', type: BidderType.BID },
-  {
-    name: 'Sharethrough',
-    startTime: 10,
-    duration: '210.4',
-    type: BidderType.NO_BID,
-  },
-  {
-    name: 'appnexus',
-    startTime: 5,
-    duration: '240.0',
-    type: BidderType.NO_BID,
-  },
-  { name: 'ix', duration: '380.1', type: BidderType.NO_BID },
-  { name: 'Rubicon', duration: '125.51', type: BidderType.WON },
-  {
-    name: 'Criteo',
-    startTime: 25,
-    duration: '470.05',
-    type: BidderType.TIMED_OUT,
-  },
-];
-//@ts-ignore
-prepareTimelineData(prebidResponse);
+}[] =
+  //@ts-ignore
+  prepareTimelineData(prebidResponse);
 
 export const Primary: Story = {
   args: {

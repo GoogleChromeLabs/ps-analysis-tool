@@ -47,12 +47,6 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
       const bidders: Partial<Bidder>[] = [];
       auctions[auctionId] = {};
 
-      events.forEach((event: any) => {
-        if (event.eventType === 'bidRequested') {
-          console.log(event, 'bidRequested');
-        }
-      });
-
       const auctionEnd: AuctionEndEvent = events.find(
         (item: PrebidAuctionEventType) => item.eventType === 'auctionEnd'
       ) as AuctionEndEvent;
@@ -64,8 +58,8 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
       auctionEnd.bidsReceived.forEach((bid: BidResponse) => {
         bidders.push({
           name: bid.bidder,
-          startTime: bid.requestTimestamp as number,
-          endTime: bid.responseTimestamp as number,
+          startTime: (bid.requestTimestamp as number) - auctionEnd.timestamp,
+          endTime: (bid.responseTimestamp as number) - auctionEnd.timestamp,
           duration: `${
             (bid?.responseTimestamp ?? 0) - (bid?.requestTimestamp ?? 0)
           }`,
@@ -84,8 +78,8 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
 
         auctionEnd.bidderRequests.forEach((bidderRequest) => {
           if (bidderRequest.bidderRequestId === item.bidderRequestId) {
-            bid.startTime = bidderRequest.start;
-            bid.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs;
+            bid.startTime = bidderRequest.start - auctionEnd.timestamp;
+            bid.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
             const noBidElapsedTime =
               events.find(
                 (event) =>
@@ -102,7 +96,11 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
                   event.bidderRequestId === item.bidderRequestId
               )?.elapsedTime ?? 0;
             bid.endTime =
-              bidderRequest.start + noBidElapsedTime - bidRequestedElapsedTime;
+              bidderRequest.start +
+              noBidElapsedTime -
+              bidRequestedElapsedTime -
+              auctionEnd.timestamp;
+            bid.duration = `${(bid?.endTime ?? 0) - (bid?.startTime ?? 0)}`;
           }
         });
 
@@ -114,6 +112,9 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
           bidders.push({
             name: event.bidder,
             type: BidderType.WON,
+            startTime: event.requestTimestamp - auctionEnd.timestamp,
+            endTime: event.responseTimestamp - auctionEnd.timestamp,
+            duration: `${event.responseTimestamp - event.requestTimestamp}`,
           });
         }
       });
@@ -132,6 +133,8 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
       };
     }
   );
+  //uncomment below line to see storybook.
+  //return auctions['40eb202e-d5fc-44db-b602-5be0a7b1f844'].bidders;
   return auctions;
 };
 
