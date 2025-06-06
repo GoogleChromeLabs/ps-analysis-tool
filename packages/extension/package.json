@@ -11,13 +11,13 @@
     "prebuild": "rimraf ../../dist/extension",
     "dev": "run-p dev:root dev:popup dev:devtools dev:report",
     "build": "npm run build:root && npm run build:popup && npm run build:devtools && npm run build:report",
-    "dev:root": "cross-env NODE_ENV=development npm run build:root",
+    "dev:root": "cross-env NODE_ENV=development npm run build:root -- --watch",
     "build:root": "cross-env PAGE=root vite build --config ../../vite.extension.config.mts",
-    "dev:popup": "cross-env NODE_ENV=development npm run build:popup && chokidar 'src/view/popup/**/*' -c 'npm run build:popup'",
+    "dev:popup": "cross-env NODE_ENV=development npm run build:popup -- --watch",
     "build:popup": "cross-env PAGE=popup vite build --config ../../vite.extension.config.mts",
-    "dev:devtools": "cross-env NODE_ENV=development npm run build:devtools && chokidar 'src/view/devtools/**/*' -c 'npm run build:devtools'",
+    "dev:devtools": "cross-env NODE_ENV=development npm run build:devtools -- --watch",
     "build:devtools": "cross-env PAGE=devtools vite build --config ../../vite.extension.config.mts",
-    "dev:report": "cross-env NODE_ENV=development npm run build:report && chokidar 'src/view/report/**/*' -c 'npm run build:report'",
+    "dev:report": "cross-env NODE_ENV=development npm run build:report -- --watch",
     "build:report": "cross-env PAGE=report vite build --config ../../vite.extension.config.mts"
   },
   "bugs": {
@@ -61,7 +61,6 @@
   },
   "devDependencies": {
     "@types/p5": "^1.7.6",
-    "chokidar-cli": "^3.0.0",
     "devtools-protocol": "^0.0.1345247",
     "html-inline-script-webpack-plugin": "^3.2.1",
     "puppeteer": "22.15.0",
