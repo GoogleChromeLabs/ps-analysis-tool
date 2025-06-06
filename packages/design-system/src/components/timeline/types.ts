@@ -25,4 +25,8 @@ export interface Bidder {
   duration: string;
   type: BidderType;
   data?: any;
+  startTime: number;
+  endTime: number;
+  adUnitCode: string;
+  serverResponseTimeMs?: number;
 }

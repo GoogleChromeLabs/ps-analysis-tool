@@ -63,7 +63,7 @@ const bidders: {
     type: BidderType.TIMED_OUT,
   },
 ];
-
+//@ts-ignore
 prepareTimelineData(prebidResponse);
 
 export const Primary: Story = {

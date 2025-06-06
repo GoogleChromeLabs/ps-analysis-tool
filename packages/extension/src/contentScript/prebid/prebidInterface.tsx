@@ -17,7 +17,16 @@
 /**
  * External dependencies.
  */
-import { noop, type AdsAndBiddersType } from '@google-psat/common';
+import {
+  noop,
+  type AdsAndBiddersType,
+  type AdUnit,
+  type BidResponse,
+  type BidWonEvent,
+  type NoBid,
+  type PrebidEvents,
+  type SingleBidderSetting,
+} from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -28,7 +37,6 @@ import {
 } from '../../constants';
 import { decycle } from '../utils';
 import mergeUnique2DArrays from '../utils/mergeUnique2DArrays';
-import type { PrebidEvents } from '../../store';
 
 /**
  * Represents the webpage's content script functionalities.

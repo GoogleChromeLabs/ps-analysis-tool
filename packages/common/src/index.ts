@@ -57,3 +57,5 @@ export * from './cookies.types';
 export * from './libraryDetection.types';
 export * from './protectedAudience.types';
 export * from './attributionReporting.types';
+export * from './prebid.types';
+export * from './prebidGlobal.types';

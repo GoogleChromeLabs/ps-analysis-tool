@@ -21,7 +21,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import { BidderType } from './types';
+import { Bidder, BidderType } from './types';
 import findMaximumBidderDuration from './utils/findMaximumBidderDuration';
 import { HammerIcon } from '../../icons';
 
@@ -41,13 +41,7 @@ interface TimelineProps {
   auctionId: string;
   auctionStartTime: string;
   auctionTime: string;
-  bidders: {
-    data(data: any): void;
-    name: string;
-    startTime: number;
-    duration: string;
-    type: BidderType;
-  }[];
+  bidders: Bidder[];
   zoomLevel?: number;
   setSelectedRow: (row: any) => void;
   navigateToAuction: (auctionId: string) => void;

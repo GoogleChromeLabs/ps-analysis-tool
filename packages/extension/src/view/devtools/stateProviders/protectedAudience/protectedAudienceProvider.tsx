@@ -30,6 +30,7 @@ import type {
   ReceivedBids,
   SingleSellerAuction,
   MultiSellerAuction,
+  PrebidEvents,
 } from '@google-psat/common';
 import { isEqual } from 'lodash-es';
 
@@ -42,7 +43,6 @@ import {
   computeReceivedBidsAndNoBids,
 } from './utils';
 import { CS_GET_PREBID_DATA_RESPONSE } from '../../../../constants';
-import type { PrebidEvents } from '../../../../store';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
@@ -269,6 +269,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         if (tabId.toString() === message.payload.tabId.toString()) {
           setPrebidResponse((prev) => {
             const data = message.payload?.prebidEvents ?? null;
+
             if (
               typeof message?.payload?.prebidEvents?.prebidExists !==
               'undefined'

@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node"
   },
+  "include": ["src/prebidGlobal.types.ts", "src/**/*.ts"],
   "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"],
   "references": [{ "path": "../i18n" }]
 }
