@@ -62,14 +62,19 @@ const Timeline = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const lineCount = useMemo(() => {
-    const maxDuration = findMaximumBidderDuration(bidders);
-    return maxDuration / TIME_DURATION + 2;
-  }, [bidders]);
+    const maxDuration = Math.max(
+      findMaximumBidderDuration(bidders),
+      auctionTimeout
+    );
+    const extraLines = 4;
+
+    return maxDuration / TIME_DURATION + extraLines;
+  }, [bidders, auctionTimeout]);
 
   const zoom = zoomLevel < 1 ? 1 : zoomLevel;
   const lines = Array.from({ length: lineCount });
   const timeoutBlockWidth = scrollWidth - auctionTimeout * zoom;
-  console.log(lines, lineCount);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimate(true);

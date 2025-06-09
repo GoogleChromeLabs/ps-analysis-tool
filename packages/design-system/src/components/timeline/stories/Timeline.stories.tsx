@@ -37,11 +37,11 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   render: () => {
     const auctions = prepareTimelineData(prebidResponse);
-    console.log('auctions', auctions);
 
     return (
       <>
         {Object.entries(auctions).map(([auctionId, auction]) => {
+          console.log(auction.auctionTimeout);
           return (
             <div key={auctionId} style={{ marginBottom: '2rem' }}>
               <Timeline {...auction} />
