@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
 
 /**
@@ -24,26 +24,36 @@ import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
  */
 import {
   useCookie,
+  usePrebid,
   useProtectedAudience,
   useSettings,
 } from '../../../../stateProviders';
 import Panel from './panel';
 
 const AdUnits = () => {
+  const { paapi, selectedAdUnit, setSelectedAdUnit } = useProtectedAudience(
+    ({ state, actions }) => ({
+      paapi: {
+        adsAndBidders: state.adsAndBidders,
+        receivedBids: state.receivedBids,
+        noBids: state.noBids,
+        auctionEvents: state.auctionEvents,
+      },
+      selectedAdUnit: state.selectedAdUnit,
+      setSelectedAdUnit: actions.setSelectedAdUnit,
+    })
+  );
+
   const {
-    adsAndBidders,
-    setSelectedAdUnit,
-    receivedBids,
-    noBids,
-    selectedAdUnit,
-    auctionEvents,
-  } = useProtectedAudience(({ state, actions }) => ({
-    adsAndBidders: state.adsAndBidders,
-    setSelectedAdUnit: actions.setSelectedAdUnit,
-    receivedBids: state.receivedBids,
-    noBids: state.noBids,
-    selectedAdUnit: state.selectedAdUnit,
-    auctionEvents: state.auctionEvents,
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidReceivedBids,
+    prebidNoBids,
+  } = usePrebid(({ state }) => ({
+    prebidAdunits: state.prebidAdUnits,
+    prebidAuctionEvents: state.prebidAuctionEvents,
+    prebidReceivedBids: state.prebidReceivedBids,
+    prebidNoBids: state.prebidNoBids,
   }));
 
   const { setIsInspecting } = useCookie(({ actions }) => ({
@@ -70,6 +80,41 @@ const AdUnits = () => {
     };
   }, [setSelectedAdUnit]);
 
+  const [pillToggle, setPillToggle] = useState('Prebid');
+
+  const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
+    if (pillToggle === 'Prebid') {
+      return {
+        adsAndBidders: prebidAdunits || {},
+        receivedBids: prebidReceivedBids || [],
+        noBids: prebidNoBids || {},
+        auctionEvents: prebidAuctionEvents || {},
+      };
+    }
+
+    return {
+      adsAndBidders: paapi.adsAndBidders,
+      receivedBids: paapi.receivedBids,
+      noBids: paapi.noBids,
+      auctionEvents: paapi.auctionEvents,
+    };
+  }, [
+    paapi.adsAndBidders,
+    paapi.auctionEvents,
+    paapi.noBids,
+    paapi.receivedBids,
+    pillToggle,
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidNoBids,
+    prebidReceivedBids,
+  ]);
+
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+  }, [updateSelectedItemKey]);
+
   if (!isUsingCDP) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -77,12 +122,7 @@ const AdUnits = () => {
           To view ad units, enable PSAT to use CDP via the{' '}
           <button
             className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={() => {
-              document
-                .getElementById('cookies-landing-scroll-container')
-                ?.scrollTo(0, 0);
-              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-            }}
+            onClick={cdpNavigation}
           >
             Settings Page
           </button>
@@ -101,6 +141,8 @@ const AdUnits = () => {
       selectedAdUnit={selectedAdUnit}
       setIsInspecting={setIsInspecting}
       auctionEvents={auctionEvents ?? {}}
+      pillToggle={pillToggle}
+      setPillToggle={setPillToggle}
     />
   );
 };

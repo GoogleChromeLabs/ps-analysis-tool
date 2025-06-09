@@ -20,8 +20,8 @@ import React, { useMemo, useState } from 'react';
 import { noop, type AdsAndBiddersType } from '@google-psat/common';
 import {
   FrameIcon,
+  Hammer,
   JsonView,
-  Pill,
   ScreenIcon,
   Table,
   TableProvider,
@@ -81,22 +81,39 @@ const AdTable = ({
       {
         header: 'Ad Container Sizes',
         accessorKey: 'mediaContainerSize',
-        cell: (info) => (
-          <div className="flex gap-2 items-center">
-            <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
-            <p className="truncate">
-              {(info as number[][])
-                ?.map((size: number[]) => {
+        cell: (info, details) => {
+          const winningMediaContainerSize =
+            details?.winningMediaContainerSize?.[0];
+
+          return (
+            <div className="flex gap-4 items-center">
+              <ScreenIcon className="fill-[#323232] min-w-5 min-h-5" />
+              <p className="truncate flex flex-wrap gap-2">
+                {(info as number[][])?.map((size: number[], index: number) => {
                   if (!size?.[0]) {
                     return null;
                   }
-                  return `${size?.[0]}x${size?.[1]}`;
-                })
-                ?.filter((size) => Boolean(size))
-                ?.join(' | ')}
-            </p>
-          </div>
-        ),
+
+                  return (
+                    <span
+                      key={index}
+                      className={classNames(
+                        'rounded-xl px-2 py-0.5 border text-xs',
+                        winningMediaContainerSize &&
+                          winningMediaContainerSize[0] === size[0] &&
+                          winningMediaContainerSize[1] === size[1]
+                          ? 'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]'
+                          : 'border-gray-400 dark:border-dark-gray-x11'
+                      )}
+                    >
+                      {size[0]}x{size[1]}
+                    </span>
+                  );
+                })}
+              </p>
+            </div>
+          );
+        },
         sortingComparator: (a, b) => {
           const aSizes = (a as number[][])
             .map((size: number[]) => `${size[0]}x${size[1]}`)
@@ -111,13 +128,44 @@ const AdTable = ({
       {
         header: 'Bidders',
         accessorKey: 'bidders',
-        cell: (info) => (
-          <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
-            {(info as string[])?.map((bidder: string, idx: number) => (
-              <div key={idx}>{<Pill title={bidder} />}</div>
-            ))}
-          </div>
-        ),
+        cell: (info, details) => {
+          const winningBid = details?.winningBid;
+          const winningBidder = details?.winningBidder;
+          const bidCurrency = details?.bidCurrency;
+
+          return (
+            <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
+              {(info as string[])?.map((bidder: string, idx: number) => (
+                <div key={idx}>
+                  {
+                    <div
+                      className={classNames(
+                        'h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1',
+                        {
+                          'border-gray-400 dark:border-dark-gray-x11':
+                            bidder !== winningBidder,
+                          'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
+                            bidder === winningBidder,
+                        }
+                      )}
+                    >
+                      {bidder === winningBidder && (
+                        <Hammer className="h-4 w-4" />
+                      )}
+                      {bidder}
+                      {bidder === winningBidder && (
+                        <span className="text-xxxhs text-[#5AAD6A] font-bold">
+                          {' '}
+                          ({winningBid} {bidCurrency})
+                        </span>
+                      )}
+                    </div>
+                  }
+                </div>
+              ))}
+            </div>
+          );
+        },
         sortingComparator: (a, b) => {
           const aBidders = (a as string[]).join('').toLowerCase();
           const bBidders = (b as string[]).join('').toLowerCase();
