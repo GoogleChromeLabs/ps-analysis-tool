@@ -42,7 +42,6 @@ module.exports = {
       require.resolve('chalk').split('chalk')[0],
       'chalk/source/vendor/supports-color/index.js'
     ),
-    mermaid: join(__dirname, '/mermaidMock.js'),
     '^lodash-es$': 'lodash',
     'lodash-es/isEqual': 'lodash/isEqual',
   },
