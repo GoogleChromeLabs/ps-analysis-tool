@@ -26,6 +26,7 @@ import { config } from './config';
 import { Circle, InfoBox, SmallCircle, clearInfoBox } from './components';
 import { getSmallCirclePositions } from './utils';
 import assets from './assets';
+import { noop } from '@google-psat/common';
 
 type Epoch = {
   webVisits: { website: string; datetime: string; topics: string[] }[];
@@ -57,14 +58,14 @@ class TopicsAnimation {
   smallCirclePositions: Record<number, { x: number; y: number }[]> = {};
   inspectedCircles: Set<number> = new Set();
   isInitialized = false;
-  isInteractive: boolean;
+  isInteractive = false;
   webVisits: Epoch['webVisits'] = [];
-  visitedSites: Set<number>;
+  visitedSites: Set<number> = new Set();
 
   // props
   p: p5;
-  handleUserVisit: (visitIndex: number) => void;
-  handleHighlighTech: (highlightAdTech: string | null) => void;
+  handleUserVisit: (visitIndex: number) => void = noop;
+  handleHighlighTech: (highlightAdTech: string | null) => void = noop;
   onReady: TopicsAnimationProps['onReady'];
 
   constructor({ p, onReady }: TopicsAnimationProps) {
@@ -77,7 +78,7 @@ class TopicsAnimation {
 
   private preload = () => {
     Object.keys(assets).forEach((key) => {
-      this.assets[key] = this.p.loadImage(assets[key]);
+      this.assets[key] = this.p.loadImage(assets[key as keyof typeof assets]);
     });
   };
 

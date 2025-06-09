@@ -22,7 +22,7 @@ import p5 from 'p5';
 /**
  * Internal dependencies
  */
-import { getAdtechsColors } from '../utils';
+import { ADTECH_COLORS } from '../utils';
 
 export const SmallCircle = (
   p: p5,
@@ -31,7 +31,7 @@ export const SmallCircle = (
   y: number,
   size: number
 ) => {
-  const adTechColor = getAdtechsColors(p)[adTech];
+  const adTechColor = ADTECH_COLORS[adTech as keyof typeof ADTECH_COLORS];
   p.push();
   p.fill(adTechColor);
   p.circle(x, y, size);
