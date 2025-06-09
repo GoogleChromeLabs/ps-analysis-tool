@@ -22,7 +22,6 @@ import type { Meta, StoryObj } from '@storybook/react';
  * Internal dependencies.
  */
 import Timeline from '..';
-import { BidderType } from '../types';
 import prebidResponse from './dummy-data';
 import prepareTimelineData from '../utils/prepareTimelineData';
 
@@ -35,24 +34,21 @@ const meta: Meta<typeof Timeline> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const bidders: {
-  name: string;
-  startTime?: number;
-  duration: string;
-  type: BidderType;
-}[] =
-  //@ts-ignore
-  prepareTimelineData(prebidResponse);
-
 export const Primary: Story = {
-  args: {
-    auctionTimeout: 420,
-    auctionId: '40eb202e-d5fc-44db-b602-5be0a7b1f844',
-    auctionStartTime: '12:18:27',
-    auctionTime: '380.1',
-    bidders,
-    zoomLevel: 2,
-    auctionEvent:
-      prebidResponse.auctionEvents['40eb202e-d5fc-44db-b602-5be0a7b1f844'],
+  render: () => {
+    const auctions = prepareTimelineData(prebidResponse);
+    console.log('auctions', auctions);
+
+    return (
+      <>
+        {Object.entries(auctions).map(([auctionId, auction]) => {
+          return (
+            <div key={auctionId} style={{ marginBottom: '2rem' }}>
+              <Timeline {...auction} />
+            </div>
+          );
+        })}
+      </>
+    );
   },
 };
