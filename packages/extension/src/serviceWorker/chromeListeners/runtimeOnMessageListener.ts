@@ -28,46 +28,19 @@ import {
   POPUP_OPEN,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
-  TABID_STORAGE,
 } from '../../constants';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 import sendUpdatedData from '../../store/utils/sendUpdatedData';
-import PAStore from '../../store/PAStore';
-import { protectedAudienceInitialState } from '../../view/devtools/stateProviders';
+import prebidStore from '../../store/prebidStore';
 
 // eslint-disable-next-line complexity
-export const runtimeOnMessageListener = async (request: any) => {
-  if (request.setInPagePrebidInterface) {
-    const tabs = await chrome.tabs.query({});
-
-    if (!tabs) {
-      return;
-    }
-
-    try {
-      await Promise.all(
-        tabs.map(async (tab) => {
-          if (!tab.id) {
-            return;
-          }
-          await chrome.tabs.sendMessage(tab.id, {
-            tabId: tab.id,
-            payload: {
-              type: TABID_STORAGE,
-              tabId: tab.id,
-              frameId: 0,
-            },
-          });
-        })
-      );
-    } catch (error) {
-      //Silence error
-    }
-  }
-
+export const runtimeOnMessageListener = async (
+  request: any,
+  sender: chrome.runtime.MessageSender
+) => {
   if (!request.type) {
     return;
   }
@@ -131,11 +104,13 @@ export const runtimeOnMessageListener = async (request: any) => {
     });
   }
 
-  if (!request?.payload?.tabId) {
+  const senderTabId = sender?.frameId === 0 ? sender?.tab?.id : null;
+
+  if (!request?.payload?.tabId && !senderTabId) {
     return;
   }
 
-  const incomingMessageTabId = request.payload.tabId;
+  const incomingMessageTabId = request.payload.tabId ?? senderTabId;
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
@@ -186,18 +161,26 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
     if (request?.payload?.prebidExists === false) {
-      PAStore.prebidEvents[incomingMessageTabId.toString()] = {
-        ...protectedAudienceInitialState.state.prebidResponse,
+      prebidStore.prebidEvents[incomingMessageTabId.toString()] = {
+        adUnits: {},
+        noBids: {},
+        versionInfo: '',
+        installedModules: [],
+        config: {},
+        receivedBids: [],
+        errorEvents: [],
+        auctionEvents: {},
+        pbjsNamespace: '',
         prebidExists: false,
       };
-      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
       return;
     }
 
-    PAStore.prebidEvents[incomingMessageTabId.toString()] = {
+    prebidStore.prebidEvents[incomingMessageTabId.toString()] = {
       prebidExists: true,
       ...request.payload.prebidData,
     };
-    DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPA++;
+    DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
   }
 };
