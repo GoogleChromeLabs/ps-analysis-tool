@@ -56,7 +56,8 @@ const ProtectedAudience = () => {
           title: 'Explorable Explanation',
           content: {
             Element: ExplorableExplanation,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
