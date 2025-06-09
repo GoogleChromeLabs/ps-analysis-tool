@@ -25,6 +25,20 @@ import { I18n } from '@google-psat/i18n';
  */
 import InstalledModules from '../installedModules';
 
+global.chrome = {
+  storage: {
+    session: {
+      get: jest.fn(),
+      set: jest.fn(),
+    },
+  },
+  devtools: {
+    inspectedWindow: {
+      tabId: 123,
+    },
+  },
+} as unknown as typeof chrome;
+
 describe('InstalledModules', () => {
   const mockInstalledModules = [
     'mockBidAdapter',
@@ -53,6 +67,7 @@ describe('InstalledModules', () => {
         message: 'Select a row to preview',
       },
     });
+    (chrome.storage.session.get as jest.Mock).mockResolvedValue({});
   });
 
   it('renders the component with table rows', () => {

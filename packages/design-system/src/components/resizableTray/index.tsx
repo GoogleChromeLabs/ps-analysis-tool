@@ -69,8 +69,6 @@ export const usePersistentTray = (
     setHeight(() => `${(divRef as HTMLDivElement).clientHeight}px`);
   };
 
-  console.log({ height });
-
   return { height, setHeight, onResizeStop };
 };
 

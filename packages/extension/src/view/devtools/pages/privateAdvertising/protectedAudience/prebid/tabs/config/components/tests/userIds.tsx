@@ -25,6 +25,20 @@ import { I18n } from '@google-psat/i18n';
  */
 import UserIds from '../userIds';
 
+global.chrome = {
+  storage: {
+    session: {
+      get: jest.fn(),
+      set: jest.fn(),
+    },
+  },
+  devtools: {
+    inspectedWindow: {
+      tabId: 123,
+    },
+  },
+} as unknown as typeof chrome;
+
 describe('UserIds', () => {
   const mockConfig = [
     {
@@ -65,6 +79,7 @@ describe('UserIds', () => {
         message: 'Select a row to preview',
       },
     });
+    (chrome.storage.session.get as jest.Mock).mockResolvedValue({});
   });
 
   it('renders table with user ID data', () => {
