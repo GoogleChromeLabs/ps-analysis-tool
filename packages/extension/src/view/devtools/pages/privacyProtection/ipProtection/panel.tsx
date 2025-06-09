@@ -26,7 +26,7 @@ const Panel = () => {
   }));
 
   const ActiveTabContent = panel.Element;
-  const { props, className } = panel;
+  const { props, className, containerClassName } = panel;
 
   return (
     <LandingPage
@@ -38,6 +38,7 @@ const Panel = () => {
           </div>
         )
       }
+      extraClasses={containerClassName}
       {...props}
     />
   );
