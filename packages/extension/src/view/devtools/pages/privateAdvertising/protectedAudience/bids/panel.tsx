@@ -17,10 +17,13 @@
 /**
  * External dependencies.
  */
-import { JsonView, PillToggle } from '@google-psat/design-system';
+import {
+  JsonView,
+  PillToggle,
+  ResizableTray,
+} from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
-import { Resizable } from 're-resizable';
 import type { NoBidsType, ReceivedBids } from '@google-psat/common';
 import classNames from 'classnames';
 
@@ -104,7 +107,7 @@ const Panel = ({
         )}
       </div>
       {showBottomTray && (
-        <Resizable
+        <ResizableTray
           defaultSize={{
             width: '100%',
             height: '20%',
@@ -114,6 +117,7 @@ const Panel = ({
           enable={{
             top: true,
           }}
+          trayId="bids-panel-bottom-tray"
         >
           <div className="text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
             {selectedRow ? (
@@ -128,7 +132,7 @@ const Panel = ({
               </div>
             )}
           </div>
-        </Resizable>
+        </ResizableTray>
       )}
     </div>
   );

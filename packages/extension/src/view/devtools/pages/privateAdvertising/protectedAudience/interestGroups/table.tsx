@@ -19,6 +19,7 @@
  */
 import {
   JsonView,
+  ResizableTray,
   Table,
   TableProvider,
   type TableColumn,
@@ -27,7 +28,6 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-import { Resizable } from 're-resizable';
 import {
   noop,
   type InterestGroups as InterestGroupsType,
@@ -191,7 +191,7 @@ const IGTable = ({
 
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
           height: '80%',
@@ -201,6 +201,7 @@ const IGTable = ({
         enable={{
           bottom: true,
         }}
+        trayId="interest-groups-table-bottom-tray"
       >
         <TableProvider
           data={
@@ -236,7 +237,7 @@ const IGTable = ({
             minWidth="50rem"
           />
         </TableProvider>
-      </Resizable>
+      </ResizableTray>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">

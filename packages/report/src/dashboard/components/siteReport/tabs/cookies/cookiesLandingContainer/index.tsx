@@ -26,13 +26,13 @@ import {
   type TabFrames,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import { Resizable } from 're-resizable';
 import {
   TableChipsBar,
   TableFiltersSidebar,
   type TableFilter,
   useGlobalFiltering,
   FilterIcon,
+  ResizableTray,
 } from '@google-psat/design-system';
 
 /**
@@ -140,13 +140,14 @@ const AssembledCookiesLanding = ({
         }}
       >
         {showFilterSidebar && (
-          <Resizable
+          <ResizableTray
             minWidth="100px"
             maxWidth="50%"
             enable={{
               right: true,
             }}
             className="border border-r border-gray-300 dark:border-quartz"
+            trayId="cookies-landing-table-bottom-tray"
           >
             <TableFiltersSidebar
               filters={filterOutput.filters}
@@ -154,7 +155,7 @@ const AssembledCookiesLanding = ({
               toggleSelectAllFilter={filterOutput.toggleSelectAllFilter}
               isSelectAllFilterSelected={filterOutput.isSelectAllFilterSelected}
             />
-          </Resizable>
+          </ResizableTray>
         )}
         <div
           className="flex-1 overflow-auto h-full"

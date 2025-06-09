@@ -21,6 +21,7 @@ import { noop, type SourcesRegistration } from '@google-psat/common';
 import {
   InfoIcon,
   JsonView,
+  ResizableTray,
   Table,
   TableProvider,
   type InfoType,
@@ -28,7 +29,6 @@ import {
   type TableFilter,
   type TableRow,
 } from '@google-psat/design-system';
-import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -289,7 +289,7 @@ const ActiveSources = () => {
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
           height: '80%',
@@ -300,6 +300,7 @@ const ActiveSources = () => {
         minHeight="20%"
         maxHeight="90%"
         className="w-full flex flex-col"
+        trayId="active-sources-table-bottom-tray"
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
@@ -325,7 +326,7 @@ const ActiveSources = () => {
             />
           </TableProvider>
         </div>
-      </Resizable>
+      </ResizableTray>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
           <div className="text-xs py-1 px-1.5 h-full">

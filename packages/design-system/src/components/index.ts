@@ -75,3 +75,4 @@ export { default as JsonView } from './jsonView/jsonView';
 export { default as MultiSelectDropDown } from './multiSelectDropDown';
 export { default as Dropdown } from './dropdown';
 export type { OptGroup, Option } from './dropdown/options';
+export { default as ResizableTray } from './resizableTray';
