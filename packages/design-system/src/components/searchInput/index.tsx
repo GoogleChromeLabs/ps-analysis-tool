@@ -73,7 +73,7 @@ const SearchInput = ({
   return (
     <div
       ref={inputContainerRef}
-      className={`w-3/5 cursor-text bg-slate-gray dark:bg-dark-graphite text-raisin-black dark:text-bright-gray rounded flex justify-between items-center gap-1 mx-[3px] my-px px-[3px] pl-2 pt-0.5 pb-px box-content text-xs ${inputExtraClass} ${
+      className={`w-3/5 cursor-text bg-slate-gray dark:bg-dark-graphite text-raisin-black dark:text-bright-gray rounded flex justify-between items-center gap-1 mx-[3px] my-px px-[3px] pl-2 pt-0.5 pb-px box-content text-xs border border-gray-300 dark:border-quartz ${inputExtraClass} ${
         isFocused
           ? 'border border-sapphire dark:border-baby-blue-eyes'
           : 'hover:bg-eerie-black dark:hover:bg-[#FDFCFB1A]'
