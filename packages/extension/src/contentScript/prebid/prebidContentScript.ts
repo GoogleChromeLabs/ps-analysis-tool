@@ -28,11 +28,6 @@ import {
  * Represents the webpage's content script functionalities.
  */
 class PrebidContentScript {
-  /**
-   * TabId of the current Tab
-   */
-  tabId: number | null = null;
-
   constructor() {
     this.listenToConnection();
   }
@@ -45,9 +40,6 @@ class PrebidContentScript {
     if (chrome.runtime?.id) {
       chrome.runtime.sendMessage({
         setInPagePrebidInterface: true,
-        payload: {
-          url: window.location.href,
-        },
       });
     }
 
@@ -58,7 +50,6 @@ class PrebidContentScript {
           payload: {
             prebidExists: event.data.prebidData?.prebidExists,
             prebidData: event.data.prebidData,
-            tabId: this.tabId,
           },
         });
       }
@@ -68,7 +59,6 @@ class PrebidContentScript {
           type: CS_GET_PREBID_DATA_RESPONSE,
           payload: {
             prebidExists: event.data.prebidExists,
-            tabId: this.tabId,
           },
         });
       }
@@ -80,10 +70,8 @@ class PrebidContentScript {
       }
 
       if (message?.payload?.type === TABID_STORAGE) {
-        this.tabId = message.payload.tabId;
         window.top?.postMessage({
           type: SCRIPT_PREBID_INITIAL_SYNC,
-          tabId: this.tabId,
         });
       }
     });

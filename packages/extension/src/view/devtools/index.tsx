@@ -37,6 +37,7 @@ import {
   WebStoriesProvider,
   AttributionReportingProvider,
   TopicsClassifierProvider,
+  PrebidContextProvider,
 } from './stateProviders';
 
 const root = document.getElementById('root');
@@ -52,19 +53,21 @@ if (root) {
       <SettingsProvider>
         <CookieProvider>
           <ProtectedAudienceContextProvider>
-            <TablePersistentSettingsProvider>
-              <LibraryDetectionProvider>
-                <AllowedListProvider>
-                  <WebStoriesProvider>
-                    <AttributionReportingProvider>
-                      <TopicsClassifierProvider>
-                        <App />
-                      </TopicsClassifierProvider>
-                    </AttributionReportingProvider>
-                  </WebStoriesProvider>
-                </AllowedListProvider>
-              </LibraryDetectionProvider>
-            </TablePersistentSettingsProvider>
+            <PrebidContextProvider>
+              <TablePersistentSettingsProvider>
+                <LibraryDetectionProvider>
+                  <AllowedListProvider>
+                    <WebStoriesProvider>
+                      <AttributionReportingProvider>
+                        <TopicsClassifierProvider>
+                          <App />
+                        </TopicsClassifierProvider>
+                      </AttributionReportingProvider>
+                    </WebStoriesProvider>
+                  </AllowedListProvider>
+                </LibraryDetectionProvider>
+              </TablePersistentSettingsProvider>
+            </PrebidContextProvider>
           </ProtectedAudienceContextProvider>
         </CookieProvider>
       </SettingsProvider>

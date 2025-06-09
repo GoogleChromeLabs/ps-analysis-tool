@@ -21,13 +21,14 @@ import type {
   PrebidDebugModuleConfigRule,
 } from '@google-psat/common';
 import { DeleteForever } from '@google-psat/design-system';
+import type { Dispatch, SetStateAction } from 'react';
+
 /**
  * Internal dependencies
  */
-import { matchRuleTargets } from '../constants';
+import { matchRuleTargets } from '../../../../../../../stateProviders/prebid/constants';
 import RuleWhen from './ruleWhen';
 import RuleThen from './ruleThen';
-import type { Dispatch, SetStateAction } from 'react';
 
 interface RuleComponentProps {
   changeRule: (

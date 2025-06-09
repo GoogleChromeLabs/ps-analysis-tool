@@ -20,6 +20,7 @@ import { TABID_STORAGE } from '../../constants';
 import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
 import PAStore from '../../store/PAStore';
+import prebidStore from '../../store/prebidStore';
 import getQueryParams from '../../utils/getQueryParams';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
@@ -65,6 +66,9 @@ export const onCommittedNavigationListener = async ({
       cookieStore?.removeCookieData(tabId.toString());
       cookieStore.deinitialiseVariablesForTab(tabId.toString());
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
+
+      prebidStore.deinitialiseVariablesForTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTab(tabId.toString());
 
       if (DataStore.globalIsUsingCDP) {
         PAStore.deinitialiseVariablesForTab(tabId.toString());

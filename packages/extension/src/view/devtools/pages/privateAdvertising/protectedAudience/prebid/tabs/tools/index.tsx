@@ -21,9 +21,9 @@ import classNames from 'classnames';
 /**
  * Internal dependencies
  */
-import usePrebidTool from './hooks/usePrebidTool';
 import HeaderComponent from './components/headerComponent';
 import RuleComponent from './components/ruleComponent';
+import { usePrebid } from '../../../../../../stateProviders';
 
 const Tools = () => {
   const {
@@ -34,7 +34,16 @@ const Tools = () => {
     storeRulesInLocalStorage,
     openGoogleManagerConsole,
     handleChangeStoreRulesInLocalStorage,
-  } = usePrebidTool();
+  } = usePrebid(({ state, actions }) => ({
+    debuggingModuleConfig: state.debuggingModuleConfig,
+    setDebuggingModuleConfig: actions.setDebuggingModuleConfig,
+    changeRule: actions.changeRule,
+    addRule: actions.addRule,
+    storeRulesInLocalStorage: state.storeRulesInLocalStorage,
+    openGoogleManagerConsole: actions.openGoogleManagerConsole,
+    handleChangeStoreRulesInLocalStorage:
+      actions.handleChangeStoreRulesInLocalStorage,
+  }));
 
   return (
     <div className="flex flex-col w-full h-full relative">
