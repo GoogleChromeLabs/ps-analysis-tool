@@ -182,6 +182,7 @@ export type App = {
   handleNextButton: () => void;
   handleControls: () => void;
   visitedSites: string[];
+  getWinningAdDelay: () => number;
 } & SketchSharedProps;
 
 // App defaults
@@ -318,6 +319,7 @@ const app: App = {
   reset: noop,
   createCanvas: noop,
   setHasLastNodeVisited: noop,
+  getWinningAdDelay: () => 0,
 };
 
 export default app;

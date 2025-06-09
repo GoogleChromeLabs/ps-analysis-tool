@@ -16,20 +16,47 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
+import React, { useMemo } from 'react';
+import {
+  PSInfoKey,
+  TabsProvider,
+  type TabItems,
+} from '@google-psat/design-system';
+import Panel from './panel';
+import Overview from './overview';
+import MDLTable from './mdlTable';
 
 const IPProtection = () => {
+  const tabItems = useMemo<TabItems>(
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: Overview,
+            props: {
+              infoKey: PSInfoKey.IPProtection,
+            },
+            className: 'p-4',
+          },
+        },
+        {
+          title: 'Masked Domain List',
+          content: {
+            Element: MDLTable,
+            props: {},
+            className: 'overflow-hidden',
+          },
+        },
+      ],
+    }),
+    []
+  );
+
   return (
-    <div data-testid="ip-protection-content" className="h-full w-full">
-      <LandingPage
-        isLandingPageContainer
-        title={I18n.getMessage('ipProtection')}
-        psInfoKey={PSInfoKey.IPProtection}
-        extraClasses="max-w-2xl h-fit"
-      />
-    </div>
+    <TabsProvider items={tabItems} name="ipProtection">
+      <Panel />
+    </TabsProvider>
   );
 };
 

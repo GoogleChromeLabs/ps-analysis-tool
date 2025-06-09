@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 
 /**
  * Internal dependencies
@@ -35,14 +35,13 @@ type LandingPageContainerProps = LandingPageProps & {
     storyUrl?: string;
     sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
-  counterStyles: string;
   titleStyles: string;
 };
 
 const LandingPageContainer = (props: LandingPageContainerProps) => {
   const [independentStory, setIndependentStory] = useState<string>('');
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const { children, contentPanelTitle, content, counterStyles } = props;
+  const { children, contentPanelTitle, content } = props;
 
   useEffect(() => {
     if (!independentStory || !iframeRef.current) {
@@ -82,6 +81,14 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
     };
   }, []);
 
+  const storyClickHandler = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>, storyUrl = '') => {
+      event.stopPropagation();
+      setIndependentStory(storyUrl);
+    },
+    []
+  );
+
   return (
     <>
       <LandingPage
@@ -94,10 +101,10 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
             content={content.map((data) => {
               return {
                 ...data,
-                onClick: () => setIndependentStory(data?.storyUrl ?? ''),
+                onStoryIconClick: (event) =>
+                  storyClickHandler(event, data?.storyUrl),
               };
             })}
-            counterStyles={counterStyles}
           />
         }
       >

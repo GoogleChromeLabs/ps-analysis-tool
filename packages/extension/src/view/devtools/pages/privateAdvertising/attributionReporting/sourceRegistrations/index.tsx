@@ -25,10 +25,10 @@ import {
   type TableColumn,
   type InfoType,
   InfoIcon,
+  JsonView,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import React, { useState, useRef, useMemo, useCallback } from 'react';
-import { prettyPrintJson } from 'pretty-print-json';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -76,37 +76,31 @@ const SourceRegistrations = () => {
         cell: (_, details) =>
           calculateRegistrationDate((details as SourcesRegistration)?.time),
         enableHiding: false,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Source Origin',
         accessorKey: 'sourceOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Reporting Origin',
         accessorKey: 'reportingOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Cleared Debug Key',
         accessorKey: 'clearedDebugKey',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Source Type',
         accessorKey: 'type',
         cell: (info) => info,
-        widthWeightagePercentage: 10,
       },
       {
         header: 'Status',
         accessorKey: 'result',
         cell: (info) => info,
-        widthWeightagePercentage: 10,
       },
     ],
     []
@@ -251,17 +245,10 @@ const SourceRegistrations = () => {
           </TableProvider>
         </div>
       </Resizable>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
-          <div className="text-xs py-1 px-1.5">
-            <pre>
-              <div
-                className="json-container"
-                dangerouslySetInnerHTML={{
-                  __html: prettyPrintJson.toHtml(selectedJSON),
-                }}
-              />
-            </pre>
+          <div className="text-xs py-1 px-1.5 h-full">
+            <JsonView src={selectedJSON} />
           </div>
         ) : (
           <div className="h-full p-8 flex items-center">

@@ -79,9 +79,7 @@ const Panel = () => {
 
     if (filteredIGData.length !== filteredIGRefData?.length) {
       if (filteredIGData.length > 0) {
-        highlightTab(2);
-      } else {
-        highlightTab(2, false);
+        highlightTab(3);
       }
 
       store = {
@@ -92,9 +90,7 @@ const Panel = () => {
 
     if (!isEqual(data.current?.adsAndBidders, adsAndBidders)) {
       if (Object.keys(adsAndBidders).length > 0) {
-        highlightTab(3);
-      } else {
-        highlightTab(3, false);
+        highlightTab(4);
       }
 
       store = {
@@ -105,11 +101,8 @@ const Panel = () => {
 
     if (!isEqual(data.current?.receivedBids, receivedBids)) {
       if (receivedBids.length > 0) {
-        highlightTab(3);
-        highlightTab(5);
-      } else {
-        highlightTab(3, false);
-        highlightTab(5, false);
+        highlightTab(4);
+        highlightTab(6);
       }
 
       store = {
@@ -120,11 +113,8 @@ const Panel = () => {
 
     if (!isEqual(data.current?.noBids, noBids)) {
       if (Object.keys(noBids).length > 0) {
-        highlightTab(3);
-        highlightTab(5);
-      } else {
-        highlightTab(3, false);
-        highlightTab(5, false);
+        highlightTab(4);
+        highlightTab(6);
       }
 
       store = {
@@ -141,9 +131,7 @@ const Panel = () => {
         Object.keys(auctionEvents).length > 0 &&
         Object.keys(adsAndBidders).length > 0
       ) {
-        highlightTab(4);
-      } else {
-        highlightTab(4, false);
+        highlightTab(5);
       }
 
       store = {
@@ -161,6 +149,31 @@ const Panel = () => {
     noBids,
     receivedBids,
   ]);
+
+  useEffect(() => {
+    const listener = ({
+      frameId,
+      frameType,
+      tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        (frameType !== 'outermost_frame' && frameId !== 0) ||
+        tabId !== chrome.devtools.inspectedWindow.tabId
+      ) {
+        return;
+      }
+
+      highlightTab(4, false);
+      highlightTab(5, false);
+      highlightTab(6, false);
+    };
+
+    chrome.webNavigation.onCommitted.addListener(listener);
+
+    return () => {
+      chrome.webNavigation.onCommitted.removeListener(listener);
+    };
+  }, [highlightTab]);
 
   return (
     <div

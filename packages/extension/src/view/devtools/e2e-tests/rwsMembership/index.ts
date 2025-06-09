@@ -25,7 +25,6 @@ import { Page } from 'puppeteer';
  */
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
-import { selectors } from '../../test-utils/constants';
 
 dotenv.config();
 jest.retryTimes(3);
@@ -45,7 +44,11 @@ describe('RWS membership', () => {
   }, 40000);
 
   test('Should be able to validate the RWS membership', async () => {
-    await puppeteer.navigateToURL(page, 'https://www.hindustantimes.com/');
+    await puppeteer.navigateToURL(
+      page,
+      'https://www.hindustantimes.com/?psat_cdp=on'
+    );
+    page.reload();
 
     const devtools = await puppeteer.getDevtools();
     const key = puppeteer.getCMDKey();
@@ -56,21 +59,10 @@ describe('RWS membership', () => {
     if (!frame) {
       return;
     }
-
-    const openSiteBoundariesTab = async () => {
-      const dropdown = await frame.waitForSelector(
-        selectors.siteBoundariesSelector,
-        {
-          timeout: 10000,
-        }
-      );
-      await dropdown?.click();
-    };
-
-    await openSiteBoundariesTab();
-
     // Check if RWS is present and click on it.
     await interaction.clickMatchingElement(frame, 'p', 'Related Website Sets');
+    await interaction.clickMatchingElement(frame, 'button', 'Observability');
+    await interaction.delay(1000);
     await interaction.clickMatchingElement(frame, 'button', 'Membership');
     await interaction.delay(6000);
 

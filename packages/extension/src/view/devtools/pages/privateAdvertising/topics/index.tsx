@@ -48,57 +48,59 @@ const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
 
 const Topics = () => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: InfoCard,
-          props: {
-            infoKey: PSInfoKey.Topics,
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: InfoCard,
+            props: {
+              infoKey: PSInfoKey.Topics,
+            },
+            className: 'p-4',
           },
-          className: 'p-4',
         },
-      },
-      {
-        title: 'Explorable Explanation',
-        content: {
-          Element: ExplorableExplanation,
-        },
-      },
-      {
-        title: 'Taxonomy V2',
-        content: {
-          Element: TaxonomyTree,
-          props: {
-            taxonomyUrl:
-              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md',
-            githubUrl:
-              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
+        {
+          title: 'Explorable Explanation',
+          content: {
+            Element: ExplorableExplanation,
           },
-          className: 'overflow-hidden',
         },
-      },
-      {
-        title: 'Taxonomy V1',
-        content: {
-          Element: TaxonomyTree,
-          props: {
-            taxonomyUrl:
-              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v1.md',
-            githubUrl:
-              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
+        {
+          title: 'Taxonomy V2',
+          content: {
+            Element: TaxonomyTree,
+            props: {
+              taxonomyUrl:
+                'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md',
+              githubUrl:
+                'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
+            },
+            className: 'overflow-hidden',
           },
-          className: 'overflow-hidden',
         },
-      },
-      {
-        title: 'Classifier',
-        content: {
-          Element: TopicsClassifier,
-          className: 'overflow-hidden',
+        {
+          title: 'Taxonomy V1',
+          content: {
+            Element: TaxonomyTree,
+            props: {
+              taxonomyUrl:
+                'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v1.md',
+              githubUrl:
+                'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
+            },
+            className: 'overflow-hidden',
+          },
         },
-      },
-    ],
+        {
+          title: 'Classifier',
+          content: {
+            Element: TopicsClassifier,
+            className: 'overflow-hidden',
+          },
+        },
+      ],
+    }),
     []
   );
 

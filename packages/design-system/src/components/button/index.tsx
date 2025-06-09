@@ -26,9 +26,11 @@ interface ButtonProps {
   onClick?: () => void;
   loading?: boolean;
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'danger' | 'small' | 'large';
+  size?: 'small' | 'large';
+  variant?: 'primary' | 'secondary' | 'danger' | 'success';
   extraClasses?: string;
   disabled?: boolean;
+  dontShowBackground?: boolean;
 }
 const Button = ({
   title = '',
@@ -37,8 +39,10 @@ const Button = ({
   onClick = undefined,
   type = 'button',
   variant = 'primary',
+  size = 'small',
   extraClasses = '',
   disabled = false,
+  dontShowBackground = false,
 }: ButtonProps) => {
   return (
     <button
@@ -52,24 +56,35 @@ const Button = ({
         extraClasses,
         'rounded flex items-center text-center py-1 px-2 font-medium',
         {
-          'py-0.5 px-1.5 text-xs bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
-            variant === 'small',
-          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-2 xs:max-md:py-4 sm:max-md:px-2 bg-smurf-blue dark:bg-google-blue text-white dark:text-raisin-black':
-            variant === 'large',
           'bg-sapphire dark:bg-baby-blue-eyes text-white dark:text-raisin-black':
-            variant === 'primary',
+            variant === 'primary' && !dontShowBackground,
           'bg-transparent text-raisin-black dark:text-bright-gray active:opacity-60':
-            variant === 'secondary',
-          'text-white dark:text-white bg-red-500': variant === 'danger',
+            variant === 'secondary' && !dontShowBackground,
+          'text-white dark:text-raisin-black bg-red-500': variant === 'danger',
+          'text-white dark:text-raisin-black bg-green-500':
+            variant === 'success',
         },
         {
           'opacity-70 cursor-default': disabled,
           'hover:bg-tufts-blue dark:hover:bg-pale-cornflower-blue':
-            !disabled && (variant === 'small' || variant === 'primary'),
+            !disabled &&
+            size === 'small' &&
+            variant === 'primary' &&
+            !dontShowBackground,
           'hover:bg-beteleguese dark:hover:bg-bright-navy-blue':
-            !disabled && variant === 'large',
-          'hover:opacity-80': !disabled && variant === 'secondary',
-          'hover:bg-red-600': !disabled && variant === 'danger',
+            !disabled &&
+            size === 'large' &&
+            variant === 'primary' &&
+            !dontShowBackground,
+          'hover:opacity-80':
+            !disabled && variant === 'secondary' && !dontShowBackground,
+          'hover:bg-red-600':
+            !disabled && variant === 'danger' && !dontShowBackground,
+        },
+        {
+          'py-0.5 px-1.5 text-xs': size === 'small',
+          'rounded-xs md:py-3.5 md:px-9 xxs:max-sm:p-4 xs:max-md:py-4 sm:max-md:px-4':
+            size === 'large',
         }
       )}
     >

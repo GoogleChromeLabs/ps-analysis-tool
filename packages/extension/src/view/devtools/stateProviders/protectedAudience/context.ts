@@ -26,6 +26,7 @@ import {
   noop,
   type singleAuctionEvent,
 } from '@google-psat/common';
+import type { PrebidEvents } from '../../../../store';
 
 export type AuctionEventsType = {
   [adunit: string]: {
@@ -46,13 +47,16 @@ export interface ProtectedAudienceContextType {
     noBids: NoBidsType;
     adsAndBidders: AdsAndBiddersType;
     selectedAdUnit: string | null;
+    sortOrder: 'asc' | 'desc';
+    prebidResponse: PrebidEvents;
   };
   actions: {
     setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
+    setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
   };
 }
 
-const initialState: ProtectedAudienceContextType = {
+export const initialState: ProtectedAudienceContextType = {
   state: {
     auctionEvents: null,
     interestGroupDetails: [],
@@ -61,9 +65,23 @@ const initialState: ProtectedAudienceContextType = {
     noBids: {},
     adsAndBidders: {},
     selectedAdUnit: null,
+    sortOrder: 'asc',
+    prebidResponse: {
+      adUnits: {},
+      noBids: {},
+      versionInfo: '',
+      installedModules: [],
+      pbjsNamespace: '',
+      config: {},
+      receivedBids: [],
+      errorEvents: [],
+      auctionEvents: {},
+      prebidExists: false,
+    },
   },
   actions: {
     setSelectedAdUnit: noop,
+    setSortOrder: noop,
   },
 };
 

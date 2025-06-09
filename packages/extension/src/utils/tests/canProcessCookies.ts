@@ -20,50 +20,18 @@ import canProcessCookies from '../canProcessCookies';
 
 describe('CanProcessCookies : ', () => {
   it('Should return false if tabUrl or responseHeaders is not present', () => {
-    expect(
-      canProcessCookies('unlimited', 'https://bbc.com', '', 123424, undefined)
-    ).toBe(false);
+    expect(canProcessCookies('https://bbc.com', undefined)).toBe(false);
 
     expect(
-      canProcessCookies('unlimited', null, '', 123424, [
-        { name: 'url', value: 'https://bbc.com' },
-      ])
-    ).toBe(false);
-  });
-
-  it('Should return false if mode is single and tabToRead is different from currentTabId', () => {
-    expect(
-      canProcessCookies(
-        'single',
-        'https://bbc.com',
-        '123548',
-        123424,
-        undefined
-      )
+      canProcessCookies(null, [{ name: 'url', value: 'https://bbc.com' }])
     ).toBe(false);
   });
 
   it('Should return false if tabUrl is a chrome new tab url', () => {
     expect(
-      canProcessCookies('single', 'chrome://newtab/', '123424', 123424, [
+      canProcessCookies('chrome://newtab/', [
         { name: 'url', value: 'chrome://newtab/' },
       ])
     ).toBe(false);
-  });
-
-  it('Should return true if tabmode is single and tabToRead is same as currentTabId', () => {
-    expect(
-      canProcessCookies('single', 'https://bbc.com', '123424', 123424, [
-        { name: 'url', value: 'https://bbc.com' },
-      ])
-    ).toBe(true);
-  });
-
-  it('Should return true if tabmode is unlimited', () => {
-    expect(
-      canProcessCookies('unlimited', 'https://bbc.com', '', 123424, [
-        { name: 'url', value: 'https://bbc.com' },
-      ])
-    ).toBe(true);
   });
 });

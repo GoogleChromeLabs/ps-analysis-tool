@@ -94,14 +94,15 @@ export const SidebarProvider = ({
      * If the item key is matched, set the active panel.
      * If the item has children, recursively find the active panel.
      * @param items Sidebar items.
+     * @param key Sidebar item key to match.
      */
-    const findActivePanel = (items: SidebarItems) => {
+    const findActivePanel = (items: SidebarItems, key: string) => {
       Object.entries(items).forEach(([itemKey, item]) => {
         if (keyFound) {
           return;
         }
 
-        if (matchKey(selectedItemKey || '', itemKey)) {
+        if (matchKey(key || '', itemKey)) {
           if (item.panel) {
             setActivePanel({
               query,
@@ -117,13 +118,31 @@ export const SidebarProvider = ({
         }
 
         if (item.children) {
-          findActivePanel(item.children);
+          findActivePanel(item.children, key);
         }
       });
     };
 
     if (selectedItemKey) {
-      findActivePanel(sidebarItems);
+      findActivePanel(sidebarItems, selectedItemKey);
+    }
+
+    if (!keyFound) {
+      const keys = selectedItemKey?.split('#');
+      keys?.pop();
+      let key = keys?.join('#');
+
+      // eslint-disable-next-line no-unmodified-loop-condition -- findActivePanel callback updates value
+      while (keys?.length && !keyFound) {
+        key = keys.join('#');
+
+        findActivePanel(sidebarItems, key);
+        keys.pop();
+      }
+
+      if (keyFound && key) {
+        setSelectedItemKey(key);
+      }
     }
   }, [query, selectedItemKey, sidebarItems]);
 
@@ -158,7 +177,7 @@ export const SidebarProvider = ({
    * @param queryString Query string to pass to the new panel.
    */
   const updateSelectedItemKey = useCallback(
-    async (key: string | null, queryString = '') => {
+    async (key: string | null, queryString = '', skipPanelDisplay = false) => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
@@ -167,7 +186,7 @@ export const SidebarProvider = ({
       }
 
       const item = findItem(sidebarItems, key);
-      if (item?.panel?.href) {
+      if (item?.panel?.href || (skipPanelDisplay && item?.panel?.href)) {
         const tab = await chrome.tabs.get(
           chrome.devtools.inspectedWindow.tabId
         );
@@ -178,10 +197,20 @@ export const SidebarProvider = ({
           const panelUrl = new URL(item.panel.href);
 
           if (tabUrl.href !== panelUrl.href) {
-            chrome.tabs.update(chrome.devtools.inspectedWindow.tabId, {
-              url: panelUrl.href,
-            });
+            chrome.scripting
+              .executeScript({
+                target: { tabId: chrome.devtools.inspectedWindow.tabId },
+                func: (_url: string) => {
+                  window.location.assign(_url);
+                },
+                args: [panelUrl.href],
+              })
+              .then(() => console.log('injected a function'));
           }
+        }
+
+        if (skipPanelDisplay) {
+          return;
         }
       }
 

@@ -24,7 +24,7 @@ import type { AuctionStep } from '../../../types.js';
 import { getCoordinateValues } from '../../../utils/getCoordinateValues';
 
 const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
-  const { box, colors } = config.flow;
+  const { box } = config.flow;
 
   steps.push({
     component: Box,
@@ -62,7 +62,6 @@ const setUpPublisherAdServerFlow = (steps: AuctionStep[]) => {
     props: {
       title: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.title,
       description: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.description,
-      color: colors.box.notBrowser,
       x: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 23,
       info: MULTI_SELLER_CONFIG.PUBLISHER_ADSERVER.info,

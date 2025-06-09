@@ -24,7 +24,7 @@ import Queue from 'queue';
  * Internal dependencies.
  */
 import config, { publisherData } from './config';
-import auctions from './modules/auctions';
+import auctions, { WINNING_AD_DELAY } from './modules/auctions';
 import flow from './modules/flow';
 import * as utils from './utils';
 import timeline from './modules/timeline';
@@ -223,6 +223,7 @@ app.addToPromiseQueue = (indexToStartFrom: number) => {
           index: _currentIndex,
         });
       }
+      flow.setButtonsDisabilityState();
       flow.clearBelowTimelineCircles();
       utils.markVisitedValue(_currentIndex, true);
       bubbles.generateBubbles();
@@ -370,6 +371,7 @@ app.handleNonInteractivePrev = async () => {
   }
 
   app.promiseQueue?.end();
+  flow.setButtonsDisabilityState(true);
   app.cancelPromise = true;
   app.timeline.isPaused = true;
   //This is to set the data for previous site in react as well.
@@ -403,13 +405,18 @@ app.handleNonInteractivePrev = async () => {
   }
 };
 
-app.handleInteractivePrev = () => {
+app.handleInteractivePrev = async () => {
   if (app.visitedIndexOrder.length === 0 || app.visitedIndexOrderTracker < 0) {
     return;
   }
 
+  if (app.visitedIndexOrderTracker >= 0) {
+    app.visitedIndexOrderTracker =
+      app.visitedIndexOrderTracker - (app.promiseQueue?.length !== 0 ? 0 : 1);
+  }
+
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -421,6 +428,7 @@ app.handleInteractivePrev = () => {
   app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
+  await utils.delay(100);
 
   app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
@@ -428,15 +436,10 @@ app.handleInteractivePrev = () => {
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  if (app.visitedIndexOrderTracker >= 0) {
-    app.visitedIndexOrderTracker--;
-  }
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
@@ -483,7 +486,27 @@ app.handleNonInteractiveNext = async () => {
   ) {
     return;
   }
+
+  if (
+    app.timeline.currentIndex === 0 &&
+    app.timeline.expandIconPositions.length === 0
+  ) {
+    const { currentIndex: _currentIndex, circlePositions } = app.timeline;
+    const { x, y } = getCoordinateValues(circlePositions[_currentIndex]);
+    const {
+      circleProps: { diameter },
+    } = config.timeline;
+
+    app.timeline.expandIconPositions.push({
+      x: x,
+      y: y + diameter / 2,
+      index: _currentIndex,
+    });
+    bubbles.generateBubbles();
+  }
+
   app.promiseQueue?.end();
+  flow.setButtonsDisabilityState(true);
   app.timeline.isPaused = true;
   app.cancelPromise = true;
   //This is to set the data for previous site in react as well.
@@ -517,13 +540,14 @@ app.handleNonInteractiveNext = async () => {
 
   app.setPlayState(true);
   try {
+    utils.wipeAndRecreateMainCanvas();
     app.promiseQueue?.start();
   } catch (error) {
     // Fail silently
   }
 };
 
-app.handleInteractiveNext = () => {
+app.handleInteractiveNext = async () => {
   if (
     app.visitedIndexOrder.length === 0 ||
     app.visitedIndexOrderTracker === app.visitedIndexOrder.length
@@ -540,7 +564,7 @@ app.handleInteractiveNext = () => {
   }
 
   app.promiseQueue?.end();
-  flow.setButtonsDisabilityState();
+  flow.setButtonsDisabilityState(true);
   app.shouldRespondToClick = false;
 
   const visitedIndex = app.visitedIndexOrder[app.visitedIndexOrderTracker];
@@ -552,18 +576,17 @@ app.handleInteractiveNext = () => {
   app.usedNextOrPrev = true;
 
   app.drawFlows(visitedIndex);
-
+  await utils.delay(100);
   app.promiseQueue?.push((cb) => {
     app.shouldRespondToClick = true;
     app.isRevisitingNodeInInteractiveMode = false;
     config.timeline.circles[visitedIndex].visited = true;
     bubbles.showMinifiedBubbles();
     timeline.renderUserIcon();
+    flow.setButtonsDisabilityState();
 
     cb?.(undefined, true);
   });
-
-  flow.setButtonsDisabilityState();
 
   utils.wipeAndRecreateMainCanvas();
   utils.wipeAndRecreateUserCanvas();
@@ -862,6 +885,16 @@ app.createCanvas = () => {
     // eslint-disable-next-line no-new
     new p5(userSketch);
   }
+};
+
+app.getWinningAdDelay = () => {
+  if (app.isRevisitingNodeInInteractiveMode) {
+    return 0;
+  }
+  // the faster the speed, the longer the BASE delay
+  const milliseconds = WINNING_AD_DELAY + app.speedMultiplier * 1000;
+  // adjust the total delay based on the speed
+  return milliseconds / app.speedMultiplier;
 };
 
 app.createCanvas();

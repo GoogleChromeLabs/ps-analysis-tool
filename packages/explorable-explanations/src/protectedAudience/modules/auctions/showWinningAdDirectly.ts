@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { QueueWorkerCallback } from 'queue';
 /**
  * Internal dependencies
  */
@@ -28,7 +29,7 @@ import type { AuctionStep } from '../../types';
 import type { Auction } from '.';
 
 export const showWinningAdDirectly = (
-  cb: (error: Error | null, success: boolean) => void,
+  cb: QueueWorkerCallback | undefined,
   props: AuctionStep['props'],
   index: number,
   auctionDraw: Auction['draw'],
@@ -167,7 +168,7 @@ export const showWinningAdDirectly = (
     } catch (error) {
       // Fail silently
     }
-    cb(null, true);
+    cb?.(undefined, true);
     return;
   }
 };

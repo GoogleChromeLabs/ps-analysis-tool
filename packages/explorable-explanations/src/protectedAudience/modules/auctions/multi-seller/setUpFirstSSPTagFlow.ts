@@ -48,6 +48,7 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
         getCoordinateValues(app.auction.nextTipCoordinates).x - box.width / 2,
       y: () => getCoordinateValues(app.auction.nextTipCoordinates).y,
       info: MULTI_SELLER_CONFIG.SSP_ADAPTER_HEADER_BIDDING.info,
+      color: colors.box.yellowBox,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -63,6 +64,7 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       direction: 'down',
       x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
+      text: 'Ad request',
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -78,8 +80,8 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       y: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).y +
         config.flow.arrowSize,
-      color: colors.box.notBrowser,
       info: MULTI_SELLER_CONFIG.SSPs.info,
+      color: colors.box.yellowBox,
     },
     delay: 1000,
     callBack: (returnValue) => {
@@ -95,6 +97,7 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       direction: 'down',
       x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x,
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y + 40,
+      text: 'OpenRTB \n bid request',
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;
@@ -110,7 +113,6 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       y: () =>
         getCoordinateValues(app.auction.nextTipCoordinates).y +
         config.flow.arrowSize,
-      color: colors.box.notBrowser,
       info: MULTI_SELLER_CONFIG.DSPs.info,
     },
     delay: 1000,
@@ -127,6 +129,7 @@ const setUpMultiSellerFirstSSPTagFlow = (steps: AuctionStep[]) => {
       direction: 'up',
       x1: () => getCoordinateValues(app.auction.nextTipCoordinates).x + 10,
       y1: () => getCoordinateValues(app.auction.nextTipCoordinates).y - 15,
+      text: 'OpenRTB \n bid response',
     },
     callBack: (returnValue) => {
       app.auction.nextTipCoordinates = returnValue;

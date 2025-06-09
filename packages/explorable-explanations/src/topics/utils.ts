@@ -77,7 +77,7 @@ export const generateTimelineVisits = (
   numVisitsPerEpoch: number,
   startDate = new Date()
 ) => {
-  const visits = [];
+  const visits: { website: string; datetime: string; topics: string[] }[] = [];
   let currentDateTime = new Date(startDate);
 
   const incrementMinutes = (7 * 24 * 60) / numVisitsPerEpoch; // Total minutes in a week divided by visits per epoch
@@ -117,4 +117,58 @@ export const createEpochs = () => {
   }
 
   return epochs;
+};
+
+/**
+ * Generates random positions for small circles based on the position of the main circle
+ * @param totalSmallCircles - Total number of small circles
+ * @param position - Position of the circle
+ * @param position.x - X coordinate of the circle
+ * @param position.y - Y coordinate of the circle
+ * @param diameter - Diameter of the circle
+ * @param smallCircleDiameter - Diameter of the small circles
+ * @returns Array of small circle positions
+ */
+export const getSmallCirclePositions = (
+  totalSmallCircles: number,
+  position: { x: number; y: number },
+  diameter: number,
+  smallCircleDiameter: number
+) => {
+  const smallCirclePositions: { x: number; y: number }[] = [];
+  const distanceFromEdge = 6;
+
+  for (let i = 0; i < totalSmallCircles; i++) {
+    let randomX: number, randomY: number, isOverlapping: boolean;
+
+    do {
+      const angle = Math.random() * 2 * Math.PI;
+
+      randomX =
+        position.x + (diameter / 2 + distanceFromEdge) * Math.cos(angle);
+      randomY =
+        position.y + (diameter / 2 + distanceFromEdge) * Math.sin(angle);
+
+      // eslint-disable-next-line no-loop-func
+      isOverlapping = smallCirclePositions.some((pos) => {
+        const dx = pos.x - randomX;
+        const dy = pos.y - randomY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance < smallCircleDiameter;
+      });
+
+      const circleCircleDistanceX = Math.abs(position.x - randomX);
+      const circleCircleDistanceY = Math.abs(position.y - randomY);
+
+      isOverlapping =
+        isOverlapping ||
+        circleCircleDistanceX <= smallCircleDiameter ||
+        circleCircleDistanceY <= smallCircleDiameter;
+    } while (isOverlapping);
+
+    smallCirclePositions.push({ x: randomX, y: randomY });
+  }
+
+  return smallCirclePositions;
 };

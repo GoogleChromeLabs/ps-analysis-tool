@@ -17,9 +17,8 @@
  * External dependencies.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { act } from 'react-dom/test-utils';
 import SinonChrome from 'sinon-chrome';
 
 /**
@@ -72,7 +71,6 @@ describe('App', () => {
   it('Should show refresh page message if cookie stats are not available', () => {
     mockUseCookieStore.mockReturnValueOnce({
       tabCookieStats: {},
-      isCurrentTabBeingListenedTo: true,
     });
     act(() => {
       render(<App />);
@@ -96,7 +94,6 @@ describe('App', () => {
 
   it('Should show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
     mockUseCookieStore.mockReturnValueOnce({
-      isCurrentTabBeingListenedTo: true,
       cookieStats: {
         total: 0,
         firstParty: {
@@ -120,7 +117,6 @@ describe('App', () => {
 
   it('Should not show No cookies found on this page message if no firstParty and thirdParty cookies are not available', () => {
     mockUseCookieStore.mockReturnValueOnce({
-      isCurrentTabBeingListenedTo: true,
       cookieStats: {
         total: 6,
         blockedCookies: {

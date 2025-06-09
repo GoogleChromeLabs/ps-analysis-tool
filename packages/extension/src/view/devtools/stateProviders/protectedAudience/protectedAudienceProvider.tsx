@@ -31,6 +31,7 @@ import type {
   SingleSellerAuction,
   MultiSellerAuction,
 } from '@google-psat/common';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -40,11 +41,25 @@ import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
-import { isEqual } from 'lodash-es';
+import { CS_GET_PREBID_DATA_RESPONSE } from '../../../../constants';
+import type { PrebidEvents } from '../../../../store';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
+
+  const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
+    prebidExists: false,
+    adUnits: {},
+    noBids: {},
+    versionInfo: '',
+    installedModules: [],
+    config: {},
+    receivedBids: [],
+    errorEvents: [],
+    auctionEvents: {},
+    pbjsNamespace: '',
+  });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
     useState<boolean>(false);
@@ -64,6 +79,9 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [noBids, setNoBids] = useState<
     ProtectedAudienceContextType['state']['noBids']
   >({});
+
+  const [sortOrder, setSortOrder] =
+    useState<ProtectedAudienceContextType['state']['sortOrder']>('asc');
 
   const [adsAndBidders, setAdsAndBidders] = useState<
     ProtectedAudienceContextType['state']['adsAndBidders']
@@ -92,16 +110,22 @@ const Provider = ({ children }: PropsWithChildren) => {
               (event) => event.type === 'configResolved'
             )?.[0];
 
-            const adUnitCode = JSON.parse(
-              // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-              configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
-            ).divId;
+            const adUnitCode =
+              JSON.parse(
+                // @ts-ignore - auctionSignals is not defined in type, but it is in the data
+                configResolvedEvent?.auctionConfig?.auctionSignals?.value ??
+                  '{}'
+              ).divId ??
+              JSON.parse(
+                // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
+              ).divId;
 
             if (!adUnitCode) {
               return;
             }
 
-            const time = new Date(events?.[0]?.time * 1000).toUTCString();
+            const time = new Date(events?.[0]?.time * 1000).toISOString();
 
             reshapedAuctionEvents[adUnitCode] = {
               ...reshapedAuctionEvents[adUnitCode],
@@ -140,10 +164,17 @@ const Provider = ({ children }: PropsWithChildren) => {
                 (_event) => _event.type === 'configResolved'
               )?.[0];
 
-              adUnit = JSON.parse(
-                // @ts-ignore - sellerSignals is not defined in type, but it is in the data
-                configResolvedEvent?.auctionConfig?.sellerSignals?.value ?? '{}'
-              ).divId;
+              adUnit =
+                JSON.parse(
+                  // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                  configResolvedEvent?.auctionConfig?.auctionSignals?.value ??
+                    '{}'
+                ).divId ??
+                JSON.parse(
+                  // @ts-ignore - sellerSignals is not defined in type, but it is in the data
+                  configResolvedEvent?.auctionConfig?.sellerSignals?.value ??
+                    '{}'
+                ).divId;
             });
 
             if (!adUnit) {
@@ -152,11 +183,14 @@ const Provider = ({ children }: PropsWithChildren) => {
 
             const time = new Date(
               events?.['0']?.[0]?.time * 1000
-            ).toUTCString();
+            ).toISOString();
 
             const sspEvents = Object.values(events).reduce((acc, event) => {
-              // @ts-ignore
-              const seller = event?.[0]?.auctionConfig?.seller ?? '';
+              const seller =
+                // @ts-ignore
+                event?.[0]?.auctionConfig?.seller +
+                '||' +
+                event?.[0].uniqueAuctionId;
 
               acc[seller] = event;
 
@@ -191,7 +225,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
           return data;
         }
-
         return prevState;
       });
 
@@ -210,11 +243,15 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
+        prebidEvents: PrebidEvents;
+        propertyName: string;
       };
     }) => {
       let didAuctionEventsChange = false;
 
-      if (!['AUCTION_EVENTS'].includes(message.type)) {
+      if (
+        !['AUCTION_EVENTS', CS_GET_PREBID_DATA_RESPONSE].includes(message.type)
+      ) {
         return;
       }
 
@@ -227,11 +264,55 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (
         incomingMessageType === 'AUCTION_EVENTS' &&
+        typeof message.payload.prebidEvents !== 'undefined'
+      ) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
+          setPrebidResponse((prev) => {
+            const data = message.payload?.prebidEvents ?? null;
+            if (
+              typeof message?.payload?.prebidEvents?.prebidExists !==
+              'undefined'
+            ) {
+              data.prebidExists = message.payload.prebidEvents.prebidExists;
+            }
+            if (!data) {
+              return data;
+            }
+
+            const keys: (keyof PrebidEvents)[] = [
+              'adUnits',
+              'receivedBids',
+              'noBids',
+              'auctionEvents',
+              'errorEvents',
+              'config',
+              'installedModules',
+              'versionInfo',
+              'pbjsNamespace',
+            ];
+
+            const updates = Object.fromEntries(
+              keys
+                .map((key) => [key, data[key]])
+                .filter(([key, value]) => {
+                  const _key = key as keyof PrebidEvents;
+                  return !isEqual(value, prev[_key]);
+                })
+            );
+
+            updates['prebidExists'] = data.prebidExists ?? prev.prebidExists;
+
+            return Object.keys(updates).length ? { ...prev, ...updates } : prev;
+          });
+        }
+      }
+
+      if (
+        incomingMessageType === 'AUCTION_EVENTS' &&
         message.payload.auctionEvents
       ) {
-        if (message.payload.tabId === tabId) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
           setIsMultiSellerAuction(message.payload.multiSellerAuction);
-
           didAuctionEventsChange = reshapeAuctionEvents(
             message.payload.auctionEvents,
             message.payload.multiSellerAuction
@@ -316,7 +397,7 @@ const Provider = ({ children }: PropsWithChildren) => {
                       new Set(
                         ...(adUnitCodeToBidders[adUnitCode]
                           ?.mediaContainerSize ?? []),
-                        mediaContainerSize
+                        ...(mediaContainerSize ?? [])
                       )
                     ),
                   ],
@@ -356,6 +437,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     [reshapeAuctionEvents]
   );
+
   const onCommittedNavigationListener = useCallback(
     ({
       frameId,
@@ -363,7 +445,8 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        (frameType !== 'outermost_frame' && frameId !== 0) ||
+        frameType !== 'outermost_frame' ||
+        frameId !== 0 ||
         tabId !== chrome.devtools.inspectedWindow.tabId
       ) {
         return;
@@ -401,19 +484,24 @@ const Provider = ({ children }: PropsWithChildren) => {
         noBids,
         adsAndBidders,
         selectedAdUnit,
+        sortOrder,
+        prebidResponse,
       },
       actions: {
         setSelectedAdUnit,
+        setSortOrder,
       },
     };
   }, [
-    selectedAdUnit,
+    prebidResponse,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,
-    noBids,
     receivedBids,
+    noBids,
     adsAndBidders,
+    selectedAdUnit,
+    sortOrder,
   ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;

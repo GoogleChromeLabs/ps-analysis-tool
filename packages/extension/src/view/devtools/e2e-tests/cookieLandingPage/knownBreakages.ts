@@ -25,8 +25,8 @@ import { Page } from 'puppeteer';
  */
 import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
-jest.retryTimes(3);
 dotenv.config();
+jest.retryTimes(3, { logErrorsBeforeRetry: true });
 describe('Validate the Known Breakages, GSI and GIS', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
@@ -44,8 +44,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     }, 40000);
 
     test('Should be able to validate the Known Breakages, GSI and GIS', async () => {
-      await puppeteer.navigateToURL(page, 'https://in.linkedin.com/');
-
+      await puppeteer.navigateToURL(
+        page,
+        'https://in.linkedin.com/?psat_cdp=on'
+      );
+      page.reload();
       const devtools = await puppeteer.getDevtools();
       const key = puppeteer.getCMDKey();
       interaction = new Interaction(devtools, key);
@@ -53,21 +56,32 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       // Navigate to the cookie tab
       const frame = await interaction.navigateToCookieTab();
 
+      if (!frame) {
+        throw new Error('Content frame not found');
+      }
+
       await interaction.delay(8000);
-      // Validate the "Facebook Like" known breakages
+      await frame.waitForSelector(
+        '[data-testid="library-detection-accordion"]:nth-child(1) p',
+        { timeout: 20000 }
+      );
       const deprecatedGoogleSignInText = await interaction.getInnerText(
-        frame ?? null,
-        '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
+        frame,
+        '[data-testid="library-detection-accordion"]:nth-child(1) p'
       );
       expect(deprecatedGoogleSignInText).toBe('Deprecated Google Sign-In');
 
       // Validate the "GIS" known breakages
+      await frame.waitForSelector(
+        '[data-testid="library-detection-accordion"]:nth-child(2) p',
+        { timeout: 20000 }
+      );
       const gisText = await interaction.getInnerText(
-        frame ?? null,
-        '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
+        frame,
+        '[data-testid="library-detection-accordion"]:nth-child(2) p'
       );
       expect(gisText).toBe('Unsupported Google Identity Services');
-    }, 60000);
+    }, 120000);
   });
 
   describe('Disqus comments', () => {
@@ -82,7 +96,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     }, 40000);
 
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
-      await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');
+      await puppeteer.navigateToURL(
+        page,
+        'https://www.math-only-math.com/?psat_cdp=on'
+      );
+      page.reload();
 
       const devtools = await puppeteer.getDevtools();
       const key = puppeteer.getCMDKey();
@@ -97,14 +115,14 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       // Validate the "Facebook Like" known breakages
       const facebookcomment = await interaction.getInnerText(
         frame,
-        '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
+        '[data-testid="library-detection-accordion"]:nth-child(1) p'
       );
       expect(facebookcomment).not.toBe(null);
       await interaction.delay(2000);
       // Validate the "Facebook Comment" known breakages
       const facebooklike = await interaction.getInnerText(
         frame,
-        '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
+        '[data-testid="library-detection-accordion"]:nth-child(2) p'
       );
       expect(facebooklike).toBe('Facebook Like Button');
     }, 60000);
@@ -122,7 +140,11 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
     }, 40000);
 
     test('Should be able to validate the Known Breakages, Facebook Likes and Comments', async () => {
-      await puppeteer.navigateToURL(page, 'https://www.math-only-math.com/');
+      await puppeteer.navigateToURL(
+        page,
+        'https://www.math-only-math.com/?psat_cdp=on'
+      );
+      page.reload();
 
       const devtools = await puppeteer.getDevtools();
       const key = puppeteer.getCMDKey();
@@ -137,14 +159,14 @@ describe('Validate the Known Breakages, GSI and GIS', () => {
       // Validate the "Facebook Like" known breakages
       const facebookcomment = await interaction.getInnerText(
         frame,
-        '[data-testid="library-detection-accordion"]:nth-child(1) p.flex-1.dark\\:text-bright-gray.font-medium'
+        '[data-testid="library-detection-accordion"]:nth-child(1) p'
       );
       expect(facebookcomment).not.toBe(null);
       await interaction.delay(2000);
       // Validate the "Facebook Comment" known breakages
       const facebooklike = await interaction.getInnerText(
         frame,
-        '[data-testid="library-detection-accordion"]:nth-child(2) p.flex-1.dark\\:text-bright-gray.font-medium'
+        '[data-testid="library-detection-accordion"]:nth-child(2) p'
       );
       expect(facebooklike).toBe('Facebook Like Button');
     }, 1200000);

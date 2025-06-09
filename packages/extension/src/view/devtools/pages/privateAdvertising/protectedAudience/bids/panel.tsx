@@ -17,11 +17,10 @@
 /**
  * External dependencies.
  */
-import { PillToggle } from '@google-psat/design-system';
+import { JsonView, PillToggle } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
-import { prettyPrintJson } from 'pretty-print-json';
 import type { NoBidsType, ReceivedBids } from '@google-psat/common';
 import classNames from 'classnames';
 
@@ -70,8 +69,7 @@ const Panel = ({
     <div className="flex flex-col pt-4 h-full w-full">
       <div className="px-4 pb-4">
         <PillToggle
-          firstOption={PillToggleOptions.ReceivedBids}
-          secondOption={PillToggleOptions.NoBids}
+          options={[PillToggleOptions.ReceivedBids, PillToggleOptions.NoBids]}
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={eeAnimatedTab}
@@ -117,17 +115,10 @@ const Panel = ({
             top: true,
           }}
         >
-          <div className="text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+          <div className="text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
             {selectedRow ? (
               <div className="text-xs py-1 px-1.5">
-                <pre>
-                  <div
-                    className="json-container"
-                    dangerouslySetInnerHTML={{
-                      __html: prettyPrintJson.toHtml(selectedRow),
-                    }}
-                  />
-                </pre>
+                <JsonView src={selectedRow} />
               </div>
             ) : (
               <div className="h-full p-8 flex items-center">

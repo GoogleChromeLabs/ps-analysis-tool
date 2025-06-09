@@ -22,7 +22,7 @@ import { Protocol } from 'devtools-protocol';
  */
 import createCookieFromAuditsIssue from '../utils/createCookieFromAuditsIssue';
 import './chromeListeners';
-import dataStore from '../store/dataStore';
+import dataStore, { DataStore } from '../store/dataStore';
 import cookieStore from '../store/cookieStore';
 import PAStore from '../store/PAStore';
 import ARAStore from '../store/ARAStore';
@@ -64,10 +64,9 @@ const calculateTabId = (source: chrome.debugger.Debuggee) => {
   }
 
   let tabId = '';
-  const tab = Object.keys(dataStore?.tabs ?? {}).filter(
+  const tab = Object.keys(DataStore?.tabs ?? {}).filter(
     (key) =>
-      source.targetId &&
-      dataStore?.getFrameIDSet(Number(key))?.has(source.targetId)
+      source.targetId && dataStore?.getFrameIDSet(key)?.has(source.targetId)
   );
   tabId = tab[0];
   return tabId;
@@ -97,11 +96,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       targets = await chrome.debugger.getTargets();
 
       targets.forEach((target) => {
-        if (
-          !target.url.startsWith('devtools://') &&
-          !target.url.startsWith('chrome://') &&
-          !attachedSet.has(target.id)
-        ) {
+        if (target.url.startsWith('https://') && !attachedSet.has(target.id)) {
           attachCDP({ targetId: target.id });
           attachedSet.add(target.id);
         }
@@ -115,7 +110,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         const childDebuggee = { targetId };
 
-        if (!attachedSet.has(targetId)) {
+        if (!attachedSet.has(targetId) && url.startsWith('https://')) {
           attachCDP(childDebuggee);
           attachedSet.add(targetId);
         }
@@ -126,7 +121,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         )[0]?.id;
 
         dataStore?.addFrameToTabAndUpdateMetadata(
-          source.tabId ?? null,
+          source.tabId?.toString() ?? null,
           source.targetId ?? null,
           targetId,
           parentFrameId ?? source.targetId,
@@ -148,7 +143,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           params as Protocol.Page.FrameAttachedEvent;
 
         await dataStore?.addFrameToTabAndUpdateMetadata(
-          source.tabId ?? null,
+          source.tabId?.toString() ?? null,
           source.targetId ?? null,
           frameId,
           parentFrameId
@@ -167,16 +162,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
 
         await dataStore?.addFrameToTabAndUpdateMetadata(
-          source.tabId ?? null,
+          source.tabId?.toString() ?? null,
           source.targetId ?? null,
           id,
           parentId,
           frameUrl
         );
-      }
-
-      if (dataStore.tabMode !== 'unlimited' && dataStore.tabToRead !== tabId) {
-        return;
       }
 
       if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
@@ -186,8 +177,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { uniqueAuctionId, eventTime, auctionConfig, parentAuctionId } =
           interestGroupAuctionEventOccured;
 
-        dataStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
-          ...(dataStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
+        PAStore.auctionDataForTabId[tabId][uniqueAuctionId] = {
+          ...(PAStore.auctionDataForTabId[tabId]?.[uniqueAuctionId] ?? {}),
           auctionConfig,
           parentAuctionId,
           auctionTime: eventTime,
@@ -222,12 +213,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { auctions, type, requestId } =
           interestGroupAuctionNetworkRequestCreatedParams;
 
-        dataStore.unParsedRequestHeadersForPA[tabId][requestId] = {
+        PAStore.unParsedRequestHeadersForPA[tabId][requestId] = {
           auctions,
           type,
         };
 
-        if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
+        if (DataStore.requestIdToCDPURLMapping[tabId][requestId]) {
           PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
         }
 
@@ -262,8 +253,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           requestUrl
         );
 
-        if (!dataStore.requestIdToCDPURLMapping[tabId]) {
-          dataStore.requestIdToCDPURLMapping[tabId] = {
+        if (!DataStore.requestIdToCDPURLMapping[tabId]) {
+          DataStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
               finalFrameId,
               frameId,
@@ -273,8 +264,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             },
           };
         } else {
-          dataStore.requestIdToCDPURLMapping[tabId] = {
-            ...dataStore.requestIdToCDPURLMapping[tabId],
+          DataStore.requestIdToCDPURLMapping[tabId] = {
+            ...DataStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
               finalFrameId,
               frameId,
@@ -285,32 +276,33 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (dataStore.unParsedRequestHeadersForPA[tabId][requestId]) {
+        if (PAStore.unParsedRequestHeadersForPA[tabId][requestId]) {
           const { auctions, type } =
-            dataStore.unParsedRequestHeadersForPA[tabId][requestId];
+            PAStore.unParsedRequestHeadersForPA[tabId][requestId];
 
           PAStore.processStartFetchEvents(auctions, tabId, requestId, type);
         }
         //@todo When cookie analysis is decoupled move this to a separate function.
         if (
-          dataStore.tabs[Number(tabId)]?.isCookieAnalysisEnabled &&
-          dataStore.unParsedRequestHeadersForCA[tabId][requestId]
+          DataStore.tabs[tabId]?.isCookieAnalysisEnabled &&
+          cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
         ) {
           if (
             extractHeader(
               'Attribution-Reporting-Eligible',
-              dataStore.unParsedRequestHeadersForCA[tabId][requestId].headers
+              cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
+                .headers ?? {}
             )
           ) {
-            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
               readHeaderAndRegister(
-                dataStore.headersForARA?.[tabId]?.[requestId].headers,
+                ARAStore.headersForARA?.[tabId]?.[requestId].headers,
                 requestUrl,
                 tabId
               );
             } else {
-              dataStore.headersForARA[tabId] = {
-                ...dataStore.headersForARA[tabId],
+              ARAStore.headersForARA[tabId] = {
+                ...ARAStore.headersForARA[tabId],
                 [requestId]: {
                   headers: {},
                   url: requestUrl,
@@ -319,7 +311,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             }
           }
           cookieStore.parseRequestHeadersForCA(
-            dataStore.unParsedRequestHeadersForCA[tabId][requestId],
+            cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
@@ -336,7 +328,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           loadingFinishedParams.requestId,
           loadingFinishedParams.timestamp,
           tabId,
-          'Finished Fetch'
+          'Finished Fetching '
         );
       }
 
@@ -356,20 +348,20 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
-        if (dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
+        if (DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           if (extractHeader('Attribution-Reporting-Eligible', headers)) {
-            if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+            if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
               readHeaderAndRegister(
                 headers,
-                dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
+                DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
                 tabId
               );
             } else {
-              dataStore.headersForARA[tabId] = {
-                ...dataStore.headersForARA[tabId],
+              ARAStore.headersForARA[tabId] = {
+                ...ARAStore.headersForARA[tabId],
                 [requestId]: {
                   headers: {},
-                  url: dataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
+                  url: DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
                     ?.url,
                 },
               };
@@ -382,15 +374,18 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             tabId,
             Array.from(
               new Set([
-                dataStore.requestIdToCDPURLMapping[tabId][requestId]
+                DataStore.requestIdToCDPURLMapping[tabId][requestId]
                   ?.finalFrameId,
-                dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+                DataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
               ])
             )
           );
         } else {
-          dataStore.unParsedRequestHeadersForCA[tabId][requestId] =
-            params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
+          cookieStore.setUnParsedRequestHeadersForCA(
+            tabId,
+            requestId,
+            params as Protocol.Network.RequestWillBeSentExtraInfoEvent
+          );
         }
 
         return;
@@ -434,20 +429,20 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           requestUrl
         );
 
-        if (!dataStore.requestIdToCDPURLMapping[tabId]) {
-          dataStore.requestIdToCDPURLMapping[tabId] = {
+        if (!DataStore.requestIdToCDPURLMapping[tabId]) {
+          DataStore.requestIdToCDPURLMapping[tabId] = {
             [requestId]: {
-              ...(dataStore.requestIdToCDPURLMapping[tabId]?.[requestId] ?? {}),
+              ...(DataStore.requestIdToCDPURLMapping[tabId]?.[requestId] ?? {}),
               finalFrameId,
               frameId,
               url: requestUrl,
             },
           };
         } else {
-          dataStore.requestIdToCDPURLMapping[tabId] = {
-            ...dataStore.requestIdToCDPURLMapping[tabId],
+          DataStore.requestIdToCDPURLMapping[tabId] = {
+            ...DataStore.requestIdToCDPURLMapping[tabId],
             [requestId]: {
-              ...dataStore.requestIdToCDPURLMapping[tabId][requestId],
+              ...DataStore.requestIdToCDPURLMapping[tabId][requestId],
               finalFrameId,
               frameId,
               url: requestUrl,
@@ -455,18 +450,18 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (dataStore.unParsedResponseHeadersForCA[tabId][requestId]) {
+        if (cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]) {
           cookieStore.parseResponseHeadersForCA(
-            dataStore.unParsedResponseHeadersForCA[tabId][requestId],
+            cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
 
-        if (dataStore.unParsedRequestHeadersForCA[tabId][requestId]) {
+        if (cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]) {
           cookieStore.parseRequestHeadersForCA(
-            dataStore.unParsedRequestHeadersForCA[tabId][requestId],
+            cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
             requestId,
             tabId,
             Array.from(new Set([finalFrameId, frameId]))
@@ -486,15 +481,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           //sometimes this fires early and we still havent calculated tabId for this.
           tabId = calculateTabId(source);
 
-          if (dataStore.headersForARA?.[tabId]?.[requestId]) {
+          if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
             readHeaderAndRegister(
               headers,
-              dataStore.headersForARA?.[tabId]?.[requestId]?.url,
+              ARAStore.headersForARA?.[tabId]?.[requestId]?.url,
               tabId
             );
           } else {
-            dataStore.headersForARA[tabId] = {
-              ...dataStore.headersForARA[tabId],
+            ARAStore.headersForARA[tabId] = {
+              ...ARAStore.headersForARA[tabId],
               [requestId]: {
                 headers,
                 url: '',
@@ -508,12 +503,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return;
         }
 
-        if (dataStore.requestIdToCDPURLMapping[tabId][requestId]) {
+        if (DataStore.requestIdToCDPURLMapping[tabId][requestId]) {
           const frameIds = Array.from(
             new Set([
-              dataStore.requestIdToCDPURLMapping[tabId][requestId]
+              DataStore.requestIdToCDPURLMapping[tabId][requestId]
                 ?.finalFrameId,
-              dataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+              DataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
             ])
           );
 
@@ -524,17 +519,20 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             frameIds
           );
 
-          if (dataStore.unParsedRequestHeadersForCA[tabId][requestId]) {
+          if (cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]) {
             cookieStore.parseRequestHeadersForCA(
-              dataStore.unParsedRequestHeadersForCA[tabId][requestId],
+              cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
               requestId,
               tabId,
               frameIds
             );
           }
         } else {
-          dataStore.unParsedResponseHeadersForCA[tabId][requestId] =
-            params as Protocol.Network.ResponseReceivedExtraInfoEvent;
+          cookieStore.setUnParsedResponseHeadersForCA(
+            tabId,
+            requestId,
+            params as Protocol.Network.ResponseReceivedExtraInfoEvent
+          );
         }
         return;
       }
@@ -568,14 +566,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         const cookieObjectToUpdate = createCookieFromAuditsIssue(
           cookieIssueDetails,
-          dataStore?.getTabUrl(Number(tabId)) ?? '',
+          dataStore?.getTabUrl(tabId) ?? '',
           [],
-          dataStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
-          dataStore.cookieDB ?? {}
+          DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
+          DataStore.cookieDB ?? {}
         );
 
         if (cookieObjectToUpdate) {
-          cookieStore?.update(Number(tabId), [cookieObjectToUpdate]);
+          cookieStore?.update(tabId, [cookieObjectToUpdate]);
         }
         return;
       }
@@ -583,9 +581,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Storage.attributionReportingSourceRegistered' && params) {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
-        dataStore.sources.sourceRegistration =
-          dataStore.sources.sourceRegistration.map((singleSource) => {
-            const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+        ARAStore.sources.sourceRegistration =
+          ARAStore.sources.sourceRegistration.map((singleSource) => {
+            const host = new URL(DataStore.tabs[tabId].url).origin;
             const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
             if (
               //@ts-ignore
@@ -622,7 +620,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const { registration, eventLevel, aggregatable } =
           params as Protocol.Storage.AttributionReportingTriggerRegisteredEvent;
 
-        dataStore.sources.triggerRegistration.forEach((trigger, index) => {
+        ARAStore.sources.triggerRegistration.forEach((trigger, index) => {
           if (tabId !== trigger.tabId) {
             return;
           }
@@ -673,7 +671,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             );
           }
 
-          const host = new URL(dataStore.tabs[Number(tabId)].url).origin;
+          const host = new URL(DataStore.tabs[tabId].url).origin;
           const sourceOriginHost = trigger.destination
             ? new URL(trigger.destination).origin
             : '';
@@ -684,7 +682,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             trigger.destination &&
             host === sourceOriginHost
           ) {
-            dataStore.sources.triggerRegistration[index] = {
+            ARAStore.sources.triggerRegistration[index] = {
               ...trigger,
               eventLevel,
               aggregatable,

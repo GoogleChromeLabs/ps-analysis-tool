@@ -63,29 +63,33 @@ const ReceivedBidsTable = ({
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
+        header: 'Event Time',
+        accessorKey: 'time',
+        cell: (_, details) =>
+          (details as singleAuctionEvent).formattedTime.toString(),
+        enableHiding: false,
+        widthWeightagePercentage: 10,
+      },
+      {
         header: 'Bidder',
         accessorKey: 'ownerOrigin',
         cell: (info) => info,
         enableHiding: false,
-        widthWeightagePercentage: 20,
       },
       {
-        header: 'Bid',
+        header: 'Bid Value',
         accessorKey: 'bid',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Currency',
         accessorKey: 'bidCurrency',
         cell: (info) => info,
-        widthWeightagePercentage: 16,
       },
       {
         header: 'Ad Unit Code',
         accessorKey: 'adUnitCode',
         cell: (info) => info,
-        widthWeightagePercentage: 16,
       },
       {
         header: 'Ad Container Size',
@@ -95,19 +99,23 @@ const ReceivedBidsTable = ({
             <div className="flex gap-2 items-center">
               <p className="truncate">
                 {(info as number[][])
-                  ?.map((size: number[]) => `${size[0]}x${size[1]}`)
+                  ?.map((size: number[]) => {
+                    if (!size?.[0]) {
+                      return null;
+                    }
+                    return `${size?.[0]}x${size?.[1]}`;
+                  })
+                  ?.filter((size) => Boolean(size))
                   ?.join(' | ')}
               </p>
             </div>
           );
         },
-        widthWeightagePercentage: 16,
       },
       {
-        header: 'Media Type',
-        accessorKey: 'mediaType',
+        header: 'Ad Type',
+        accessorKey: 'adType',
         cell: (info) => info,
-        widthWeightagePercentage: 16,
       },
     ],
     []

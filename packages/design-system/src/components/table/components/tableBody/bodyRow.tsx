@@ -37,12 +37,16 @@ interface BodyRowProps {
   verticalBarColorHash: string;
   getRowObjectKey: (row: TableRow) => string;
   onRowClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, index: number) => void;
+  onKeyDown: (
+    e: React.KeyboardEvent<HTMLTableRowElement>,
+    index: number
+  ) => void;
   onRowContextMenu: (
     e: React.MouseEvent<HTMLDivElement>,
     row: TableRow
   ) => void;
   rowHeightClass?: string;
+  shouldScroll?: boolean;
 }
 
 const BodyRow = ({
@@ -59,6 +63,7 @@ const BodyRow = ({
   onKeyDown,
   onRowContextMenu,
   rowHeightClass,
+  shouldScroll = false,
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
@@ -75,10 +80,10 @@ const BodyRow = ({
       (isRowFocused
         ? isHighlighted
           ? 'bg-dirty-red'
-          : 'bg-gainsboro dark:bg-outer-space'
+          : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : isHighlighted
         ? 'bg-dirty-pink text-dirty-red'
-        : 'bg-blueberry text-white dark:bg-medium-persian-blue dark:text-chinese-silver')
+        : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
 
@@ -93,11 +98,22 @@ const BodyRow = ({
     }
   }, [index, isHighlighted]);
 
+  useEffect(() => {
+    if (shouldScroll) {
+      const element = document.getElementById(index.toString());
+      element?.scrollIntoView?.({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'start',
+      });
+    }
+  }, [index, shouldScroll]);
+
   return (
-    <div
+    <tr
       id={index.toString()}
       className={classnames(
-        'outline-0 flex divide-x divide-american-silver dark:divide-quartz relative',
+        'outline-0 divide-x divide-american-silver dark:divide-quartz relative',
         {
           [classes]: extraClasses.length === 0,
         },
@@ -110,20 +126,10 @@ const BodyRow = ({
       onContextMenu={(e) => onRowContextMenu(e, row)}
       data-testid="body-row"
     >
-      {/* Vertical bar for for some indication, styles can also be made dynamic.*/}
-      {hasVerticalBar && (
-        <span
-          style={{
-            backgroundColor: verticalBarColorHash,
-          }}
-          className="absolute block top-0 bottom-0 left-0 w-1 h-full"
-        />
-      )}
       {columns.map(
         (
           {
             accessorKey,
-            width,
             enableBodyCellPrefixIcon,
             showBodyCellPrefixIcon,
             bodyCellPrefixIcon,
@@ -134,7 +140,6 @@ const BodyRow = ({
             key={idx}
             onRowClick={onRowClick}
             cell={row[accessorKey]?.value}
-            width={width || 0}
             row={row}
             hasIcon={enableBodyCellPrefixIcon}
             showIcon={
@@ -142,10 +147,13 @@ const BodyRow = ({
             }
             icon={bodyCellPrefixIcon ?? undefined}
             rowHeightClass={rowHeightClass}
+            accessorKey={accessorKey}
+            hasVerticalBar={idx === 0 && hasVerticalBar}
+            verticalBarColorHash={verticalBarColorHash}
           />
         )
       )}
-    </div>
+    </tr>
   );
 };
 

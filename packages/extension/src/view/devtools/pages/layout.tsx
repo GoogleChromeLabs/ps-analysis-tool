@@ -37,6 +37,9 @@ import {
   InspectButton,
   ToastMessage,
   SIDEBAR_ITEMS_KEYS,
+  Button,
+  Tick,
+  Plus,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -52,7 +55,10 @@ import {
   useProtectedAudience,
   useSettings,
 } from '../stateProviders';
-import useCanShowAnalyzeTabButton from '../hooks/useCanShowAnalyzeTabButton';
+import {
+  CDP_WARNING_MESSAGE,
+  RELOAD_WARNING_MESSAGE,
+} from '../../../constants';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -66,21 +72,29 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     selectedAdUnit: state.selectedAdUnit,
   }));
 
-  const { settingsChanged, handleSettingsChange } = useSettings(
-    ({ state, actions }) => ({
-      settingsChanged: state.settingsChanged,
-      handleSettingsChange: actions.handleSettingsChange,
-    })
-  );
+  const {
+    settingsChanged,
+    handleSettingsChange,
+    exceedingLimitations,
+    isUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay,
+  } = useSettings(({ state, actions }) => ({
+    settingsChanged: state.settingsChanged,
+    handleSettingsChange: actions.handleSettingsChange,
+    exceedingLimitations: state.exceedingLimitations,
+    setSettingsChanged: actions.setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay:
+      actions.setIsUsingCDPForSettingsPageDisplay,
+    isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
+  }));
 
   const {
     tabFrames,
     frameHasCookies,
     canStartInspecting,
-    tabUrl,
     isInspecting,
     setIsInspecting,
-    selectedFrame,
     setSelectedFrame,
   } = useCookie(({ state, actions }) => ({
     tabFrames: state.tabFrames,
@@ -120,23 +134,26 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       const data = { ...prev };
       const psData = data[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX];
 
-      psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-        SIDEBAR_ITEMS_KEYS.COOKIES
-      ].panel = {
-        Element: Cookies,
-        props: { setFilteredCookies },
-      };
-      psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-        SIDEBAR_ITEMS_KEYS.COOKIES
-      ].children = Object.keys(tabFrames || {}).reduce<SidebarItems>(
-        (acc, url) => {
+      const cookiesMainItem =
+        psData.children[SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES].children[
+          SIDEBAR_ITEMS_KEYS.COOKIES
+        ];
+
+      if (cookiesMainItem) {
+        cookiesMainItem.panel = {
+          Element: Cookies as (props: any) => React.JSX.Element,
+          props: { setFilteredCookies },
+        };
+        cookiesMainItem.children = Object.keys(
+          tabFrames || {}
+        ).reduce<SidebarItems>((acc, url) => {
           const popupTitle = I18n.getMessage('cookiesUsedByFrame', [url]);
 
           acc[url] = {
             title: url,
             popupTitle,
             panel: {
-              Element: Cookies,
+              Element: Cookies as (props: any) => React.JSX.Element,
               props: { setFilteredCookies },
             },
             icon: {
@@ -150,30 +167,29 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           };
 
           return acc;
-        },
-        {}
-      );
+        }, {});
 
-      const showInspectButton =
-        canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
+        const showInspectButton =
+          canStartInspecting && Boolean(Object.keys(tabFrames || {}).length);
 
-      if (showInspectButton) {
-        psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-          SIDEBAR_ITEMS_KEYS.COOKIES
-        ].extraInterfaceToTitle = {
-          Element: InspectButton,
-          props: {
-            isInspecting,
-            selectedAdUnit,
-            setIsInspecting,
-            isTabFocused:
-              isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES),
-          },
-        };
-      } else {
-        psData.children[SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING].children[
-          SIDEBAR_ITEMS_KEYS.COOKIES
-        ].extraInterfaceToTitle = {};
+        if (showInspectButton) {
+          psData.children[SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES].children[
+            SIDEBAR_ITEMS_KEYS.COOKIES
+          ].extraInterfaceToTitle = {
+            Element: InspectButton,
+            props: {
+              isInspecting,
+              selectedAdUnit,
+              setIsInspecting,
+              isTabFocused:
+                isSidebarFocused && isKeySelected(SIDEBAR_ITEMS_KEYS.COOKIES),
+            },
+          };
+        } else {
+          psData.children[SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES].children[
+            SIDEBAR_ITEMS_KEYS.COOKIES
+          ].extraInterfaceToTitle = {};
+        }
       }
 
       return data;
@@ -190,6 +206,127 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     tabFrames,
   ]);
 
+  const buttonReloadActionCompnent = useMemo(() => {
+    return (
+      <div className="flex items-center gap-5">
+        <Button
+          text={
+            <>
+              <Tick className="w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">Yes</span>
+            </>
+          }
+          size="large"
+          onClick={handleSettingsChange}
+          variant="success"
+        />
+        <Button
+          text={
+            <>
+              <Plus className="rotate-45 w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">No</span>
+            </>
+          }
+          size="large"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsPageDisplay(true);
+          }}
+        />
+      </div>
+    );
+  }, [
+    handleSettingsChange,
+    setIsUsingCDPForSettingsPageDisplay,
+    setSettingsChanged,
+  ]);
+
+  const isUsingCDPCondition = useMemo(
+    () => isUsingCDPForSettingsPageDisplay,
+    [isUsingCDPForSettingsPageDisplay]
+  );
+
+  const settingsReadActionComponent = useMemo(() => {
+    return (
+      <div className="flex items-center gap-5">
+        <Button
+          text={
+            <>
+              <Tick className="w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">Yes</span>
+            </>
+          }
+          size="large"
+          onClick={handleSettingsChange}
+          variant={exceedingLimitations ? 'danger' : 'success'}
+        />
+        <Button
+          text={
+            <>
+              <Plus className="rotate-45 w-4 h-4 sm:hidden max-sm:block" />
+              <span className="max-sm:hidden sm:block">No</span>
+            </>
+          }
+          size="large"
+          onClick={async () => {
+            await chrome.storage.session.remove([
+              'isUsingCDP',
+              'pendingReload',
+            ]);
+            setSettingsChanged(false);
+            setIsUsingCDPForSettingsPageDisplay(false);
+          }}
+        />
+      </div>
+    );
+  }, [
+    exceedingLimitations,
+    handleSettingsChange,
+    setSettingsChanged,
+    setIsUsingCDPForSettingsPageDisplay,
+  ]);
+
+  const formedToastMessage = useMemo(() => {
+    let message = '';
+
+    if (settingsChanged) {
+      if (isUsingCDPCondition) {
+        message = exceedingLimitations
+          ? CDP_WARNING_MESSAGE
+          : RELOAD_WARNING_MESSAGE;
+        return (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={settingsReadActionComponent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5 px-5"
+          />
+        );
+      } else {
+        message = RELOAD_WARNING_MESSAGE;
+        return (
+          <ToastMessage
+            additionalStyles="text-sm"
+            text={message}
+            actionComponent={buttonReloadActionCompnent}
+            textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
+          />
+        );
+      }
+    }
+    return <></>;
+  }, [
+    buttonReloadActionCompnent,
+    exceedingLimitations,
+    isUsingCDPCondition,
+    settingsChanged,
+    settingsReadActionComponent,
+  ]);
+
   useEffect(() => {
     if (Object.keys(tabFrames || {}).includes(currentItemKey || '')) {
       setSelectedFrame(currentItemKey);
@@ -201,7 +338,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   const cookieDropdownOpen = useMemo(() => {
     return (
       sidebarItems[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]?.children[
-        SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+        SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
       ]?.children?.[SIDEBAR_ITEMS_KEYS.COOKIES]?.dropdownOpen ?? false
     );
   }, [sidebarItems]);
@@ -218,27 +355,6 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       );
     })();
   }, [selectedItemKey, isCollapsed, cookieDropdownOpen]);
-
-  const lastUrl = useRef(tabUrl);
-  const cookiesAnalyzed = useCanShowAnalyzeTabButton();
-
-  useEffect(() => {
-    if (!cookiesAnalyzed) {
-      return;
-    }
-
-    if (
-      lastUrl.current === null ||
-      new URL(lastUrl.current).hostname === new URL(tabUrl || '').hostname
-    ) {
-      lastUrl.current = tabUrl;
-      return;
-    }
-
-    lastUrl.current = tabUrl;
-
-    updateSelectedItemKey(selectedFrame || SIDEBAR_ITEMS_KEYS.DASHBOARD);
-  }, [cookiesAnalyzed, selectedFrame, tabUrl, updateSelectedItemKey]);
 
   const [filteredCookies, setFilteredCookies] = useState<CookieTableData[]>([]);
 
@@ -303,16 +419,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             </div>
           </div>
         </main>
-        {settingsChanged && (
-          <div className="h-fit w-full relative z-10">
-            <ToastMessage
-              additionalStyles="text-sm"
-              text={I18n.getMessage('settingsChanged')}
-              onClick={handleSettingsChange}
-              textAdditionalStyles="xxs:p-1 xxs:text-xxs sm:max-2xl:text-xsm leading-5"
-            />
-          </div>
-        )}
+        {formedToastMessage}
       </div>
     </div>
   );

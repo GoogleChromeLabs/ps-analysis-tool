@@ -17,46 +17,13 @@
  * External Dependencies
  */
 import React from 'react';
-import {
-  LandingPageContainer,
-  SIDEBAR_ITEMS_KEYS,
-} from '@google-psat/design-system';
+import { LandingPageContainer } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const content = [
-  {
-    title: () => I18n.getMessage('chips'),
-    description: () => I18n.getMessage('chipsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/chips',
-    storyUrl: 'https://privacysandbox-stories.com/web-stories/chips/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.CHIPS,
-  },
-  {
-    title: () => I18n.getMessage('storageAccessAPI'),
-    description: () => I18n.getMessage('storageAccessAPIDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/storage-access-api',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/storage-access-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS,
-  },
-  {
-    title: () => I18n.getMessage('rws'),
-    description: () => I18n.getMessage('rwsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/related-website-sets',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/related-website-sets/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
-  },
-  {
-    title: () => 'FedCM',
-    description: () =>
-      'The Federated Credential Management API enables privacy-preserving identity federation.',
-    url: 'https://developers.google.com/privacy-sandbox/3pcd/fedcm',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/federated-credential-management-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL,
-  },
-];
+/**
+ * Internal dependencies.
+ */
+import { SITE_BOUNDARIES_CONTENT } from '../constants';
 
 const SiteBoundaries = () => {
   return (
@@ -64,8 +31,7 @@ const SiteBoundaries = () => {
       <LandingPageContainer
         title={I18n.getMessage('siteBoundaries')}
         contentPanelTitle={I18n.getMessage('siteBoundariesDescription')}
-        content={content}
-        counterStyles="bg-blue-600"
+        content={SITE_BOUNDARIES_CONTENT}
         titleStyles="text-blue-600"
         extraClasses="min-h-[78vh] w-full"
       />

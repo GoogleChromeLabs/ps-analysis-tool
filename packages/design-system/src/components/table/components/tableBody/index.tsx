@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef } from 'react';
+import React, { memo, useCallback, useRef } from 'react';
 
 /**
  * Internal dependencies.
@@ -30,6 +30,7 @@ interface TableBodyProps {
   setIsRowFocused: (state: boolean) => void;
   selectedKey: string | undefined | null;
   rowHeightClass?: string;
+  shouldScroll?: boolean;
 }
 
 const TableBody = ({
@@ -37,6 +38,7 @@ const TableBody = ({
   setIsRowFocused,
   selectedKey,
   rowHeightClass,
+  shouldScroll = false,
 }: TableBodyProps) => {
   const {
     rows,
@@ -47,6 +49,7 @@ const TableBody = ({
     conditionalTableRowClassesHandler,
     hasVerticalBar,
     getVerticalBarColorHash,
+    isResizing,
   } = useTable(({ state, actions }) => ({
     rows: state.rows,
     columns: state.columns,
@@ -57,24 +60,29 @@ const TableBody = ({
       actions.conditionalTableRowClassesHandler,
     hasVerticalBar: actions.hasVerticalBar,
     getVerticalBarColorHash: actions.getVerticalBarColorHash,
+    isResizing: state.isResizing,
   }));
 
-  const tableBodyRef = useRef(null);
+  const tableBodyRef = useRef<HTMLTableSectionElement | null>(null);
 
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {
+    (event: React.KeyboardEvent<HTMLTableRowElement>, index: number) => {
       event.preventDefault();
 
       //@ts-ignore - the `children` property will be available on the `current` property.
       const currentRow = tableBodyRef.current?.children.namedItem(index);
+      if (!currentRow) {
+        return;
+      }
+
       let newRowId: string | undefined;
       let rowElement: HTMLTableRowElement | null = null;
 
       if (event.key === 'ArrowUp') {
-        rowElement = currentRow?.previousElementSibling;
+        rowElement = currentRow?.previousElementSibling as HTMLTableRowElement;
         newRowId = rowElement?.id;
       } else if (event.key === 'ArrowDown') {
-        rowElement = currentRow?.nextElementSibling;
+        rowElement = currentRow?.nextElementSibling as HTMLTableRowElement;
         newRowId = rowElement?.id;
 
         if (rows.length === index + 1) {
@@ -104,12 +112,10 @@ const TableBody = ({
   );
 
   return (
-    <div
-      ref={tableBodyRef}
-      className="h-full flex flex-col overflow-x-hidden overflow-y-auto"
-    >
+    <tbody ref={tableBodyRef} className="h-full overflow-hidden">
       {rows.map((row, index) => (
         <BodyRow
+          shouldScroll={shouldScroll && rows.length - 1 === index}
           key={index}
           index={index}
           row={row}
@@ -126,6 +132,10 @@ const TableBody = ({
           verticalBarColorHash={getVerticalBarColorHash?.(row) ?? ''}
           getRowObjectKey={getRowObjectKey}
           onRowClick={() => {
+            if (isResizing) {
+              return;
+            }
+
             onRowClick(row?.originalData);
             setIsRowFocused(true);
           }}
@@ -134,24 +144,27 @@ const TableBody = ({
           rowHeightClass={rowHeightClass}
         />
       ))}
-      <div
-        className="grow outline-0 flex divide-x divide-american-silver dark:divide-quartz"
+
+      <tr
+        className="outline-0 divide-x divide-american-silver dark:divide-quartz"
         onClick={() => {
+          if (isResizing) {
+            return;
+          }
           setIsRowFocused(false);
         }}
       >
-        {columns.map(({ width }, index) => (
-          <div
-            key={index}
-            className="px-1 py-px outline-0 h-full flex-1"
-            style={{
-              minWidth: width,
-            }}
-          />
+        {columns.map((_, index) => (
+          <td key={index} className="px-1 py-px outline-0 h-full relative">
+            <div
+              className="absolute right-[-2px] cursor-ew-resize h-full w-2 z-50 top-0"
+              data-column-resize-handle={columns[index].accessorKey}
+            />
+          </td>
         ))}
-      </div>
-    </div>
+      </tr>
+    </tbody>
   );
 };
 
-export default TableBody;
+export default memo(TableBody);

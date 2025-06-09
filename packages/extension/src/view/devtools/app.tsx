@@ -24,7 +24,8 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { getSessionStorage } from '@google-psat/common';
-
+import 'github-markdown-css/github-markdown.css';
+import '@google-psat/design-system/theme.css';
 /**
  * Internal dependencies.
  */
@@ -32,6 +33,20 @@ import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
+
+const setThemeMode = (isDarkMode: boolean) => {
+  if (isDarkMode) {
+    document.body.classList.add('dark');
+    document.body.classList.remove('light');
+  } else {
+    document.body.classList.add('light');
+    document.body.classList.remove('dark');
+  }
+};
+
+// set initial theme mode based on devtools theme
+const theme = chrome.devtools.panels.themeName;
+setThemeMode(theme === 'dark');
 
 const App: React.FC = () => {
   const [sidebarData, setSidebarData] = useState(TABS);
@@ -56,6 +71,24 @@ const App: React.FC = () => {
     buttonText: I18n.getMessage('refreshPanel'),
   });
 
+  // update theme mode when the browser theme changes
+  useEffect(() => {
+    const onColorSchemeChange = (e: MediaQueryListEvent) => {
+      setThemeMode(e.matches);
+    };
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mediaQuery) {
+      mediaQuery.addEventListener('change', onColorSchemeChange);
+    }
+
+    return () => {
+      if (mediaQuery) {
+        mediaQuery.removeEventListener('change', onColorSchemeChange);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     (async () => {
       if (!chrome.devtools.inspectedWindow.tabId) {
@@ -63,12 +96,9 @@ const App: React.FC = () => {
       }
 
       const data = await getSessionStorage('persistentSetting');
-      const syncData = await chrome.storage.sync.get();
 
       if (data?.selectedSidebarItem) {
         setDefaultSelectedItemKey(data?.selectedSidebarItem);
-      } else if (syncData?.psLandingPageViewed) {
-        setDefaultSelectedItemKey(SIDEBAR_ITEMS_KEYS.DASHBOARD);
       }
 
       if (data?.sidebarCollapsedState) {
@@ -81,7 +111,7 @@ const App: React.FC = () => {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
           newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
-            SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+            SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
           ].children[SIDEBAR_ITEMS_KEYS.COOKIES].dropdownOpen =
             data?.cookieDropdownOpen;
           return newSidebarData;

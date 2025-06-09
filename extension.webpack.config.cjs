@@ -25,6 +25,10 @@ const root = {
   entry: {
     'service-worker': './src/serviceWorker/index.ts',
     'content-script': './src/contentScript/index.ts',
+    'js-cookie-content-script': './src/contentScript/jsCookie.ts',
+    'prebid-interface': './src/contentScript/prebid/prebidInterface.tsx',
+    'prebid-content-script':
+      './src/contentScript/prebid/prebidContentScript.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/extension'),
@@ -123,6 +127,7 @@ const dashboardReport = {
   output: {
     path: path.resolve(__dirname, './dist/extension/devtools'),
     filename: 'devtoolsDashboard.js',
+    publicPath: '/',
   },
   plugins: [
     new WebpackBar({

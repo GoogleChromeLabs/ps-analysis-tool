@@ -26,3 +26,9 @@ type BulletListItem = {
   sidebarKey?: string;
   pubDate?: string;
 };
+
+declare module 'entities/decode' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type EntityDecoder = any;
+  export { EntityDecoder };
+}

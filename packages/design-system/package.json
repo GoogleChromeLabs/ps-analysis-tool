@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/design-system",
-  "version": "0.13.0",
+  "version": "0.14.1",
   "description": "A package for presentational components that are being used in multiple packages",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
@@ -8,6 +8,9 @@
   "customExports": {
     ".": {
       "default": "./src/index.ts"
+    },
+    "./theme.css": {
+      "default": "./src/theme.css"
     }
   },
   "scripts": {
@@ -38,6 +41,7 @@
   "dependencies": {
     "@google-psat/common": "*",
     "@google-psat/i18n": "*",
+    "@microlink/react-json-view": "^1.26.1",
     "@types/lodash-es": "^4.17.12",
     "classnames": "^2.3.2",
     "fast-xml-parser": "^4.4.1",
@@ -45,9 +49,9 @@
     "jszip": "^3.10.1",
     "lodash-es": "^4.17.21",
     "p-queue": "^7.3.4",
-    "re-resizable": "^6.9.9",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "re-resizable": "^6.11.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "use-context-selector": "^1.4.1"
   }
 }

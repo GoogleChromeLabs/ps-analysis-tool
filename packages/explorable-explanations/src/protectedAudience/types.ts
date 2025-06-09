@@ -165,6 +165,7 @@ export type AuctionStepProps = {
   isBranchComponent?: boolean;
   isForBranches?: boolean;
   forceScroll?: boolean;
+  stepDelay?: number;
 };
 
 export type AuctionStep = {

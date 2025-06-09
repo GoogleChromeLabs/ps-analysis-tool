@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -30,7 +30,7 @@ import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
 import TableChipsBar from './filtersSidebar/chips';
 import TableFiltersSidebar from './filtersSidebar';
-
+import classNames from 'classnames';
 interface TableProps {
   selectedKey: string | undefined | null;
   isFiltersSidebarOpen?: boolean;
@@ -40,6 +40,8 @@ interface TableProps {
   hideSearch?: boolean;
   hideTableTopBar?: boolean;
   rowHeightClass?: string;
+  shouldScroll?: boolean;
+  showOverflow?: boolean;
 }
 
 const Table = ({
@@ -51,9 +53,10 @@ const Table = ({
   hideSearch,
   hideTableTopBar,
   rowHeightClass,
+  shouldScroll = false,
+  showOverflow = true,
 }: TableProps) => {
   const {
-    tableContainerRef,
     filters,
     isSelectAllFilterSelected,
     toggleFilterSelection,
@@ -64,8 +67,11 @@ const Table = ({
     searchValue,
     setSearchValue,
     exportTableData,
+    count,
+    tableContainerRef,
+    loadMoreData,
+    hasMoreData,
   } = useTable(({ state, actions }) => ({
-    tableContainerRef: state.tableContainerRef,
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
     toggleFilterSelection: actions.toggleFilterSelection,
@@ -76,6 +82,10 @@ const Table = ({
     searchValue: state.searchValue,
     setSearchValue: actions.setSearchValue,
     exportTableData: actions.exportTableData,
+    count: state.count,
+    tableContainerRef: state.tableContainerRef,
+    loadMoreData: actions.loadMoreData,
+    hasMoreData: state.hasMoreData,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -94,7 +104,7 @@ const Table = ({
         tableRef.current &&
         !tableRef.current.contains(event.target as Node)
       ) {
-        setIsRowFocused(true);
+        setIsRowFocused(false);
       }
     };
     globalThis?.document?.addEventListener('click', handleClickOutside, true);
@@ -125,6 +135,20 @@ const Table = ({
     [showColumnsMenu]
   );
 
+  const scrollListener = useCallback(
+    (event: React.UIEvent<HTMLTableElement>) => {
+      const target = event.target as HTMLTableElement;
+      const scrollTop = target.scrollTop;
+      const scrollHeight = target.scrollHeight;
+      const clientHeight = target.clientHeight;
+
+      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight && hasMoreData) {
+        loadMoreData();
+      }
+    },
+    [hasMoreData, loadMoreData]
+  );
+
   return (
     <div className="w-full h-full flex flex-col text-raisin-black dark:text-bright-gray">
       {!hideTableTopBar && (
@@ -139,17 +163,20 @@ const Table = ({
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             exportTableData={exportTableData}
+            count={count}
           />
-          {!hideFiltering && (
-            <TableChipsBar
-              selectedFilters={selectedFilters}
-              resetFilters={resetFilters}
-              toggleFilterSelection={toggleFilterSelection}
-            />
-          )}
+          <div className="flex items-center justify-between gap-1 px-2 py-0.5 bg-anti-flash-white dark:bg-raisin-black">
+            {!hideFiltering && (
+              <TableChipsBar
+                selectedFilters={selectedFilters}
+                resetFilters={resetFilters}
+                toggleFilterSelection={toggleFilterSelection}
+              />
+            )}
+          </div>
         </>
       )}
-      <div className="w-full flex-1 overflow-hidden h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz">
+      <div className="w-full flex-1 h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz overflow-hidden">
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"
@@ -169,15 +196,18 @@ const Table = ({
         )}
         <div
           ref={tableContainerRef}
-          className="relative h-full w-full overflow-auto"
+          className={classNames('relative h-full w-full flex-1', {
+            'overflow-auto': showOverflow,
+          })}
+          onScroll={scrollListener}
         >
           <ColumnMenu
             open={showColumnsMenu}
             onClose={setShowColumnsMenu}
             position={columnPosition}
           />
-          <div
-            className="h-full w-full overflow-hidden flex flex-col"
+          <table
+            className="h-full w-full table-auto border-separate border-spacing-0 relative"
             style={{
               minWidth: minWidth ?? '70rem',
             }}
@@ -193,12 +223,13 @@ const Table = ({
               setIsRowFocused={setIsRowFocused}
               selectedKey={selectedKey}
               rowHeightClass={rowHeightClass}
+              shouldScroll={shouldScroll}
             />
-          </div>
+          </table>
         </div>
       </div>
     </div>
   );
 };
 
-export default Table;
+export default memo(Table);

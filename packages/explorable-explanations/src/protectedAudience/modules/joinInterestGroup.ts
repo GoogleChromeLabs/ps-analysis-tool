@@ -113,6 +113,7 @@ const joinInterestGroup: JoinInterestGroup = {
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).x,
         y1: () =>
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y + 40,
+        text: 'Tagging call',
       },
       callBack: (returnValue) => {
         app.joinInterestGroup.nextTipCoordinates = returnValue;
@@ -130,7 +131,6 @@ const joinInterestGroup: JoinInterestGroup = {
         y: () =>
           getCoordinateValues(app.joinInterestGroup.nextTipCoordinates).y +
           config.flow.arrowSize,
-        color: config.flow.colors.box.notBrowser,
         info: ADVERTIZER_CONFIG.DSPS.info,
       },
       delay: 1000,
@@ -208,7 +208,11 @@ const joinInterestGroup: JoinInterestGroup = {
     });
 
     app.promiseQueue?.push((cb) => {
-      if (app.p && !app.isInteractiveMode) {
+      if (
+        app.p &&
+        !app.isInteractiveMode &&
+        !app.isRevisitingNodeInInteractiveMode
+      ) {
         const circleItem = config.timeline.circles[index];
         const { diameter, verticalSpacing } = config.timeline.circleProps;
         const circleVerticalSpace = verticalSpacing + diameter;
