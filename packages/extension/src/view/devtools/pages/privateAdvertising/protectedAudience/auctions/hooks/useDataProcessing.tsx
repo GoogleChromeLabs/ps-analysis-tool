@@ -22,36 +22,45 @@ import { useCallback, useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience } from '../../../../../stateProviders';
+import { usePrebid, useProtectedAudience } from '../../../../../stateProviders';
 
 const useDataProcessing = () => {
-  const { paapi, prebidResponse, isMultiSeller } = useProtectedAudience(
-    ({ state }) => ({
-      paapi: {
-        auctionEvents: state.auctionEvents,
-        adsAndBidders: state.adsAndBidders,
-        isMultiSeller: state.isMultiSellerAuction,
-        receivedBids: state.receivedBids,
-        noBids: state.noBids,
-      },
-      prebidResponse: state.prebidResponse,
+  const { paapi, isMultiSeller } = useProtectedAudience(({ state }) => ({
+    paapi: {
+      auctionEvents: state.auctionEvents,
+      adsAndBidders: state.adsAndBidders,
       isMultiSeller: state.isMultiSellerAuction,
-    })
-  );
+      receivedBids: state.receivedBids,
+      noBids: state.noBids,
+    },
+    isMultiSeller: state.isMultiSellerAuction,
+  }));
+
+  const {
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidNoBids,
+    prebidReceivedBids,
+  } = usePrebid(({ state }) => ({
+    prebidAdunits: state.prebidAdUnits,
+    prebidAuctionEvents: state.prebidAuctionEvents,
+    prebidReceivedBids: state.prebidReceivedBids,
+    prebidNoBids: state.prebidNoBids,
+  }));
 
   const adUnits = useMemo(() => {
-    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-      return Object.keys(prebidResponse.adUnits);
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      return Object.keys(prebidAdunits);
     }
 
     return Object.keys(paapi?.adsAndBidders || {});
-  }, [paapi.adsAndBidders, prebidResponse.adUnits]);
+  }, [paapi.adsAndBidders, prebidAdunits]);
 
   const adUnitsTimestamp = useMemo(() => {
     const _adUnitsTimestamp: Record<string, string[]> = {};
 
-    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-      Object.values(prebidResponse?.auctionEvents || {}).forEach((events) => {
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      Object.values(prebidAuctionEvents || {}).forEach((events) => {
         const _adUnits = events[0].adUnitCodes as string[];
 
         _adUnits.forEach((adUnit) => {
@@ -84,15 +93,15 @@ const useDataProcessing = () => {
   }, [
     paapi.adsAndBidders,
     paapi.auctionEvents,
-    prebidResponse.adUnits,
-    prebidResponse.auctionEvents,
+    prebidAdunits,
+    prebidAuctionEvents,
   ]);
 
   const adUnitsAuctionId = useMemo(() => {
     const _adUnitsAuctionId: Record<string, Record<string, string>> = {};
 
-    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-      Object.values(prebidResponse.auctionEvents).forEach((events) => {
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      Object.values(prebidAuctionEvents).forEach((events) => {
         const _adUnits = events[0].adUnitCodes as string[];
         const time = new Date(events[0].timestamp).toISOString();
 
@@ -127,8 +136,8 @@ const useDataProcessing = () => {
   }, [
     paapi.adsAndBidders,
     paapi.auctionEvents,
-    prebidResponse.adUnits,
-    prebidResponse.auctionEvents,
+    prebidAdunits,
+    prebidAuctionEvents,
   ]);
 
   const adUnitsMediaContainerSize = useMemo(() => {
@@ -140,8 +149,8 @@ const useDataProcessing = () => {
       paapi: {},
     };
 
-    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-      Object.values(prebidResponse.adUnits).forEach((data) => {
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      Object.values(prebidAdunits).forEach((data) => {
         const mediaContainerSize = data.mediaContainerSize as number[][];
 
         if (mediaContainerSize) {
@@ -207,12 +216,12 @@ const useDataProcessing = () => {
     };
 
     return _adUnitsMediaContainerSize;
-  }, [paapi.adsAndBidders, prebidResponse.adUnits]);
+  }, [paapi.adsAndBidders, prebidAdunits]);
 
   const adUnitsBidders = useMemo(() => {
     const _adUnitBidders: Record<string, Record<string, string[]>> = {};
-    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-      Object.values(prebidResponse.adUnits).forEach((data) => {
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      Object.values(prebidAdunits).forEach((data) => {
         const bidders = data.bidders as string[];
 
         if (bidders) {
@@ -247,13 +256,13 @@ const useDataProcessing = () => {
     }
 
     return _adUnitBidders;
-  }, [paapi.adsAndBidders, prebidResponse.adUnits]);
+  }, [paapi.adsAndBidders, prebidAdunits]);
 
   const adUnitsBidsCount = useMemo(() => {
     const _adUnitBidsCount: Record<string, Record<string, number>> = {};
 
-    if (Object.keys(prebidResponse?.receivedBids || {}).length > 0) {
-      Object.values(prebidResponse.receivedBids).forEach((data) => {
+    if (Object.keys(prebidReceivedBids || {}).length > 0) {
+      Object.values(prebidReceivedBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
         if (adUnit) {
@@ -279,13 +288,13 @@ const useDataProcessing = () => {
     }
 
     return _adUnitBidsCount;
-  }, [paapi.receivedBids, prebidResponse.receivedBids]);
+  }, [paapi.receivedBids, prebidReceivedBids]);
 
   const adUnitsNoBidsCount = useMemo(() => {
     const _adUnitNoBidsCount: Record<string, Record<string, number>> = {};
 
-    if (Object.keys(prebidResponse?.noBids || {}).length > 0) {
-      Object.values(prebidResponse.noBids).forEach((data) => {
+    if (Object.keys(prebidNoBids || {}).length > 0) {
+      Object.values(prebidNoBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
 
         if (adUnit) {
@@ -311,13 +320,13 @@ const useDataProcessing = () => {
     }
 
     return _adUnitNoBidsCount;
-  }, [paapi.noBids, prebidResponse.noBids]);
+  }, [paapi.noBids, prebidNoBids]);
 
   const adUnitsWinnerBid = useMemo(() => {
     const _adUnitWinnerBid: Record<string, Record<string, string>> = {};
 
-    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-      Object.values(prebidResponse.adUnits).forEach((data) => {
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      Object.values(prebidAdunits).forEach((data) => {
         const winnerBid = data.winningBidder as string;
 
         if (winnerBid) {
@@ -343,7 +352,7 @@ const useDataProcessing = () => {
     }
 
     return _adUnitWinnerBid;
-  }, [paapi.adsAndBidders, prebidResponse.adUnits]);
+  }, [paapi.adsAndBidders, prebidAdunits]);
 
   const adUnitsWinnerContainerSize = useMemo(() => {
     const _adUnitWinnerContainerSize: Record<
@@ -351,8 +360,8 @@ const useDataProcessing = () => {
       Record<string, number[]>
     > = {};
 
-    if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
-      Object.values(prebidResponse.adUnits).forEach((data: any) => {
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      Object.values(prebidAdunits).forEach((data: any) => {
         const mediaContainerSize = data
           ?.winningMediaContainerSize?.[0] as number[];
 
@@ -378,11 +387,11 @@ const useDataProcessing = () => {
     }
 
     return _adUnitWinnerContainerSize;
-  }, [paapi.adsAndBidders, prebidResponse.adUnits]);
+  }, [paapi.adsAndBidders, prebidAdunits]);
 
   const getPrebidData = useCallback(
     (adUnit: string, time: string) => {
-      const auction = Object.entries(prebidResponse?.auctionEvents || {}).find(
+      const auction = Object.entries(prebidAuctionEvents || {}).find(
         ([, events]) => {
           return (
             events[0].adUnitCodes.includes(adUnit) &&
@@ -393,7 +402,7 @@ const useDataProcessing = () => {
 
       return auction;
     },
-    [prebidResponse.auctionEvents]
+    [prebidAuctionEvents]
   );
 
   const getPAData = useCallback(

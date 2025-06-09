@@ -30,7 +30,7 @@ import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies
  */
-import { useProtectedAudience } from '../../../stateProviders';
+import { usePrebid, useProtectedAudience } from '../../../stateProviders';
 
 const Panel = () => {
   const { panel, highlightTab } = useTabs(({ state, actions }) => ({
@@ -51,14 +51,17 @@ const Panel = () => {
     receivedBids,
     noBids,
     auctionEvents,
-    prebidResponse,
   } = useProtectedAudience(({ state }) => ({
     interestGroupDetails: state.interestGroupDetails,
     adsAndBidders: state.adsAndBidders,
     receivedBids: state.receivedBids,
     noBids: state.noBids,
     auctionEvents: state.auctionEvents ?? {},
-    prebidResponse: state.prebidResponse,
+  }));
+
+  const { prebidAdunits, prebidAuctionEvents } = usePrebid(({ state }) => ({
+    prebidAdunits: state.prebidAdUnits,
+    prebidAuctionEvents: state.prebidAuctionEvents,
   }));
 
   const data = useRef<{
@@ -67,7 +70,8 @@ const Panel = () => {
     receivedBids?: typeof receivedBids;
     noBids?: typeof noBids;
     auctionEvents?: typeof auctionEvents;
-    prebidResponse?: typeof prebidResponse;
+    prebidAdunits?: typeof prebidAdunits;
+    prebidAuctionEvents?: typeof prebidAuctionEvents;
   } | null>(null);
 
   useEffect(() => {
@@ -143,32 +147,25 @@ const Panel = () => {
       };
     }
 
-    if (
-      !isEqual(data.current?.prebidResponse?.adUnits, prebidResponse?.adUnits)
-    ) {
-      if (Object.keys(prebidResponse?.adUnits || {}).length > 0) {
+    if (!isEqual(data.current?.prebidAdunits, prebidAdunits)) {
+      if (Object.keys(prebidAdunits || {}).length > 0) {
         highlightTab(4);
       }
 
       store = {
         ...store,
-        prebidResponse,
+        prebidAdunits,
       };
     }
 
-    if (
-      !isEqual(
-        data.current?.prebidResponse?.auctionEvents,
-        prebidResponse?.auctionEvents
-      )
-    ) {
-      if (Object.keys(prebidResponse?.auctionEvents || {}).length > 0) {
+    if (!isEqual(data.current?.auctionEvents, auctionEvents)) {
+      if (Object.keys(auctionEvents || {}).length > 0) {
         highlightTab(5);
       }
 
       store = {
         ...store,
-        prebidResponse,
+        auctionEvents,
       };
     }
 
@@ -180,7 +177,8 @@ const Panel = () => {
     interestGroupDetails,
     noBids,
     receivedBids,
-    prebidResponse,
+    prebidAdunits,
+    prebidAuctionEvents,
   ]);
 
   useEffect(() => {
