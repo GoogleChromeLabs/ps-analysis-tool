@@ -39,6 +39,7 @@ export interface TabsStoreContext {
       Element: ((props: any) => React.JSX.Element) | null;
       props?: Record<string, any>;
       className?: string;
+      containerClassName?: string;
     };
     storage: string[];
     isGroup: boolean;

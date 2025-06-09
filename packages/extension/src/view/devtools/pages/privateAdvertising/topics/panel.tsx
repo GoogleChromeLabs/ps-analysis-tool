@@ -22,7 +22,7 @@ import React from 'react';
 const Panel = () => {
   const { panel } = useTabs(({ state }) => ({ panel: state.panel }));
   const ActiveTabContent = panel.Element;
-  const { props, className } = panel;
+  const { props, className, containerClassName } = panel;
 
   return (
     <LandingPage
@@ -34,6 +34,7 @@ const Panel = () => {
           </div>
         )
       }
+      extraClasses={containerClassName}
       {...props}
     />
   );
