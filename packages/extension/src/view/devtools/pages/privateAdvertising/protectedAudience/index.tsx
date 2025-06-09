@@ -72,34 +72,40 @@ const ProtectedAudience = () => {
           title: 'Interest Groups',
           content: {
             Element: InterestGroups,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Ad Units',
           content: {
             Element: AdUnits,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Auctions',
           content: {
             Element: Auctions,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Bids',
           content: {
             Element: Bids,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Prebid',
           content: {
             Element: Prebid,
+            className: 'h-full',
+            containerClassName: 'h-full',
           },
         },
       ],
