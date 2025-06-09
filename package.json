@@ -4,7 +4,7 @@
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"build-storybook": "storybook build",
-		"build:all": "npm run build:tsc-packages && npm run build:cli-dashboard && npm run webpack:build:cli && npm run webpack:build:ext",
+		"build:all": "npm run build:tsc-packages && npm run build:cli-dashboard && npm run webpack:build:cli && npm run vite:build:ext",
 		"build:tsc-packages": "npm run build:i18n && npm run build:common && npm run build:design-system && npm run build:library-detection && npm run build:analysis-utils && npm run build:report",
 		"dev:tsc-packages": "run-p dev:i18n dev:common dev:design-system dev:library-detection dev:analysis-utils dev:report",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
@@ -34,10 +34,10 @@
 		"build:ee:pa": "npm run build -w @google-psat/explorable-explanations",
 		"build:cli-dashboard": "cross-env NODE_ENV=production npm run build -w @google-psat/cli-dashboard",
 		"cookie-db:update": "node scripts/update-cookie-db.cjs",
-		"webpack:dev:ext": "npm run dev -w @google-psat/extension",
-		"dev:ext": "run-p dev:tsc-packages webpack:dev:ext",
-		"webpack:build:ext": "cross-env NODE_ENV=production npm run build -w @google-psat/extension",
-		"build:ext": "npm run build:tsc-packages && npm run build:ee:pa && npm run webpack:build:ext",
+		"dev:ext": "run-p dev:tsc-packages vite:dev:ext",
+		"vite:dev:ext": "npm run dev -w @google-psat/extension",
+		"vite:build:ext": "cross-env NODE_ENV=production npm run build -w @google-psat/extension",
+		"build:ext": "npm run build:tsc-packages && npm run build:ee:pa && npm run vite:build:ext",
 		"build:ext:google": "npm i && npm run build:ext && node scripts/update-manifest-key.cjs",
 		"lint": "npm-run-all --parallel lint:*",
 		"lint:js": "eslint .",
@@ -53,7 +53,6 @@
 		"test:cli:e2e": "jest --config=tests/cliE2E.jest.config.cjs --runInBand",
 		"test:extension:e2e": "jest --config=tests/extensionE2E.jest.config.cjs --runInBand",
 		"test:coverage": "npm run test -- --collectCoverage && open coverage/lcov-report/index.html",
-		"serve": "webpack serve",
 		"start": "npm i && npm run dev:ext"
 	},
 	"repository": {

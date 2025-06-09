@@ -48,6 +48,11 @@ export default defineConfig(() => {
       outDir: `../../../../../dist/extension/${page}`,
       sourcemap: isDev,
     },
+    define: {
+      // since we always run this code in production mode,
+      // we use this to differentiate watch mode from regular production mode
+      'process.env.isDev': JSON.stringify(isDev),
+    },
     plugins: [
       viteStaticCopy({
         targets: [
