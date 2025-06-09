@@ -30,7 +30,7 @@ import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies
  */
-import { useProtectedAudience } from '../../../stateProviders';
+import { usePrebid, useProtectedAudience } from '../../../stateProviders';
 
 const Panel = () => {
   const { panel, highlightTab } = useTabs(({ state, actions }) => ({
@@ -59,12 +59,19 @@ const Panel = () => {
     auctionEvents: state.auctionEvents ?? {},
   }));
 
+  const { prebidAdunits, prebidAuctionEvents } = usePrebid(({ state }) => ({
+    prebidAdunits: state.prebidAdUnits,
+    prebidAuctionEvents: state.prebidAuctionEvents,
+  }));
+
   const data = useRef<{
     interestGroupDetails?: typeof interestGroupDetails;
     adsAndBidders?: typeof adsAndBidders;
     receivedBids?: typeof receivedBids;
     noBids?: typeof noBids;
     auctionEvents?: typeof auctionEvents;
+    prebidAdunits?: typeof prebidAdunits;
+    prebidAuctionEvents?: typeof prebidAuctionEvents;
   } | null>(null);
 
   useEffect(() => {
@@ -140,6 +147,28 @@ const Panel = () => {
       };
     }
 
+    if (!isEqual(data.current?.prebidAdunits, prebidAdunits)) {
+      if (Object.keys(prebidAdunits || {}).length > 0) {
+        highlightTab(4);
+      }
+
+      store = {
+        ...store,
+        prebidAdunits,
+      };
+    }
+
+    if (!isEqual(data.current?.auctionEvents, auctionEvents)) {
+      if (Object.keys(auctionEvents || {}).length > 0) {
+        highlightTab(5);
+      }
+
+      store = {
+        ...store,
+        auctionEvents,
+      };
+    }
+
     data.current = store;
   }, [
     adsAndBidders,
@@ -148,6 +177,8 @@ const Panel = () => {
     interestGroupDetails,
     noBids,
     receivedBids,
+    prebidAdunits,
+    prebidAuctionEvents,
   ]);
 
   useEffect(() => {

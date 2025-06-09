@@ -23,7 +23,7 @@ import type { CookieTableData } from '@google-psat/common';
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
-import { useCookie, useProtectedAudience } from '../stateProviders';
+import { useCookie, usePrebid, useProtectedAudience } from '../stateProviders';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -54,12 +54,16 @@ const useFrameOverlay = (
     canStartInspecting: state.canStartInspecting,
   }));
 
-  const { selectedAdUnit, adsAndBidders, prebidResponse } =
-    useProtectedAudience(({ state }) => ({
+  const { selectedAdUnit, adsAndBidders } = useProtectedAudience(
+    ({ state }) => ({
       selectedAdUnit: state.selectedAdUnit,
       adsAndBidders: state.adsAndBidders,
-      prebidResponse: state.prebidResponse,
-    }));
+    })
+  );
+
+  const { prebidAdUnits } = usePrebid(({ state }) => ({
+    prebidAdUnits: state.prebidAdUnits,
+  }));
 
   const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
     useState(false);
@@ -295,23 +299,23 @@ const useFrameOverlay = (
           selectedAdUnit,
           numberOfBidders:
             adsAndBidders[selectedAdUnit]?.bidders?.length ??
-            prebidResponse.adUnits[selectedAdUnit]?.bidders?.length ??
+            prebidAdUnits[selectedAdUnit]?.bidders?.length ??
             0,
           bidders:
             adsAndBidders[selectedAdUnit]?.bidders ??
-            prebidResponse.adUnits[selectedAdUnit]?.bidders ??
+            prebidAdUnits[selectedAdUnit]?.bidders ??
             [],
           winningBid:
             adsAndBidders[selectedAdUnit]?.winningBid ??
-            prebidResponse.adUnits[selectedAdUnit]?.winningBid ??
+            prebidAdUnits[selectedAdUnit]?.winningBid ??
             null,
           bidCurrency:
             adsAndBidders[selectedAdUnit]?.bidCurrency ??
-            prebidResponse.adUnits[selectedAdUnit]?.bidCurrency ??
+            prebidAdUnits[selectedAdUnit]?.bidCurrency ??
             null,
           winningBidder:
             adsAndBidders[selectedAdUnit]?.winningBidder ??
-            prebidResponse.adUnits[selectedAdUnit]?.winningBidder ??
+            prebidAdUnits[selectedAdUnit]?.winningBidder ??
             null,
           isInspecting,
         });
@@ -327,7 +331,7 @@ const useFrameOverlay = (
     selectedFrame,
     selectedAdUnit,
     adsAndBidders,
-    prebidResponse?.adUnits,
+    prebidAdUnits,
   ]);
 
   useEffect(() => {
