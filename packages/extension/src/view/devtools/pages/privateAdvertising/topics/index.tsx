@@ -68,6 +68,7 @@ const Topics = () => {
                 'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
             },
             className: 'overflow-hidden',
+            containerClassName: 'overflow-hidden',
           },
         },
         {
@@ -81,6 +82,7 @@ const Topics = () => {
                 'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
             },
             className: 'overflow-hidden',
+            containerClassName: 'overflow-hidden',
           },
         },
         {
