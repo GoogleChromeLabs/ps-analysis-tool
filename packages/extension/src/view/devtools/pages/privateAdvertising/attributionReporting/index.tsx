@@ -54,21 +54,24 @@ const AttributionReporting = () => {
           title: 'Active Sources',
           content: {
             Element: ActiveSources,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Source Registrations',
           content: {
             Element: SourceRegistrations,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Trigger Registrations',
           content: {
             Element: TriggerRegistrations,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
       ],

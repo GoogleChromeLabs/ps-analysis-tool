@@ -32,7 +32,7 @@ const Panel = () => {
   }));
 
   const ActiveTabContent = panel.Element;
-  const { props, className } = panel;
+  const { props, className, containerClassName } = panel;
 
   const { sourcesRegistration, triggerRegistration, filter } =
     useAttributionReporting(({ state }) => ({
@@ -128,6 +128,7 @@ const Panel = () => {
           </div>
         )
       }
+      extraClasses={containerClassName}
       {...props}
     />
   );
