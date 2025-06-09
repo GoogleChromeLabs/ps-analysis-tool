@@ -29,7 +29,7 @@ import type { PrebidDebugModuleConfigRule } from '@google-psat/common';
  * Internal dependencies
  */
 import { useProtectedAudience } from '../../../../../../../stateProviders';
-import { matchRuleTargets } from '../constants';
+import { matchRuleTargets } from '../../../../../../../stateProviders/prebid/constants';
 
 interface RuleProps {
   options: { label: string; value: string }[];
