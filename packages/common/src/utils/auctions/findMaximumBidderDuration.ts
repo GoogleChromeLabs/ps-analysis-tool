@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const formatDuration = (value: string) => {
-  const duration = parseFloat(value);
-  return Number.isInteger(duration)
-    ? duration.toString()
-    : duration.toFixed(2).replace(/\.?0+$/, '');
-};
+/**
+ * Internal dependencies.
+ */
+import type { Bidder } from './types';
 
-export default formatDuration;
+export const findMaximumBidderDuration = (bidders: Bidder[]) => {
+  return bidders.reduce((max, bidder) => {
+    const duration = parseFloat(bidder.duration);
+    return duration > max ? duration : max;
+  }, 0);
+};

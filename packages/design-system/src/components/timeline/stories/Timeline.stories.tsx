@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import type { Meta, StoryObj } from '@storybook/react';
+import { prepareTimelineData } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import Timeline from '..';
 import prebidResponse from './dummy-data';
-import prepareTimelineData from '../utils/prepareTimelineData';
 
 const meta: Meta<typeof Timeline> = {
   title: 'DesignSystem/Timeline',

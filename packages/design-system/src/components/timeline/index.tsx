@@ -17,13 +17,16 @@
  * External dependencies.
  */
 import React, { useEffect, useRef, useState, useMemo } from 'react';
+import {
+  findMaximumBidderDuration,
+  formatDuration,
+  type Bidder,
+  BidderType,
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import { Bidder, BidderType } from './types';
-import findMaximumBidderDuration from './utils/findMaximumBidderDuration';
-import formatDuration from './utils/formatDuration';
 import { HammerIcon } from '../../icons';
 
 const INITIAL_TIME = 50;

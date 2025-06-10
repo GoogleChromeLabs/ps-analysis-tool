@@ -13,16 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import type { Bidder } from '../types';
-
-const findMaximumBidderDuration = (bidders: Bidder[]) => {
-  return bidders.reduce((max, bidder) => {
-    const duration = parseFloat(bidder.duration);
-    return duration > max ? duration : max;
-  }, 0);
+export const formatDuration = (value: string) => {
+  const duration = parseFloat(value);
+  return Number.isInteger(duration)
+    ? duration.toString()
+    : duration.toFixed(2).replace(/\.?0+$/, '');
 };
-
-export default findMaximumBidderDuration;

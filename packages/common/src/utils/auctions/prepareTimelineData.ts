@@ -16,30 +16,20 @@
 /**
  * External dependencies.
  */
+import { type PrebidEvents, PrebidAuctionEventType } from '../../prebid.types';
 import {
-  type PrebidEvents,
   type AuctionEndEvent,
-  PrebidAuctionEventType,
   BidResponse,
   NoBid,
-} from '@google-psat/common';
+} from '../../prebidGlobal.types';
+
 /**
  * Internal dependencies.
  */
-import { Bidder, BidderType } from '../types';
+import { Bidder, BidderType } from './types';
+import { formatTimestampToIST } from './formatTimestampToIST';
 
-const formatTimestampToIST = (timestamp: string) => {
-  const date = new Date(timestamp);
-  return date.toLocaleTimeString('en-IN', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true,
-    timeZoneName: 'short',
-  });
-};
-
-const prepareTimelineData = (prebidResponse: PrebidEvents) => {
+export const prepareTimelineData = (prebidResponse: PrebidEvents) => {
   const auctions: any = {};
 
   Object.entries(prebidResponse.auctionEvents).forEach(
@@ -133,9 +123,6 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
       };
     }
   );
-  //uncomment below line to see storybook.
-  // return auctions['40eb202e-d5fc-44db-b602-5be0a7b1f844'].bidders;
+
   return auctions;
 };
-
-export default prepareTimelineData;

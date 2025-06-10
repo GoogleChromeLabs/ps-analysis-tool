@@ -28,7 +28,7 @@ import {
 /**
  * Internal dependencies.
  */
-import { useSettings } from '../../../../stateProviders';
+import { useSettings, useProtectedAudience } from '../../../../stateProviders';
 import PrebidBidsPanel from './prebid';
 import PaapiBidsPanel from './paapi';
 
@@ -44,6 +44,9 @@ const Bids = () => {
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.PREBID
   );
+  const { prebidResponse } = useProtectedAudience(({ state }) => ({
+    prebidResponse: state.prebidResponse,
+  }));
 
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
