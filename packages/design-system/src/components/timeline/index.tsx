@@ -20,8 +20,9 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import {
   findMaximumBidderDuration,
   formatDuration,
-  type Bidder,
   BidderType,
+  type Bidder,
+  type TimelineData,
 } from '@google-psat/common';
 
 /**
@@ -40,12 +41,7 @@ const BAR_COLORS: Record<BidderType, string> = {
   [BidderType.TIMED_OUT]: '#FC2D04',
 };
 
-interface TimelineProps {
-  auctionTimeout: number;
-  auctionId: string;
-  auctionStartTime: string;
-  auctionTime: string;
-  bidders: Bidder[];
+interface TimelineProps extends TimelineData {
   zoomLevel?: number;
   setSelectedRow: (row: Bidder['data']) => void;
   navigateToAuction: (auctionId: string) => void;

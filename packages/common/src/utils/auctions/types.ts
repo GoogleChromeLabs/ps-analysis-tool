@@ -31,3 +31,11 @@ export interface Bidder {
   adUnitCode: string;
   serverResponseTimeMs?: number;
 }
+
+export interface TimelineData {
+  auctionTimeout: number;
+  auctionId: string;
+  auctionStartTime: string;
+  auctionTime: string;
+  bidders: Bidder[];
+}
