@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import { prepareTimelineData, type Bidder } from '@google-psat/design-system';
+import { prepareTimelineData, type Bidder } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -32,11 +32,13 @@ interface PrebidBidsPanelProps {
 
 const PrebidBidsPanel = ({ storage, setStorage }: PrebidBidsPanelProps) => {
   const { prebidResponse } = useProtectedAudience(({ state }) => ({
-    prebidResponse: state.prebidResponse,
+    prebidReponse: state.prebidResponse,
   }));
 
-  const allTimelines = useMemo(() => {
+  const timelines = useMemo(() => {
     let _timelines: Bidder[] = [];
+
+    console.log(prebidResponse);
 
     if (!prebidResponse?.auctionEvents) {
       return _timelines;
@@ -48,7 +50,7 @@ const PrebidBidsPanel = ({ storage, setStorage }: PrebidBidsPanelProps) => {
   }, [prebidResponse]);
 
   return (
-    <Panel storage={storage} setStorage={setStorage} timelines={allTimelines} />
+    <Panel storage={storage} setStorage={setStorage} timelines={timelines} />
   );
 };
 

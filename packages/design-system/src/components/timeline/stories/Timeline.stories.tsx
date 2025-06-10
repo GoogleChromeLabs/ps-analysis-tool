@@ -41,7 +41,6 @@ export const Primary: Story = {
     return (
       <>
         {Object.entries(auctions).map(([auctionId, auction]) => {
-          console.log(auction.auctionTimeout);
           return (
             <div key={auctionId} style={{ marginBottom: '2rem' }}>
               <Timeline {...auction} />
