@@ -22,6 +22,7 @@ import {
   PillToggle,
   Timeline,
   useTabs,
+  Slider,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
@@ -71,6 +72,7 @@ const Panel = ({
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.ReceivedBids
   );
+  const [zoomLevel, setZoomLevel] = useState<number>(2);
 
   const showBottomTray = useMemo(() => {
     if (pillToggle === PillToggleOptions.ReceivedBids) {
@@ -122,6 +124,7 @@ const Panel = ({
               <div key={auctionId} className="my-4">
                 <Timeline
                   {...auction}
+                  zoomLevel={zoomLevel}
                   setSelectedRow={setSelectedRow}
                   navigateToAuction={() => setPAActiveTab(5)}
                 />
@@ -146,6 +149,20 @@ const Panel = ({
           eeAnimatedTab={eeAnimatedTab}
         />
       </div>
+      {pillToggle === PillToggleOptions.TimelineName && (
+        <div className="absolute top-[18px] right-[20px]">
+          <Slider
+            sliderStep={zoomLevel}
+            setSliderStep={(step) => {
+              setZoomLevel(step);
+            }}
+            label="Zoom"
+            min={1}
+            max={4}
+            step={1}
+          />
+        </div>
+      )}
       <div className="flex-1 overflow-auto text-outer-space-crayola">
         {activePage}
       </div>
