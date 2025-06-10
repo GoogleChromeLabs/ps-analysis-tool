@@ -29,7 +29,11 @@ import {
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import {
+  usePrebid,
+  useProtectedAudience,
+  useSettings,
+} from '../../../../stateProviders';
 import Panel from './panel';
 
 export enum BidsPillOptions {
@@ -39,12 +43,16 @@ export enum BidsPillOptions {
 }
 
 const Bids = () => {
-  const { paapi, prebidReponse } = useProtectedAudience(({ state }) => ({
+  const { paapi } = useProtectedAudience(({ state }) => ({
     paapi: {
       receivedBids: state.receivedBids,
       noBids: state.noBids,
     },
-    prebidReponse: state.prebidResponse,
+  }));
+
+  const { prebidNoBids, prebidReceivedBids } = usePrebid(({ state }) => ({
+    prebidNoBids: state.prebidNoBids,
+    prebidReceivedBids: state.prebidReceivedBids,
   }));
 
   const { isUsingCDP } = useSettings(({ state }) => ({
@@ -66,19 +74,19 @@ const Bids = () => {
   );
   const noBids = useMemo(() => {
     if (panelPillToggle === 'Prebid') {
-      return prebidReponse?.noBids || {};
+      return prebidNoBids || {};
     }
 
     return paapi?.noBids || {};
-  }, [paapi?.noBids, panelPillToggle, prebidReponse.noBids]);
+  }, [paapi?.noBids, panelPillToggle, prebidNoBids]);
 
   const receivedBids = useMemo(() => {
     if (panelPillToggle === 'Prebid') {
-      return prebidReponse?.receivedBids || [];
+      return prebidReceivedBids || [];
     }
 
     return paapi?.receivedBids || [];
-  }, [paapi?.receivedBids, panelPillToggle, prebidReponse.receivedBids]);
+  }, [paapi?.receivedBids, panelPillToggle, prebidReceivedBids]);
 
   const cdpNavigation = useCallback(() => {
     document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
