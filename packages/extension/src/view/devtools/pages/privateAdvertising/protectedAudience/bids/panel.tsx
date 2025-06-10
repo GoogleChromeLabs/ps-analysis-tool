@@ -21,11 +21,7 @@ import { JsonView } from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
-import type {
-  NoBidsType,
-  PrebidNoBidsType,
-  ReceivedBids,
-} from '@google-psat/common';
+import type { NoBidsType, ReceivedBids } from '@google-psat/common';
 import classNames from 'classnames';
 
 /**
@@ -37,7 +33,7 @@ import { BidsPillOptions } from '.';
 
 interface PanelProps {
   receivedBids: ReceivedBids[];
-  noBids: NoBidsType | PrebidNoBidsType;
+  noBids: NoBidsType[keyof NoBidsType][];
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
   eeAnimatedTab?: boolean;

@@ -25,6 +25,7 @@ import {
   useSidebar,
   useTabs,
 } from '@google-psat/design-system';
+import type { NoBidsType } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -72,13 +73,32 @@ const Bids = () => {
   const [bidsPillToggle, setBidsPillToggle] = useState<string>(
     BidsPillOptions.ReceivedBids
   );
-  const noBids = useMemo(() => {
-    if (panelPillToggle === 'Prebid') {
-      return prebidNoBids || {};
+
+  const processedPrebidNoBids = useMemo(() => {
+    if (!prebidNoBids) {
+      return {};
     }
 
-    return paapi?.noBids || {};
-  }, [paapi?.noBids, panelPillToggle, prebidNoBids]);
+    return Object.entries(prebidNoBids).reduce((acc, [key, value]) => {
+      const bids = value?.bidder.map((bid) => ({
+        ownerOrigin: bid,
+        name: bid,
+        ...value,
+      }));
+
+      acc[key] = bids;
+
+      return acc;
+    }, {} as Record<string, NoBidsType[keyof NoBidsType][]>);
+  }, [prebidNoBids]);
+
+  const noBids = useMemo(() => {
+    if (panelPillToggle === 'Prebid') {
+      return Object.values(processedPrebidNoBids).flat() || [];
+    }
+
+    return Object.values(paapi?.noBids) || [];
+  }, [paapi?.noBids, panelPillToggle, processedPrebidNoBids]);
 
   const receivedBids = useMemo(() => {
     if (panelPillToggle === 'Prebid') {
