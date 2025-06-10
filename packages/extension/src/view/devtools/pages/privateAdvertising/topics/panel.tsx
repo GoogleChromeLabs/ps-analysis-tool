@@ -29,7 +29,7 @@ const Panel = () => {
       title="Topics"
       contentPanel={
         ActiveTabContent && (
-          <div className={className}>
+          <div className={className} data-testid="topics-content">
             <ActiveTabContent {...props} />
           </div>
         )

@@ -33,7 +33,7 @@ const Panel = () => {
       title="IP Protection"
       contentPanel={
         ActiveTabContent && (
-          <div className={className}>
+          <div className={className} data-testid="ip-protection-content">
             <ActiveTabContent {...props} />
           </div>
         )

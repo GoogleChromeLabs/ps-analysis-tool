@@ -123,7 +123,10 @@ const Panel = () => {
       title="Attribution Reporting"
       contentPanel={
         ActiveTabContent && (
-          <div className={className}>
+          <div
+            className={className}
+            data-testid="attribution-reporting-content"
+          >
             <ActiveTabContent {...props} />
           </div>
         )
