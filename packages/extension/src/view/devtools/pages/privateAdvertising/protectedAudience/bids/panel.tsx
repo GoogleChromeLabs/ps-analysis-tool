@@ -119,7 +119,7 @@ const Panel = ({
                 <Timeline
                   {...auction}
                   setSelectedRow={setSelectedRow}
-                  navigateToAuction={() => setPAActiveTab(4)}
+                  navigateToAuction={() => setPAActiveTab(5)}
                 />
               </div>
             );

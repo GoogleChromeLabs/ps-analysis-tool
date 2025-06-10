@@ -16,8 +16,8 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import classNames from 'classnames';
-import React, { useRef } from 'react';
 
 interface PillToggleProps {
   options: string[];
@@ -34,14 +34,6 @@ const PillToggle = ({
   eeAnimatedTab,
   width = 'w-max',
 }: PillToggleProps) => {
-  const selectedIndexRef = useRef<number | null>(null);
-
-  options.forEach((option, index) => {
-    if (pillToggle === option) {
-      selectedIndexRef.current = index;
-    }
-  });
-
   return (
     <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">
       {options.map((option, index) => {
@@ -50,7 +42,7 @@ const PillToggle = ({
             key={option}
             style={{ zIndex: options.length - index }}
             className={classNames(
-              `px-5 h-full border-r border-[#B6B6B6] dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
+              `px-5 h-full border-r border-gray-silver dark:border-quartz text-raisin-black dark:text-bright-gray relative`,
               width,
               {
                 'dark:bg-raisin-black bg-white': pillToggle === option,
