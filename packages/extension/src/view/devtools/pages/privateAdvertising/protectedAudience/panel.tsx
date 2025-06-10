@@ -180,7 +180,7 @@ const Panel = () => {
     }
 
     if (!isEqual(data.current?.prebidReceivedBids, prebidReceivedBids)) {
-      if (prebidReceivedBids.length > 0) {
+      if (prebidReceivedBids?.length) {
         highlightTab(6);
       }
 
