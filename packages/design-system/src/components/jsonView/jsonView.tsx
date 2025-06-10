@@ -73,7 +73,9 @@ const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
           enableClipboard={false}
           displayDataTypes={false}
           displayObjectSize={false}
-          shouldCollapse={(object) => object.name !== 'root'}
+          shouldCollapse={(object) =>
+            object.name !== 'root' && Object.keys(object.src).length > 5
+          }
           quotesOnKeys={false}
           {...props}
         />

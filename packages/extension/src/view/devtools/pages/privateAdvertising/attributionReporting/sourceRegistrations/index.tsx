@@ -211,7 +211,7 @@ const SourceRegistrations = () => {
       <ResizableTray
         defaultSize={{
           width: '100%',
-          height: '80%',
+          height: selectedJSON ? '50%' : '90%',
         }}
         enable={{
           bottom: true,
