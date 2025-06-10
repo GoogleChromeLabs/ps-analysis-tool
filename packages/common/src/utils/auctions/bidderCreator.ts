@@ -21,6 +21,7 @@ import { PrebidAuctionEventType } from '../../prebid.types';
 import {
   BidRequestedEvent,
   BidResponse,
+  BidTimeoutEvent,
   NoBid,
 } from '../../prebidGlobal.types';
 import { Bidder, BidderType } from './types';
@@ -89,6 +90,65 @@ export function formNoBidData(
   const bidder: Partial<Bidder> = {
     name: bid.bidder,
     type: BidderType.NO_BID,
+    adUnitCode: bid.adUnitCode,
+    data: bidderRequest,
+  };
+
+  bidder.startTime = bidderRequest.start - auctionEndTimestamp;
+  bidder.data = bidderRequest;
+  bidder.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
+  const noBidElapsedTime =
+    events.find(
+      (event) =>
+        event.eventType === 'noBid' &&
+        //@ts-ignore
+        event.bidderRequestId === bid.bidderRequestId
+    )?.elapsedTime ?? 0;
+
+  const bidRequestedElapsedTime =
+    events.find(
+      (event) =>
+        event.eventType === 'bidRequested' &&
+        //@ts-ignore
+        event.bidderRequestId === bid.bidderRequestId
+    )?.elapsedTime ?? 0;
+  bidder.endTime =
+    bidderRequest.start +
+    noBidElapsedTime -
+    bidRequestedElapsedTime -
+    auctionEndTimestamp;
+  bidder.duration = `${(bidder?.endTime ?? 0) - (bidder?.startTime ?? 0)}`;
+
+  return bidder;
+}
+
+/**
+ * Forms data for bids that received no response
+ * @param timedOutBids Array of bid responses that received no bids
+ * @param bidderRequest The bidder request event data
+ * @param auctionEndTimestamp Timestamp marking the end of the auction
+ * @param events Array of Prebid auction events
+ * @returns {Partial<Bidder> | null} Bidder data object or null if no matching bid is found
+ */
+export function formTimedOutBids(
+  timedOutBids: BidTimeoutEvent[],
+  bidderRequest: BidRequestedEvent,
+  auctionEndTimestamp: number,
+  events: PrebidAuctionEventType[]
+) {
+  const bid = timedOutBids.find(
+    (_bid) =>
+      _bid.auctionId === bidderRequest?.auctionId &&
+      _bid.bidder === bidderRequest.bidder
+  );
+
+  if (!bid) {
+    return null;
+  }
+
+  const bidder: Partial<Bidder> = {
+    name: bid.bidder,
+    type: BidderType.TIMED_OUT,
     adUnitCode: bid.adUnitCode,
     data: bidderRequest,
   };

@@ -22,10 +22,19 @@ import {
   AuctionEndEvent,
   BidRequestedEvent,
   BidResponse,
+  BidTimeoutEvent,
   NoBid,
 } from '../../prebidGlobal.types';
-import { formNoBidData, formReceivedBidData } from './bidderCreator';
+import {
+  formNoBidData,
+  formReceivedBidData,
+  formTimedOutBids,
+} from './bidderCreator';
 import { Bidder, BidderType } from './types';
+
+type PrebidTimeoutEvent = PrebidAuctionEventType & {
+  bids: BidTimeoutEvent;
+};
 
 const formatTimestampToIST = (timestamp: string) => {
   const date = new Date(timestamp);
@@ -88,6 +97,20 @@ export const prepareTimelineData = (
 
       if (noBid) {
         bidders.push(noBid);
+        return;
+      }
+
+      const timedOutBid = formTimedOutBids(
+        events
+          .filter((event) => event.eventType === 'bidTimeout')
+          ?.map((event) => (event as PrebidTimeoutEvent).bids) ?? [],
+        bidderRequest,
+        auctionEnd.timestamp,
+        events
+      );
+
+      if (timedOutBid) {
+        bidders.push(timedOutBid);
         return;
       }
     });
