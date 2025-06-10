@@ -76,3 +76,4 @@ export { default as Timeline } from './timeline';
 export { default as MultiSelectDropDown } from './multiSelectDropDown';
 export { default as Dropdown } from './dropdown';
 export type { OptGroup, Option } from './dropdown/options';
+export { default as Slider } from './slider';
