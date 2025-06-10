@@ -47,7 +47,7 @@ interface TimelineProps {
   auctionTime: string;
   bidders: Bidder[];
   zoomLevel?: number;
-  setSelectedRow: (row: any) => void;
+  setSelectedRow: (row: Bidder['data']) => void;
   navigateToAuction: (auctionId: string) => void;
 }
 

@@ -16,16 +16,20 @@
 /**
  * External dependencies.
  */
+import React, { useMemo, useState } from 'react';
 import {
   JsonView,
   PillToggle,
   Timeline,
   useTabs,
 } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
-import type { NoBidsType, ReceivedBids } from '@google-psat/common';
+import type {
+  NoBidsType,
+  ReceivedBids,
+  PrebidEvents,
+} from '@google-psat/common';
 import classNames from 'classnames';
 
 /**
@@ -44,7 +48,7 @@ enum PillToggleOptions {
 interface PanelProps {
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
-  timelines: any[];
+  timelines: PrebidEvents['auctionEvents'];
   eeAnimatedTab?: boolean;
 }
 
@@ -130,7 +134,7 @@ const Panel = ({
 
   return (
     <div className="flex flex-col pt-4 h-full w-full">
-      <div className="absolute top-[16px] left-[270px]">
+      <div className="absolute top-[16px] left-[250px]">
         <PillToggle
           options={[
             PillToggleOptions.ReceivedBids,
