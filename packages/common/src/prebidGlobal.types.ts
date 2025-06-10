@@ -45,6 +45,7 @@ export interface Bid {
 
 export interface NoBid {
   bidder: string;
+  bidderCode: string;
   adUnitCode: string;
   auctionId: string;
   bidId: string;
@@ -95,6 +96,7 @@ export interface BidRequestedEvent {
   bidder: string;
   auctionId: string;
   bidderRequestId: string;
+  bidderCode: string;
   serverResponseTimeMs?: number; // Time taken for the server to respond
   bids: Array<{
     adUnitCode: string;
@@ -286,6 +288,7 @@ export interface BidResponse {
   creativeId: string;
   netRevenue: boolean;
   bidder: string;
+  bidderCode: string;
   adUnitCode: string;
   auctionId: string;
   bidderRequestId: string;

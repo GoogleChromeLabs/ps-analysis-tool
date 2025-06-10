@@ -37,128 +37,133 @@ const formatTimestampToIST = (timestamp: string) => {
   });
 };
 
-const prepareTimelineData = (prebidResponse: PrebidEvents) => {
+export const prepareTimelineData = (
+  auctionEvents: PrebidEvents['auctionEvents']
+) => {
   const auctions: any = {};
 
-  Object.entries(prebidResponse.auctionEvents).forEach(
-    ([auctionId, events]) => {
-      const bidders: Partial<Bidder>[] = [];
-      auctions[auctionId] = {};
+  Object.entries(auctionEvents).forEach(([auctionId, events]) => {
+    const bidders: Partial<Bidder>[] = [];
+    auctions[auctionId] = {};
 
-      const auctionEnd: AuctionEndEvent = events.find(
-        (item: PrebidAuctionEventType) => item.eventType === 'auctionEnd'
-      ) as AuctionEndEvent;
+    const auctionEnd: AuctionEndEvent = events.find(
+      (item: PrebidAuctionEventType) => item.eventType === 'auctionEnd'
+    ) as AuctionEndEvent;
+    console.log(auctionEnd);
+    if (!auctionEnd) {
+      return;
+    }
 
-      if (!auctionEnd) {
+    const bidderRequests = auctionEnd.bidderRequests.sort(
+      (a, b) => a.start - b.start
+    ) as BidRequestedEvent[];
+
+    const receivedBids = events.filter(
+      (event: any) => event.eventType === 'BidResponse'
+    ) as BidResponse[];
+
+    const noBids = events.filter(
+      (event: any) => event.eventType === 'noBid'
+    ) as NoBid[];
+
+    bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
+      console.log(receivedBids, bidderRequests);
+      const bid = receivedBids.find(
+        (_bid) =>
+          _bid.auctionId === bidderRequest?.auctionId &&
+          (_bid.bidderCode === bidderRequest.bidderCode ||
+            _bid.bidder === bidderRequest.bidderCode)
+      );
+
+      if (!bid) {
         return;
       }
 
-      const bidderRequests = auctionEnd.bidderRequests
-        .filter((event: any) => event.eventType === 'bidRequested')
-        .sort((a, b) => a.start - b.start) as BidRequestedEvent[];
-
-      const receivedBids = events.filter(
-        (event: any) => event.eventType === 'bidResponse'
-      ) as BidResponse[];
-
-      const noBids = events.filter(
-        (event: any) => event.eventType === 'noBid'
-      ) as NoBid[];
-
-      bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
-        const bid = receivedBids.find(
-          (_bid) => _bid.bidderRequestId === bidderRequest.bidderRequestId
-        );
-        if (!bid) {
-          return;
-        }
-
-        bidders.push({
-          name: bid.bidder,
-          startTime: (bid.requestTimestamp as number) - auctionEnd.timestamp,
-          endTime: (bid.responseTimestamp as number) - auctionEnd.timestamp,
-          duration: `${
-            (bid?.responseTimestamp ?? 0) - (bid?.requestTimestamp ?? 0)
-          }`,
-          type: BidderType.BID,
-          data: bid,
-        });
+      bidders.push({
+        name: bid.bidder,
+        startTime: (bid.requestTimestamp as number) - auctionEnd.timestamp,
+        endTime: (bid.responseTimestamp as number) - auctionEnd.timestamp,
+        duration: `${
+          (bid?.responseTimestamp ?? 0) - (bid?.requestTimestamp ?? 0)
+        }`,
+        type: BidderType.BID,
+        data: bidderRequest,
       });
+    });
 
-      bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
-        const bid = noBids.find(
-          (_bid) => _bid.bidderRequestId === bidderRequest.bidderRequestId
-        );
+    bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
+      const bid = noBids.find(
+        (_bid) =>
+          _bid.auctionId === bidderRequest?.auctionId &&
+          (_bid.bidderCode === bidderRequest.bidderCode ||
+            _bid.bidder === bidderRequest.bidderCode)
+      );
 
-        if (!bid) {
-          return;
-        }
+      if (!bid) {
+        return;
+      }
 
-        const bidder: Partial<Bidder> = {
-          name: bid.bidder,
-          type: BidderType.NO_BID,
-          adUnitCode: bid.adUnitCode,
-          data: bid,
-        };
-
-        bidder.startTime = bidderRequest.start - auctionEnd.timestamp;
-        bidder.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
-        const noBidElapsedTime =
-          events.find(
-            (event) =>
-              event.eventType === 'noBid' &&
-              //@ts-ignore
-              event.bidderRequestId === item.bidderRequestId
-          )?.elapsedTime ?? 0;
-
-        const bidRequestedElapsedTime =
-          events.find(
-            (event) =>
-              event.eventType === 'bidRequested' &&
-              //@ts-ignore
-              event.bidderRequestId === item.bidderRequestId
-          )?.elapsedTime ?? 0;
-        bidder.endTime =
-          bidderRequest.start +
-          noBidElapsedTime -
-          bidRequestedElapsedTime -
-          auctionEnd.timestamp;
-        bidder.duration = `${
-          (bidder?.endTime ?? 0) - (bidder?.startTime ?? 0)
-        }`;
-
-        bidders.push(bid);
-      });
-
-      events.forEach((event: any) => {
-        if (event.eventType === 'bidWon') {
-          bidders.push({
-            name: event.bidder,
-            type: BidderType.WON,
-            startTime: event.requestTimestamp - auctionEnd.timestamp,
-            endTime: event.responseTimestamp - auctionEnd.timestamp,
-            duration: `${event.responseTimestamp - event.requestTimestamp}`,
-          });
-        }
-      });
-
-      auctions[auctionId] = {
-        bidders,
-        auctionTimeout: auctionEnd.timeout,
-        auctionId: auctionEnd.auctionId,
-        auctionStartTime: auctionEnd.timestamp,
-        auctionStartTimeFormatted: formatTimestampToIST(
-          `${auctionEnd.timestamp}`
-        ),
-        auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
-        zoomLevel: 2,
-        adUnitCodes: auctionEnd.adUnitCodes,
+      const bidder: Partial<Bidder> = {
+        name: bid.bidder,
+        type: BidderType.NO_BID,
+        adUnitCode: bid.adUnitCode,
+        data: bid,
       };
-    }
-  );
+
+      bidder.startTime = bidderRequest.start - auctionEnd.timestamp;
+      bidder.data = bidderRequest;
+      bidder.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
+      const noBidElapsedTime =
+        events.find(
+          (event) =>
+            event.eventType === 'noBid' &&
+            //@ts-ignore
+            event.bidderRequestId === bid.bidderRequestId
+        )?.elapsedTime ?? 0;
+
+      const bidRequestedElapsedTime =
+        events.find(
+          (event) =>
+            event.eventType === 'bidRequested' &&
+            //@ts-ignore
+            event.bidderRequestId === bid.bidderRequestId
+        )?.elapsedTime ?? 0;
+      bidder.endTime =
+        bidderRequest.start +
+        noBidElapsedTime -
+        bidRequestedElapsedTime -
+        auctionEnd.timestamp;
+      bidder.duration = `${(bidder?.endTime ?? 0) - (bidder?.startTime ?? 0)}`;
+
+      bidders.push(bidder);
+    });
+
+    events.forEach((event: any) => {
+      if (event.eventType === 'bidWon') {
+        bidders.push({
+          name: event.bidder,
+          type: BidderType.WON,
+          startTime: event.requestTimestamp - auctionEnd.timestamp,
+          endTime: event.responseTimestamp - auctionEnd.timestamp,
+          duration: `${event.responseTimestamp - event.requestTimestamp}`,
+        });
+      }
+    });
+
+    auctions[auctionId] = {
+      bidders,
+      auctionTimeout: auctionEnd.timeout,
+      auctionId: auctionEnd.auctionId,
+      auctionStartTime: auctionEnd.timestamp,
+      auctionStartTimeFormatted: formatTimestampToIST(
+        `${auctionEnd.timestamp}`
+      ),
+      auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
+      zoomLevel: 2,
+      adUnitCodes: auctionEnd.adUnitCodes,
+    };
+  });
   //uncomment below line to see storybook.
   //return auctions['40eb202e-d5fc-44db-b602-5be0a7b1f844'].bidders;
   return auctions;
 };
-
-export default prepareTimelineData;

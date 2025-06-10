@@ -21,6 +21,7 @@ import {
   noop,
   type AdsAndBiddersType,
   type AdUnit,
+  type AuctionEndEvent,
   type BidResponse,
   type BidWonEvent,
   type NoBid,
@@ -408,7 +409,7 @@ class PrebidInterface {
       );
 
       if (auctionInitEvent) {
-        auctionInitEvents.push(auctionInitEvent);
+        auctionInitEvents.push(auctionInitEvent as AuctionEndEvent);
       }
     });
 
