@@ -170,6 +170,8 @@ const Timeline = ({
                           {String(bidder.name)}
                           <span className="text-granite-gray ml-1">
                             {bidder.type === BidderType.NO_BID && ' (no bid)'}
+                            {bidder.type === BidderType.BID &&
+                              ' (received bid)'}
                             {bidder.type === BidderType.TIMED_OUT &&
                               ' (timed out)'}
                           </span>
@@ -177,7 +179,7 @@ const Timeline = ({
                             <span className="flex text-granite-gray ">
                               <span>(won)</span>
                               <span>
-                                <HammerIcon />
+                                <HammerIcon height="18" />
                               </span>
                             </span>
                           )}
