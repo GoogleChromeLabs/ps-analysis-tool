@@ -21,14 +21,14 @@ import { InfoIcon } from '@google-psat/design-system';
  * Internal dependencies
  */
 import Panel from './panel';
-import { useProtectedAudience } from '../../../../stateProviders';
+import { usePrebid } from '../../../../stateProviders';
 
 const Prebid = () => {
-  const { prebidResponse } = useProtectedAudience(({ state }) => ({
-    prebidResponse: state.prebidResponse,
+  const { prebidExists } = usePrebid(({ state }) => ({
+    prebidExists: state.prebidExists,
   }));
 
-  if (!prebidResponse?.prebidExists) {
+  if (!prebidExists) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center">
         <div className="px-4 pt-2 mx-auto leading-5 flex gap-1 justify-center items-baseline max-w-4xl">
@@ -46,7 +46,7 @@ const Prebid = () => {
     );
   }
 
-  return <Panel prebidResponse={prebidResponse} />;
+  return <Panel />;
 };
 
 export default Prebid;
