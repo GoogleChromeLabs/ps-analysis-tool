@@ -67,7 +67,6 @@ export const prepareTimelineData = (
     ) as NoBid[];
 
     bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
-      console.log(receivedBids, bidderRequests);
       const bid = receivedBids.find(
         (_bid) =>
           _bid.auctionId === bidderRequest?.auctionId &&
