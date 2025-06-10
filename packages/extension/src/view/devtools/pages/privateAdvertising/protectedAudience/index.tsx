@@ -94,7 +94,7 @@ const ProtectedAudience = () => {
           },
         },
         {
-          title: 'Prebid',
+          title: 'Prebid Extras',
           content: {
             Element: Prebid,
           },
