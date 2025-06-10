@@ -49,6 +49,8 @@ interface AdUnitsPanelProps {
   isEE?: boolean;
   pillToggle: string;
   setPillToggle: React.Dispatch<React.SetStateAction<string>>;
+  highlightOption?: string;
+  setHighlightOption?: (value: string) => void;
 }
 
 const AdUnitsPanel = ({
@@ -63,6 +65,8 @@ const AdUnitsPanel = ({
   isEE,
   pillToggle,
   setPillToggle,
+  highlightOption,
+  setHighlightOption,
 }: AdUnitsPanelProps) => {
   const adUnitsCount = Object.values(adsAndBidders).length;
   const biddersCount = useMemo(
@@ -88,7 +92,9 @@ const AdUnitsPanel = ({
             options={['Prebid', 'PAAPI']}
             pillToggle={pillToggle}
             setPillToggle={setPillToggle}
-            eeAnimatedTab={isEE}
+            eeAnimatedTab={Boolean(isEE)}
+            highlightOption={highlightOption}
+            setHighlightOption={setHighlightOption}
           />
         </div>
       )}

@@ -81,6 +81,13 @@ const AdUnits = () => {
   }, [setSelectedAdUnit]);
 
   const [pillToggle, setPillToggle] = useState('Prebid');
+  const [highlightOption, setHighlightOption] = useState<string>();
+
+  useEffect(() => {
+    if (paapi.adsAndBidders && Object.keys(paapi.adsAndBidders).length > 0) {
+      setHighlightOption('PAAPI');
+    }
+  }, [paapi.adsAndBidders]);
 
   const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
     if (pillToggle === 'Prebid') {
@@ -143,6 +150,8 @@ const AdUnits = () => {
       auctionEvents={auctionEvents ?? {}}
       pillToggle={pillToggle}
       setPillToggle={setPillToggle}
+      highlightOption={highlightOption}
+      setHighlightOption={setHighlightOption}
     />
   );
 };

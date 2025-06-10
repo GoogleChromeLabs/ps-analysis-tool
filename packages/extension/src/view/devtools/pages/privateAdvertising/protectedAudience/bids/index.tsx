@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   DoubleArrow,
   PillToggle,
@@ -70,6 +70,13 @@ const Bids = () => {
   }));
 
   const [panelPillToggle, setPanelPillToggle] = useState<string>('Prebid');
+  const [highlightOption, setHighlightOption] = useState<string>('');
+  useEffect(() => {
+    if (paapi?.receivedBids?.length || paapi?.noBids?.length) {
+      setHighlightOption('PAAPI');
+    }
+  }, [paapi]);
+
   const [bidsPillToggle, setBidsPillToggle] = useState<string>(
     BidsPillOptions.ReceivedBids
   );
@@ -138,6 +145,8 @@ const Bids = () => {
           pillToggle={panelPillToggle}
           setPillToggle={setPanelPillToggle}
           eeAnimatedTab={false}
+          highlightOption={highlightOption}
+          setHighlightOption={setHighlightOption}
         />
         <DoubleArrow className="fill-gray-500 dark:fill-bright-gray" />
         <PillToggle

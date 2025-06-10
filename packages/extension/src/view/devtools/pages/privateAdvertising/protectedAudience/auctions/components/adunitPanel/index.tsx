@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTabs } from '@google-psat/design-system';
 
 /**
@@ -65,6 +65,13 @@ const AdunitPanel = ({
   }));
 
   const [pillToggle, setPillToggle] = useState('Prebid');
+  const [highlightOption, setHighlightOption] = useState('');
+
+  useEffect(() => {
+    if (bidsCount['paapi'] > 0 || noBidsCount['paapi'] > 0) {
+      setHighlightOption('PAAPI');
+    }
+  }, [bidsCount, noBidsCount]);
 
   const pillLowerCase = pillToggle.toLowerCase();
 
@@ -85,6 +92,8 @@ const AdunitPanel = ({
       winningMediaContainer={winningMediaContainer[pillLowerCase] || []}
       pillToggle={pillToggle}
       setPillToggle={setPillToggle}
+      highlightOption={highlightOption}
+      setHighlightOption={setHighlightOption}
     />
   );
 };

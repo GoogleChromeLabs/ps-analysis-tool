@@ -47,6 +47,8 @@ interface PanelProps {
   winningMediaContainer?: number[];
   pillToggle: string;
   setPillToggle: React.Dispatch<React.SetStateAction<string>>;
+  highlightOption?: string;
+  setHighlightOption?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Panel = ({
@@ -65,6 +67,8 @@ const Panel = ({
   winningMediaContainer = [],
   pillToggle,
   setPillToggle,
+  highlightOption,
+  setHighlightOption,
 }: PanelProps) => {
   const items = useMemo(
     () => [
@@ -161,6 +165,8 @@ const Panel = ({
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={false}
+          highlightOption={highlightOption}
+          setHighlightOption={setHighlightOption}
         />
       </div>
       <Matrix
