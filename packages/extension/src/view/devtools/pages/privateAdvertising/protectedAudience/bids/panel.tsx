@@ -119,7 +119,7 @@ const Panel = ({
         {timelines &&
           Object.entries(timelines).map(([auctionId, auction]) => {
             return (
-              <div key={auctionId} className="mb-4">
+              <div key={auctionId} className="my-4">
                 <Timeline
                   {...auction}
                   setSelectedRow={setSelectedRow}
@@ -133,8 +133,8 @@ const Panel = ({
   }
 
   return (
-    <div className="flex flex-col pt-4 h-full w-full">
-      <div className="absolute top-[16px] left-[250px]">
+    <div className="flex flex-col h-full w-full">
+      <div className="absolute top-[12px] left-[250px]">
         <PillToggle
           options={[
             PillToggleOptions.ReceivedBids,

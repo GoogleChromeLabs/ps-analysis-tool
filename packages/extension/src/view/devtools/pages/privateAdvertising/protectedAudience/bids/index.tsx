@@ -78,7 +78,7 @@ const Bids = () => {
 
   return (
     <div className="flex flex-col h-full w-full relative">
-      <div className="px-4 pb-2 pt-4 flex gap-6 items-center ">
+      <div className="px-3 py-3 flex gap-6 items-center border-american-silver dark:border-quartz border-b">
         <PillToggle
           options={[PillToggleOptions.PREBID, PillToggleOptions.PAAPI]}
           pillToggle={pillToggle}
