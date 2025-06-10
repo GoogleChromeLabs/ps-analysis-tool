@@ -22,6 +22,7 @@ import {
   PrebidAuctionEventType,
   BidResponse,
   NoBid,
+  BidRequestedEvent,
 } from '@google-psat/common';
 /**
  * Internal dependencies.
@@ -55,7 +56,26 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
         return;
       }
 
-      auctionEnd.bidsReceived.forEach((bid: BidResponse) => {
+      const bidderRequests = auctionEnd.bidderRequests
+        .filter((event: any) => event.eventType === 'bidRequested')
+        .sort((a, b) => a.start - b.start) as BidRequestedEvent[];
+
+      const receivedBids = events.filter(
+        (event: any) => event.eventType === 'bidResponse'
+      ) as BidResponse[];
+
+      const noBids = events.filter(
+        (event: any) => event.eventType === 'noBid'
+      ) as NoBid[];
+
+      bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
+        const bid = receivedBids.find(
+          (_bid) => _bid.bidderRequestId === bidderRequest.bidderRequestId
+        );
+        if (!bid) {
+          return;
+        }
+
         bidders.push({
           name: bid.bidder,
           startTime: (bid.requestTimestamp as number) - auctionEnd.timestamp,
@@ -68,41 +88,47 @@ const prepareTimelineData = (prebidResponse: PrebidEvents) => {
         });
       });
 
-      auctionEnd.noBids.forEach((item: NoBid) => {
-        const bid: Partial<Bidder> = {
-          name: item.bidder,
+      bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
+        const bid = noBids.find(
+          (_bid) => _bid.bidderRequestId === bidderRequest.bidderRequestId
+        );
+
+        if (!bid) {
+          return;
+        }
+
+        const bidder: Partial<Bidder> = {
+          name: bid.bidder,
           type: BidderType.NO_BID,
-          adUnitCode: item.adUnitCode,
-          data: item,
+          adUnitCode: bid.adUnitCode,
+          data: bid,
         };
 
-        auctionEnd.bidderRequests.forEach((bidderRequest) => {
-          if (bidderRequest.bidderRequestId === item.bidderRequestId) {
-            bid.startTime = bidderRequest.start - auctionEnd.timestamp;
-            bid.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
-            const noBidElapsedTime =
-              events.find(
-                (event) =>
-                  event.eventType === 'noBid' &&
-                  //@ts-ignore
-                  event.bidderRequestId === item.bidderRequestId
-              )?.elapsedTime ?? 0;
+        bidder.startTime = bidderRequest.start - auctionEnd.timestamp;
+        bidder.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
+        const noBidElapsedTime =
+          events.find(
+            (event) =>
+              event.eventType === 'noBid' &&
+              //@ts-ignore
+              event.bidderRequestId === item.bidderRequestId
+          )?.elapsedTime ?? 0;
 
-            const bidRequestedElapsedTime =
-              events.find(
-                (event) =>
-                  event.eventType === 'bidRequested' &&
-                  //@ts-ignore
-                  event.bidderRequestId === item.bidderRequestId
-              )?.elapsedTime ?? 0;
-            bid.endTime =
-              bidderRequest.start +
-              noBidElapsedTime -
-              bidRequestedElapsedTime -
-              auctionEnd.timestamp;
-            bid.duration = `${(bid?.endTime ?? 0) - (bid?.startTime ?? 0)}`;
-          }
-        });
+        const bidRequestedElapsedTime =
+          events.find(
+            (event) =>
+              event.eventType === 'bidRequested' &&
+              //@ts-ignore
+              event.bidderRequestId === item.bidderRequestId
+          )?.elapsedTime ?? 0;
+        bidder.endTime =
+          bidderRequest.start +
+          noBidElapsedTime -
+          bidRequestedElapsedTime -
+          auctionEnd.timestamp;
+        bidder.duration = `${
+          (bidder?.endTime ?? 0) - (bidder?.startTime ?? 0)
+        }`;
 
         bidders.push(bid);
       });

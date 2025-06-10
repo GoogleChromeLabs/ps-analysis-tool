@@ -288,6 +288,7 @@ export interface BidResponse {
   bidder: string;
   adUnitCode: string;
   auctionId: string;
+  bidderRequestId: string;
   price: number;
   dealId?: string;
   mediaType?: 'banner' | 'video' | 'native';
