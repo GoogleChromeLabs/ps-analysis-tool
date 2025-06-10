@@ -80,8 +80,6 @@ const Panel = ({
 
   let activePage = null;
 
-  console.log(timelines, 'timelines');
-
   if (pillToggle === PillToggleOptions.ReceivedBids) {
     activePage = (
       <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">

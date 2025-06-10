@@ -29,100 +29,100 @@ import {
 import { Bidder, BidderType } from './types';
 import { formatTimestampToIST } from './formatTimestampToIST';
 
-export const prepareTimelineData = (prebidResponse: PrebidEvents) => {
+export const prepareTimelineData = (
+  auctionEvents: PrebidEvents['auctionEvents']
+) => {
   const auctions: any = {};
 
-  Object.entries(prebidResponse.auctionEvents).forEach(
-    ([auctionId, events]) => {
-      const bidders: Partial<Bidder>[] = [];
-      auctions[auctionId] = {};
+  Object.entries(auctionEvents).forEach(([auctionId, events]) => {
+    const bidders: Partial<Bidder>[] = [];
+    auctions[auctionId] = {};
 
-      const auctionEnd: AuctionEndEvent = events.find(
-        (item: PrebidAuctionEventType) => item.eventType === 'auctionEnd'
-      ) as AuctionEndEvent;
+    const auctionEnd: AuctionEndEvent = events.find(
+      (item: PrebidAuctionEventType) => item.eventType === 'auctionEnd'
+    ) as AuctionEndEvent;
 
-      if (!auctionEnd) {
-        return;
-      }
+    if (!auctionEnd) {
+      return;
+    }
 
-      auctionEnd.bidsReceived.forEach((bid: BidResponse) => {
-        bidders.push({
-          name: bid.bidder,
-          startTime: (bid.requestTimestamp as number) - auctionEnd.timestamp,
-          endTime: (bid.responseTimestamp as number) - auctionEnd.timestamp,
-          duration: `${
-            (bid?.responseTimestamp ?? 0) - (bid?.requestTimestamp ?? 0)
-          }`,
-          type: BidderType.BID,
-          data: bid,
-        });
+    auctionEnd.bidsReceived.forEach((bid: BidResponse) => {
+      bidders.push({
+        name: bid.bidder,
+        startTime: (bid.requestTimestamp as number) - auctionEnd.timestamp,
+        endTime: (bid.responseTimestamp as number) - auctionEnd.timestamp,
+        duration: `${
+          (bid?.responseTimestamp ?? 0) - (bid?.requestTimestamp ?? 0)
+        }`,
+        type: BidderType.BID,
+        data: bid,
       });
+    });
 
-      auctionEnd.noBids.forEach((item: NoBid) => {
-        const bid: Partial<Bidder> = {
-          name: item.bidder,
-          type: BidderType.NO_BID,
-          adUnitCode: item.adUnitCode,
-          data: item,
-        };
+    auctionEnd.noBids.forEach((item: NoBid) => {
+      const bid: Partial<Bidder> = {
+        name: item.bidder,
+        type: BidderType.NO_BID,
+        adUnitCode: item.adUnitCode,
+        data: item,
+      };
 
-        auctionEnd.bidderRequests.forEach((bidderRequest) => {
-          if (bidderRequest.bidderRequestId === item.bidderRequestId) {
-            bid.startTime = bidderRequest.start - auctionEnd.timestamp;
-            bid.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
-            const noBidElapsedTime =
-              events.find(
-                (event) =>
-                  event.eventType === 'noBid' &&
-                  //@ts-ignore
-                  event.bidderRequestId === item.bidderRequestId
-              )?.elapsedTime ?? 0;
+      auctionEnd.bidderRequests.forEach((bidderRequest) => {
+        if (bidderRequest.bidderRequestId === item.bidderRequestId) {
+          bid.startTime = bidderRequest.start - auctionEnd.timestamp;
+          bid.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
+          const noBidElapsedTime =
+            events.find(
+              (event) =>
+                event.eventType === 'noBid' &&
+                //@ts-ignore
+                event.bidderRequestId === item.bidderRequestId
+            )?.elapsedTime ?? 0;
 
-            const bidRequestedElapsedTime =
-              events.find(
-                (event) =>
-                  event.eventType === 'bidRequested' &&
-                  //@ts-ignore
-                  event.bidderRequestId === item.bidderRequestId
-              )?.elapsedTime ?? 0;
-            bid.endTime =
-              bidderRequest.start +
-              noBidElapsedTime -
-              bidRequestedElapsedTime -
-              auctionEnd.timestamp;
-            bid.duration = `${(bid?.endTime ?? 0) - (bid?.startTime ?? 0)}`;
-          }
-        });
-
-        bidders.push(bid);
-      });
-
-      events.forEach((event: any) => {
-        if (event.eventType === 'bidWon') {
-          bidders.push({
-            name: event.bidder,
-            type: BidderType.WON,
-            startTime: event.requestTimestamp - auctionEnd.timestamp,
-            endTime: event.responseTimestamp - auctionEnd.timestamp,
-            duration: `${event.responseTimestamp - event.requestTimestamp}`,
-          });
+          const bidRequestedElapsedTime =
+            events.find(
+              (event) =>
+                event.eventType === 'bidRequested' &&
+                //@ts-ignore
+                event.bidderRequestId === item.bidderRequestId
+            )?.elapsedTime ?? 0;
+          bid.endTime =
+            bidderRequest.start +
+            noBidElapsedTime -
+            bidRequestedElapsedTime -
+            auctionEnd.timestamp;
+          bid.duration = `${(bid?.endTime ?? 0) - (bid?.startTime ?? 0)}`;
         }
       });
 
-      auctions[auctionId] = {
-        bidders,
-        auctionTimeout: auctionEnd.timeout,
-        auctionId: auctionEnd.auctionId,
-        auctionStartTime: auctionEnd.timestamp,
-        auctionStartTimeFormatted: formatTimestampToIST(
-          `${auctionEnd.timestamp}`
-        ),
-        auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
-        zoomLevel: 2,
-        adUnitCodes: auctionEnd.adUnitCodes,
-      };
-    }
-  );
+      bidders.push(bid);
+    });
+
+    events.forEach((event: any) => {
+      if (event.eventType === 'bidWon') {
+        bidders.push({
+          name: event.bidder,
+          type: BidderType.WON,
+          startTime: event.requestTimestamp - auctionEnd.timestamp,
+          endTime: event.responseTimestamp - auctionEnd.timestamp,
+          duration: `${event.responseTimestamp - event.requestTimestamp}`,
+        });
+      }
+    });
+
+    auctions[auctionId] = {
+      bidders,
+      auctionTimeout: auctionEnd.timeout,
+      auctionId: auctionEnd.auctionId,
+      auctionStartTime: auctionEnd.timestamp,
+      auctionStartTimeFormatted: formatTimestampToIST(
+        `${auctionEnd.timestamp}`
+      ),
+      auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
+      zoomLevel: 2,
+      adUnitCodes: auctionEnd.adUnitCodes,
+    };
+  });
 
   return auctions;
 };

@@ -22,7 +22,7 @@ import { prepareTimelineData, type Bidder } from '@google-psat/common';
  * Internal dependencies.
  */
 import Panel from '../panel';
-import { useProtectedAudience } from '../../../../../stateProviders';
+import { usePrebid } from '../../../../../stateProviders';
 
 interface PrebidBidsPanelProps {
   storage?: string[];
@@ -31,23 +31,21 @@ interface PrebidBidsPanelProps {
 }
 
 const PrebidBidsPanel = ({ storage, setStorage }: PrebidBidsPanelProps) => {
-  const { prebidResponse } = useProtectedAudience(({ state }) => ({
-    prebidReponse: state.prebidResponse,
+  const { prebidAuctionEvents } = usePrebid(({ state }) => ({
+    prebidAuctionEvents: state.prebidAuctionEvents,
   }));
 
   const timelines = useMemo(() => {
     let _timelines: Bidder[] = [];
 
-    console.log(prebidResponse);
-
-    if (!prebidResponse?.auctionEvents) {
+    if (!prebidAuctionEvents) {
       return _timelines;
     }
 
-    _timelines = prepareTimelineData(prebidResponse);
+    _timelines = prepareTimelineData(prebidAuctionEvents);
 
     return _timelines;
-  }, [prebidResponse]);
+  }, [prebidAuctionEvents]);
 
   return (
     <Panel storage={storage} setStorage={setStorage} timelines={timelines} />

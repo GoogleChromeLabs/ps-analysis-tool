@@ -19,6 +19,10 @@
 import type { Bidder } from './types';
 
 export const findMaximumBidderDuration = (bidders: Bidder[]) => {
+  if (!bidders || bidders.length === 0) {
+    return 0;
+  }
+
   return bidders.reduce((max, bidder) => {
     const duration = parseFloat(bidder.duration);
     return duration > max ? duration : max;
