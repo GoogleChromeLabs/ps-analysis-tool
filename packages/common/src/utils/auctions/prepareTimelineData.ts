@@ -116,7 +116,6 @@ export const prepareTimelineData = (
       adUnitCodes: auctionEnd.adUnitCodes,
     };
   });
-  //uncomment below line to see storybook.
-  //return auctions['40eb202e-d5fc-44db-b602-5be0a7b1f844'].bidders;
+
   return auctions;
 };

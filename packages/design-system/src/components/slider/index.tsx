@@ -24,22 +24,33 @@ interface SliderProps {
   setSliderStep:
     | React.Dispatch<React.SetStateAction<number>>
     | ((step: number) => void);
+  label?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
-const Slider = ({ sliderStep, setSliderStep }: SliderProps) => {
+const Slider = ({
+  sliderStep,
+  setSliderStep,
+  label = 'Speed',
+  min = 0.5,
+  max = 2,
+  step = 0.5,
+}: SliderProps) => {
   return (
     <div className="flex items-center gap-2">
       <label
         htmlFor="steps-range"
         className="text-raisin-black dark:text-bright-gray"
       >
-        Speed:
+        {label}:
       </label>
       <input
         type="range"
-        min={0.5}
-        max={2}
-        step={0.5}
+        min={min}
+        max={max}
+        step={step}
         value={sliderStep}
         onChange={(event) => setSliderStep(Number(event.target.value))}
         className="w-full h-1 bg-baby-blue-eyes rounded-lg appearance-none cursor-pointer"

@@ -16,16 +16,21 @@
 /**
  * External dependencies.
  */
+import React, { useMemo, useState } from 'react';
 import {
   JsonView,
   PillToggle,
   Timeline,
   useTabs,
+  Slider,
 } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
-import type { NoBidsType, ReceivedBids } from '@google-psat/common';
+import type {
+  NoBidsType,
+  ReceivedBids,
+  PrebidEvents,
+} from '@google-psat/common';
 import classNames from 'classnames';
 
 /**
@@ -44,7 +49,7 @@ enum PillToggleOptions {
 interface PanelProps {
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
-  timelines: any[];
+  timelines: PrebidEvents['auctionEvents'];
   eeAnimatedTab?: boolean;
 }
 
@@ -67,6 +72,7 @@ const Panel = ({
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.ReceivedBids
   );
+  const [zoomLevel, setZoomLevel] = useState<number>(2);
 
   const showBottomTray = useMemo(() => {
     if (pillToggle === PillToggleOptions.ReceivedBids) {
@@ -115,11 +121,12 @@ const Panel = ({
         {timelines &&
           Object.entries(timelines).map(([auctionId, auction]) => {
             return (
-              <div key={auctionId} className="mb-4">
+              <div key={auctionId} className="my-4">
                 <Timeline
                   {...auction}
+                  zoomLevel={zoomLevel}
                   setSelectedRow={setSelectedRow}
-                  navigateToAuction={() => setPAActiveTab(4)}
+                  navigateToAuction={() => setPAActiveTab(5)}
                 />
               </div>
             );
@@ -129,8 +136,8 @@ const Panel = ({
   }
 
   return (
-    <div className="flex flex-col pt-4 h-full w-full">
-      <div className="absolute top-[16px] left-[270px]">
+    <div className="flex flex-col h-full w-full">
+      <div className="absolute top-[12px] left-[250px]">
         <PillToggle
           options={[
             PillToggleOptions.ReceivedBids,
@@ -142,6 +149,20 @@ const Panel = ({
           eeAnimatedTab={eeAnimatedTab}
         />
       </div>
+      {pillToggle === PillToggleOptions.TimelineName && (
+        <div className="absolute top-[18px] right-[20px]">
+          <Slider
+            sliderStep={zoomLevel}
+            setSliderStep={(step) => {
+              setZoomLevel(step);
+            }}
+            label="Zoom"
+            min={1}
+            max={4}
+            step={1}
+          />
+        </div>
+      )}
       <div className="flex-1 overflow-auto text-outer-space-crayola">
         {activePage}
       </div>

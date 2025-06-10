@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import React, { useMemo } from 'react';
-import { prepareTimelineData, type Bidder } from '@google-psat/common';
+import { prepareTimelineData } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
@@ -36,15 +36,11 @@ const PrebidBidsPanel = ({ storage, setStorage }: PrebidBidsPanelProps) => {
   }));
 
   const timelines = useMemo(() => {
-    let _timelines: Bidder[] = [];
-
     if (!prebidAuctionEvents) {
-      return _timelines;
+      return [];
     }
 
-    _timelines = prepareTimelineData(prebidAuctionEvents);
-
-    return _timelines;
+    return prepareTimelineData(prebidAuctionEvents);
   }, [prebidAuctionEvents]);
 
   return (
