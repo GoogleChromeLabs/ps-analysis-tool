@@ -19,6 +19,7 @@
 import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
 import PAStore from '../../store/PAStore';
+import prebidStore from '../../store/prebidStore';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   try {
@@ -32,6 +33,9 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
     dataStore.initialiseVariablesForNewTab(tab.id.toString());
     cookieStore.deinitialiseVariablesForTab(tab.id.toString());
     cookieStore.initialiseVariablesForNewTab(tab.id.toString());
+
+    prebidStore.deinitialiseVariablesForTab(tab.id.toString());
+    prebidStore.initialiseVariablesForNewTab(tab.id.toString());
 
     PAStore.deinitialiseVariablesForTab(tab.id.toString());
     PAStore.initialiseVariablesForNewTab(tab.id.toString());

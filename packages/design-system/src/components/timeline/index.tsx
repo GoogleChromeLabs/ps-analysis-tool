@@ -17,12 +17,16 @@
  * External dependencies.
  */
 import React, { useEffect, useRef, useState, useMemo } from 'react';
+import {
+  findMaximumBidderDuration,
+  formatDuration,
+  type Bidder,
+  BidderType,
+} from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import { Bidder, BidderType } from './types';
-import findMaximumBidderDuration from './utils/findMaximumBidderDuration';
 import { HammerIcon } from '../../icons';
 
 const INITIAL_TIME = 50;
@@ -62,14 +66,23 @@ const Timeline = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const lineCount = useMemo(() => {
-    const maxDuration = findMaximumBidderDuration(bidders);
-    return maxDuration / TIME_DURATION + 2;
-  }, [bidders]);
+    const maxDuration = Math.max(
+      findMaximumBidderDuration(bidders),
+      auctionTimeout
+    );
+    const extraLines = 4;
+
+    if (maxDuration === 0) {
+      return extraLines * 2; // If no bidders, just show the timeout line
+    }
+
+    return maxDuration / TIME_DURATION + extraLines;
+  }, [bidders, auctionTimeout]);
 
   const zoom = zoomLevel < 1 ? 1 : zoomLevel;
   const lines = Array.from({ length: lineCount });
   const timeoutBlockWidth = scrollWidth - auctionTimeout * zoom;
-  console.log(lines, lineCount);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimate(true);
@@ -85,15 +98,15 @@ const Timeline = ({
   }, [containerRef, bidders, auctionTimeout]);
 
   return (
-    <div>
+    <div className="mb-4">
       <header className="flex justify-between text-sm font-semibold">
         <p>Auction Start: {auctionStartTime}</p>
         <p>Auction Time: {auctionTime}ms</p>
       </header>
       <div
         ref={containerRef}
-        className="m-h-[200px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
-        style={{ height: bidders.length * BAR_HEIGHT }}
+        className="min-h-[300px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
+        style={{ height: bidders ? bidders.length * BAR_HEIGHT : '300px' }}
       >
         {/*Vertical Columns*/}
         <div className="flex h-full">
@@ -132,48 +145,51 @@ const Timeline = ({
         {/*Bars Block*/}
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="relative">
-            {bidders.map((bidder, index) => {
-              const fullWidth = parseFloat(bidder.duration) * zoom;
-              return (
-                <div key={index} className="relative group ">
-                  {/*Bar*/}
-                  <div
-                    className="absolute h-[10px] transition-all duration-300 ease-out group-hover:scale-101 group-hover:border group-hover:border-grey transform origin-left cursor-pointer"
-                    role="button"
-                    onClick={() => setSelectedRow(bidder?.data)}
-                    style={{
-                      width: animate ? `${fullWidth}px` : `0px`,
-                      backgroundColor: BAR_COLORS[bidder.type],
-                      top: `${(index + 1) * 40}px`,
-                      left: `${
-                        bidder.startTime ? bidder.startTime * zoom : 0
-                      }px`,
-                    }}
-                  >
-                    {/*Metadata*/}
-                    <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1">
-                      <span className="pr-2 text-xs flex">
-                        {String(bidder.name)}
-                        <span className="text-granite-gray ml-1">
-                          {bidder.type === BidderType.NO_BID && ' (no bid)'}
-                          {bidder.type === BidderType.TIMED_OUT &&
-                            ' (timed out)'}
-                        </span>
-                        {bidder.type === BidderType.WON && (
-                          <span className="flex text-granite-gray">
-                            <span>(won)</span>
-                            <span>
-                              <HammerIcon />
-                            </span>
+            {bidders &&
+              bidders.map((bidder, index) => {
+                const fullWidth = parseFloat(bidder.duration) * zoom;
+                return (
+                  <div key={index} className="relative group ">
+                    {/*Bar*/}
+                    <div
+                      className="absolute h-[10px] transition-all duration-300 ease-out group-hover:scale-101 group-hover:border group-hover:border-grey transform origin-left cursor-pointer"
+                      role="button"
+                      onClick={() => setSelectedRow(bidder?.data)}
+                      style={{
+                        width: animate ? `${fullWidth}px` : `0px`,
+                        backgroundColor: BAR_COLORS[bidder.type],
+                        top: `${(index + 1) * 40}px`,
+                        left: `${
+                          bidder.startTime ? bidder.startTime * zoom : 0
+                        }px`,
+                      }}
+                    >
+                      {/*Metadata*/}
+                      <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1 min-w-[180px]">
+                        <span className="pr-2 text-xs flex">
+                          {String(bidder.name)}
+                          <span className="text-granite-gray ml-1">
+                            {bidder.type === BidderType.NO_BID && ' (no bid)'}
+                            {bidder.type === BidderType.TIMED_OUT &&
+                              ' (timed out)'}
                           </span>
-                        )}
-                      </span>
-                      <span className="text-xs">{bidder.duration}ms</span>
+                          {bidder.type === BidderType.WON && (
+                            <span className="flex text-granite-gray ">
+                              <span>(won)</span>
+                              <span>
+                                <HammerIcon />
+                              </span>
+                            </span>
+                          )}
+                        </span>
+                        <span className="text-xs">
+                          {formatDuration(bidder.duration)}ms
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>

@@ -17,46 +17,74 @@
 /**
  * External dependencies
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies
  */
-import { useCookie, useProtectedAudience } from '../../../../../stateProviders';
+import {
+  useCookie,
+  useProtectedAudience,
+} from '../../../../../../stateProviders';
 import Panel from './panel';
 
 interface AdunitPanelProps {
   adunit: string;
+  mediaContainerSize: Record<string, number[][]>;
+  bidders: Record<string, string[]>;
+  biddersCount: Record<string, number>;
+  bidsCount: Record<string, number>;
+  noBidsCount: Record<string, number>;
+  winnerBid: Record<string, string | null> | null;
+  winningMediaContainer?: Record<string, number[]>;
 }
 
-const AdunitPanel = ({ adunit }: AdunitPanelProps) => {
+const AdunitPanel = ({
+  adunit,
+  mediaContainerSize,
+  bidders,
+  biddersCount,
+  bidsCount,
+  noBidsCount,
+  winnerBid = null,
+  winningMediaContainer = {},
+}: AdunitPanelProps) => {
   const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
     setIsInspecting: actions.setIsInspecting,
   }));
 
-  const { adsAndBidders, setSelectedAdUnit } = useProtectedAudience(
-    ({ state, actions }) => ({
-      adsAndBidders: state.adsAndBidders,
-      setSelectedAdUnit: actions.setSelectedAdUnit,
-    })
-  );
+  const { setSelectedAdUnit } = useProtectedAudience(({ actions }) => ({
+    setSelectedAdUnit: actions.setSelectedAdUnit,
+  }));
 
   const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
     setStorage: actions.setStorage,
     setActiveTab: actions.setActiveTab,
   }));
 
+  const [pillToggle, setPillToggle] = useState('Prebid');
+
+  const pillLowerCase = pillToggle.toLowerCase();
+
   return (
     <Panel
       adunit={adunit}
+      mediaContainerSize={mediaContainerSize[pillLowerCase]}
+      bidders={bidders[pillLowerCase]}
+      biddersCount={biddersCount[pillLowerCase]}
+      bidsCount={bidsCount[pillLowerCase]}
+      noBidsCount={noBidsCount[pillLowerCase]}
       isInspecting={isInspecting}
       setIsInspecting={setIsInspecting}
-      adsAndBidders={adsAndBidders}
       setSelectedAdUnit={setSelectedAdUnit}
       setStorage={setStorage}
       setActiveTab={setActiveTab}
+      winnerBid={winnerBid?.[pillLowerCase] || null}
+      winningMediaContainer={winningMediaContainer[pillLowerCase] || []}
+      pillToggle={pillToggle}
+      setPillToggle={setPillToggle}
     />
   );
 };

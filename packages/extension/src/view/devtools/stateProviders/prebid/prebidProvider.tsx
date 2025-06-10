@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,69 @@
  * limitations under the License.
  */
 /**
- * External dependencies
+ * External dependencies.
  */
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, {
+  type PropsWithChildren,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
+import { isEqual } from 'lodash-es';
 import type {
   PrebidDebugModuleConfig,
   PrebidDebugModuleConfigRule,
 } from '@google-psat/common';
+
 /**
- * Internal dependencies
+ * Internal dependencies.
  */
-import { replaceRuleTargets, matchRuleTargets } from '../constants';
-import { useProtectedAudience } from '../../../../../../../stateProviders';
-import { STORE_RULES_TOGGLE } from '../../../../../../../../../constants';
-import firstDifferent from '../../../../../../../../../utils/firstDifferent';
+import Context, { type PrebidContextType } from './context';
+import type { PrebidEvents } from '../../../../store';
+import { PREBID_EVENTS, STORE_RULES_TOGGLE } from '../../../../constants';
+import firstDifferent from '../../../../utils/firstDifferent';
+import { replaceRuleTargets, matchRuleTargets } from './constants';
 
-// Source: Github Repository (https://github.com/prebid/professor-prebid/tree/master)
-// Modified by @amovar18 use hook and directly execute google tag script using chrome.scripting.
+const Provider = ({ children }: PropsWithChildren) => {
+  const [prebidAuctionEvents, setPrebidAuctionEvents] = useState<
+    PrebidContextType['state']['prebidAuctionEvents']
+  >({});
 
-//@todo -- Move this and other states used in prebid into a provider for better readability and modularity in follow-up PR.
-const usePrebidTool = () => {
+  const [prebidExists, setPrebidExists] =
+    useState<PrebidContextType['state']['prebidExists']>(null);
+
+  const [config, setConfig] = useState<PrebidContextType['state']['config']>(
+    {}
+  );
+
+  const [errorEvents, setErrorEvents] = useState<
+    PrebidContextType['state']['errorEvents']
+  >([]);
+
+  const [prebidNoBids, setPrebidNoBids] = useState<
+    PrebidContextType['state']['prebidNoBids']
+  >({});
+
+  const [prebidReceivedBids, setPrebidReceivedBids] = useState<
+    PrebidContextType['state']['prebidReceivedBids']
+  >([]);
+
+  const [installedModules, setInstalledModules] = useState<
+    PrebidContextType['state']['installedModules']
+  >([]);
+
+  const [pbjsNamespace, setPBJSNamespace] =
+    useState<PrebidContextType['state']['pbjsNamespace']>('');
+
+  const [prebidAdUnits, setPrebidAdUnits] = useState<
+    PrebidContextType['state']['prebidAdUnits']
+  >({});
+
+  const [versionInfo, setPrebidVersionInfo] =
+    useState<PrebidContextType['state']['versionInfo']>('');
+
   const [debuggingModuleConfig, setDebuggingModuleConfig] =
     useState<PrebidDebugModuleConfig>({
       enabled: false,
@@ -56,10 +99,6 @@ const usePrebidTool = () => {
     chrome.storage.local.set({ [STORE_RULES_TOGGLE]: value });
     setStoreRulesInLocalStorage(value);
   }, []);
-
-  const { pbjsNamespace } = useProtectedAudience(({ state }) => ({
-    pbjsNamespace: state.prebidResponse.pbjsNamespace,
-  }));
 
   const handleWriteRulesToStorage = useCallback(
     async (input: PrebidDebugModuleConfig) => {
@@ -214,26 +253,140 @@ const usePrebidTool = () => {
     []
   );
 
-  const valueToBeReturned = useMemo(() => {
+  const messagePassingListener = useCallback(
+    (message: {
+      type: string;
+      payload: {
+        tabId: number;
+        prebidEvents: PrebidEvents;
+      };
+    }) => {
+      if (![PREBID_EVENTS].includes(message.type)) {
+        return;
+      }
+
+      if (!message.type) {
+        return;
+      }
+
+      const tabId = chrome.devtools.inspectedWindow.tabId;
+      const incomingMessageType = message.type;
+      if (
+        incomingMessageType === PREBID_EVENTS &&
+        typeof message.payload.prebidEvents !== 'undefined'
+      ) {
+        if (tabId.toString() === message.payload.tabId.toString()) {
+          setPrebidExists(message.payload.prebidEvents.prebidExists);
+          if (!message.payload.prebidEvents.prebidExists) {
+            return;
+          }
+          setConfig((prev) => {
+            return isEqual(message.payload.prebidEvents.config, prev)
+              ? prev
+              : message.payload.prebidEvents.config;
+          });
+          setErrorEvents(message.payload.prebidEvents.errorEvents);
+          setInstalledModules(message.payload.prebidEvents.installedModules);
+          setPBJSNamespace(message.payload.prebidEvents.pbjsNamespace);
+          setPrebidAdUnits(message.payload.prebidEvents.adUnits);
+          setPrebidAuctionEvents(message.payload.prebidEvents.auctionEvents);
+          setPrebidNoBids(message.payload.prebidEvents.noBids);
+          setPrebidReceivedBids(message.payload.prebidEvents.receivedBids);
+          setPrebidVersionInfo(message.payload.prebidEvents.versionInfo);
+        }
+      }
+    },
+    []
+  );
+
+  const onCommittedNavigationListener = useCallback(
+    ({
+      frameId,
+      frameType,
+      tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        frameType !== 'outermost_frame' ||
+        frameId !== 0 ||
+        tabId !== chrome.devtools.inspectedWindow.tabId
+      ) {
+        return;
+      }
+
+      setConfig({});
+      setErrorEvents([]);
+      setInstalledModules([]);
+      setPBJSNamespace('');
+      setPrebidAdUnits({});
+      setPrebidAuctionEvents({});
+      setPrebidExists(null);
+      setPrebidNoBids({});
+      setPrebidReceivedBids([]);
+      setPrebidVersionInfo('');
+    },
+    []
+  );
+
+  useEffect(() => {
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.webNavigation?.onCommitted?.addListener(
+      onCommittedNavigationListener
+    );
+
+    return () => {
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.webNavigation?.onCommitted?.removeListener(
+        onCommittedNavigationListener
+      );
+    };
+  }, [messagePassingListener, onCommittedNavigationListener]);
+
+  const memoisedValue: PrebidContextType = useMemo(() => {
     return {
-      setDebuggingModuleConfig,
-      debuggingModuleConfig,
-      changeRule,
-      addRule,
-      handleChangeStoreRulesInLocalStorage,
-      storeRulesInLocalStorage,
-      openGoogleManagerConsole,
+      state: {
+        prebidAdUnits,
+        prebidNoBids,
+        versionInfo,
+        installedModules,
+        config,
+        prebidReceivedBids,
+        errorEvents,
+        prebidAuctionEvents,
+        pbjsNamespace,
+        prebidExists,
+        debuggingModuleConfig,
+        storeRulesInLocalStorage,
+      },
+      actions: {
+        changeRule,
+        addRule,
+        handleWriteRulesToStorage,
+        openGoogleManagerConsole,
+        setDebuggingModuleConfig,
+        handleChangeStoreRulesInLocalStorage,
+      },
     };
   }, [
-    addRule,
+    storeRulesInLocalStorage,
+    debuggingModuleConfig,
+    prebidAdUnits,
+    prebidNoBids,
+    versionInfo,
+    installedModules,
+    config,
+    prebidReceivedBids,
+    errorEvents,
+    prebidAuctionEvents,
+    pbjsNamespace,
+    prebidExists,
     changeRule,
+    addRule,
+    handleWriteRulesToStorage,
     openGoogleManagerConsole,
     handleChangeStoreRulesInLocalStorage,
-    debuggingModuleConfig,
-    storeRulesInLocalStorage,
   ]);
 
-  return valueToBeReturned;
+  return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };
 
-export default usePrebidTool;
+export default Provider;

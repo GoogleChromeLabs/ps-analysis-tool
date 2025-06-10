@@ -20,6 +20,7 @@ import ARAStore from '../../../store/ARAStore';
 import cookieStore from '../../../store/cookieStore';
 import dataStore, { DataStore } from '../../../store/dataStore';
 import PAStore from '../../../store/PAStore';
+import prebidStore from '../../../store/prebidStore';
 import attachCDP from '../../attachCDP';
 
 const updateGlobalVariableAndAttachCDP = async () => {
@@ -40,6 +41,9 @@ const updateGlobalVariableAndAttachCDP = async () => {
     dataStore?.addTabData(tab.id.toString());
     dataStore.initialiseVariablesForNewTab(tab.id.toString());
     cookieStore.initialiseVariablesForNewTab(tab.id.toString());
+
+    prebidStore.deinitialiseVariablesForTab(tab.id.toString());
+    prebidStore.initialiseVariablesForNewTab(tab.id.toString());
 
     PAStore.initialiseVariablesForNewTab(tab.id.toString());
     ARAStore.initialiseVariablesForNewTab(tab.id.toString());

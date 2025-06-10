@@ -112,15 +112,18 @@ const Panel = ({
   } else if (pillToggle === PillToggleOptions.TimelineName) {
     activePage = (
       <div className="w-full px-5">
-        {timelines.map((timeline, index) => (
-          <div key={index} className="mb-4">
-            <Timeline
-              {...timeline}
-              setSelectedRow={setSelectedRow}
-              navigateToAuction={() => setPAActiveTab(4)}
-            />
-          </div>
-        ))}
+        {timelines &&
+          Object.entries(timelines).map(([auctionId, auction]) => {
+            return (
+              <div key={auctionId} className="mb-4">
+                <Timeline
+                  {...auction}
+                  setSelectedRow={setSelectedRow}
+                  navigateToAuction={() => setPAActiveTab(4)}
+                />
+              </div>
+            );
+          })}
       </div>
     );
   }

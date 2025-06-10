@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { BidderType, type Bidder } from '@google-psat/design-system';
+import { BidderType, type Bidder } from '@google-psat/common';
 
 const preBidData = {
   name: 'books',

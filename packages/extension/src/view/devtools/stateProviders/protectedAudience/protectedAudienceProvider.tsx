@@ -42,24 +42,14 @@ import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
-import { CS_GET_PREBID_DATA_RESPONSE } from '../../../../constants';
+import {
+  AUCTION_EVENTS,
+  CS_GET_PREBID_DATA_RESPONSE,
+} from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
     useState<ProtectedAudienceContextType['state']['auctionEvents']>(null);
-
-  const [prebidResponse, setPrebidResponse] = useState<PrebidEvents>({
-    prebidExists: false,
-    adUnits: {},
-    noBids: {},
-    versionInfo: '',
-    installedModules: [],
-    config: {},
-    receivedBids: [],
-    errorEvents: [],
-    auctionEvents: {},
-    pbjsNamespace: '',
-  });
 
   const [isMultiSellerAuction, setIsMultiSellerAuction] =
     useState<boolean>(false);
@@ -250,7 +240,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       let didAuctionEventsChange = false;
 
       if (
-        !['AUCTION_EVENTS', CS_GET_PREBID_DATA_RESPONSE].includes(message.type)
+        ![AUCTION_EVENTS, CS_GET_PREBID_DATA_RESPONSE].includes(message.type)
       ) {
         return;
       }
@@ -263,53 +253,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       const incomingMessageType = message.type;
 
       if (
-        incomingMessageType === 'AUCTION_EVENTS' &&
-        typeof message.payload.prebidEvents !== 'undefined'
-      ) {
-        if (tabId.toString() === message.payload.tabId.toString()) {
-          setPrebidResponse((prev) => {
-            const data = message.payload?.prebidEvents ?? null;
-
-            if (
-              typeof message?.payload?.prebidEvents?.prebidExists !==
-              'undefined'
-            ) {
-              data.prebidExists = message.payload.prebidEvents.prebidExists;
-            }
-            if (!data) {
-              return data;
-            }
-
-            const keys: (keyof PrebidEvents)[] = [
-              'adUnits',
-              'receivedBids',
-              'noBids',
-              'auctionEvents',
-              'errorEvents',
-              'config',
-              'installedModules',
-              'versionInfo',
-              'pbjsNamespace',
-            ];
-
-            const updates = Object.fromEntries(
-              keys
-                .map((key) => [key, data[key]])
-                .filter(([key, value]) => {
-                  const _key = key as keyof PrebidEvents;
-                  return !isEqual(value, prev[_key]);
-                })
-            );
-
-            updates['prebidExists'] = data.prebidExists ?? prev.prebidExists;
-
-            return Object.keys(updates).length ? { ...prev, ...updates } : prev;
-          });
-        }
-      }
-
-      if (
-        incomingMessageType === 'AUCTION_EVENTS' &&
+        incomingMessageType === AUCTION_EVENTS &&
         message.payload.auctionEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
@@ -486,7 +430,6 @@ const Provider = ({ children }: PropsWithChildren) => {
         adsAndBidders,
         selectedAdUnit,
         sortOrder,
-        prebidResponse,
       },
       actions: {
         setSelectedAdUnit,
@@ -494,7 +437,6 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
-    prebidResponse,
     auctionEvents,
     interestGroupDetails,
     isMultiSellerAuction,

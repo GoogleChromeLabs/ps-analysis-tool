@@ -53,12 +53,8 @@ const PillToggle = ({
               `px-5 h-full border-r border-[#B6B6B6] dark:border-quartz text-raisin-black dark:text-bright-gray w-max`,
               width,
               {
-                'px-8': index > 0,
-                'bg-anti-flash-white dark:bg-gray-500 ': pillToggle === option,
-                'bg-white dark:bg-raisin-black backdrop-opacity-1':
-                  selectedIndexRef.current && index < selectedIndexRef.current,
-                'bg-transparent':
-                  selectedIndexRef.current && index > selectedIndexRef.current,
+                'dark:bg-raisin-black bg-white': pillToggle === option,
+                'bg-anti-flash-white dark:bg-gray-500 ': pillToggle !== option,
                 'text-xs': eeAnimatedTab,
                 'rounded-r-full -ml-[10px]': index > 0,
                 'rounded-full': index === 0,

@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import {
-  type PrebidEvents,
-  type AuctionEndEvent,
-  PrebidAuctionEventType,
-  BidResponse,
-  NoBid,
-  BidRequestedEvent,
-} from '@google-psat/common';
+
 /**
  * Internal dependencies.
  */
-import { Bidder, BidderType } from '../types';
+import { PrebidEvents, PrebidAuctionEventType } from '../../prebid.types';
+import {
+  AuctionEndEvent,
+  BidRequestedEvent,
+  BidResponse,
+  NoBid,
+} from '../../prebidGlobal.types';
+import { Bidder, BidderType } from './types';
 
 const formatTimestampToIST = (timestamp: string) => {
   const date = new Date(timestamp);
