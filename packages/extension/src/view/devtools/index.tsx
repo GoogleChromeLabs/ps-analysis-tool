@@ -23,7 +23,6 @@ import {
   ErrorFallback,
   Provider as TablePersistentSettingsProvider,
 } from '@google-psat/design-system';
-import { LibraryDetectionProvider } from '@google-psat/library-detection';
 
 /**
  * Internal dependencies.
@@ -55,17 +54,15 @@ if (root) {
           <ProtectedAudienceContextProvider>
             <PrebidContextProvider>
               <TablePersistentSettingsProvider>
-                <LibraryDetectionProvider>
-                  <AllowedListProvider>
-                    <WebStoriesProvider>
-                      <AttributionReportingProvider>
-                        <TopicsClassifierProvider>
-                          <App />
-                        </TopicsClassifierProvider>
-                      </AttributionReportingProvider>
-                    </WebStoriesProvider>
-                  </AllowedListProvider>
-                </LibraryDetectionProvider>
+                <AllowedListProvider>
+                  <WebStoriesProvider>
+                    <AttributionReportingProvider>
+                      <TopicsClassifierProvider>
+                        <App />
+                      </TopicsClassifierProvider>
+                    </AttributionReportingProvider>
+                  </WebStoriesProvider>
+                </AllowedListProvider>
               </TablePersistentSettingsProvider>
             </PrebidContextProvider>
           </ProtectedAudienceContextProvider>
