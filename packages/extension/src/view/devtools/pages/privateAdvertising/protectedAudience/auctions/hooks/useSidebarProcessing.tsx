@@ -212,6 +212,7 @@ const useSidebarProcessing = () => {
   }));
 
   const storageRef = useRef<string>(storage[5] || '');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const defaultSelectedItemKey = useMemo(() => {
     let key = '';
@@ -226,10 +227,20 @@ const useSidebarProcessing = () => {
       });
     });
 
-    setStorage('', 5);
+    timeoutRef.current = setTimeout(() => {
+      setStorage('', 5);
+    });
 
     return key;
   }, [adUnits, adUnitsTimestamp, getPrebidData, setStorage]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     sidebarData,
