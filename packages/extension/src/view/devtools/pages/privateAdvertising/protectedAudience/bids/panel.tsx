@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   JsonView,
   PillToggle,
@@ -64,8 +64,9 @@ const Panel = ({
     receivedBids: state.receivedBids,
     noBids: state.noBids,
   }));
-  const { setPAActiveTab } = useTabs(({ actions }) => ({
+  const { setPAActiveTab, setPAStorage } = useTabs(({ actions }) => ({
     setPAActiveTab: actions.setActiveTab,
+    setPAStorage: actions.setStorage,
   }));
   const [selectedRow, setSelectedRow] = useState<
     ReceivedBids | NoBidsType[keyof NoBidsType] | null
@@ -74,6 +75,14 @@ const Panel = ({
     PillToggleOptions.ReceivedBids
   );
   const [zoomLevel, setZoomLevel] = useState<number>(2);
+
+  const navigateToAuction = useCallback(
+    (data: string) => {
+      setPAStorage(data, 5);
+      setPAActiveTab(5);
+    },
+    [setPAActiveTab, setPAStorage]
+  );
 
   const showBottomTray = useMemo(() => {
     if (pillToggle === PillToggleOptions.ReceivedBids) {
@@ -128,7 +137,7 @@ const Panel = ({
                 {...auction}
                 zoomLevel={zoomLevel}
                 setSelectedRow={setSelectedRow}
-                navigateToAuction={() => setPAActiveTab(5)}
+                navigateToAuction={navigateToAuction}
               />
             </div>
           ))
