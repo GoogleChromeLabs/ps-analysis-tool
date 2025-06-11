@@ -96,7 +96,6 @@ export const mockData1: CompleteJson = {
       },
     },
   },
-  libraryMatches: {},
 };
 
 export const mockData2: CompleteJson = {
@@ -224,11 +223,9 @@ export const mockData2: CompleteJson = {
       },
     },
   },
-  libraryMatches: {},
 };
 export const tempSinglePageData: CompleteJson = {
   pageUrl: 'https://edition.cnn.com/sitemaps/sitemap-section.xml',
-  libraryMatches: {},
   erroredOutUrls: [],
   cookieData: {
     'https://edition.cnn.com': {
@@ -262,7 +259,6 @@ export const tempSinglePageData: CompleteJson = {
 
 export const tempMultiPageData: CompleteJson[] = [
   {
-    libraryMatches: {},
     erroredOutUrls: [],
     pageUrl: 'https://www.cnn.com/index.html',
     cookieData: {
@@ -296,7 +292,6 @@ export const tempMultiPageData: CompleteJson[] = [
     },
   },
   {
-    libraryMatches: {},
     erroredOutUrls: [],
     pageUrl: 'https://edition.cnn.com/index.html',
     cookieData: {

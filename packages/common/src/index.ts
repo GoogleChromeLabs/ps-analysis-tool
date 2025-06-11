@@ -34,8 +34,6 @@ export { default as parseRequestWillBeSentExtraInfo } from './utils/parseRequest
 export { default as getDomainFromUrl } from './utils/getDomainFromUrl';
 export { default as extractUrl } from './utils/extractUrl';
 export { default as noop } from './utils/noop';
-export { default as getDevToolWorker } from './worker/devToolWorker';
-export { default as executeTaskInDevToolWorker } from './worker/executeTaskInDevToolWorker';
 export { default as getValueByKey } from './utils/getValueByKey';
 export * from './utils/contextSelector';
 export { default as addUTMParams, type MediumType } from './utils/addUTMParams';
@@ -51,7 +49,6 @@ export { default as reshapeCookies } from './utils/reshapeCookies';
 // eslint-disable-next-line import/named
 export { type Context } from 'use-context-selector';
 export * from './utils/sessionStorage';
-export * from './worker/enums';
 export * from './utils/generateReports';
 export * from './cookies.types';
 export * from './protectedAudience.types';
