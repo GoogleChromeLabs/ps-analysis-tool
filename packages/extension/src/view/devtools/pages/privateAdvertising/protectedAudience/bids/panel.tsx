@@ -39,6 +39,7 @@ import classNames from 'classnames';
 import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
 import { useProtectedAudience } from '../../../../stateProviders';
+import Placeholder from './placeholder';
 
 enum PillToggleOptions {
   ReceivedBids = 'Received Bids',
@@ -79,16 +80,18 @@ const Panel = ({
       return receivedBids.length > 0;
     } else if (pillToggle === PillToggleOptions.NoBids) {
       return Object.keys(noBids).length > 0;
-    } else {
-      return true; // Always show for Timeline
+    } else if (pillToggle === PillToggleOptions.TimelineName) {
+      return Object.keys(timelines).length > 0;
     }
-  }, [noBids, pillToggle, receivedBids.length]);
+
+    return false;
+  }, [noBids, pillToggle, receivedBids.length, timelines]);
 
   let activePage = null;
 
   if (pillToggle === PillToggleOptions.ReceivedBids) {
     activePage = (
-      <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+      <div className="w-full h-full border-american-silver dark:border-quartz overflow-auto">
         <ReceivedBidsTable
           setSelectedRow={setSelectedRow}
           selectedRow={selectedRow}
@@ -103,7 +106,7 @@ const Panel = ({
     activePage = (
       <div
         className={classNames(
-          'h-full border-r border-t border-american-silver dark:border-quartz',
+          'h-full border-r border-american-silver dark:border-quartz',
           Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
         )}
       >
@@ -117,20 +120,21 @@ const Panel = ({
     );
   } else if (pillToggle === PillToggleOptions.TimelineName) {
     activePage = (
-      <div className="w-full px-5">
-        {timelines &&
-          Object.entries(timelines).map(([auctionId, auction]) => {
-            return (
-              <div key={auctionId} className="my-4">
-                <Timeline
-                  {...auction}
-                  zoomLevel={zoomLevel}
-                  setSelectedRow={setSelectedRow}
-                  navigateToAuction={() => setPAActiveTab(5)}
-                />
-              </div>
-            );
-          })}
+      <div className="w-full h-full px-5">
+        {timelines && Object.entries(timelines).length > 0 ? (
+          Object.entries(timelines).map(([auctionId, auction]) => (
+            <div key={auctionId} className="my-4">
+              <Timeline
+                {...auction}
+                zoomLevel={zoomLevel}
+                setSelectedRow={setSelectedRow}
+                navigateToAuction={() => setPAActiveTab(5)}
+              />
+            </div>
+          ))
+        ) : (
+          <Placeholder showEvaluationPlaceholder={true} />
+        )}
       </div>
     );
   }
@@ -149,20 +153,21 @@ const Panel = ({
           eeAnimatedTab={eeAnimatedTab}
         />
       </div>
-      {pillToggle === PillToggleOptions.TimelineName && (
-        <div className="absolute top-[18px] right-[20px]">
-          <Slider
-            sliderStep={zoomLevel}
-            setSliderStep={(step) => {
-              setZoomLevel(step);
-            }}
-            label="Zoom"
-            min={1}
-            max={4}
-            step={1}
-          />
-        </div>
-      )}
+      {pillToggle === PillToggleOptions.TimelineName &&
+        Object.entries(timelines).length > 0 && (
+          <div className="absolute top-[18px] right-[20px]">
+            <Slider
+              sliderStep={zoomLevel}
+              setSliderStep={(step) => {
+                setZoomLevel(step);
+              }}
+              label="Zoom"
+              min={1}
+              max={4}
+              step={1}
+            />
+          </div>
+        )}
       <div className="flex-1 overflow-auto text-outer-space-crayola">
         {activePage}
       </div>

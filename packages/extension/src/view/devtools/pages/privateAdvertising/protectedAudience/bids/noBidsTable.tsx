@@ -29,7 +29,11 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
-import EvaluationEnvironment from '../evaluationEnvironment';
+
+/**
+ * Internal dependencies.
+ */
+import Placeholder from './placeholder';
 
 interface NoBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -83,14 +87,7 @@ const NoBidsTable = ({
 
   if (!noBids || Object.keys(noBids).length === 0) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        <p className="text-lg text-raisin-black dark:text-bright-gray">
-          No bids data was recorded.
-        </p>
-        {showEvaluationPlaceholder && (
-          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids if you haven’t already." />
-        )}
-      </div>
+      <Placeholder showEvaluationPlaceholder={showEvaluationPlaceholder} />
     );
   }
 
