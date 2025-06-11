@@ -34,7 +34,7 @@ import { formatTimestampToIST } from './formatTimestampToIST';
 import { Bidder, BidderType } from './types';
 
 type PrebidTimeoutEvent = PrebidAuctionEventType & {
-  bids: BidTimeoutEvent;
+  timeoutBid: BidTimeoutEvent;
 };
 
 export const prepareTimelineData = (
@@ -93,7 +93,7 @@ export const prepareTimelineData = (
       const timedOutBid = formTimedOutBids(
         events
           .filter((event) => event.eventType === 'bidTimeout')
-          ?.map((event) => (event as PrebidTimeoutEvent).bids) ?? [],
+          ?.map((event) => (event as PrebidTimeoutEvent).timeoutBid) ?? [],
         bidderRequest,
         auctionEnd.timestamp,
         events
