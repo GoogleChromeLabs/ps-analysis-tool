@@ -127,6 +127,27 @@ const Timeline = ({
                 style={{ flexBasis: `${TIME_DURATION * zoom}px` }}
                 key={index}
               >
+                {Array.from({ length: TIME_DURATION / 10 - 1 }).map(
+                  (__, subIndex) => {
+                    const lineClasses = classNames(
+                      'absolute w-[1px] border-r border-dotted h-full transition-all duration-300 ease-out',
+                      {
+                        'border-sky-100': zoom === 1,
+                        'border-sky-200': zoom >= 2,
+                      }
+                    );
+                    return (
+                      <div
+                        key={subIndex}
+                        className={lineClasses}
+                        style={{
+                          left: `${(subIndex + 1) * (zoom * 10)}px`,
+                          top: '0',
+                        }}
+                      ></div>
+                    );
+                  }
+                )}
                 <span className={spanClasses}>
                   {INITIAL_TIME + index * TIME_DURATION}ms
                 </span>
