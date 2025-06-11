@@ -10,7 +10,7 @@
   "scripts": {
     "prebuild": "rimraf ../../dist/extension",
     "dev": "run-p dev:root dev:popup dev:devtools dev:report",
-    "build": "npm run build:root && npm run build:popup && npm run build:devtools && npm run build:report",
+    "build": "npm run build:root && npm run build:popup && npm run build:report && npm run build:devtools",
     "dev:root": "cross-env NODE_ENV=development npm run build:root -- --watch",
     "build:root": "cross-env PAGE=root vite build --config ../../vite.extension.config.mts",
     "dev:popup": "cross-env NODE_ENV=development npm run build:popup -- --watch",
