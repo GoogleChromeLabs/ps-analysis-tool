@@ -48,7 +48,9 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
       filteredEvents = filteredEvents.filter((event) => {
         return Object.values(event.message)
           .map((value) =>
-            typeof value === 'object' ? JSON.stringify(value) : value
+            typeof value === 'object'
+              ? JSON.stringify(value).toLowerCase()
+              : (value ?? '')?.toLowerCase()
           )
           .join(' ')
           .includes(searchValue);
