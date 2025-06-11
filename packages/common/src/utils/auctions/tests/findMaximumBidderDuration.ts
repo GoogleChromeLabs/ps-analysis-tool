@@ -16,8 +16,8 @@
 /**
  * Internal dependencies.
  */
-import findMaximumBidderDuration from '../findMaximumBidderDuration';
-import type { Bidder } from '../../types';
+import { findMaximumBidderDuration } from '../findMaximumBidderDuration';
+import type { Bidder } from '../types';
 
 describe('findMaximumBidderDuration', () => {
   it('returns 0 for empty array', () => {

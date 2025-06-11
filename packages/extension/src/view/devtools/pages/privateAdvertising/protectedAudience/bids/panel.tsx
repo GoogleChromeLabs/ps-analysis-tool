@@ -158,7 +158,7 @@ const Panel = ({
           <div className="absolute top-[18px] right-[20px]">
             <Slider
               sliderStep={zoomLevel}
-              setSliderStep={(step) => {
+              setSliderStep={(step: number) => {
                 setZoomLevel(step);
               }}
               label="Zoom"

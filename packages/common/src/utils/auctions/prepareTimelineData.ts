@@ -22,9 +22,19 @@ import {
   AuctionEndEvent,
   BidRequestedEvent,
   BidResponse,
+  BidTimeoutEvent,
   NoBid,
 } from '../../prebidGlobal.types';
+import {
+  formNoBidData,
+  formReceivedBidData,
+  formTimedOutBids,
+} from './bidderCreator';
 import { Bidder, BidderType } from './types';
+
+type PrebidTimeoutEvent = PrebidAuctionEventType & {
+  bids: BidTimeoutEvent;
+};
 
 const formatTimestampToIST = (timestamp: string) => {
   const date = new Date(timestamp);
@@ -43,13 +53,13 @@ export const prepareTimelineData = (
   const auctions: any = {};
 
   Object.entries(auctionEvents).forEach(([auctionId, events]) => {
-    const bidders: Partial<Bidder>[] = [];
+    let bidders: Partial<Bidder>[] = [];
     auctions[auctionId] = {};
 
     const auctionEnd: AuctionEndEvent = events.find(
       (item: PrebidAuctionEventType) => item.eventType === 'auctionEnd'
     ) as AuctionEndEvent;
-    console.log(auctionEnd);
+
     if (!auctionEnd) {
       return;
     }
@@ -59,93 +69,59 @@ export const prepareTimelineData = (
     ) as BidRequestedEvent[];
 
     const receivedBids = events.filter(
-      (event: any) => event.eventType === 'BidResponse'
+      (event: PrebidAuctionEventType) => event.eventType === 'BidResponse'
     ) as BidResponse[];
 
     const noBids = events.filter(
-      (event: any) => event.eventType === 'noBid'
+      (event: PrebidAuctionEventType) => event.eventType === 'noBid'
     ) as NoBid[];
 
     bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
-      console.log(receivedBids, bidderRequests);
-      const bid = receivedBids.find(
-        (_bid) =>
-          _bid.auctionId === bidderRequest?.auctionId &&
-          (_bid.bidderCode === bidderRequest.bidderCode ||
-            _bid.bidder === bidderRequest.bidderCode)
+      const receivedBid = formReceivedBidData(
+        receivedBids,
+        bidderRequest,
+        auctionEnd.timestamp
       );
 
-      if (!bid) {
+      if (receivedBid) {
+        bidders.push(receivedBid);
         return;
       }
 
-      bidders.push({
-        name: bid.bidder,
-        startTime: (bid.requestTimestamp as number) - auctionEnd.timestamp,
-        endTime: (bid.responseTimestamp as number) - auctionEnd.timestamp,
-        duration: `${
-          (bid?.responseTimestamp ?? 0) - (bid?.requestTimestamp ?? 0)
-        }`,
-        type: BidderType.BID,
-        data: bidderRequest,
-      });
-    });
-
-    bidderRequests.forEach((bidderRequest: BidRequestedEvent) => {
-      const bid = noBids.find(
-        (_bid) =>
-          _bid.auctionId === bidderRequest?.auctionId &&
-          (_bid.bidderCode === bidderRequest.bidderCode ||
-            _bid.bidder === bidderRequest.bidderCode)
+      const noBid = formNoBidData(
+        noBids,
+        bidderRequest,
+        auctionEnd.timestamp,
+        events
       );
 
-      if (!bid) {
+      if (noBid) {
+        bidders.push(noBid);
         return;
       }
 
-      const bidder: Partial<Bidder> = {
-        name: bid.bidder,
-        type: BidderType.NO_BID,
-        adUnitCode: bid.adUnitCode,
-        data: bid,
-      };
+      const timedOutBid = formTimedOutBids(
+        events
+          .filter((event) => event.eventType === 'bidTimeout')
+          ?.map((event) => (event as PrebidTimeoutEvent).bids) ?? [],
+        bidderRequest,
+        auctionEnd.timestamp,
+        events
+      );
 
-      bidder.startTime = bidderRequest.start - auctionEnd.timestamp;
-      bidder.data = bidderRequest;
-      bidder.serverResponseTimeMs = bidderRequest?.serverResponseTimeMs ?? 0;
-      const noBidElapsedTime =
-        events.find(
-          (event) =>
-            event.eventType === 'noBid' &&
-            //@ts-ignore
-            event.bidderRequestId === bid.bidderRequestId
-        )?.elapsedTime ?? 0;
-
-      const bidRequestedElapsedTime =
-        events.find(
-          (event) =>
-            event.eventType === 'bidRequested' &&
-            //@ts-ignore
-            event.bidderRequestId === bid.bidderRequestId
-        )?.elapsedTime ?? 0;
-      bidder.endTime =
-        bidderRequest.start +
-        noBidElapsedTime -
-        bidRequestedElapsedTime -
-        auctionEnd.timestamp;
-      bidder.duration = `${(bidder?.endTime ?? 0) - (bidder?.startTime ?? 0)}`;
-
-      bidders.push(bidder);
+      if (timedOutBid) {
+        bidders.push(timedOutBid);
+        return;
+      }
     });
 
     events.forEach((event: any) => {
       if (event.eventType === 'bidWon') {
-        bidders.push({
-          name: event.bidder,
-          type: BidderType.WON,
-          startTime: event.requestTimestamp - auctionEnd.timestamp,
-          endTime: event.responseTimestamp - auctionEnd.timestamp,
-          duration: `${event.responseTimestamp - event.requestTimestamp}`,
+        bidders = bidders.map((bidder) => {
+          if (bidder.type === BidderType.BID && bidder.name === event.bidder) {
+            bidder.type = BidderType.WON;
+          }
+          return bidder;
         });
       }
     });

@@ -290,7 +290,7 @@ class PrebidInterface {
     this.prebidInterface?.onEvent('bidTimeout', (args) => {
       args.forEach((arg) => {
         this.addEvent(arg.auctionId, {
-          ...args,
+          bids: arg,
           eventType: 'bidTimeout',
         });
       });
