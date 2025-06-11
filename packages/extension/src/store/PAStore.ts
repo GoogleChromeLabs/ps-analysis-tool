@@ -25,7 +25,7 @@ import type { Protocol } from 'devtools-protocol';
 import networkTime from './utils/networkTime';
 import formatTime from './utils/formatTime';
 import { DataStore } from './dataStore';
-import type { PrebidEvents } from './types';
+import { AUCTION_EVENTS } from '../constants';
 
 class PAStore extends DataStore {
   /**
@@ -37,12 +37,6 @@ class PAStore extends DataStore {
     };
   } = {};
 
-  /**
-   * The auction event of the tabs (Interest group access as well as interest group auction events).
-   */
-  prebidEvents: {
-    [tabId: string]: PrebidEvents;
-  } = {};
   /**
    * For tab 123456 auction events will have interestGroup accessed events as well as the interestGroupAuctionEvents.
    * There can be 2 types of interestGroupAccessed events:
@@ -100,7 +94,6 @@ class PAStore extends DataStore {
       delete this.auctionEvents[tabId][uniqueAuctionId];
     });
     delete this.auctionDataForTabId[tabId];
-    delete this.prebidEvents[tabId];
   }
 
   initialiseVariablesForNewTab(tabId: string): void {
@@ -111,18 +104,6 @@ class PAStore extends DataStore {
       globalEvents,
     };
     this.auctionDataForTabId[tabId] = {};
-    this.prebidEvents[tabId] = {
-      prebidExists: false,
-      adUnits: {},
-      pbjsNamespace: '',
-      noBids: {},
-      receivedBids: [],
-      errorEvents: [],
-      versionInfo: '',
-      config: {},
-      auctionEvents: {},
-      installedModules: [],
-    };
     //@ts-ignore
     globalThis.PSAT = {
       //@ts-ignore
@@ -130,7 +111,6 @@ class PAStore extends DataStore {
       unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
       auctionEvents: this.auctionEvents,
       auctionDataForTabId: this.auctionDataForTabId,
-      prebidEvents: this.prebidEvents,
     };
   }
 
@@ -142,7 +122,6 @@ class PAStore extends DataStore {
     delete this.unParsedRequestHeadersForPA[tabId.toString()];
     delete this.auctionDataForTabId[tabId.toString()];
     delete this.auctionEvents[tabId.toString()];
-    delete this.prebidEvents[tabId.toString()];
   }
 
   /**
@@ -221,14 +200,13 @@ class PAStore extends DataStore {
       }
 
       await chrome.runtime.sendMessage({
-        type: 'AUCTION_EVENTS',
+        type: AUCTION_EVENTS,
         payload: {
           refreshTabData: overrideForInitialSync,
           tabId,
           auctionEvents: isMultiSellerAuction ? groupedAuctionBids : rest,
           multiSellerAuction: isMultiSellerAuction,
           globalEvents: globalEvents ?? [],
-          prebidEvents: this.prebidEvents[tabId],
         },
       });
       DataStore.tabs[tabId].newUpdatesPA = 0;

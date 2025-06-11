@@ -19,37 +19,25 @@
  */
 import React, { useMemo } from 'react';
 import { MatrixComponent } from '@google-psat/design-system';
-import type {
-  AdsAndBiddersType,
-  NoBidsType,
-  ReceivedBids,
-} from '@google-psat/common';
 
 interface AdMatrixProps {
-  adsAndBidders: AdsAndBiddersType;
-  receivedBids: ReceivedBids[];
-  noBids: NoBidsType;
+  adUnitsCount: number;
+  biddersCount: number;
+  bidsCount: number;
+  noBidsCount: number;
 }
 
-const AdMatrix = ({ adsAndBidders, receivedBids, noBids }: AdMatrixProps) => {
-  const biddersCount = useMemo(() => {
-    const bidders = Object.values(adsAndBidders).reduce((acc, ad) => {
-      if (ad.bidders) {
-        ad.bidders.forEach((bidder) => {
-          acc.add(bidder);
-        });
-      }
-      return acc;
-    }, new Set());
-
-    return bidders.size;
-  }, [adsAndBidders]);
-
+const AdMatrix = ({
+  adUnitsCount,
+  biddersCount,
+  bidsCount,
+  noBidsCount,
+}: AdMatrixProps) => {
   const matrixData = useMemo(
     () => [
       {
         title: 'Ad Units',
-        count: Object.values(adsAndBidders).length,
+        count: adUnitsCount,
         color: '#5CC971',
         description: 'Placeholder',
         countClassName: 'text-[#5CC971]',
@@ -63,20 +51,20 @@ const AdMatrix = ({ adsAndBidders, receivedBids, noBids }: AdMatrixProps) => {
       },
       {
         title: 'Bids',
-        count: receivedBids.length,
+        count: bidsCount,
         color: '#4C79F4',
         description: 'Placeholder',
         countClassName: 'text-[#4C79F4]',
       },
       {
         title: 'No Bids',
-        count: Object.values(noBids).length,
+        count: noBidsCount,
         color: '#EC7159',
         description: 'Placeholder',
         countClassName: 'text-[#EC7159]',
       },
     ],
-    [adsAndBidders, biddersCount, noBids, receivedBids.length]
+    [adUnitsCount, biddersCount, bidsCount, noBidsCount]
   );
 
   return (

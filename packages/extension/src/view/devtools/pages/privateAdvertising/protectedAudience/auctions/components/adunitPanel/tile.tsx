@@ -23,7 +23,7 @@ import React from 'react';
 interface TileProps {
   item: {
     name: string;
-    buttons: { name: string; onClick?: () => void }[];
+    buttons: { name: string; onClick?: () => void; className?: string }[];
     Icon: React.FC<React.SVGProps<SVGSVGElement>>;
   };
 }
@@ -41,25 +41,33 @@ const Tile = ({ item }: TileProps) => {
         <h4>{item.name}</h4>
       </div>
       <div className="flex flex-wrap gap-x-3 gap-y-2 mt-6">
-        {item.buttons &&
-          item.buttons.map((button) => (
-            <button
-              className={classNames(
-                'bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs',
-                {
-                  'hover:border-american-silver hover:cursor-pointer hover:bg-light-gray hover:scale-[1.03] transition-all duration-150 ease-in-out':
-                    button.onClick,
-                },
-                {
-                  'cursor-default': !button.onClick,
-                }
-              )}
-              key={button.name}
-              onClick={button?.onClick}
-            >
-              {button.name}
-            </button>
-          ))}
+        {item.buttons?.length ? (
+          item.buttons.map((button) => {
+            return (
+              <button
+                className={classNames(
+                  'bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs',
+                  {
+                    'hover:border-american-silver hover:cursor-pointer hover:bg-light-gray hover:scale-[1.03] transition-all duration-150 ease-in-out':
+                      button.onClick,
+                  },
+                  {
+                    'cursor-default': !button.onClick,
+                  },
+                  button.className
+                )}
+                key={button.name}
+                onClick={button?.onClick}
+              >
+                {button.name}
+              </button>
+            );
+          })
+        ) : (
+          <>
+            <p className="text-sm text-gray-500 py-1 px-4">No data available</p>
+          </>
+        )}
       </div>
     </div>
   );

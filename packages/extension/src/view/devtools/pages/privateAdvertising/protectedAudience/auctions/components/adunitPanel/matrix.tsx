@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,69 +20,38 @@
 import React, { useMemo } from 'react';
 import { MatrixComponent } from '@google-psat/design-system';
 
-/**
- * Internal dependencies
- */
-import { useProtectedAudience } from '../../../../../stateProviders';
-
 interface MatrixData {
-  adUnitCode: string;
+  biddersCount: number;
+  bidsCount: number;
+  noBidsCount: number;
 }
 
-const Matrix = ({ adUnitCode }: MatrixData) => {
-  const { adsAndBidders, receivedBids, noBids } = useProtectedAudience(
-    ({ state }) => ({
-      adsAndBidders: state.adsAndBidders,
-      receivedBids: state.receivedBids,
-      noBids: state.noBids,
-    })
-  );
-
-  const biddersCount = useMemo(() => {
-    const bidders = Object.values(adsAndBidders).reduce((acc, ad) => {
-      if (adUnitCode !== ad.adUnitCode) {
-        return acc;
-      }
-
-      if (ad.bidders) {
-        ad.bidders.forEach((bidder) => {
-          acc.add(bidder);
-        });
-      }
-      return acc;
-    }, new Set());
-
-    return bidders.size;
-  }, [adUnitCode, adsAndBidders]);
-
+const Matrix = ({ biddersCount, bidsCount, noBidsCount }: MatrixData) => {
   const matrixData = useMemo(
     () => [
       {
         title: 'Bidders',
-        count: biddersCount,
+        count: biddersCount || 0,
         color: '#F3AE4E',
         description: 'Placeholder',
         countClassName: 'text-[#F3AE4E]',
       },
       {
         title: 'Bids',
-        count: receivedBids.filter((bid) => bid.adUnitCode === adUnitCode)
-          .length,
+        count: bidsCount || 0,
         color: '#4C79F4',
         description: 'Placeholder',
         countClassName: 'text-[#4C79F4]',
       },
       {
         title: 'No Bids',
-        count: Object.values(noBids).filter(
-          (bid) => bid.adUnitCode === adUnitCode
-        ).length,
+        count: noBidsCount || 0,
         color: '#EC7159',
         description: 'Placeholder',
         countClassName: 'text-[#EC7159]',
       },
     ],
-    [adUnitCode, biddersCount, noBids, receivedBids]
+    [biddersCount, bidsCount, noBidsCount]
   );
 
   return (

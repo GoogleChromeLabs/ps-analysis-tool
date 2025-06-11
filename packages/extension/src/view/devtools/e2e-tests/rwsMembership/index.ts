@@ -61,6 +61,8 @@ describe('RWS membership', () => {
     }
     // Check if RWS is present and click on it.
     await interaction.clickMatchingElement(frame, 'p', 'Related Website Sets');
+    await interaction.clickMatchingElement(frame, 'button', 'Observability');
+    await interaction.delay(1000);
     await interaction.clickMatchingElement(frame, 'button', 'Membership');
     await interaction.delay(6000);
 

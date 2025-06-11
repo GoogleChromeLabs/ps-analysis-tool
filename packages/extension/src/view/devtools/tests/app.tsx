@@ -32,6 +32,7 @@ import {
   useCookie,
   useProtectedAudience,
   useSettings,
+  usePrebid,
 } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -42,6 +43,7 @@ jest.mock('../stateProviders', () => ({
   useCookie: jest.fn(),
   useSettings: jest.fn(),
   useProtectedAudience: jest.fn(),
+  usePrebid: jest.fn(),
 }));
 
 jest.mock(
@@ -57,6 +59,7 @@ const mockUseTablePersistentSettingStore =
   useTablePersistentSettingsStore as jest.Mock;
 const mockUseProtectedAudienceStore = useProtectedAudience as jest.Mock;
 const mockUseSettingsStore = useSettings as jest.Mock;
+const mockPrebidStore = usePrebid as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {
@@ -225,6 +228,24 @@ describe('App', () => {
       tabUrl: data.tabUrl,
     });
 
+    mockPrebidStore.mockReturnValue({
+      prebidAdUnits: {},
+      prebidNoBids: {},
+      versionInfo: '',
+      installedModules: [],
+      config: {},
+      prebidReceivedBids: [],
+      errorEvents: [],
+      prebidAuctionEvents: {},
+      pbjsNamespace: '',
+      prebidExists: null,
+      debuggingModuleConfig: {
+        enabled: false,
+        intercept: [],
+      },
+      storeRulesInLocalStorage: false,
+    });
+
     mockUseProtectedAudienceStore.mockReturnValue({
       auctionEvents: {},
       interestGroupDetails: [],
@@ -257,15 +278,36 @@ describe('App', () => {
       canStartInspecting: true,
       tabUrl: data.tabUrl,
     });
+
     mockUseProtectedAudienceStore.mockReturnValue({
       auctionEvents: {},
       interestGroupDetails: [],
     });
+
     mockUseTablePersistentSettingStore.mockReturnValue({
       getPreferences: () => '',
       setPreferences: noop,
     });
+
     mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
+
+    mockPrebidStore.mockReturnValue({
+      prebidAdUnits: {},
+      prebidNoBids: {},
+      versionInfo: '',
+      installedModules: [],
+      config: {},
+      prebidReceivedBids: [],
+      errorEvents: [],
+      prebidAuctionEvents: {},
+      pbjsNamespace: '',
+      prebidExists: null,
+      debuggingModuleConfig: {
+        enabled: false,
+        intercept: [],
+      },
+      storeRulesInLocalStorage: false,
+    });
 
     act(() => {
       render(<App />);

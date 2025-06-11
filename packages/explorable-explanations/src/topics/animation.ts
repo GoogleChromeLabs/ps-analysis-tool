@@ -21,29 +21,27 @@ import { Circle, InfoBox, SmallCircle, clearInfoBox } from './components';
 import { getSmallCirclePositions } from './utils';
 import assets from './assets';
 
-export type Epoch = { datetime: string; website: string; topics: string[] };
+type Epoch = {
+  webVisits: { website: string; datetime: string; topics: string[] }[];
+};
+
 export type Assets = Record<string, p5.Image | null>;
 
 export type TopicsAnimationProps = {
   p: p5;
-  epoch: Epoch[];
-  isInteractive: boolean;
-  siteAdTechs: Record<string, string[]>;
   handleUserVisit: (visitIndex: number) => void;
-  setHighlightAdTech: (highlightAdTech: string | null) => void;
-  visitIndexStart: number;
+  handleHighlighTech: (highlightAdTech: string | null) => void;
   onReady?: () => void;
 };
 
 class TopicsAnimation {
-  p: p5;
   assets: Assets = {};
 
   // state
   circlePositions: Record<number, { x: number; y: number }> = {};
   siteAdTechs: Record<string, string[]> = {};
   visitIndex = 0;
-  playing = true;
+  playing = false;
   speedMultiplier = 1;
   inspectedCircleIndex = -1;
   inspectedSmallCircleIndex = [-1, -1]; // [circleIndex, smallCircleIndex]
@@ -52,39 +50,23 @@ class TopicsAnimation {
   canvas: p5.Renderer | null = null;
   smallCirclePositions: Record<number, { x: number; y: number }[]> = {};
   inspectedCircles: Set<number> = new Set();
-  isTextLoadingCoverVisible = true;
-  isInited = false;
+  isInitialized = false;
+  isInteractive: boolean;
+  webVisits: Epoch['webVisits'] = [];
+  visitedSites: Set<number>;
 
   // props
-  epoch: TopicsAnimationProps['epoch'];
-  isInteractive: TopicsAnimationProps['isInteractive'];
-  handleUserVisit: TopicsAnimationProps['handleUserVisit'];
-  setHighlightAdTech: TopicsAnimationProps['setHighlightAdTech'];
-  visitIndexStart: TopicsAnimationProps['visitIndexStart'];
+  p: p5;
+  handleUserVisit: (visitIndex: number) => void;
+  handleHighlighTech: (highlightAdTech: string | null) => void;
   onReady: TopicsAnimationProps['onReady'];
 
-  constructor({
-    p,
-    epoch,
-    isInteractive,
-    siteAdTechs,
-    handleUserVisit,
-    setHighlightAdTech,
-    visitIndexStart,
-    onReady,
-  }: TopicsAnimationProps) {
-    this.p = p;
-    this.epoch = epoch;
-    this.isInteractive = isInteractive;
-    this.siteAdTechs = siteAdTechs;
-    this.handleUserVisit = handleUserVisit;
-    this.setHighlightAdTech = setHighlightAdTech;
+  constructor({ p, onReady }: TopicsAnimationProps) {
     this.onReady = onReady;
-    if (visitIndexStart) {
-      this.visitIndex = visitIndexStart;
-    }
+    this.p = p;
     p.preload = this.preload;
     p.setup = this.setup;
+    p.draw = this.draw;
   }
 
   private preload = () => {
@@ -109,9 +91,13 @@ class TopicsAnimation {
   };
 
   private draw = () => {
-    if (!this.isInited) {
-      this.isInited = true;
+    if (!this.isInitialized) {
+      this.isInitialized = true;
       this.onReady?.();
+      return;
+    }
+
+    if (this.webVisits.length === 0) {
       return;
     }
 
@@ -123,7 +109,6 @@ class TopicsAnimation {
     this.inspectedSmallCircleIndex = this.getInspectedSmallCircleIndex();
 
     if (this.isInteractive) {
-      this.playing = false;
       this.drawInteractiveMode();
     } else {
       this.incrementVisitIndex();
@@ -132,13 +117,11 @@ class TopicsAnimation {
   };
 
   private incrementVisitIndex = () => {
-    if (this.visitIndexStart === this.epoch.length - 1) {
-      this.visitIndex = this.epoch.length + 1;
-      this.playing = false;
+    if (!this.playing) {
       return;
     }
 
-    if (!this.playing) {
+    if (this.visitIndex > this.webVisits.length) {
       return;
     }
 
@@ -152,7 +135,6 @@ class TopicsAnimation {
 
     if (this.p.frameCount % delay === 0) {
       this.handleUserVisit(this.visitIndex);
-      this.visitIndex++;
     }
   };
 
@@ -173,7 +155,7 @@ class TopicsAnimation {
       return;
     }
     this.resetInfoBox(this.visitIndex - 1);
-    this.drawInfoBox(index, this.epoch[index].website);
+    this.drawInfoBox(index, this.webVisits[index].website);
   };
 
   drawUserVisitedDone = (index: number) => {
@@ -209,7 +191,7 @@ class TopicsAnimation {
     const { diameter, horizontalSpacing } = config.timeline.circleProps;
     const circleVerticalSpace = horizontalSpacing - 30 + diameter;
     const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
-    const currentCircle = this.epoch[visitIndex];
+    const currentCircle = this.webVisits[visitIndex];
 
     if (!this.isInteractive) {
       p.push();
@@ -244,6 +226,15 @@ class TopicsAnimation {
       return;
     }
 
+    if (this.inspectedSmallCircleIndex[0] !== -1) {
+      const [circleIndex, smallCircleIndex] = this.inspectedSmallCircleIndex;
+      this.handleHighlighTech(
+        this.siteAdTechs[this.webVisits[Number(circleIndex)].website][
+          Number(smallCircleIndex)
+        ]
+      );
+    }
+
     if (this.isInteractive && this.inspectedCircleIndex !== -1) {
       const index = this.inspectedCircleIndex;
       if (this.prevVisitedCircleIndex === index) {
@@ -257,26 +248,18 @@ class TopicsAnimation {
       if (this.smallCirclePositions[index] === undefined) {
         this.drawUserVisited(index);
       } else {
-        this.drawInfoBox(index, this.epoch[index].website);
+        this.drawInfoBox(index, this.webVisits[index].website);
       }
+
+      this.handleUserVisit(index);
       this.prevVisitedCircleIndex = index;
-    }
-
-    if (this.inspectedSmallCircleIndex[0] !== -1) {
-      const [circleIndex, smallCircleIndex] = this.inspectedSmallCircleIndex;
-
-      this.setHighlightAdTech(
-        this.siteAdTechs[this.epoch[Number(circleIndex)].website][
-          Number(smallCircleIndex)
-        ]
-      );
     }
   };
 
   private drawInfoBox(index: number, currentSite: string) {
     const p = this.p;
     const position = this.circlePositions[index];
-    const topics = this.epoch[index].topics;
+    const topics = this.webVisits[index].topics;
     const { diameter } = config.timeline.circleProps;
     const adTechs = this.siteAdTechs[currentSite];
     InfoBox({ p, position, diameter, topics, adTechs });
@@ -303,7 +286,7 @@ class TopicsAnimation {
     }
 
     if (appSmallCirclePositions) {
-      for (let i = 0; i < appSmallCirclePositions.length; i++) {
+      for (let i = 0; i < adTechs.length; i++) {
         const smallCirclePosition = appSmallCirclePositions[i];
         SmallCircle(
           p,
@@ -343,7 +326,7 @@ class TopicsAnimation {
     p.textAlign(p.CENTER, p.CENTER);
     p.textSize(12);
 
-    this.epoch.forEach((circleItem, index) => {
+    this.webVisits.forEach((circleItem, index) => {
       const xPosition = horizontalSpacing + circleVerticalSpace * index;
 
       if (this.assets[circleItem.website]) {
@@ -384,24 +367,30 @@ class TopicsAnimation {
     const isInspectingSmallCircle = this.inspectedSmallCircleIndex[0] !== -1;
 
     const lastVisitedIndex = this.prevVisitedCircleIndex;
-    const totalInspectedCircles = this.inspectedCircles.size;
     // draw already visited/inspected circles
     if (lastVisitedIndex !== -1) {
       this.inspectedCircles.add(lastVisitedIndex);
-      const inspectedCirclesArray = Array.from(this.inspectedCircles);
-      for (let i = 0; i < inspectedCirclesArray.length; i++) {
-        const index = inspectedCirclesArray[i];
-        if (lastVisitedIndex === index) {
-          this.drawUserVisited(index);
-        } else {
-          this.drawUserVisitedDone(index);
-        }
-        this.drawSmallCircles(index, this.epoch[index].website);
+    }
+
+    // draw user user/completed circles
+    const inspectedCirclesArray = Array.from(this.inspectedCircles);
+    for (let i = 0; i < inspectedCirclesArray.length; i++) {
+      const index = inspectedCirclesArray[i];
+      // draw user in last one selected circle
+      if (lastVisitedIndex === index) {
+        this.drawUserVisited(index);
+      } else {
+        // draw completed circles
+        this.drawUserVisitedDone(index);
       }
-      this.drawInfoBox(lastVisitedIndex, this.epoch[lastVisitedIndex].website);
-      if (totalInspectedCircles !== this.inspectedCircles.size) {
-        this.handleUserVisit(lastVisitedIndex);
-      }
+      this.drawSmallCircles(index, this.webVisits[index].website);
+    }
+
+    if (lastVisitedIndex !== -1) {
+      this.drawInfoBox(
+        lastVisitedIndex,
+        this.webVisits[lastVisitedIndex].website
+      );
     }
 
     if (isInspectingSmallCircle) {
@@ -492,16 +481,13 @@ class TopicsAnimation {
   };
 
   public reset = () => {
-    this.isInited = false;
+    this.isInitialized = false;
     this.inspectedCircleIndex = -1;
     this.circlePositions = {};
     this.smallCirclePositions = {};
     this.prevVisitedCircleIndex = -1;
+    this.visitIndex = 0;
     this.inspectedCircles.clear();
-  };
-
-  public getCurrentVisitIndex = () => {
-    return this.visitIndex;
   };
 
   public setCurrentVisitIndex = (visitIndex: number) => {
@@ -514,17 +500,36 @@ class TopicsAnimation {
 
   public setInteractiveMode = (state: boolean) => {
     this.isInteractive = state;
-    if (this.isInteractive) {
-      this.playing = false;
-    }
   };
 
-  public setEpoch = (epoch: Epoch[]) => {
-    this.epoch = epoch;
+  public setWebVisits = (webVisits: Epoch['webVisits']) => {
+    // it must be reset in order to generate new small circle positions
+    this.smallCirclePositions = {};
+    this.prevVisitedCircleIndex = -1;
+    this.inspectedCircleIndex = -1;
+    this.inspectedSmallCircleIndex = [-1, -1];
+    this.webVisits = webVisits;
   };
 
-  public start = () => {
-    this.p.draw = this.draw;
+  public setSiteAdTechs = (siteAdTechs: Record<string, string[]>) => {
+    this.siteAdTechs = siteAdTechs;
+  };
+
+  public setHandleUserVisit = (
+    handleUserVisit: (visitIndex: number) => void
+  ) => {
+    this.handleUserVisit = handleUserVisit;
+  };
+
+  public setHandleHighlighTech = (
+    handleHighlighTech: (highlightAdTech: string | null) => void
+  ) => {
+    this.handleHighlighTech = handleHighlighTech;
+  };
+
+  // used for interactive mode
+  public setInspectedCircles = (inspectedCircles: Set<number>) => {
+    this.inspectedCircles = inspectedCircles;
   };
 }
 

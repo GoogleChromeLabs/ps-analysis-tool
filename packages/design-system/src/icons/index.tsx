@@ -125,4 +125,5 @@ export { default as WarningColored } from './warning-icon.svg?react';
 export { default as Equal } from './equal.svg?react';
 export { default as DeleteForever } from './delete-forever.svg?react';
 export { default as DoubleArrow } from './double-arrow.svg?react';
+export { default as Hammer } from './hammer.svg?react';
 export * from './ps-icons';
