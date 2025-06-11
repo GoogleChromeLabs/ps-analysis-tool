@@ -243,15 +243,22 @@ const ReceivedBidsTable = ({
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
+        console;
         const data = row.originalData as singleAuctionEvent;
-        return data?.ownerOrigin + data?.uniqueAuctionId + data?.time;
+        return (
+          data?.ownerOrigin +
+          data?.uniqueAuctionId +
+          data?.time +
+          data?.adUnitCode
+        );
       }}
     >
       <Table
         selectedKey={
           selectedRow?.ownerOrigin +
           selectedRow?.uniqueAuctionId +
-          selectedRow?.time
+          selectedRow?.time +
+          selectedRow?.adUnitCode
         }
         hideSearch={true}
         minWidth="50rem"

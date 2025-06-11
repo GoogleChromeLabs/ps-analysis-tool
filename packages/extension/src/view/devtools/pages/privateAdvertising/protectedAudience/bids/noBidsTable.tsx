@@ -115,7 +115,8 @@ const NoBidsTable = ({
         return (
           row.originalData?.ownerOrigin +
           row.originalData?.adUnitCode +
-          row.originalData?.uniqueAuctionId
+          row.originalData?.uniqueAuctionId +
+          row.originalData?.name
         );
       }}
     >
@@ -123,7 +124,8 @@ const NoBidsTable = ({
         selectedKey={
           selectedRow?.ownerOrigin +
           (selectedRow?.adUnitCode || '') +
-          selectedRow?.uniqueAuctionId
+          selectedRow?.uniqueAuctionId +
+          (selectedRow?.name || '')
         }
         minWidth="42rem"
         hideSearch={true}
