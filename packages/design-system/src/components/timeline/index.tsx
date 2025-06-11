@@ -24,6 +24,7 @@ import {
   type Bidder,
   type TimelineData,
 } from '@google-psat/common';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -60,6 +61,8 @@ const Timeline = ({
   const [animate, setAnimate] = useState(false);
   const [scrollWidth, setScrollWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [timeoutBlockWidth, setTimeoutBlockWidth] = useState(0);
+  const [zoom, setZoom] = useState(2);
 
   const lineCount = useMemo(() => {
     const maxDuration = Math.max(
@@ -75,9 +78,13 @@ const Timeline = ({
     return maxDuration / TIME_DURATION + extraLines;
   }, [bidders, auctionTimeout]);
 
-  const zoom = zoomLevel < 1 ? 1 : zoomLevel;
   const lines = Array.from({ length: lineCount });
-  const timeoutBlockWidth = scrollWidth - auctionTimeout * zoom;
+
+  useEffect(() => {
+    const _zoom = zoomLevel < 1 ? 1 : zoomLevel;
+    setZoom(_zoom);
+    setTimeoutBlockWidth(scrollWidth - auctionTimeout * _zoom);
+  }, [scrollWidth, auctionTimeout, zoomLevel]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -101,19 +108,26 @@ const Timeline = ({
       </header>
       <div
         ref={containerRef}
-        className="min-h-[300px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
-        style={{ height: bidders ? bidders.length * BAR_HEIGHT : '300px' }}
+        className="min-h-[200px] border-pale-cornflower-blue border-1 mt-2 relative overflow-auto"
+        style={{ height: bidders ? bidders.length * BAR_HEIGHT : '200px' }}
       >
         {/*Vertical Columns*/}
         <div className="flex h-full">
           {lines.map((_, index) => {
+            const spanClasses = classNames(
+              'absolute right-0 block text-xs mt-1',
+              {
+                'pr-2': zoom > 1,
+                'pr-[1px]': zoom === 1,
+              }
+            );
             return (
               <div
                 className="border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] relative transition-all duration-300 ease-out"
                 style={{ flexBasis: `${TIME_DURATION * zoom}px` }}
                 key={index}
               >
-                <span className="absolute right-0 pr-2 block text-xs mt-1">
+                <span className={spanClasses}>
                   {INITIAL_TIME + index * TIME_DURATION}ms
                 </span>
               </div>

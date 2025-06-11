@@ -120,7 +120,7 @@ const Panel = ({
     );
   } else if (pillToggle === PillToggleOptions.TimelineName) {
     activePage = (
-      <div className="w-full h-full px-5">
+      <div className="w-full h-full px-4">
         {timelines && Object.entries(timelines).length > 0 ? (
           Object.entries(timelines).map(([auctionId, auction]) => (
             <div key={auctionId} className="my-4">
