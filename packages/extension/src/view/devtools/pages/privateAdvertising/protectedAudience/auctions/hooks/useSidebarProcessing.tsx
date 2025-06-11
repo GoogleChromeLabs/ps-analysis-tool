@@ -186,9 +186,13 @@ const useSidebarProcessing = () => {
         };
       });
 
-      newSidebarData.adunits.children = {
-        ...adUnitContainerChildren,
-      };
+      if (adUnits.length === 0) {
+        newSidebarData.adunits.children = {};
+      } else {
+        newSidebarData.adunits.children = {
+          ...adUnitContainerChildren,
+        };
+      }
 
       return newSidebarData;
     });
