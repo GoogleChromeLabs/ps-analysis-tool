@@ -179,6 +179,11 @@ const Timeline = ({
             {bidders &&
               bidders.map((bidder, index) => {
                 const fullWidth = parseFloat(bidder.duration) * zoom;
+                const bidderType =
+                  bidder.type === BidderType.NO_BID &&
+                  Number(bidder.duration) > auctionTimeout
+                    ? BidderType.TIMED_OUT
+                    : bidder.type;
                 return (
                   <div key={index} className="relative group ">
                     {/*Bar*/}
@@ -188,7 +193,7 @@ const Timeline = ({
                       onClick={() => setSelectedRow(bidder?.data)}
                       style={{
                         width: animate ? `${fullWidth}px` : `0px`,
-                        backgroundColor: BAR_COLORS[bidder.type],
+                        backgroundColor: BAR_COLORS[bidderType],
                         top: `${(index + 1) * 40}px`,
                         left: `${
                           bidder.startTime ? bidder.startTime * zoom : 0
