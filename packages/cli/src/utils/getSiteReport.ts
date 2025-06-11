@@ -22,12 +22,6 @@ import {
   type ErroredOutUrlsData,
   type SingleURLError,
 } from '@google-psat/common';
-import {
-  type DetectionFunctions,
-  detectMatchingSignatures,
-  LIBRARIES,
-  type LibraryData,
-} from '@google-psat/library-detection';
 
 /**
  * This function returns the exact object which will be sent to the cli dashboard when report is generated.
@@ -37,34 +31,18 @@ import {
  */
 function getSiteReport(urls: string[], processedData: any) {
   return urls.map((url, index) => {
-    const {
-      erroredOutUrls = {},
-      cookieData = {},
-      domQueryMatches = {},
-      resources = [],
-    } = processedData[index];
+    const { erroredOutUrls = {}, cookieData = {} } = processedData[index];
 
     const hasTimeOutError = erroredOutUrls[url]?.some(
       ({ errorName }: SingleURLError) =>
         errorName === 'TimeoutError' || errorName === 'i'
     );
 
-    const detectedMatchingSignatures: LibraryData = {
-      ...detectMatchingSignatures(
-        resources ?? [],
-        Object.fromEntries(
-          LIBRARIES.map((library) => [library.name, library.detectionFunction])
-        ) as DetectionFunctions
-      ),
-      ...(domQueryMatches ?? {}),
-    };
-
     if (erroredOutUrls[url] && erroredOutUrls[url].length > 0) {
       if (hasTimeOutError) {
         return {
           pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
           cookieData: cookieData,
-          libraryMatches: detectedMatchingSignatures ?? [],
           erroredOutUrls: [
             ...erroredOutUrls[url].map((errors: SingleURLError) => {
               return {
@@ -94,7 +72,6 @@ function getSiteReport(urls: string[], processedData: any) {
     return {
       pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
       cookieData,
-      libraryMatches: detectedMatchingSignatures ?? [],
     } as unknown as CompleteJson;
   });
 }

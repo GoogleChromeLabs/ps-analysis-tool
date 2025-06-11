@@ -21,7 +21,6 @@ import {
   type CookieTableData,
   getCookieKey,
   noop,
-  type LibraryData,
   type TabCookies,
   type TabFrames,
 } from '@google-psat/common';
@@ -46,10 +45,6 @@ interface AssembledCookiesLandingProps {
   tabFrames: TabFrames;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => Promise<void>;
-  libraryMatches: LibraryData | null;
-  libraryMatchesUrlCount?: {
-    [url: string]: number;
-  };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
   query?: string;
@@ -62,8 +57,6 @@ const AssembledCookiesLanding = ({
   tabFrames,
   setAppliedFilters,
   downloadReport,
-  libraryMatches,
-  libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
   query = '',
   clearQuery = noop,
@@ -165,8 +158,6 @@ const AssembledCookiesLanding = ({
             tabFrames={tabFrames}
             cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
-            libraryMatches={libraryMatches}
-            libraryMatchesUrlCount={libraryMatchesUrlCount}
             menuBarScrollContainerId={menuBarScrollContainerId}
           />
         </div>
