@@ -42,10 +42,7 @@ import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
-import {
-  AUCTION_EVENTS,
-  CS_GET_PREBID_DATA_RESPONSE,
-} from '../../../../constants';
+import { AUCTION_EVENTS } from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
@@ -238,13 +235,9 @@ const Provider = ({ children }: PropsWithChildren) => {
       };
     }) => {
       let didAuctionEventsChange = false;
-
-      if (
-        ![AUCTION_EVENTS, CS_GET_PREBID_DATA_RESPONSE].includes(message.type)
-      ) {
+      if (![AUCTION_EVENTS].includes(message.type)) {
         return;
       }
-
       if (!message.type) {
         return;
       }
@@ -390,9 +383,11 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        frameType !== 'outermost_frame' ||
-        frameId !== 0 ||
-        tabId !== chrome.devtools.inspectedWindow.tabId
+        !(
+          chrome.devtools.inspectedWindow.tabId === tabId &&
+          frameType === 'outermost_frame' &&
+          frameId === 0
+        )
       ) {
         return;
       }

@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
-import { noop, type singleAuctionEvent } from '@google-psat/common';
+import {
+  noop,
+  type singleAuctionEvent,
+  type PrebidEvents,
+} from '@google-psat/common';
 import {
   Table,
   TableProvider,
@@ -34,7 +38,6 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import BottomTray from '../components/table/bottomTray';
-import type { PrebidEvents } from '../../../../../../../store';
 
 interface PrebidTableProps {
   auctionEvents: [
