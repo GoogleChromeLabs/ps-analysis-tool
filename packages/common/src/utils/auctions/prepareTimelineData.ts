@@ -30,21 +30,11 @@ import {
   formReceivedBidData,
   formTimedOutBids,
 } from './bidderCreator';
+import { formatTimestampToIST } from './formatTimestampToIST';
 import { Bidder, BidderType } from './types';
 
 type PrebidTimeoutEvent = PrebidAuctionEventType & {
   bids: BidTimeoutEvent;
-};
-
-const formatTimestampToIST = (timestamp: string) => {
-  const date = new Date(timestamp);
-  return date.toLocaleTimeString('en-IN', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true,
-    timeZoneName: 'short',
-  });
 };
 
 export const prepareTimelineData = (
@@ -132,7 +122,7 @@ export const prepareTimelineData = (
       auctionId: auctionEnd.auctionId,
       auctionStartTime: auctionEnd.timestamp,
       auctionStartTimeFormatted: formatTimestampToIST(
-        `${auctionEnd.timestamp}`
+        Number(auctionEnd.timestamp)
       ),
       auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
       zoomLevel: 2,

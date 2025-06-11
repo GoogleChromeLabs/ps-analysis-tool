@@ -51,7 +51,7 @@ interface TimelineProps extends TimelineData {
 const Timeline = ({
   auctionTimeout,
   auctionId,
-  auctionStartTime,
+  auctionStartTimeFormatted,
   auctionTime,
   bidders,
   zoomLevel = 2,
@@ -103,7 +103,7 @@ const Timeline = ({
   return (
     <div className="mb-4">
       <header className="flex justify-between text-sm font-semibold">
-        <p>Auction Start: {auctionStartTime}</p>
+        <p>Auction Start: {auctionStartTimeFormatted}</p>
         <p>Auction Time: {auctionTime}ms</p>
       </header>
       <div

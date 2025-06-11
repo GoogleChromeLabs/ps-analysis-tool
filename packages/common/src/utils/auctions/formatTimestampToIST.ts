@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export const formatTimestampToIST = (timestamp: string) => {
+export const formatTimestampToIST = (timestamp: number) => {
   const date = new Date(timestamp);
   return date.toLocaleTimeString('en-IN', {
     hour: '2-digit',

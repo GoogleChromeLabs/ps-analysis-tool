@@ -35,7 +35,7 @@ export interface Bidder {
 export interface TimelineData {
   auctionTimeout: number;
   auctionId: string;
-  auctionStartTime: string;
+  auctionStartTimeFormatted: string;
   auctionTime: string;
   bidders: Bidder[];
 }
