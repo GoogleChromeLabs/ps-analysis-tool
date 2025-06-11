@@ -26,12 +26,12 @@ import useSidebarProcessing from './hooks/useSidebarProcessing';
 import Panel from './panel';
 
 const Auctions = () => {
-  const { sidebarData } = useSidebarProcessing();
+  const { sidebarData, defaultSelectedItemKey } = useSidebarProcessing();
 
   return (
     <SidebarProvider
       data={sidebarData}
-      defaultSelectedItemKey={Object.keys(sidebarData)[0]}
+      defaultSelectedItemKey={defaultSelectedItemKey}
     >
       <Panel />
     </SidebarProvider>
