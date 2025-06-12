@@ -18,7 +18,6 @@
  * External dependencies
  */
 import React, { useEffect, useState } from 'react';
-import { useTabs } from '@google-psat/design-system';
 
 /**
  * Internal dependencies
@@ -59,11 +58,6 @@ const AdunitPanel = ({
     setSelectedAdUnit: actions.setSelectedAdUnit,
   }));
 
-  const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
-    setStorage: actions.setStorage,
-    setActiveTab: actions.setActiveTab,
-  }));
-
   const [pillToggle, setPillToggle] = useState('Prebid');
   const [highlightOption, setHighlightOption] = useState('');
 
@@ -86,8 +80,6 @@ const AdunitPanel = ({
       isInspecting={isInspecting}
       setIsInspecting={setIsInspecting}
       setSelectedAdUnit={setSelectedAdUnit}
-      setStorage={setStorage}
-      setActiveTab={setActiveTab}
       winnerBid={winnerBid?.[pillLowerCase] || null}
       winningMediaContainer={winningMediaContainer[pillLowerCase] || []}
       pillToggle={pillToggle}

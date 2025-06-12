@@ -41,8 +41,6 @@ interface PanelProps {
   isInspecting?: boolean;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
-  setStorage?: (data: string, index?: number) => void;
-  setActiveTab?: (tab: number) => void;
   winnerBid?: string | null;
   winningMediaContainer?: number[];
   pillToggle: string;
@@ -61,8 +59,6 @@ const Panel = ({
   isInspecting,
   setIsInspecting,
   setSelectedAdUnit,
-  setStorage,
-  setActiveTab,
   winnerBid = null,
   winningMediaContainer = [],
   pillToggle,
@@ -75,7 +71,7 @@ const Panel = ({
       {
         name: 'Ad Unit Code',
         Icon: FrameIcon,
-        buttons: [
+        pills: [
           {
             name: adunit,
             onClick: () => {
@@ -93,7 +89,7 @@ const Panel = ({
       {
         name: 'Ad Container Sizes',
         Icon: ScreenIcon,
-        buttons: [
+        pills: [
           ...(mediaContainerSize || [])
             .filter(
               (size) =>
@@ -116,18 +112,9 @@ const Panel = ({
       {
         name: 'Bidders',
         Icon: MoneyIcon,
-        buttons: [
+        pills: [
           ...(bidders || []).map((bidder) => ({
             name: bidder,
-            onClick: () => {
-              setStorage?.(
-                JSON.stringify({
-                  bidder,
-                  adUnitCode: adunit,
-                })
-              );
-              setActiveTab?.(5);
-            },
             className:
               winnerBid === bidder
                 ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
@@ -145,8 +132,6 @@ const Panel = ({
       setSelectedAdUnit,
       winningMediaContainer,
       winnerBid,
-      setStorage,
-      setActiveTab,
     ]
   );
 
