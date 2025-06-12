@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import type p5 from 'p5';
+
 declare module '*.svg' {
   import React = require('react');
   const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
   export default ReactComponent;
+}
+
+declare global {
+  interface Window {
+    p5: typeof p5;
+  }
 }
 
 declare module '*.png' {

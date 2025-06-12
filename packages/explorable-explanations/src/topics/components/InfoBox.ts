@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 /**
+ * External dependencies
+ */
+import type p5 from 'p5';
+/**
  * Internal dependencies
  */
 import { getAdtechsColors } from '../utils';

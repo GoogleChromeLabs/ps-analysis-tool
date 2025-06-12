@@ -28,10 +28,15 @@ export default defineConfig(() => {
       build: {
         outDir: `../../dist/extension`,
         rollupOptions: {
+          target: 'es2020',
           input: {
             'service-worker': 'src/serviceWorker/index.ts',
             'content-script': 'src/contentScript/index.ts',
             'js-cookie-content-script': 'src/contentScript/jsCookie.ts',
+            'prebid-content-script':
+              'src/contentScript/prebid/prebidContentScript.ts',
+            'prebid-interface':
+              './src/contentScript/prebid/prebidInterface.tsx',
           },
           output: {
             entryFileNames: '[name].js',
@@ -120,6 +125,7 @@ export default defineConfig(() => {
     },
     plugins: [
       viteStaticCopy({
+        // use this file instead public folder to make sure we have the correct version of p5
         targets: [
           {
             src: '../../../../../node_modules/p5/lib/p5.min.js',

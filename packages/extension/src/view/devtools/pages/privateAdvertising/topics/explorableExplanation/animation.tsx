@@ -18,7 +18,13 @@
  * External dependencies.
  */
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+// @ts-ignore package does not have types
 import { TopicsAnimation } from '@google-psat/explorable-explanations';
+import type p5 from 'p5';
+
+/**
+ * Internal dependencies
+ */
 import type {
   TopicsExplorableExplanationAction,
   TopicsExplorableExplanationState,
@@ -76,7 +82,7 @@ const Animation = ({
     // keep only one instance of p5
     if (node.current && !animation) {
       // eslint-disable-next-line no-new
-      new p5(init, node.current);
+      new window.p5(init, node.current);
     }
   }, [topicsDispatch, topicsState.activeEpoch, animation, handleUserVisit]);
 
