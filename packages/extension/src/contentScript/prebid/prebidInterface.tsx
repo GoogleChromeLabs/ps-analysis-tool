@@ -328,14 +328,19 @@ class PrebidInterface {
   addEvent(key: string, args: any) {
     const event = this.prebidInterface?.getEvents().pop();
 
-    if (!event) {
+    if (!event || !key) {
       return;
+    }
+
+    if (!this.prebidData.auctionEvents[key]) {
+      this.prebidData.auctionEvents[key] = [];
     }
 
     this.prebidData.auctionEvents[key].push({
       ...args,
       elapsedTime: event.elapsedTime,
     });
+    this.calculateAdUnit();
   }
 
   calculateBidResponse(bid: BidResponse) {
