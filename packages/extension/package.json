@@ -9,15 +9,15 @@
   "license": "Apache-2.0",
   "scripts": {
     "prebuild": "rimraf ../../dist/extension",
-    "dev": "run-p dev:root dev:popup dev:devtools dev:report",
-    "build": "npm run build:root && npm run build:popup && npm run build:report && npm run build:devtools",
-    "dev:root": "cross-env NODE_ENV=development npm run build:root -- --watch",
-    "build:root": "cross-env PAGE=root vite build --config ../../vite.extension.config.mts",
-    "dev:popup": "cross-env NODE_ENV=development npm run build:popup -- --watch",
+    "dev": "run-p dev:scripts dev:popup dev:report dev:devtools",
+    "build": "npm run build:scripts && npm run build:devtools && npm run build:popup && npm run build:report",
+    "dev:scripts": "cross-env VITE_CJS_IGNORE_WARNING=true NODE_ENV=development npm run build:scripts",
+    "build:scripts": "ts-node ../../vite.extension-scripts.config.ts",
+    "dev:popup": "cross-env NODE_ENV=development npm run build:popup",
     "build:popup": "cross-env PAGE=popup vite build --config ../../vite.extension.config.mts",
     "dev:devtools": "cross-env NODE_ENV=development npm run build:devtools -- --watch",
     "build:devtools": "cross-env PAGE=devtools vite build --config ../../vite.extension.config.mts",
-    "dev:report": "cross-env NODE_ENV=development npm run build:report -- --watch",
+    "dev:report": "cross-env NODE_ENV=development npm run build:report",
     "build:report": "cross-env PAGE=report vite build --config ../../vite.extension.config.mts"
   },
   "bugs": {
@@ -65,6 +65,8 @@
     "puppeteer": "22.15.0",
     "puppeteer-extra": "3.3.6",
     "puppeteer-extra-plugin-user-preferences": "^2.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
     "vite": "^6.3.5"
   }
 }

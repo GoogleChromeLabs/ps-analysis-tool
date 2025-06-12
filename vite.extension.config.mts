@@ -21,42 +21,13 @@ import path from 'path';
 const page = process.env.PAGE;
 const isDev = process.env.NODE_ENV === 'development';
 
-// TODO: use vite plugin for hot reload
 export default defineConfig(() => {
-  if (page === 'root') {
-    return mergeConfig(baseConfig, {
-      build: {
-        outDir: `../../dist/extension`,
-        rollupOptions: {
-          target: 'es2020',
-          input: {
-            'service-worker': 'src/serviceWorker/index.ts',
-            'content-script': 'src/contentScript/index.ts',
-            'js-cookie-content-script': 'src/contentScript/jsCookie.ts',
-            'prebid-content-script':
-              'src/contentScript/prebid/prebidContentScript.ts',
-            'prebid-interface':
-              './src/contentScript/prebid/prebidInterface.tsx',
-          },
-          output: {
-            entryFileNames: '[name].js',
-            sourcemap: isDev,
-          },
-        },
-      },
-    });
-  }
-
   const commonConfig = mergeConfig(baseConfig, {
-    base: '', // important to make sure the paths are correct
+    base: '', // important to make sure the paths are correct in output index.html
     build: {
+      emptyOutDir: false,
       outDir: `../../../../../dist/extension/${page}`,
-      sourcemap: isDev,
-    },
-    define: {
-      // since we always run this code in production mode,
-      // we use this to differentiate watch mode from regular production mode
-      'process.env.isDev': JSON.stringify(isDev),
+      minify: !isDev,
     },
     plugins: [
       viteStaticCopy({
