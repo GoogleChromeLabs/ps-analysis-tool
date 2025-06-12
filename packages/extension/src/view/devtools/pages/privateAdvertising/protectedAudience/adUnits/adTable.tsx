@@ -59,29 +59,72 @@ const AdTable = ({
 }: AdTableProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
+  const adUnitsWithOrtb2Imp = useMemo(() => {
+    const auctionEnd = Object.values(auctionEvents || {})[0].find(
+      (event) => event.eventType === 'auctionEnd'
+    );
+
+    const adUnitCodes = auctionEnd?.adUnitCodes;
+
+    return adUnitCodes?.reduce(
+      (
+        combinedData: Record<string, any>,
+        adUnitCode: string,
+        index: number
+      ) => {
+        const adUnits = auctionEnd?.adUnits || [];
+
+        return {
+          ...combinedData,
+          [adUnitCode]: adUnits[index].ortb2Imp,
+        };
+      },
+      {} as Record<string, any>
+    );
+  }, [auctionEvents]);
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Ad Unit Code',
         accessorKey: 'adUnitCode',
         cell: (info) => (
-          <button
-            className={classNames('w-full flex gap-2 items-center', {
-              'cursor-default': Boolean(isEE),
-            })}
-            onClick={() => {
-              if (selectedAdUnit === info) {
-                setSelectedAdUnit?.(null);
-                setIsInspecting?.(false);
-              } else {
-                setIsInspecting?.(true);
-                setSelectedAdUnit?.(info as string);
-              }
-            }}
-          >
-            <FrameIcon className="fill-[#1A73E8] min-w-5 min-h-5" />
-            <p className="truncate">{info}</p>
-          </button>
+          <div className="flex flex-col gap-2">
+            <button
+              className={classNames(
+                'w-fit flex gap-2 hover:opacity-70 active:opacity-50',
+                {
+                  'cursor-default': Boolean(isEE),
+                }
+              )}
+              onClick={() => {
+                if (selectedAdUnit === info) {
+                  setSelectedAdUnit?.(null);
+                  setIsInspecting?.(false);
+                } else {
+                  setIsInspecting?.(true);
+                  setSelectedAdUnit?.(info as string);
+                }
+              }}
+            >
+              <FrameIcon className="fill-[#1A73E8] min-w-5 min-h-5" />
+              <p className="truncate">{info}</p>
+            </button>
+            <div className="flex gap-2 items-center">
+              Ortb2Imp:{' '}
+              <button
+                className="border border-gray-400 dark:border-dark-gray-x11 rounded-xl px-2 py-0.5 text-xs hover:opacity-70 active:opacity-50"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedRow?.(
+                    Object.values(adUnitsWithOrtb2Imp[info as string])[0] as any
+                  );
+                }}
+              >
+                {Object.keys(adUnitsWithOrtb2Imp[info as string])[0]}
+              </button>
+            </div>
+          </div>
         ),
         enableHiding: false,
       },
