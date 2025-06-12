@@ -4,7 +4,8 @@
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"build-storybook": "storybook build",
-		"build:all": "npm run build:tsc-packages && npm run build:cli-dashboard && npm run webpack:build:cli && npm run vite:build:ext",
+		"build:all": "run-p webpack:build:cli build:all:vite",
+		"build:all:vite": "npm run build:tsc-packages && npm run build:cli-dashboard && npm run vite:build:ext",
 		"build:tsc-packages": "npm run build:i18n && npm run build:common && npm run build:design-system && npm run build:library-detection && npm run build:analysis-utils && npm run build:report",
 		"dev:tsc-packages": "run-p dev:i18n dev:common dev:design-system dev:library-detection dev:analysis-utils dev:report",
 		"publish:all:local": "npm run build:all && npm run publish:local --workspaces",
