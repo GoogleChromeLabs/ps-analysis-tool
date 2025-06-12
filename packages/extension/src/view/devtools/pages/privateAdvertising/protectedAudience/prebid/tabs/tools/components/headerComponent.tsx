@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies
  */
 import { Button, ToggleSwitch } from '@google-psat/design-system';
 import { type PrebidDebugModuleConfig } from '@google-psat/common';
-import type { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 
 interface HeaderComponentProps {
   setDebuggingModuleConfig: Dispatch<SetStateAction<PrebidDebugModuleConfig>>;
@@ -35,12 +34,42 @@ const HeaderComponent = ({
   handleChangeStoreRulesInLocalStorage,
   openGoogleManagerConsole,
 }: HeaderComponentProps) => {
+  const [isGAMReady, setIsGAMReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    chrome.devtools.inspectedWindow.eval(
+      `(function() {
+    try {
+      const gtag = window.googletag;
+      if (gtag && gtag.apiReady && typeof gtag.pubads === 'function') {
+        const slots = gtag.pubads().getSlots();
+        return { isReady: true, slotCount: slots.length };
+      }
+      return { isReady: false, slotCount: 0 };
+    } catch (e) {
+      return { isReady: false, slotCount: 0 };
+    }
+  })()`,
+      (res: { isReady: boolean }, ex) => {
+        if (!ex) {
+          setIsGAMReady(res?.isReady);
+        }
+      }
+    );
+  }, []);
+
   return (
     <div className="flex justify-between mt-6">
       <Button
         text="Open Google Ad Manager Console"
         extraClasses="text-base"
         onClick={openGoogleManagerConsole}
+        disabled={!isGAMReady}
+        title={
+          isGAMReady
+            ? ''
+            : 'Google Ad Manager Console either not ready or not available on this page'
+        }
       />
       <div className="flex flex-row items-center gap-4">
         <div className="flex flex-row items-center">
@@ -72,4 +101,5 @@ const HeaderComponent = ({
     </div>
   );
 };
+
 export default HeaderComponent;
