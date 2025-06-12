@@ -102,7 +102,7 @@ const Timeline = ({
 
   return (
     <div className="mb-4">
-      <header className="flex justify-between text-sm font-semibold">
+      <header className="flex justify-between text-sm dark:text-bright-gray font-semibold">
         <p>Auction Start: {auctionStartTimeFormatted}</p>
         <p>Auction Time: {auctionTime}ms</p>
       </header>
@@ -115,7 +115,7 @@ const Timeline = ({
         <div className="flex h-full">
           {lines.map((_, index) => {
             const spanClasses = classNames(
-              'absolute right-0 block text-xs mt-1',
+              'absolute right-0 block text-xs dark:text-bright-gray mt-1',
               {
                 'pr-2': zoom > 1,
                 'pr-[1px]': zoom === 1,
@@ -132,8 +132,8 @@ const Timeline = ({
                     const lineClasses = classNames(
                       'absolute w-[1px] border-r border-dotted h-full transition-all duration-300 ease-out',
                       {
-                        'border-sky-100': zoom === 1,
-                        'border-sky-200': zoom >= 2,
+                        'border-sky-100 dark:border-gray-800': zoom === 1,
+                        'border-sky-200 dark:border-gray-700': zoom >= 2,
                       }
                     );
                     return (
@@ -167,7 +167,7 @@ const Timeline = ({
             style={{ width: `${timeoutBlockWidth}px` }}
           >
             <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
-            <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282]">
+            <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
               Timeout: {auctionTimeout}ms
             </span>
           </div>
@@ -202,9 +202,9 @@ const Timeline = ({
                     >
                       {/*Metadata*/}
                       <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1 min-w-[180px]">
-                        <span className="pr-2 text-xs flex">
+                        <span className="pr-2 text-xs dark:text-bright-gray flex">
                           {String(bidder.name)}
-                          <span className="text-granite-gray ml-1">
+                          <span className="text-granite-gray dark:text-bright-gray ml-1">
                             {bidder.type === BidderType.NO_BID && ' (no bid)'}
                             {bidder.type === BidderType.BID &&
                               ' (received bid)'}
@@ -212,7 +212,7 @@ const Timeline = ({
                               ' (timed out)'}
                           </span>
                           {bidder.type === BidderType.WON && (
-                            <span className="flex text-granite-gray ">
+                            <span className="flex text-granite-gray dark:text-bright-gray ">
                               <span>(won)</span>
                               <span>
                                 <HammerIcon height="18" />
@@ -220,7 +220,7 @@ const Timeline = ({
                             </span>
                           )}
                         </span>
-                        <span className="text-xs">
+                        <span className="text-xs dark:text-bright-gray">
                           {formatDuration(bidder.duration)}ms
                         </span>
                       </div>
@@ -232,7 +232,7 @@ const Timeline = ({
         </div>
       </div>
       <footer>
-        <p className="text-sm text-right mt-1">
+        <p className="text-sm text-right mt-1 dark:text-bright-gray">
           Auction ID:{' '}
           <a
             onClick={(event) => {
