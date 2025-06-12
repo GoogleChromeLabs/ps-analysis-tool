@@ -35,12 +35,18 @@ import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
 import classNames from 'classnames';
 
+/**
+ * Internal dependencies
+ */
+import type { PrebidEvents } from '../../../../../../store';
+
 interface AdTableProps {
   adsAndBidders: AdsAndBiddersType;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   selectedAdUnit?: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   isEE?: boolean;
+  auctionEvents?: PrebidEvents['auctionEvents'];
 }
 
 const AdTable = ({
@@ -49,6 +55,7 @@ const AdTable = ({
   selectedAdUnit,
   setIsInspecting,
   isEE,
+  auctionEvents,
 }: AdTableProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
@@ -135,34 +142,49 @@ const AdTable = ({
 
           return (
             <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
-              {(info as string[])?.map((bidder: string, idx: number) => (
-                <div key={idx}>
-                  {
-                    <div
-                      className={classNames(
-                        'h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1',
-                        {
-                          'border-gray-400 dark:border-dark-gray-x11':
-                            bidder !== winningBidder,
-                          'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
-                            bidder === winningBidder,
-                        }
-                      )}
-                    >
-                      {bidder === winningBidder && (
-                        <Hammer className="h-4 w-4" />
-                      )}
-                      {bidder}
-                      {bidder === winningBidder && (
-                        <span className="text-xxxhs text-[#5AAD6A] font-bold">
-                          {' '}
-                          ({winningBid} {bidCurrency})
-                        </span>
-                      )}
-                    </div>
-                  }
-                </div>
-              ))}
+              {(info as string[])?.map((bidder: string, idx: number) => {
+                const selectedBidder = Object.values(
+                  auctionEvents || {}
+                )[0].filter((event) => {
+                  return (
+                    event.eventType === 'bidRequested' &&
+                    event.bidderCode === bidder
+                  );
+                });
+
+                return (
+                  <div
+                    key={idx}
+                    className={classNames(
+                      'h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1',
+                      {
+                        'border-gray-400 dark:border-dark-gray-x11':
+                          bidder !== winningBidder,
+                        'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
+                          bidder === winningBidder,
+                        'cursor-pointer hover:opacity-70 active:opacity-50':
+                          selectedBidder[0],
+                      }
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      if (selectedBidder.length) {
+                        setSelectedRow?.(selectedBidder[0]);
+                      }
+                    }}
+                  >
+                    {bidder === winningBidder && <Hammer className="h-4 w-4" />}
+                    {bidder}
+                    {bidder === winningBidder && (
+                      <span className="text-xxxhs text-[#5AAD6A] font-bold">
+                        {' '}
+                        ({Number(winningBid).toFixed(2)} {bidCurrency})
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           );
         },
@@ -174,7 +196,7 @@ const AdTable = ({
         },
       },
     ],
-    [selectedAdUnit, setIsInspecting, setSelectedAdUnit, isEE]
+    [isEE, selectedAdUnit, setSelectedAdUnit, setIsInspecting, auctionEvents]
   );
 
   const tableFilters = useMemo<TableFilter>(

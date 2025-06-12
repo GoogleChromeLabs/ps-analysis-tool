@@ -24,6 +24,7 @@ import type {
   PrebidNoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
+import { PillToggle } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -32,7 +33,6 @@ import EvaluationEnvironment from '../evaluationEnvironment';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import AdMatrix from './adMatrix';
 import AdTable from './adTable';
-import { PillToggle } from '@google-psat/design-system';
 import type { PrebidEvents } from '../../../../../../store';
 
 type DummyReceivedBids = Record<string, ReceivedBids[]>;
@@ -114,6 +114,11 @@ const AdUnitsPanel = ({
               selectedAdUnit={selectedAdUnit}
               setIsInspecting={setIsInspecting}
               isEE={isEE}
+              auctionEvents={
+                pillToggle === 'Prebid'
+                  ? (auctionEvents as PrebidEvents['auctionEvents'])
+                  : undefined
+              }
             />
           </>
         ) : (
