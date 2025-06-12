@@ -239,7 +239,14 @@ const AdTable = ({
         },
       },
     ],
-    [isEE, selectedAdUnit, setSelectedAdUnit, setIsInspecting, auctionEvents]
+    [
+      isEE,
+      adUnitsWithOrtb2Imp,
+      selectedAdUnit,
+      setSelectedAdUnit,
+      setIsInspecting,
+      auctionEvents,
+    ]
   );
 
   const tableFilters = useMemo<TableFilter>(
