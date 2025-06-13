@@ -46,7 +46,7 @@ const createConfig = (script: (typeof scripts)[number]) => {
     build: {
       emptyOutDir: false,
       outDir: `../../dist/extension`,
-      minify: !isDev, // faster during development
+      minify: !isDev,
       watch: isDev ? {} : null,
       rollupOptions: {
         input: {

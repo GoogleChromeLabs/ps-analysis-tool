@@ -87,7 +87,7 @@ export default defineConfig(() => {
   return mergeConfig(commonConfig, {
     root: path.resolve(__dirname, 'packages/extension/src/view/devtools'),
     build: {
-      watch: isDev,
+      watch: isDev ? {} : null,
       rollupOptions: {
         input: {
           devtools: './src/view/devtools/devtools.html',

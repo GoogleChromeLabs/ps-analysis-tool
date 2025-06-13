@@ -15,7 +15,7 @@
     "build:scripts": "node --loader ts-node/esm ../../vite.extension.scripts.config.mts",
     "dev:popup": "cross-env NODE_ENV=development npm run build:popup",
     "build:popup": "cross-env PAGE=popup vite build --config ../../vite.extension.config.mts",
-    "dev:devtools": "cross-env NODE_ENV=development npm run build:devtools -- --watch",
+    "dev:devtools": "cross-env NODE_ENV=development npm run build:devtools",
     "build:devtools": "cross-env PAGE=devtools vite build --config ../../vite.extension.config.mts",
     "dev:report": "cross-env NODE_ENV=development npm run build:report",
     "build:report": "cross-env PAGE=report vite build --config ../../vite.extension.config.mts"
