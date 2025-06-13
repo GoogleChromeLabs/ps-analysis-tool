@@ -124,6 +124,7 @@ export const prepareTimelineData = (
       auctionStartTimeFormatted: formatTimestampToIST(
         Number(auctionEnd.timestamp)
       ),
+      auctionEndDuration: auctionEnd.auctionEnd - auctionEnd.timestamp,
       auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
       zoomLevel: 2,
       adUnitCodes: auctionEnd.adUnitCodes,

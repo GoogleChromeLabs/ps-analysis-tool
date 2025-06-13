@@ -38,4 +38,5 @@ export interface TimelineData {
   auctionStartTimeFormatted: string;
   auctionTime: string;
   bidders: Bidder[];
+  auctionEndDuration: number;
 }

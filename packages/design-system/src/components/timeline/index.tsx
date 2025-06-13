@@ -53,6 +53,7 @@ const Timeline = ({
   auctionId,
   auctionStartTimeFormatted,
   auctionTime,
+  auctionEndDuration,
   bidders,
   zoomLevel = 2,
   setSelectedRow,
@@ -169,6 +170,23 @@ const Timeline = ({
             <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
             <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
               Timeout: {auctionTimeout}ms
+            </span>
+          </div>
+        </div>
+
+        {/*Auction End block*/}
+        <div className="absolute flex w-fit h-full top-0">
+          <div
+            style={{ width: `${auctionTimeout * zoom}px` }}
+            className="h-full"
+          ></div>
+          <div
+            className="h-full relative flex-1"
+            style={{ width: `${timeoutBlockWidth}px` }}
+          >
+            <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
+            <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
+              Auction End: {formatDuration(String(auctionEndDuration))}ms
             </span>
           </div>
         </div>

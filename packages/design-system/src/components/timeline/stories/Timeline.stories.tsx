@@ -38,6 +38,8 @@ export const Primary: Story = {
   render: () => {
     const auctions = prepareTimelineData(prebidResponse);
 
+    console.log( auctions );
+
     return (
       <>
         {Object.entries(auctions).map(([auctionId, auction]) => {
