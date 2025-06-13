@@ -17,7 +17,7 @@ import { build, defineConfig } from 'vite';
 
 const isDev = process.env.NODE_ENV === 'development';
 
-// content scripts defined in the manifest.json
+// content scripts and worker defined in the manifest.json
 const scripts = [
   {
     name: 'service-worker',
@@ -47,6 +47,7 @@ const createConfig = (script: (typeof scripts)[number]) => {
       emptyOutDir: false,
       outDir: `../../dist/extension`,
       minify: !isDev, // faster during development
+      watch: isDev ? {} : null,
       rollupOptions: {
         input: {
           [script.name]: script.path,
