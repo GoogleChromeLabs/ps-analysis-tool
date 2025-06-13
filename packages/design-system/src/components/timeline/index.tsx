@@ -42,7 +42,7 @@ const BAR_COLORS: Record<BidderType, string> = {
   [BidderType.TIMED_OUT]: '#FC2D04',
 };
 
-interface TimelineProps extends TimelineData {
+export interface TimelineProps extends TimelineData {
   zoomLevel?: number;
   setSelectedRow: (row: Bidder['data']) => void;
   navigateToAuction: (auctionId: string) => void;

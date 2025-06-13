@@ -17,11 +17,11 @@
  * External dependencies
  */
 import { useState } from 'react';
-
+import type { PrebidEvents } from '@google-psat/common';
 /**
  * Internal dependencies
  */
-import type { PrebidEvents } from '../../../../../../../../store';
+
 import SingleErrorRow from './singleErrorRow';
 import Header from './header';
 
@@ -48,12 +48,11 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
       filteredEvents = filteredEvents.filter((event) => {
         return Object.values(event.message)
           .map((value) =>
-            typeof value === 'object'
-              ? JSON.stringify(value).toLowerCase()
-              : (value ?? '')?.toLowerCase()
+            typeof value === 'object' ? JSON.stringify(value) : value
           )
           .join(' ')
-          .includes(searchValue);
+          .toLowerCase()
+          .includes(searchValue.toLowerCase());
       });
     }
 

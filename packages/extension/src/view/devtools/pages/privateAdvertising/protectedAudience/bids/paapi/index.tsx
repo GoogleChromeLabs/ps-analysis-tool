@@ -17,7 +17,6 @@
  * Internal dependencies.
  */
 import Panel from '../panel';
-import { timelines } from '../dummy';
 
 interface PaapiBidsPanelProps {
   storage?: string[];
@@ -26,9 +25,7 @@ interface PaapiBidsPanelProps {
 }
 
 const PaapiBidsPanel = ({ storage, setStorage }: PaapiBidsPanelProps) => {
-  return (
-    <Panel storage={storage} setStorage={setStorage} timelines={timelines} />
-  );
+  return <Panel storage={storage} setStorage={setStorage} timelines={{}} />;
 };
 
 export default PaapiBidsPanel;
