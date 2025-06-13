@@ -16,13 +16,14 @@
 /**
  * External dependencies.
  */
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { prepareTimelineData } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import Timeline from '..';
+import Timeline, { TimelineProps } from '..';
 import prebidResponse from './dummy-data';
 
 const meta: Meta<typeof Timeline> = {
@@ -36,9 +37,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   render: () => {
-    const auctions = prepareTimelineData(prebidResponse);
-
-    console.log( auctions );
+    const auctions: TimelineProps = prepareTimelineData(prebidResponse);
 
     return (
       <>
