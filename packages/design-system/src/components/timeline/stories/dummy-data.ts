@@ -39040,7 +39040,7 @@ export default {
                             }
                         },
                         "badv": [],
-                        "bcat": []
+                        "bcat": [],
                     },
                     "schain": {
                         "ver": "1.0",
@@ -39270,7 +39270,7 @@ export default {
             ],
             "bidsRejected": [],
             "winningBids": [],
-            "timeout": 3000,
+            "timeout": 2000,
             "metrics": {},
             "seatNonBids": [],
             "eventType": "auctionEnd",
