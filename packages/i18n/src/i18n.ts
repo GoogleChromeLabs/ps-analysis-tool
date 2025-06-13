@@ -35,7 +35,7 @@ class I18n {
     };
   } = {};
 
-  private locale = 'en';
+  public locale = 'en';
 
   /**
    * Initializes the messages object with the provided messages.
@@ -70,12 +70,12 @@ class I18n {
    * @param {string} locale - The locale string.
    * @returns {string[]} An array of locale strings.
    */
-  private createLocaleArray(locale: string) {
+  public createLocaleArray(locale: string) {
     if (!locale) {
       return ['en'];
     }
 
-    return [
+    const locales = [
       locale,
       locale.replace(/_/g, '-'),
       locale.replace(/-/g, '_'),
@@ -83,6 +83,8 @@ class I18n {
       locale.split('_')[0],
       'en',
     ];
+
+    return [...new Set(locales)];
   }
 
   /**
@@ -127,42 +129,6 @@ class I18n {
 
     const result = await fetchWithRetry();
     return result;
-  }
-
-  /**
-   * Loads messages data for the CLI.
-   * @param {string} locale - The locale string.
-   */
-  async loadCLIMessagesData(locale: string) {
-    const localeArray = this.createLocaleArray(locale);
-
-    for (const _locale of localeArray) {
-      try {
-        let response;
-        try {
-          /* eslint-disable no-await-in-loop */
-          response = await fetch(
-            `../../../../node_modules/@google-psat/i18n/_locales/messages/${_locale}/messages.json`
-          );
-        } catch {
-          response = await fetch(
-            `../../../i18n/_locales/messages/${_locale}/messages.json`
-          );
-        }
-
-        if (!response?.ok) {
-          continue;
-        }
-
-        const messages = await response.json();
-        this.initMessages(messages);
-        this.locale = _locale;
-        break;
-        /* eslint-enable no-await-in-loop */
-      } catch (error) {
-        continue;
-      }
-    }
   }
 
   /**

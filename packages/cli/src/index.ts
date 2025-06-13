@@ -23,7 +23,6 @@ import { existsSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import path, { basename } from 'path';
-import { I18n } from '@google-psat/i18n';
 import { removeAndAddNewSpinnerText } from '@google-psat/common';
 import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
 import { LIBRARIES } from '@google-psat/library-detection';
@@ -46,6 +45,7 @@ import {
   redLogger,
   getSiteReport,
   saveResultsAsHTML,
+  loadCLIMessages,
 } from './utils';
 import packageJson from '../package.json';
 import checkLatestVersion from './utils/checkLatestVersion';
@@ -278,7 +278,7 @@ program.parse();
     cookieAnalysisAndFetchedResourceData
   );
 
-  I18n.loadCLIMessagesData(locale);
+  loadCLIMessages(locale);
 
   const isSiteMap = sitemapUrl || filePath ? true : false;
 
