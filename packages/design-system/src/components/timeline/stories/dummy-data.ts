@@ -39040,7 +39040,7 @@ export default {
                             }
                         },
                         "badv": [],
-                        "bcat": [],
+                        "bcat": []
                     },
                     "schain": {
                         "ver": "1.0",
