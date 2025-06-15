@@ -63,6 +63,7 @@ const Timeline = ({
   const [scrollWidth, setScrollWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [timeoutBlockWidth, setTimeoutBlockWidth] = useState(0);
+  const [aunctionEndBlockWidth, setAuctionEndBlockWidth] = useState(0);
   const [zoom, setZoom] = useState(2);
 
   const lineCount = useMemo(() => {
@@ -85,7 +86,8 @@ const Timeline = ({
     const _zoom = zoomLevel < 1 ? 1 : zoomLevel;
     setZoom(_zoom);
     setTimeoutBlockWidth(scrollWidth - auctionTimeout * _zoom);
-  }, [scrollWidth, auctionTimeout, zoomLevel]);
+    setAuctionEndBlockWidth(scrollWidth - auctionEndDuration * _zoom);
+  }, [scrollWidth, auctionTimeout, auctionEndDuration, zoomLevel]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -174,18 +176,18 @@ const Timeline = ({
           </div>
         </div>
 
-        {/*Auction End block*/}
+        {/*Auction-End block*/}
         <div className="absolute flex w-fit h-full top-0">
           <div
-            style={{ width: `${auctionTimeout * zoom}px` }}
+            style={{ width: `${auctionEndDuration * zoom}px` }}
             className="h-full"
           ></div>
           <div
             className="h-full relative flex-1"
-            style={{ width: `${timeoutBlockWidth}px` }}
+            style={{ width: `${aunctionEndBlockWidth}px` }}
           >
-            <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
-            <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
+            <div className="bg-[#E90303] opacity-[4%] w-full h-full"></div>
+            <span className="absolute left-[-45px] bottom-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
               Auction End: {formatDuration(String(auctionEndDuration))}ms
             </span>
           </div>
