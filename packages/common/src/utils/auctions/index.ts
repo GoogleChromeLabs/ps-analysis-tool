@@ -15,6 +15,6 @@
  */
 export * from './findMaximumBidderDuration';
 export * from './formatDuration';
-export * from './formatTimestampToIST';
+export * from './formatTimestamp';
 export * from './prepareTimelineData';
 export * from './types';

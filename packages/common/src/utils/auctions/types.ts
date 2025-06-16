@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// @TODO to be moved to types file.
 export enum BidderType {
   BID = 'bid',
   NO_BID = 'no-bid',
