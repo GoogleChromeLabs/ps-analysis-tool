@@ -27,8 +27,6 @@ import {
 /**
  * Internal dependencies.
  */
-import RWSJsonGenerator from './jsonGenerator';
-import Insights from './insights';
 import Panel from './panel';
 
 const RelatedWebsiteSets = () => {
@@ -42,20 +40,6 @@ const RelatedWebsiteSets = () => {
             props: {
               infoKey: PSInfoKey.RelatedWebsiteSets,
             },
-          },
-        },
-        {
-          title: 'JSON Generator',
-          content: {
-            Element: RWSJsonGenerator,
-          },
-        },
-      ],
-      Observability: [
-        {
-          title: 'Membership',
-          content: {
-            Element: Insights,
           },
         },
       ],
