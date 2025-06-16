@@ -50,10 +50,10 @@ const AdUnits = () => {
     prebidReceivedBids,
     prebidNoBids,
   } = usePrebid(({ state }) => ({
-    prebidAdunits: state.prebidData.adUnits,
-    prebidAuctionEvents: state.prebidData.auctionEvents,
-    prebidReceivedBids: state.prebidData.receivedBids,
-    prebidNoBids: state.prebidData.noBids,
+    prebidAdunits: state.prebidData?.adUnits,
+    prebidAuctionEvents: state.prebidData?.auctionEvents,
+    prebidReceivedBids: state.prebidData?.receivedBids,
+    prebidNoBids: state.prebidData?.noBids,
   }));
 
   const { setIsInspecting } = useCookie(({ actions }) => ({

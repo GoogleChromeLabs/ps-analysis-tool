@@ -13,8 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies
+ */
+import { Dropdown } from '@google-psat/design-system';
+
+/**
+ * Internal dependencies
+ */
+import { usePrebid } from '../../../../../../stateProviders';
+
 const NamespaceTab = () => {
-  return <></>;
+  const { selectedFrameId, pbjsNamespaces, setFrameId } = usePrebid(
+    ({ state, actions }) => ({
+      selectedFrameId: state.selectedFrameId,
+      pbjsNamespaces: state.pbjsNamespaces,
+      setFrameId: actions.setFrameId,
+    })
+  );
+
+  return (
+    <>
+      <div className="w-full h-full">
+        <div className="w-max">
+          <Dropdown
+            options={Object.keys(pbjsNamespaces).map((namespace) => {
+              return {
+                label: pbjsNamespaces[Number(namespace)].host,
+                value: namespace,
+              };
+            })}
+            value={selectedFrameId.toString()}
+            onChange={(value) => setFrameId(Number(value))}
+          />
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default NamespaceTab;

@@ -32,13 +32,20 @@ export interface PrebidContextType {
     prebidData: PrebidEvents;
     prebidExists: boolean | null;
     debuggingModuleConfig: PrebidDebugModuleConfig;
-    pbjsNamespaces: { [frameId: number]: string };
+    selectedFrameId: number;
+    pbjsNamespaces: {
+      [frameId: number]: {
+        name: string;
+        host: string;
+      };
+    };
     storeRulesInLocalStorage: boolean;
   };
   actions: {
     setDebuggingModuleConfig: React.Dispatch<
       React.SetStateAction<PrebidDebugModuleConfig>
     >;
+    setFrameId: React.Dispatch<React.SetStateAction<number>>;
     handleChangeStoreRulesInLocalStorage: (value: boolean) => void;
     openGoogleManagerConsole: () => void;
     changeRule: (
@@ -75,6 +82,7 @@ export const initialState: PrebidContextType = {
     },
     pbjsNamespaces: {},
     prebidExists: null,
+    selectedFrameId: 0,
     debuggingModuleConfig: {
       enabled: false,
       intercept: [],
@@ -82,6 +90,7 @@ export const initialState: PrebidContextType = {
     storeRulesInLocalStorage: false,
   },
   actions: {
+    setFrameId: noop,
     setDebuggingModuleConfig: noop,
     changeRule: noop,
     addRule: noop,

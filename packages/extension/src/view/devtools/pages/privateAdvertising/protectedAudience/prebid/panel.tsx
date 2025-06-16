@@ -47,10 +47,10 @@ const Panel = () => {
 
   const { config, errorEvents, installedModules, prebidVersion } = usePrebid(
     ({ state }) => ({
-      config: state.prebidData.config,
-      installedModules: state.prebidData.installedModules ?? [],
-      prebidVersion: state.prebidData.versionInfo,
-      errorEvents: state.prebidData.errorEvents,
+      config: state.prebidData?.config,
+      installedModules: state.prebidData?.installedModules ?? [],
+      prebidVersion: state.prebidData?.versionInfo,
+      errorEvents: state.prebidData?.errorEvents,
     })
   );
 
