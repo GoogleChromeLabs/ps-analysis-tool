@@ -28,13 +28,13 @@ import { isEqual } from 'lodash-es';
 import type {
   PrebidDebugModuleConfig,
   PrebidDebugModuleConfigRule,
+  PrebidEvents,
 } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import Context, { type PrebidContextType } from './context';
-import type { PrebidEvents } from '../../../../store';
 import { PREBID_EVENTS, STORE_RULES_TOGGLE } from '../../../../constants';
 import firstDifferent from '../../../../utils/firstDifferent';
 import { replaceRuleTargets, matchRuleTargets } from './constants';
@@ -285,14 +285,54 @@ const Provider = ({ children }: PropsWithChildren) => {
               ? prev
               : message.payload.prebidEvents.config;
           });
-          setErrorEvents(message.payload.prebidEvents.errorEvents);
-          setInstalledModules(message.payload.prebidEvents.installedModules);
-          setPBJSNamespace(message.payload.prebidEvents.pbjsNamespace);
-          setPrebidAdUnits(message.payload.prebidEvents.adUnits);
-          setPrebidAuctionEvents(message.payload.prebidEvents.auctionEvents);
-          setPrebidNoBids(message.payload.prebidEvents.noBids);
-          setPrebidReceivedBids(message.payload.prebidEvents.receivedBids);
-          setPrebidVersionInfo(message.payload.prebidEvents.versionInfo);
+
+          setErrorEvents((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.errorEvents)
+              ? prev
+              : message.payload.prebidEvents.errorEvents;
+          });
+
+          setInstalledModules((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.installedModules)
+              ? prev
+              : message.payload.prebidEvents.installedModules;
+          });
+
+          setPBJSNamespace((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.pbjsNamespace)
+              ? prev
+              : message.payload.prebidEvents.pbjsNamespace;
+          });
+
+          setPrebidAdUnits((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.adUnits)
+              ? prev
+              : message.payload.prebidEvents.adUnits;
+          });
+
+          setPrebidAuctionEvents((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.auctionEvents)
+              ? prev
+              : message.payload.prebidEvents.auctionEvents;
+          });
+
+          setPrebidNoBids((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.noBids)
+              ? prev
+              : message.payload.prebidEvents.noBids;
+          });
+
+          setPrebidReceivedBids((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.receivedBids)
+              ? prev
+              : message.payload.prebidEvents.receivedBids;
+          });
+
+          setPrebidVersionInfo((prev) => {
+            return isEqual(prev, message.payload.prebidEvents.versionInfo)
+              ? prev
+              : message.payload.prebidEvents.versionInfo;
+          });
         }
       }
     },
@@ -306,9 +346,11 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        frameType !== 'outermost_frame' ||
-        frameId !== 0 ||
-        tabId !== chrome.devtools.inspectedWindow.tabId
+        !(
+          chrome.devtools.inspectedWindow.tabId === tabId &&
+          frameType === 'outermost_frame' &&
+          frameId === 0
+        )
       ) {
         return;
       }

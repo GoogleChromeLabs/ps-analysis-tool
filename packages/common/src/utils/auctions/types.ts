@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import { SidebarProvider } from '@google-psat/design-system';
+export enum BidderType {
+  BID = 'bid',
+  NO_BID = 'no-bid',
+  WON = 'won',
+  TIMED_OUT = 'timed-out',
+}
 
-/**
- * Internal dependencies.
- */
-import useSidebarProcessing from './hooks/useSidebarProcessing';
-import Panel from './panel';
+export interface Bidder {
+  name: string;
+  duration: string;
+  type: BidderType;
+  data?: any;
+  startTime: number;
+  endTime: number;
+  adUnitCode: string;
+  serverResponseTimeMs?: number;
+}
 
-const Auctions = () => {
-  const { sidebarData, defaultSelectedItemKey } = useSidebarProcessing();
-
-  return (
-    <SidebarProvider
-      data={sidebarData}
-      defaultSelectedItemKey={defaultSelectedItemKey}
-    >
-      <Panel />
-    </SidebarProvider>
-  );
-};
-
-export default Auctions;
+export interface TimelineData {
+  auctionTimeout: number;
+  auctionId: string;
+  auctionStartTimeFormatted: string;
+  auctionTime: string;
+  bidders: Bidder[];
+  auctionEndDuration: number;
+}

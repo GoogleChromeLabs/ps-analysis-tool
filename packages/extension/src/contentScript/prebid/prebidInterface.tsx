@@ -17,7 +17,17 @@
 /**
  * External dependencies.
  */
-import { noop, type AdsAndBiddersType } from '@google-psat/common';
+import {
+  noop,
+  type AdsAndBiddersType,
+  type AdUnit,
+  type AuctionEndEvent,
+  type BidResponse,
+  type BidWonEvent,
+  type NoBid,
+  type PrebidEvents,
+  type SingleBidderSetting,
+} from '@google-psat/common';
 import merge from 'lodash/merge';
 /**
  * Internal dependencies.
@@ -29,7 +39,6 @@ import {
 } from '../../constants';
 import { decycle } from '../utils';
 import mergeUnique2DArrays from '../utils/mergeUnique2DArrays';
-import type { PrebidEvents } from '../../store';
 
 /**
  * Represents the webpage's content script functionalities.
@@ -281,7 +290,7 @@ class PrebidInterface {
     this.prebidInterface?.onEvent('bidTimeout', (args) => {
       args.forEach((arg) => {
         this.addEvent(arg.auctionId, {
-          ...args,
+          timeoutBid: arg,
           eventType: 'bidTimeout',
         });
       });
@@ -319,14 +328,19 @@ class PrebidInterface {
   addEvent(key: string, args: any) {
     const event = this.prebidInterface?.getEvents().pop();
 
-    if (!event) {
+    if (!event || !key) {
       return;
+    }
+
+    if (!this.prebidData.auctionEvents[key]) {
+      this.prebidData.auctionEvents[key] = [];
     }
 
     this.prebidData.auctionEvents[key].push({
       ...args,
       elapsedTime: event.elapsedTime,
     });
+    this.calculateAdUnit();
   }
 
   calculateBidResponse(bid: BidResponse) {
@@ -400,7 +414,7 @@ class PrebidInterface {
       );
 
       if (auctionInitEvent) {
-        auctionInitEvents.push(auctionInitEvent);
+        auctionInitEvents.push(auctionInitEvent as AuctionEndEvent);
       }
     });
 
