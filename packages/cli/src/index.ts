@@ -26,7 +26,6 @@ import path, { basename } from 'path';
 import { I18n } from '@google-psat/i18n';
 import { removeAndAddNewSpinnerText } from '@google-psat/common';
 import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
-import { LIBRARIES } from '@google-psat/library-detection';
 import { pathToFileURL } from 'node:url';
 
 /**
@@ -243,7 +242,6 @@ program.parse();
     cookieAnalysisAndFetchedResourceData =
       await analyzeCookiesUrlsInBatchesAndFetchResources(
         urlsToProcess,
-        LIBRARIES,
         !isHeadful,
         waitTime,
         cookieDictionary,
