@@ -23,6 +23,7 @@ import {
   Timeline,
   useTabs,
   Slider,
+  type TimelineProps,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
@@ -40,7 +41,6 @@ import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
 import { useProtectedAudience } from '../../../../stateProviders';
 import Placeholder from './placeholder';
-import type { TimelineProps } from '@google-psat/design-system/src/components/timeline';
 
 enum PillToggleOptions {
   ReceivedBids = 'Received Bids',

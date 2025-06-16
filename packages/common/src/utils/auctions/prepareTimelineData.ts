@@ -30,7 +30,7 @@ import {
   formReceivedBidData,
   formTimedOutBids,
 } from './bidderCreator';
-import { formatTimestampToIST } from './formatTimestampToIST';
+import { formatTimestamp } from './formatTimestamp';
 import { Bidder, BidderType } from './types';
 
 type PrebidTimeoutEvent = PrebidAuctionEventType & {
@@ -121,9 +121,7 @@ export const prepareTimelineData = (
       auctionTimeout: auctionEnd.timeout,
       auctionId: auctionEnd.auctionId,
       auctionStartTime: auctionEnd.timestamp,
-      auctionStartTimeFormatted: formatTimestampToIST(
-        Number(auctionEnd.timestamp)
-      ),
+      auctionStartTimeFormatted: formatTimestamp(Number(auctionEnd.timestamp)),
       auctionEndDuration: auctionEnd.auctionEnd - auctionEnd.timestamp,
       auctionTime: auctionEnd.auctionEnd - auctionEnd.timestamp,
       zoomLevel: 2,
