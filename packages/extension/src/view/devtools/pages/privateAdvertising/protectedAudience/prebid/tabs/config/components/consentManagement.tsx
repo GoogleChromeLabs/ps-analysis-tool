@@ -103,7 +103,7 @@ const ConsentManagement = ({ config }: ConsentManagementPanelProps) => {
       <ResizableTray
         defaultSize={{
           width: '100%',
-          height: '80%',
+          height: selectedRow ? '50%' : '90%',
         }}
         minHeight="15%"
         maxHeight="90%"

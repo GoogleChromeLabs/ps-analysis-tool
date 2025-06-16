@@ -74,7 +74,16 @@ export const usePersistentTray = (
 
 const ResizableTray = (props: ResizableTrayProps) => {
   const { trayId, ...rest } = props;
-  const { height, onResizeStop } = usePersistentTray(trayId, rest.defaultSize);
+  const { height, onResizeStop, setHeight } = usePersistentTray(
+    trayId,
+    rest.defaultSize
+  );
+
+  useEffect(() => {
+    if (rest.defaultSize?.height) {
+      setHeight(String(rest.defaultSize?.height));
+    }
+  }, [rest.defaultSize?.height, setHeight]);
 
   if (!trayId) {
     return <Resizable {...rest} />;

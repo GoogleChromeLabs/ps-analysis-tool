@@ -194,9 +194,9 @@ const IGTable = ({
       <ResizableTray
         defaultSize={{
           width: '100%',
-          height: '80%',
+          height: selectedRow ? '50%' : '90%',
         }}
-        minHeight="15%"
+        minHeight="30%"
         maxHeight="90%"
         enable={{
           bottom: true,

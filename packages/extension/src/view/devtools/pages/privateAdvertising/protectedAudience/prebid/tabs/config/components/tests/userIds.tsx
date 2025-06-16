@@ -107,9 +107,9 @@ describe('UserIds', () => {
       screen.queryByText('Select a row to preview')
     ).not.toBeInTheDocument();
 
-    await waitFor(() => screen.getByText('name'));
-    expect(screen.getByText('name')).toBeInTheDocument();
-    expect(screen.getByText('storage')).toBeInTheDocument();
+    await waitFor(() => screen.getAllByText('name'));
+    expect(screen.getAllByText('name')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('storage')[0]).toBeInTheDocument();
   });
 
   it('handles empty config', () => {
