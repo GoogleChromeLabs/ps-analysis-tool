@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import React from 'react';
-import { SidebarProvider } from '@google-psat/design-system';
-
-/**
  * Internal dependencies.
  */
-import useSidebarProcessing from './hooks/useSidebarProcessing';
-import Panel from './panel';
+import EvaluationEnvironment from '../evaluationEnvironment';
 
-const Auctions = () => {
-  const { sidebarData, defaultSelectedItemKey } = useSidebarProcessing();
+interface PlaceholderProps {
+  showEvaluationPlaceholder: boolean | undefined;
+}
 
+const Placeholder = ({ showEvaluationPlaceholder }: PlaceholderProps) => {
   return (
-    <SidebarProvider
-      data={sidebarData}
-      defaultSelectedItemKey={defaultSelectedItemKey}
-    >
-      <Panel />
-    </SidebarProvider>
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      <p className="text-lg text-raisin-black dark:text-bright-gray">
+        No bids data was recorded.
+      </p>
+      {showEvaluationPlaceholder && (
+        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids if you haven’t already." />
+      )}
+    </div>
   );
 };
 
-export default Auctions;
+export default Placeholder;

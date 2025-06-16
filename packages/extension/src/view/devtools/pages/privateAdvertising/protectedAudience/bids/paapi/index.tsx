@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import React from 'react';
-import { SidebarProvider } from '@google-psat/design-system';
-
-/**
  * Internal dependencies.
  */
-import useSidebarProcessing from './hooks/useSidebarProcessing';
-import Panel from './panel';
+import Panel from '../panel';
 
-const Auctions = () => {
-  const { sidebarData, defaultSelectedItemKey } = useSidebarProcessing();
+interface PaapiBidsPanelProps {
+  storage?: string[];
+  setStorage?: (data: string, index: number) => void;
+  eeAnimatedTab?: boolean;
+}
 
-  return (
-    <SidebarProvider
-      data={sidebarData}
-      defaultSelectedItemKey={defaultSelectedItemKey}
-    >
-      <Panel />
-    </SidebarProvider>
-  );
+const PaapiBidsPanel = ({ storage, setStorage }: PaapiBidsPanelProps) => {
+  return <Panel storage={storage} setStorage={setStorage} timelines={{}} />;
 };
 
-export default Auctions;
+export default PaapiBidsPanel;

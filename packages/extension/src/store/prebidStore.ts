@@ -15,11 +15,14 @@
  */
 
 /**
+ * External dependencies
+ */
+import type { PrebidEvents } from '@google-psat/common';
+/**
  * Internal dependencies.
  */
 import { PREBID_EVENTS } from '../constants';
 import { DataStore } from './dataStore';
-import type { PrebidEvents } from './types';
 
 class PrebidStore extends DataStore {
   /**
@@ -108,7 +111,7 @@ class PrebidStore extends DataStore {
           prebidEvents: this.prebidEvents[tabId],
         },
       });
-      DataStore.tabs[tabId].newUpdatesPA = 0;
+      DataStore.tabs[tabId].newUpdatesPrebid = 0;
     } catch (error) {
       // Fail silently
     }

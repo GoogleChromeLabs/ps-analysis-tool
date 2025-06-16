@@ -35,7 +35,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 /**
  * Internal dependencies.
  */
-import EvaluationEnvironment from '../evaluationEnvironment';
+import Placeholder from './placeholder';
 
 interface ReceivedBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -220,14 +220,7 @@ const ReceivedBidsTable = ({
 
   if (!receivedBids || receivedBids.length === 0) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        <p className="text-lg text-raisin-black dark:text-bright-gray">
-          No bids data was recorded.
-        </p>
-        {showEvaluationPlaceholder && (
-          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids if you haven’t already." />
-        )}
-      </div>
+      <Placeholder showEvaluationPlaceholder={showEvaluationPlaceholder} />
     );
   }
 

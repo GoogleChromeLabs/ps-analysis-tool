@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 /**
- * External dependencies.
- */
-import React from 'react';
-import { SidebarProvider } from '@google-psat/design-system';
-
-/**
  * Internal dependencies.
  */
-import useSidebarProcessing from './hooks/useSidebarProcessing';
-import Panel from './panel';
+import type { Bidder } from './types';
 
-const Auctions = () => {
-  const { sidebarData, defaultSelectedItemKey } = useSidebarProcessing();
+export const findMaximumBidderDuration = (bidders: Bidder[]) => {
+  if (!bidders || bidders.length === 0) {
+    return 0;
+  }
 
-  return (
-    <SidebarProvider
-      data={sidebarData}
-      defaultSelectedItemKey={defaultSelectedItemKey}
-    >
-      <Panel />
-    </SidebarProvider>
-  );
+  return bidders.reduce((max, bidder) => {
+    const duration = parseFloat(bidder.duration);
+    return duration > max ? duration : max;
+  }, 0);
 };
-
-export default Auctions;

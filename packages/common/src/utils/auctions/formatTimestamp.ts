@@ -13,29 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import { SidebarProvider } from '@google-psat/design-system';
 
-/**
- * Internal dependencies.
- */
-import useSidebarProcessing from './hooks/useSidebarProcessing';
-import Panel from './panel';
-
-const Auctions = () => {
-  const { sidebarData, defaultSelectedItemKey } = useSidebarProcessing();
-
-  return (
-    <SidebarProvider
-      data={sidebarData}
-      defaultSelectedItemKey={defaultSelectedItemKey}
-    >
-      <Panel />
-    </SidebarProvider>
-  );
+export const formatTimestamp = (timestamp: number) => {
+  const date = new Date(timestamp);
+  return date.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    timeZoneName: 'short',
+  });
 };
-
-export default Auctions;

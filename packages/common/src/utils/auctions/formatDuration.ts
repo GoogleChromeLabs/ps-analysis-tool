@@ -13,29 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import { SidebarProvider } from '@google-psat/design-system';
-
-/**
- * Internal dependencies.
- */
-import useSidebarProcessing from './hooks/useSidebarProcessing';
-import Panel from './panel';
-
-const Auctions = () => {
-  const { sidebarData, defaultSelectedItemKey } = useSidebarProcessing();
-
-  return (
-    <SidebarProvider
-      data={sidebarData}
-      defaultSelectedItemKey={defaultSelectedItemKey}
-    >
-      <Panel />
-    </SidebarProvider>
-  );
+export const formatDuration = (value: string) => {
+  const duration = parseFloat(value);
+  return Number.isInteger(duration)
+    ? duration.toString()
+    : duration.toFixed(2).replace(/\.?0+$/, '');
 };
-
-export default Auctions;

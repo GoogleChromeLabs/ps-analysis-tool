@@ -17,8 +17,8 @@
 /**
  * External dependencies.
  */
-import type { SidebarItems } from '@google-psat/design-system';
-import { useEffect, useState } from 'react';
+import { useTabs, type SidebarItems } from '@google-psat/design-system';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -210,8 +210,45 @@ const useSidebarProcessing = () => {
     getPrebidData,
   ]);
 
+  const { storage, setStorage } = useTabs(({ state, actions }) => ({
+    storage: state.storage,
+    setStorage: actions.setStorage,
+  }));
+
+  const storageRef = useRef<string>(storage[5] || '');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const defaultSelectedItemKey = useMemo(() => {
+    let key = '';
+
+    adUnits.forEach((adUnit) => {
+      adUnitsTimestamp[adUnit]?.forEach((timestamp) => {
+        const auctionEvents = getPrebidData(adUnit, timestamp);
+
+        if (storageRef.current === auctionEvents?.[0]) {
+          key = `${timestamp}||${adUnit} Prebid`;
+        }
+      });
+    });
+
+    timeoutRef.current = setTimeout(() => {
+      setStorage('', 5);
+    });
+
+    return key;
+  }, [adUnits, adUnitsTimestamp, getPrebidData, setStorage]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return {
     sidebarData,
+    defaultSelectedItemKey: defaultSelectedItemKey || 'adunits',
   };
 };
 
