@@ -102,12 +102,20 @@ class PrebidStore extends DataStore {
         return;
       }
 
+      const newData: { [frameId: number]: PrebidEvents } = {};
+      Object.keys(this.prebidEvents[tabId]).forEach((key) => {
+        const _frameId = Number(key);
+        if (this.prebidEvents[tabId][_frameId].pbjsNamespace) {
+          newData[_frameId] = this.prebidEvents[tabId][_frameId];
+        }
+      });
+
       await chrome.runtime.sendMessage({
         type: PREBID_EVENTS,
         payload: {
           refreshTabData: overrideForInitialSync,
           tabId,
-          prebidEvents: this.prebidEvents[tabId],
+          prebidEvents: newData,
         },
       });
       DataStore.tabs[tabId].newUpdatesPA = 0;
