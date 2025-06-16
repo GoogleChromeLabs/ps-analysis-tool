@@ -26,9 +26,9 @@ import {
   type TableColumn,
   type TableRow,
   Link,
+  ResizableTray,
 } from '@google-psat/design-system';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies
@@ -141,7 +141,7 @@ const MDLTable = () => {
         getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
         tablePersistentSettingsKey="mdlTable"
       >
-        <Resizable
+        <ResizableTray
           defaultSize={{
             width: '100%',
             height: '85%',
@@ -155,9 +155,10 @@ const MDLTable = () => {
             left: false,
           }}
           className="h-full flex"
+          trayId="mdl-table-bottom-tray"
         >
           <Table selectedKey={selectedKey} />
-        </Resizable>
+        </ResizableTray>
         <Legend />
       </TableProvider>
     </div>

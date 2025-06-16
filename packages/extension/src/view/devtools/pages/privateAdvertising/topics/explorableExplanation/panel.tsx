@@ -157,7 +157,10 @@ const Panel = ({ topicsState, topicsDispatch }: PanelProps) => {
       <div className="flex-1 overflow-auto">
         <Animation topicsState={topicsState} topicsDispatch={topicsDispatch} />
       </div>
-      <DraggableTray ref={draggableTrayRef} />
+      <DraggableTray
+        ref={draggableTrayRef}
+        trayId="topicsExplorableExplanation"
+      />
     </div>
   );
 };
