@@ -43,7 +43,7 @@ const updateGlobalVariableAndAttachCDP = async () => {
     cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
     prebidStore.deinitialiseVariablesForTab(tab.id.toString());
-    prebidStore.initialiseVariablesForNewTab(tab.id.toString());
+    prebidStore.initialiseVariablesForNewTabAndFrame(tab.id.toString(), 0);
 
     PAStore.initialiseVariablesForNewTab(tab.id.toString());
     ARAStore.initialiseVariablesForNewTab(tab.id.toString());

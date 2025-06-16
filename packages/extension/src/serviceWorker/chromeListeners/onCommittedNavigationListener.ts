@@ -68,7 +68,10 @@ export const onCommittedNavigationListener = async ({
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
 
       prebidStore.deinitialiseVariablesForTab(tabId.toString());
-      prebidStore.initialiseVariablesForNewTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(
+        tabId.toString(),
+        frameId
+      );
 
       if (DataStore.globalIsUsingCDP) {
         PAStore.deinitialiseVariablesForTab(tabId.toString());

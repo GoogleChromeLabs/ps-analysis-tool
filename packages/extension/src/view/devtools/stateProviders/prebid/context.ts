@@ -18,9 +18,6 @@
  */
 import {
   createContext,
-  type ReceivedBids,
-  type AdsAndBiddersType,
-  type PrebidNoBidsType,
   noop,
   type PrebidDebugModuleConfig,
   type PrebidDebugModuleConfigRule,
@@ -28,25 +25,14 @@ import {
 /**
  * Internal dependencies.
  */
-import type { PrebidWarningTypes } from '../../../../store';
+import type { PrebidEvents } from '../../../../store';
 
 export interface PrebidContextType {
   state: {
-    prebidAuctionEvents: { [auctionId: string]: any[] };
-    errorEvents: {
-      type: PrebidWarningTypes;
-      message: string[];
-      time: string;
-    }[];
-    versionInfo: string;
-    prebidAdUnits: AdsAndBiddersType;
-    prebidReceivedBids: ReceivedBids[];
-    prebidNoBids: PrebidNoBidsType;
-    installedModules: string[];
-    config: PrebidConfig;
-    pbjsNamespace: string;
+    prebidData: PrebidEvents;
     prebidExists: boolean | null;
     debuggingModuleConfig: PrebidDebugModuleConfig;
+    pbjsNamespaces: { [frameId: number]: string };
     storeRulesInLocalStorage: boolean;
   };
   actions: {
@@ -75,15 +61,19 @@ export interface PrebidContextType {
 
 export const initialState: PrebidContextType = {
   state: {
-    prebidAdUnits: {},
-    prebidNoBids: {},
-    versionInfo: '',
-    installedModules: [],
-    config: {},
-    prebidReceivedBids: [],
-    errorEvents: [],
-    prebidAuctionEvents: {},
-    pbjsNamespace: '',
+    prebidData: {
+      prebidExists: false,
+      adUnits: {},
+      pbjsNamespace: '',
+      noBids: {},
+      receivedBids: [],
+      errorEvents: [],
+      versionInfo: '',
+      config: {},
+      auctionEvents: {},
+      installedModules: [],
+    },
+    pbjsNamespaces: {},
     prebidExists: null,
     debuggingModuleConfig: {
       enabled: false,

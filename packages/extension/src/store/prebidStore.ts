@@ -26,7 +26,9 @@ class PrebidStore extends DataStore {
    * This will store the prebid data for each tab
    */
   prebidEvents: {
-    [tabId: string]: PrebidEvents;
+    [tabId: string]: {
+      [frameId: number]: PrebidEvents;
+    };
   } = {};
 
   constructor() {
@@ -38,9 +40,9 @@ class PrebidStore extends DataStore {
     delete this.prebidEvents[tabId];
   }
 
-  initialiseVariablesForNewTab(tabId: string): void {
+  initialiseVariablesForNewTabAndFrame(tabId: string, frameId: number): void {
     super.initialiseVariablesForNewTab(tabId);
-    this.prebidEvents[tabId] = {
+    this.prebidEvents[tabId][frameId] = {
       prebidExists: false,
       adUnits: {},
       pbjsNamespace: '',

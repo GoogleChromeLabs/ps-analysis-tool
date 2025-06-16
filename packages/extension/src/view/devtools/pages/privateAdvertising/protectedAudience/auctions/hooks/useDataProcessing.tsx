@@ -42,10 +42,10 @@ const useDataProcessing = () => {
     prebidNoBids,
     prebidReceivedBids,
   } = usePrebid(({ state }) => ({
-    prebidAdunits: state.prebidAdUnits,
-    prebidAuctionEvents: state.prebidAuctionEvents,
-    prebidReceivedBids: state.prebidReceivedBids,
-    prebidNoBids: state.prebidNoBids,
+    prebidAdunits: state.prebidData.adUnits,
+    prebidAuctionEvents: state.prebidData.auctionEvents,
+    prebidReceivedBids: state.prebidData.receivedBids,
+    prebidNoBids: state.prebidData.noBids,
   }));
 
   const adUnits = useMemo(() => {

@@ -104,7 +104,8 @@ export const runtimeOnMessageListener = async (
     });
   }
 
-  const senderTabId = sender?.frameId === 0 ? sender?.tab?.id : null;
+  const frameId = sender?.frameId ?? 0;
+  const senderTabId = frameId === 0 ? sender?.tab?.id : null;
 
   if (!request?.payload?.tabId && !senderTabId) {
     return;
@@ -161,7 +162,7 @@ export const runtimeOnMessageListener = async (
 
   if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
     if (request?.payload?.prebidExists === false) {
-      prebidStore.prebidEvents[incomingMessageTabId.toString()] = {
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][frameId] = {
         adUnits: {},
         noBids: {},
         versionInfo: '',
@@ -177,7 +178,7 @@ export const runtimeOnMessageListener = async (
       return;
     }
 
-    prebidStore.prebidEvents[incomingMessageTabId.toString()] = {
+    prebidStore.prebidEvents[incomingMessageTabId.toString()][frameId] = {
       prebidExists: true,
       ...request.payload.prebidData,
     };

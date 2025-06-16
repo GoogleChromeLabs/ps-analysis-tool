@@ -60,8 +60,8 @@ const Panel = () => {
   }));
 
   const { prebidAdunits, prebidAuctionEvents } = usePrebid(({ state }) => ({
-    prebidAdunits: state.prebidAdUnits,
-    prebidAuctionEvents: state.prebidAuctionEvents,
+    prebidAdunits: state.prebidData.adUnits,
+    prebidAuctionEvents: state.prebidData.auctionEvents,
   }));
 
   const data = useRef<{
