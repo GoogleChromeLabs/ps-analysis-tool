@@ -236,7 +236,6 @@ const ReceivedBidsTable = ({
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
-        console;
         const data = row.originalData as singleAuctionEvent;
         return (
           data?.ownerOrigin +

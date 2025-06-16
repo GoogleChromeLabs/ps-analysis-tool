@@ -17,11 +17,20 @@
 /**
  * External dependencies.
  */
-import { JsonView } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
+import {
+  JsonView,
+  Timeline,
+  useTabs,
+  type TimelineProps,
+} from '@google-psat/design-system';
+import React, { useCallback, useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 import { Resizable } from 're-resizable';
-import type { NoBidsType, ReceivedBids } from '@google-psat/common';
+import type {
+  NoBidsType,
+  PrebidEvents,
+  ReceivedBids,
+} from '@google-psat/common';
 import classNames from 'classnames';
 
 /**
@@ -30,6 +39,7 @@ import classNames from 'classnames';
 import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
 import { BidsPillOptions } from '.';
+import Placeholder from './placeholder';
 
 interface PanelProps {
   receivedBids: ReceivedBids[];
@@ -38,6 +48,8 @@ interface PanelProps {
   setStorage?: (data: string, index: number) => void;
   eeAnimatedTab?: boolean;
   bidsPillToggle: string;
+  timelines: PrebidEvents['auctionEvents'];
+  zoomLevel?: number;
 }
 
 const Panel = ({
@@ -47,6 +59,8 @@ const Panel = ({
   setStorage,
   eeAnimatedTab = false,
   bidsPillToggle,
+  timelines,
+  zoomLevel = 2,
 }: PanelProps) => {
   const [selectedRow, setSelectedRow] = useState<
     ReceivedBids | NoBidsType[keyof NoBidsType] | null
@@ -57,8 +71,25 @@ const Panel = ({
       return receivedBids.length > 0;
     }
 
-    return Object.keys(noBids).length > 0;
-  }, [noBids, bidsPillToggle, receivedBids.length]);
+    if (bidsPillToggle === BidsPillOptions.NoBids) {
+      return Object.keys(noBids).length > 0;
+    }
+
+    return Object.entries(timelines).length > 0;
+  }, [bidsPillToggle, timelines, receivedBids.length, noBids]);
+
+  const { setPAActiveTab, setPAStorage } = useTabs(({ actions }) => ({
+    setPAActiveTab: actions.setActiveTab,
+    setPAStorage: actions.setStorage,
+  }));
+
+  const navigateToAuction = useCallback(
+    (data: string) => {
+      setPAStorage(data, 5);
+      setPAActiveTab(5);
+    },
+    [setPAActiveTab, setPAStorage]
+  );
 
   return (
     <>
@@ -92,9 +123,26 @@ const Panel = ({
           </div>
         )}
 
-        {bidsPillToggle === BidsPillOptions.Timeline && <></>}
+        {bidsPillToggle === BidsPillOptions.Timeline && (
+          <div className="w-full h-full px-4 border-t border-american-silver dark:border-quartz">
+            {timelines && Object.entries(timelines).length > 0 ? (
+              Object.entries(timelines).map(([auctionId, auction]) => (
+                <div key={auctionId} className="my-4">
+                  <Timeline
+                    {...(auction as unknown as TimelineProps)}
+                    zoomLevel={zoomLevel}
+                    setSelectedRow={setSelectedRow}
+                    navigateToAuction={navigateToAuction}
+                  />
+                </div>
+              ))
+            ) : (
+              <Placeholder showEvaluationPlaceholder={true} />
+            )}
+          </div>
+        )}
       </div>
-      {showBottomTray && bidsPillToggle !== BidsPillOptions.Timeline && (
+      {showBottomTray && (
         <Resizable
           defaultSize={{
             width: '100%',

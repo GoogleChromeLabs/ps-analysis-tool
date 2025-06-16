@@ -21,10 +21,11 @@ import {
   DoubleArrow,
   PillToggle,
   SIDEBAR_ITEMS_KEYS,
+  Slider,
   useSidebar,
   useTabs,
 } from '@google-psat/design-system';
-import type { NoBidsType } from '@google-psat/common';
+import { prepareTimelineData, type NoBidsType } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -50,10 +51,13 @@ const Bids = () => {
     },
   }));
 
-  const { prebidNoBids, prebidReceivedBids } = usePrebid(({ state }) => ({
-    prebidNoBids: state.prebidNoBids,
-    prebidReceivedBids: state.prebidReceivedBids,
-  }));
+  const { prebidNoBids, prebidReceivedBids, prebidAuctionEvents } = usePrebid(
+    ({ state }) => ({
+      prebidNoBids: state.prebidNoBids,
+      prebidReceivedBids: state.prebidReceivedBids,
+      prebidAuctionEvents: state.prebidAuctionEvents,
+    })
+  );
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
@@ -114,6 +118,20 @@ const Bids = () => {
     return paapi?.receivedBids || [];
   }, [paapi?.receivedBids, panelPillToggle, prebidReceivedBids]);
 
+  const timelines = useMemo(() => {
+    if (panelPillToggle === 'Prebid') {
+      if (!prebidAuctionEvents) {
+        return [];
+      }
+
+      return prepareTimelineData(prebidAuctionEvents);
+    }
+
+    return {};
+  }, [panelPillToggle, prebidAuctionEvents]);
+
+  const [zoomLevel, setZoomLevel] = useState<number>(2);
+
   const cdpNavigation = useCallback(() => {
     document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
     updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
@@ -138,26 +156,43 @@ const Bids = () => {
 
   return (
     <div className="flex flex-col pt-4 h-full w-full">
-      <div className="px-4 pb-4 flex gap-4 items-center">
-        <PillToggle
-          options={['Prebid', 'PAAPI']}
-          pillToggle={panelPillToggle}
-          setPillToggle={setPanelPillToggle}
-          eeAnimatedTab={false}
-          highlightOption={highlightOption}
-          setHighlightOption={setHighlightOption}
-        />
-        <DoubleArrow className="fill-gray-500 dark:fill-bright-gray" />
-        <PillToggle
-          options={[
-            BidsPillOptions.ReceivedBids,
-            BidsPillOptions.NoBids,
-            BidsPillOptions.Timeline,
-          ]}
-          pillToggle={bidsPillToggle}
-          setPillToggle={setBidsPillToggle}
-          eeAnimatedTab={false}
-        />
+      <div className="flex justify-between items-center">
+        <div className="px-4 pb-4 flex gap-4 items-center">
+          <PillToggle
+            options={['Prebid', 'PAAPI']}
+            pillToggle={panelPillToggle}
+            setPillToggle={setPanelPillToggle}
+            eeAnimatedTab={false}
+            highlightOption={highlightOption}
+            setHighlightOption={setHighlightOption}
+          />
+          <DoubleArrow className="fill-gray-500 dark:fill-bright-gray" />
+          <PillToggle
+            options={[
+              BidsPillOptions.ReceivedBids,
+              BidsPillOptions.NoBids,
+              BidsPillOptions.Timeline,
+            ]}
+            pillToggle={bidsPillToggle}
+            setPillToggle={setBidsPillToggle}
+            eeAnimatedTab={false}
+          />
+        </div>
+        {bidsPillToggle === BidsPillOptions.Timeline &&
+          Object.entries(timelines).length > 0 && (
+            <div className="px-4">
+              <Slider
+                sliderStep={zoomLevel}
+                setSliderStep={(step: number) => {
+                  setZoomLevel(step);
+                }}
+                label="Zoom"
+                min={1}
+                max={4}
+                step={1}
+              />
+            </div>
+          )}
       </div>
       <Panel
         receivedBids={receivedBids}
@@ -165,6 +200,8 @@ const Bids = () => {
         storage={storage}
         setStorage={setStorage}
         bidsPillToggle={bidsPillToggle}
+        timelines={timelines}
+        zoomLevel={zoomLevel}
       />
     </div>
   );
