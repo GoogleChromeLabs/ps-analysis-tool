@@ -31,7 +31,6 @@ const getTooltipInfoData = (
   numberOfHiddenFrames: number,
   numberOfFirstPartyCookies: number,
   numberOfThirdPartyCookies: number,
-  belongsToRWS: string,
   allowedFeatures: string[] | string,
   displayShowMoreButton: boolean,
   blockedCookies: number,
@@ -93,7 +92,6 @@ const getTooltipInfoData = (
   if (frameType === 'Unknown') {
     info[I18n.getMessage('note')] = I18n.getMessage('unknownFrameNote');
   } else {
-    info[I18n.getMessage('belongsToRWSHeader')] = belongsToRWS;
     attr['allowedFeaturesInCompactView'] = allowedFeaturesInCompactView;
     attr['allowedFeatureInExpandedView'] = allowedFeatureInExpandedView;
 

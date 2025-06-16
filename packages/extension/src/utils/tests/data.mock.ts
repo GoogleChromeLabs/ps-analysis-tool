@@ -3404,22 +3404,18 @@ export const tabFrames = {
   'https://rtcamp.com': {
     frameIds: ['0'],
     frameType: 'outermost_frame' as FrameType,
-    isOnRWS: false,
   },
   'https://ads.kwanzoo.com': {
     frameIds: ['106'],
     frameType: 'sub_frame' as FrameType,
-    isOnRWS: false,
   },
   'https://td.doubleclick.net': {
     frameIds: ['107'],
     frameType: 'sub_frame' as FrameType,
-    isOnRWS: false,
   },
   'https://www.google.com': {
     frameIds: ['108', '109', '112'],
     frameType: 'sub_frame' as FrameType,
-    isOnRWS: false,
   },
 };
 export const libraryMatches = {
@@ -7031,22 +7027,18 @@ export const data = {
     'https://rtcamp.com': {
       frameIds: [0],
       frameType: 'outermost_frame',
-      isOnRWS: false,
     },
     'https://ads.kwanzoo.com': {
       frameIds: [106],
       frameType: 'sub_frame',
-      isOnRWS: false,
     },
     'https://td.doubleclick.net': {
       frameIds: [107],
       frameType: 'sub_frame',
-      isOnRWS: false,
     },
     'https://www.google.com': {
       frameIds: [108, 109, 112],
       frameType: 'sub_frame',
-      isOnRWS: false,
     },
   },
   showInfoIcon: true,

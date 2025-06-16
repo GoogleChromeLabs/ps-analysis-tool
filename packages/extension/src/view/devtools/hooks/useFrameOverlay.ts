@@ -24,7 +24,6 @@ import type { CookieTableData } from '@google-psat/common';
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
 import { useCookie, usePrebid, useProtectedAudience } from '../stateProviders';
-import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
   attributes: { iframeOrigin: string | null; setInPage?: boolean };
@@ -335,79 +334,72 @@ const useFrameOverlay = (
   ]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (!connectedToPort && !canStartInspecting) {
-          connectToPort();
-        }
-
-        if (!isInspecting && portRef.current && canStartInspecting) {
-          portRef.current.postMessage({
-            isInspecting: false,
-          });
-
-          return;
-        }
-
-        if (
-          chrome.runtime?.id &&
-          portRef.current &&
-          tabFrames &&
-          canStartInspecting
-        ) {
-          const thirdPartyCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
-            : [];
-          const firstPartyCookies = filteredCookies
-            ? filteredCookies.filter((cookie) => cookie.isFirstParty)
-            : [];
-          const blockedCookies = filteredCookies
-            ? filteredCookies.filter(
-                (cookie) =>
-                  cookie.isBlocked ||
-                  (cookie.blockedReasons?.length !== undefined &&
-                    cookie.blockedReasons?.length > 0)
-              )
-            : [];
-          const blockedReasons = filteredCookies
-            ? filteredCookies
-                .filter((cookie) => cookie.isBlocked)
-                .reduce((previousReasons: string[], cookie) => {
-                  if (
-                    cookie.blockedReasons?.length !== undefined &&
-                    cookie.blockedReasons?.length > 0
-                  ) {
-                    return [
-                      ...new Set([
-                        ...previousReasons,
-                        ...(cookie.blockedReasons || []),
-                      ]),
-                    ];
-                  }
-                  return [...new Set([...previousReasons])];
-                }, [])
-            : [];
-
-          const isFrameOnRWS = selectedFrame
-            ? await isOnRWS(selectedFrame)
-            : false;
-
-          portRef.current?.postMessage({
-            selectedFrame,
-            removeAllFramePopovers: isFrameSelectedFromDevTool,
-            thirdPartyCookies: thirdPartyCookies.length,
-            firstPartyCookies: firstPartyCookies.length,
-            blockedCookies: blockedCookies.length,
-            blockedReasons: blockedReasons.join(', '),
-            isInspecting,
-            isForProtectedAudience: Boolean(selectedAdUnit),
-            isOnRWS: isFrameOnRWS,
-          });
-        }
-      } catch (error) {
-        // Silently fail.
+    try {
+      if (!connectedToPort && !canStartInspecting) {
+        connectToPort();
       }
-    })();
+
+      if (!isInspecting && portRef.current && canStartInspecting) {
+        portRef.current.postMessage({
+          isInspecting: false,
+        });
+
+        return;
+      }
+
+      if (
+        chrome.runtime?.id &&
+        portRef.current &&
+        tabFrames &&
+        canStartInspecting
+      ) {
+        const thirdPartyCookies = filteredCookies
+          ? filteredCookies.filter((cookie) => !cookie.isFirstParty)
+          : [];
+        const firstPartyCookies = filteredCookies
+          ? filteredCookies.filter((cookie) => cookie.isFirstParty)
+          : [];
+        const blockedCookies = filteredCookies
+          ? filteredCookies.filter(
+              (cookie) =>
+                cookie.isBlocked ||
+                (cookie.blockedReasons?.length !== undefined &&
+                  cookie.blockedReasons?.length > 0)
+            )
+          : [];
+        const blockedReasons = filteredCookies
+          ? filteredCookies
+              .filter((cookie) => cookie.isBlocked)
+              .reduce((previousReasons: string[], cookie) => {
+                if (
+                  cookie.blockedReasons?.length !== undefined &&
+                  cookie.blockedReasons?.length > 0
+                ) {
+                  return [
+                    ...new Set([
+                      ...previousReasons,
+                      ...(cookie.blockedReasons || []),
+                    ]),
+                  ];
+                }
+                return [...new Set([...previousReasons])];
+              }, [])
+          : [];
+
+        portRef.current?.postMessage({
+          selectedFrame,
+          removeAllFramePopovers: isFrameSelectedFromDevTool,
+          thirdPartyCookies: thirdPartyCookies.length,
+          firstPartyCookies: firstPartyCookies.length,
+          blockedCookies: blockedCookies.length,
+          blockedReasons: blockedReasons.join(', '),
+          isInspecting,
+          isForProtectedAudience: Boolean(selectedAdUnit),
+        });
+      }
+    } catch (error) {
+      // Silently fail.
+    }
   }, [
     selectedAdUnit,
     canStartInspecting,

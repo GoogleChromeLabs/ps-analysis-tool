@@ -18,7 +18,6 @@ export interface ResponseType {
   firstPartyCookies?: number;
   thirdPartyCookies?: number;
   isInspecting: boolean;
-  isOnRWS?: boolean;
   removeAllFramePopovers?: boolean;
   blockedCookies?: number;
   blockedReasons?: string;

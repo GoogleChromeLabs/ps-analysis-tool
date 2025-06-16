@@ -101,11 +101,6 @@ const createTooltip = (
       numberOfHiddenFrames,
       data?.firstPartyCookies || 0,
       data?.thirdPartyCookies || 0,
-      origin
-        ? data?.isOnRWS
-          ? I18n.getMessage('yes')
-          : I18n.getMessage('no')
-        : 'N/A',
       allowedFeatured,
       DISPLAY_SHOW_MORE_BUTTON,
       data?.blockedCookies || 0,
