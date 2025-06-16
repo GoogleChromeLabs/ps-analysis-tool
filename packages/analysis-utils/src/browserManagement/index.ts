@@ -17,13 +17,10 @@
 /**
  * External dependencies.
  */
-import puppeteer, { Browser, HTTPResponse, Page, Protocol } from 'puppeteer';
+import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { parse, type Cookie } from 'simple-cookie';
 import {
   type CookieData,
-  type ScriptTagUnderCheck,
-  type LibraryData,
-  type LibraryMatchers,
   type SingleURLError,
   resolveWithTimeout,
   delay,
@@ -56,7 +53,6 @@ export class BrowserManagement {
   pageFrames: Record<string, Record<string, string>>;
   pageResponses: Record<string, Record<string, ResponseData>>;
   pageRequests: Record<string, Record<string, RequestData>>;
-  pageResourcesMaps: Record<string, Record<string, ScriptTagUnderCheck>>;
   shouldLogDebug: boolean;
   spinnies: Spinnies | undefined;
   isSiteMap: boolean;
@@ -82,7 +78,6 @@ export class BrowserManagement {
     this.pageResponses = {};
     this.pageRequests = {};
     this.shouldLogDebug = shouldLogDebug;
-    this.pageResourcesMaps = {};
     this.spinnies = spinnies;
     this.indent = indent;
     this.erroredOutUrls = {};
@@ -391,26 +386,6 @@ export class BrowserManagement {
     this.debugLog(`Scrolling on URL: ${url}`);
   }
 
-  responseEventListener(pageId: string, response: HTTPResponse) {
-    if (
-      response?.headers()?.['content-type']?.includes('javascript') ||
-      response?.headers()?.['content-type']?.includes('html')
-    ) {
-      response
-        .text()
-        .then((content) => {
-          this.pageResourcesMaps[pageId][response.url()] = {
-            origin: response.url(),
-            type: response?.headers()?.['content-type']?.includes('javascript')
-              ? 'Script'
-              : 'Document',
-            content,
-          };
-        })
-        .catch(() => undefined);
-    }
-  }
-
   responseReceivedListener(
     pageId: string,
     { requestId, frameId, response }: Protocol.Network.ResponseReceivedEvent
@@ -682,9 +657,6 @@ export class BrowserManagement {
 
     this.pageRequests[pageId] = {};
     this.pageResponses[pageId] = {};
-    this.pageResourcesMaps[pageId] = {};
-
-    page.on('response', (ev) => this.responseEventListener(pageId, ev));
 
     cdpSession.on('Network.responseReceived', (ev) =>
       this.responseReceivedListener(pageId, ev)
@@ -763,92 +735,22 @@ export class BrowserManagement {
     return cookies;
   }
 
+  // @todo Remove after ensuring that it is not used anywhere except library detection feature.
   getResources(urls: string[]) {
     const allFetchedResources: { [key: string]: any } = {};
 
     urls.forEach((url) => {
-      const page = this.pages[url];
-      const resources = this.pageResourcesMaps[url];
-
-      if (!page || !resources) {
-        allFetchedResources[url] = [];
-        return;
-      }
-
-      const mainFrameUrl = new URL(page.url()).origin;
-
-      allFetchedResources[mainFrameUrl] = Array.from(
-        Object.values(resources) ?? []
-      );
+      allFetchedResources[url] = [];
+      return;
     });
 
     return allFetchedResources;
   }
 
-  async insertAndRunDOMQueryFunctions(
-    url: string,
-    Libraries: LibraryMatchers[]
-  ) {
-    try {
-      const page = this.pages[url];
-
-      if (!page) {
-        throw new Error('No page with the provided ID was found');
-      }
-
-      const domQueryMatches: LibraryData = {};
-
-      await Promise.all(
-        Libraries.map(async ({ domQueryFunction, name }) => {
-          if (domQueryFunction && name) {
-            await page.addScriptTag({
-              content: `window.${name.replaceAll(
-                '-',
-                ''
-              )} = ${domQueryFunction}`,
-            });
-
-            const queryResult = await page.evaluate((library: string) => {
-              //@ts-ignore
-              const functionDOMQuery = window[`${library}`];
-
-              if (!functionDOMQuery) {
-                return [];
-              }
-
-              return functionDOMQuery();
-            }, name.replaceAll('-', ''));
-
-            domQueryMatches[name] = {
-              domQuerymatches: queryResult as [string],
-            };
-          }
-        })
-      );
-
-      const mainFrameUrl = new URL(page.url()).origin;
-
-      return { [mainFrameUrl]: domQueryMatches };
-    } catch (error) {
-      if (error instanceof Error) {
-        this.pushErrors(url, {
-          errorMessage: error.message,
-          stackTrace: error?.stack ?? '',
-          errorName: error?.name,
-        });
-
-        throw error;
-      }
-      return {};
-    }
-  }
-
   async analyzeCookies(
     userProvidedUrls: string[],
-    shouldSkipAcceptBanner: boolean,
-    Libraries: LibraryMatchers[]
+    shouldSkipAcceptBanner: boolean
   ) {
-    let consolidatedDOMQueryMatches: { [key: string]: LibraryData } = {};
     // Open tabs and attach network listeners
     await Promise.all(
       userProvidedUrls.map(async (url) => {
@@ -897,26 +799,6 @@ export class BrowserManagement {
         await this.pageScroll(url);
       })
     );
-
-    try {
-      await Promise.all(
-        userProvidedUrls.map(async (url) => {
-          const newMatches = await this.insertAndRunDOMQueryFunctions(
-            url,
-            Libraries
-          );
-
-          consolidatedDOMQueryMatches = {
-            ...consolidatedDOMQueryMatches,
-            ...newMatches,
-          };
-        })
-      );
-    } catch (error) {
-      if (!this.isSiteMap) {
-        throw error;
-      }
-    }
 
     // Delay for page to load more resources
     await delay(this.pageWaitTime / 2);
@@ -973,7 +855,6 @@ export class BrowserManagement {
 
     return {
       result,
-      consolidatedDOMQueryMatches,
       erroredOutUrls: this.erroredOutUrls,
     };
   }

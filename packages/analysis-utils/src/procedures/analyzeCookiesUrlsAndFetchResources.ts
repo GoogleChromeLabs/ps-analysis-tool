@@ -21,7 +21,6 @@ import {
   isFirstParty,
   findAnalyticsMatch,
   type CookieDatabase,
-  type LibraryMatchers,
   deriveBlockingStatus,
   type Selectors,
 } from '@google-psat/common';
@@ -33,7 +32,6 @@ import { BrowserManagement } from '../browserManagement';
 
 export const analyzeCookiesUrlsAndFetchResources = async (
   urls: string[],
-  Libraries: LibraryMatchers[],
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
@@ -63,11 +61,8 @@ export const analyzeCookiesUrlsAndFetchResources = async (
 
     await browser.initializeBrowser(true);
 
-    const {
-      result: analysisCookieData,
-      consolidatedDOMQueryMatches,
-      erroredOutUrls,
-    } = await browser.analyzeCookies(urls, shouldSkipAcceptBanner, Libraries);
+    const { result: analysisCookieData, erroredOutUrls } =
+      await browser.analyzeCookies(urls, shouldSkipAcceptBanner);
 
     const resources = browser.getResources(urls);
 
@@ -103,7 +98,6 @@ export const analyzeCookiesUrlsAndFetchResources = async (
         cookieData,
         resources: resources[pageUrl],
         erroredOutUrls,
-        domQueryMatches: consolidatedDOMQueryMatches[pageUrl],
       };
     });
 
