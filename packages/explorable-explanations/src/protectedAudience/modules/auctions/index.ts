@@ -32,6 +32,7 @@ import setupBranches from './setupBranches';
 import setupShowWinningAd from './setupShowWinningAd';
 import { showWinningAdDirectly } from './showWinningAdDirectly';
 import { getCoordinateValues } from '../../utils/getCoordinateValues';
+import { AuctionStep } from '../../types';
 import { MULTI_SELLER_CONFIG, SINGLE_SELLER_CONFIG } from '../flowConfig';
 
 export const WINNING_AD_DELAY = 5000;
@@ -72,7 +73,7 @@ const auction: Auction = {
       return;
     }
 
-    const steps = [];
+    const steps: AuctionStep[] = [];
 
     setUpAdUnitCode(steps, index);
     setupBranches(steps, index);

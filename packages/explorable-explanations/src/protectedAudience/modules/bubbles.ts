@@ -49,6 +49,17 @@ type PositionOfCircle = {
   speed?: number;
 };
 
+type BubbleData = {
+  id: string;
+  value: number;
+  group: string;
+  color: string;
+};
+
+type ValueMap = {
+  value: BubbleData;
+  index: number;
+};
 /**
  * @module bubbles
  * Handles interest group bubbles.
@@ -449,16 +460,16 @@ const bubbles: Bubbles = {
     app.setIsBubbleExpanded(true);
 
     const svg = bubbles.bubbleChart(app.bubbles.positions, {
-      label: (d) =>
+      label: (d: BubbleData) =>
         [
-          ...d.id
-            .split('.')
-            .pop()
-            .split(/(?=[A-Z][a-z])/g),
+          ...(d?.id
+            ?.split('.')
+            ?.pop()
+            ?.split(/(?=[A-Z][a-z])/g) ?? []),
         ].join('\n'),
-      value: (d) => d.value,
-      groupFn: (d) => d.group,
-      title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+      value: (d: BubbleData) => d.value,
+      groupFn: (d: BubbleData) => d.group,
+      title: (d: BubbleData) => `${d.id}\n${d.value.toLocaleString('en')}`,
       width: app.bubbles.expandedCircleDiameter,
       height: app.bubbles.expandedCircleDiameter,
       margin: 4,
@@ -493,16 +504,16 @@ const bubbles: Bubbles = {
     app.setIsBubbleExpanded(false);
 
     const svg = bubbles.bubbleChart(app.bubbles.positions, {
-      label: (d) =>
+      label: (d: BubbleData) =>
         [
-          ...d.id
-            .split('.')
-            .pop()
-            .split(/(?=[A-Z][a-z])/g),
+          ...(d?.id
+            ?.split('.')
+            ?.pop()
+            ?.split(/(?=[A-Z][a-z])/g) ?? []),
         ].join('\n'),
-      value: (d) => d.value,
-      groupFn: (d) => d.group,
-      title: (d) => `${d.id}\n${d.value.toLocaleString('en')}`,
+      value: (d: BubbleData) => d.value,
+      groupFn: (d: BubbleData) => d.group,
+      title: (d: BubbleData) => `${d.id}\n${d.value.toLocaleString('en')}`,
       width: app.bubbles.minifiedCircleDiameter,
       height: app.bubbles.minifiedCircleDiameter,
     });
@@ -547,9 +558,9 @@ const bubbles: Bubbles = {
   bubbleChart: (
     data,
     {
-      name = ([x]) => x,
+      name = ([singleName]: string[]) => singleName,
       label = name,
-      value = ([, y]) => y,
+      value = ([, index]: ValueMap[]) => index,
       groupFn,
       title,
       width = 640,
@@ -572,8 +583,8 @@ const bubbles: Bubbles = {
       app.timeline.currentIndex
     );
 
-    data = data.filter((_data, i) => {
-      if (totalBubbles && i < totalBubbles) {
+    data = data.filter((_data: BubbleData, index: number) => {
+      if (totalBubbles && index < totalBubbles) {
         return true;
       }
       return false;
@@ -584,7 +595,8 @@ const bubbles: Bubbles = {
     }
 
     const values = d3.map(data, value);
-    const groups = groupFn === null ? null : d3.map(data, groupFn);
+    const groups =
+      groupFn === null ? null : (d3.map(data, groupFn) as string[]);
     const groupIntervals = d3
       .range(values.length)
       .filter((i) => typeof values[i] === 'number' && values[i] > 0);
@@ -594,14 +606,13 @@ const bubbles: Bubbles = {
     }
 
     groupsParams = groupFn && new d3.InternSet(groupsParams);
-    const labels = label === null ? null : d3.map(data, label);
+    const labels = label === null ? null : (d3.map(data, label) as string[]);
     const titles =
       title === undefined
         ? labels
         : title === null
         ? null
-        : d3.map(data, title);
-
+        : (d3.map(data, title) as string[]);
     const root = d3
       .pack()
       .size([
@@ -644,12 +655,13 @@ const bubbles: Bubbles = {
       event: { stopPropagation: () => void },
       d: { data: string | number }
     ) => {
+      const index = d.data as number;
       app.setHighlightedInterestGroup({
-        interestGroupName: titles?.[d.data]?.split('\n')[0],
-        interestGroupOwner: 'https://www.' + groups?.[d.data],
-        color: app.color?.(groups?.[d.data]) || '',
+        interestGroupName: titles?.[index]?.split('\n')[0] ?? '',
+        interestGroupOwner: 'https://www.' + groups?.[index],
+        color: app.color?.(groups?.[index] ?? '') || '',
       });
-      app.bubbles.highlightedInterestGroup = titles?.[d.data];
+      app.bubbles.highlightedInterestGroup = titles?.[index] ?? '';
       event.stopPropagation();
     };
 

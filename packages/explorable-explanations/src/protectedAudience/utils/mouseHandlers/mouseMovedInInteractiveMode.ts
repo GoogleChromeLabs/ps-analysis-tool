@@ -18,13 +18,17 @@
  */
 import app from '../../app';
 import config from '../../config';
+import { Timeline } from '../../modules/timeline';
 import { drawOpenArrowWithoutAnimationIcon } from '../drawOpenArrowWithoutAnimationIcon';
 import { getCoordinateValues } from '../getCoordinateValues';
 import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
 import { isOverControls } from '../isOverControls';
 import { wipeAndRecreateUserCanvas } from '../wipeAndRecreateCanvas';
-const mouseMovedInInteractiveMode = (event, renderUserIcon) => {
+const mouseMovedInInteractiveMode = (
+  event: MouseEvent,
+  renderUserIcon: Timeline['renderUserIcon']
+) => {
   const { offsetX, offsetY } = event;
   app.mouseX = offsetX;
   app.mouseY = offsetY;

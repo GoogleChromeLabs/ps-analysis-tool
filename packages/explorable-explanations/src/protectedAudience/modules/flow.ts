@@ -102,15 +102,19 @@ const flow: Flow = {
    * @param overrideState If passed this state overrides the state of the buttons;
    */
   setButtonsDisabilityState: (overrideState = false) => {
-    const prevButton = document.getElementById('prevButton') ?? app.prevButton;
-    const nextButton = document.getElementById('nextButton') ?? app.nextButton;
+    const prevButton =
+      (document.getElementById('prevButton') as HTMLButtonElement) ??
+      app.prevButton;
+    const nextButton =
+      (document.getElementById('nextButton') as HTMLButtonElement) ??
+      app.nextButton;
     // Exit early if buttons are not found
     if (!prevButton || !nextButton) {
       return;
     }
 
     // Helper function to set button state
-    const setButtonState = (button, isDisabled) => {
+    const setButtonState = (button: HTMLButtonElement, isDisabled: boolean) => {
       button.disabled = isDisabled;
       button.classList.toggle('disabled:pointer-events-none', isDisabled);
       // eslint-disable-next-line no-undef

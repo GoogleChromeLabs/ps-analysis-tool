@@ -22,7 +22,7 @@ import p5 from 'p5';
 /**
  * Internal dependencies
  */
-import { getAdtechsColors } from '../utils';
+import { ADTECH_COLORS } from '../utils';
 
 type InfoBoxProps = {
   p: p5;
@@ -75,7 +75,7 @@ export const InfoBox = ({
   p.textStyle(p.NORMAL);
   for (let i = 0; i < numAdTechs; i++) {
     const adTech = adTechs[i];
-    const adTechColor = getAdtechsColors(p)[adTech];
+    const adTechColor = ADTECH_COLORS[adTech as keyof typeof ADTECH_COLORS];
 
     p.fill(adTechColor);
     p.stroke(0);

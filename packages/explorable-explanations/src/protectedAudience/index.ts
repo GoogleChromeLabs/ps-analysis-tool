@@ -37,8 +37,8 @@ import {
   setupMainCanvas,
   setupUserCanvas,
 } from './canvas';
-import type { P5, Circle } from './types.ts';
-import { getCoordinateValues } from './utils/getCoordinateValues.ts';
+import type { P5, Circle, PublisherNames } from './types';
+import { getCoordinateValues } from './utils/getCoordinateValues';
 app.setUpTimeLine = () => {
   app.auction.auctions = [];
   app.joinInterestGroup.joinings = [];
@@ -338,7 +338,9 @@ app.calculateDateTime = (index: number) => {
       date.toTimeString().split(' ')[0];
 
     if (circle.type === 'publisher') {
-      const data = publisherData[circle.website];
+      const data = publisherData[
+        circle.website as PublisherNames
+      ] as (typeof publisherData)['aljazeera.com'];
 
       if (data) {
         data.branches.forEach((branch) => {
@@ -615,8 +617,10 @@ app.handleControls = () => {
   // eslint-disable-next-line no-undef
   if (process.env.IS_RUNNING_STANDALONE) {
     app.controlsDiv = document.getElementById('controls-div');
-    app.nextButton = document.getElementById('next-div');
-    app.prevButton = document.getElementById('previous-div');
+    app.nextButton = document.getElementById('next-div') as HTMLButtonElement;
+    app.prevButton = document.getElementById(
+      'previous-div'
+    ) as HTMLButtonElement;
     app.prevButton?.addEventListener('click', app.handlePrevButton);
     app.nextButton?.addEventListener('click', app.handleNextButton);
     app.playButton?.addEventListener('click', () => {

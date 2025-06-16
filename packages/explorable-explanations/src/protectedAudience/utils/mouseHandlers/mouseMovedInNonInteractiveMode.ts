@@ -22,7 +22,7 @@ import { isInsideBox } from '../isInsideBox';
 import { isInsideCircle } from '../isInsideCircle';
 import { getCoordinateValues } from '../getCoordinateValues';
 
-const mouseMovedInNonInteractiveMode = (event) => {
+const mouseMovedInNonInteractiveMode = (event: MouseEvent) => {
   if (!app.shouldRespondToClick) {
     return;
   }
