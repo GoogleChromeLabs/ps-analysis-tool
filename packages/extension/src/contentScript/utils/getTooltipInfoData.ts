@@ -113,11 +113,11 @@ export const getTooltipInfoDataForPA = (
     attr: attr,
   };
 
-  info['bidders'] = data.bidders?.join(', ') ?? '';
-  info['winningBid'] = `${data.winningBid} ${data.bidCurrency}`;
-  info['numberOfBidders'] = `${data.numberOfBidders}`;
-  info['winningBidder'] = data.winningBidder ?? '';
-  info['selectedAdUnit'] = data.selectedAdUnit ?? '';
+  info['Bidders'] = data.bidders?.join(', ') ?? '';
+  info['Winning Bid'] = `${data.winningBid} ${data.bidCurrency}`;
+  info['Number Of Bidders'] = `${data.numberOfBidders}`;
+  info['Winning Bidder'] = data.winningBidder ?? '';
+  info['Selected AdUnit'] = data.selectedAdUnit ?? '';
 
   return infoData;
 };

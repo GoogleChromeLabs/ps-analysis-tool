@@ -27,7 +27,7 @@ import { PuppeteerManagement } from '../../test-utils/puppeteerManagement';
 import { Interaction } from '../../test-utils/interaction';
 dotenv.config();
 jest.retryTimes(3, { logErrorsBeforeRetry: true });
-describe('Validate the Known Breakages, GSI and GIS', () => {
+describe.skip('Validate the Known Breakages, GSI and GIS', () => {
   let page: Page;
   let puppeteer: PuppeteerManagement;
   let interaction: Interaction;

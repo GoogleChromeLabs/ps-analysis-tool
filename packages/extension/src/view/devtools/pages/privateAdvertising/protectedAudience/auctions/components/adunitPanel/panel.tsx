@@ -18,45 +18,54 @@
  * External dependencies
  */
 import React, { useEffect, useMemo } from 'react';
-import { FrameIcon, MoneyIcon, ScreenIcon } from '@google-psat/design-system';
-import type {
-  AdsAndBiddersType,
-  NoBidsType,
-  singleAuctionEvent,
-} from '@google-psat/common';
+import {
+  FrameIcon,
+  MoneyIcon,
+  PillToggle,
+  ScreenIcon,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies
  */
 import Tile from './tile';
-import type { AdUnitLiteral } from '../../explorableExplanation';
-import MatrixHOC from './matrixContainer';
+import Matrix from './matrix';
 
 interface PanelProps {
   adunit: string;
-  adsAndBidders: AdsAndBiddersType;
+  mediaContainerSize?: number[][];
+  bidders?: string[];
+  biddersCount: number;
+  bidsCount: number;
+  noBidsCount: number;
   isInspecting?: boolean;
-  receivedBids?: Record<AdUnitLiteral, singleAuctionEvent[]>;
-  noBids?: NoBidsType;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   setStorage?: (data: string, index?: number) => void;
   setActiveTab?: (tab: number) => void;
+  winnerBid?: string | null;
+  winningMediaContainer?: number[];
+  pillToggle: string;
+  setPillToggle: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Panel = ({
   adunit,
+  mediaContainerSize,
+  bidders,
+  biddersCount,
+  bidsCount,
+  noBidsCount,
   isInspecting,
   setIsInspecting,
-  adsAndBidders,
-  receivedBids,
-  noBids,
   setSelectedAdUnit,
   setStorage,
   setActiveTab,
+  winnerBid = null,
+  winningMediaContainer = [],
+  pillToggle,
+  setPillToggle,
 }: PanelProps) => {
-  const currentAd = adsAndBidders[adunit];
-
   const items = useMemo(
     () => [
       {
@@ -81,16 +90,30 @@ const Panel = ({
         name: 'Ad Container Sizes',
         Icon: ScreenIcon,
         buttons: [
-          ...(currentAd?.mediaContainerSize || []).map((size) => ({
-            name: `${size?.[0]}x${size?.[1]}`,
-          })),
+          ...(mediaContainerSize || [])
+            .filter(
+              (size) =>
+                size?.length === 2 &&
+                typeof size[0] === 'number' &&
+                typeof size[1] === 'number'
+            )
+            .map((size) => {
+              return {
+                name: `${size?.[0]}x${size?.[1]}`,
+                className:
+                  winningMediaContainer?.[0] === size?.[0] &&
+                  winningMediaContainer?.[1] === size?.[1]
+                    ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
+                    : '',
+              };
+            }),
         ],
       },
       {
         name: 'Bidders',
         Icon: MoneyIcon,
         buttons: [
-          ...(currentAd?.bidders || []).map((bidder) => ({
+          ...(bidders || []).map((bidder) => ({
             name: bidder,
             onClick: () => {
               setStorage?.(
@@ -101,19 +124,25 @@ const Panel = ({
               );
               setActiveTab?.(5);
             },
+            className:
+              winnerBid === bidder
+                ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
+                : '',
           })),
         ],
       },
     ],
     [
       adunit,
-      currentAd?.bidders,
-      currentAd?.mediaContainerSize,
+      mediaContainerSize,
+      bidders,
       isInspecting,
-      setActiveTab,
       setIsInspecting,
       setSelectedAdUnit,
+      winningMediaContainer,
+      winnerBid,
       setStorage,
+      setActiveTab,
     ]
   );
 
@@ -125,19 +154,26 @@ const Panel = ({
   }, [setIsInspecting, setSelectedAdUnit, adunit]);
 
   return (
-    <>
-      <MatrixHOC
-        adUnitCode={adunit}
-        adsAndBidders={adsAndBidders}
-        receivedBids={receivedBids?.[adunit as AdUnitLiteral]}
-        noBids={noBids}
+    <div className="flex flex-col h-full w-full ">
+      <div className="p-4">
+        <PillToggle
+          options={['Prebid', 'PAAPI']}
+          pillToggle={pillToggle}
+          setPillToggle={setPillToggle}
+          eeAnimatedTab={false}
+        />
+      </div>
+      <Matrix
+        biddersCount={biddersCount}
+        bidsCount={bidsCount}
+        noBidsCount={noBidsCount}
       />
       <div className="p-4 flex gap-4 flex-wrap">
         {items.map((item) => (
           <Tile key={item.name} item={item} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

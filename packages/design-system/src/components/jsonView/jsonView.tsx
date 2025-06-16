@@ -17,25 +17,16 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState, lazy, Suspense, memo } from 'react';
-import type { ReactJsonViewProps } from '@microlink/react-json-view';
+import React, { useEffect, useState, memo } from 'react';
+import ReactJson, { ReactJsonViewProps } from '@microlink/react-json-view';
 // must be lazy loaded to avoid issue with puppeteer and service worker
 // https://github.com/mac-s-g/react-json-view/issues/296
-const LazyReactJson = lazy(() => import('@microlink/react-json-view'));
 
 /**
  * Internal dependencies.
  */
 import { darkTheme, lightTheme } from './jsonTheme';
 import './jsonView.css';
-
-const LoadingText = () => {
-  return (
-    <div className="w-full h-full flex items-center justify-center text-lg font-bold text-granite-gray">
-      Loading...
-    </div>
-  );
-};
 
 /**
  * JsonView component.
@@ -66,20 +57,16 @@ const JsonView = (props: ReactJsonViewProps): React.ReactElement => {
 
   return (
     <div className="json-view">
-      <Suspense fallback={<LoadingText />}>
-        <LazyReactJson
-          theme={isDarkMode ? darkTheme : lightTheme}
-          iconStyle="triangle"
-          enableClipboard={false}
-          displayDataTypes={false}
-          displayObjectSize={false}
-          shouldCollapse={(object) =>
-            object.name !== 'root' && Object.keys(object.src).length > 5
-          }
-          quotesOnKeys={false}
-          {...props}
-        />
-      </Suspense>
+      <ReactJson
+        theme={isDarkMode ? darkTheme : lightTheme}
+        iconStyle="triangle"
+        enableClipboard={false}
+        displayDataTypes={false}
+        displayObjectSize={false}
+        shouldCollapse={(object) => object.name !== 'root'}
+        quotesOnKeys={false}
+        {...props}
+      />
     </div>
   );
 };

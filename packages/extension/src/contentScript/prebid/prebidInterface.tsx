@@ -155,7 +155,7 @@ class PrebidInterface {
         pbjsClass.prebidData.config = {
           ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
           bidderSettings,
-          eids: pbjsClass.prebidInterface?.getUserIdsAsEids() ?? [],
+          eids: pbjsClass.prebidInterface?.getUserIdsAsEids?.() ?? [],
         };
 
         window.top?.postMessage({
