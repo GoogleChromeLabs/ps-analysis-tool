@@ -13,32 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
   useTabs,
+  PillToggle,
+  DoubleArrow,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience, useSettings } from '../../../../stateProviders';
-import Panel from './panel';
+import { useSettings } from '../../../../stateProviders';
+import PrebidBidsPanel from './prebid';
+import PaapiBidsPanel from './paapi';
+
+enum PillToggleOptions {
+  PREBID = 'Prebid',
+  PAAPI = 'PAAPI',
+}
 
 const Bids = () => {
-  const { receivedBids, noBids } = useProtectedAudience(({ state }) => ({
-    receivedBids: state.receivedBids,
-    noBids: state.noBids,
-  }));
-
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,
   }));
+  const [pillToggle, setPillToggle] = useState<string>(
+    PillToggleOptions.PREBID
+  );
 
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
     updateSelectedItemKey: actions.updateSelectedItemKey,
@@ -72,12 +77,26 @@ const Bids = () => {
   }
 
   return (
-    <Panel
-      receivedBids={receivedBids}
-      noBids={noBids}
-      storage={storage}
-      setStorage={setStorage}
-    />
+    <div className="flex flex-col h-full w-full relative">
+      <div className="px-3 py-3 flex gap-6 items-center border-american-silver dark:border-quartz border-b">
+        <PillToggle
+          options={[PillToggleOptions.PREBID, PillToggleOptions.PAAPI]}
+          pillToggle={pillToggle}
+          setPillToggle={setPillToggle}
+          eeAnimatedTab={false}
+        />
+        <DoubleArrow
+          width="30px"
+          height="30px"
+          className="fill-charcoal-gray"
+        />
+      </div>
+      {pillToggle === PillToggleOptions.PREBID ? (
+        <PrebidBidsPanel storage={storage} setStorage={setStorage} />
+      ) : (
+        <PaapiBidsPanel storage={storage} setStorage={setStorage} />
+      )}
+    </div>
   );
 };
 

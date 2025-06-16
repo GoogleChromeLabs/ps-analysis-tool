@@ -179,6 +179,15 @@ export const runtimeOnMessageListener = async (
 
     prebidStore.prebidEvents[incomingMessageTabId.toString()] = {
       prebidExists: true,
+      adUnits: {},
+      noBids: {},
+      versionInfo: '',
+      installedModules: [],
+      config: {},
+      receivedBids: [],
+      errorEvents: [],
+      auctionEvents: {},
+      pbjsNamespace: '',
       ...request.payload.prebidData,
     };
     DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;

@@ -26,11 +26,13 @@ import matchKey from './matchKey';
  * Tree traversal is done in a depth-first manner to find the item.
  * @param items Sidebar items.
  * @param key Key to find.
+ * @param dropdownOpen Optional parameter to indicate to open the dropdown across the tree.
  * @returns Sidebar item.
  */
 const findItem = (
   items: SidebarItems,
-  key: string | null
+  key: string | null,
+  dropdownOpen?: boolean
 ): SidebarItemValue | null => {
   if (!key) {
     return null;
@@ -48,11 +50,20 @@ const findItem = (
       if (matchKey(key || '', itemKey)) {
         keyFound = true;
         item = _item;
+
+        if (dropdownOpen) {
+          _item.dropdownOpen = dropdownOpen;
+        }
+
         return;
       }
 
       if (_item.children) {
         _findItem(_item.children);
+
+        if (keyFound && dropdownOpen) {
+          _item.dropdownOpen = true;
+        }
       }
     });
   };

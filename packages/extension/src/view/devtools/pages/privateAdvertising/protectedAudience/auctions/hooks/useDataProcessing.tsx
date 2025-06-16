@@ -61,7 +61,11 @@ const useDataProcessing = () => {
 
     if (Object.keys(prebidAdunits || {}).length > 0) {
       Object.values(prebidAuctionEvents || {}).forEach((events) => {
-        const _adUnits = events[0].adUnitCodes as string[];
+        if (!events?.length || !events[0]?.adUnitCodes?.length) {
+          return;
+        }
+
+        const _adUnits = events[0]?.adUnitCodes as string[];
 
         _adUnits.forEach((adUnit) => {
           _adUnitsTimestamp[adUnit] = [
@@ -72,8 +76,8 @@ const useDataProcessing = () => {
       });
     }
 
-    if (Object.keys(paapi?.adsAndBidders).length > 0) {
-      const _adUnits = Object.keys(paapi.adsAndBidders);
+    if (Object.keys(paapi?.adsAndBidders || {}).length > 0) {
+      const _adUnits = Object.keys(paapi.adsAndBidders || {});
 
       _adUnits.forEach((adUnit) => {
         const events = paapi.auctionEvents?.[adUnit];
@@ -101,8 +105,12 @@ const useDataProcessing = () => {
     const _adUnitsAuctionId: Record<string, Record<string, string>> = {};
 
     if (Object.keys(prebidAdunits || {}).length > 0) {
-      Object.values(prebidAuctionEvents).forEach((events) => {
-        const _adUnits = events[0].adUnitCodes as string[];
+      Object.values(prebidAuctionEvents || {}).forEach((events) => {
+        if (!events?.length || !events[0]?.adUnitCodes?.length) {
+          return;
+        }
+
+        const _adUnits = events[0]?.adUnitCodes as string[];
         const time = new Date(events[0].timestamp).toISOString();
 
         _adUnits.forEach((adUnit) => {
@@ -224,11 +232,13 @@ const useDataProcessing = () => {
       Object.values(prebidAdunits).forEach((data) => {
         const bidders = data.bidders as string[];
 
-        if (bidders) {
-          _adUnitBidders[data.adUnitCode] = {
-            prebid: bidders,
-          };
+        if (!bidders?.length) {
+          return;
         }
+
+        _adUnitBidders[data.adUnitCode] = {
+          prebid: bidders,
+        };
 
         _adUnitBidders[data.adUnitCode] = {
           ..._adUnitBidders[data.adUnitCode],
@@ -241,12 +251,14 @@ const useDataProcessing = () => {
       Object.values(paapi.adsAndBidders).forEach((data) => {
         const bidders = data.bidders as string[];
 
-        if (bidders) {
-          _adUnitBidders[data.adUnitCode] = {
-            ..._adUnitBidders[data.adUnitCode],
-            paapi: bidders,
-          };
+        if (!bidders?.length) {
+          return;
         }
+
+        _adUnitBidders[data.adUnitCode] = {
+          ..._adUnitBidders[data.adUnitCode],
+          paapi: bidders,
+        };
 
         _adUnitBidders[data.adUnitCode] = {
           ..._adUnitBidders[data.adUnitCode],
