@@ -57,7 +57,6 @@ function getSiteReport(urls: string[], processedData: any) {
       return {
         pageUrl: parseUrl(url) ? new URL(url).href : encodeURI(url),
         cookieData: {},
-        libraryMatches: [],
         erroredOutUrls: [
           ...erroredOutUrls[url].map((errors: SingleURLError) => {
             return {
