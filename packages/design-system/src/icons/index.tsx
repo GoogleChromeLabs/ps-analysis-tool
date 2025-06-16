@@ -114,7 +114,6 @@ export { default as SearchIcon } from './search.svg';
 export { default as Tick } from './tick.svg';
 export { default as Plus } from './add-simple.svg';
 export { default as DescendingOrder } from './arrow-upward-with-line.svg';
-export { default as DoubleArrowRightIcon } from './double-arrow-right.svg';
 export { default as HammerIcon } from './hammer.svg';
 export { default as Person } from './person.svg';
 export { default as Ruler } from './ruler.svg';

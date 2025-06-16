@@ -40,6 +40,7 @@ import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
 import { useProtectedAudience } from '../../../../stateProviders';
 import Placeholder from './placeholder';
+import type { TimelineProps } from '@google-psat/design-system/src/components/timeline';
 
 enum PillToggleOptions {
   ReceivedBids = 'Received Bids',
@@ -96,57 +97,71 @@ const Panel = ({
     return false;
   }, [noBids, pillToggle, receivedBids.length, timelines]);
 
-  let activePage = null;
-
-  if (pillToggle === PillToggleOptions.ReceivedBids) {
-    activePage = (
-      <div className="w-full h-full border-american-silver dark:border-quartz overflow-auto">
-        <ReceivedBidsTable
-          setSelectedRow={setSelectedRow}
-          selectedRow={selectedRow}
-          receivedBids={receivedBids}
-          storage={storage}
-          setStorage={setStorage}
-          showEvaluationPlaceholder={!eeAnimatedTab}
-        />
-      </div>
-    );
-  } else if (pillToggle === PillToggleOptions.NoBids) {
-    activePage = (
-      <div
-        className={classNames(
-          'h-full border-r border-american-silver dark:border-quartz',
-          Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
-        )}
-      >
-        <NoBidsTable
-          setSelectedRow={setSelectedRow}
-          selectedRow={selectedRow}
-          noBids={noBids}
-          showEvaluationPlaceholder={!eeAnimatedTab}
-        />
-      </div>
-    );
-  } else if (pillToggle === PillToggleOptions.TimelineName) {
-    activePage = (
-      <div className="w-full h-full px-4">
-        {timelines && Object.entries(timelines).length > 0 ? (
-          Object.entries(timelines).map(([auctionId, auction]) => (
-            <div key={auctionId} className="my-4">
-              <Timeline
-                {...auction}
-                zoomLevel={zoomLevel}
-                setSelectedRow={setSelectedRow}
-                navigateToAuction={navigateToAuction}
-              />
-            </div>
-          ))
-        ) : (
-          <Placeholder showEvaluationPlaceholder={true} />
-        )}
-      </div>
-    );
-  }
+  const activePage = useMemo(() => {
+    switch (pillToggle) {
+      case PillToggleOptions.NoBids:
+        return (
+          <div
+            className={classNames(
+              'h-full border-r border-american-silver dark:border-quartz',
+              Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
+            )}
+          >
+            <NoBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+              noBids={noBids}
+              showEvaluationPlaceholder={!eeAnimatedTab}
+            />
+          </div>
+        );
+      case PillToggleOptions.ReceivedBids:
+        return (
+          <div className="w-full h-full border-american-silver dark:border-quartz overflow-auto">
+            <ReceivedBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+              receivedBids={receivedBids}
+              storage={storage}
+              setStorage={setStorage}
+              showEvaluationPlaceholder={!eeAnimatedTab}
+            />
+          </div>
+        );
+      case PillToggleOptions.TimelineName:
+        return (
+          <div className="w-full h-full px-4">
+            {timelines && Object.entries(timelines).length > 0 ? (
+              Object.entries(timelines).map(([auctionId, auction]) => (
+                <div key={auctionId} className="my-4">
+                  <Timeline
+                    {...(auction as unknown as TimelineProps)}
+                    zoomLevel={zoomLevel}
+                    setSelectedRow={setSelectedRow}
+                    navigateToAuction={navigateToAuction}
+                  />
+                </div>
+              ))
+            ) : (
+              <Placeholder showEvaluationPlaceholder={true} />
+            )}
+          </div>
+        );
+      default:
+        return <></>;
+    }
+  }, [
+    eeAnimatedTab,
+    navigateToAuction,
+    noBids,
+    pillToggle,
+    receivedBids,
+    selectedRow,
+    setStorage,
+    storage,
+    timelines,
+    zoomLevel,
+  ]);
 
   return (
     <div className="flex flex-col h-full w-full">
