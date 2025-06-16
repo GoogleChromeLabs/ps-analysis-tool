@@ -105,8 +105,7 @@ export const runtimeOnMessageListener = async (
   }
 
   const frameId = sender?.frameId ?? 0;
-  const senderTabId = frameId === 0 ? sender?.tab?.id : null;
-
+  const senderTabId = sender?.tab?.id;
   if (!request?.payload?.tabId && !senderTabId) {
     return;
   }

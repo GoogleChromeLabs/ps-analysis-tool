@@ -30,6 +30,7 @@ import {
 import { decycle } from '../utils';
 import mergeUnique2DArrays from '../utils/mergeUnique2DArrays';
 import type { PrebidEvents } from '../../store';
+import { isEqual } from 'lodash-es';
 
 /**
  * Represents the webpage's content script functionalities.
@@ -94,7 +95,6 @@ class PrebidInterface {
    */
   static doesPrebidExist() {
     let stopLoop = false;
-    const pbjsClass = new this();
     /**
      * Timing is 60 seconds because the script runs at document_start where in all scripts are
      * loaded but not run. So when prebidInterface is loaded it will check for instantation of
@@ -103,10 +103,9 @@ class PrebidInterface {
      */
     const timeout = setTimeout(() => {
       stopLoop = true;
-      pbjsClass.scanningStatus = true;
-      window.top?.postMessage({
+      window.postMessage({
         type: PREBID_SCANNING_STATUS,
-        prebidExists: pbjsClass.prebidData.prebidExists,
+        prebidExists: false,
       });
     }, 60000);
 
@@ -114,15 +113,14 @@ class PrebidInterface {
       //@ts-ignore
       const pbjsGlobals = window._pbjsGlobals ?? [];
       if (pbjsGlobals?.length > 0) {
+        const pbjsClass = new this();
         pbjsClass.prebidInterface = window[
           pbjsGlobals[0]
         ] as unknown as typeof window.pbjs;
+        pbjsClass.initPrebidListener();
 
         pbjsClass.prebidData.prebidExists = true;
         pbjsClass.scanningStatus = true;
-
-        pbjsClass.sendInitialData();
-        pbjsClass.initPrebidListener();
 
         pbjsClass.prebidData.pbjsNamespace = pbjsGlobals[0];
 
@@ -158,10 +156,6 @@ class PrebidInterface {
           eids: pbjsClass.prebidInterface?.getUserIdsAsEids?.() ?? [],
         };
 
-        window.top?.postMessage({
-          type: PREBID_SCANNING_STATUS,
-          prebidExists: pbjsClass.prebidData.prebidExists,
-        });
         stopLoop = true;
         clearTimeout(timeout);
       }
@@ -188,6 +182,7 @@ class PrebidInterface {
     };
 
     this.setIntervalValue = setInterval(() => {
+      this.calculateAdUnit();
       if (this.updateCounter > 0) {
         this.sendInitialData();
         this.updateCounter = 0;
@@ -196,7 +191,7 @@ class PrebidInterface {
   }
 
   sendInitialData() {
-    window.top?.postMessage({
+    window?.postMessage({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
       prebidData: this.prebidData.prebidExists
         ? JSON.parse(decycle(this.prebidData))
@@ -404,6 +399,12 @@ class PrebidInterface {
       }
     });
 
+    this.prebidInterface?.getEvents().forEach((event) => {
+      if (event.eventType === 'auctionInit') {
+        auctionInitEvents.push(event.args);
+      }
+    });
+
     const adUnitArray = auctionInitEvents
       ?.reduce((previousValue, currentValue) => {
         return [...previousValue, ...currentValue.adUnits];
@@ -437,7 +438,7 @@ class PrebidInterface {
         }
       }, [] as AdUnit[]);
 
-    this.prebidData.adUnits =
+    const calculatedAdUnits =
       adUnitArray?.reduce((acc, adUnit) => {
         acc[adUnit.code] = {
           mediaContainerSize:
@@ -455,6 +456,11 @@ class PrebidInterface {
         };
         return acc;
       }, {} as AdsAndBiddersType) ?? {};
+
+    if (!isEqual(calculatedAdUnits, this.prebidData.adUnits)) {
+      this.prebidData.adUnits = calculatedAdUnits;
+      this.updateCounter += 1;
+    }
   }
 }
 

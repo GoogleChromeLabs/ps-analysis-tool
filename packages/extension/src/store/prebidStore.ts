@@ -42,6 +42,11 @@ class PrebidStore extends DataStore {
 
   initialiseVariablesForNewTabAndFrame(tabId: string, frameId: number): void {
     super.initialiseVariablesForNewTab(tabId);
+
+    if (!this.prebidEvents[tabId]) {
+      this.prebidEvents[tabId] = {};
+    }
+
     this.prebidEvents[tabId][frameId] = {
       prebidExists: false,
       adUnits: {},
