@@ -47,7 +47,6 @@ const createConfig = (script: (typeof scripts)[number]) => {
       emptyOutDir: false,
       outDir: `../../dist/extension`,
       minify: !isDev,
-      watch: isDev ? {} : null,
       rollupOptions: {
         input: {
           [script.name]: script.path,

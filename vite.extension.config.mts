@@ -17,6 +17,7 @@ import { defineConfig, mergeConfig } from 'vite';
 import baseConfig from './vite.shared.config.mjs';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'path';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 const page = process.env.PAGE;
 const isDev = process.env.NODE_ENV === 'development';
@@ -25,7 +26,7 @@ export default defineConfig(() => {
   const commonConfig = mergeConfig(baseConfig, {
     base: '', // important to make sure the paths are correct in output index.html
     build: {
-      emptyOutDir: false,
+      emptyOutDir: false, // don't empty the output directory, output folder is re-used
       outDir: `../../../../../dist/extension/${page}`,
       minify: !isDev,
     },
@@ -74,12 +75,14 @@ export default defineConfig(() => {
     return mergeConfig(commonConfig, {
       root: path.resolve(__dirname, 'packages/extension/src/view/report'),
       build: {
+        outDir: `../../../../../dist/extension/devtools`,
         rollupOptions: {
           input: {
             dashboard: './src/view/report/dashboard.html',
           },
         },
       },
+      plugins: [viteSingleFile()],
     });
   }
 
@@ -97,7 +100,8 @@ export default defineConfig(() => {
     },
     plugins: [
       viteStaticCopy({
-        // use this file instead public folder to make sure we have the correct version of p5
+        // use this file instead public folder to make sure we use the same version across the app
+        // P5 need to be added as separated script due to issues with ESM and strict mode
         targets: [
           {
             src: '../../../../../node_modules/p5/lib/p5.min.js',
