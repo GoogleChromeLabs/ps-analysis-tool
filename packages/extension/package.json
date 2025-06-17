@@ -12,7 +12,7 @@
     "dev": "run-p dev:scripts dev:popup dev:report dev:devtools",
     "build": "npm run build:scripts && npm run build:devtools && npm run build:popup && npm run build:report",
     "dev:scripts": "cross-env NODE_NO_WARNINGS=1 NODE_ENV=development npm run build:scripts",
-    "build:scripts": "node --loader ts-node/esm ../../vite.extension.scripts.config.mts",
+    "build:scripts": "cross-env VITE_CJS_IGNORE_WARNING=true ts-node ../../vite.extension.scripts.config",
     "dev:popup": "cross-env NODE_ENV=development npm run build:popup",
     "build:popup": "cross-env PAGE=popup vite build --config ../../vite.extension.config.mts",
     "dev:devtools": "cross-env NODE_ENV=development npm run build:devtools",

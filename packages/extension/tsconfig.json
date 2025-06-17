@@ -17,8 +17,5 @@
       "path": "../design-system"
     },
     { "path": "../i18n" }
-  ],
-  "ts-node": {
-    "esm": true
-  }
+  ]
 }
