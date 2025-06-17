@@ -23,7 +23,6 @@ import {
   type CookieTableData,
   useContextSelector,
   createContext,
-  type LibraryData,
   reshapeCookies,
 } from '@google-psat/common';
 
@@ -32,7 +31,6 @@ export interface ContentStore {
     tabCookies: { [key: string]: CookieTableData };
     completeJson: CompleteJson[] | null;
     path: string;
-    libraryMatches: LibraryData | null;
   };
 }
 
@@ -41,7 +39,6 @@ const initialState: ContentStore = {
     tabCookies: {},
     completeJson: null,
     path: '',
-    libraryMatches: null,
   },
 };
 
@@ -55,7 +52,6 @@ interface ContentStoreProviderProps {
   };
   completeJson: CompleteJson[] | null;
   path: string;
-  libraryMatches: LibraryData | null;
 }
 
 export const Provider = ({
@@ -63,7 +59,6 @@ export const Provider = ({
   completeJson,
   children,
   path,
-  libraryMatches,
 }: PropsWithChildren<ContentStoreProviderProps>) => {
   const tabCookies = useMemo(() => reshapeCookies(cookies), [cookies]);
 
@@ -74,7 +69,6 @@ export const Provider = ({
           tabCookies,
           completeJson,
           path,
-          libraryMatches,
         },
       }}
     >

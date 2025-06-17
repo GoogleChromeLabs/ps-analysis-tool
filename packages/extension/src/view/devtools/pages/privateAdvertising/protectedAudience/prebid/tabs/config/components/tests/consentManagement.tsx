@@ -25,6 +25,20 @@ import '@testing-library/jest-dom';
  */
 import ConsentManagement from '../consentManagement';
 
+global.chrome = {
+  storage: {
+    session: {
+      get: jest.fn(),
+      set: jest.fn(),
+    },
+  },
+  devtools: {
+    inspectedWindow: {
+      tabId: 123,
+    },
+  },
+} as unknown as typeof chrome;
+
 describe('ConsentManagement', () => {
   const mockConfig = {
     gdpr: {
@@ -75,6 +89,7 @@ describe('ConsentManagement', () => {
   });
 
   it('shows JSON view when row is clicked', async () => {
+    (chrome.storage.session.get as jest.Mock).mockResolvedValue({});
     render(<ConsentManagement config={mockConfig} />);
     act(() => fireEvent.click(screen.getByText('gdpr')));
     await waitFor(() => screen.getByText('cmpApi'));

@@ -40,13 +40,10 @@ const CookiesTab = ({
   clearQuery = noop,
   url = '',
 }: CookiesTabProps) => {
-  const { tabCookies, completeJson, libraryMatches } = useContentStore(
-    ({ state }) => ({
-      tabCookies: state.tabCookies,
-      completeJson: state.completeJson,
-      libraryMatches: state.libraryMatches,
-    })
-  );
+  const { tabCookies, completeJson } = useContentStore(({ state }) => ({
+    tabCookies: state.tabCookies,
+    completeJson: state.completeJson,
+  }));
 
   const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
 
@@ -91,7 +88,6 @@ const CookiesTab = ({
         <div className="flex flex-col h-full w-full">
           <AssembledCookiesLanding
             tabCookies={tabCookies}
-            libraryMatches={libraryMatches}
             tabFrames={tabFrames}
             downloadReport={downloadReport}
             setAppliedFilters={setAppliedFilters}

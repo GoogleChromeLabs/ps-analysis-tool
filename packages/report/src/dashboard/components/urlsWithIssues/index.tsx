@@ -18,7 +18,6 @@
  * External dependencies
  */
 import { useMemo, useState } from 'react';
-import { Resizable } from 're-resizable';
 import { noop, type ErroredOutUrlsData } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import {
@@ -28,6 +27,7 @@ import {
   type InfoType,
   type TableRow,
   type TableFilter,
+  ResizableTray,
 } from '@google-psat/design-system';
 
 interface ErroredOutUrlsProps {
@@ -65,7 +65,7 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
 
   return (
     <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
           height: '80%',
@@ -79,6 +79,7 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
           left: false,
         }}
         className="h-full flex"
+        trayId="urls-with-issues-table-bottom-tray"
       >
         <TableProvider
           data={erroredOutUrls}
@@ -96,7 +97,7 @@ const ErroredOutUrls = ({ erroredOutUrls }: ErroredOutUrlsProps) => {
         >
           <Table hideFiltering={true} selectedKey={selectedRow?.url} />
         </TableProvider>
-      </Resizable>
+      </ResizableTray>
       <div className="flex-1 border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem]">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5">

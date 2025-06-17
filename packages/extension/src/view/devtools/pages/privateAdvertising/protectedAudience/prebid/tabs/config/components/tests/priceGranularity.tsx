@@ -25,6 +25,20 @@ import { I18n } from '@google-psat/i18n';
  */
 import PriceGranularity from '../priceGranularity';
 
+global.chrome = {
+  storage: {
+    session: {
+      get: jest.fn(),
+      set: jest.fn(),
+    },
+  },
+  devtools: {
+    inspectedWindow: {
+      tabId: 123,
+    },
+  },
+} as unknown as typeof chrome;
+
 describe('PriceGranularity', () => {
   const defaultProps = {
     priceGranularity: 'medium',
@@ -53,6 +67,7 @@ describe('PriceGranularity', () => {
         message: 'Select a row to preview',
       },
     });
+    (chrome.storage.session.get as jest.Mock).mockResolvedValue({});
   });
 
   it('renders table with default price granularity data', () => {

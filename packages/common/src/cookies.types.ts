@@ -18,7 +18,6 @@
  */
 import { type Cookie as ParsedCookie } from 'simple-cookie';
 import type { Protocol } from 'devtools-protocol';
-import { LibraryData } from './libraryDetection.types';
 
 export type CookiesCount = {
   total: number;
@@ -242,7 +241,6 @@ export type CompleteJson = {
     };
   };
   erroredOutUrls: ErroredOutUrlsData[];
-  libraryMatches: { [key: string]: LibraryData };
 };
 
 export interface DataMapping {
