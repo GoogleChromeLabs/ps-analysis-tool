@@ -249,6 +249,7 @@ const useSidebarProcessing = () => {
   return {
     sidebarData,
     defaultSelectedItemKey: defaultSelectedItemKey || 'adunits',
+    hasData: Object.keys(sidebarData.adunits.children).length > 0,
   };
 };
 

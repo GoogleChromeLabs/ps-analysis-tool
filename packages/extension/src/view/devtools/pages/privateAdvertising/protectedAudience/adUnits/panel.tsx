@@ -123,21 +123,11 @@ const AdUnitsPanel = ({
           </>
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center">
-            {pillToggle === 'Prebid' ? (
-              <>
-                <p className="text-lg text-raisin-black dark:text-bright-gray">
-                  No ad units were recorded.
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="text-lg text-raisin-black dark:text-bright-gray">
-                  No ad units were recorded.
-                </p>
-                {showEvaluationPlaceholder && (
-                  <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
-                )}
-              </>
+            <p className="text-lg text-raisin-black dark:text-bright-gray">
+              No ad units were recorded.
+            </p>
+            {showEvaluationPlaceholder && (
+              <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
             )}
           </div>
         )}
