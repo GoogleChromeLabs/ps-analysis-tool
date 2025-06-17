@@ -19,7 +19,8 @@
     "**/tests/**/*.ts",
     "**/tests/**/*.tsx",
     "**/dist/**/*",
-    "**/dist-types/**/*"
+    "**/dist-types/**/*",
+    "**/stories/**"
   ],
   "references": [
     {

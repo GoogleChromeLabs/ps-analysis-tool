@@ -25,8 +25,8 @@ import {
   type TableColumn,
   type TableRow,
   type InfoType,
+  ResizableTray,
 } from '@google-psat/design-system';
-import { Resizable } from 're-resizable';
 
 /**
  * Internal dependencies.
@@ -163,7 +163,7 @@ const AuctionTable = ({
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
           height: '80%',
@@ -174,6 +174,7 @@ const AuctionTable = ({
         minHeight="20%"
         maxHeight="90%"
         className="w-full flex flex-col"
+        trayId="auctions-table-bottom-tray"
       >
         {auctionEvents.length > 0 ? (
           <>
@@ -225,7 +226,7 @@ const AuctionTable = ({
             </p>
           </div>
         )}
-      </Resizable>
+      </ResizableTray>
       <BottomTray selectedJSON={selectedJSON as object} />
     </div>
   );

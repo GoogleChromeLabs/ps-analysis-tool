@@ -114,6 +114,7 @@ export { default as SearchIcon } from './search.svg?react';
 export { default as Tick } from './tick.svg?react';
 export { default as Plus } from './add-simple.svg?react';
 export { default as DescendingOrder } from './arrow-upward-with-line.svg?react';
+export { default as HammerIcon } from './hammer.svg?react';
 export { default as Person } from './person.svg?react';
 export { default as Ruler } from './ruler.svg?react';
 export { default as DoubleUser } from './double-user.svg?react';

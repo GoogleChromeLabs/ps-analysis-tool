@@ -30,9 +30,11 @@ import React, {
 import { useTabs } from '../tabs/useTabs';
 import { DoubleDownArrow } from '../../icons';
 import Tabs from '../tabs';
+import { usePersistentTray } from '../resizableTray';
 
 interface DraggableTrayProps {
   initialCollapsed?: boolean;
+  trayId?: string;
 }
 
 const DraggableTray = forwardRef<
@@ -42,7 +44,7 @@ const DraggableTray = forwardRef<
   },
   DraggableTrayProps
 >(function DraggableTray(
-  { initialCollapsed = false }: DraggableTrayProps,
+  { initialCollapsed = false, trayId }: DraggableTrayProps,
   ref
 ) {
   const { panel, activeTab } = useTabs(({ state }) => ({
@@ -54,7 +56,9 @@ const DraggableTray = forwardRef<
 
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
-  const [height, setHeight] = useState<string | undefined>('30%');
+  const { height, setHeight, onResizeStop } = usePersistentTray(trayId, {
+    height: '30%',
+  });
 
   useEffect(() => {
     setIsCollapsed(false);
@@ -64,7 +68,7 @@ const DraggableTray = forwardRef<
     if (!isCollapsed) {
       setHeight('30%');
     }
-  }, [isCollapsed]);
+  }, [isCollapsed, setHeight]);
 
   useImperativeHandle(
     ref,
@@ -81,9 +85,7 @@ const DraggableTray = forwardRef<
         width: '100%',
         height: '30%',
       }}
-      onResizeStop={(_, __, ___, d) => {
-        setHeight(() => `calc(${height} + ${d.height}px)`);
-      }}
+      onResizeStop={onResizeStop}
       size={{
         width: '100%',
         height: isCollapsed ? '30px' : height,

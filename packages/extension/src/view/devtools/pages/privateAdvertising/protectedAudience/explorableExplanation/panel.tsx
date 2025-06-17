@@ -468,7 +468,7 @@ const Panel = ({
         platform={OSInformation ?? ''}
       />
       <ReactP5Wrapper sketch={userSketch} />
-      <DraggableTray ref={draggableTrayRef} />
+      <DraggableTray ref={draggableTrayRef} trayId="explorableExplanation" />
     </div>
   );
 };

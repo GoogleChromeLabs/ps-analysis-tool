@@ -18,11 +18,11 @@
  */
 import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { type PrebidEvents } from '@google-psat/common';
 /**
  * Internal dependencies
  */
 import Events from '..';
-import { PrebidEvents } from '../../../../../../../../../store';
 
 describe('Events Component', () => {
   const mockErrorEvents: PrebidEvents['errorEvents'] = [

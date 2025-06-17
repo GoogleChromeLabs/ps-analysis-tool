@@ -25,7 +25,6 @@ import Spinnies from 'spinnies';
 import path, { basename } from 'path';
 import { removeAndAddNewSpinnerText } from '@google-psat/common';
 import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
-import { LIBRARIES } from '@google-psat/library-detection';
 import { pathToFileURL } from 'node:url';
 
 /**
@@ -244,7 +243,6 @@ program.parse();
     cookieAnalysisAndFetchedResourceData =
       await analyzeCookiesUrlsInBatchesAndFetchResources(
         urlsToProcess,
-        LIBRARIES,
         !isHeadful,
         waitTime,
         cookieDictionary,

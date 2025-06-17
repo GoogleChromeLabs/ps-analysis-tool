@@ -16,6 +16,10 @@
 
 import type p5 from 'p5';
 
+/**
+ * External dependencies.
+ */
+import type { PrebidJsGlobal } from '@google-psat/common';
 declare module '*.svg' {
   import React = require('react');
   const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
@@ -46,3 +50,9 @@ export type RelatedWebsiteSetType = {
     [url: string]: string;
   };
 };
+
+declare global {
+  interface Window {
+    pbjs: PrebidJsGlobal;
+  }
+}

@@ -13,15 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
-import { JsonView, PillToggle } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  JsonView,
+  PillToggle,
+  Timeline,
+  useTabs,
+  Slider,
+  ResizableTray,
+  type TimelineProps,
+} from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-import { Resizable } from 're-resizable';
-import type { NoBidsType, ReceivedBids } from '@google-psat/common';
+import type {
+  NoBidsType,
+  ReceivedBids,
+  PrebidEvents,
+} from '@google-psat/common';
 import classNames from 'classnames';
 
 /**
@@ -29,68 +39,71 @@ import classNames from 'classnames';
  */
 import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
+import { useProtectedAudience } from '../../../../stateProviders';
+import Placeholder from './placeholder';
 
 enum PillToggleOptions {
   ReceivedBids = 'Received Bids',
   NoBids = 'No Bids',
+  TimelineName = 'Timeline',
 }
 
 interface PanelProps {
-  receivedBids: ReceivedBids[];
-  noBids: NoBidsType;
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
+  timelines: PrebidEvents['auctionEvents'];
   eeAnimatedTab?: boolean;
 }
 
 const Panel = ({
-  receivedBids,
-  noBids,
   storage,
   setStorage,
+  timelines,
   eeAnimatedTab = false,
 }: PanelProps) => {
+  const { receivedBids, noBids } = useProtectedAudience(({ state }) => ({
+    receivedBids: state.receivedBids,
+    noBids: state.noBids,
+  }));
+  const { setPAActiveTab, setPAStorage } = useTabs(({ actions }) => ({
+    setPAActiveTab: actions.setActiveTab,
+    setPAStorage: actions.setStorage,
+  }));
   const [selectedRow, setSelectedRow] = useState<
     ReceivedBids | NoBidsType[keyof NoBidsType] | null
   >(null);
   const [pillToggle, setPillToggle] = useState<string>(
     PillToggleOptions.ReceivedBids
   );
+  const [zoomLevel, setZoomLevel] = useState<number>(2);
+
+  const navigateToAuction = useCallback(
+    (data: string) => {
+      setPAStorage(data, 5);
+      setPAActiveTab(5);
+    },
+    [setPAActiveTab, setPAStorage]
+  );
 
   const showBottomTray = useMemo(() => {
     if (pillToggle === PillToggleOptions.ReceivedBids) {
       return receivedBids.length > 0;
+    } else if (pillToggle === PillToggleOptions.NoBids) {
+      return Object.keys(noBids).length > 0;
+    } else if (pillToggle === PillToggleOptions.TimelineName) {
+      return Object.keys(timelines).length > 0;
     }
 
-    return Object.keys(noBids).length > 0;
-  }, [noBids, pillToggle, receivedBids.length]);
+    return false;
+  }, [noBids, pillToggle, receivedBids.length, timelines]);
 
-  return (
-    <div className="flex flex-col pt-4 h-full w-full">
-      <div className="px-4 pb-4">
-        <PillToggle
-          options={[PillToggleOptions.ReceivedBids, PillToggleOptions.NoBids]}
-          pillToggle={pillToggle}
-          setPillToggle={setPillToggle}
-          eeAnimatedTab={eeAnimatedTab}
-        />
-      </div>
-      <div className="flex-1 overflow-auto text-outer-space-crayola">
-        {pillToggle === PillToggleOptions.ReceivedBids ? (
-          <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
-            <ReceivedBidsTable
-              setSelectedRow={setSelectedRow}
-              selectedRow={selectedRow}
-              receivedBids={receivedBids}
-              storage={storage}
-              setStorage={setStorage}
-              showEvaluationPlaceholder={!eeAnimatedTab}
-            />
-          </div>
-        ) : (
+  const activePage = useMemo(() => {
+    switch (pillToggle) {
+      case PillToggleOptions.NoBids:
+        return (
           <div
             className={classNames(
-              'h-full border-r border-t border-american-silver dark:border-quartz',
+              'h-full border-r border-american-silver dark:border-quartz',
               Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
             )}
           >
@@ -101,10 +114,89 @@ const Panel = ({
               showEvaluationPlaceholder={!eeAnimatedTab}
             />
           </div>
+        );
+      case PillToggleOptions.ReceivedBids:
+        return (
+          <div className="w-full h-full border-american-silver dark:border-quartz overflow-auto">
+            <ReceivedBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+              receivedBids={receivedBids}
+              storage={storage}
+              setStorage={setStorage}
+              showEvaluationPlaceholder={!eeAnimatedTab}
+            />
+          </div>
+        );
+      case PillToggleOptions.TimelineName:
+        return (
+          <div className="w-full h-full px-4">
+            {timelines && Object.entries(timelines).length > 0 ? (
+              Object.entries(timelines).map(([auctionId, auction]) => (
+                <div key={auctionId} className="my-4">
+                  <Timeline
+                    {...(auction as unknown as TimelineProps)}
+                    zoomLevel={zoomLevel}
+                    setSelectedRow={setSelectedRow}
+                    navigateToAuction={navigateToAuction}
+                  />
+                </div>
+              ))
+            ) : (
+              <Placeholder showEvaluationPlaceholder={true} />
+            )}
+          </div>
+        );
+      default:
+        return <></>;
+    }
+  }, [
+    eeAnimatedTab,
+    navigateToAuction,
+    noBids,
+    pillToggle,
+    receivedBids,
+    selectedRow,
+    setStorage,
+    storage,
+    timelines,
+    zoomLevel,
+  ]);
+
+  return (
+    <div className="flex flex-col h-full w-full">
+      <div className="absolute top-[12px] left-[250px]">
+        <PillToggle
+          options={[
+            PillToggleOptions.ReceivedBids,
+            PillToggleOptions.NoBids,
+            PillToggleOptions.TimelineName,
+          ]}
+          pillToggle={pillToggle}
+          setPillToggle={setPillToggle}
+          eeAnimatedTab={eeAnimatedTab}
+        />
+      </div>
+      {pillToggle === PillToggleOptions.TimelineName &&
+        Object.entries(timelines).length > 0 && (
+          <div className="absolute top-[18px] right-[20px]">
+            <Slider
+              sliderStep={zoomLevel}
+              setSliderStep={(step: number) => {
+                setZoomLevel(step);
+              }}
+              label="Zoom"
+              min={1}
+              max={4}
+              step={1}
+            />
+          </div>
         )}
+      <div className="flex-1 overflow-auto text-outer-space-crayola">
+        {activePage}
       </div>
       {showBottomTray && (
-        <Resizable
+        <ResizableTray
           defaultSize={{
             width: '100%',
             height: '20%',
@@ -114,6 +206,7 @@ const Panel = ({
           enable={{
             top: true,
           }}
+          trayId="bids-panel-bottom-tray"
         >
           <div className="text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
             {selectedRow ? (
@@ -128,7 +221,7 @@ const Panel = ({
               </div>
             )}
           </div>
-        </Resizable>
+        </ResizableTray>
       )}
     </div>
   );

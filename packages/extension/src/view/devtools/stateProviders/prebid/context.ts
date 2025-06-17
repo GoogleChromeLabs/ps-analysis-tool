@@ -24,11 +24,9 @@ import {
   noop,
   type PrebidDebugModuleConfig,
   type PrebidDebugModuleConfigRule,
+  type PrebidConfig,
+  type PrebidWarningTypes,
 } from '@google-psat/common';
-/**
- * Internal dependencies.
- */
-import type { PrebidWarningTypes } from '../../../../store';
 
 export interface PrebidContextType {
   state: {

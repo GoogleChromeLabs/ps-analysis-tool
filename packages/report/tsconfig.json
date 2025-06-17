@@ -21,9 +21,6 @@
     },
     {
       "path": "../i18n"
-    },
-    {
-      "path": "../library-detection"
     }
   ]
 }
