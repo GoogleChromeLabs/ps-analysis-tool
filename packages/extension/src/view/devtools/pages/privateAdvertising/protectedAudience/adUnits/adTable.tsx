@@ -22,6 +22,7 @@ import {
   FrameIcon,
   Hammer,
   JsonView,
+  ResizableTray,
   ScreenIcon,
   Table,
   TableProvider,
@@ -32,7 +33,6 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-import { Resizable } from 're-resizable';
 import classNames from 'classnames';
 
 interface AdTableProps {
@@ -218,16 +218,17 @@ const AdTable = ({
         height: 'calc(100% - 77px)',
       }}
     >
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
-          height: '80%',
+          height: selectedRow ? '50%' : '90%',
         }}
         minHeight="20%"
         maxHeight="90%"
         enable={{
           bottom: true,
         }}
+        trayId="ad-table-bottom-tray"
       >
         <TableProvider
           data={Object.values(adsAndBidders)}
@@ -250,7 +251,7 @@ const AdTable = ({
             minWidth="50rem"
           />
         </TableProvider>
-      </Resizable>
+      </ResizableTray>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedRow ? (
           <div className="text-xs py-1 px-1.5 h-full">

@@ -21,18 +21,17 @@ import {
   type CookieTableData,
   getCookieKey,
   noop,
-  type LibraryData,
   type TabCookies,
   type TabFrames,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import { Resizable } from 're-resizable';
 import {
   TableChipsBar,
   TableFiltersSidebar,
   type TableFilter,
   useGlobalFiltering,
   FilterIcon,
+  ResizableTray,
 } from '@google-psat/design-system';
 
 /**
@@ -46,10 +45,6 @@ interface AssembledCookiesLandingProps {
   tabFrames: TabFrames;
   setAppliedFilters: React.Dispatch<React.SetStateAction<TableFilter>>;
   downloadReport?: () => Promise<void>;
-  libraryMatches: LibraryData | null;
-  libraryMatchesUrlCount?: {
-    [url: string]: number;
-  };
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
   query?: string;
@@ -62,8 +57,6 @@ const AssembledCookiesLanding = ({
   tabFrames,
   setAppliedFilters,
   downloadReport,
-  libraryMatches,
-  libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
   query = '',
   clearQuery = noop,
@@ -140,13 +133,14 @@ const AssembledCookiesLanding = ({
         }}
       >
         {showFilterSidebar && (
-          <Resizable
+          <ResizableTray
             minWidth="100px"
             maxWidth="50%"
             enable={{
               right: true,
             }}
             className="border border-r border-gray-300 dark:border-quartz"
+            trayId="cookies-landing-table-bottom-tray"
           >
             <TableFiltersSidebar
               filters={filterOutput.filters}
@@ -154,7 +148,7 @@ const AssembledCookiesLanding = ({
               toggleSelectAllFilter={filterOutput.toggleSelectAllFilter}
               isSelectAllFilterSelected={filterOutput.isSelectAllFilterSelected}
             />
-          </Resizable>
+          </ResizableTray>
         )}
         <div
           className="flex-1 overflow-auto h-full"
@@ -165,8 +159,6 @@ const AssembledCookiesLanding = ({
             tabFrames={tabFrames}
             cookiesWithIssues={cookiesWithIssues}
             downloadReport={downloadReport}
-            libraryMatches={libraryMatches}
-            libraryMatchesUrlCount={libraryMatchesUrlCount}
             menuBarScrollContainerId={menuBarScrollContainerId}
           />
         </div>

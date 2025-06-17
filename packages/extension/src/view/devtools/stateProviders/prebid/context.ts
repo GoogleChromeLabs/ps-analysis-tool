@@ -21,11 +21,8 @@ import {
   noop,
   type PrebidDebugModuleConfig,
   type PrebidDebugModuleConfigRule,
+  type PrebidEvents,
 } from '@google-psat/common';
-/**
- * Internal dependencies.
- */
-import type { PrebidEvents } from '../../../../store';
 
 export type PBJSNamespacesType = {
   [frameId: string]: {

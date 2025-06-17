@@ -25,6 +25,20 @@ import { I18n } from '@google-psat/i18n';
  */
 import UserIds from '../userIds';
 
+global.chrome = {
+  storage: {
+    session: {
+      get: jest.fn(),
+      set: jest.fn(),
+    },
+  },
+  devtools: {
+    inspectedWindow: {
+      tabId: 123,
+    },
+  },
+} as unknown as typeof chrome;
+
 describe('UserIds', () => {
   const mockConfig = [
     {
@@ -65,6 +79,7 @@ describe('UserIds', () => {
         message: 'Select a row to preview',
       },
     });
+    (chrome.storage.session.get as jest.Mock).mockResolvedValue({});
   });
 
   it('renders table with user ID data', () => {
@@ -92,9 +107,9 @@ describe('UserIds', () => {
       screen.queryByText('Select a row to preview')
     ).not.toBeInTheDocument();
 
-    await waitFor(() => screen.getByText('name'));
-    expect(screen.getByText('name')).toBeInTheDocument();
-    expect(screen.getByText('storage')).toBeInTheDocument();
+    await waitFor(() => screen.getAllByText('name'));
+    expect(screen.getAllByText('name')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('storage')[0]).toBeInTheDocument();
   });
 
   it('handles empty config', () => {

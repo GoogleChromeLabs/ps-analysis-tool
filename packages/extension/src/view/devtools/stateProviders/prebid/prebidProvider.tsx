@@ -28,6 +28,7 @@ import { isEqual } from 'lodash-es';
 import type {
   PrebidDebugModuleConfig,
   PrebidDebugModuleConfigRule,
+  PrebidEvents,
 } from '@google-psat/common';
 
 /**
@@ -37,7 +38,6 @@ import Context, {
   type PBJSNamespacesType,
   type PrebidContextType,
 } from './context';
-import type { PrebidEvents } from '../../../../store';
 import { PREBID_EVENTS, STORE_RULES_TOGGLE } from '../../../../constants';
 import firstDifferent from '../../../../utils/firstDifferent';
 import { replaceRuleTargets, matchRuleTargets } from './constants';
@@ -341,14 +341,18 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        frameType !== 'outermost_frame' ||
-        _frameId !== 0 ||
-        tabId !== chrome.devtools.inspectedWindow.tabId
+        !(
+          chrome.devtools.inspectedWindow.tabId === tabId &&
+          frameType === 'outermost_frame' &&
+          _frameId === 0
+        )
       ) {
         return;
       }
       initialStateFetched.current = false;
       setFrameId(0);
+      setNamespace('');
+      setPbjsNamespaces({});
       setPrebidData({});
     },
     []

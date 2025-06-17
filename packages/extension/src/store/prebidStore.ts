@@ -15,11 +15,14 @@
  */
 
 /**
+ * External dependencies
+ */
+import type { PrebidEvents } from '@google-psat/common';
+/**
  * Internal dependencies.
  */
 import { PREBID_EVENTS } from '../constants';
 import { DataStore } from './dataStore';
-import type { PrebidEvents } from './types';
 
 class PrebidStore extends DataStore {
   /**
