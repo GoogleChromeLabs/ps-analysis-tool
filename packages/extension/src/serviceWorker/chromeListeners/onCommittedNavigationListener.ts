@@ -98,7 +98,7 @@ export const onCommittedNavigationListener = async ({
     }
 
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('http'));
 
     await sendMessageWrapper(
       'EXCEEDING_LIMITATION_UPDATE',

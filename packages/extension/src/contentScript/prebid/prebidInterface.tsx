@@ -111,50 +111,51 @@ class PrebidInterface {
 
     const isPrebidInPage = () => {
       //@ts-ignore
-      const pbjsGlobals = window._pbjsGlobals ?? [];
+      const pbjsGlobals: string[] = window._pbjsGlobals ?? [];
       if (pbjsGlobals?.length > 0) {
-        const pbjsClass = new this();
-        pbjsClass.prebidInterface = window[
-          pbjsGlobals[0]
-        ] as unknown as typeof window.pbjs;
-        pbjsClass.initPrebidListener();
+        pbjsGlobals.forEach((pbjsGlobal: string) => {
+          const pbjsClass = new this();
+          //@ts-ignore
+          pbjsClass.prebidInterface = window[pbjsGlobal] as typeof window.pbjs;
+          pbjsClass.initPrebidListener();
 
-        pbjsClass.prebidData.prebidExists = true;
-        pbjsClass.scanningStatus = true;
+          pbjsClass.prebidData.prebidExists = true;
+          pbjsClass.scanningStatus = true;
 
-        pbjsClass.prebidData.pbjsNamespace = pbjsGlobals[0];
+          pbjsClass.prebidData.pbjsNamespace = pbjsGlobal;
 
-        pbjsClass.prebidData.versionInfo =
-          pbjsClass.prebidInterface.version ?? '';
+          pbjsClass.prebidData.versionInfo =
+            pbjsClass.prebidInterface.version ?? '';
 
-        pbjsClass.prebidData.installedModules =
-          pbjsClass.prebidInterface.installedModules ?? [];
+          pbjsClass.prebidData.installedModules =
+            pbjsClass.prebidInterface.installedModules ?? [];
 
-        const bidderSettings: Record<string, SingleBidderSetting> = {};
+          const bidderSettings: Record<string, SingleBidderSetting> = {};
 
-        Object.keys(pbjsClass?.prebidInterface?.bidderSettings ?? {}).forEach(
-          (bidder) => {
-            bidderSettings[bidder] = {};
+          Object.keys(pbjsClass?.prebidInterface?.bidderSettings ?? {}).forEach(
+            (bidder) => {
+              bidderSettings[bidder] = {};
 
-            const {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
-              bidCpmAdjustment = noop,
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
-              adserverTargeting = [],
-              ...rest
-            } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};
+              const {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
+                bidCpmAdjustment = noop,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Since we only want to use rest and not the other values
+                adserverTargeting = [],
+                ...rest
+              } = pbjsClass.prebidInterface?.bidderSettings[bidder] ?? {};
 
-            bidderSettings[bidder] = {
-              ...rest,
-            };
-          }
-        );
+              bidderSettings[bidder] = {
+                ...rest,
+              };
+            }
+          );
 
-        pbjsClass.prebidData.config = {
-          ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
-          bidderSettings,
-          eids: pbjsClass.prebidInterface?.getUserIdsAsEids?.() ?? [],
-        };
+          pbjsClass.prebidData.config = {
+            ...(pbjsClass.prebidInterface?.getConfig() ?? {}),
+            bidderSettings,
+            eids: pbjsClass.prebidInterface?.getUserIdsAsEids?.() ?? [],
+          };
+        });
 
         stopLoop = true;
         clearTimeout(timeout);

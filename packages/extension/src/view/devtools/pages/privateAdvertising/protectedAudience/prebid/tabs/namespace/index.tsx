@@ -24,27 +24,56 @@ import { Dropdown } from '@google-psat/design-system';
 import { usePrebid } from '../../../../../../stateProviders';
 
 const NamespaceTab = () => {
-  const { selectedFrameId, pbjsNamespaces, setFrameId } = usePrebid(
-    ({ state, actions }) => ({
-      selectedFrameId: state.selectedFrameId,
-      pbjsNamespaces: state.pbjsNamespaces,
-      setFrameId: actions.setFrameId,
-    })
-  );
+  const {
+    selectedFrameId,
+    pbjsNamespaces,
+    setFrameId,
+    namespace,
+    setNamespace,
+  } = usePrebid(({ state, actions }) => ({
+    selectedFrameId: state.selectedFrameId,
+    pbjsNamespaces: state.pbjsNamespaces,
+    namespace: state.namespace,
+    setNamespace: actions.setNamespace,
+    setFrameId: actions.setFrameId,
+  }));
 
   return (
     <>
-      <div className="w-full h-full">
+      <div className="w-full h-full flex flex-row gap-10">
         <div className="w-max">
           <Dropdown
-            options={Object.keys(pbjsNamespaces).map((namespace) => {
+            options={Object.keys(pbjsNamespaces).map((frameId) => {
               return {
-                label: pbjsNamespaces[Number(namespace)].host,
-                value: namespace,
+                label: pbjsNamespaces[Number(frameId)].host,
+                value: frameId,
               };
             })}
-            value={selectedFrameId.toString()}
-            onChange={(value) => setFrameId(Number(value))}
+            value={`${selectedFrameId}`}
+            onChange={(value) => {
+              const _frameId = Number(value);
+              const defaultNamespace =
+                pbjsNamespaces[_frameId].namespaces[0].namespace;
+
+              setFrameId(Number(_frameId));
+              setNamespace(defaultNamespace);
+            }}
+          />
+        </div>
+        <div className="w-max">
+          <Dropdown
+            options={pbjsNamespaces[selectedFrameId].namespaces.map(
+              (_namespace) => {
+                return {
+                  label: _namespace.namespace,
+                  value: _namespace.namespace,
+                };
+              }
+            )}
+            value={`${namespace}`}
+            onChange={(value) => {
+              setNamespace(value);
+            }}
           />
         </div>
       </div>

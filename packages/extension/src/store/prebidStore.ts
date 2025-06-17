@@ -27,7 +27,7 @@ class PrebidStore extends DataStore {
    */
   prebidEvents: {
     [tabId: string]: {
-      [frameId: number]: PrebidEvents;
+      [frameKey: string]: PrebidEvents;
     };
   } = {};
 
@@ -107,11 +107,11 @@ class PrebidStore extends DataStore {
         return;
       }
 
-      const newData: { [frameId: number]: PrebidEvents } = {};
+      const newData: { [frameKey: string]: PrebidEvents } = {};
       Object.keys(this.prebidEvents[tabId]).forEach((key) => {
-        const _frameId = Number(key);
-        if (this.prebidEvents[tabId][_frameId].pbjsNamespace) {
-          newData[_frameId] = this.prebidEvents[tabId][_frameId];
+        const _framekey = key;
+        if (this.prebidEvents[tabId][_framekey].pbjsNamespace) {
+          newData[_framekey] = this.prebidEvents[tabId][_framekey];
         }
       });
 
@@ -123,7 +123,7 @@ class PrebidStore extends DataStore {
           prebidEvents: newData,
         },
       });
-      DataStore.tabs[tabId].newUpdatesPA = 0;
+      DataStore.tabs[tabId].newUpdatesPrebid = 0;
     } catch (error) {
       // Fail silently
     }

@@ -27,25 +27,32 @@ import {
  */
 import type { PrebidEvents } from '../../../../store';
 
+export type PBJSNamespacesType = {
+  [frameId: string]: {
+    namespaces: {
+      frameId: number;
+      namespace: string;
+    }[];
+    host: string;
+  };
+};
+
 export interface PrebidContextType {
   state: {
     prebidData: PrebidEvents;
     prebidExists: boolean | null;
     debuggingModuleConfig: PrebidDebugModuleConfig;
     selectedFrameId: number;
-    pbjsNamespaces: {
-      [frameId: number]: {
-        name: string;
-        host: string;
-      };
-    };
+    pbjsNamespaces: PBJSNamespacesType;
     storeRulesInLocalStorage: boolean;
+    namespace: string;
   };
   actions: {
     setDebuggingModuleConfig: React.Dispatch<
       React.SetStateAction<PrebidDebugModuleConfig>
     >;
     setFrameId: React.Dispatch<React.SetStateAction<number>>;
+    setNamespace: React.Dispatch<React.SetStateAction<string>>;
     handleChangeStoreRulesInLocalStorage: (value: boolean) => void;
     openGoogleManagerConsole: () => void;
     changeRule: (
@@ -80,6 +87,7 @@ export const initialState: PrebidContextType = {
       auctionEvents: {},
       installedModules: [],
     },
+    namespace: '',
     pbjsNamespaces: {},
     prebidExists: null,
     selectedFrameId: 0,
@@ -90,6 +98,7 @@ export const initialState: PrebidContextType = {
     storeRulesInLocalStorage: false,
   },
   actions: {
+    setNamespace: noop,
     setFrameId: noop,
     setDebuggingModuleConfig: noop,
     changeRule: noop,
