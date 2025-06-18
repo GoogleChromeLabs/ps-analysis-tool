@@ -310,6 +310,10 @@ const Provider = ({ children }: PropsWithChildren) => {
             });
           });
 
+          if (!_pbjsNamespaces) {
+            return;
+          }
+
           setPbjsNamespaces((prev) => {
             return isEqual(_pbjsNamespaces, prev) ? prev : _pbjsNamespaces;
           });
