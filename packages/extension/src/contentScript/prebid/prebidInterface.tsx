@@ -22,6 +22,7 @@ import {
   type AdsAndBiddersType,
   type AdUnit,
   type AuctionEndEvent,
+  type BidTimeoutEvent,
   type BidWonEvent,
   type ErrorEventType,
   type PrebidAuctionEventType,
@@ -256,16 +257,16 @@ class PrebidInterface {
             break;
           case 'bidResponse':
             calculatedReceivedBids.push({
-              bidCurrency: args.bid.currency,
-              uniqueAuctionId: args.bid.auctionId,
-              index: this.prebidData.receivedBids.length,
-              bid: args.bid.price,
-              ownerOrigin: args.bid.bidder,
-              time: args.bid.responseTimestamp ?? Date.now(),
+              bidCurrency: args.currency,
+              uniqueAuctionId: args.auctionId,
+              index: calculatedReceivedBids.length,
+              bid: args.price,
+              ownerOrigin: args.bidder,
+              time: args.responseTimestamp ?? Date.now(),
               formattedTime: new Date(
-                args.bid.responseTimestamp ?? Date.now()
+                args.responseTimestamp ?? Date.now()
               ).toISOString(),
-              adUnitCode: args.bid.adUnitCode,
+              adUnitCode: args.adUnitCode,
               type: '',
               eventType: 'BidAvailable',
             });
@@ -291,10 +292,12 @@ class PrebidInterface {
             });
             break;
           case 'bidTimeout':
-            calculatedEvents[args.auctionId].push({
-              ...args,
-              elapsedTime,
-              eventType,
+            args.forEach((element: BidTimeoutEvent) => {
+              calculatedEvents[element.auctionId].push({
+                ...args,
+                elapsedTime,
+                eventType,
+              });
             });
             break;
           case 'bidWon':
@@ -305,30 +308,29 @@ class PrebidInterface {
             });
             break;
           case 'noBid':
-            if (!calculatedNoBids[args.bid.auctionId]) {
-              calculatedNoBids[args.bid.auctionId] = {
-                uniqueAuctionId: args.bid.auctionId,
-                adUnitCode: args.bid.adUnitCode,
-                mediaContainerSize: args.bid.sizes,
-                bidder: [args.bid.bidder],
+            if (!calculatedNoBids[args.auctionId]) {
+              calculatedNoBids[args.auctionId] = {
+                uniqueAuctionId: args.auctionId,
+                adUnitCode: args.adUnitCode,
+                mediaContainerSize: args.sizes,
+                bidder: [args.bidder],
               };
             } else {
-              calculatedNoBids[args.bid.auctionId] = {
-                adUnitCode: args.bid.adUnitCode,
+              calculatedNoBids[args.auctionId] = {
+                adUnitCode: args.adUnitCode,
                 mediaContainerSize: [
                   ...mergeUnique2DArrays(
-                    this.prebidData.noBids[args.bid.auctionId]
-                      ?.mediaContainerSize ?? [],
-                    args.bid?.sizes ?? []
+                    calculatedNoBids[args.auctionId]?.mediaContainerSize ?? [],
+                    args?.sizes ?? []
                   ),
                 ],
                 bidder: Array.from(
                   new Set<string>([
-                    ...this.prebidData.noBids[args.bid.auctionId].bidder,
-                    args.bid.bidder,
+                    ...calculatedNoBids[args.auctionId].bidder,
+                    args.bidder,
                   ])
                 ),
-                uniqueAuctionId: args.bid.auctionId,
+                uniqueAuctionId: args.auctionId,
               };
             }
             calculatedEvents[args.auctionId].push({
@@ -454,11 +456,11 @@ class PrebidInterface {
           bidders: Array.from(
             new Set<string>(adUnit.bids.map((_bid) => _bid.bidder ?? ''))
           ),
-          winningBid: bidWonEvents[adUnit.code].winningBid,
-          bidCurrency: bidWonEvents[adUnit.code].bidCurrency,
-          winningBidder: bidWonEvents[adUnit.code].winningBidder,
+          winningBid: bidWonEvents[adUnit.code]?.winningBid ?? 0,
+          bidCurrency: bidWonEvents[adUnit.code]?.bidCurrency ?? '',
+          winningBidder: bidWonEvents[adUnit.code]?.winningBidder ?? '',
           winningMediaContainerSize:
-            bidWonEvents[adUnit.code].winningMediaContainerSize,
+            bidWonEvents[adUnit.code]?.winningMediaContainerSize ?? [],
         };
         return acc;
       }, {} as AdsAndBiddersType) ?? {};

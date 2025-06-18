@@ -214,7 +214,7 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
                 <p>Timeout: {auctionEvents[1][0].timeout}ms</p>
                 <p>
                   Auction Time:{' '}
-                  {auctionEndObject.auctionEnd - auctionEndObject.timestamp}ms
+                  {auctionEndObject?.auctionEnd - auctionEndObject?.timestamp}ms
                 </p>
               </div>
             </div>
