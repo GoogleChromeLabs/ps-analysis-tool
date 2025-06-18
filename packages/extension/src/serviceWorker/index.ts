@@ -16,8 +16,8 @@
 /**
  * External dependencies.
  */
-import { Protocol } from 'devtools-protocol';
 import { isValidURL } from '@google-psat/common';
+import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */

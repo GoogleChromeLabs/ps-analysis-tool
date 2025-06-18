@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import {
-  InfoCard as InfoCardTemplate,
-  QuickLinksList,
-  type PSInfoKeyType,
-} from '@google-psat/design-system';
+import { resolve } from 'node:path';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { readdirSync } from 'node:fs';
+import svgr from 'vite-plugin-svgr';
 
-const Overview = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
-  return (
-    <>
-      <InfoCardTemplate infoKey={infoKey} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </>
-  );
-};
+const packagesDir = resolve(__dirname, 'packages');
+const aliases = readdirSync(packagesDir).map((name) => ({
+  find: `@google-psat/${name}`,
+  replacement: resolve(packagesDir, name, 'src'),
+}));
 
-export default Overview;
+export default defineConfig({
+  plugins: [svgr(), react()],
+  resolve: {
+    alias: aliases,
+  },
+});

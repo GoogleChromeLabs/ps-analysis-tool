@@ -33,7 +33,7 @@ const SiteBoundaries = () => {
         contentPanelTitle={I18n.getMessage('siteBoundariesDescription')}
         content={SITE_BOUNDARIES_CONTENT}
         titleStyles="text-blue-600"
-        extraClasses="min-h-[78vh] w-full"
+        extraClasses="w-full p-4"
       />
     </>
   );

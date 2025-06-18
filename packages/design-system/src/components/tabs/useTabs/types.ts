@@ -30,6 +30,7 @@ type TabItem = {
     Element: (props: any) => React.JSX.Element;
     props?: Record<string, any>;
     className?: string;
+    containerClassName?: string;
   };
   addSpacer?: boolean;
 };

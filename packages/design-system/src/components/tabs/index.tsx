@@ -145,6 +145,10 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     ]
   );
 
+  if (!groupedTitles || Object.keys(groupedTitles).length === 0) {
+    return null;
+  }
+
   return (
     <div
       className={classNames(
