@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import { noop } from '@google-psat/common';
+import { noop, type PrebidConfig } from '@google-psat/common';
 import {
   Table,
   TableProvider,
@@ -66,7 +66,7 @@ const PrebidConfig = ({ configObject }: PrebidConfigPanelProps) => {
   );
 
   return (
-    <div className="w-[70%] flex flex-col border border-american-silver dark:border-quartz">
+    <div className="w-[70%] flex flex-col border-r border-b border-american-silver dark:border-quartz">
       <TableProvider
         data={Object.entries(configObject).map(([key, value], index) => {
           return {

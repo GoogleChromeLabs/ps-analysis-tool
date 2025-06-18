@@ -43,6 +43,7 @@ const Bids = () => {
     paapi: {
       receivedBids: state.receivedBids,
       noBids: state.noBids,
+      auctionEvents: state.auctionEvents,
     },
   }));
 
@@ -122,11 +123,15 @@ const Bids = () => {
         return [];
       }
 
-      return prepareTimelineData(prebidAuctionEvents);
+      return prepareTimelineData(prebidAuctionEvents, true);
     }
 
-    return {};
-  }, [panelPillToggle, prebidAuctionEvents]);
+    if (!paapi?.auctionEvents) {
+      return [];
+    }
+
+    return prepareTimelineData(paapi.auctionEvents, true);
+  }, [paapi.auctionEvents, panelPillToggle, prebidAuctionEvents]);
 
   const [zoomLevel, setZoomLevel] = useState<number>(2);
 
@@ -164,7 +169,11 @@ const Bids = () => {
             highlightOption={highlightOption}
             setHighlightOption={setHighlightOption}
           />
-          <DoubleArrow className="fill-gray-500 dark:fill-bright-gray" />
+          <DoubleArrow
+            width="30px"
+            height="30px"
+            className="fill-charcoal-gray"
+          />
           <PillToggle
             options={[
               BidsPillOptions.ReceivedBids,

@@ -49,7 +49,7 @@ const VersionComponent = ({ prebidVersion }: VersionComponentProps) => {
   }, [fetchReleaseInfo]);
 
   return (
-    <div className="w-full h-full flex flex-col gap-2">
+    <div className="w-full h-full flex flex-col gap-2 px-4">
       {loading && (
         <div className="w-full h-full flex items-center justify-center">
           <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />
@@ -57,7 +57,9 @@ const VersionComponent = ({ prebidVersion }: VersionComponentProps) => {
       )}
       {!loading && (
         <>
-          <h2 className="font-bold">Version Information</h2>
+          <h2 className="font-bold text-raisin-black dark:text-bright-gray">
+            Version Information
+          </h2>
           <p className="text-raisin-black dark:text-bright-gray">
             Installed Version:{' '}
             <span className="font-bold">{prebidVersion}</span>
