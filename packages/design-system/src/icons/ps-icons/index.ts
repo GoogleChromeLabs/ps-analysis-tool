@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as PSCookieIcon } from './cookie.svg';
-export { default as PSCUJsIcon } from './cujs.svg';
-export { default as PSDemosIcon } from './demos.svg';
-export { default as PSDevSiteIcon } from './dev-site.svg';
-export { default as PSHelpCenterIcon } from './help-center.svg';
-export { default as PSLearningIcon } from './learning.svg';
-export { default as PSPrivateAdvertisingIcon } from './private-advertising.svg';
-export { default as PSSiteBoundriesIcon } from './site-boundries.svg';
-export { default as PSStoriesIcon } from './stories.svg';
-export { default as PSTrackingProtectionIcon } from './tracking-protection.svg';
-export { default as PSWikiIcon } from './wiki.svg';
-export { default as PSNumberCircleIcon } from './number-circle.svg';
+export { default as PSCookieIcon } from './cookie.svg?react';
+export { default as PSCUJsIcon } from './cujs.svg?react';
+export { default as PSDemosIcon } from './demos.svg?react';
+export { default as PSDevSiteIcon } from './dev-site.svg?react';
+export { default as PSHelpCenterIcon } from './help-center.svg?react';
+export { default as PSLearningIcon } from './learning.svg?react';
+export { default as PSPrivateAdvertisingIcon } from './private-advertising.svg?react';
+export { default as PSSiteBoundriesIcon } from './site-boundries.svg?react';
+export { default as PSStoriesIcon } from './stories.svg?react';
+export { default as PSTrackingProtectionIcon } from './tracking-protection.svg?react';
+export { default as PSWikiIcon } from './wiki.svg?react';
+export { default as PSNumberCircleIcon } from './number-circle.svg?react';

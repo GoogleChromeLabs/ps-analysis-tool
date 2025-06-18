@@ -23,7 +23,6 @@ import { existsSync } from 'fs-extra';
 // @ts-ignore Package does not support typescript.
 import Spinnies from 'spinnies';
 import path, { basename } from 'path';
-import { I18n } from '@google-psat/i18n';
 import { removeAndAddNewSpinnerText } from '@google-psat/common';
 import { analyzeCookiesUrlsInBatchesAndFetchResources } from '@google-psat/analysis-utils';
 import { pathToFileURL } from 'node:url';
@@ -45,6 +44,7 @@ import {
   redLogger,
   getSiteReport,
   saveResultsAsHTML,
+  loadCLIMessages,
 } from './utils';
 import packageJson from '../package.json';
 import checkLatestVersion from './utils/checkLatestVersion';
@@ -235,6 +235,7 @@ program.parse();
     text: 'Analyzing cookies on the first site visit',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cookieAnalysisAndFetchedResourceData: any;
 
   // eslint-disable-next-line no-useless-catch -- Because we are rethrowing the same error no need to create a new Error instance
@@ -275,7 +276,7 @@ program.parse();
     cookieAnalysisAndFetchedResourceData
   );
 
-  I18n.loadCLIMessagesData(locale);
+  loadCLIMessages(locale);
 
   const isSiteMap = sitemapUrl || filePath ? true : false;
 

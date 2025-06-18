@@ -104,8 +104,8 @@ export const runtimeOnMessageListener = async (
     });
   }
 
-  const senderTabId = sender?.frameId === 0 ? sender?.tab?.id : null;
-
+  const frameId = sender?.frameId ?? 0;
+  const senderTabId = sender?.tab?.id;
   if (!request?.payload?.tabId && !senderTabId) {
     return;
   }
@@ -115,7 +115,7 @@ export const runtimeOnMessageListener = async (
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
 
@@ -133,7 +133,7 @@ export const runtimeOnMessageListener = async (
   if (POPUP_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
     await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
@@ -161,35 +161,31 @@ export const runtimeOnMessageListener = async (
 
   if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
     if (request?.payload?.prebidExists === false) {
-      prebidStore.prebidEvents[incomingMessageTabId.toString()] = {
-        adUnits: {},
-        noBids: {},
-        versionInfo: '',
-        installedModules: [],
-        config: {},
-        receivedBids: [],
-        errorEvents: [],
-        auctionEvents: {},
-        pbjsNamespace: '',
-        prebidExists: false,
-      };
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][`${frameId}`] =
+        {
+          adUnits: {},
+          noBids: {},
+          versionInfo: '',
+          installedModules: [],
+          config: {},
+          receivedBids: [],
+          errorEvents: [],
+          auctionEvents: {},
+          pbjsNamespace: '',
+          prebidExists: false,
+        };
       DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
       return;
     }
 
-    prebidStore.prebidEvents[incomingMessageTabId.toString()] = {
-      prebidExists: true,
-      adUnits: {},
-      noBids: {},
-      versionInfo: '',
-      installedModules: [],
-      config: {},
-      receivedBids: [],
-      errorEvents: [],
-      auctionEvents: {},
-      pbjsNamespace: '',
-      ...request.payload.prebidData,
-    };
-    DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+    if (request.payload.prebidData.pbjsNamespace) {
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][
+        `${frameId}#${request.payload.prebidData.pbjsNamespace}`
+      ] = {
+        prebidExists: true,
+        ...request.payload.prebidData,
+      };
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+    }
   }
 };

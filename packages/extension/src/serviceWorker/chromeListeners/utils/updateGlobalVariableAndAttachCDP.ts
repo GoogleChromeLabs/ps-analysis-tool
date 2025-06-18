@@ -34,7 +34,7 @@ const updateGlobalVariableAndAttachCDP = async () => {
   const targets = await chrome.debugger.getTargets();
 
   allTabs.forEach((tab) => {
-    if (!tab.id || !tab.url?.startsWith('https://')) {
+    if (!tab.id || !tab.url?.startsWith('http')) {
       return;
     }
 
@@ -42,7 +42,8 @@ const updateGlobalVariableAndAttachCDP = async () => {
     dataStore.initialiseVariablesForNewTab(tab.id.toString());
     cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
-    prebidStore.initialiseVariablesForNewTab(tab.id.toString());
+    prebidStore.deinitialiseVariablesForTab(tab.id.toString());
+    prebidStore.initialiseVariablesForNewTabAndFrame(tab.id.toString(), 0);
 
     PAStore.initialiseVariablesForNewTab(tab.id.toString());
     ARAStore.initialiseVariablesForNewTab(tab.id.toString());
