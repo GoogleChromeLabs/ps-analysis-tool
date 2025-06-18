@@ -17,11 +17,11 @@
  * External dependencies.
  */
 import type { Protocol } from 'devtools-protocol';
+import { isValidURL } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 
 export class DataStore {

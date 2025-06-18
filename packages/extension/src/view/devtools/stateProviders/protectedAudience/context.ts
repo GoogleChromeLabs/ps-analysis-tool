@@ -24,18 +24,8 @@ import {
   type NoBidsType,
   type AdsAndBiddersType,
   noop,
-  type singleAuctionEvent,
+  type AuctionEventsType,
 } from '@google-psat/common';
-
-export type AuctionEventsType = {
-  [adunit: string]: {
-    [time: string]: {
-      [sellerURL: string]: {
-        [auctionHostURL: string]: singleAuctionEvent[];
-      };
-    };
-  };
-};
 
 export interface ProtectedAudienceContextType {
   state: {
