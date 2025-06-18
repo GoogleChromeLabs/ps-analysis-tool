@@ -16,13 +16,11 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   DoubleArrow,
   PillToggle,
-  SIDEBAR_ITEMS_KEYS,
   Slider,
-  useSidebar,
   useTabs,
 } from '@google-psat/design-system';
 import { prepareTimelineData, type NoBidsType } from '@google-psat/common';
@@ -30,11 +28,7 @@ import { prepareTimelineData, type NoBidsType } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import {
-  usePrebid,
-  useProtectedAudience,
-  useSettings,
-} from '../../../../stateProviders';
+import { usePrebid, useProtectedAudience } from '../../../../stateProviders';
 import Panel from './panel';
 import { BidsPillOptions, PanelOptions } from './enums';
 
@@ -53,14 +47,6 @@ const Bids = () => {
       prebidAuctionEvents: state.prebidAuctionEvents,
     })
   );
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
 
   const { storage, setStorage } = useTabs(({ state, actions }) => ({
     storage: state.storage,
@@ -130,28 +116,6 @@ const Bids = () => {
 
   const [zoomLevel, setZoomLevel] = useState<number>(2);
 
-  const cdpNavigation = useCallback(() => {
-    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
-    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-  }, [updateSelectedItemKey]);
-
-  if (!isUsingCDP) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view bids data, enable PSAT to use CDP via the{' '}
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={cdpNavigation}
-          >
-            Settings Page
-          </button>
-          .
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col pt-4 h-full w-full">
       <div className="flex justify-between items-center">
@@ -198,6 +162,7 @@ const Bids = () => {
         storage={storage}
         setStorage={setStorage}
         bidsPillToggle={bidsPillToggle}
+        panelPillToggle={panelPillToggle}
         timelines={timelines}
         zoomLevel={zoomLevel}
       />

@@ -23,6 +23,8 @@ import {
   useTabs,
   ResizableTray,
   type TimelineProps,
+  useSidebar,
+  SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 import React, { useCallback, useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
@@ -40,6 +42,7 @@ import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
 import Placeholder from './placeholder';
 import { BidsPillOptions } from './enums';
+import { useSettings } from '../../../../stateProviders';
 
 interface PanelProps {
   receivedBids: ReceivedBids[];
@@ -48,6 +51,7 @@ interface PanelProps {
   setStorage?: (data: string, index: number) => void;
   eeAnimatedTab?: boolean;
   bidsPillToggle: string;
+  panelPillToggle: string;
   timelines: PrebidEvents['auctionEvents'];
   zoomLevel?: number;
 }
@@ -59,6 +63,7 @@ const Panel = ({
   setStorage,
   eeAnimatedTab = false,
   bidsPillToggle,
+  panelPillToggle,
   timelines,
   zoomLevel = 2,
 }: PanelProps) => {
@@ -91,57 +96,85 @@ const Panel = ({
     [setPAActiveTab, setPAStorage]
   );
 
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+  }, [updateSelectedItemKey]);
+
   return (
     <>
-      <div className="flex-1 overflow-auto text-outer-space-crayola">
-        {bidsPillToggle === BidsPillOptions.ReceivedBids && (
-          <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
-            <ReceivedBidsTable
-              setSelectedRow={setSelectedRow}
-              selectedRow={selectedRow}
-              receivedBids={receivedBids}
-              storage={storage}
-              setStorage={setStorage}
-              showEvaluationPlaceholder={!eeAnimatedTab}
-            />
-          </div>
-        )}
+      {!isUsingCDP && panelPillToggle === 'PAAPI' ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <p className="text-sm text-raisin-black dark:text-bright-gray">
+            To view ad units, enable PSAT to use CDP via the{' '}
+            <button
+              className="text-bright-navy-blue dark:text-jordy-blue"
+              onClick={cdpNavigation}
+            >
+              Settings Page
+            </button>
+            .
+          </p>
+        </div>
+      ) : (
+        <div className="flex-1 overflow-auto text-outer-space-crayola">
+          {bidsPillToggle === BidsPillOptions.ReceivedBids && (
+            <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+              <ReceivedBidsTable
+                setSelectedRow={setSelectedRow}
+                selectedRow={selectedRow}
+                receivedBids={receivedBids}
+                storage={storage}
+                setStorage={setStorage}
+                showEvaluationPlaceholder={!eeAnimatedTab}
+              />
+            </div>
+          )}
 
-        {bidsPillToggle === BidsPillOptions.NoBids && (
-          <div
-            className={classNames(
-              'h-full border-r border-t border-american-silver dark:border-quartz',
-              Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
-            )}
-          >
-            <NoBidsTable
-              setSelectedRow={setSelectedRow}
-              selectedRow={selectedRow}
-              noBids={noBids}
-              showEvaluationPlaceholder={!eeAnimatedTab}
-            />
-          </div>
-        )}
+          {bidsPillToggle === BidsPillOptions.NoBids && (
+            <div
+              className={classNames(
+                'h-full border-r border-t border-american-silver dark:border-quartz',
+                Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
+              )}
+            >
+              <NoBidsTable
+                setSelectedRow={setSelectedRow}
+                selectedRow={selectedRow}
+                noBids={noBids}
+                showEvaluationPlaceholder={!eeAnimatedTab}
+              />
+            </div>
+          )}
 
-        {bidsPillToggle === BidsPillOptions.Timeline && (
-          <div className="w-full h-full px-4 border-t border-american-silver dark:border-quartz">
-            {timelines && Object.entries(timelines).length > 0 ? (
-              Object.entries(timelines).map(([auctionId, auction]) => (
-                <div key={auctionId} className="my-4">
-                  <Timeline
-                    {...(auction as unknown as TimelineProps)}
-                    zoomLevel={zoomLevel}
-                    setSelectedRow={setSelectedRow}
-                    navigateToAuction={navigateToAuction}
-                  />
-                </div>
-              ))
-            ) : (
-              <Placeholder showEvaluationPlaceholder={true} />
-            )}
-          </div>
-        )}
-      </div>
+          {bidsPillToggle === BidsPillOptions.Timeline && (
+            <div className="w-full h-full px-4 border-t border-american-silver dark:border-quartz">
+              {timelines && Object.entries(timelines).length > 0 ? (
+                Object.entries(timelines).map(([auctionId, auction]) => (
+                  <div key={auctionId} className="my-4">
+                    <Timeline
+                      {...(auction as unknown as TimelineProps)}
+                      zoomLevel={zoomLevel}
+                      setSelectedRow={setSelectedRow}
+                      navigateToAuction={navigateToAuction}
+                    />
+                  </div>
+                ))
+              ) : (
+                <Placeholder showEvaluationPlaceholder={true} />
+              )}
+            </div>
+          )}
+        </div>
+      )}
       {showBottomTray && (
         <ResizableTray
           defaultSize={{

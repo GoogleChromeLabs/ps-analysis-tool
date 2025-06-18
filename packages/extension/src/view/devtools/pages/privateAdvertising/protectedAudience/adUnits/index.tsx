@@ -16,8 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -26,7 +25,6 @@ import {
   useCookie,
   usePrebid,
   useProtectedAudience,
-  useSettings,
 } from '../../../../stateProviders';
 import Panel from './panel';
 
@@ -60,19 +58,11 @@ const AdUnits = () => {
     setIsInspecting: actions.setIsInspecting,
   }));
 
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
   useEffect(() => {
     return () => {
       setIsInspecting(false);
     };
   }, [setIsInspecting]);
-
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
 
   useEffect(() => {
     return () => {
@@ -116,28 +106,6 @@ const AdUnits = () => {
     prebidNoBids,
     prebidReceivedBids,
   ]);
-
-  const cdpNavigation = useCallback(() => {
-    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
-    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-  }, [updateSelectedItemKey]);
-
-  if (!isUsingCDP) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view ad units, enable PSAT to use CDP via the{' '}
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={cdpNavigation}
-          >
-            Settings Page
-          </button>
-          .
-        </p>
-      </div>
-    );
-  }
 
   return (
     <Panel

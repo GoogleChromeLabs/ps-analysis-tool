@@ -17,12 +17,14 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   FrameIcon,
   MoneyIcon,
   PillToggle,
   ScreenIcon,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
 } from '@google-psat/design-system';
 
 /**
@@ -30,6 +32,7 @@ import {
  */
 import Tile from './tile';
 import Matrix from './matrix';
+import { useSettings } from '../../../../../../stateProviders';
 
 interface PanelProps {
   adunit: string;
@@ -142,6 +145,19 @@ const Panel = ({
     };
   }, [setIsInspecting, setSelectedAdUnit, adunit]);
 
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+  }, [updateSelectedItemKey]);
+
   return (
     <div className="flex flex-col h-full w-full ">
       <div className="p-4">
@@ -154,16 +170,41 @@ const Panel = ({
           setHighlightOption={setHighlightOption}
         />
       </div>
-      <Matrix
-        biddersCount={biddersCount}
-        bidsCount={bidsCount}
-        noBidsCount={noBidsCount}
-      />
-      <div className="p-4 flex gap-4 flex-wrap">
-        {items.map((item) => (
-          <Tile key={item.name} item={item} />
-        ))}
-      </div>
+      {biddersCount === 0 ? (
+        !isUsingCDP && pillToggle === 'PAAPI' ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-sm text-raisin-black dark:text-bright-gray">
+              To view ad units, enable PSAT to use CDP via the{' '}
+              <button
+                className="text-bright-navy-blue dark:text-jordy-blue"
+                onClick={cdpNavigation}
+              >
+                Settings Page
+              </button>
+              .
+            </p>
+          </div>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-sm text-raisin-black dark:text-bright-gray">
+              No data available for this ad unit.
+            </p>
+          </div>
+        )
+      ) : (
+        <>
+          <Matrix
+            biddersCount={biddersCount}
+            bidsCount={bidsCount}
+            noBidsCount={noBidsCount}
+          />
+          <div className="p-4 flex gap-4 flex-wrap">
+            {items.map((item) => (
+              <Tile key={item.name} item={item} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
