@@ -36,12 +36,7 @@ import {
   useSettings,
 } from '../../../../stateProviders';
 import Panel from './panel';
-
-export enum BidsPillOptions {
-  ReceivedBids = 'Received Bids',
-  NoBids = 'No Bids',
-  Timeline = 'Timeline',
-}
+import { BidsPillOptions, PanelOptions } from './enums';
 
 const Bids = () => {
   const { paapi } = useProtectedAudience(({ state }) => ({
@@ -72,11 +67,14 @@ const Bids = () => {
     setStorage: actions.setStorage,
   }));
 
-  const [panelPillToggle, setPanelPillToggle] = useState<string>('Prebid');
+  const [panelPillToggle, setPanelPillToggle] = useState<string>(
+    PanelOptions.Prebid
+  );
   const [highlightOption, setHighlightOption] = useState<string>('');
+
   useEffect(() => {
     if (paapi?.receivedBids?.length || paapi?.noBids?.length) {
-      setHighlightOption('PAAPI');
+      setHighlightOption(PanelOptions.PAAPI);
     }
   }, [paapi]);
 
@@ -103,7 +101,7 @@ const Bids = () => {
   }, [prebidNoBids]);
 
   const noBids = useMemo(() => {
-    if (panelPillToggle === 'Prebid') {
+    if (panelPillToggle === PanelOptions.Prebid) {
       return Object.values(processedPrebidNoBids).flat() || [];
     }
 
@@ -111,7 +109,7 @@ const Bids = () => {
   }, [paapi?.noBids, panelPillToggle, processedPrebidNoBids]);
 
   const receivedBids = useMemo(() => {
-    if (panelPillToggle === 'Prebid') {
+    if (panelPillToggle === PanelOptions.Prebid) {
       return prebidReceivedBids || [];
     }
 
@@ -119,7 +117,7 @@ const Bids = () => {
   }, [paapi?.receivedBids, panelPillToggle, prebidReceivedBids]);
 
   const timelines = useMemo(() => {
-    if (panelPillToggle === 'Prebid') {
+    if (panelPillToggle === PanelOptions.Prebid) {
       if (!prebidAuctionEvents) {
         return [];
       }
@@ -159,7 +157,7 @@ const Bids = () => {
       <div className="flex justify-between items-center">
         <div className="px-4 pb-4 flex gap-4 items-center">
           <PillToggle
-            options={['Prebid', 'PAAPI']}
+            options={[PanelOptions.Prebid, PanelOptions.PAAPI]}
             pillToggle={panelPillToggle}
             setPillToggle={setPanelPillToggle}
             eeAnimatedTab={false}

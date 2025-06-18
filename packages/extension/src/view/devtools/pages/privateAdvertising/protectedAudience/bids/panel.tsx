@@ -38,8 +38,8 @@ import classNames from 'classnames';
  */
 import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
-import { BidsPillOptions } from '.';
 import Placeholder from './placeholder';
+import { BidsPillOptions } from './enums';
 
 interface PanelProps {
   receivedBids: ReceivedBids[];

@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
-import { noop, type AdsAndBiddersType } from '@google-psat/common';
+import {
+  noop,
+  type AdsAndBiddersType,
+  type PrebidEvents,
+} from '@google-psat/common';
 import {
   FrameIcon,
   Hammer,
@@ -34,11 +38,6 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
-
-/**
- * Internal dependencies
- */
-import type { PrebidEvents } from '../../../../../../store';
 
 interface AdTableProps {
   adsAndBidders: AdsAndBiddersType;
