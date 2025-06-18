@@ -11,11 +11,11 @@
     "prebuild": "rimraf ../../dist/extension",
     "dev": "npm run dev:scripts && npm run dev:popup && npm run dev:report && npm run dev:devtools",
     "build": "npm run build:scripts && npm run build:popup && npm run build:report && npm run build:devtools",
-    "dev:scripts": "cross-env NODE_NO_WARNINGS=1 NODE_ENV=development npm run build:scripts",
+    "dev:scripts": "cross-env VITE_CJS_IGNORE_WARNING=true NODE_NO_WARNINGS=1 NODE_ENV=development npm run build:scripts",
     "build:scripts": "node --loader ts-node/esm ../../vite.extension.scripts.config.mts",
     "dev:popup": "cross-env NODE_ENV=development npm run build:popup",
     "build:popup": "cross-env PAGE=popup vite build --config ../../vite.extension.config.mts",
-    "dev:devtools": "cross-env VITE_CJS_IGNORE_WARNING=true NODE_ENV=development npm run build:devtools",
+    "dev:devtools": "cross-env NODE_ENV=development npm run build:devtools",
     "build:devtools": "cross-env PAGE=devtools vite build --config ../../vite.extension.config.mts",
     "dev:report": "cross-env NODE_ENV=development npm run build:report",
     "build:report": "cross-env PAGE=report vite build --config ../../vite.extension.config.mts"

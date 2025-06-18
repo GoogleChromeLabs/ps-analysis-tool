@@ -48,6 +48,7 @@ const createConfig = (script: (typeof scripts)[number]) => {
       outDir: `../../dist/extension`,
       minify: !isDev,
       rollupOptions: {
+        external: ['p5'],
         input: {
           [script.name]: script.path,
         },
