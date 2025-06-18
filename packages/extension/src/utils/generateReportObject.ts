@@ -29,7 +29,6 @@ import {
   type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-import isValidURL from './isValidURL';
 
 /**
  * Utility function to generate report object.

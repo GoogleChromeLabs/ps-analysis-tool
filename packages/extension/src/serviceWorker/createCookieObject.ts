@@ -20,13 +20,9 @@ import {
   calculateEffectiveExpiryDate,
   type CookieData,
   getDomainFromUrl,
+  isValidURL,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
-
-/**
- * Internal dependencies
- */
-import isValidURL from '../utils/isValidURL';
 
 /**
  * Create cookie object from ChromeStorage API cookie object, previously saved parsed cookie object if any, and recently captured request/response cookie header.

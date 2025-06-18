@@ -112,3 +112,13 @@ export interface PrebidDebugModuleConfigRule {
     [key: string]: string | number;
   };
 }
+
+export type AuctionEventsType = {
+  [adunit: string]: {
+    [time: string]: {
+      [sellerURL: string]: {
+        [auctionHostURL: string]: singleAuctionEvent[];
+      };
+    };
+  };
+};

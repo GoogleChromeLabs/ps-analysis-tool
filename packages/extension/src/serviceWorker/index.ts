@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import { isValidURL } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
@@ -324,11 +325,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const loadingFinishedParams =
           params as Protocol.Network.LoadingFinishedEvent;
 
+        const url =
+          DataStore.requestIdToCDPURLMapping[tabId][
+            loadingFinishedParams.requestId
+          ].url;
+
         PAStore.parseRequestHeadersForPA(
           loadingFinishedParams.requestId,
           loadingFinishedParams.timestamp,
           tabId,
-          'Finished Fetching '
+          'Finished Fetching ',
+          isValidURL(url) ? new URL(url).origin : ''
         );
       }
 
@@ -336,11 +343,17 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const loadingFailedParams =
           params as Protocol.Network.LoadingFinishedEvent;
 
+        const url =
+          DataStore.requestIdToCDPURLMapping[tabId][
+            loadingFailedParams.requestId
+          ].url;
+
         PAStore.parseRequestHeadersForPA(
           loadingFailedParams.requestId,
           loadingFailedParams.timestamp,
           tabId,
-          'Failed Fetch'
+          'Failed Fetch ',
+          isValidURL(url) ? new URL(url).origin : ''
         );
       }
 
@@ -569,7 +582,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           dataStore?.getTabUrl(tabId) ?? '',
           [],
           DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url,
-          DataStore.cookieDB ?? {}
+          cookieStore.cookieDB ?? {}
         );
 
         if (cookieObjectToUpdate) {

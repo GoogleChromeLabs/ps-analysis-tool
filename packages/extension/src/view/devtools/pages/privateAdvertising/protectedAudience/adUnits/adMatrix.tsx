@@ -73,14 +73,14 @@ const AdMatrix = ({
         if (dataComponent && dataComponent.countClassName) {
           return (
             <div key={index} className={'py-1'}>
-              <button className="p-3.5 w-full box-border cursor-default">
+              <div className="p-3.5 w-full box-border">
                 <MatrixComponent
                   {...dataComponent}
                   countClassName={
                     dataComponent.countClassName + ' text-xxl leading-none'
                   }
                 />
-              </button>
+              </div>
             </div>
           );
         }

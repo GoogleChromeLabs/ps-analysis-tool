@@ -45,7 +45,7 @@ export const onResponseStartedListener = ({
       'response',
       tabId,
       url,
-      DataStore.cookieDB ?? {},
+      cookieStore.cookieDB ?? {},
       tabUrl,
       frameId.toString(),
       requestId,

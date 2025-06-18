@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { noop, type singleAuctionEvent } from '@google-psat/common';
 import {
   Table,
@@ -26,23 +26,27 @@ import {
   type TableRow,
   type InfoType,
   ResizableTray,
+  SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
 import BottomTray from './bottomTray';
+import { useSettings } from '../../../../../../stateProviders';
 
 interface AuctionTableProps {
   auctionEvents: singleAuctionEvent[];
   parentOrigin?: string;
   startDate?: string;
+  updateSelectedItemKey?: (key: string) => void;
 }
 
 const AuctionTable = ({
   auctionEvents,
   parentOrigin = '',
   startDate = '',
+  updateSelectedItemKey = noop,
 }: AuctionTableProps) => {
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
     null
@@ -160,6 +164,32 @@ const AuctionTable = ({
     }),
     []
   );
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+  }, [updateSelectedItemKey]);
+
+  if (!isUsingCDP) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-sm text-raisin-black dark:text-bright-gray">
+          To view ad units, enable PSAT to use CDP via the{' '}
+          <button
+            className="text-bright-navy-blue dark:text-jordy-blue"
+            onClick={cdpNavigation}
+          >
+            Settings Page
+          </button>
+          .
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">

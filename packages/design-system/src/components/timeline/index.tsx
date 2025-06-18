@@ -252,7 +252,7 @@ const Timeline = ({
         </div>
       </div>
       <footer>
-        <p className="text-sm text-right mt-1 dark:text-bright-gray">
+        <p className="text-sm text-right my-1 dark:text-bright-gray">
           Auction ID:{' '}
           <a
             onClick={(event) => {

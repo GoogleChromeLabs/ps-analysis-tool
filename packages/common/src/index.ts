@@ -46,6 +46,7 @@ export { default as getLegendDescription } from './utils/getLegendDescription';
 export { default as extractCookies } from './utils/extractCookies';
 export { default as extractReportData } from './utils/extractReportData';
 export { default as reshapeCookies } from './utils/reshapeCookies';
+export { default as isValidURL } from './utils/isValidURL';
 // eslint-disable-next-line import/named
 export { type Context } from 'use-context-selector';
 export * from './utils/sessionStorage';

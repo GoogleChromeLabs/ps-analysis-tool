@@ -405,6 +405,10 @@ const useDataProcessing = () => {
     (adUnit: string, time: string) => {
       const auction = Object.entries(prebidAuctionEvents || {}).find(
         ([, events]) => {
+          if (!events?.length || !events[0]?.adUnitCodes?.length) {
+            return false;
+          }
+
           return (
             events[0].adUnitCodes.includes(adUnit) &&
             new Date(events[0].timestamp).toISOString() === time

@@ -59,7 +59,7 @@ const HeaderComponent = ({
   }, []);
 
   return (
-    <div className="flex justify-between mt-6">
+    <div className="flex justify-between">
       <Button
         text="Open Google Ad Manager Console"
         extraClasses="text-base"
