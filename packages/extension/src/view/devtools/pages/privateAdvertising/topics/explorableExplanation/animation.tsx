@@ -67,7 +67,7 @@ const Animation = ({
   );
 
   useEffect(() => {
-    const init = (sketch: p5) => {
+    const init = (sketch: typeof p5) => {
       const instance = new TopicsAnimation({
         p: sketch,
         onReady: () => {

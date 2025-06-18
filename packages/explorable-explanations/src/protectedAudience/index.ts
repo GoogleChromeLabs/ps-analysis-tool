@@ -18,7 +18,7 @@
  */
 import * as d3 from 'd3';
 import Queue from 'queue';
-import p5 from '../p5';
+import { p5 } from '../p5';
 
 /**
  * Internal dependencies.

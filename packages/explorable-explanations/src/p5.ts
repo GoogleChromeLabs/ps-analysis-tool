@@ -13,6 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const p5 = window.p5;
 
-export default p5;
+export const p5 = window.p5;
