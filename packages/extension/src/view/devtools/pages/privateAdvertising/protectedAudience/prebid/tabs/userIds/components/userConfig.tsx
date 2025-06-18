@@ -16,6 +16,7 @@
 /**
  * External dependencies
  */
+import type { UserIdConfig } from '@google-psat/common';
 import {
   type TableColumn,
   type TableData,
@@ -98,7 +99,7 @@ const UserConfig = ({ config }: UserConfigPanelProps) => {
   );
 
   return (
-    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
+    <div className="w-full h-full text-outer-space-crayola flex flex-col">
       <ResizableTray
         defaultSize={{
           width: '100%',

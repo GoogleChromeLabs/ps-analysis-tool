@@ -248,12 +248,14 @@ class PAStore extends DataStore {
    * @param { Protocol.Network.MonotonicTime } timestamp Timestamp of the request
    * @param {string} tabId The tabId this request is associated to.
    * @param {string} method determines which event called the function.
+   * @param url
    */
   parseRequestHeadersForPA(
     requestId: string,
     timestamp: Protocol.Network.MonotonicTime,
     tabId: string,
-    method: string
+    method: string,
+    url: string
   ) {
     if (!this.unParsedRequestHeadersForPA[tabId][requestId]?.auctions) {
       return;
@@ -276,7 +278,7 @@ class PAStore extends DataStore {
         bidCurrency: auctionConfig?.bidCurrency ?? '',
         bid: auctionConfig?.bid ?? null,
         name: auctionConfig?.name ?? '',
-        ownerOrigin: auctionConfig?.ownerOrigin ?? '',
+        ownerOrigin: auctionConfig?.ownerOrigin ?? url ?? '',
         type: method + type,
         formattedTime:
           this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0

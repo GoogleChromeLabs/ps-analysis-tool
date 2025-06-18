@@ -238,11 +238,41 @@ const useSidebarProcessing = () => {
     let key = '';
 
     adUnits.forEach((adUnit) => {
-      adUnitsTimestamp[adUnit]?.forEach((timestamp) => {
-        const auctionEvents = getPrebidData(adUnit, timestamp);
+      if (key) {
+        return;
+      }
 
-        if (storageRef.current === auctionEvents?.[0]) {
+      adUnitsTimestamp[adUnit]?.forEach((timestamp) => {
+        if (key) {
+          return;
+        }
+
+        const prebidAuctionEvents = getPrebidData(adUnit, timestamp);
+
+        if (storageRef.current === prebidAuctionEvents?.[0]) {
           key = `${timestamp}||${adUnit} Prebid`;
+        }
+
+        if (key) {
+          return;
+        }
+
+        const paAuctionEvents =
+          Object.values(
+            getPAData(
+              adUnit,
+              timestamp,
+              adUnitsAuctionId?.[adUnit]?.[timestamp] || ''
+            )
+          )?.[0]?.auctionEvents || [];
+
+        if (
+          paAuctionEvents?.length &&
+          storageRef.current === paAuctionEvents?.[0]?.uniqueAuctionId
+        ) {
+          key = `${timestamp}||${
+            adUnitsAuctionId?.[adUnit]?.[timestamp] || ''
+          }||${adUnit}`;
         }
       });
     });
@@ -252,7 +282,14 @@ const useSidebarProcessing = () => {
     });
 
     return key;
-  }, [adUnits, adUnitsTimestamp, getPrebidData, setStorage]);
+  }, [
+    adUnits,
+    adUnitsAuctionId,
+    adUnitsTimestamp,
+    getPAData,
+    getPrebidData,
+    setStorage,
+  ]);
 
   useEffect(() => {
     return () => {

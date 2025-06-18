@@ -16,6 +16,7 @@
 /**
  * External dependencies
  */
+import type { PrebidConfig } from '@google-psat/common';
 import { JsonView } from '@google-psat/design-system';
 
 type BidderSettingsPanelProps = {
@@ -24,8 +25,8 @@ type BidderSettingsPanelProps = {
 
 const JSONViewerWrapper = ({ config }: BidderSettingsPanelProps) => {
   return (
-    <div className="w-full h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full minimum-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+    <div className="w-full h-full text-outer-space-crayola flex flex-col">
+      <div className="flex-1 text-raisin-black dark:text-bright-gray shadow-sm h-full minimum-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {config && (
           <div className="text-xs py-1 px-1.5">
             <JsonView src={config} />

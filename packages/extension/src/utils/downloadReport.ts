@@ -20,6 +20,7 @@ import {
   getCurrentDateAndTime,
   type TabCookies,
   type TabFrames,
+  isValidURL,
 } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 import { I18n } from '@google-psat/i18n';
@@ -29,7 +30,6 @@ import type { TableFilter } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import { generateDashboardObject } from './generateReportObject';
-import isValidURL from './isValidURL';
 
 /**
  * Utility function to download report.

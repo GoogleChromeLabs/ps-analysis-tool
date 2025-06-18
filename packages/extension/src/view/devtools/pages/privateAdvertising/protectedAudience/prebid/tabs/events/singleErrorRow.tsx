@@ -17,6 +17,8 @@
  * External dependencies
  */
 import { WarningColored, Error } from '@google-psat/design-system';
+import classNames from 'classnames';
+import { useState } from 'react';
 
 type SingleErrorRowProps = {
   type: 'WARNING' | 'ERROR' | 'INFO';
@@ -31,18 +33,25 @@ const SingleErrorRow = ({
   time,
   additionalClasses,
 }: SingleErrorRowProps) => {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <div
-      className={`flex flex-row items-center gap-2 text-raisin-black dark:text-bright-gray ${additionalClasses}`}
+      className={`flex flex-row items-start gap-2 text-raisin-black dark:text-bright-gray ${additionalClasses}`}
       key={time}
     >
-      <div className="flex items-center justify-center">
+      <p className="flex items-center justify-center">
         {type === 'ERROR' ? <Error /> : <WarningColored />}
-      </div>
-      <div className="flex items-center justify-center">{time}:</div>
-      <div className="flex items-center justify-center wrap-anywhere">
+      </p>
+      <p>{time}:</p>
+      <p
+        className={classNames({
+          truncate: !expanded,
+        })}
+        onClick={() => setExpanded(!expanded)}
+      >
         {message}
-      </div>
+      </p>
     </div>
   );
 };
