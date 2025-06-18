@@ -18,39 +18,38 @@
  */
 import {
   createContext,
-  type ReceivedBids,
-  type AdsAndBiddersType,
-  type PrebidNoBidsType,
   noop,
   type PrebidDebugModuleConfig,
   type PrebidDebugModuleConfigRule,
-  type PrebidConfig,
-  type PrebidWarningTypes,
+  type PrebidEvents,
 } from '@google-psat/common';
+
+export type PBJSNamespacesType = {
+  [frameId: string]: {
+    namespaces: {
+      frameId: number;
+      namespace: string;
+    }[];
+    host: string;
+  };
+};
 
 export interface PrebidContextType {
   state: {
-    prebidAuctionEvents: { [auctionId: string]: any[] };
-    errorEvents: {
-      type: PrebidWarningTypes;
-      message: string[];
-      time: string;
-    }[];
-    versionInfo: string;
-    prebidAdUnits: AdsAndBiddersType;
-    prebidReceivedBids: ReceivedBids[];
-    prebidNoBids: PrebidNoBidsType;
-    installedModules: string[];
-    config: PrebidConfig;
-    pbjsNamespace: string;
+    prebidData: PrebidEvents;
     prebidExists: boolean | null;
     debuggingModuleConfig: PrebidDebugModuleConfig;
+    selectedFrameId: number;
+    pbjsNamespaces: PBJSNamespacesType;
     storeRulesInLocalStorage: boolean;
+    namespace: string;
   };
   actions: {
     setDebuggingModuleConfig: React.Dispatch<
       React.SetStateAction<PrebidDebugModuleConfig>
     >;
+    setFrameId: React.Dispatch<React.SetStateAction<number>>;
+    setNamespace: React.Dispatch<React.SetStateAction<string>>;
     handleChangeStoreRulesInLocalStorage: (value: boolean) => void;
     openGoogleManagerConsole: () => void;
     changeRule: (
@@ -73,16 +72,22 @@ export interface PrebidContextType {
 
 export const initialState: PrebidContextType = {
   state: {
-    prebidAdUnits: {},
-    prebidNoBids: {},
-    versionInfo: '',
-    installedModules: [],
-    config: {},
-    prebidReceivedBids: [],
-    errorEvents: [],
-    prebidAuctionEvents: {},
-    pbjsNamespace: '',
+    prebidData: {
+      prebidExists: false,
+      adUnits: {},
+      pbjsNamespace: '',
+      noBids: {},
+      receivedBids: [],
+      errorEvents: [],
+      versionInfo: '',
+      config: {},
+      auctionEvents: {},
+      installedModules: [],
+    },
+    namespace: '',
+    pbjsNamespaces: {},
     prebidExists: null,
+    selectedFrameId: 0,
     debuggingModuleConfig: {
       enabled: false,
       intercept: [],
@@ -90,6 +95,8 @@ export const initialState: PrebidContextType = {
     storeRulesInLocalStorage: false,
   },
   actions: {
+    setNamespace: noop,
+    setFrameId: noop,
     setDebuggingModuleConfig: noop,
     changeRule: noop,
     addRule: noop,

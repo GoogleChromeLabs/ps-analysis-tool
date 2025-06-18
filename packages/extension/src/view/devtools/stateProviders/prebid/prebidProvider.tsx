@@ -34,48 +34,26 @@ import type {
 /**
  * Internal dependencies.
  */
-import Context, { type PrebidContextType } from './context';
+import Context, {
+  type PBJSNamespacesType,
+  type PrebidContextType,
+} from './context';
 import { PREBID_EVENTS, STORE_RULES_TOGGLE } from '../../../../constants';
 import firstDifferent from '../../../../utils/firstDifferent';
 import { replaceRuleTargets, matchRuleTargets } from './constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [prebidAuctionEvents, setPrebidAuctionEvents] = useState<
-    PrebidContextType['state']['prebidAuctionEvents']
-  >({});
+  const [prebidData, setPrebidData] = useState<{
+    [frameId: string]: PrebidEvents;
+  }>({});
 
   const [prebidExists, setPrebidExists] =
     useState<PrebidContextType['state']['prebidExists']>(null);
 
-  const [config, setConfig] = useState<PrebidContextType['state']['config']>(
-    {}
-  );
+  const [pbjsNamespaces, setPbjsNamespaces] = useState<PBJSNamespacesType>({});
 
-  const [errorEvents, setErrorEvents] = useState<
-    PrebidContextType['state']['errorEvents']
-  >([]);
-
-  const [prebidNoBids, setPrebidNoBids] = useState<
-    PrebidContextType['state']['prebidNoBids']
-  >({});
-
-  const [prebidReceivedBids, setPrebidReceivedBids] = useState<
-    PrebidContextType['state']['prebidReceivedBids']
-  >([]);
-
-  const [installedModules, setInstalledModules] = useState<
-    PrebidContextType['state']['installedModules']
-  >([]);
-
-  const [pbjsNamespace, setPBJSNamespace] =
-    useState<PrebidContextType['state']['pbjsNamespace']>('');
-
-  const [prebidAdUnits, setPrebidAdUnits] = useState<
-    PrebidContextType['state']['prebidAdUnits']
-  >({});
-
-  const [versionInfo, setPrebidVersionInfo] =
-    useState<PrebidContextType['state']['versionInfo']>('');
+  const [frameId, setFrameId] = useState<number>(0);
+  const [namespace, setNamespace] = useState<string>('');
 
   const [debuggingModuleConfig, setDebuggingModuleConfig] =
     useState<PrebidDebugModuleConfig>({
@@ -105,6 +83,8 @@ const Provider = ({ children }: PropsWithChildren) => {
       setDebuggingModuleConfig(input);
 
       const tabId = chrome.devtools.inspectedWindow.tabId;
+      const pbjsNamespace =
+        prebidData[`${frameId}#${namespace}`]?.pbjsNamespace;
 
       if (!pbjsNamespace) {
         return;
@@ -112,9 +92,9 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       await chrome.scripting.executeScript({
         target: { tabId },
-        func: (namespace: string, _input: object) => {
+        func: (_namespace: string, _input: object) => {
           sessionStorage.setItem(
-            `__${namespace}_debugging__`,
+            `__${_namespace}_debugging__`,
             `${JSON.stringify(_input)}`
           );
         },
@@ -127,16 +107,16 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       await chrome.scripting.executeScript({
         target: { tabId },
-        func: (namespace: string, _input: object) => {
+        func: (_namespace: string, _input: object) => {
           localStorage.setItem(
-            `__${namespace}_debugging__`,
+            `__${_namespace}_debugging__`,
             `${JSON.stringify(_input)}`
           );
         },
         args: [pbjsNamespace, input],
       });
     },
-    [pbjsNamespace, storeRulesInLocalStorage]
+    [prebidData, frameId, namespace, storeRulesInLocalStorage]
   );
 
   const openGoogleManagerConsole = useCallback(async () => {
@@ -160,6 +140,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const getInitialState = useCallback(async () => {
     const tabId = chrome.devtools.inspectedWindow.tabId;
+    const pbjsNamespace = prebidData[`${frameId}#${namespace}`]?.pbjsNamespace;
 
     if (!pbjsNamespace) {
       initialStateFetched.current = true;
@@ -168,16 +149,16 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     let [first] = await chrome.scripting.executeScript({
       target: { tabId },
-      func: (namespace: string) =>
-        sessionStorage.getItem(`__${namespace}_debugging__`),
+      func: (_namespace: string) =>
+        sessionStorage.getItem(`__${_namespace}_debugging__`),
       args: [pbjsNamespace],
     });
 
     if (!first || !first.result) {
       [first] = await chrome.scripting.executeScript({
         target: { tabId },
-        func: (namespace: string) =>
-          localStorage.getItem(`__${namespace}_debugging__`),
+        func: (_namespace: string) =>
+          localStorage.getItem(`__${_namespace}_debugging__`),
         args: [pbjsNamespace],
       });
     }
@@ -191,7 +172,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     setDebuggingModuleConfig(savedConfig);
     handleWriteRulesToStorage(savedConfig);
     initialStateFetched.current = true;
-  }, [pbjsNamespace, handleWriteRulesToStorage]);
+  }, [frameId, handleWriteRulesToStorage, namespace, prebidData]);
 
   useEffect(() => {
     getInitialState();
@@ -254,11 +235,11 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   const messagePassingListener = useCallback(
-    (message: {
+    async (message: {
       type: string;
       payload: {
         tabId: number;
-        prebidEvents: PrebidEvents;
+        prebidEvents: { [frameKey: string]: PrebidEvents };
       };
     }) => {
       if (![PREBID_EVENTS].includes(message.type)) {
@@ -276,62 +257,76 @@ const Provider = ({ children }: PropsWithChildren) => {
         typeof message.payload.prebidEvents !== 'undefined'
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
-          setPrebidExists(message.payload.prebidEvents.prebidExists);
-          if (!message.payload.prebidEvents.prebidExists) {
-            return;
-          }
-          setConfig((prev) => {
-            return isEqual(message.payload.prebidEvents.config, prev)
-              ? prev
-              : message.payload.prebidEvents.config;
+          const frames = await chrome.webNavigation.getAllFrames({ tabId });
+          setPrebidData((prev) => {
+            const newData = message.payload.prebidEvents;
+            const constructedData = prev;
+            let updated = false;
+
+            Object.keys(newData).forEach((key) => {
+              if (!isEqual(prev[key], newData[key])) {
+                const _frameId = Number(key.split('#')[0]);
+                if (frames?.find((frame) => frame.frameId === _frameId)) {
+                  constructedData[key] = newData[key];
+                  updated = true;
+                }
+              }
+            });
+
+            return updated ? constructedData : prev;
           });
 
-          setErrorEvents((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.errorEvents)
-              ? prev
-              : message.payload.prebidEvents.errorEvents;
+          const _pbjsNamespaces: {
+            [frameId: string]: {
+              namespaces: {
+                frameId: number;
+                namespace: string;
+              }[];
+              host: string;
+            };
+          } = {};
+
+          Object.keys(message.payload.prebidEvents).forEach((key) => {
+            const [_frameId, _pbjsNamespace] = key.split('#');
+
+            const frame = frames?.find(
+              (_frame) => _frame.frameId === Number(_frameId)
+            );
+
+            if (!_pbjsNamespace || !frame) {
+              return;
+            }
+
+            if (!_pbjsNamespaces[_frameId]) {
+              _pbjsNamespaces[_frameId] = {
+                namespaces: [],
+                host: frame.url ?? '',
+              };
+            }
+
+            _pbjsNamespaces[_frameId].namespaces.push({
+              frameId: frame.frameId,
+              namespace: _pbjsNamespace,
+            });
           });
 
-          setInstalledModules((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.installedModules)
-              ? prev
-              : message.payload.prebidEvents.installedModules;
+          setPbjsNamespaces((prev) => {
+            return isEqual(_pbjsNamespaces, prev) ? prev : _pbjsNamespaces;
           });
 
-          setPBJSNamespace((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.pbjsNamespace)
-              ? prev
-              : message.payload.prebidEvents.pbjsNamespace;
-          });
+          const defaultFrame = Number(Object.keys(_pbjsNamespaces)[0]);
+          const { frameId: _frameId, namespace: _pbjsNamespace } =
+            _pbjsNamespaces[defaultFrame].namespaces[0];
 
-          setPrebidAdUnits((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.adUnits)
-              ? prev
-              : message.payload.prebidEvents.adUnits;
-          });
+          setFrameId(Number(_frameId));
+          setNamespace(_pbjsNamespace);
 
-          setPrebidAuctionEvents((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.auctionEvents)
-              ? prev
-              : message.payload.prebidEvents.auctionEvents;
-          });
-
-          setPrebidNoBids((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.noBids)
-              ? prev
-              : message.payload.prebidEvents.noBids;
-          });
-
-          setPrebidReceivedBids((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.receivedBids)
-              ? prev
-              : message.payload.prebidEvents.receivedBids;
-          });
-
-          setPrebidVersionInfo((prev) => {
-            return isEqual(prev, message.payload.prebidEvents.versionInfo)
-              ? prev
-              : message.payload.prebidEvents.versionInfo;
+          setPrebidExists((prev) => {
+            let newState = false;
+            if (Object.keys(_pbjsNamespaces).length > 0) {
+              newState = true;
+            }
+            return isEqual(prev, newState) ? prev : newState;
           });
         }
       }
@@ -341,7 +336,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const onCommittedNavigationListener = useCallback(
     ({
-      frameId,
+      frameId: _frameId,
       frameType,
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
@@ -349,22 +344,16 @@ const Provider = ({ children }: PropsWithChildren) => {
         !(
           chrome.devtools.inspectedWindow.tabId === tabId &&
           frameType === 'outermost_frame' &&
-          frameId === 0
+          _frameId === 0
         )
       ) {
         return;
       }
-
-      setConfig({});
-      setErrorEvents([]);
-      setInstalledModules([]);
-      setPBJSNamespace('');
-      setPrebidAdUnits({});
-      setPrebidAuctionEvents({});
-      setPrebidExists(null);
-      setPrebidNoBids({});
-      setPrebidReceivedBids([]);
-      setPrebidVersionInfo('');
+      initialStateFetched.current = false;
+      setFrameId(0);
+      setNamespace('');
+      setPbjsNamespaces({});
+      setPrebidData({});
     },
     []
   );
@@ -386,20 +375,17 @@ const Provider = ({ children }: PropsWithChildren) => {
   const memoisedValue: PrebidContextType = useMemo(() => {
     return {
       state: {
-        prebidAdUnits,
-        prebidNoBids,
-        versionInfo,
-        installedModules,
-        config,
-        prebidReceivedBids,
-        errorEvents,
-        prebidAuctionEvents,
-        pbjsNamespace,
+        prebidData: prebidData[`${frameId}#${namespace}`],
+        pbjsNamespaces,
         prebidExists,
+        selectedFrameId: frameId,
         debuggingModuleConfig,
         storeRulesInLocalStorage,
+        namespace,
       },
       actions: {
+        setNamespace,
+        setFrameId,
         changeRule,
         addRule,
         handleWriteRulesToStorage,
@@ -409,18 +395,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
-    storeRulesInLocalStorage,
-    debuggingModuleConfig,
-    prebidAdUnits,
-    prebidNoBids,
-    versionInfo,
-    installedModules,
-    config,
-    prebidReceivedBids,
-    errorEvents,
-    prebidAuctionEvents,
-    pbjsNamespace,
+    namespace,
+    pbjsNamespaces,
+    prebidData,
+    frameId,
     prebidExists,
+    debuggingModuleConfig,
+    storeRulesInLocalStorage,
     changeRule,
     addRule,
     handleWriteRulesToStorage,

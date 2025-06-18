@@ -35,7 +35,7 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
     cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
     prebidStore.deinitialiseVariablesForTab(tab.id.toString());
-    prebidStore.initialiseVariablesForNewTab(tab.id.toString());
+    prebidStore.initialiseVariablesForNewTabAndFrame(tab.id.toString(), 0);
 
     PAStore.deinitialiseVariablesForTab(tab.id.toString());
     PAStore.initialiseVariablesForNewTab(tab.id.toString());

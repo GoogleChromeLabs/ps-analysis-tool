@@ -68,7 +68,10 @@ export const onCommittedNavigationListener = async ({
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
 
       prebidStore.deinitialiseVariablesForTab(tabId.toString());
-      prebidStore.initialiseVariablesForNewTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(
+        tabId.toString(),
+        frameId
+      );
 
       if (DataStore.globalIsUsingCDP) {
         PAStore.deinitialiseVariablesForTab(tabId.toString());
@@ -95,7 +98,7 @@ export const onCommittedNavigationListener = async ({
     }
 
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('http'));
 
     await sendMessageWrapper(
       'EXCEEDING_LIMITATION_UPDATE',
