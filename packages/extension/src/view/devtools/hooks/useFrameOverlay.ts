@@ -62,7 +62,7 @@ const useFrameOverlay = (
   );
 
   const { prebidAdUnits } = usePrebid(({ state }) => ({
-    prebidAdUnits: state.prebidData.adUnits,
+    prebidAdUnits: state.prebidData?.adUnits,
   }));
 
   const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
