@@ -51,6 +51,7 @@ import {
   DemosIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
+import { addUTMParams } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -428,7 +429,7 @@ const TABS: SidebarItems = {
         panel: {
           Element: HelpCenter,
           skipPanelDisplay: true,
-          href: 'https://support.google.com/privacysandbox',
+          href: addUTMParams('https://support.google.com/privacysandbox'),
         },
         icon: {
           Element: Help,
@@ -451,7 +452,7 @@ const TABS: SidebarItems = {
         panel: {
           Element: DevSite,
           skipPanelDisplay: true,
-          href: 'https://developers.google.com/privacy-sandbox',
+          href: addUTMParams('https://developers.google.com/privacy-sandbox'),
         },
         icon: {
           Element: DevGuideIcon,

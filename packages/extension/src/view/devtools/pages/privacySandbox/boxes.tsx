@@ -22,6 +22,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
 } from '@google-psat/design-system';
+import { addUTMParams } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -44,7 +45,7 @@ const Boxes = () => {
         Object.keys(tabFrames || {})?.[0] || SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX;
 
       if (url) {
-        chrome.tabs.update({ url });
+        chrome.tabs.update({ url: addUTMParams(url) });
       }
 
       navigateTo(sidebarKey === 'FIRST_COOKIE_TABLE' ? firstFrame : sidebarKey);

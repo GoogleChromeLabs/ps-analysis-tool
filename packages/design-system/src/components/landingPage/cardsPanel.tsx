@@ -18,6 +18,7 @@
  */
 import React, { ComponentType, SVGProps } from 'react';
 import classNames from 'classnames';
+import { addUTMParams } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -67,7 +68,7 @@ const CardsPanel = ({
     navigateTo(sidebarKey);
 
     if (url) {
-      chrome.tabs.update({ url });
+      chrome.tabs.update({ url: addUTMParams(url) });
     }
   };
 
