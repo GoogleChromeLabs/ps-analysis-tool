@@ -16,7 +16,10 @@
 /**
  * External dependencies
  */
-import { noop, type PrebidConfig } from '@google-psat/common';
+import {
+  noop,
+  type PrebidConfig as PrebidConfigType,
+} from '@google-psat/common';
 import {
   Table,
   TableProvider,
@@ -27,7 +30,7 @@ import {
 import { useCallback, useMemo, useState } from 'react';
 
 type PrebidConfigPanelProps = {
-  configObject: Partial<PrebidConfig>;
+  configObject: Partial<PrebidConfigType>;
 };
 const PrebidConfig = ({ configObject }: PrebidConfigPanelProps) => {
   const [selectedKey, setSelectedKey] = useState<string>('');
