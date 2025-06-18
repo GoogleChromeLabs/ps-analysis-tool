@@ -29,9 +29,6 @@ export default defineConfig(() => {
       emptyOutDir: false, // don't empty the output directory, output folder is re-used
       outDir: `../../../../../dist/extension/${page}`,
       minify: !isDev,
-      rollupOptions: {
-        external: ['p5'],
-      },
     },
     plugins: [
       viteStaticCopy({
