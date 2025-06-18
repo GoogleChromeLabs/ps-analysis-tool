@@ -15,7 +15,7 @@
  */
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
-const commonConfig = require('./webpack.shared.cjs');
+const commonConfig = require('./webpack.base.cjs');
 const webpack = require('webpack');
 const WebpackBar = require('webpackbar');
 
@@ -24,7 +24,7 @@ module.exports = {
   target: 'node', // Important for Node.js modules
   externalsPresets: { node: true }, // in order to ignore built-in modules like path, fs, etc.
   output: {
-    path: path.resolve(__dirname, './packages/cli/dist'),
+    path: path.resolve(__dirname, './dist'),
     filename: '[name].js',
   },
   plugins: [

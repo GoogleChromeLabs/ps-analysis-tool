@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = function (api) {
-  const isProduction = api.env('production');
+import { resolve } from 'node:path';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { readdirSync } from 'node:fs';
+import svgr from 'vite-plugin-svgr';
 
-  return {
-    presets: [
-      ['@babel/preset-env'],
-      [
-        '@babel/preset-react',
-        {
-          runtime: 'automatic',
-          development: !isProduction,
-        },
-      ],
-      '@babel/preset-typescript',
-    ],
-    plugins: [
-      ['@babel/plugin-transform-react-jsx', { runtime: 'automatic' }],
-      ['babel-plugin-styled-components'],
-    ],
-    sourceMaps: true,
-  };
-};
+const packagesDir = resolve(__dirname, 'packages');
+const aliases = readdirSync(packagesDir).map((name) => ({
+  find: `@google-psat/${name}`,
+  replacement: resolve(packagesDir, name, 'src'),
+}));
+
+export default defineConfig({
+  plugins: [svgr(), react()],
+  resolve: {
+    alias: aliases,
+  },
+});
