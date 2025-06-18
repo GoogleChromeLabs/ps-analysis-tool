@@ -29,12 +29,14 @@ import ToolsContainer from './tabs/tools';
 import UserIdsContainer from './tabs/userIds';
 import VersionComponent from './tabs/version';
 import { usePrebid } from '../../../../stateProviders';
+import NamespaceTab from './tabs/namespace';
 
 enum PillToggleOptions {
   Config = 'Config',
   Events = 'Events',
   Tools = 'Tools',
   UserId = 'UserId',
+  Namespace = 'Namespace',
   Version = 'Version',
 }
 
@@ -45,10 +47,10 @@ const Panel = () => {
 
   const { config, errorEvents, installedModules, prebidVersion } = usePrebid(
     ({ state }) => ({
-      config: state.config,
-      installedModules: state.installedModules ?? [],
-      prebidVersion: state.versionInfo,
-      errorEvents: state.errorEvents,
+      config: state.prebidData?.config,
+      installedModules: state.prebidData?.installedModules ?? [],
+      prebidVersion: state.prebidData?.versionInfo,
+      errorEvents: state.prebidData?.errorEvents,
     })
   );
 
@@ -69,6 +71,8 @@ const Panel = () => {
         return <UserIdsContainer config={config} />;
       case PillToggleOptions.Version:
         return <VersionComponent prebidVersion={prebidVersion} />;
+      case PillToggleOptions.Namespace:
+        return <NamespaceTab />;
       default:
         return <></>;
     }
@@ -82,7 +86,6 @@ const Panel = () => {
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={false}
-          width="w-24"
         />
       </div>
       <div className="flex-1 overflow-auto text-outer-space-crayola">

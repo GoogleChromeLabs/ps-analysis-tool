@@ -29,7 +29,9 @@ class PrebidStore extends DataStore {
    * This will store the prebid data for each tab
    */
   prebidEvents: {
-    [tabId: string]: PrebidEvents;
+    [tabId: string]: {
+      [frameKey: string]: PrebidEvents;
+    };
   } = {};
 
   constructor() {
@@ -41,9 +43,14 @@ class PrebidStore extends DataStore {
     delete this.prebidEvents[tabId];
   }
 
-  initialiseVariablesForNewTab(tabId: string): void {
+  initialiseVariablesForNewTabAndFrame(tabId: string, frameId: number): void {
     super.initialiseVariablesForNewTab(tabId);
-    this.prebidEvents[tabId] = {
+
+    if (!this.prebidEvents[tabId]) {
+      this.prebidEvents[tabId] = {};
+    }
+
+    this.prebidEvents[tabId][frameId] = {
       prebidExists: false,
       adUnits: {},
       pbjsNamespace: '',
@@ -103,12 +110,20 @@ class PrebidStore extends DataStore {
         return;
       }
 
+      const newData: { [frameKey: string]: PrebidEvents } = {};
+      Object.keys(this.prebidEvents[tabId]).forEach((key) => {
+        const _framekey = key;
+        if (this.prebidEvents[tabId][_framekey].pbjsNamespace) {
+          newData[_framekey] = this.prebidEvents[tabId][_framekey];
+        }
+      });
+
       await chrome.runtime.sendMessage({
         type: PREBID_EVENTS,
         payload: {
           refreshTabData: overrideForInitialSync,
           tabId,
-          prebidEvents: this.prebidEvents[tabId],
+          prebidEvents: newData,
         },
       });
       DataStore.tabs[tabId].newUpdatesPrebid = 0;

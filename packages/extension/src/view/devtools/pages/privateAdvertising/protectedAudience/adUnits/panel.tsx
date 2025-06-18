@@ -17,14 +17,19 @@
 /**
  * External dependencies.
  */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import type {
   AdsAndBiddersType,
   NoBidsType,
+  PrebidEvents,
   PrebidNoBidsType,
   ReceivedBids,
 } from '@google-psat/common';
-import { PillToggle } from '@google-psat/design-system';
+import {
+  PillToggle,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -33,7 +38,7 @@ import EvaluationEnvironment from '../evaluationEnvironment';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import AdMatrix from './adMatrix';
 import AdTable from './adTable';
-import type { PrebidEvents } from '../../../../../../store';
+import { useSettings } from '../../../../stateProviders';
 
 type DummyReceivedBids = Record<string, ReceivedBids[]>;
 
@@ -51,6 +56,7 @@ interface AdUnitsPanelProps {
   setPillToggle: React.Dispatch<React.SetStateAction<string>>;
   highlightOption?: string;
   setHighlightOption?: (value: string) => void;
+  navigateToSettings?: () => void;
 }
 
 const AdUnitsPanel = ({
@@ -67,6 +73,7 @@ const AdUnitsPanel = ({
   setPillToggle,
   highlightOption,
   setHighlightOption,
+  navigateToSettings,
 }: AdUnitsPanelProps) => {
   const adUnitsCount = Object.values(adsAndBidders).length;
   const biddersCount = useMemo(
@@ -83,6 +90,23 @@ const AdUnitsPanel = ({
   );
   const bidsCount = Object.keys(receivedBids ?? {}).length;
   const noBidsCount = Object.keys(noBids).length;
+
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    if (navigateToSettings) {
+      navigateToSettings();
+    } else {
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+    }
+  }, [updateSelectedItemKey, navigateToSettings]);
 
   return (
     <div className="flex flex-col h-full w-full">
@@ -121,6 +145,19 @@ const AdUnitsPanel = ({
               }
             />
           </>
+        ) : !isUsingCDP && pillToggle === 'PAAPI' ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-sm text-raisin-black dark:text-bright-gray">
+              To view ad units, enable PSAT to use CDP via the{' '}
+              <button
+                className="text-bright-navy-blue dark:text-jordy-blue"
+                onClick={cdpNavigation}
+              >
+                Settings Page
+              </button>
+              .
+            </p>
+          </div>
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center">
             <p className="text-lg text-raisin-black dark:text-bright-gray">

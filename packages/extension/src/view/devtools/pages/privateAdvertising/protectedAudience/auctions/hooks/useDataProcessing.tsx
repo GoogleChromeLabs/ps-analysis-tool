@@ -42,10 +42,10 @@ const useDataProcessing = () => {
     prebidNoBids,
     prebidReceivedBids,
   } = usePrebid(({ state }) => ({
-    prebidAdunits: state.prebidAdUnits,
-    prebidAuctionEvents: state.prebidAuctionEvents,
-    prebidReceivedBids: state.prebidReceivedBids,
-    prebidNoBids: state.prebidNoBids,
+    prebidAdunits: state.prebidData?.adUnits,
+    prebidAuctionEvents: state.prebidData?.auctionEvents,
+    prebidReceivedBids: state.prebidData?.receivedBids,
+    prebidNoBids: state.prebidData?.noBids,
   }));
 
   const adUnits = useMemo(() => {
@@ -405,6 +405,10 @@ const useDataProcessing = () => {
     (adUnit: string, time: string) => {
       const auction = Object.entries(prebidAuctionEvents || {}).find(
         ([, events]) => {
+          if (!events?.length || !events[0]?.adUnitCodes?.length) {
+            return false;
+          }
+
           return (
             events[0].adUnitCodes.includes(adUnit) &&
             new Date(events[0].timestamp).toISOString() === time
