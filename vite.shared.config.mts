@@ -30,4 +30,7 @@ export default defineConfig({
   resolve: {
     alias: aliases,
   },
+  build: {
+    chunkSizeWarningLimit: 2000,
+  },
 });

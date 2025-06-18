@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import * as d3 from 'd3';
-import type p5 from 'p5';
+import p5 from 'p5';
 
 /**
  * Internal dependencies.
@@ -204,7 +204,7 @@ const bubbles: Bubbles = {
 
           const speed = bubbles.speedCalculator(distance) || 0;
 
-          const dir = window.p5.Vector.sub(target, p.createVector(x, y));
+          const dir = p5.Vector.sub(target, p.createVector(x, y));
           dir.normalize();
 
           // Only increment the coordinates if the target is not reached.
@@ -388,7 +388,7 @@ const bubbles: Bubbles = {
           }
 
           const speed = bubbles.speedCalculator(distance) || 0;
-          const dir = window.p5.Vector.sub(target, igp.createVector(x, y));
+          const dir = p5.Vector.sub(target, igp.createVector(x, y));
 
           dir.normalize();
 
