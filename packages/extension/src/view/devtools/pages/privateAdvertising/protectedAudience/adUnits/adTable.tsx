@@ -39,10 +39,6 @@ import {
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
 
-/**
- * Internal dependencies
- */
-
 interface AdTableProps {
   adsAndBidders: AdsAndBiddersType;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
