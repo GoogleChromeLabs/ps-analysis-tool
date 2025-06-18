@@ -130,6 +130,8 @@ const preparePrebidTimelineData = (
       adUnitCodes: auctionEnd.adUnitCodes,
     };
   });
+
+  return auctions;
 };
 
 const prepareProtectedAudienceTimelineData = (

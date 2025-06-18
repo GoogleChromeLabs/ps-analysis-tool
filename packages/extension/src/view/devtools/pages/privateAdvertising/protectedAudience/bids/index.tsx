@@ -130,7 +130,7 @@ const Bids = () => {
       return [];
     }
 
-    return prepareTimelineData(paapi.auctionEvents, true);
+    return prepareTimelineData(paapi.auctionEvents, false);
   }, [paapi.auctionEvents, panelPillToggle, prebidAuctionEvents]);
 
   const [zoomLevel, setZoomLevel] = useState<number>(2);
