@@ -162,7 +162,7 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
 
   const tableData = useMemo(
     () =>
-      auctionEvents[1]
+      auctionEvents?.[1]
         .filter((event) => {
           return (
             event.adUnitCode === adUnit ||
@@ -182,9 +182,9 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
     [adUnit, auctionEvents]
   );
 
-  const auctionEndObject = auctionEvents[1].filter(
+  const auctionEndObject = auctionEvents?.[1].filter(
     (event) => event.eventType === 'auctionEnd'
-  )[0];
+  )?.[0];
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
@@ -207,11 +207,11 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
                 <p>Auction Id: {auctionEvents[0]}</p>
                 <p>
                   Start Time:{' '}
-                  {new Date(auctionEvents[1][0].timestamp).toISOString()}
+                  {new Date(auctionEvents?.[1][0].timestamp).toISOString()}
                 </p>
               </div>
               <div className="flex justify-between items-center">
-                <p>Timeout: {auctionEvents[1][0].timeout}ms</p>
+                <p>Timeout: {auctionEvents?.[1][0].timeout}ms</p>
                 <p>
                   Auction Time:{' '}
                   {auctionEndObject?.auctionEnd - auctionEndObject?.timestamp}ms

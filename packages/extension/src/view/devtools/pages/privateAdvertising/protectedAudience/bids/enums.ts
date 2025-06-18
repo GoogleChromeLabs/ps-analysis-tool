@@ -13,19 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Internal dependencies.
- */
-import Panel from '../panel';
-
-interface PaapiBidsPanelProps {
-  storage?: string[];
-  setStorage?: (data: string, index: number) => void;
-  eeAnimatedTab?: boolean;
+export enum BidsPillOptions {
+  ReceivedBids = 'Received Bids',
+  NoBids = 'No Bids',
+  Timeline = 'Timeline',
 }
 
-const PaapiBidsPanel = ({ storage, setStorage }: PaapiBidsPanelProps) => {
-  return <Panel storage={storage} setStorage={setStorage} timelines={{}} />;
-};
-
-export default PaapiBidsPanel;
+export enum PanelOptions {
+  Prebid = 'Prebid',
+  PAAPI = 'PAAPI',
+}

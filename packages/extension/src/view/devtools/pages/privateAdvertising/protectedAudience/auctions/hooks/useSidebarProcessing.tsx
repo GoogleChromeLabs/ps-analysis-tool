@@ -17,7 +17,12 @@
 /**
  * External dependencies.
  */
-import { useTabs, type SidebarItems } from '@google-psat/design-system';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
+  useTabs,
+  type SidebarItems,
+} from '@google-psat/design-system';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
@@ -30,12 +35,20 @@ import PrebidTable from '../prebidTable';
 import AuctionTable from '../components/table';
 
 const useSidebarProcessing = () => {
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
       panel: {
         Element: AdUnits,
-        props: {},
+        props: {
+          navigateToSettings: () => {
+            updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+          },
+        },
       },
       children: {},
       dropdownOpen: true,
@@ -150,6 +163,7 @@ const useSidebarProcessing = () => {
                 auctionEvents: PAData[key].auctionEvents,
                 parentOrigin: PAData[key].parentOrigin,
                 startDate: PAData[key].startDate,
+                updateSelectedItemKey,
               },
             },
             isBlurred: PAData[key].isBlurred,
@@ -165,6 +179,7 @@ const useSidebarProcessing = () => {
                         parentOrigin: childValue.parentOrigin,
                         startDate: childValue.startDate,
                         isBlurred: childValue.isBlurred,
+                        updateSelectedItemKey,
                       },
                     },
                     children: {},
@@ -186,9 +201,13 @@ const useSidebarProcessing = () => {
         };
       });
 
-      newSidebarData.adunits.children = {
-        ...adUnitContainerChildren,
-      };
+      if (adUnits.length === 0) {
+        newSidebarData.adunits.children = {};
+      } else {
+        newSidebarData.adunits.children = {
+          ...adUnitContainerChildren,
+        };
+      }
 
       return newSidebarData;
     });
@@ -204,6 +223,7 @@ const useSidebarProcessing = () => {
     adUnitsWinnerContainerSize,
     getPAData,
     getPrebidData,
+    updateSelectedItemKey,
   ]);
 
   const { storage, setStorage } = useTabs(({ state, actions }) => ({
@@ -218,11 +238,41 @@ const useSidebarProcessing = () => {
     let key = '';
 
     adUnits.forEach((adUnit) => {
-      adUnitsTimestamp[adUnit]?.forEach((timestamp) => {
-        const auctionEvents = getPrebidData(adUnit, timestamp);
+      if (key) {
+        return;
+      }
 
-        if (storageRef.current === auctionEvents?.[0]) {
+      adUnitsTimestamp[adUnit]?.forEach((timestamp) => {
+        if (key) {
+          return;
+        }
+
+        const prebidAuctionEvents = getPrebidData(adUnit, timestamp);
+
+        if (storageRef.current === prebidAuctionEvents?.[0]) {
           key = `${timestamp}||${adUnit} Prebid`;
+        }
+
+        if (key) {
+          return;
+        }
+
+        const paAuctionEvents =
+          Object.values(
+            getPAData(
+              adUnit,
+              timestamp,
+              adUnitsAuctionId?.[adUnit]?.[timestamp] || ''
+            )
+          )?.[0]?.auctionEvents || [];
+
+        if (
+          paAuctionEvents?.length &&
+          storageRef.current === paAuctionEvents?.[0]?.uniqueAuctionId
+        ) {
+          key = `${timestamp}||${
+            adUnitsAuctionId?.[adUnit]?.[timestamp] || ''
+          }||${adUnit}`;
         }
       });
     });
@@ -232,7 +282,14 @@ const useSidebarProcessing = () => {
     });
 
     return key;
-  }, [adUnits, adUnitsTimestamp, getPrebidData, setStorage]);
+  }, [
+    adUnits,
+    adUnitsAuctionId,
+    adUnitsTimestamp,
+    getPAData,
+    getPrebidData,
+    setStorage,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -245,6 +302,7 @@ const useSidebarProcessing = () => {
   return {
     sidebarData,
     defaultSelectedItemKey: defaultSelectedItemKey || 'adunits',
+    hasData: Object.keys(sidebarData.adunits.children).length > 0,
   };
 };
 

@@ -46,7 +46,7 @@ export const getAndParseNetworkCookies = async (tabId: string) => {
           const parsedCookies = parseNetworkCookies(
             cookies,
             dataStore?.getTabUrl(tabId) ?? '',
-            DataStore.cookieDB ?? {},
+            cookieStore.cookieDB ?? {},
             key
           );
           if (parsedCookies.length > 0) {

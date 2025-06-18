@@ -17,7 +17,11 @@
  * External dependencies.
  */
 import React, { useMemo, useState } from 'react';
-import { noop, type AdsAndBiddersType } from '@google-psat/common';
+import {
+  noop,
+  type AdsAndBiddersType,
+  type PrebidEvents,
+} from '@google-psat/common';
 import {
   FrameIcon,
   Hammer,
@@ -41,6 +45,7 @@ interface AdTableProps {
   selectedAdUnit?: string | null;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   isEE?: boolean;
+  auctionEvents?: PrebidEvents['auctionEvents'];
 }
 
 const AdTable = ({
@@ -49,8 +54,33 @@ const AdTable = ({
   selectedAdUnit,
   setIsInspecting,
   isEE,
+  auctionEvents,
 }: AdTableProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
+
+  const adUnitsWithOrtb2Imp = useMemo(() => {
+    const auctionEnd = Object.values(auctionEvents || {})?.[0]?.find(
+      (event) => event.eventType === 'auctionEnd'
+    );
+
+    const adUnitCodes = auctionEnd?.adUnitCodes;
+
+    return adUnitCodes?.reduce(
+      (
+        combinedData: Record<string, any>,
+        adUnitCode: string,
+        index: number
+      ) => {
+        const adUnits = auctionEnd?.adUnits || [];
+
+        return {
+          ...combinedData,
+          [adUnitCode]: adUnits[index].ortb2Imp,
+        };
+      },
+      {} as Record<string, any>
+    );
+  }, [auctionEvents]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -58,23 +88,53 @@ const AdTable = ({
         header: 'Ad Unit Code',
         accessorKey: 'adUnitCode',
         cell: (info) => (
-          <button
-            className={classNames('w-full flex gap-2 items-center', {
-              'cursor-default': Boolean(isEE),
-            })}
-            onClick={() => {
-              if (selectedAdUnit === info) {
-                setSelectedAdUnit?.(null);
-                setIsInspecting?.(false);
-              } else {
-                setIsInspecting?.(true);
-                setSelectedAdUnit?.(info as string);
-              }
-            }}
-          >
-            <FrameIcon className="fill-[#1A73E8] min-w-5 min-h-5" />
-            <p className="truncate">{info}</p>
-          </button>
+          <div className="flex flex-col gap-2">
+            <button
+              className={classNames(
+                'w-fit flex gap-2 hover:opacity-70 active:opacity-50',
+                {
+                  'cursor-default': Boolean(isEE),
+                }
+              )}
+              onClick={() => {
+                if (selectedAdUnit === info) {
+                  setSelectedAdUnit?.(null);
+                  setIsInspecting?.(false);
+                } else {
+                  setIsInspecting?.(true);
+                  setSelectedAdUnit?.(info as string);
+                }
+              }}
+            >
+              <FrameIcon className="fill-[#1A73E8] min-w-5 min-h-5" />
+              <p className="truncate">{info}</p>
+            </button>
+            {adUnitsWithOrtb2Imp?.[info as string] && (
+              <div className="flex gap-2 items-center">
+                Ortb2Imp:{' '}
+                <button
+                  className="border border-gray-400 dark:border-dark-gray-x11 rounded-xl px-2 py-0.5 text-xs hover:opacity-70 active:opacity-50"
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    if (adUnitsWithOrtb2Imp?.[info as string]) {
+                      setSelectedRow?.(
+                        Object.values(
+                          adUnitsWithOrtb2Imp[info as string]
+                        )[0] as any
+                      );
+                    }
+                  }}
+                >
+                  {
+                    Object.keys(
+                      adUnitsWithOrtb2Imp?.[info as string] || {}
+                    )?.[0]
+                  }
+                </button>
+              </div>
+            )}
+          </div>
         ),
         enableHiding: false,
       },
@@ -135,34 +195,49 @@ const AdTable = ({
 
           return (
             <div className="flex flex-wrap gap-2 p-1 overflow-auto h-full w-full">
-              {(info as string[])?.map((bidder: string, idx: number) => (
-                <div key={idx}>
-                  {
-                    <div
-                      className={classNames(
-                        'h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1',
-                        {
-                          'border-gray-400 dark:border-dark-gray-x11':
-                            bidder !== winningBidder,
-                          'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
-                            bidder === winningBidder,
-                        }
-                      )}
-                    >
-                      {bidder === winningBidder && (
-                        <Hammer className="h-4 w-4" />
-                      )}
-                      {bidder}
-                      {bidder === winningBidder && (
-                        <span className="text-xxxhs text-[#5AAD6A] font-bold">
-                          {' '}
-                          ({winningBid} {bidCurrency})
-                        </span>
-                      )}
-                    </div>
-                  }
-                </div>
-              ))}
+              {(info as string[])?.map((bidder: string, idx: number) => {
+                const selectedBidder = Object.values(
+                  auctionEvents || {}
+                )?.[0]?.filter((event) => {
+                  return (
+                    event.eventType === 'bidRequested' &&
+                    event.bidderCode === bidder
+                  );
+                });
+
+                return (
+                  <div
+                    key={idx}
+                    className={classNames(
+                      'h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1',
+                      {
+                        'border-gray-400 dark:border-dark-gray-x11':
+                          bidder !== winningBidder,
+                        'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
+                          bidder === winningBidder,
+                        'cursor-pointer hover:opacity-70 active:opacity-50':
+                          selectedBidder?.[0],
+                      }
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      if (selectedBidder.length) {
+                        setSelectedRow?.(selectedBidder[0]);
+                      }
+                    }}
+                  >
+                    {bidder === winningBidder && <Hammer className="h-4 w-4" />}
+                    {bidder}
+                    {bidder === winningBidder && (
+                      <span className="text-xxxhs text-[#5AAD6A] font-bold">
+                        {' '}
+                        ({Number(winningBid).toFixed(2)} {bidCurrency})
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           );
         },
@@ -174,7 +249,14 @@ const AdTable = ({
         },
       },
     ],
-    [selectedAdUnit, setIsInspecting, setSelectedAdUnit, isEE]
+    [
+      isEE,
+      adUnitsWithOrtb2Imp,
+      selectedAdUnit,
+      setSelectedAdUnit,
+      setIsInspecting,
+      auctionEvents,
+    ]
   );
 
   const tableFilters = useMemo<TableFilter>(

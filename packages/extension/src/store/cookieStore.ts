@@ -40,7 +40,7 @@ class CookieStore extends DataStore {
   /**
    * CookieDatabase to run analytics match on.
    */
-  protected cookieDB: CookieDatabase | null = null;
+  cookieDB: CookieDatabase | null = null;
 
   /**
    * This variable stores the unParsedRequest headers received from Network.requestWillBeSentExtraInfo.

@@ -49,9 +49,16 @@ const Panel = () => {
     auctionEvents: state.auctionEvents ?? {},
   }));
 
-  const { prebidAdunits, prebidAuctionEvents } = usePrebid(({ state }) => ({
+  const {
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidReceivedBids,
+    prebidNoBids,
+  } = usePrebid(({ state }) => ({
     prebidAdunits: state.prebidData?.adUnits,
     prebidAuctionEvents: state.prebidData?.auctionEvents,
+    prebidReceivedBids: state.prebidData?.receivedBids,
+    prebidNoBids: state.prebidData?.noBids,
   }));
 
   const data = useRef<{
@@ -62,8 +69,11 @@ const Panel = () => {
     auctionEvents?: typeof auctionEvents;
     prebidAdunits?: typeof prebidAdunits;
     prebidAuctionEvents?: typeof prebidAuctionEvents;
+    prebidReceivedBids?: typeof prebidReceivedBids;
+    prebidNoBids?: typeof prebidNoBids;
   } | null>(null);
 
+  // eslint-disable-next-line complexity
   useEffect(() => {
     let store = data.current;
 
@@ -148,14 +158,36 @@ const Panel = () => {
       };
     }
 
-    if (!isEqual(data.current?.auctionEvents, auctionEvents)) {
-      if (Object.keys(auctionEvents || {}).length > 0) {
+    if (!isEqual(data.current?.prebidAuctionEvents, prebidAuctionEvents)) {
+      if (Object.keys(prebidAuctionEvents || {}).length > 0) {
         highlightTab(5);
       }
 
       store = {
         ...store,
         auctionEvents,
+      };
+    }
+
+    if (!isEqual(data.current?.prebidReceivedBids, prebidReceivedBids)) {
+      if (prebidReceivedBids?.length) {
+        highlightTab(6);
+      }
+
+      store = {
+        ...store,
+        prebidReceivedBids,
+      };
+    }
+
+    if (!isEqual(data.current?.prebidNoBids, prebidNoBids)) {
+      if (Object.keys(prebidNoBids || {}).length > 0) {
+        highlightTab(6);
+      }
+
+      store = {
+        ...store,
+        prebidNoBids,
       };
     }
 
@@ -169,6 +201,8 @@ const Panel = () => {
     receivedBids,
     prebidAdunits,
     prebidAuctionEvents,
+    prebidReceivedBids,
+    prebidNoBids,
   ]);
 
   useEffect(() => {
