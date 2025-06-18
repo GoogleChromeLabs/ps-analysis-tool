@@ -103,6 +103,26 @@ const Timeline = ({
     }
   }, [containerRef, bidders, auctionTimeout]);
 
+  useEffect(() => {
+    const _zoom = zoomLevel < 1 ? 1 : zoomLevel;
+    setZoom(_zoom);
+    setTimeoutBlockWidth(scrollWidth - auctionTimeout * _zoom);
+  }, [scrollWidth, auctionTimeout, zoomLevel]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setAnimate(true);
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setScrollWidth(containerRef.current.scrollWidth);
+    }
+  }, [containerRef, bidders, auctionTimeout]);
+
   return (
     <div className="mb-4">
       <header className="flex justify-between text-sm dark:text-bright-gray font-semibold">

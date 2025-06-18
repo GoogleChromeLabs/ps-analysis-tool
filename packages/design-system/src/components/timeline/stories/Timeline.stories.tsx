@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   render: () => {
-    const auctions: TimelineProps = prepareTimelineData(prebidResponse);
+    const auctions: TimelineProps = prepareTimelineData(prebidResponse, true);
 
     return (
       <>
