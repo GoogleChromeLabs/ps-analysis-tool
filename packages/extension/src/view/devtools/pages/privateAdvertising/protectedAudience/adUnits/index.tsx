@@ -28,7 +28,11 @@ import {
 } from '../../../../stateProviders';
 import Panel from './panel';
 
-const AdUnits = () => {
+interface AdUnitsProps {
+  navigateToSettings?: () => void;
+}
+
+const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
   const { paapi, selectedAdUnit, setSelectedAdUnit } = useProtectedAudience(
     ({ state, actions }) => ({
       paapi: {
@@ -120,6 +124,7 @@ const AdUnits = () => {
       setPillToggle={setPillToggle}
       highlightOption={highlightOption}
       setHighlightOption={setHighlightOption}
+      navigateToSettings={navigateToSettings}
     />
   );
 };

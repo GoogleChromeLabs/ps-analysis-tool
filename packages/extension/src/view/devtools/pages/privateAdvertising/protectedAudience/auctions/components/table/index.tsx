@@ -26,7 +26,6 @@ import {
   type TableRow,
   type InfoType,
   ResizableTray,
-  useSidebar,
   SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 
@@ -40,12 +39,14 @@ interface AuctionTableProps {
   auctionEvents: singleAuctionEvent[];
   parentOrigin?: string;
   startDate?: string;
+  updateSelectedItemKey?: (key: string) => void;
 }
 
 const AuctionTable = ({
   auctionEvents,
   parentOrigin = '',
   startDate = '',
+  updateSelectedItemKey = noop,
 }: AuctionTableProps) => {
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
     null
@@ -163,10 +164,6 @@ const AuctionTable = ({
     }),
     []
   );
-
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
 
   const { isUsingCDP } = useSettings(({ state }) => ({
     isUsingCDP: state.isUsingCDP,

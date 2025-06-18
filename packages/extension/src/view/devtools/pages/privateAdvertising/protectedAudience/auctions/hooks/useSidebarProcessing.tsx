@@ -17,7 +17,12 @@
 /**
  * External dependencies.
  */
-import { useTabs, type SidebarItems } from '@google-psat/design-system';
+import {
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
+  useTabs,
+  type SidebarItems,
+} from '@google-psat/design-system';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
@@ -30,12 +35,20 @@ import PrebidTable from '../prebidTable';
 import AuctionTable from '../components/table';
 
 const useSidebarProcessing = () => {
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
       title: 'Ad Units',
       panel: {
         Element: AdUnits,
-        props: {},
+        props: {
+          navigateToSettings: () => {
+            updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+          },
+        },
       },
       children: {},
       dropdownOpen: true,
@@ -150,6 +163,7 @@ const useSidebarProcessing = () => {
                 auctionEvents: PAData[key].auctionEvents,
                 parentOrigin: PAData[key].parentOrigin,
                 startDate: PAData[key].startDate,
+                updateSelectedItemKey,
               },
             },
             isBlurred: PAData[key].isBlurred,
@@ -165,6 +179,7 @@ const useSidebarProcessing = () => {
                         parentOrigin: childValue.parentOrigin,
                         startDate: childValue.startDate,
                         isBlurred: childValue.isBlurred,
+                        updateSelectedItemKey,
                       },
                     },
                     children: {},
@@ -208,6 +223,7 @@ const useSidebarProcessing = () => {
     adUnitsWinnerContainerSize,
     getPAData,
     getPrebidData,
+    updateSelectedItemKey,
   ]);
 
   const { storage, setStorage } = useTabs(({ state, actions }) => ({

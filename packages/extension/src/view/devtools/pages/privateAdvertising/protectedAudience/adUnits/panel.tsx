@@ -56,6 +56,7 @@ interface AdUnitsPanelProps {
   setPillToggle: React.Dispatch<React.SetStateAction<string>>;
   highlightOption?: string;
   setHighlightOption?: (value: string) => void;
+  navigateToSettings?: () => void;
 }
 
 const AdUnitsPanel = ({
@@ -72,6 +73,7 @@ const AdUnitsPanel = ({
   setPillToggle,
   highlightOption,
   setHighlightOption,
+  navigateToSettings,
 }: AdUnitsPanelProps) => {
   const adUnitsCount = Object.values(adsAndBidders).length;
   const biddersCount = useMemo(
@@ -99,8 +101,12 @@ const AdUnitsPanel = ({
 
   const cdpNavigation = useCallback(() => {
     document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
-    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-  }, [updateSelectedItemKey]);
+    if (navigateToSettings) {
+      navigateToSettings();
+    } else {
+      updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+    }
+  }, [updateSelectedItemKey, navigateToSettings]);
 
   return (
     <div className="flex flex-col h-full w-full">
