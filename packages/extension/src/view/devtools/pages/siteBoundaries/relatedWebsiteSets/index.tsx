@@ -41,13 +41,17 @@ const RelatedWebsiteSets = () => {
             Element: InfoCard,
             props: {
               infoKey: PSInfoKey.RelatedWebsiteSets,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
             },
+            className: 'p-4',
           },
         },
         {
           title: 'JSON Generator',
           content: {
             Element: RWSJsonGenerator,
+            className: 'p-4',
           },
         },
       ],
@@ -56,6 +60,7 @@ const RelatedWebsiteSets = () => {
           title: 'Membership',
           content: {
             Element: Insights,
+            className: 'p-4',
           },
         },
       ],

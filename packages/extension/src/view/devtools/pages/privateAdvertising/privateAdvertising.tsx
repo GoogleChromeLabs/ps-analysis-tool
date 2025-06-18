@@ -30,7 +30,7 @@ const PrivateAdvertising = () => {
   return (
     <LandingPageContainer
       title={I18n.getMessage('privateAdvertising')}
-      extraClasses="min-h-[78vh] w-full"
+      extraClasses="w-full p-4"
       contentPanelTitle={I18n.getMessage('privateAdvertisingDescription')}
       content={PRIVATE_ADVERTISING_CONTENT}
       titleStyles="text-blue-600"

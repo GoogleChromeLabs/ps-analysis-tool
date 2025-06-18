@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies.
- */
-import React from 'react';
-import {
-  InfoCard as InfoCardTemplate,
-  QuickLinksList,
-  type PSInfoKeyType,
-} from '@google-psat/design-system';
+import { mergeConfig } from 'vite';
+import path from 'path';
 
-const Overview = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
-  return (
-    <>
-      <InfoCardTemplate infoKey={infoKey} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </>
-  );
-};
+import baseConfig from './vite.shared.config.mjs';
 
-export default Overview;
+export default mergeConfig(baseConfig, {
+  root: path.resolve(__dirname, 'packages/explorable-explanations'),
+  build: {
+    emptyOutDir: true,
+    outDir: './dist',
+    rollupOptions: {
+      input: {
+        index: './src/index.ts',
+      },
+      output: {
+        entryFileNames: 'index.js',
+      },
+    },
+  },
+  define: {
+    'process.env.IS_RUNNING_STANDALONE': JSON.stringify(true),
+  },
+});

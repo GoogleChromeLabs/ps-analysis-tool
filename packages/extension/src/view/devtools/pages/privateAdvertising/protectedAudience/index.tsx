@@ -18,6 +18,7 @@
  */
 import React, { useMemo } from 'react';
 import {
+  InfoCard,
   PSInfoKey,
   TabsProvider,
   type TabItems,
@@ -33,7 +34,6 @@ import Panel from './panel';
 import AdUnits from './adUnits';
 import ExplorableExplanation from './explorableExplanation';
 import WorkletBreakpoints from './workletBreakpoints';
-import Overview from './overview';
 import Prebid from './prebid';
 
 const ProtectedAudience = () => {
@@ -43,9 +43,11 @@ const ProtectedAudience = () => {
         {
           title: 'Overview',
           content: {
-            Element: Overview,
+            Element: InfoCard,
             props: {
               infoKey: PSInfoKey.ProtectedAudience,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
             },
             className: 'p-4',
           },
@@ -54,7 +56,8 @@ const ProtectedAudience = () => {
           title: 'Explorable Explanation',
           content: {
             Element: ExplorableExplanation,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
@@ -69,34 +72,40 @@ const ProtectedAudience = () => {
           title: 'Interest Groups',
           content: {
             Element: InterestGroups,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Ad Units',
           content: {
             Element: AdUnits,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Auctions',
           content: {
             Element: Auctions,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Bids',
           content: {
             Element: Bids,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
           },
         },
         {
           title: 'Prebid Extras',
           content: {
             Element: Prebid,
+            className: 'h-full',
+            containerClassName: 'h-full',
           },
         },
       ],

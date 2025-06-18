@@ -59,7 +59,7 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
       updateSelectedItemKey(sidebarItemKey);
     }
     if (url) {
-      chrome.tabs.update({ url });
+      chrome.tabs.update({ url: addUTMParams(url) });
     }
   };
 

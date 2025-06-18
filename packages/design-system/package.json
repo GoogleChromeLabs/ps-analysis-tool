@@ -2,6 +2,7 @@
   "name": "@google-psat/design-system",
   "version": "0.14.1",
   "description": "A package for presentational components that are being used in multiple packages",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
   "source": "src/index.ts",
@@ -52,6 +53,7 @@
     "re-resizable": "^6.11.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "use-context-selector": "^1.4.1"
+    "use-context-selector": "^1.4.1",
+    "victory": "^36.6.11"
   }
 }
