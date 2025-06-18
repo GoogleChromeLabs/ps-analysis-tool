@@ -18,6 +18,7 @@
  */
 import * as d3 from 'd3';
 import Queue from 'queue';
+import p5 from '../p5';
 
 /**
  * Internal dependencies.
@@ -873,11 +874,11 @@ app.createCanvas = () => {
   if (process.env.IS_RUNNING_STANDALONE) {
     app.handleControls();
     // eslint-disable-next-line no-new
-    new window.p5(sketch);
+    new p5(sketch);
     // eslint-disable-next-line no-new
-    new window.p5(interestGroupSketch);
+    new p5(interestGroupSketch);
     // eslint-disable-next-line no-new
-    new window.p5(userSketch);
+    new p5(userSketch);
   }
 };
 
