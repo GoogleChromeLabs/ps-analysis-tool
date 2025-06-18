@@ -17,12 +17,14 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   FrameIcon,
   MoneyIcon,
   PillToggle,
   ScreenIcon,
+  SIDEBAR_ITEMS_KEYS,
+  useSidebar,
 } from '@google-psat/design-system';
 
 /**
@@ -30,6 +32,7 @@ import {
  */
 import Tile from './tile';
 import Matrix from './matrix';
+import { useSettings } from '../../../../../../stateProviders';
 
 interface PanelProps {
   adunit: string;
@@ -41,12 +44,12 @@ interface PanelProps {
   isInspecting?: boolean;
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
-  setStorage?: (data: string, index?: number) => void;
-  setActiveTab?: (tab: number) => void;
   winnerBid?: string | null;
   winningMediaContainer?: number[];
   pillToggle: string;
   setPillToggle: React.Dispatch<React.SetStateAction<string>>;
+  highlightOption?: string;
+  setHighlightOption?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Panel = ({
@@ -59,19 +62,19 @@ const Panel = ({
   isInspecting,
   setIsInspecting,
   setSelectedAdUnit,
-  setStorage,
-  setActiveTab,
   winnerBid = null,
   winningMediaContainer = [],
   pillToggle,
   setPillToggle,
+  highlightOption,
+  setHighlightOption,
 }: PanelProps) => {
   const items = useMemo(
     () => [
       {
         name: 'Ad Unit Code',
         Icon: FrameIcon,
-        buttons: [
+        pills: [
           {
             name: adunit,
             onClick: () => {
@@ -89,7 +92,7 @@ const Panel = ({
       {
         name: 'Ad Container Sizes',
         Icon: ScreenIcon,
-        buttons: [
+        pills: [
           ...(mediaContainerSize || [])
             .filter(
               (size) =>
@@ -112,18 +115,9 @@ const Panel = ({
       {
         name: 'Bidders',
         Icon: MoneyIcon,
-        buttons: [
+        pills: [
           ...(bidders || []).map((bidder) => ({
             name: bidder,
-            onClick: () => {
-              setStorage?.(
-                JSON.stringify({
-                  bidder,
-                  adUnitCode: adunit,
-                })
-              );
-              setActiveTab?.(5);
-            },
             className:
               winnerBid === bidder
                 ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
@@ -141,8 +135,6 @@ const Panel = ({
       setSelectedAdUnit,
       winningMediaContainer,
       winnerBid,
-      setStorage,
-      setActiveTab,
     ]
   );
 
@@ -153,6 +145,19 @@ const Panel = ({
     };
   }, [setIsInspecting, setSelectedAdUnit, adunit]);
 
+  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
+    updateSelectedItemKey: actions.updateSelectedItemKey,
+  }));
+
+  const { isUsingCDP } = useSettings(({ state }) => ({
+    isUsingCDP: state.isUsingCDP,
+  }));
+
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+  }, [updateSelectedItemKey]);
+
   return (
     <div className="flex flex-col h-full w-full ">
       <div className="p-4">
@@ -161,18 +166,45 @@ const Panel = ({
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={false}
+          highlightOption={highlightOption}
+          setHighlightOption={setHighlightOption}
         />
       </div>
-      <Matrix
-        biddersCount={biddersCount}
-        bidsCount={bidsCount}
-        noBidsCount={noBidsCount}
-      />
-      <div className="p-4 flex gap-4 flex-wrap">
-        {items.map((item) => (
-          <Tile key={item.name} item={item} />
-        ))}
-      </div>
+      {biddersCount === 0 ? (
+        !isUsingCDP && pillToggle === 'PAAPI' ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-sm text-raisin-black dark:text-bright-gray">
+              To view ad units, enable PSAT to use CDP via the{' '}
+              <button
+                className="text-bright-navy-blue dark:text-jordy-blue"
+                onClick={cdpNavigation}
+              >
+                Settings Page
+              </button>
+              .
+            </p>
+          </div>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-sm text-raisin-black dark:text-bright-gray">
+              No data available for this ad unit.
+            </p>
+          </div>
+        )
+      ) : (
+        <>
+          <Matrix
+            biddersCount={biddersCount}
+            bidsCount={bidsCount}
+            noBidsCount={noBidsCount}
+          />
+          <div className="p-4 flex gap-4 flex-wrap">
+            {items.map((item) => (
+              <Tile key={item.name} item={item} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -16,8 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -26,11 +25,14 @@ import {
   useCookie,
   usePrebid,
   useProtectedAudience,
-  useSettings,
 } from '../../../../stateProviders';
 import Panel from './panel';
 
-const AdUnits = () => {
+interface AdUnitsProps {
+  navigateToSettings?: () => void;
+}
+
+const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
   const { paapi, selectedAdUnit, setSelectedAdUnit } = useProtectedAudience(
     ({ state, actions }) => ({
       paapi: {
@@ -60,19 +62,11 @@ const AdUnits = () => {
     setIsInspecting: actions.setIsInspecting,
   }));
 
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
   useEffect(() => {
     return () => {
       setIsInspecting(false);
     };
   }, [setIsInspecting]);
-
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
 
   useEffect(() => {
     return () => {
@@ -81,6 +75,13 @@ const AdUnits = () => {
   }, [setSelectedAdUnit]);
 
   const [pillToggle, setPillToggle] = useState('Prebid');
+  const [highlightOption, setHighlightOption] = useState<string>();
+
+  useEffect(() => {
+    if (paapi.adsAndBidders && Object.keys(paapi.adsAndBidders).length > 0) {
+      setHighlightOption('PAAPI');
+    }
+  }, [paapi.adsAndBidders]);
 
   const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
     if (pillToggle === 'Prebid') {
@@ -110,28 +111,6 @@ const AdUnits = () => {
     prebidReceivedBids,
   ]);
 
-  const cdpNavigation = useCallback(() => {
-    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
-    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-  }, [updateSelectedItemKey]);
-
-  if (!isUsingCDP) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view ad units, enable PSAT to use CDP via the{' '}
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={cdpNavigation}
-          >
-            Settings Page
-          </button>
-          .
-        </p>
-      </div>
-    );
-  }
-
   return (
     <Panel
       adsAndBidders={adsAndBidders}
@@ -143,6 +122,9 @@ const AdUnits = () => {
       auctionEvents={auctionEvents ?? {}}
       pillToggle={pillToggle}
       setPillToggle={setPillToggle}
+      highlightOption={highlightOption}
+      setHighlightOption={setHighlightOption}
+      navigateToSettings={navigateToSettings}
     />
   );
 };
