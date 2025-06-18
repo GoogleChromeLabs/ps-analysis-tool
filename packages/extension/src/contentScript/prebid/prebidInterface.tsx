@@ -351,25 +351,42 @@ class PrebidInterface {
         }
       });
 
-    if (!isEqual(calculatedErrorEvents, this.prebidData.errorEvents)) {
+    if (
+      !isEqual(
+        JSON.parse(decycle(calculatedErrorEvents)),
+        this.prebidData.errorEvents
+      )
+    ) {
       this.prebidData.errorEvents = structuredClone(
         JSON.parse(decycle(calculatedErrorEvents))
       );
       this.updateCounter += 1;
     }
-    if (!isEqual(calculatedNoBids, this.prebidData.noBids)) {
+    if (
+      !isEqual(JSON.parse(decycle(calculatedNoBids)), this.prebidData.noBids)
+    ) {
       this.prebidData.noBids = structuredClone(
         JSON.parse(decycle(calculatedNoBids))
       );
       this.updateCounter += 1;
     }
-    if (!isEqual(calculatedReceivedBids, this.prebidData.receivedBids)) {
+    if (
+      !isEqual(
+        JSON.parse(decycle(calculatedReceivedBids)),
+        this.prebidData.receivedBids
+      )
+    ) {
       this.prebidData.receivedBids = structuredClone(
         JSON.parse(decycle(calculatedReceivedBids))
       );
       this.updateCounter += 1;
     }
-    if (!isEqual(calculatedEvents, this.prebidData.auctionEvents)) {
+    if (
+      !isEqual(
+        JSON.parse(decycle(calculatedEvents)),
+        this.prebidData.auctionEvents
+      )
+    ) {
       this.prebidData.auctionEvents = structuredClone(
         JSON.parse(decycle(calculatedEvents))
       );
