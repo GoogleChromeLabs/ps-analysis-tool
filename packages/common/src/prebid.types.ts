@@ -31,17 +31,19 @@ export type PrebidAuctionEventType =
     eventType: string;
   };
 
+export type ErrorEventType = {
+  type: PrebidWarningTypes;
+  message: string[];
+  time: string;
+};
+
 export type PrebidEvents = {
   prebidExists: boolean | null;
   adUnits: AdsAndBiddersType;
   noBids: PrebidNoBidsType;
   versionInfo: string;
   receivedBids: ReceivedBids[];
-  errorEvents: {
-    type: PrebidWarningTypes;
-    message: string[];
-    time: string;
-  }[];
+  errorEvents: ErrorEventType[];
   auctionEvents: { [auctionId: string]: PrebidAuctionEventType[] };
   installedModules: string[];
   config: PrebidConfig;

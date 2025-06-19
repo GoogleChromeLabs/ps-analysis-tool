@@ -65,6 +65,10 @@ const AdTable = ({
 
     const adUnitCodes = auctionEnd?.adUnitCodes;
 
+    if (!adUnitCodes) {
+      return {};
+    }
+
     return adUnitCodes?.reduce(
       (
         combinedData: Record<string, any>,

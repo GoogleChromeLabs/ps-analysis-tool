@@ -161,9 +161,16 @@ export interface BidWonEvent {
   renderer?: any;
   native?: any;
 }
-
+export interface AuctionInitEvent {
+  auctionId: string;
+  timestamp: number;
+  timeout: number;
+  adUnits: AdUnit[];
+  auctionStatus: 'inProgress' | 'completed';
+  labels?: string[];
+}
 export interface PrebidEventDataMap {
-  auctionInit: { auctionId: string; timestamp: number };
+  auctionInit: AuctionInitEvent;
   auctionEnd: AuctionEndEvent;
   bidRequested: BidRequestedEvent;
   bidResponse: BidResponse;

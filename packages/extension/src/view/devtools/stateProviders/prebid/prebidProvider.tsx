@@ -260,20 +260,18 @@ const Provider = ({ children }: PropsWithChildren) => {
           const frames = await chrome.webNavigation.getAllFrames({ tabId });
           setPrebidData((prev) => {
             const newData = message.payload.prebidEvents;
-            const constructedData = prev;
             let updated = false;
 
             Object.keys(newData).forEach((key) => {
               if (!isEqual(prev[key], newData[key])) {
                 const _frameId = Number(key.split('#')[0]);
                 if (frames?.find((frame) => frame.frameId === _frameId)) {
-                  constructedData[key] = newData[key];
                   updated = true;
                 }
               }
             });
 
-            return updated ? constructedData : prev;
+            return updated ? newData : prev;
           });
 
           const _pbjsNamespaces: {
@@ -310,11 +308,15 @@ const Provider = ({ children }: PropsWithChildren) => {
             });
           });
 
+          const defaultFrame = Number(Object.keys(_pbjsNamespaces)[0]);
+          if (!_pbjsNamespaces || !_pbjsNamespaces[defaultFrame]) {
+            return;
+          }
+
           setPbjsNamespaces((prev) => {
             return isEqual(_pbjsNamespaces, prev) ? prev : _pbjsNamespaces;
           });
 
-          const defaultFrame = Number(Object.keys(_pbjsNamespaces)[0]);
           const { frameId: _frameId, namespace: _pbjsNamespace } =
             _pbjsNamespaces[defaultFrame].namespaces[0];
 

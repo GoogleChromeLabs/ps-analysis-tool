@@ -20,6 +20,7 @@
 import React, { useCallback, useMemo } from 'react';
 import type {
   AdsAndBiddersType,
+  AuctionEventsType,
   NoBidsType,
   PrebidEvents,
   PrebidNoBidsType,
@@ -35,7 +36,6 @@ import {
  * Internal dependencies.
  */
 import EvaluationEnvironment from '../evaluationEnvironment';
-import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import AdMatrix from './adMatrix';
 import AdTable from './adTable';
 import { useSettings } from '../../../../stateProviders';
