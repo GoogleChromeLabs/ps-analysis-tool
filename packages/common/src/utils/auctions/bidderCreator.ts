@@ -138,7 +138,7 @@ export function formTimedOutBids(
 ) {
   const bid = timedOutBids.find(
     (_bid) =>
-      _bid.auctionId === bidderRequest?.auctionId &&
+      _bid?.auctionId === bidderRequest?.auctionId &&
       _bid.bidder === bidderRequest.bidder
   );
 
