@@ -45,7 +45,7 @@ const NamespaceTab = () => {
           <Dropdown
             options={Object.keys(pbjsNamespaces).map((frameId) => {
               return {
-                label: pbjsNamespaces[Number(frameId)].host,
+                label: pbjsNamespaces[Number(frameId)]?.host,
                 value: frameId,
               };
             })}
@@ -53,7 +53,7 @@ const NamespaceTab = () => {
             onChange={(value) => {
               const _frameId = Number(value);
               const defaultNamespace =
-                pbjsNamespaces[_frameId].namespaces[0].namespace;
+                pbjsNamespaces[_frameId]?.namespaces[0]?.namespace;
 
               setFrameId(Number(_frameId));
               setNamespace(defaultNamespace);
@@ -62,7 +62,7 @@ const NamespaceTab = () => {
         </div>
         <div className="w-max">
           <Dropdown
-            options={pbjsNamespaces[selectedFrameId].namespaces.map(
+            options={pbjsNamespaces[selectedFrameId]?.namespaces.map(
               (_namespace) => {
                 return {
                   label: _namespace.namespace,
