@@ -86,7 +86,7 @@ const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
 
   const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
     if (pillToggle === 'Prebid') {
-      const processedNobids = Object.entries(prebidNoBids).reduce(
+      const processedNobids = Object.entries(prebidNoBids ?? {}).reduce(
         (acc, [key, value]) => {
           value?.bidder.forEach(
             (bid) =>

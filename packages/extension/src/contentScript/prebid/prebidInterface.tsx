@@ -247,7 +247,7 @@ class PrebidInterface {
             calculatedErrorEvents.push({
               type: args.type,
               message: args.arguments,
-              time: `${elapsedTime}ms`,
+              time: `${Math.round(elapsedTime)}ms`,
             });
             break;
           case 'bidRequested':
@@ -269,9 +269,10 @@ class PrebidInterface {
               bidCurrency: args.currency,
               uniqueAuctionId: args.auctionId,
               index: calculatedReceivedBids.length,
-              bid: args.price,
+              bid: args.price ?? args.cpm,
               ownerOrigin: args.bidder,
               time: args.responseTimestamp ?? Date.now(),
+              mediaContainerSize: [[args.width, args.height]],
               formattedTime: new Date(
                 args.responseTimestamp ?? Date.now()
               ).toISOString(),

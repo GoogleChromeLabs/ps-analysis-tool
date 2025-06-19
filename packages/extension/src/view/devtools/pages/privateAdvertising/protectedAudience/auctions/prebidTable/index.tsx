@@ -93,7 +93,8 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
       {
         header: 'Bid CPM',
         accessorKey: 'cpm',
-        cell: (info) => (info ? Number(info).toFixed(2) : ''),
+        cell: (info) =>
+          typeof info !== 'undefined' ? Number(info).toFixed(2) : '',
       },
       {
         header: 'Bid Currency',
@@ -176,6 +177,7 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
           );
         })
         .map((event, index) => ({
+          bidderCode: event?.bidder ?? '',
           ...event,
           index,
         })),

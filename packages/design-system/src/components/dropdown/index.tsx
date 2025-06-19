@@ -42,7 +42,7 @@ const Dropdown = ({
   return (
     <select
       ref={ref}
-      className="border border-hex-gray dark:border-quartz rounded px-5 w-max py-2 w-full text-sm text-raisin-black dark:text-bright-gray"
+      className="border border-hex-gray dark:border-quartz rounded px-5 w-max py-2 text-sm text-raisin-black dark:text-bright-gray"
       value={value}
       onChange={(e) => onChange(e.target.value)}
     >
