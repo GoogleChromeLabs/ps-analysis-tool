@@ -119,7 +119,7 @@ const Bids = () => {
     return prepareTimelineData(paapi.auctionEvents, false);
   }, [paapi.auctionEvents, panelPillToggle, prebidAuctionEvents]);
 
-  const [zoomLevel, setZoomLevel] = useState<number>(2);
+  const [zoomLevel, setZoomLevel] = useState(1.5);
 
   return (
     <div className="flex flex-col pt-4 h-full w-full">
@@ -158,9 +158,9 @@ const Bids = () => {
                   setZoomLevel(step);
                 }}
                 label="Zoom"
-                min={1}
-                max={4}
-                step={1}
+                min={0.5}
+                max={2.5}
+                step={0.5}
               />
             </div>
           )}
