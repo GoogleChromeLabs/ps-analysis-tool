@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "prebuild": "rimraf ../../dist/extension",
-    "dev": "npm run dev:scripts && npm run dev:popup && npm run dev:report && npm run dev:devtools",
+    "dev": "run-p dev:scripts dev:popup dev:report dev:devtools",
     "build": "npm run build:scripts && npm run build:popup && npm run build:report && npm run build:devtools",
     "dev:scripts": "cross-env NODE_NO_WARNINGS=1 NODE_ENV=development npm run build:scripts",
     "build:scripts": "node --loader ts-node/esm ../../vite.extension.scripts.config.mts",
