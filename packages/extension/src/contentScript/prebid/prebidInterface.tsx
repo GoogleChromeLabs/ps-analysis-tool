@@ -123,6 +123,11 @@ class PrebidInterface {
       const pbjsGlobals: string[] = window._pbjsGlobals ?? [];
       if (pbjsGlobals?.length > 0) {
         pbjsGlobals.forEach((pbjsGlobal: string) => {
+          //@ts-ignore
+          if (!window[pbjsGlobal]?.getEvents) {
+            return;
+          }
+
           const pbjsClass = new this();
           //@ts-ignore
           pbjsClass.prebidInterface = window[pbjsGlobal] as typeof window.pbjs;
@@ -217,6 +222,10 @@ class PrebidInterface {
     const calculatedNoBids: PrebidNoBidsType = {};
     const calculatedReceivedBids: ReceivedBids[] = [];
 
+    if (!this.prebidInterface?.getEvents) {
+      return;
+    }
+
     this.prebidInterface
       ?.getEvents()
       .forEach(({ eventType, args, elapsedTime }) => {
@@ -294,7 +303,7 @@ class PrebidInterface {
           case 'bidTimeout':
             args.forEach((element: BidTimeoutEvent) => {
               calculatedEvents[element.auctionId].push({
-                ...args,
+                ...element,
                 elapsedTime,
                 eventType,
               });
@@ -308,25 +317,25 @@ class PrebidInterface {
             });
             break;
           case 'noBid':
-            if (!calculatedNoBids[args.auctionId]) {
-              calculatedNoBids[args.auctionId] = {
+            if (!calculatedNoBids[args.adUnitCode]) {
+              calculatedNoBids[args.adUnitCode] = {
                 uniqueAuctionId: args.auctionId,
                 adUnitCode: args.adUnitCode,
                 mediaContainerSize: args.sizes,
                 bidder: [args.bidder],
               };
             } else {
-              calculatedNoBids[args.auctionId] = {
+              calculatedNoBids[args.adUnitCode] = {
                 adUnitCode: args.adUnitCode,
                 mediaContainerSize: [
                   ...mergeUnique2DArrays(
-                    calculatedNoBids[args.auctionId]?.mediaContainerSize ?? [],
+                    calculatedNoBids[args.adUnitCode]?.mediaContainerSize ?? [],
                     args?.sizes ?? []
                   ),
                 ],
                 bidder: Array.from(
                   new Set<string>([
-                    ...calculatedNoBids[args.auctionId].bidder,
+                    ...calculatedNoBids[args.adUnitCode].bidder,
                     args.bidder,
                   ])
                 ),
@@ -395,6 +404,10 @@ class PrebidInterface {
   }
 
   calculateAdUnit() {
+    if (!this.prebidInterface?.getEvents) {
+      return;
+    }
+
     const auctionInitEvents: AuctionEndEvent[] = [];
     const bidWonEvents: {
       [adUnitCode: string]: {

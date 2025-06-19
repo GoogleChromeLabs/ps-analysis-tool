@@ -73,7 +73,7 @@ export type NoBidsType = {
 };
 
 export type PrebidNoBidsType = {
-  [auctionId: string]: {
+  [adUnitCode: string]: {
     bidder: string[];
     uniqueAuctionId: string;
     adUnitCode?: string;
