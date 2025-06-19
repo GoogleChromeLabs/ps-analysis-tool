@@ -101,7 +101,7 @@ const ProtectedAudience = () => {
           },
         },
         {
-          title: 'Prebid Extras',
+          title: 'Prebid Utilities',
           content: {
             Element: Prebid,
             className: 'h-full',
