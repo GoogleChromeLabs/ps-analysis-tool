@@ -212,10 +212,13 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
               </div>
               <div className="flex justify-between items-center">
                 <p>Timeout: {auctionEvents?.[1][0].timeout}ms</p>
-                <p>
-                  Auction Time:{' '}
-                  {auctionEndObject?.auctionEnd - auctionEndObject?.timestamp}ms
-                </p>
+                {auctionEndObject && (
+                  <p>
+                    Auction Time:{' '}
+                    {auctionEndObject?.auctionEnd - auctionEndObject?.timestamp}
+                    ms
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
