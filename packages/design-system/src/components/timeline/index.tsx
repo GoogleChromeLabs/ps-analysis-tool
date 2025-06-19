@@ -63,7 +63,7 @@ const Timeline = ({
   const [scrollWidth, setScrollWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [timeoutBlockWidth, setTimeoutBlockWidth] = useState(0);
-  const [aunctionEndBlockWidth, setAuctionEndBlockWidth] = useState(0);
+  const [auctionEndBlockWidth, setAuctionEndBlockWidth] = useState(0);
   const [zoom, setZoom] = useState(2);
 
   const lineCount = useMemo(() => {
@@ -83,7 +83,7 @@ const Timeline = ({
   const lines = Array.from({ length: lineCount });
 
   useEffect(() => {
-    const _zoom = zoomLevel < 1 ? 1 : zoomLevel;
+    const _zoom = zoomLevel;
     setZoom(_zoom);
     setTimeoutBlockWidth(scrollWidth - auctionTimeout * _zoom);
     setAuctionEndBlockWidth(scrollWidth - auctionEndDuration * _zoom);
@@ -121,9 +121,10 @@ const Timeline = ({
               'absolute right-0 block text-xs dark:text-bright-gray mt-1',
               {
                 'pr-2': zoom > 1,
-                'pr-[1px]': zoom === 1,
+                'rotate-180': zoom <= 1,
               }
             );
+
             return (
               <div
                 className="border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] relative transition-all duration-300 ease-out"
@@ -134,10 +135,7 @@ const Timeline = ({
                   (__, subIndex) => {
                     const lineClasses = classNames(
                       'absolute w-[1px] border-r border-dotted h-full transition-all duration-300 ease-out',
-                      {
-                        'border-sky-100 dark:border-gray-800': zoom === 1,
-                        'border-sky-200 dark:border-gray-700': zoom >= 2,
-                      }
+                      'border-sky-100 dark:border-gray-800'
                     );
                     return (
                       <div
@@ -151,7 +149,12 @@ const Timeline = ({
                     );
                   }
                 )}
-                <span className={spanClasses}>
+                <span
+                  className={spanClasses}
+                  style={{
+                    writingMode: zoom <= 1 ? 'vertical-rl' : undefined,
+                  }}
+                >
                   {INITIAL_TIME + index * TIME_DURATION}ms
                 </span>
               </div>
@@ -162,7 +165,7 @@ const Timeline = ({
         {/*Timeout block*/}
         <div className="absolute flex w-fit h-full top-0">
           <div
-            style={{ width: `${auctionTimeout * zoom}px` }}
+            style={{ width: `${(auctionTimeout * zoom).toFixed(0)}px` }}
             className="h-full"
           ></div>
           <div
@@ -170,7 +173,10 @@ const Timeline = ({
             style={{ width: `${timeoutBlockWidth}px` }}
           >
             <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
-            <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
+            <span
+              className="absolute top-20 rotate-180 text-xs text-[#828282] dark:text-gray"
+              style={{ writingMode: 'vertical-rl' }}
+            >
               Timeout: {auctionTimeout}ms
             </span>
           </div>
@@ -179,22 +185,30 @@ const Timeline = ({
         {/*Auction-End block*/}
         <div className="absolute flex w-fit h-full top-0">
           <div
-            style={{ width: `${auctionEndDuration * zoom}px` }}
+            style={{ width: `${(auctionEndDuration * zoom).toFixed(0)}px` }}
             className="h-full"
           ></div>
           <div
             className="h-full relative flex-1"
-            style={{ width: `${aunctionEndBlockWidth}px` }}
+            style={{ width: `${auctionEndBlockWidth}px` }}
           >
             <div className="bg-[#E90303] opacity-[4%] w-full h-full"></div>
-            <span className="absolute left-[-45px] bottom-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
+            <span
+              className="absolute bottom-20 rotate-180 text-xs text-[#828282] dark:text-gray"
+              style={{ writingMode: 'vertical-rl' }}
+            >
               Auction End: {formatDuration(String(auctionEndDuration))}ms
             </span>
           </div>
         </div>
 
         {/*Bars Block*/}
-        <div className="absolute top-0 left-0 w-full h-full">
+        <div
+          className={classNames('absolute left-0 w-full h-full', {
+            'top-8': zoom <= 1,
+            'top-0': zoom > 1,
+          })}
+        >
           <div className="relative">
             {bidders &&
               bidders.map((bidder, index) => {
@@ -212,11 +226,13 @@ const Timeline = ({
                       role="button"
                       onClick={() => setSelectedRow(bidder?.data)}
                       style={{
-                        width: animate ? `${fullWidth}px` : `0px`,
+                        width: animate ? `${fullWidth.toFixed(0)}px` : `0px`,
                         backgroundColor: BAR_COLORS[bidderType],
                         top: `${(index + 1) * 40}px`,
                         left: `${
-                          bidder.startTime ? bidder.startTime * zoom : 0
+                          bidder.startTime
+                            ? (bidder.startTime * zoom).toFixed(0)
+                            : 0
                         }px`,
                       }}
                     >
