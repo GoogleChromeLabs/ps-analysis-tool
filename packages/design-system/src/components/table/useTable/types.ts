@@ -167,5 +167,6 @@ export interface TableProviderProps {
   getVerticalBarColorHash?: (row: TableRow) => string;
   isRowSelected?: (cookie: TableData | null) => boolean;
   tableContainerRef?: React.RefObject<HTMLDivElement>;
+  tableRef?: React.RefObject<HTMLTableElement>;
   minColumnWidth?: number;
 }

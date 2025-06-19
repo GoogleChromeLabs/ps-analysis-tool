@@ -49,6 +49,7 @@ export interface TableStoreContext {
     count: number;
     tableContainerRef: UseColumnResizing['tableContainerRef'];
     minColumnWidth: number;
+    tableRef: UseColumnResizing['tableRef'];
   };
   actions: {
     setSortKey: ColumnSortingOutput['setSortKey'];
@@ -89,6 +90,7 @@ const initialState: TableStoreContext = {
     hasMoreData: false,
     count: 0,
     tableContainerRef: null,
+    tableRef: null,
     minColumnWidth: 0,
   },
   actions: {

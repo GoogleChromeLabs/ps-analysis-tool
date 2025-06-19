@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Resizable } from 're-resizable';
 
 /**
@@ -71,6 +71,7 @@ const Table = ({
     tableContainerRef,
     loadMoreData,
     hasMoreData,
+    tableRef,
   } = useTable(({ state, actions }) => ({
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
@@ -86,6 +87,8 @@ const Table = ({
     tableContainerRef: state.tableContainerRef,
     loadMoreData: actions.loadMoreData,
     hasMoreData: state.hasMoreData,
+    columns: state.columns,
+    tableRef: state.tableRef,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -96,12 +99,11 @@ const Table = ({
     y: 0,
   });
   const [isRowFocused, setIsRowFocused] = useState(false);
-  const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        tableRef.current &&
+        tableRef?.current &&
         !tableRef.current.contains(event.target as Node)
       ) {
         setIsRowFocused(false);
@@ -116,7 +118,7 @@ const Table = ({
         true
       );
     };
-  }, []);
+  }, [tableRef]);
 
   useEffect(() => {
     if (selectedKey === undefined) {
@@ -207,9 +209,9 @@ const Table = ({
             position={columnPosition}
           />
           <table
-            className="h-full w-full table-auto border-separate border-spacing-0 relative"
+            className="h-full w-full table-fixed border-separate border-spacing-0 relative border-r border-american-silver dark:border-quartz"
             style={{
-              minWidth: minWidth ?? '70rem',
+              minWidth: minWidth ?? 'auto',
             }}
             ref={tableRef}
           >

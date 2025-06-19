@@ -49,10 +49,17 @@ const setColumnWidth = (columnElement: HTMLElement, width: number | string) => {
   columnElement.style.maxWidth = `${parsedWidth}px`;
 };
 
+const setColumnFullWidth = (columnElement: HTMLElement) => {
+  columnElement.style.width = '100%';
+  columnElement.style.minWidth = '100%';
+  columnElement.style.maxWidth = '100%';
+};
+
 export type UseColumnResizing = {
   isResizing: boolean;
   setColumnWidths: () => void;
   tableContainerRef: React.RefObject<HTMLDivElement> | null;
+  tableRef: React.RefObject<HTMLTableElement> | null;
 };
 
 type ColumnsSizing = Record<string, number>;
@@ -70,6 +77,7 @@ const useColumnResizing = (
   const startX = useRef(0);
   const rafId = useRef<number>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLTableElement>(null);
   const currentColumn = useRef<HTMLElement | null>(null);
   const [persistedColumnsSizing, setPersistedColumnsSizing] = useState<
     ColumnsSizing | undefined
@@ -205,26 +213,40 @@ const useColumnResizing = (
       return;
     }
 
+    const allHandles = document.querySelectorAll(`[data-column-resize-id]`);
+    const lastHandleId = (allHandles[allHandles.length - 1] as HTMLElement)
+      ?.dataset?.columnResizeId;
+
     // use persisted columns sizing if available
     if (persistedColumnsSizing) {
       Object.entries(persistedColumnsSizing).forEach(([columnId, width]) => {
         const columnElement = getColumnElement(columnId);
-        if (columnElement) {
-          setColumnWidth(columnElement, width);
+
+        if (!columnElement) {
+          return;
         }
+
+        if (columnId === lastHandleId) {
+          setColumnFullWidth(columnElement);
+          return;
+        }
+
+        setColumnWidth(columnElement, width);
       });
+      if (tableRef.current) {
+        tableRef.current.style.width = 'auto';
+      }
       return;
     }
 
     // calculate initial column widths
     const columnsSizing: ColumnsSizing = {};
-    const allHandles = document.querySelectorAll(`[data-column-resize-id]`);
 
     if (allHandles.length === 0) {
       return;
     }
 
-    Array.from(allHandles).forEach((handle, index) => {
+    Array.from(allHandles).forEach((handle) => {
       const columnId = (handle as HTMLElement).dataset.columnResizeId;
       if (!columnId) {
         return;
@@ -234,8 +256,8 @@ const useColumnResizing = (
         return;
       }
 
-      if (index === allHandles.length - 1) {
-        columnElement.style.minWidth = '100%';
+      if (columnId === lastHandleId) {
+        setColumnFullWidth(columnElement);
       }
 
       // don't set any width if it's already set
@@ -251,6 +273,11 @@ const useColumnResizing = (
       columnsSizing[columnId] = width;
     });
     setPersistedColumnsSizing(columnsSizing);
+
+    // allow table to resized freely after all columns are set
+    if (tableRef.current) {
+      tableRef.current.style.width = 'auto';
+    }
   }, [areSettingsLoaded, persistedColumnsSizing]);
 
   useEffect(() => {
@@ -292,7 +319,7 @@ const useColumnResizing = (
     };
   }, [setColumnWidths]);
 
-  return { isResizing, setColumnWidths, tableContainerRef };
+  return { isResizing, setColumnWidths, tableContainerRef, tableRef };
 };
 
 export default useColumnResizing;
