@@ -40,7 +40,7 @@ const NamespaceTab = () => {
 
   return (
     <>
-      <div className="w-full h-full flex flex-row gap-10">
+      <div className="w-full h-full flex flex-row gap-6 px-4">
         <div className="w-max">
           <Dropdown
             options={Object.keys(pbjsNamespaces).map((frameId) => {
