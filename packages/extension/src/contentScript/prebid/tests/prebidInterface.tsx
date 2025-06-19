@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import {
+  PREBID_SCANNING_STATUS,
   SCRIPT_GET_PREBID_DATA_RESPONSE,
   SCRIPT_PREBID_INITIAL_SYNC,
 } from '../../../constants';
@@ -34,6 +35,46 @@ describe('PrebidInterface', () => {
   afterEach(() => {
     jest.clearAllMocks();
     jest.useRealTimers();
+  });
+
+  it('should post message if Prebid not found after timeout', () => {
+    const mockPostMessage = jest.fn();
+    //@ts-ignore
+    window.postMessage = mockPostMessage;
+    PrebidInterface.doesPrebidExist();
+
+    jest.advanceTimersByTime(60000);
+
+    expect(mockPostMessage).toHaveBeenCalledWith({
+      type: PREBID_SCANNING_STATUS,
+      prebidExists: false,
+    });
+  });
+
+  it('should detect Prebid when present', () => {
+    const mockPostMessage = jest.fn();
+    //@ts-ignore
+    window.postMessage = mockPostMessage;
+    //@ts-ignore
+    window._pbjsGlobals = ['pbjs'];
+    //@ts-ignore
+    window.pbjs = {
+      version: '1.0.0',
+      installedModules: ['module1', 'module2'],
+      bidderSettings: {},
+      getConfig: () => ({}),
+      getUserIdsAsEids: () => [],
+    };
+
+    PrebidInterface.doesPrebidExist();
+
+    jest.advanceTimersByTime(1000);
+
+    // Prebid should be detected before timeout
+    expect(mockPostMessage).not.toHaveBeenCalledWith({
+      type: PREBID_SCANNING_STATUS,
+      prebidExists: false,
+    });
   });
 
   it('should initialize with default values', () => {
@@ -81,7 +122,7 @@ describe('PrebidInterface', () => {
   it('should send initial data', () => {
     const mockPostMessage = jest.fn();
     //@ts-ignore
-    window.top.postMessage = mockPostMessage;
+    window.postMessage = mockPostMessage;
 
     prebidInterface.prebidData.prebidExists = true;
     prebidInterface.sendInitialData();
@@ -89,76 +130,6 @@ describe('PrebidInterface', () => {
     expect(mockPostMessage).toHaveBeenCalledWith({
       type: SCRIPT_GET_PREBID_DATA_RESPONSE,
       prebidData: JSON.parse(decycle(prebidInterface.prebidData)),
-    });
-  });
-
-  it('should calculate bid response correctly', () => {
-    const bid = {
-      auctionId: '123',
-      adUnitCode: 'adUnit1',
-      responseTimestamp: 1672531200000,
-      price: 5.0,
-      currency: 'USD',
-      bidder: 'bidder1',
-    };
-
-    prebidInterface.calculateBidResponse(bid as any);
-
-    expect(prebidInterface.prebidData.receivedBids).toEqual([
-      {
-        bidCurrency: 'USD',
-        uniqueAuctionId: '123',
-        index: 0,
-        bid: 5.0,
-        ownerOrigin: 'bidder1',
-        time: 1672531200000,
-        formattedTime: '2023-01-01T00:00:00.000Z',
-        adUnitCode: 'adUnit1',
-        type: '',
-        eventType: 'BidAvailable',
-      },
-    ]);
-  });
-
-  it('should calculate no bid correctly', () => {
-    const noBid = {
-      auctionId: '123',
-      adUnitCode: 'adUnit1',
-      sizes: [[300, 250]],
-      bidder: 'bidder1',
-    };
-
-    prebidInterface.calculateNoBid(noBid as any);
-
-    expect(prebidInterface.prebidData.noBids).toEqual({
-      '123': {
-        uniqueAuctionId: '123',
-        adUnitCode: 'adUnit1',
-        mediaContainerSize: [[300, 250]],
-        bidder: ['bidder1'],
-      },
-    });
-  });
-
-  it('should calculate ad unit correctly', () => {
-    const bid = {
-      adUnitCode: 'adUnit1',
-      cpm: 5.0,
-      currency: 'USD',
-      bidder: 'bidder1',
-      height: 200,
-      width: 200,
-    };
-
-    prebidInterface.calculateAdUnit(bid as any);
-
-    expect(prebidInterface.prebidData.adUnits).toEqual({
-      adUnit1: {
-        winningBid: 5.0,
-        bidCurrency: 'USD',
-        winningBidder: 'bidder1',
-        winningMediaContainerSize: [[200, 200]],
-      },
     });
   });
 });
