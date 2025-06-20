@@ -22,7 +22,7 @@ import React from 'react';
 const Placeholder = () => {
   return (
     <div className="h-full p-8 flex items-center justify-center">
-      <p className="text-center text-lg">
+      <p className="text-center text-lg text-raisin-black dark:text-bright-gray">
         Auction events have yet to be recorded.
       </p>
     </div>
