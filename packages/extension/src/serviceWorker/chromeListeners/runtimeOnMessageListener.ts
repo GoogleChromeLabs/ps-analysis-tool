@@ -26,6 +26,7 @@ import {
   INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
+  PREBID_SCANNING_STATUS,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
 } from '../../constants';
@@ -161,20 +162,6 @@ export const runtimeOnMessageListener = async (
 
   if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
     if (request?.payload?.prebidExists === false) {
-      prebidStore.prebidEvents[incomingMessageTabId.toString()][`${frameId}`] =
-        {
-          adUnits: {},
-          noBids: {},
-          versionInfo: '',
-          installedModules: [],
-          config: {},
-          receivedBids: [],
-          errorEvents: [],
-          auctionEvents: {},
-          pbjsNamespace: '',
-          prebidExists: false,
-        };
-      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
       return;
     }
 
@@ -186,6 +173,18 @@ export const runtimeOnMessageListener = async (
         ...request.payload.prebidData,
       };
       DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+    }
+  }
+
+  if (PREBID_SCANNING_STATUS === incomingMessageType) {
+    if (request?.payload?.prebidExists === false) {
+      //@ts-ignore
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][`${frameId}`] =
+        {
+          prebidExists: false,
+        };
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+      return;
     }
   }
 };
