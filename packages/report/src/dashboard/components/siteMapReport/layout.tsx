@@ -23,7 +23,6 @@ import {
   type TabFrames,
   type CookieFrameStorageType,
   type CompleteJson,
-  type LibraryData,
   type ErroredOutUrlsData,
   noop,
   reshapeCookies,
@@ -50,7 +49,6 @@ interface LayoutProps {
   sidebarData: SidebarItems;
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
   path: string;
-  libraryMatches: { [url: string]: LibraryData } | null;
   erroredOutUrls: ErroredOutUrlsData[];
 }
 
@@ -61,7 +59,6 @@ const Layout = ({
   setSidebarData,
   path,
   erroredOutUrls,
-  libraryMatches,
 }: LayoutProps) => {
   const [sites, setSites] = useState<string[]>([]);
 
@@ -147,7 +144,6 @@ const Layout = ({
           tabFrames,
           completeJson,
           path,
-          libraryMatches,
           query,
           clearQuery,
         },
@@ -165,7 +161,6 @@ const Layout = ({
                 tabFrames,
                 completeJson,
                 path,
-                libraryMatches,
                 query,
                 clearQuery,
               },
@@ -210,7 +205,6 @@ const Layout = ({
     completeJson,
     cookiesWithIssues,
     doesSiteHaveCookies,
-    libraryMatches,
     path,
     query,
     reshapedCookies,

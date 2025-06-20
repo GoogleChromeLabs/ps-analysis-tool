@@ -16,9 +16,9 @@
 /**
  * External dependencies
  */
-import p5 from 'p5';
 import * as d3 from 'd3';
 import Queue from 'queue';
+import { p5 } from '../p5';
 
 /**
  * Internal dependencies.
@@ -875,7 +875,6 @@ app.createCanvas = () => {
     app.handleControls();
     // eslint-disable-next-line no-new
     new p5(sketch);
-
     // eslint-disable-next-line no-new
     new p5(interestGroupSketch);
     // eslint-disable-next-line no-new

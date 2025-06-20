@@ -30,7 +30,9 @@ import type {
   ReceivedBids,
   SingleSellerAuction,
   MultiSellerAuction,
+  PrebidEvents,
 } from '@google-psat/common';
+import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -40,7 +42,7 @@ import {
   computeInterestGroupDetails,
   computeReceivedBidsAndNoBids,
 } from './utils';
-import { isEqual } from 'lodash-es';
+import { AUCTION_EVENTS } from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [auctionEvents, setAuctionEvents] =
@@ -228,14 +230,14 @@ const Provider = ({ children }: PropsWithChildren) => {
         multiSellerAuction: boolean;
         globalEvents: singleAuctionEvent[];
         refreshTabData: boolean;
+        prebidEvents: PrebidEvents;
+        propertyName: string;
       };
     }) => {
       let didAuctionEventsChange = false;
-
-      if (!['AUCTION_EVENTS'].includes(message.type)) {
+      if (![AUCTION_EVENTS].includes(message.type)) {
         return;
       }
-
       if (!message.type) {
         return;
       }
@@ -244,7 +246,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       const incomingMessageType = message.type;
 
       if (
-        incomingMessageType === 'AUCTION_EVENTS' &&
+        incomingMessageType === AUCTION_EVENTS &&
         message.payload.auctionEvents
       ) {
         if (tabId.toString() === message.payload.tabId.toString()) {
@@ -381,9 +383,11 @@ const Provider = ({ children }: PropsWithChildren) => {
       tabId,
     }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
       if (
-        frameType !== 'outermost_frame' ||
-        frameId !== 0 ||
-        tabId !== chrome.devtools.inspectedWindow.tabId
+        !(
+          chrome.devtools.inspectedWindow.tabId === tabId &&
+          frameType === 'outermost_frame' &&
+          frameId === 0
+        )
       ) {
         return;
       }

@@ -29,7 +29,11 @@ import {
   type TableRow,
 } from '@google-psat/design-system';
 import React, { useMemo } from 'react';
-import EvaluationEnvironment from '../evaluationEnvironment';
+
+/**
+ * Internal dependencies.
+ */
+import Placeholder from './placeholder';
 
 interface NoBidsTableProps {
   setSelectedRow: React.Dispatch<
@@ -38,7 +42,7 @@ interface NoBidsTableProps {
     >
   >;
   selectedRow: singleAuctionEvent | NoBidsType[keyof NoBidsType] | null;
-  noBids: NoBidsType;
+  noBids: NoBidsType[keyof NoBidsType][];
   showEvaluationPlaceholder?: boolean;
 }
 
@@ -81,35 +85,35 @@ const NoBidsTable = ({
     []
   );
 
-  if (!noBids || Object.keys(noBids).length === 0) {
+  if (!noBids || noBids.length === 0) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        <p className="text-lg text-raisin-black dark:text-bright-gray">
-          No bids data was recorded.
-        </p>
-        {showEvaluationPlaceholder && (
-          <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the bids if you haven’t already." />
-        )}
-      </div>
+      <Placeholder showEvaluationPlaceholder={showEvaluationPlaceholder} />
     );
   }
 
   return (
     <TableProvider
-      data={Object.values(noBids)}
+      data={noBids}
       tableColumns={tableColumns}
       tableFilterData={tableFilters}
       tableSearchKeys={undefined}
       tablePersistentSettingsKey="bidsTable#nobids"
       onRowClick={(row) => {
-        setSelectedRow(row as NoBidsType[keyof NoBidsType]);
+        const _data = row;
+        // Prebid noBids data has a different structure
+        if (_data?.bidder) {
+          delete _data.ownerOrigin;
+        }
+
+        setSelectedRow(_data as NoBidsType[keyof NoBidsType]);
       }}
       onRowContextMenu={noop}
       getRowObjectKey={(row: TableRow) => {
         return (
           row.originalData?.ownerOrigin +
           row.originalData?.adUnitCode +
-          row.originalData?.uniqueAuctionId
+          row.originalData?.uniqueAuctionId +
+          row.originalData?.name
         );
       }}
     >
@@ -117,7 +121,8 @@ const NoBidsTable = ({
         selectedKey={
           selectedRow?.ownerOrigin +
           (selectedRow?.adUnitCode || '') +
-          selectedRow?.uniqueAuctionId
+          selectedRow?.uniqueAuctionId +
+          (selectedRow?.name || '')
         }
         minWidth="42rem"
         hideSearch={true}

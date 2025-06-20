@@ -33,9 +33,16 @@
       "matches": ["*://*/*"]
     },
     {
+      "js": ["prebid-content-script.js"],
+      "all_frames": true,
+      "matches": ["*://*/*"],
+      "run_at": "document_start"
+    },
+    {
       "js": ["js-cookie-content-script.js"],
       "matches": ["*://*/*"],
-      "all_frames": true
+      "all_frames": true,
+      "run_at": "document_start"
     }
   ],
   "action": {
@@ -44,7 +51,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["assets/data/*.json", "data/*json", "report/index.html"],
+      "resources": [
+        "assets/data/*.json",
+        "data/*json",
+        "report/index.html",
+        "prebid-interface.js"
+      ],
       "matches": ["*://*/*"]
     }
   ]

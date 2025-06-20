@@ -35,9 +35,30 @@ import { fetchDictionary } from '../utils/fetchCookieDictionary';
 import processAndStoreDocumentCookies from '../utils/processAndStoreDocumentCookies';
 
 /**
+ * When the content script for the cookies is loaded the web_accessible resource is injected
+ * in the page by the content script. The script is then run and when everything from the script
+ * is loaded and completed. The script is removed from the page. This helps in avoiding tampering with the script.
+ */
+const injectScript = () => {
+  const script = document.createElement('script');
+  script.src = chrome.runtime.getURL('/prebid-interface.js');
+  const node = document.head || document.documentElement;
+
+  if (node) {
+    node.appendChild(script);
+    script.onload = () => {
+      script.remove();
+    };
+  } else {
+    requestIdleCallback(injectScript);
+  }
+};
+injectScript();
+
+/**
  * Represents the webpage's content script functionalities.
  */
-class WebpageContentScript {
+class WebpageContentScriptJSCookie {
   /**
    * TabId of the current Tab
    */
@@ -67,7 +88,7 @@ class WebpageContentScript {
     // Message once on initialize, to let the devtool know that content script has loaded.
     if (chrome.runtime?.id) {
       chrome.runtime.sendMessage({
-        setInPage: true,
+        setInPageJSCookie: true,
       });
     }
 
@@ -216,4 +237,4 @@ class WebpageContentScript {
 }
 
 // eslint-disable-next-line no-new
-new WebpageContentScript();
+new WebpageContentScriptJSCookie();

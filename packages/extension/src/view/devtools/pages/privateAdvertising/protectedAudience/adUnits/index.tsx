@@ -16,42 +16,50 @@
 /**
  * External dependencies.
  */
-import React, { useEffect } from 'react';
-import { SIDEBAR_ITEMS_KEYS, useSidebar } from '@google-psat/design-system';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies.
  */
 import {
   useCookie,
+  usePrebid,
   useProtectedAudience,
-  useSettings,
 } from '../../../../stateProviders';
 import Panel from './panel';
 
-const AdUnits = () => {
+interface AdUnitsProps {
+  navigateToSettings?: () => void;
+}
+
+const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
+  const { paapi, selectedAdUnit, setSelectedAdUnit } = useProtectedAudience(
+    ({ state, actions }) => ({
+      paapi: {
+        adsAndBidders: state.adsAndBidders,
+        receivedBids: state.receivedBids,
+        noBids: state.noBids,
+        auctionEvents: state.auctionEvents,
+      },
+      selectedAdUnit: state.selectedAdUnit,
+      setSelectedAdUnit: actions.setSelectedAdUnit,
+    })
+  );
+
   const {
-    adsAndBidders,
-    setSelectedAdUnit,
-    receivedBids,
-    noBids,
-    selectedAdUnit,
-    auctionEvents,
-  } = useProtectedAudience(({ state, actions }) => ({
-    adsAndBidders: state.adsAndBidders,
-    setSelectedAdUnit: actions.setSelectedAdUnit,
-    receivedBids: state.receivedBids,
-    noBids: state.noBids,
-    selectedAdUnit: state.selectedAdUnit,
-    auctionEvents: state.auctionEvents,
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidReceivedBids,
+    prebidNoBids,
+  } = usePrebid(({ state }) => ({
+    prebidAdunits: state.prebidData?.adUnits,
+    prebidAuctionEvents: state.prebidData?.auctionEvents,
+    prebidReceivedBids: state.prebidData?.receivedBids,
+    prebidNoBids: state.prebidData?.noBids,
   }));
 
   const { setIsInspecting } = useCookie(({ actions }) => ({
     setIsInspecting: actions.setIsInspecting,
-  }));
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
   }));
 
   useEffect(() => {
@@ -60,37 +68,48 @@ const AdUnits = () => {
     };
   }, [setIsInspecting]);
 
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
-
   useEffect(() => {
     return () => {
       setSelectedAdUnit(null);
     };
   }, [setSelectedAdUnit]);
 
-  if (!isUsingCDP) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view ad units, enable PSAT to use CDP via the{' '}
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={() => {
-              document
-                .getElementById('cookies-landing-scroll-container')
-                ?.scrollTo(0, 0);
-              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-            }}
-          >
-            Settings Page
-          </button>
-          .
-        </p>
-      </div>
-    );
-  }
+  const [pillToggle, setPillToggle] = useState('Prebid');
+  const [highlightOption, setHighlightOption] = useState<string>();
+
+  useEffect(() => {
+    if (paapi.adsAndBidders && Object.keys(paapi.adsAndBidders).length > 0) {
+      setHighlightOption('PAAPI');
+    }
+  }, [paapi.adsAndBidders]);
+
+  const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
+    if (pillToggle === 'Prebid') {
+      return {
+        adsAndBidders: prebidAdunits || {},
+        receivedBids: prebidReceivedBids || [],
+        noBids: prebidNoBids || {},
+        auctionEvents: prebidAuctionEvents || {},
+      };
+    }
+
+    return {
+      adsAndBidders: paapi.adsAndBidders,
+      receivedBids: paapi.receivedBids,
+      noBids: paapi.noBids,
+      auctionEvents: paapi.auctionEvents,
+    };
+  }, [
+    paapi.adsAndBidders,
+    paapi.auctionEvents,
+    paapi.noBids,
+    paapi.receivedBids,
+    pillToggle,
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidNoBids,
+    prebidReceivedBids,
+  ]);
 
   return (
     <Panel
@@ -101,6 +120,11 @@ const AdUnits = () => {
       selectedAdUnit={selectedAdUnit}
       setIsInspecting={setIsInspecting}
       auctionEvents={auctionEvents ?? {}}
+      pillToggle={pillToggle}
+      setPillToggle={setPillToggle}
+      highlightOption={highlightOption}
+      setHighlightOption={setHighlightOption}
+      navigateToSettings={navigateToSettings}
     />
   );
 };

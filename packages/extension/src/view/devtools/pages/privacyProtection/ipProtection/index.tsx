@@ -18,36 +18,41 @@
  */
 import React, { useMemo } from 'react';
 import {
+  InfoCard,
   PSInfoKey,
   TabsProvider,
   type TabItems,
 } from '@google-psat/design-system';
 import Panel from './panel';
-import Overview from './overview';
 import MDLTable from './mdlTable';
 
 const IPProtection = () => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: Overview,
-          props: {
-            infoKey: PSInfoKey.IPProtection,
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: InfoCard,
+            props: {
+              infoKey: PSInfoKey.IPProtection,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
+            },
+            className: 'p-4',
           },
-          className: 'p-4',
         },
-      },
-      {
-        title: 'Masked Domain List',
-        content: {
-          Element: MDLTable,
-          props: {},
-          className: 'overflow-hidden',
+        {
+          title: 'Masked Domain List',
+          content: {
+            Element: MDLTable,
+            props: {},
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
         },
-      },
-    ],
+      ],
+    }),
     []
   );
 

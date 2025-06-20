@@ -317,6 +317,8 @@
   --text-color-rose-900: #881337;
   --text-color-rose-950: #4c0519;
 
+  --text-color-sapphire: #0b57d0;
+  --text-color-baby-blue-eyes: #a8c7fa;
   --text-color-text-medium-gray: #bdbdbd;
   --text-color-chestnut-gold: #a98307;
   --text-color-battle-dress: #7d8471;
@@ -403,6 +405,8 @@
   --background-color-transparent: transparent;
   --background-color-black: #000;
   --background-color-white: #fff;
+
+  --background-color-slate-gray: #ECECEC;
 
   --background-color-slate-50: #f8fafc;
   --background-color-slate-100: #f1f5f9;
@@ -727,6 +731,13 @@
   --background-color-mahogany: #cc3300;
   --background-color-blueberry: #4285fa;
   --background-color-celeste: #b1f8f2;
+	--background-color-steel-blue: #3A83AB;
+
+  --background-color-lavender-sky: #d3e3fd;
+  --background-color-silver-mist: #dcdcdc;
+
+  --background-color-midnight-slate: #44474e;
+  --background-color-dark-graphite: #3c3c3c;
 
   --border-color-*: initial;
   --border-color-inherit: inherit;
@@ -1020,6 +1031,9 @@
   --border-color-privacy-blue: #4285fa;
   --border-color-privacy-green: #3bd897;
   --border-color-privacy-purple: #dc9af8;
+  --border-color-gray-silver: #B6B6B6;
+	--border-color-steel-blue: #3A83AB;
+  --border-color-pale-cornflower-blue: #b4c8ee;
 
   --color-*: initial;
   --color-inherit: inherit;
@@ -1303,6 +1317,7 @@
   --color-charleston-green: #292a2d;
   --color-outer-space: #303942;
   --color-granite-gray: #5f6369;
+  --color-charcoal-gray: #999999;
   --color-blood-red: #de3730;
   --color-bright-red: #ff5449;
   --color-dark-charcoal: #323232;
@@ -1310,6 +1325,7 @@
   --color-american-silver: #cbcdd1;
   --color-quartz: #494c50;
   --color-hex-gray: #e0e0e0;
+  --color-gray-silver: #B6B6B6;
 
   --stroke-*: initial;
   --stroke-bright-gray: #e8eaed;

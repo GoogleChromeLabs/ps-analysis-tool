@@ -30,6 +30,7 @@ import {
   interestGroupSketch,
   sketch as mainSketch,
   config,
+  // @ts-ignore package does not have types
 } from '@google-psat/explorable-explanations';
 import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
@@ -467,7 +468,7 @@ const Panel = ({
         platform={OSInformation ?? ''}
       />
       <ReactP5Wrapper sketch={userSketch} />
-      <DraggableTray ref={draggableTrayRef} />
+      <DraggableTray ref={draggableTrayRef} trayId="explorableExplanation" />
     </div>
   );
 };

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 export { fetchDictionary } from './fetchCookieDictionary';
+export { loadCLIMessages } from './loadCLImessages';
 export { default as getUrlListFromArgs } from './getUrlListFromArgs';
 export { default as generateCSVFiles } from './generateCSVfiles';
 export { default as saveReports } from './saveReports';

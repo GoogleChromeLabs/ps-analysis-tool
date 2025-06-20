@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipDefaultLibCheck": true,
     "rootDir": "src",
     "target": "es6",
     "module": "commonjs",

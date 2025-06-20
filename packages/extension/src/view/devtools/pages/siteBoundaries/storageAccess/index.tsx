@@ -27,7 +27,7 @@ const StorageAccess = () => {
         isLandingPageContainer
         title={I18n.getMessage('storageAccessAPI')}
         psInfoKey={PSInfoKey.StorageAccess}
-        extraClasses="max-w-2xl h-fit"
+        extraClasses="max-w-2xl h-fit p-4"
       />
     </div>
   );

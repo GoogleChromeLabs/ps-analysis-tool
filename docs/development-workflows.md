@@ -8,7 +8,7 @@ This documentation provides the commands necessary for developing the extension 
 
 To run the extension in development mode for continuous changes only for the extension package, use:
 ```bash
-npm run webpack:dev:ext
+npm run vite:dev:ext
 ```
 
 If you are making continuous changes in the extension or any packages it depends on, use:
@@ -29,7 +29,7 @@ npm run build:ext
 
 To run the CLI in development mode for continuous changes only for the cli package, use:
 ```bash
-npm run webpack:dev:cli
+npm run vite:dev:cli
 ```
 
 If you are making continuous changes in the CLI or any packages it relies on, use:

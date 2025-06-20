@@ -10,6 +10,7 @@
       "default": "./src/index.ts"
     }
   },
+  "type": "module",
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc-watch --build",

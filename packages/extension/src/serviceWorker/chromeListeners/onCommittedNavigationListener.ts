@@ -20,6 +20,7 @@ import { TABID_STORAGE } from '../../constants';
 import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
 import PAStore from '../../store/PAStore';
+import prebidStore from '../../store/prebidStore';
 import getQueryParams from '../../utils/getQueryParams';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
@@ -66,6 +67,12 @@ export const onCommittedNavigationListener = async ({
       cookieStore.deinitialiseVariablesForTab(tabId.toString());
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
 
+      prebidStore.deinitialiseVariablesForTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(
+        tabId.toString(),
+        frameId
+      );
+
       if (DataStore.globalIsUsingCDP) {
         PAStore.deinitialiseVariablesForTab(tabId.toString());
         PAStore.initialiseVariablesForNewTab(tabId.toString());
@@ -91,7 +98,7 @@ export const onCommittedNavigationListener = async ({
     }
 
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('http'));
 
     await sendMessageWrapper(
       'EXCEEDING_LIMITATION_UPDATE',

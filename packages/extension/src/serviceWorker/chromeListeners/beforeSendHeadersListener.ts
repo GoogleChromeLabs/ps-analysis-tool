@@ -45,7 +45,7 @@ export const onBeforeSendHeadersListener = ({
       'request',
       tabId,
       url,
-      DataStore.cookieDB ?? {},
+      cookieStore.cookieDB ?? {},
       tabUrl,
       frameId.toString(),
       requestId,

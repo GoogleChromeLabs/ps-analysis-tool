@@ -17,20 +17,14 @@
 /**
  * External dependencies
  */
-import {
-  Breadcrumbs,
-  Tabs,
-  useSidebar,
-  useTabs,
-} from '@google-psat/design-system';
-import classNames from 'classnames';
+import { LandingPage, useTabs } from '@google-psat/design-system';
 import React, { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies
  */
-import { useProtectedAudience } from '../../../stateProviders';
+import { usePrebid, useProtectedAudience } from '../../../stateProviders';
 
 const Panel = () => {
   const { panel, highlightTab } = useTabs(({ state, actions }) => ({
@@ -39,11 +33,7 @@ const Panel = () => {
   }));
 
   const ActiveTabContent = panel.Element;
-  const { className, props } = panel;
-
-  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
-    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
-  }));
+  const { props, className, containerClassName } = panel;
 
   const {
     interestGroupDetails,
@@ -59,14 +49,31 @@ const Panel = () => {
     auctionEvents: state.auctionEvents ?? {},
   }));
 
+  const {
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidReceivedBids,
+    prebidNoBids,
+  } = usePrebid(({ state }) => ({
+    prebidAdunits: state.prebidData?.adUnits,
+    prebidAuctionEvents: state.prebidData?.auctionEvents,
+    prebidReceivedBids: state.prebidData?.receivedBids,
+    prebidNoBids: state.prebidData?.noBids,
+  }));
+
   const data = useRef<{
     interestGroupDetails?: typeof interestGroupDetails;
     adsAndBidders?: typeof adsAndBidders;
     receivedBids?: typeof receivedBids;
     noBids?: typeof noBids;
     auctionEvents?: typeof auctionEvents;
+    prebidAdunits?: typeof prebidAdunits;
+    prebidAuctionEvents?: typeof prebidAuctionEvents;
+    prebidReceivedBids?: typeof prebidReceivedBids;
+    prebidNoBids?: typeof prebidNoBids;
   } | null>(null);
 
+  // eslint-disable-next-line complexity
   useEffect(() => {
     let store = data.current;
 
@@ -79,7 +86,7 @@ const Panel = () => {
 
     if (filteredIGData.length !== filteredIGRefData?.length) {
       if (filteredIGData.length > 0) {
-        highlightTab(2);
+        highlightTab(3);
       }
 
       store = {
@@ -90,7 +97,7 @@ const Panel = () => {
 
     if (!isEqual(data.current?.adsAndBidders, adsAndBidders)) {
       if (Object.keys(adsAndBidders).length > 0) {
-        highlightTab(3);
+        highlightTab(4);
       }
 
       store = {
@@ -101,8 +108,8 @@ const Panel = () => {
 
     if (!isEqual(data.current?.receivedBids, receivedBids)) {
       if (receivedBids.length > 0) {
-        highlightTab(3);
-        highlightTab(5);
+        highlightTab(4);
+        highlightTab(6);
       }
 
       store = {
@@ -113,8 +120,8 @@ const Panel = () => {
 
     if (!isEqual(data.current?.noBids, noBids)) {
       if (Object.keys(noBids).length > 0) {
-        highlightTab(3);
-        highlightTab(5);
+        highlightTab(4);
+        highlightTab(6);
       }
 
       store = {
@@ -131,12 +138,56 @@ const Panel = () => {
         Object.keys(auctionEvents).length > 0 &&
         Object.keys(adsAndBidders).length > 0
       ) {
-        highlightTab(4);
+        highlightTab(5);
       }
 
       store = {
         ...store,
         auctionEvents,
+      };
+    }
+
+    if (!isEqual(data.current?.prebidAdunits, prebidAdunits)) {
+      if (Object.keys(prebidAdunits || {}).length > 0) {
+        highlightTab(4);
+      }
+
+      store = {
+        ...store,
+        prebidAdunits,
+      };
+    }
+
+    if (!isEqual(data.current?.prebidAuctionEvents, prebidAuctionEvents)) {
+      if (Object.keys(prebidAuctionEvents || {}).length > 0) {
+        highlightTab(5);
+      }
+
+      store = {
+        ...store,
+        auctionEvents,
+      };
+    }
+
+    if (!isEqual(data.current?.prebidReceivedBids, prebidReceivedBids)) {
+      if (prebidReceivedBids?.length) {
+        highlightTab(6);
+      }
+
+      store = {
+        ...store,
+        prebidReceivedBids,
+      };
+    }
+
+    if (!isEqual(data.current?.prebidNoBids, prebidNoBids)) {
+      if (Object.keys(prebidNoBids || {}).length > 0) {
+        highlightTab(6);
+      }
+
+      store = {
+        ...store,
+        prebidNoBids,
       };
     }
 
@@ -148,6 +199,10 @@ const Panel = () => {
     interestGroupDetails,
     noBids,
     receivedBids,
+    prebidAdunits,
+    prebidAuctionEvents,
+    prebidReceivedBids,
+    prebidNoBids,
   ]);
 
   useEffect(() => {
@@ -163,9 +218,9 @@ const Panel = () => {
         return;
       }
 
-      highlightTab(3, false);
       highlightTab(4, false);
       highlightTab(5, false);
+      highlightTab(6, false);
     };
 
     chrome.webNavigation.onCommitted.addListener(listener);
@@ -176,27 +231,18 @@ const Panel = () => {
   }, [highlightTab]);
 
   return (
-    <div
-      data-testid="protected-audience-content"
-      className="h-screen w-full flex flex-col overflow-hidden"
-    >
-      <div className="p-4 flex flex-col gap-1">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">{'Protected Audience'}</h1>
-        </div>
-        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
-      </div>
-
-      <Tabs />
-      <div
-        className={classNames('overflow-auto', className)}
-        style={{
-          minHeight: 'calc(100% - 116px)',
-        }}
-      >
-        {ActiveTabContent && <ActiveTabContent {...props} />}
-      </div>
-    </div>
+    <LandingPage
+      title="Protected Audience"
+      contentPanel={
+        ActiveTabContent && (
+          <div className={className}>
+            <ActiveTabContent {...props} />
+          </div>
+        )
+      }
+      extraClasses={containerClassName}
+      {...props}
+    />
   );
 };
 

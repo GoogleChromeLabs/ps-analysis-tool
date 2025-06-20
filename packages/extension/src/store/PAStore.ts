@@ -25,6 +25,7 @@ import type { Protocol } from 'devtools-protocol';
 import networkTime from './utils/networkTime';
 import formatTime from './utils/formatTime';
 import { DataStore } from './dataStore';
+import { AUCTION_EVENTS } from '../constants';
 
 class PAStore extends DataStore {
   /**
@@ -35,6 +36,7 @@ class PAStore extends DataStore {
       [uniqueAuctionId: string]: singleAuctionEvent[];
     };
   } = {};
+
   /**
    * For tab 123456 auction events will have interestGroup accessed events as well as the interestGroupAuctionEvents.
    * There can be 2 types of interestGroupAccessed events:
@@ -107,8 +109,8 @@ class PAStore extends DataStore {
       //@ts-ignore
       ...globalThis.PSAT,
       unParsedRequestHeadersForPA: this.unParsedRequestHeadersForPA,
-      auctionEvents: this.auctionEvents[tabId],
-      auctionDataForTabId: this.auctionDataForTabId[tabId],
+      auctionEvents: this.auctionEvents,
+      auctionDataForTabId: this.auctionDataForTabId,
     };
   }
 
@@ -198,7 +200,7 @@ class PAStore extends DataStore {
       }
 
       await chrome.runtime.sendMessage({
-        type: 'AUCTION_EVENTS',
+        type: AUCTION_EVENTS,
         payload: {
           refreshTabData: overrideForInitialSync,
           tabId,
@@ -246,12 +248,14 @@ class PAStore extends DataStore {
    * @param { Protocol.Network.MonotonicTime } timestamp Timestamp of the request
    * @param {string} tabId The tabId this request is associated to.
    * @param {string} method determines which event called the function.
+   * @param url
    */
   parseRequestHeadersForPA(
     requestId: string,
     timestamp: Protocol.Network.MonotonicTime,
     tabId: string,
-    method: string
+    method: string,
+    url: string
   ) {
     if (!this.unParsedRequestHeadersForPA[tabId][requestId]?.auctions) {
       return;
@@ -274,7 +278,7 @@ class PAStore extends DataStore {
         bidCurrency: auctionConfig?.bidCurrency ?? '',
         bid: auctionConfig?.bid ?? null,
         name: auctionConfig?.name ?? '',
-        ownerOrigin: auctionConfig?.ownerOrigin ?? '',
+        ownerOrigin: auctionConfig?.ownerOrigin ?? url ?? '',
         type: method + type,
         formattedTime:
           this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0

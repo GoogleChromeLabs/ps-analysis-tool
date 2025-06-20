@@ -52,14 +52,6 @@ export const SidebarProvider = ({
   const [sidebarItems, setSidebarItems] = useState<SidebarItems>({});
   const [isSidebarFocused, setIsSidebarFocused] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(collapsedState);
-
-  /**
-   * Update the selected item key when the defaultSelectedItemKey loads.
-   */
-  useEffect(() => {
-    setSelectedItemKey(defaultSelectedItemKey);
-  }, [defaultSelectedItemKey]);
-
   /**
    * Get the last sidebar item key in selectedItemKey chain.
    * Eg: selectedItemKey = 'Privacy-Sandbox#cookies#frameUrl'
@@ -82,6 +74,32 @@ export const SidebarProvider = ({
   useEffect(() => {
     setSidebarItems(data);
   }, [data]);
+
+  /**
+   * Toggle the dropdown of the sidebar item.
+   * @param action Dropdown action.
+   * @param key Sidebar item key to toggle dropdown.
+   */
+  const toggleDropdown = useCallback((action: boolean, key: string) => {
+    setSidebarItems((prev) => {
+      const items = { ...prev };
+      const item = findItem(items, key, action);
+
+      if (item && Object.keys(item.children).length) {
+        item.dropdownOpen = action;
+      }
+
+      return items;
+    });
+  }, []);
+
+  /**
+   * Update the selected item key when the defaultSelectedItemKey loads.
+   */
+  useEffect(() => {
+    setSelectedItemKey(defaultSelectedItemKey);
+    toggleDropdown(true, defaultSelectedItemKey || '');
+  }, [defaultSelectedItemKey, toggleDropdown]);
 
   /**
    * Find the active panel when the selected item key changes.
@@ -177,7 +195,7 @@ export const SidebarProvider = ({
    * @param queryString Query string to pass to the new panel.
    */
   const updateSelectedItemKey = useCallback(
-    async (key: string | null, queryString = '') => {
+    async (key: string | null, queryString = '', skipPanelDisplay = false) => {
       const keyPath = createKeyPath(sidebarItems, key || '');
 
       if (!keyPath.length) {
@@ -186,7 +204,7 @@ export const SidebarProvider = ({
       }
 
       const item = findItem(sidebarItems, key);
-      if (item?.panel?.href) {
+      if (item?.panel?.href || (skipPanelDisplay && item?.panel?.href)) {
         const tab = await chrome.tabs.get(
           chrome.devtools.inspectedWindow.tabId
         );
@@ -208,6 +226,10 @@ export const SidebarProvider = ({
               .then(() => console.log('injected a function'));
           }
         }
+
+        if (skipPanelDisplay) {
+          return;
+        }
       }
 
       setSelectedItemKey(keyPath.join('#'));
@@ -215,24 +237,6 @@ export const SidebarProvider = ({
     },
     [sidebarItems]
   );
-
-  /**
-   * Toggle the dropdown of the sidebar item.
-   * @param action Dropdown action.
-   * @param key Sidebar item key to toggle dropdown.
-   */
-  const toggleDropdown = useCallback((action: boolean, key: string) => {
-    setSidebarItems((prev) => {
-      const items = { ...prev };
-      const item = findItem(items, key);
-
-      if (item && Object.keys(item.children).length) {
-        item.dropdownOpen = action;
-      }
-
-      return items;
-    });
-  }, []);
 
   /**
    * Handle keyboard navigation in the sidebar.

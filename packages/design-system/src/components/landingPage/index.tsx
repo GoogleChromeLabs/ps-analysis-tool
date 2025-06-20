@@ -16,7 +16,7 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 
 /**
  * Internal dependencies
@@ -81,6 +81,14 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
     };
   }, []);
 
+  const storyClickHandler = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>, storyUrl = '') => {
+      event.stopPropagation();
+      setIndependentStory(storyUrl);
+    },
+    []
+  );
+
   return (
     <>
       <LandingPage
@@ -93,7 +101,8 @@ const LandingPageContainer = (props: LandingPageContainerProps) => {
             content={content.map((data) => {
               return {
                 ...data,
-                onClick: () => setIndependentStory(data?.storyUrl ?? ''),
+                onStoryIconClick: (event) =>
+                  storyClickHandler(event, data?.storyUrl),
               };
             })}
           />

@@ -19,11 +19,9 @@
  */
 import React, { useMemo } from 'react';
 import {
-  InfoCard as InfoCardTemplate,
+  InfoCard,
   PSInfoKey,
-  QuickLinksList,
   TabsProvider,
-  type PSInfoKeyType,
   type TabItems,
 } from '@google-psat/design-system';
 
@@ -35,70 +33,67 @@ import TaxonomyTree from './taxonomyTree';
 import Panel from './panel';
 import TopicsClassifier from './topicsClassifier';
 
-const InfoCard = ({ infoKey }: { infoKey: PSInfoKeyType }) => {
-  return (
-    <>
-      <InfoCardTemplate infoKey={infoKey} />
-      <div className="mt-8 border-t border-gray-300 dark:border-quartz">
-        <QuickLinksList />
-      </div>
-    </>
-  );
-};
-
 const Topics = () => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: InfoCard,
-          props: {
-            infoKey: PSInfoKey.Topics,
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: InfoCard,
+            props: {
+              infoKey: PSInfoKey.Topics,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
+            },
+            className: 'p-4',
           },
-          className: 'p-4',
         },
-      },
-      {
-        title: 'Explorable Explanation',
-        content: {
-          Element: ExplorableExplanation,
-        },
-      },
-      {
-        title: 'Taxonomy V2',
-        content: {
-          Element: TaxonomyTree,
-          props: {
-            taxonomyUrl:
-              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md',
-            githubUrl:
-              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
+        {
+          title: 'Explorable Explanation',
+          content: {
+            Element: ExplorableExplanation,
+            className: 'overflow-hidden',
+            containerClassName: 'overflow-hidden',
           },
-          className: 'overflow-hidden',
         },
-      },
-      {
-        title: 'Taxonomy V1',
-        content: {
-          Element: TaxonomyTree,
-          props: {
-            taxonomyUrl:
-              'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v1.md',
-            githubUrl:
-              'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
+        {
+          title: 'Taxonomy V2',
+          content: {
+            Element: TaxonomyTree,
+            props: {
+              taxonomyUrl:
+                'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v2.md',
+              githubUrl:
+                'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v2.md',
+            },
+            className: 'overflow-hidden',
+            containerClassName: 'overflow-hidden',
           },
-          className: 'overflow-hidden',
         },
-      },
-      {
-        title: 'Classifier',
-        content: {
-          Element: TopicsClassifier,
-          className: 'overflow-hidden',
+        {
+          title: 'Taxonomy V1',
+          content: {
+            Element: TaxonomyTree,
+            props: {
+              taxonomyUrl:
+                'https://raw.githubusercontent.com/patcg-individual-drafts/topics/refs/heads/main/taxonomy_v1.md',
+              githubUrl:
+                'https://github.com/patcg-individual-drafts/topics/blob/main/taxonomy_v1.md',
+            },
+            className: 'overflow-hidden',
+            containerClassName: 'overflow-hidden',
+          },
         },
-      },
-    ],
+        {
+          title: 'Classifier',
+          content: {
+            Element: TopicsClassifier,
+            className: 'overflow-hidden',
+          },
+        },
+      ],
+    }),
     []
   );
 

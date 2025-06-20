@@ -13,10 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import type p5 from 'p5';
+
+/**
+ * External dependencies.
+ */
+import type { PrebidJsGlobal } from '@google-psat/common';
 declare module '*.svg' {
   import React = require('react');
   const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
   export default ReactComponent;
+}
+
+declare global {
+  interface Window {
+    p5: typeof p5;
+  }
 }
 
 declare module '*.png' {
@@ -37,3 +50,9 @@ export type RelatedWebsiteSetType = {
     [url: string]: string;
   };
 };
+
+declare global {
+  interface Window {
+    pbjs: PrebidJsGlobal;
+  }
+}

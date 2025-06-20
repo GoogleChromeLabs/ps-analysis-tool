@@ -17,11 +17,11 @@
  * External dependencies.
  */
 import type { Protocol } from 'devtools-protocol';
+import { isValidURL } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import isValidURL from '../utils/isValidURL';
 import { doesFrameExist } from '../utils/doesFrameExist';
 
 export class DataStore {
@@ -62,6 +62,7 @@ export class DataStore {
       popupOpenState: boolean;
       newUpdatesCA: number;
       newUpdatesPA: number;
+      newUpdatesPrebid: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
@@ -183,6 +184,7 @@ export class DataStore {
       popupOpenState: false,
       newUpdatesCA: 0,
       newUpdatesPA: 0,
+      newUpdatesPrebid: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,

@@ -19,6 +19,7 @@
  */
 import dataStore, { DataStore } from '../../store/dataStore';
 import {
+  CS_GET_PREBID_DATA_RESPONSE,
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
@@ -33,9 +34,13 @@ import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 import sendUpdatedData from '../../store/utils/sendUpdatedData';
+import prebidStore from '../../store/prebidStore';
 
 // eslint-disable-next-line complexity
-export const runtimeOnMessageListener = async (request: any) => {
+export const runtimeOnMessageListener = async (
+  request: any,
+  sender: chrome.runtime.MessageSender
+) => {
   if (!request.type) {
     return;
   }
@@ -99,16 +104,18 @@ export const runtimeOnMessageListener = async (request: any) => {
     });
   }
 
-  if (!request?.payload?.tabId) {
+  const frameId = sender?.frameId ?? 0;
+  const senderTabId = sender?.tab?.id;
+  if (!request?.payload?.tabId && !senderTabId) {
     return;
   }
 
-  const incomingMessageTabId = request.payload.tabId;
+  const incomingMessageTabId = request.payload.tabId ?? senderTabId;
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
 
@@ -126,7 +133,7 @@ export const runtimeOnMessageListener = async (request: any) => {
   if (POPUP_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
     await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
@@ -150,5 +157,35 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
     cookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
+  }
+
+  if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
+    if (request?.payload?.prebidExists === false) {
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][`${frameId}`] =
+        {
+          adUnits: {},
+          noBids: {},
+          versionInfo: '',
+          installedModules: [],
+          config: {},
+          receivedBids: [],
+          errorEvents: [],
+          auctionEvents: {},
+          pbjsNamespace: '',
+          prebidExists: false,
+        };
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+      return;
+    }
+
+    if (request.payload.prebidData.pbjsNamespace) {
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][
+        `${frameId}#${request.payload.prebidData.pbjsNamespace}`
+      ] = {
+        prebidExists: true,
+        ...request.payload.prebidData,
+      };
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+    }
   }
 };
