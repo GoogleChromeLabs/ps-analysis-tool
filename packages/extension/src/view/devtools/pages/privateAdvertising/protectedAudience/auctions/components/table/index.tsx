@@ -34,6 +34,7 @@ import {
  */
 import BottomTray from './bottomTray';
 import { useSettings } from '../../../../../../stateProviders';
+import Placeholder from '../placeholder';
 
 interface AuctionTableProps {
   auctionEvents: singleAuctionEvent[];
@@ -193,71 +194,71 @@ const AuctionTable = ({
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
-      <ResizableTray
-        defaultSize={{
-          width: '100%',
-          height: '80%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-        minHeight="20%"
-        maxHeight="90%"
-        className="w-full flex flex-col"
-        trayId="auctions-table-bottom-tray"
-      >
-        {auctionEvents.length > 0 ? (
-          <>
-            <div className="flex justify-between items-center p-2">
-              <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
-              <p>
-                {startDate
-                  ? startDate
-                  : new Date(
-                      auctionEvents?.[0]?.time * 1000 || ''
-                    ).toUTCString()}
-              </p>
-            </div>
-            <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
-              <TableProvider
-                data={auctionEvents}
-                tableColumns={tableColumns}
-                tableFilterData={tableFilters}
-                tableSearchKeys={undefined}
-                tablePersistentSettingsKey={
-                  'adtable' +
-                  auctionEvents?.[0]?.auctionConfig?.seller +
-                  parentOrigin
-                }
-                onRowContextMenu={noop}
-                onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
-                getRowObjectKey={(row: TableRow) => {
-                  return (
-                    // @ts-ignore
-                    (row.originalData as singleAuctionEvent).index.toString()
-                  );
-                }}
-              >
-                <Table
-                  selectedKey={
-                    // @ts-ignore
-                    selectedJSON?.index.toString() || ''
+      {auctionEvents.length > 0 ? (
+        <>
+          <ResizableTray
+            defaultSize={{
+              width: '100%',
+              height: '80%',
+            }}
+            enable={{
+              bottom: true,
+            }}
+            minHeight="20%"
+            maxHeight="90%"
+            className="w-full flex flex-col"
+            trayId="auctions-table-bottom-tray"
+          >
+            <>
+              <div className="flex justify-between items-center p-2">
+                <p>Started by: {auctionEvents?.[0]?.auctionConfig?.seller}</p>
+                <p>
+                  {startDate
+                    ? startDate
+                    : new Date(
+                        auctionEvents?.[0]?.time * 1000 || ''
+                      ).toUTCString()}
+                </p>
+              </div>
+              <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
+                <TableProvider
+                  data={auctionEvents}
+                  tableColumns={tableColumns}
+                  tableFilterData={tableFilters}
+                  tableSearchKeys={undefined}
+                  tablePersistentSettingsKey={
+                    'adtable' +
+                    auctionEvents?.[0]?.auctionConfig?.seller +
+                    parentOrigin
                   }
-                  hideSearch={true}
-                  minWidth="50rem"
-                />
-              </TableProvider>
-            </div>
-          </>
-        ) : (
-          <div className="h-full p-8 flex items-center justify-center">
-            <p className="text-center text-lg">
-              Auction events have yet to be recorded.
-            </p>
-          </div>
-        )}
-      </ResizableTray>
-      <BottomTray selectedJSON={selectedJSON as object} />
+                  onRowContextMenu={noop}
+                  onRowClick={(row) =>
+                    setSelectedJSON(row as singleAuctionEvent)
+                  }
+                  getRowObjectKey={(row: TableRow) => {
+                    return (
+                      // @ts-ignore
+                      (row.originalData as singleAuctionEvent).index.toString()
+                    );
+                  }}
+                >
+                  <Table
+                    selectedKey={
+                      // @ts-ignore
+                      selectedJSON?.index.toString() || ''
+                    }
+                    hideSearch={true}
+                    minWidth="50rem"
+                  />
+                </TableProvider>
+              </div>
+            </>
+          </ResizableTray>
+          <BottomTray selectedJSON={selectedJSON as object} />
+        </>
+      ) : (
+        <Placeholder />
+      )}
     </div>
   );
 };
