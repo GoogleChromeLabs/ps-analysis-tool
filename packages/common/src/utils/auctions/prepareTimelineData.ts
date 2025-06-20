@@ -151,6 +151,9 @@ const prepareProtectedAudienceTimelineData = (
                   (event) =>
                     event?.type === 'bid' || event?.type === 'topLevelBid'
                 );
+                const winEvent = events.filter(
+                  (event) => event?.type === 'win'
+                )?.[0];
 
                 const isTopLevelBid =
                   events.filter((event) => event?.type === 'topLevelBid')
@@ -159,7 +162,7 @@ const prepareProtectedAudienceTimelineData = (
                 const { time: auctionEndTime, formattedTime } =
                   events[events.length - 1];
 
-                const bidders: Partial<Bidder>[] = [];
+                let bidders: Partial<Bidder>[] = [];
 
                 if (!auctionId) {
                   return;
@@ -189,7 +192,25 @@ const prepareProtectedAudienceTimelineData = (
                       type: BidderType.BID,
                       data: bid,
                     });
-                    return;
+                  }
+
+                  if (winEvent) {
+                    bidders = bidders.map((bidder) => {
+                      const winnerHostname =
+                        winEvent.ownerOrigin &&
+                        isValidURL(winEvent.ownerOrigin ?? '')
+                          ? new URL(winEvent.ownerOrigin).hostname
+                          : '';
+
+                      if (
+                        winnerHostname &&
+                        winnerHostname === bidder.name &&
+                        winEvent.name === bidder.data?.name
+                      ) {
+                        bidder.type = BidderType.WON;
+                      }
+                      return bidder;
+                    });
                   }
 
                   const loadedEvent = events.find(

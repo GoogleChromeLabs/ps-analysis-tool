@@ -43,9 +43,9 @@ const Bids = () => {
 
   const { prebidNoBids, prebidReceivedBids, prebidAuctionEvents } = usePrebid(
     ({ state }) => ({
-      prebidNoBids: state.prebidNoBids,
-      prebidReceivedBids: state.prebidReceivedBids,
-      prebidAuctionEvents: state.prebidAuctionEvents,
+      prebidNoBids: state.prebidData?.noBids,
+      prebidReceivedBids: state.prebidData?.receivedBids,
+      prebidAuctionEvents: state.prebidData?.auctionEvents,
     })
   );
 
