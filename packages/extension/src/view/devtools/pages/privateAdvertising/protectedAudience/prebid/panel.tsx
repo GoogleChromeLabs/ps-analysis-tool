@@ -88,8 +88,8 @@ const Panel = () => {
           eeAnimatedTab={false}
         />
       </div>
-      <div className="flex-1 overflow-auto text-outer-space-crayola py-4">
-        <div className="px-4 w-full h-full border-american-silver dark:border-quartz overflow-auto">
+      <div className="flex-1 overflow-auto text-outer-space-crayola">
+        <div className="w-full h-full border-american-silver dark:border-quartz overflow-auto mt-4">
           {containerToShow}
         </div>
       </div>

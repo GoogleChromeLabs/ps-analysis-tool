@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import classNames from 'classnames';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface PillToggleProps {
   options: string[];
@@ -25,6 +25,8 @@ interface PillToggleProps {
   setPillToggle: (value: string) => void;
   eeAnimatedTab: boolean;
   width?: string;
+  highlightOption?: string;
+  setHighlightOption?: (value: string) => void;
 }
 
 const PillToggle = ({
@@ -33,7 +35,15 @@ const PillToggle = ({
   setPillToggle,
   eeAnimatedTab,
   width = 'w-max',
+  highlightOption,
+  setHighlightOption,
 }: PillToggleProps) => {
+  useEffect(() => {
+    if (pillToggle === highlightOption) {
+      setHighlightOption?.('');
+    }
+  }, [highlightOption, pillToggle, setHighlightOption]);
+
   return (
     <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">
       {options.map((option, index) => {
@@ -50,6 +60,7 @@ const PillToggle = ({
                 'text-xs': eeAnimatedTab,
                 'rounded-r-full -ml-[10px]': index > 0,
                 'rounded-full': index === 0,
+                underline: highlightOption === option,
               }
             )}
             onClick={() => setPillToggle(option)}

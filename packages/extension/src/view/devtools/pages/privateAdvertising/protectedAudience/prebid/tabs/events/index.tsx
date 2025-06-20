@@ -68,7 +68,7 @@ const Events = ({ errorEvents = [] }: EventsPanelProps) => {
   };
 
   return (
-    <div className="flex flex-col border border-hex-gray dark:border-quartz mb-3">
+    <div className="flex flex-col border border-hex-gray dark:border-quartz mb-3 mx-4">
       <Header
         errorEvents={errorEvents}
         filteredErrorEvents={errorEvents}

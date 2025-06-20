@@ -16,86 +16,165 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  SIDEBAR_ITEMS_KEYS,
-  useSidebar,
-  useTabs,
-  PillToggle,
   DoubleArrow,
+  PillToggle,
+  Slider,
+  useTabs,
 } from '@google-psat/design-system';
+import { prepareTimelineData, type NoBidsType } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import { useSettings } from '../../../../stateProviders';
-import PrebidBidsPanel from './prebid';
-import PaapiBidsPanel from './paapi';
-
-enum PillToggleOptions {
-  PREBID = 'Prebid',
-  PAAPI = 'PAAPI',
-}
+import { usePrebid, useProtectedAudience } from '../../../../stateProviders';
+import Panel from './panel';
+import { BidsPillOptions, PanelOptions } from './enums';
 
 const Bids = () => {
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
+  const { paapi } = useProtectedAudience(({ state }) => ({
+    paapi: {
+      receivedBids: state.receivedBids,
+      noBids: state.noBids,
+      auctionEvents: state.auctionEvents,
+    },
   }));
-  const [pillToggle, setPillToggle] = useState<string>(
-    PillToggleOptions.PREBID
-  );
 
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
+  const { prebidNoBids, prebidReceivedBids, prebidAuctionEvents } = usePrebid(
+    ({ state }) => ({
+      prebidNoBids: state.prebidData?.noBids,
+      prebidReceivedBids: state.prebidData?.receivedBids,
+      prebidAuctionEvents: state.prebidData?.auctionEvents,
+    })
+  );
 
   const { storage, setStorage } = useTabs(({ state, actions }) => ({
     storage: state.storage,
     setStorage: actions.setStorage,
   }));
 
-  const cdpNavigation = useCallback(() => {
-    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
-    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-  }, [updateSelectedItemKey]);
+  const [panelPillToggle, setPanelPillToggle] = useState<string>(
+    PanelOptions.Prebid
+  );
+  const [highlightOption, setHighlightOption] = useState<string>('');
 
-  if (!isUsingCDP) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view bids data, enable PSAT to use CDP via the{' '}
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={cdpNavigation}
-          >
-            Settings Page
-          </button>
-          .
-        </p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (paapi?.receivedBids?.length || paapi?.noBids?.length) {
+      setHighlightOption(PanelOptions.PAAPI);
+    }
+  }, [paapi]);
+
+  const [bidsPillToggle, setBidsPillToggle] = useState<string>(
+    BidsPillOptions.ReceivedBids
+  );
+
+  const processedPrebidNoBids = useMemo(() => {
+    if (!prebidNoBids) {
+      return {};
+    }
+
+    return Object.entries(prebidNoBids).reduce((acc, [key, value]) => {
+      const bids = value?.bidder.map((bid) => ({
+        ownerOrigin: bid,
+        name: bid,
+        ...value,
+      }));
+
+      acc[key] = bids;
+
+      return acc;
+    }, {} as Record<string, NoBidsType[keyof NoBidsType][]>);
+  }, [prebidNoBids]);
+
+  const noBids = useMemo(() => {
+    if (panelPillToggle === PanelOptions.Prebid) {
+      return Object.values(processedPrebidNoBids).flat() || [];
+    }
+
+    return Object.values(paapi?.noBids) || [];
+  }, [paapi?.noBids, panelPillToggle, processedPrebidNoBids]);
+
+  const receivedBids = useMemo(() => {
+    if (panelPillToggle === PanelOptions.Prebid) {
+      return prebidReceivedBids || [];
+    }
+
+    return paapi?.receivedBids || [];
+  }, [paapi?.receivedBids, panelPillToggle, prebidReceivedBids]);
+
+  const timelines = useMemo(() => {
+    if (panelPillToggle === PanelOptions.Prebid) {
+      if (!prebidAuctionEvents) {
+        return [];
+      }
+
+      return prepareTimelineData(prebidAuctionEvents, true);
+    }
+
+    if (!paapi?.auctionEvents) {
+      return [];
+    }
+
+    return prepareTimelineData(paapi.auctionEvents, false);
+  }, [paapi.auctionEvents, panelPillToggle, prebidAuctionEvents]);
+
+  const [zoomLevel, setZoomLevel] = useState<number>(2);
 
   return (
-    <div className="flex flex-col h-full w-full relative">
-      <div className="px-3 py-3 flex gap-6 items-center border-american-silver dark:border-quartz border-b">
-        <PillToggle
-          options={[PillToggleOptions.PREBID, PillToggleOptions.PAAPI]}
-          pillToggle={pillToggle}
-          setPillToggle={setPillToggle}
-          eeAnimatedTab={false}
-        />
-        <DoubleArrow
-          width="30px"
-          height="30px"
-          className="fill-charcoal-gray"
-        />
+    <div className="flex flex-col pt-4 h-full w-full">
+      <div className="flex justify-between items-center">
+        <div className="px-4 pb-4 flex gap-4 items-center">
+          <PillToggle
+            options={[PanelOptions.Prebid, PanelOptions.PAAPI]}
+            pillToggle={panelPillToggle}
+            setPillToggle={setPanelPillToggle}
+            eeAnimatedTab={false}
+            highlightOption={highlightOption}
+            setHighlightOption={setHighlightOption}
+          />
+          <DoubleArrow
+            width="30px"
+            height="30px"
+            className="fill-charcoal-gray"
+          />
+          <PillToggle
+            options={[
+              BidsPillOptions.ReceivedBids,
+              BidsPillOptions.NoBids,
+              BidsPillOptions.Timeline,
+            ]}
+            pillToggle={bidsPillToggle}
+            setPillToggle={setBidsPillToggle}
+            eeAnimatedTab={false}
+          />
+        </div>
+        {bidsPillToggle === BidsPillOptions.Timeline &&
+          Object.entries(timelines).length > 0 && (
+            <div className="px-4">
+              <Slider
+                sliderStep={zoomLevel}
+                setSliderStep={(step: number) => {
+                  setZoomLevel(step);
+                }}
+                label="Zoom"
+                min={1}
+                max={4}
+                step={1}
+              />
+            </div>
+          )}
       </div>
-      {pillToggle === PillToggleOptions.PREBID ? (
-        <PrebidBidsPanel storage={storage} setStorage={setStorage} />
-      ) : (
-        <PaapiBidsPanel storage={storage} setStorage={setStorage} />
-      )}
+      <Panel
+        receivedBids={receivedBids}
+        noBids={noBids}
+        storage={storage}
+        setStorage={setStorage}
+        bidsPillToggle={bidsPillToggle}
+        panelPillToggle={panelPillToggle}
+        timelines={timelines}
+        zoomLevel={zoomLevel}
+      />
     </div>
   );
 };

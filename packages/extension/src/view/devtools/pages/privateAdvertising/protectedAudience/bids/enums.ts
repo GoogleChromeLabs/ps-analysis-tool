@@ -13,24 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resolve } from 'node:path';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { readdirSync } from 'node:fs';
-import svgr from 'vite-plugin-svgr';
+export enum BidsPillOptions {
+  ReceivedBids = 'Received Bids',
+  NoBids = 'No Bids',
+  Timeline = 'Timeline',
+}
 
-const packagesDir = resolve(__dirname, 'packages');
-const aliases = readdirSync(packagesDir).map((name) => ({
-  find: `@google-psat/${name}`,
-  replacement: resolve(packagesDir, name, 'src'),
-}));
-
-export default defineConfig({
-  plugins: [svgr(), react()],
-  resolve: {
-    alias: aliases,
-  },
-  build: {
-    chunkSizeWarningLimit: 2000,
-  },
-});
+export enum PanelOptions {
+  Prebid = 'Prebid',
+  PAAPI = 'PAAPI',
+}

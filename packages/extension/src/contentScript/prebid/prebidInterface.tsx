@@ -22,10 +22,13 @@ import {
   type AdsAndBiddersType,
   type AdUnit,
   type AuctionEndEvent,
-  type BidResponse,
+  type BidTimeoutEvent,
   type BidWonEvent,
-  type NoBid,
+  type ErrorEventType,
+  type PrebidAuctionEventType,
   type PrebidEvents,
+  type PrebidNoBidsType,
+  type ReceivedBids,
   type SingleBidderSetting,
 } from '@google-psat/common';
 import merge from 'lodash/merge';
@@ -86,21 +89,18 @@ class PrebidInterface {
   }
 
   /**
-   * Checks if the Prebid.js library exists on the current webpage and initializes
-   * the provided Prebid interface class accordingly. The function continuously scans
-   * for the presence of Prebid.js until it is found or a timeout occurs.
-   * The function performs the following steps:
-   * 1. Instantiates the provided class and starts scanning for the Prebid.js library.
-   * 2. If the Prebid.js library is detected, it initializes the `prebidInterface` property
-   *    of the instantiated class with the global Prebid.js object.
-   * 3. Sets the `prebidExists` and `scanningStatus` properties of the instantiated class
-   *    to indicate the presence of Prebid.js and the completion of the scanning process.
-   * 4. Calls the `sendInitialData` and `initPrebidListener` methods of the instantiated class
-   *    to handle further interactions with Prebid.js.
-   * 5. Stops scanning either when Prebid.js is found or after a timeout of 60 seconds.
-   *
-   * Note: The function uses a recursive `setTimeout` to periodically check for the presence
-   * of Prebid.js on the page.
+   * Checks for the presence of Prebid.js in the page.
+   * @static
+   * @returns {void}
+   * @description This method polls the page every second for 60 seconds to check if Prebid.js is loaded.
+   * It looks for the _pbjsGlobals array in the window object, which contains namespaces of loaded Prebid instances.
+   * If found, it:
+   * - Creates a new PrebidInterface instance for each namespace
+   * - Initializes the prebid interface with the found global instance
+   * - Sets prebid existence flag to true
+   * - Captures version info and installed modules
+   * - Collects bidder settings configuration
+   * - Posts a message with scanning status if Prebid is not found after timeout
    */
   static doesPrebidExist() {
     let stopLoop = false;
@@ -126,7 +126,6 @@ class PrebidInterface {
           const pbjsClass = new this();
           //@ts-ignore
           pbjsClass.prebidInterface = window[pbjsGlobal] as typeof window.pbjs;
-          pbjsClass.initPrebidListener();
 
           pbjsClass.prebidData.prebidExists = true;
           pbjsClass.scanningStatus = true;
@@ -192,6 +191,7 @@ class PrebidInterface {
     };
 
     this.setIntervalValue = setInterval(() => {
+      this.calculateEventsAndUpdateData();
       this.calculateAdUnit();
       if (this.updateCounter > 0) {
         this.sendInitialData();
@@ -209,201 +209,215 @@ class PrebidInterface {
     });
   }
 
-  initPrebidListener() {
-    this.prebidInterface?.onEvent('auctionInit', (args) => {
-      this.prebidData.auctionEvents = {
-        ...this.prebidData.auctionEvents,
-        [args.auctionId]: [],
-      };
-      this.addEvent(args.auctionId, { ...args, eventType: 'auctionInit' });
-      this.calculateAdUnit();
-      this.updateCounter++;
-    });
+  calculateEventsAndUpdateData() {
+    let calculatedEvents: {
+      [auctionId: string]: PrebidAuctionEventType[];
+    } = {};
+    const calculatedErrorEvents: ErrorEventType[] = [];
+    const calculatedNoBids: PrebidNoBidsType = {};
+    const calculatedReceivedBids: ReceivedBids[] = [];
 
-    this.prebidInterface?.onEvent('auctionDebug', (args) => {
-      const events = this.prebidInterface?.getEvents();
-      const lastEvent = events?.[events.length - 1];
+    this.prebidInterface
+      ?.getEvents()
+      .forEach(({ eventType, args, elapsedTime }) => {
+        switch (eventType) {
+          case 'auctionInit':
+            if (!calculatedEvents[args.auctionId]) {
+              calculatedEvents = {
+                ...calculatedEvents,
+                [args.auctionId]: [],
+              };
+            }
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'auctionDebug':
+            calculatedErrorEvents.push({
+              type: args.type,
+              message: args.arguments,
+              time: `${elapsedTime}ms`,
+            });
+            break;
+          case 'bidRequested':
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'beforeBidderHttp':
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'bidResponse':
+            calculatedReceivedBids.push({
+              bidCurrency: args.currency,
+              uniqueAuctionId: args.auctionId,
+              index: calculatedReceivedBids.length,
+              bid: args.price,
+              ownerOrigin: args.bidder,
+              time: args.responseTimestamp ?? Date.now(),
+              formattedTime: new Date(
+                args.responseTimestamp ?? Date.now()
+              ).toISOString(),
+              adUnitCode: args.adUnitCode,
+              type: '',
+              eventType: 'BidAvailable',
+            });
 
-      this.prebidData.errorEvents.push({
-        type: args.type,
-        message: args.arguments,
-        time: `${Math.round(lastEvent?.elapsedTime ?? 0)}ms`,
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'bidAccepted':
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'bidRejected':
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'bidTimeout':
+            args.forEach((element: BidTimeoutEvent) => {
+              calculatedEvents[element.auctionId].push({
+                ...args,
+                elapsedTime,
+                eventType,
+              });
+            });
+            break;
+          case 'bidWon':
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'noBid':
+            if (!calculatedNoBids[args.auctionId]) {
+              calculatedNoBids[args.auctionId] = {
+                uniqueAuctionId: args.auctionId,
+                adUnitCode: args.adUnitCode,
+                mediaContainerSize: args.sizes,
+                bidder: [args.bidder],
+              };
+            } else {
+              calculatedNoBids[args.auctionId] = {
+                adUnitCode: args.adUnitCode,
+                mediaContainerSize: [
+                  ...mergeUnique2DArrays(
+                    calculatedNoBids[args.auctionId]?.mediaContainerSize ?? [],
+                    args?.sizes ?? []
+                  ),
+                ],
+                bidder: Array.from(
+                  new Set<string>([
+                    ...calculatedNoBids[args.auctionId].bidder,
+                    args.bidder,
+                  ])
+                ),
+                uniqueAuctionId: args.auctionId,
+              };
+            }
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          case 'auctionEnd':
+            calculatedEvents[args.auctionId].push({
+              ...args,
+              elapsedTime,
+              eventType,
+            });
+            break;
+          default:
+            break;
+        }
       });
-      this.updateCounter++;
-    });
 
-    this.prebidInterface?.onEvent('beforeRequestBids', (args) => {
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'beforeRequestBids',
-      });
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('bidRequested', (args) => {
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'bidRequested',
-      });
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('beforeBidderHttp', (args) => {
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'beforeBidderHttp',
-      });
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('bidResponse', (args) => {
-      this.calculateBidResponse(args);
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'BidResponse',
-      });
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('bidAccepted', (args) => {
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'bidAccepted',
-      });
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('bidRejected', (args) => {
-      if (args.bid?.auctionId) {
-        this.addEvent(args.bid.auctionId, {
-          ...args,
-          eventType: 'bidRejected',
-        });
-        this.updateCounter++;
-      }
-    });
-
-    this.prebidInterface?.onEvent('bidTimeout', (args) => {
-      args.forEach((arg) => {
-        this.addEvent(arg.auctionId, {
-          timeoutBid: arg,
-          eventType: 'bidTimeout',
-        });
-      });
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('bidWon', (args) => {
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'bidWon',
-      });
-      this.calculateAdUnit(args);
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('noBid', (args) => {
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'noBid',
-      });
-      this.calculateNoBid(args);
-      this.updateCounter++;
-    });
-
-    this.prebidInterface?.onEvent('auctionEnd', (args) => {
-      this.addEvent(args.auctionId, {
-        ...args,
-        eventType: 'auctionEnd',
-      });
-      this.sendInitialData();
-      this.updateCounter++;
-    });
-  }
-
-  addEvent(key: string, args: any) {
-    const event = this.prebidInterface?.getEvents().pop();
-
-    if (!event || !key) {
-      return;
+    if (
+      !isEqual(
+        JSON.parse(decycle(calculatedErrorEvents)),
+        this.prebidData.errorEvents
+      )
+    ) {
+      this.prebidData.errorEvents = structuredClone(
+        JSON.parse(decycle(calculatedErrorEvents))
+      );
+      this.updateCounter += 1;
     }
-
-    if (!this.prebidData.auctionEvents[key]) {
-      this.prebidData.auctionEvents[key] = [];
+    if (
+      !isEqual(JSON.parse(decycle(calculatedNoBids)), this.prebidData.noBids)
+    ) {
+      this.prebidData.noBids = structuredClone(
+        JSON.parse(decycle(calculatedNoBids))
+      );
+      this.updateCounter += 1;
     }
-
-    this.prebidData.auctionEvents[key].push({
-      ...args,
-      elapsedTime: event.elapsedTime,
-    });
-    this.calculateAdUnit();
-  }
-
-  calculateBidResponse(bid: BidResponse) {
-    const {
-      auctionId,
-      adUnitCode,
-      responseTimestamp = Date.now(),
-      price,
-      currency,
-      bidder,
-    } = bid;
-
-    this.prebidData.receivedBids.push({
-      bidCurrency: currency,
-      uniqueAuctionId: auctionId,
-      index: this.prebidData.receivedBids.length,
-      bid: price,
-      ownerOrigin: bidder,
-      time: responseTimestamp,
-      formattedTime: new Date(responseTimestamp).toISOString(),
-      adUnitCode,
-      type: '',
-      eventType: 'BidAvailable',
-    });
-  }
-
-  calculateNoBid(bid: NoBid) {
-    if (!this.prebidData.noBids[bid.auctionId]) {
-      this.prebidData.noBids[bid.auctionId] = {
-        uniqueAuctionId: bid.auctionId,
-        adUnitCode: bid.adUnitCode,
-        mediaContainerSize: bid.sizes,
-        bidder: [bid.bidder],
-      };
-    } else {
-      this.prebidData.noBids[bid.auctionId] = {
-        adUnitCode: bid.adUnitCode,
-        mediaContainerSize: [
-          ...mergeUnique2DArrays(
-            this.prebidData.noBids[bid.auctionId]?.mediaContainerSize ?? [],
-            bid?.sizes ?? []
-          ),
-        ],
-        bidder: Array.from(
-          new Set<string>([
-            ...this.prebidData.noBids[bid.auctionId].bidder,
-            bid.bidder,
-          ])
-        ),
-        uniqueAuctionId: bid.auctionId,
-      };
+    if (
+      !isEqual(
+        JSON.parse(decycle(calculatedReceivedBids)),
+        this.prebidData.receivedBids
+      )
+    ) {
+      this.prebidData.receivedBids = structuredClone(
+        JSON.parse(decycle(calculatedReceivedBids))
+      );
+      this.updateCounter += 1;
+    }
+    if (
+      !isEqual(
+        JSON.parse(decycle(calculatedEvents)),
+        this.prebidData.auctionEvents
+      )
+    ) {
+      this.prebidData.auctionEvents = structuredClone(
+        JSON.parse(decycle(calculatedEvents))
+      );
+      this.updateCounter += 1;
     }
   }
 
-  calculateAdUnit(bid?: BidWonEvent) {
-    if (bid) {
-      this.prebidData.adUnits[bid.adUnitCode] = {
-        ...this.prebidData.adUnits[bid.adUnitCode],
-        winningBid: bid?.cpm,
-        bidCurrency: bid.currency,
+  calculateAdUnit() {
+    const auctionInitEvents: AuctionEndEvent[] = [];
+    const bidWonEvents: {
+      [adUnitCode: string]: {
+        winningBid: number;
+        bidCurrency: string;
+        winningBidder: string;
+        winningMediaContainerSize: number[][];
+      };
+    } = {};
+
+    (
+      Object.values(this.prebidData.auctionEvents)
+        .flat()
+        .filter((event) => event.eventType === 'bidWon') as BidWonEvent[]
+    ).forEach((bid: BidWonEvent) => {
+      bidWonEvents[bid.adUnitCode] = {
+        winningBid: bid.cpm,
         winningBidder: bid.bidder,
         winningMediaContainerSize: [[bid.width, bid.height]],
+        bidCurrency: bid.currency,
       };
-      return;
-    }
+    });
 
-    const auctionInitEvents: AuctionEndEvent[] = [];
     Object.values(this.prebidData.auctionEvents).forEach((events) => {
       const auctionInitEvent = events.find(
         (event) => event.eventType === 'auctionInit'
@@ -411,12 +425,6 @@ class PrebidInterface {
 
       if (auctionInitEvent) {
         auctionInitEvents.push(auctionInitEvent as AuctionEndEvent);
-      }
-    });
-
-    this.prebidInterface?.getEvents().forEach((event) => {
-      if (event.eventType === 'auctionInit') {
-        auctionInitEvents.push(event.args);
       }
     });
 
@@ -465,9 +473,11 @@ class PrebidInterface {
           bidders: Array.from(
             new Set<string>(adUnit.bids.map((_bid) => _bid.bidder ?? ''))
           ),
-          winningBid: 0,
-          bidCurrency: '',
-          winningBidder: '',
+          winningBid: bidWonEvents[adUnit.code]?.winningBid ?? 0,
+          bidCurrency: bidWonEvents[adUnit.code]?.bidCurrency ?? '',
+          winningBidder: bidWonEvents[adUnit.code]?.winningBidder ?? '',
+          winningMediaContainerSize:
+            bidWonEvents[adUnit.code]?.winningMediaContainerSize ?? [],
         };
         return acc;
       }, {} as AdsAndBiddersType) ?? {};

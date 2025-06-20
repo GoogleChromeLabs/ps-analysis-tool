@@ -17,8 +17,7 @@
 /**
  * External dependencies
  */
-import React, { useState } from 'react';
-import { useTabs } from '@google-psat/design-system';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -59,12 +58,14 @@ const AdunitPanel = ({
     setSelectedAdUnit: actions.setSelectedAdUnit,
   }));
 
-  const { setStorage, setActiveTab } = useTabs(({ actions }) => ({
-    setStorage: actions.setStorage,
-    setActiveTab: actions.setActiveTab,
-  }));
-
   const [pillToggle, setPillToggle] = useState('Prebid');
+  const [highlightOption, setHighlightOption] = useState('');
+
+  useEffect(() => {
+    if (bidsCount['paapi'] > 0 || noBidsCount['paapi'] > 0) {
+      setHighlightOption('PAAPI');
+    }
+  }, [bidsCount, noBidsCount]);
 
   const pillLowerCase = pillToggle.toLowerCase();
 
@@ -79,12 +80,12 @@ const AdunitPanel = ({
       isInspecting={isInspecting}
       setIsInspecting={setIsInspecting}
       setSelectedAdUnit={setSelectedAdUnit}
-      setStorage={setStorage}
-      setActiveTab={setActiveTab}
       winnerBid={winnerBid?.[pillLowerCase] || null}
       winningMediaContainer={winningMediaContainer[pillLowerCase] || []}
       pillToggle={pillToggle}
       setPillToggle={setPillToggle}
+      highlightOption={highlightOption}
+      setHighlightOption={setHighlightOption}
     />
   );
 };

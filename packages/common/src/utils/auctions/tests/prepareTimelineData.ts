@@ -22,7 +22,7 @@ import { BidderType } from '../types';
 
 describe('prepareTimelineData', () => {
   it('should return empty object if no auction events', () => {
-    const result = prepareTimelineData({});
+    const result = prepareTimelineData({}, true);
     expect(result).toEqual({});
   });
 
@@ -58,7 +58,7 @@ describe('prepareTimelineData', () => {
       ],
     };
 
-    const result = prepareTimelineData(mockAuctionEvents);
+    const result = prepareTimelineData(mockAuctionEvents, true);
 
     expect(result).toHaveProperty('auction-1');
     expect(result['auction-1']).toMatchObject({
@@ -84,7 +84,7 @@ describe('prepareTimelineData', () => {
       ],
     };
 
-    const result = prepareTimelineData(mockAuctionEvents);
+    const result = prepareTimelineData(mockAuctionEvents, true);
     expect(result['auction-1']).toStrictEqual({});
   });
 });

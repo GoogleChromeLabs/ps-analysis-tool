@@ -46,7 +46,7 @@ const Tools = () => {
   }));
 
   return (
-    <div className="flex flex-col w-full h-full relative">
+    <div className="flex flex-col w-full h-full relative px-4">
       <HeaderComponent
         openGoogleManagerConsole={openGoogleManagerConsole}
         handleChangeStoreRulesInLocalStorage={

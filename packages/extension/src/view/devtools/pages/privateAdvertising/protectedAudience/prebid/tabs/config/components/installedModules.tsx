@@ -107,7 +107,7 @@ const InstalledModules = ({ installedModules }: InstalledModulesPanelProps) => {
   );
 
   return (
-    <div className="w-[70%] h-full text-outer-space-crayola border-x border-american-silver dark:border-quartz flex flex-col">
+    <div className="w-[70%] h-full text-outer-space-crayola flex flex-col border-r border-american-silver dark:border-quartz">
       <ResizableTray
         defaultSize={{
           width: '100%',
