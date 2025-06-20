@@ -29,18 +29,8 @@ import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import { HammerIcon } from '../../icons';
-
-const INITIAL_TIME = 50;
-const TIME_DURATION = 50;
-const BAR_HEIGHT = 50;
-
-const BAR_COLORS: Record<BidderType, string> = {
-  [BidderType.BID]: '#7CACF8',
-  [BidderType.NO_BID]: '#EC7159',
-  [BidderType.WON]: '#5CC971',
-  [BidderType.TIMED_OUT]: '#FC2D04',
-};
+import { BAR_HEIGHT, INITIAL_TIME, TIME_DURATION } from './constants';
+import Bar from './bar';
 
 export interface TimelineProps extends TimelineData {
   zoomLevel?: number;
@@ -63,7 +53,7 @@ const Timeline = ({
   const [scrollWidth, setScrollWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [timeoutBlockWidth, setTimeoutBlockWidth] = useState(0);
-  const [aunctionEndBlockWidth, setAuctionEndBlockWidth] = useState(0);
+  const [auctionEndBlockWidth, setAuctionEndBlockWidth] = useState(0);
   const [zoom, setZoom] = useState(2);
 
   const lineCount = useMemo(() => {
@@ -83,7 +73,7 @@ const Timeline = ({
   const lines = Array.from({ length: lineCount });
 
   useEffect(() => {
-    const _zoom = zoomLevel < 1 ? 1 : zoomLevel;
+    const _zoom = zoomLevel;
     setZoom(_zoom);
     setTimeoutBlockWidth(scrollWidth - auctionTimeout * _zoom);
     setAuctionEndBlockWidth(scrollWidth - auctionEndDuration * _zoom);
@@ -103,6 +93,9 @@ const Timeline = ({
     }
   }, [containerRef, bidders, auctionTimeout]);
 
+  const childHeight =
+    Math.max((bidders?.length ?? 0) * BAR_HEIGHT, 200) + (zoom <= 1 ? 32 : 0);
+
   return (
     <div className="mb-4">
       <header className="flex justify-between text-sm dark:text-bright-gray font-semibold">
@@ -115,15 +108,21 @@ const Timeline = ({
         style={{ height: bidders ? bidders.length * BAR_HEIGHT : '200px' }}
       >
         {/*Vertical Columns*/}
-        <div className="flex h-full">
+        <div
+          className="flex"
+          style={{
+            height: childHeight,
+          }}
+        >
           {lines.map((_, index) => {
             const spanClasses = classNames(
               'absolute right-0 block text-xs dark:text-bright-gray mt-1',
               {
                 'pr-2': zoom > 1,
-                'pr-[1px]': zoom === 1,
+                'rotate-180': zoom <= 1,
               }
             );
+
             return (
               <div
                 className="border-pale-cornflower-blue border-r-1 h-full shrink-[0] grow-[0] relative transition-all duration-300 ease-out"
@@ -134,10 +133,7 @@ const Timeline = ({
                   (__, subIndex) => {
                     const lineClasses = classNames(
                       'absolute w-[1px] border-r border-dotted h-full transition-all duration-300 ease-out',
-                      {
-                        'border-sky-100 dark:border-gray-800': zoom === 1,
-                        'border-sky-200 dark:border-gray-700': zoom >= 2,
-                      }
+                      'border-sky-100 dark:border-gray-800'
                     );
                     return (
                       <div
@@ -151,7 +147,12 @@ const Timeline = ({
                     );
                   }
                 )}
-                <span className={spanClasses}>
+                <span
+                  className={spanClasses}
+                  style={{
+                    writingMode: zoom <= 1 ? 'vertical-rl' : undefined,
+                  }}
+                >
                   {INITIAL_TIME + index * TIME_DURATION}ms
                 </span>
               </div>
@@ -160,41 +161,61 @@ const Timeline = ({
         </div>
 
         {/*Timeout block*/}
-        <div className="absolute flex w-fit h-full top-0">
+        <div
+          className="absolute flex w-fit top-0"
+          style={{ height: childHeight }}
+        >
           <div
-            style={{ width: `${auctionTimeout * zoom}px` }}
-            className="h-full"
+            style={{
+              width: `${(auctionTimeout * zoom).toFixed(0)}px`,
+            }}
           ></div>
           <div
             className="h-full relative flex-1"
             style={{ width: `${timeoutBlockWidth}px` }}
           >
             <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
-            <span className="absolute left-[-35px] top-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
+            <span
+              className="absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center"
+              style={{ writingMode: 'vertical-rl' }}
+            >
               Timeout: {auctionTimeout}ms
             </span>
           </div>
         </div>
 
         {/*Auction-End block*/}
-        <div className="absolute flex w-fit h-full top-0">
+        <div
+          className="absolute flex w-fit top-0"
+          style={{
+            height: childHeight,
+          }}
+        >
           <div
-            style={{ width: `${auctionEndDuration * zoom}px` }}
+            style={{ width: `${(auctionEndDuration * zoom).toFixed(0)}px` }}
             className="h-full"
           ></div>
           <div
             className="h-full relative flex-1"
-            style={{ width: `${aunctionEndBlockWidth}px` }}
+            style={{ width: `${auctionEndBlockWidth}px` }}
           >
             <div className="bg-[#E90303] opacity-[4%] w-full h-full"></div>
-            <span className="absolute left-[-45px] bottom-20 rotate-[270deg] text-xs text-[#828282] dark:text-gray">
+            <span
+              className="absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center"
+              style={{ writingMode: 'vertical-rl' }}
+            >
               Auction End: {formatDuration(String(auctionEndDuration))}ms
             </span>
           </div>
         </div>
 
         {/*Bars Block*/}
-        <div className="absolute top-0 left-0 w-full h-full">
+        <div
+          className={classNames('absolute left-0 w-full h-full', {
+            'top-8': zoom <= 1,
+            'top-0': zoom > 1,
+          })}
+        >
           <div className="relative">
             {bidders &&
               bidders.map((bidder, index) => {
@@ -205,47 +226,17 @@ const Timeline = ({
                     ? BidderType.TIMED_OUT
                     : bidder.type;
                 return (
-                  <div key={index} className="relative group ">
-                    {/*Bar*/}
-                    <div
-                      className="absolute h-[10px] transition-all duration-300 ease-out group-hover:scale-101 group-hover:border group-hover:border-grey transform origin-left cursor-pointer"
-                      role="button"
-                      onClick={() => setSelectedRow(bidder?.data)}
-                      style={{
-                        width: animate ? `${fullWidth}px` : `0px`,
-                        backgroundColor: BAR_COLORS[bidderType],
-                        top: `${(index + 1) * 40}px`,
-                        left: `${
-                          bidder.startTime ? bidder.startTime * zoom : 0
-                        }px`,
-                      }}
-                    >
-                      {/*Metadata*/}
-                      <div className="absolute left-0 bottom-[-20px] w-full flex justify-between px-1 min-w-[180px]">
-                        <span className="pr-2 text-xs dark:text-bright-gray flex">
-                          {String(bidder.name)}
-                          <span className="text-granite-gray dark:text-bright-gray ml-1">
-                            {bidder.type === BidderType.NO_BID && ' (no bid)'}
-                            {bidder.type === BidderType.BID &&
-                              ' (received bid)'}
-                            {bidder.type === BidderType.TIMED_OUT &&
-                              ' (timed out)'}
-                          </span>
-                          {bidder.type === BidderType.WON && (
-                            <span className="flex text-granite-gray dark:text-bright-gray ">
-                              <span>(won)</span>
-                              <span>
-                                <HammerIcon height="18" />
-                              </span>
-                            </span>
-                          )}
-                        </span>
-                        <span className="text-xs dark:text-bright-gray">
-                          {formatDuration(bidder.duration)}ms
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <React.Fragment key={index}>
+                    <Bar
+                      bidder={bidder}
+                      index={index}
+                      zoom={zoom}
+                      bidderType={bidderType}
+                      fullWidth={fullWidth}
+                      animate={animate}
+                      setSelectedRow={setSelectedRow}
+                    />
+                  </React.Fragment>
                 );
               })}
           </div>
