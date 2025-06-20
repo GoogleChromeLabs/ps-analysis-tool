@@ -81,7 +81,7 @@ const RuleComponent = ({
         </div>
       </div>
       <div
-        className="flex flex-row w-full h-fit items-start gap-10"
+        className="flex flex-row w-full h-fit items-start gap-10 min-w-fit"
         key={ruleIndex}
       >
         <div key={ruleIndex} className="w-1/2 flex flex-col gap-2 mx-4">

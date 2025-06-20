@@ -56,6 +56,7 @@ const scripts: Script[] = [
 const createConfig = (script: (typeof scripts)[number]) => {
   return defineConfig({
     build: {
+      watch: isDev ? {} : null,
       emptyOutDir: false,
       outDir: `../../dist/extension`,
       minify: !isDev,

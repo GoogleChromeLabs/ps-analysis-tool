@@ -308,11 +308,11 @@ const useDataProcessing = () => {
     if (Object.keys(prebidNoBids || {}).length > 0) {
       Object.values(prebidNoBids).forEach((data) => {
         const adUnit = data.adUnitCode as string;
-
         if (adUnit) {
           _adUnitNoBidsCount[adUnit] = {
             ..._adUnitNoBidsCount[adUnit],
-            prebid: (_adUnitNoBidsCount[adUnit]?.prebid || 0) + 1,
+            prebid:
+              (_adUnitNoBidsCount[adUnit]?.prebid || 0) + data.bidder.length,
           };
         }
       });

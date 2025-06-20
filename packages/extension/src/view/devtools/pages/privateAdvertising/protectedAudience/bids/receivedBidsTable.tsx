@@ -79,7 +79,8 @@ const ReceivedBidsTable = ({
       {
         header: 'Bid Value',
         accessorKey: 'bid',
-        cell: (info) => info,
+        cell: (info) =>
+          typeof info !== 'undefined' ? Number(info).toFixed(2) : '',
       },
       {
         header: 'Currency',

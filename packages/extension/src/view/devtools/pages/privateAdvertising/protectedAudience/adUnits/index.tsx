@@ -27,6 +27,7 @@ import {
   useProtectedAudience,
 } from '../../../../stateProviders';
 import Panel from './panel';
+import type { PrebidNoBidsType } from '@google-psat/common';
 
 interface AdUnitsProps {
   navigateToSettings?: () => void;
@@ -85,10 +86,23 @@ const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
 
   const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
     if (pillToggle === 'Prebid') {
+      const processedNobids = Object.entries(prebidNoBids ?? {}).reduce(
+        (acc, [key, value]) => {
+          value?.bidder.forEach(
+            (bid) =>
+              (acc[key + bid] = {
+                ...value,
+              })
+          );
+
+          return acc;
+        },
+        {} as PrebidNoBidsType
+      );
       return {
         adsAndBidders: prebidAdunits || {},
         receivedBids: prebidReceivedBids || [],
-        noBids: prebidNoBids || {},
+        noBids: processedNobids || {},
         auctionEvents: prebidAuctionEvents || {},
       };
     }

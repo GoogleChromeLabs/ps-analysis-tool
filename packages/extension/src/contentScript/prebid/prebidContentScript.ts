@@ -56,7 +56,7 @@ class PrebidContentScript {
 
       if (event.data?.type === PREBID_SCANNING_STATUS) {
         chrome.runtime.sendMessage({
-          type: CS_GET_PREBID_DATA_RESPONSE,
+          type: PREBID_SCANNING_STATUS,
           payload: {
             prebidExists: event.data.prebidExists,
           },

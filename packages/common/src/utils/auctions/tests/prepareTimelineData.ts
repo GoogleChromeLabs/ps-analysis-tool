@@ -45,7 +45,7 @@ describe('prepareTimelineData', () => {
           ],
         },
         {
-          eventType: 'BidResponse',
+          eventType: 'bidResponse',
           bidder: 'bidder1',
           auctionId: 'auction-1',
           responseTimestamp: 1200,
@@ -78,7 +78,7 @@ describe('prepareTimelineData', () => {
     const mockAuctionEvents = {
       'auction-1': [
         {
-          eventType: 'BidResponse',
+          eventType: 'bidResponse',
           bidder: 'bidder1',
         },
       ],

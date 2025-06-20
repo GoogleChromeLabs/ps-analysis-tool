@@ -58,7 +58,7 @@ const Tools = () => {
       />
       <div
         className={classNames(
-          'flex flex-col w-full h-fit mt-2 rounded-sm border border-hex-gray dark:border-quartz px-4 py-3',
+          'flex flex-col w-full h-fit mt-2 rounded-sm border border-hex-gray dark:border-quartz px-4 py-3 min-w-fit',
           {
             'items-start': debuggingModuleConfig.intercept.length > 0,
             'items-center': debuggingModuleConfig.intercept.length === 0,

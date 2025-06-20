@@ -20,6 +20,7 @@ import React, { useMemo, useState } from 'react';
 import {
   noop,
   type AdsAndBiddersType,
+  type AuctionEndEvent,
   type PrebidEvents,
 } from '@google-psat/common';
 import {
@@ -59,31 +60,38 @@ const AdTable = ({
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
 
   const adUnitsWithOrtb2Imp = useMemo(() => {
-    const auctionEnd = Object.values(auctionEvents || {})?.[0]?.find(
-      (event) => event.eventType === 'auctionEnd'
-    );
+    const auctionEndEvents = Object.values(auctionEvents || {})
+      ?.flat()
+      ?.filter((event) => event.eventType === 'auctionEnd');
 
-    const adUnitCodes = auctionEnd?.adUnitCodes;
+    return auctionEndEvents.reduce((acc, auctionEnd) => {
+      const adUnitCodes = (auctionEnd as AuctionEndEvent)?.adUnitCodes;
 
-    if (!adUnitCodes) {
-      return {};
-    }
+      if (!adUnitCodes) {
+        return acc;
+      }
 
-    return adUnitCodes?.reduce(
-      (
-        combinedData: Record<string, any>,
-        adUnitCode: string,
-        index: number
-      ) => {
-        const adUnits = auctionEnd?.adUnits || [];
+      const singleOrtb2Imp = adUnitCodes?.reduce(
+        (
+          combinedData: Record<string, any>,
+          adUnitCode: string,
+          index: number
+        ) => {
+          const adUnits = (auctionEnd as AuctionEndEvent)?.adUnits || [];
+          return {
+            ...combinedData,
+            [adUnitCode]: adUnits[index].ortb2Imp,
+          };
+        },
+        {} as Record<string, any>
+      );
 
-        return {
-          ...combinedData,
-          [adUnitCode]: adUnits[index].ortb2Imp,
-        };
-      },
-      {} as Record<string, any>
-    );
+      acc = {
+        ...acc,
+        ...singleOrtb2Imp,
+      };
+      return acc;
+    }, {} as Record<string, any>);
   }, [auctionEvents]);
 
   const tableColumns = useMemo<TableColumn[]>(

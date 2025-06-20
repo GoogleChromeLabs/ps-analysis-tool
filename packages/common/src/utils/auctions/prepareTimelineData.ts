@@ -61,7 +61,7 @@ const preparePrebidTimelineData = (
     ) as BidRequestedEvent[];
 
     const receivedBids = events.filter(
-      (event: PrebidAuctionEventType) => event.eventType === 'BidResponse'
+      (event: PrebidAuctionEventType) => event.eventType === 'bidResponse'
     ) as BidResponse[];
 
     const noBids = events.filter(
