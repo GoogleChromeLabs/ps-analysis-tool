@@ -17,27 +17,39 @@ import { build, defineConfig } from 'vite';
 
 const isDev = process.env.NODE_ENV === 'development';
 
+type Script = {
+  name: string;
+  path: string;
+  // all content scripts must be in iife format
+  format: 'es' | 'iife';
+};
+
 // content scripts and worker defined in the manifest.json
-const scripts = [
+const scripts: Script[] = [
   {
     name: 'service-worker',
     path: 'src/serviceWorker/index.ts',
+    format: 'es', // defined as module in manifest.json
   },
   {
     name: 'content-script',
     path: 'src/contentScript/index.ts',
+    format: 'iife',
   },
   {
     name: 'js-cookie-content-script',
     path: 'src/contentScript/jsCookie.ts',
+    format: 'iife',
   },
   {
     name: 'prebid-content-script',
     path: 'src/contentScript/prebid/prebidContentScript.ts',
+    format: 'iife',
   },
   {
     name: 'prebid-interface',
     path: 'src/contentScript/prebid/prebidInterface.tsx',
+    format: 'iife',
   },
 ] as const;
 
@@ -52,7 +64,7 @@ const createConfig = (script: (typeof scripts)[number]) => {
           [script.name]: script.path,
         },
         output: {
-          format: 'iife',
+          format: script.format || 'iife',
           chunkFileNames: '[name].js',
           entryFileNames: '[name].js',
         },
