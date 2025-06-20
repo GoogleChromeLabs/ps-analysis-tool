@@ -71,6 +71,9 @@ const Provider = ({ children }: PropsWithChildren) => {
       const checked = result ? result[STORE_RULES_TOGGLE] : false;
       setStoreRulesInLocalStorage(checked);
     });
+    return () => {
+      initialStateFetched.current = false;
+    };
   }, []);
 
   const handleChangeStoreRulesInLocalStorage = useCallback((value: boolean) => {
@@ -143,7 +146,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     const pbjsNamespace = prebidData[`${frameId}#${namespace}`]?.pbjsNamespace;
 
     if (!pbjsNamespace) {
-      initialStateFetched.current = true;
       return;
     }
 
