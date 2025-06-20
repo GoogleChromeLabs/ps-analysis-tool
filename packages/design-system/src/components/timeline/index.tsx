@@ -94,7 +94,7 @@ const Timeline = ({
   }, [containerRef, bidders, auctionTimeout]);
 
   const childHeight =
-    Math.max(Number(bidders?.length) * BAR_HEIGHT, 200) + (zoom <= 1 ? 32 : 0);
+    Math.max((bidders?.length ?? 0) * BAR_HEIGHT, 200) + (zoom <= 1 ? 32 : 0);
 
   return (
     <div className="mb-4">
