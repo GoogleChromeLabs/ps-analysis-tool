@@ -33,6 +33,7 @@ import useDataProcessing from './useDataProcessing';
 import AdunitPanel from '../components/adunitPanel';
 import PrebidTable from '../prebidTable';
 import AuctionTable from '../components/table';
+import Placeholder from '../components/placeholder';
 
 const useSidebarProcessing = () => {
   const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
@@ -146,6 +147,9 @@ const useSidebarProcessing = () => {
 
           timeChildren[`${time}||${adUnit} Adserver`] = {
             title: 'Adserver',
+            panel: {
+              Element: Placeholder,
+            },
             children: {},
             isBlurred: true,
           };
