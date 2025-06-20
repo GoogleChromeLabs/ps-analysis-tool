@@ -93,6 +93,9 @@ const Timeline = ({
     }
   }, [containerRef, bidders, auctionTimeout]);
 
+  const childHeight =
+    Math.max(Number(bidders?.length) * BAR_HEIGHT, 200) + (zoom <= 1 ? 32 : 0);
+
   return (
     <div className="mb-4">
       <header className="flex justify-between text-sm dark:text-bright-gray font-semibold">
@@ -105,7 +108,12 @@ const Timeline = ({
         style={{ height: bidders ? bidders.length * BAR_HEIGHT : '200px' }}
       >
         {/*Vertical Columns*/}
-        <div className="flex h-full">
+        <div
+          className="flex"
+          style={{
+            height: childHeight,
+          }}
+        >
           {lines.map((_, index) => {
             const spanClasses = classNames(
               'absolute right-0 block text-xs dark:text-bright-gray mt-1',
@@ -153,10 +161,14 @@ const Timeline = ({
         </div>
 
         {/*Timeout block*/}
-        <div className="absolute flex w-fit h-full top-0">
+        <div
+          className="absolute flex w-fit top-0"
+          style={{ height: childHeight }}
+        >
           <div
-            style={{ width: `${(auctionTimeout * zoom).toFixed(0)}px` }}
-            className="h-full"
+            style={{
+              width: `${(auctionTimeout * zoom).toFixed(0)}px`,
+            }}
           ></div>
           <div
             className="h-full relative flex-1"
@@ -164,7 +176,7 @@ const Timeline = ({
           >
             <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
             <span
-              className="absolute top-20 rotate-180 text-xs text-[#828282] dark:text-gray"
+              className="absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center"
               style={{ writingMode: 'vertical-rl' }}
             >
               Timeout: {auctionTimeout}ms
@@ -173,7 +185,12 @@ const Timeline = ({
         </div>
 
         {/*Auction-End block*/}
-        <div className="absolute flex w-fit h-full top-0">
+        <div
+          className="absolute flex w-fit top-0"
+          style={{
+            height: childHeight,
+          }}
+        >
           <div
             style={{ width: `${(auctionEndDuration * zoom).toFixed(0)}px` }}
             className="h-full"
@@ -184,7 +201,7 @@ const Timeline = ({
           >
             <div className="bg-[#E90303] opacity-[4%] w-full h-full"></div>
             <span
-              className="absolute bottom-20 rotate-180 text-xs text-[#828282] dark:text-gray"
+              className="absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center"
               style={{ writingMode: 'vertical-rl' }}
             >
               Auction End: {formatDuration(String(auctionEndDuration))}ms
