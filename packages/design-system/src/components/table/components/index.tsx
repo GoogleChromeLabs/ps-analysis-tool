@@ -87,7 +87,6 @@ const Table = ({
     tableContainerRef: state.tableContainerRef,
     loadMoreData: actions.loadMoreData,
     hasMoreData: state.hasMoreData,
-    columns: state.columns,
     tableRef: state.tableRef,
   }));
 

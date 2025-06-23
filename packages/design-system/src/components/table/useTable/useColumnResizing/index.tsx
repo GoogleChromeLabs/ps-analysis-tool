@@ -217,28 +217,6 @@ const useColumnResizing = (
     const lastHandleId = (allHandles[allHandles.length - 1] as HTMLElement)
       ?.dataset?.columnResizeId;
 
-    // use persisted columns sizing if available
-    if (persistedColumnsSizing) {
-      Object.entries(persistedColumnsSizing).forEach(([columnId, width]) => {
-        const columnElement = getColumnElement(columnId);
-
-        if (!columnElement) {
-          return;
-        }
-
-        if (columnId === lastHandleId) {
-          setColumnFullWidth(columnElement);
-          return;
-        }
-
-        setColumnWidth(columnElement, width);
-      });
-      if (tableRef.current) {
-        tableRef.current.style.width = 'auto';
-      }
-      return;
-    }
-
     // calculate initial column widths
     const columnsSizing: ColumnsSizing = {};
 
@@ -258,6 +236,13 @@ const useColumnResizing = (
 
       if (columnId === lastHandleId) {
         setColumnFullWidth(columnElement);
+        return;
+      }
+
+      // use persisted columns sizing if available
+      if (persistedColumnsSizing?.[columnId]) {
+        setColumnWidth(columnElement, persistedColumnsSizing[columnId]);
+        return;
       }
 
       // don't set any width if it's already set
@@ -272,11 +257,19 @@ const useColumnResizing = (
       setColumnWidth(columnElement, width);
       columnsSizing[columnId] = width;
     });
-    setPersistedColumnsSizing(columnsSizing);
 
-    // allow table to resized freely after all columns are set
+    // persist columns sizing if not already set
+    if (!persistedColumnsSizing) {
+      setPersistedColumnsSizing(columnsSizing);
+    }
+
     if (tableRef.current) {
-      tableRef.current.style.width = 'auto';
+      if (allHandles.length === 1) {
+        tableRef.current.style.width = '100%';
+      } else {
+        // allow table to resized freely after all columns are set
+        tableRef.current.style.width = 'auto';
+      }
     }
   }, [areSettingsLoaded, persistedColumnsSizing, isResizing]);
 
