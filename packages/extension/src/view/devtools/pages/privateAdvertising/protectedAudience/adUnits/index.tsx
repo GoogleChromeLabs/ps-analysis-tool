@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useEffect, useMemo, useState } from 'react';
+import type { PrebidNoBidsType } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -27,7 +28,6 @@ import {
   useProtectedAudience,
 } from '../../../../stateProviders';
 import Panel from './panel';
-import type { PrebidNoBidsType } from '@google-psat/common';
 
 interface AdUnitsProps {
   navigateToSettings?: () => void;

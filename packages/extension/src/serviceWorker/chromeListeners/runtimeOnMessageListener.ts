@@ -178,7 +178,7 @@ export const runtimeOnMessageListener = async (
 
   if (PREBID_SCANNING_STATUS === incomingMessageType) {
     if (request?.payload?.prebidExists === false) {
-      //@ts-ignore
+      //@ts-ignore -- We dont want to create a new object here, just add data whether or not prebid exists for this frame.
       prebidStore.prebidEvents[incomingMessageTabId.toString()][`${frameId}`] =
         {
           prebidExists: false,
