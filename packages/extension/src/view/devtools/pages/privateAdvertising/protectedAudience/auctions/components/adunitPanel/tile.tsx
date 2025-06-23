@@ -46,7 +46,7 @@ const Tile = ({ item }: TileProps) => {
             return (
               <div
                 className={classNames(
-                  'bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs',
+                  'bg-cultured-grey text-raisin-black py-1 px-4 rounded-full border border-dark-grey text-xs',
                   {
                     'hover:border-american-silver cursor-pointer hover:bg-light-gray hover:scale-[1.03] transition-all duration-150 ease-in-out':
                       pill.onClick,

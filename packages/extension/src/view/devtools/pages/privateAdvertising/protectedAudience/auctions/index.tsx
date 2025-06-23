@@ -24,7 +24,6 @@ import { SidebarProvider } from '@google-psat/design-system';
  */
 import useSidebarProcessing from './hooks/useSidebarProcessing';
 import Panel from './panel';
-import EvaluationEnvironment from '../evaluationEnvironment';
 
 const Auctions = () => {
   const { sidebarData, defaultSelectedItemKey, hasData } =
@@ -34,10 +33,8 @@ const Auctions = () => {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center">
         <p className="text-lg text-raisin-black dark:text-bright-gray">
-          No ad units were recorded.
+          No auctions were recorded.
         </p>
-
-        <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
       </div>
     );
   }

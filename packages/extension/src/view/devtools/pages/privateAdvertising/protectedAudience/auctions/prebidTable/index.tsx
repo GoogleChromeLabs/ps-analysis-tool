@@ -190,75 +190,86 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
-      <Resizable
-        defaultSize={{
-          width: '100%',
-          height: '80%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-        minHeight="20%"
-        maxHeight="90%"
-        className="w-full flex flex-col"
-      >
-        {auctionEvents?.length ? (
-          <>
-            <div className="flex flex-col gap-2 p-2">
-              <div className="flex justify-between items-center">
-                <p>Auction Id: {auctionEvents[0]}</p>
-                <p>
-                  Start Time:{' '}
-                  {new Date(auctionEvents?.[1][0].timestamp).toISOString()}
-                </p>
-              </div>
-              <div className="flex justify-between items-center">
-                <p>Timeout: {auctionEvents?.[1][0].timeout}ms</p>
-                {auctionEndObject && (
+      {auctionEvents?.length ? (
+        <>
+          <Resizable
+            defaultSize={{
+              width: '100%',
+              height: '80%',
+            }}
+            enable={{
+              bottom: true,
+            }}
+            minHeight="20%"
+            maxHeight="90%"
+            className="w-full flex flex-col"
+          >
+            <>
+              <div className="flex flex-col gap-2 p-2">
+                <div className="flex justify-between items-center">
                   <p>
-                    Auction Time:{' '}
-                    {auctionEndObject?.auctionEnd - auctionEndObject?.timestamp}
-                    ms
+                    <span className="font-semibold">Auction Id:</span>
+                    {auctionEvents[0]}
                   </p>
-                )}
+                  <p>
+                    <span className="font-semibold">Start Time:</span>
+                    {new Date(auctionEvents?.[1][0].timestamp).toISOString()}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p>
+                    <span className="font-semibold">Timeout:</span>
+                    {auctionEvents?.[1][0].timeout}ms
+                  </p>
+                  {auctionEndObject && (
+                    <p>
+                      <span className="font-semibold">Auction Time:</span>{' '}
+                      {auctionEndObject?.auctionEnd -
+                        auctionEndObject?.timestamp}
+                      ms
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
-              <TableProvider
-                data={tableData}
-                tableColumns={tableColumns}
-                tableFilterData={tableFilters}
-                tableSearchKeys={undefined}
-                tablePersistentSettingsKey={'adtable' + auctionEvents[0]}
-                onRowContextMenu={noop}
-                onRowClick={(row) => setSelectedJSON(row as singleAuctionEvent)}
-                getRowObjectKey={(row: TableRow) => {
-                  return (
-                    // @ts-ignore
-                    row.originalData.index.toString()
-                  );
-                }}
-              >
-                <Table
-                  selectedKey={
-                    // @ts-ignore
-                    selectedJSON?.index.toString() || ''
+              <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
+                <TableProvider
+                  data={tableData}
+                  tableColumns={tableColumns}
+                  tableFilterData={tableFilters}
+                  tableSearchKeys={undefined}
+                  tablePersistentSettingsKey={'adtable' + auctionEvents[0]}
+                  onRowContextMenu={noop}
+                  onRowClick={(row) =>
+                    setSelectedJSON(row as singleAuctionEvent)
                   }
-                  hideSearch={true}
-                  minWidth="50rem"
-                />
-              </TableProvider>
-            </div>
-          </>
-        ) : (
-          <div className="h-full p-8 flex items-center justify-center">
-            <p className="text-center text-lg">
-              Auction events have yet to be recorded.
-            </p>
-          </div>
-        )}
-      </Resizable>
-      <BottomTray selectedJSON={selectedJSON as object} />
+                  getRowObjectKey={(row: TableRow) => {
+                    return (
+                      // @ts-ignore
+                      row.originalData.index.toString()
+                    );
+                  }}
+                >
+                  <Table
+                    selectedKey={
+                      // @ts-ignore
+                      selectedJSON?.index.toString() || ''
+                    }
+                    hideSearch={true}
+                    minWidth="50rem"
+                  />
+                </TableProvider>
+              </div>
+            </>
+          </Resizable>
+          <BottomTray selectedJSON={selectedJSON as object} />
+        </>
+      ) : (
+        <div className="h-full p-8 flex items-center justify-center">
+          <p className="text-center text-lg">
+            Auction events have yet to be recorded.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
