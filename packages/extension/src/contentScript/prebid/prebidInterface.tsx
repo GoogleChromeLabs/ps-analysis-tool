@@ -278,6 +278,7 @@ class PrebidInterface {
               ).toISOString(),
               adUnitCode: args.adUnitCode,
               type: '',
+              adType: args.mediaType ?? '',
               eventType: 'BidAvailable',
             });
 
