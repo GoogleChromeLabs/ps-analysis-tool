@@ -165,7 +165,7 @@ const Table = ({
             exportTableData={exportTableData}
             count={count}
           />
-          <div className="flex items-center justify-between gap-1 px-2 py-0.5 bg-anti-flash-white dark:bg-raisin-black">
+          <div className="flex items-center justify-between gap-1 py-0.5 bg-anti-flash-white dark:bg-raisin-black">
             {!hideFiltering && (
               <TableChipsBar
                 selectedFilters={selectedFilters}

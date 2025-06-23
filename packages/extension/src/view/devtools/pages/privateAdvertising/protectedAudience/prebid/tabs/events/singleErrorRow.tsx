@@ -37,7 +37,7 @@ const SingleErrorRow = ({
 
   return (
     <div
-      className={`flex flex-row items-start gap-2 text-raisin-black dark:text-bright-gray ${additionalClasses}`}
+      className={`flex flex-row items-start gap-2 text-raisin-black dark:text-bright-gray mx-[3px] ${additionalClasses}`}
       key={time}
     >
       <p className="flex items-center justify-center">

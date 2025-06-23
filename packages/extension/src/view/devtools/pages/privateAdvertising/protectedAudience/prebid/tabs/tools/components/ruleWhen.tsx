@@ -28,7 +28,7 @@ import type { PrebidDebugModuleConfigRule } from '@google-psat/common';
 /**
  * Internal dependencies
  */
-import { useProtectedAudience } from '../../../../../../../stateProviders';
+import { usePrebid } from '../../../../../../../stateProviders';
 import { matchRuleTargets } from '../../../../../../../stateProviders/prebid/constants';
 
 interface RuleProps {
@@ -61,8 +61,8 @@ const RuleWhen = ({
   groupIndex,
 }: RuleProps) => {
   const dropdownRef = useRef<HTMLSelectElement | null>(null);
-  const ruleValueOptions = useProtectedAudience(({ state }) => {
-    const prebidAdunits = Object.values(state?.prebidResponse?.adUnits ?? {});
+  const ruleValueOptions = usePrebid(({ state }) => {
+    const prebidAdunits = Object.values(state?.prebidData?.adUnits ?? {});
 
     const _bidders = prebidAdunits?.reduce((prev, adUnit) => {
       const newBidders = adUnit.bidders?.reduce((prevValue, bidder) => {
@@ -77,7 +77,7 @@ const RuleWhen = ({
     }, [] as string[]);
 
     return {
-      adUnitCode: Object.keys(state?.prebidResponse?.adUnits ?? {}),
+      adUnitCode: Object.keys(state?.prebidData?.adUnits ?? {}),
       bidder: _bidders,
     };
   });
@@ -87,7 +87,7 @@ const RuleWhen = ({
         <p className="text-sm text-raisin-black dark:text-bright-gray">and</p>
       )}
       <div className="flex flex-row gap-2 items-center gap-1">
-        <div className="w-1/2 relative">
+        <div className="relative">
           <div
             style={{ marginBottom: '-7px' }}
             className="min-w-0 px-2 text-left pointer-events-none"
@@ -109,7 +109,7 @@ const RuleWhen = ({
         <div className="w-4 h-4">
           <Equal className="w-4 h-4 text-sapphire dark:text-baby-blue-eyes" />
         </div>
-        <div className="w-1/2 relative">
+        <div className="relative">
           <div
             style={{ marginBottom: '-7px' }}
             className="min-w-0 px-2 text-left pointer-events-none"
