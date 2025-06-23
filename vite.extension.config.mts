@@ -96,23 +96,6 @@ export default defineConfig(() => {
           devtools: './src/view/devtools/devtools.html',
           index: './src/view/devtools/index.html',
         },
-        output: {
-          manualChunks: (id: string) => {
-            if (id.includes('view/devtools')) {
-              return 'devtools';
-            }
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-            if (id.includes('design-system')) {
-              return 'design-system';
-            }
-            if (id.includes('common')) {
-              return 'common';
-            }
-            return null;
-          },
-        },
       },
     },
     plugins: [

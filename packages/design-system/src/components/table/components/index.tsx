@@ -209,7 +209,7 @@ const Table = ({
             position={columnPosition}
           />
           <table
-            className="h-full w-full table-fixed border-separate border-spacing-0 relative border-r border-american-silver dark:border-quartz"
+            className="h-full w-full table-fixed border-separate border-spacing-0 relative border-r border-american-silver dark:border-quartz overflow-hidden"
             style={{
               minWidth: minWidth ?? 'auto',
             }}

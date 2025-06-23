@@ -93,7 +93,7 @@ const useColumnResizing = (
       startX.current = event.screenX;
       const columnElement = getColumnElement(columnId);
       if (columnElement) {
-        startingColumnWidth.current = getColumnWidth(columnElement);
+        startingColumnWidth.current = getColumnWidth(columnElement) || 0;
         currentColumn.current = columnElement;
       }
     }
@@ -143,7 +143,7 @@ const useColumnResizing = (
       if (!columnId) {
         return;
       }
-      const width = getColumnWidth(columnElement);
+      const width = getColumnWidth(columnElement) || 0;
       setPersistedColumnsSizing((prev) => {
         return { ...(prev || {}), [columnId]: width };
       });
@@ -209,7 +209,7 @@ const useColumnResizing = (
   // fixes the column widths when the component is mounted
   // so the columns don't resize when the user starts dragging
   const setColumnWidths = useCallback(() => {
-    if (!areSettingsLoaded) {
+    if (!areSettingsLoaded || isResizing) {
       return;
     }
 
@@ -262,13 +262,13 @@ const useColumnResizing = (
 
       // don't set any width if it's already set
       if (columnElement.style.maxWidth !== '') {
-        columnsSizing[columnId] = getColumnWidth(columnElement);
+        columnsSizing[columnId] = getColumnWidth(columnElement) || 0;
         return;
       }
 
       const minWidth = getColumnMinWidth(columnElement);
       const colWidth = getColumnWidth(columnElement);
-      const width = Math.max(minWidth || 0, colWidth);
+      const width = Math.max(minWidth || 0, colWidth || 0);
       setColumnWidth(columnElement, width);
       columnsSizing[columnId] = width;
     });
@@ -278,27 +278,24 @@ const useColumnResizing = (
     if (tableRef.current) {
       tableRef.current.style.width = 'auto';
     }
-  }, [areSettingsLoaded, persistedColumnsSizing]);
+  }, [areSettingsLoaded, persistedColumnsSizing, isResizing]);
 
   useEffect(() => {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mouseout', handleMouseOut);
-    window.addEventListener('resize', setColumnWidths);
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseout', handleMouseOut);
-      window.removeEventListener('resize', setColumnWidths);
     };
   }, [
     handleMouseDown,
     handleMouseMove,
     handleMouseOut,
     handleMouseUp,
-    setColumnWidths,
     tableContainerRef,
   ]);
 
