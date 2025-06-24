@@ -650,6 +650,7 @@ check_chrome_update() {
   local cache_file=""
   local latest_version=""
   local update_args=""
+  local update_value=""
 
   echo "Checking for Chrome updates..."
   echo "Current: \$current_channel channel, version \$current_version"
@@ -662,12 +663,14 @@ check_chrome_update() {
     # Chrome was installed using a specific milestone
     json_url="https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone.json"
     cache_file="\$CHROME_UPDATE_CACHE_DIR/chrome_milestone_\${current_milestone}_update.json"
-    update_args="--chrome-version \$current_milestone"
+    update_args="--chrome-version"
+    update_value="\$current_milestone"
   else
     # Chrome was installed using a channel
     json_url="https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json"
     cache_file="\$CHROME_UPDATE_CACHE_DIR/chrome_\${current_channel}_update.json"
-    update_args="--chrome-channel \$current_channel"
+    update_args="--chrome-channel"
+    update_value="\$current_channel"
   fi
 
   # Check if cache is valid
@@ -746,12 +749,17 @@ check_chrome_update() {
       }
 
       # Execute the downloaded script with the appropriate arguments
-      echo "Executing: \$temp_script \$update_args"
-      "\$temp_script" \$update_args
+      echo "Executing: \$temp_script \$update_args \$update_value"
+      "\$temp_script" \$update_args \$update_value
+      local script_exit_code=$?
 
       # Clean up the temporary script
       rm -f "\$temp_script"
-      echo "Please restart your terminal or source the updated launcher script."
+
+      if [ \$script_exit_code -eq 0 ]; then
+        echo "Please restart your terminal or source the updated launcher script."
+      fi
+
       return 1  # Return non-zero to indicate update in progress
     else
       echo "Continuing with current version."
@@ -960,7 +968,7 @@ launch_chrome_testing() {
       --no-first-run
       --silent-debugger-extension-api # Needed for PS Analysis Tool
       --disable-infobars
-      --force-device-scale-factor=1
+      # --force-device-scale-factor=1
       # --enable-features=NetworkServiceInProcess # May be needed for some extension interactions
       --start-maximized # Optional: Start maximized
   )
