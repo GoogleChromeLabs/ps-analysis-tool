@@ -53,10 +53,14 @@ const ChipsBar = ({
     return acc;
   }, 0);
 
+  if (appliedFiltersCount === 0) {
+    return null;
+  }
+
   return (
     <div
       className={
-        'w-full h-4 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black'
+        'w-full h-4 flex items-center overflow-x-scroll no-scrollbar bg-anti-flash-white dark:bg-raisin-black my-0.5 mx-0.5'
       }
     >
       {appliedFiltersCount > 0 && !hideClearAll && (

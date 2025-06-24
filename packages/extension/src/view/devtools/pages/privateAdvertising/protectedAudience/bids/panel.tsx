@@ -77,10 +77,10 @@ const Panel = ({
     }
 
     if (bidsPillToggle === BidsPillOptions.NoBids) {
-      return Object.keys(noBids).length > 0;
+      return Object.keys(noBids || {}).length > 0;
     }
 
-    return Object.entries(timelines).length > 0;
+    return Object.entries(timelines || {}).length > 0;
   }, [bidsPillToggle, timelines, receivedBids.length, noBids]);
 
   const { setPAActiveTab, setPAStorage } = useTabs(({ actions }) => ({
