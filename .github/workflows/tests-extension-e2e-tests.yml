@@ -48,6 +48,8 @@ jobs:
         run: |
           ls 
           pwd 
+          rm -rf **/node_modules
+          rm -rf package-lock.json
           npm install || true
           npm run build:ext
       - name: Install Xvfb
