@@ -303,9 +303,9 @@ class PrebidInterface {
             });
             break;
           case 'bidTimeout':
-            args.forEach((element: BidTimeoutEvent) => {
-              calculatedEvents[element.auctionId].push({
-                ...element,
+            args.forEach((arg: BidTimeoutEvent) => {
+              calculatedEvents[arg.auctionId].push({
+                ...arg,
                 elapsedTime,
                 eventType,
               });
