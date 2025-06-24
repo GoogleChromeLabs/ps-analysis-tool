@@ -62,11 +62,15 @@ const NamePrefixIconSelector = ({
 
   if (isInboundBlocked && isOutboundBlocked) {
     if (isInboundBlockedInAll && isOutboundBlockedInAll) {
-      return <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />;
+      return (
+        <OutboundInboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />
+      );
     }
 
     if (!isInboundBlockedInAll && !isOutboundBlockedInAll) {
-      return <OutboundInboundIcon className="stroke-[#FE8455] scale-150" />;
+      return (
+        <OutboundInboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />
+      );
     }
 
     if (isInboundBlockedInAll) {
@@ -78,16 +82,16 @@ const NamePrefixIconSelector = ({
 
   if (isInboundBlocked) {
     if (isInboundBlockedInAll) {
-      return <InboundIcon className="stroke-[#D8302F] scale-150" />;
+      return <InboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />;
     }
-    return <InboundIcon className="stroke-[#FE8455] scale-150" />;
+    return <InboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />;
   }
 
   if (isOutboundBlocked) {
     if (isOutboundBlockedInAll) {
-      return <OutboundIcon className="stroke-[#D8302F] scale-150" />;
+      return <OutboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />;
     }
-    return <OutboundIcon className="stroke-[#FE8455] scale-150" />;
+    return <OutboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />;
   }
 
   return <></>;
