@@ -143,7 +143,7 @@ const Panel = ({
             <div
               className={classNames(
                 'h-full border-r border-t border-american-silver dark:border-quartz',
-                Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
+                Object.keys(noBids).length > 0 ? 'w-fit' : 'w-full'
               )}
             >
               <NoBidsTable
