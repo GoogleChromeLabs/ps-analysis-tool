@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { resolve } from 'node:path';
+import path, { resolve } from 'node:path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { readdirSync } from 'node:fs';
 import svgr from 'vite-plugin-svgr';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const packagesDir = resolve(__dirname, 'packages');
 const aliases = readdirSync(packagesDir).map((name) => ({
@@ -34,3 +38,5 @@ export default defineConfig({
     chunkSizeWarningLimit: 2000,
   },
 });
+
+export { __dirname };
