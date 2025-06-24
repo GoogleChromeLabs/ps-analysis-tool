@@ -33,11 +33,11 @@ export const ADVERTIZER_CONFIG = {
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          In the current flow, DSP tags collect user data from the webpage and
-          send it to DSP servers for processing. The DSP servers analyze this
-          data and return a JSON response. This response is then passed as a
-          parameter to the
-          <code className="text-upsed-tomato">joinAdInterestGroup()</code>
+          In the current flow, the DSP tag collects a range of anonymous data
+          about the user and their interaction with the website and send it to
+          DSP servers for processing. The DSP servers analyze this data and
+          return a JSON response. This response is then passed as a parameter to
+          the <code className="text-upsed-tomato">joinAdInterestGroup()</code>{' '}
           function, which adds the user to specific interest groups. These
           interest groups are crucial for targeting users with relevant ads in
           future auctions.
@@ -100,7 +100,7 @@ export const SINGLE_SELLER_CONFIG = {
         <p className="mt-1">
           In the current flow, the SSP ad tag sends an ad request to the SSP
           server, indicating that the browser supports the Protected Audience
-          API. It also returns contextual auction responses to the
+          API. It also returns contextual auction responses to the{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function,
           which is responsible for initiating the on-device auction.
         </p>
@@ -123,7 +123,7 @@ export const SINGLE_SELLER_CONFIG = {
         <p>
           The SSP server receives ad requests from the SSP tag and forwards them
           to DSPs, who bid on the ad space via RTB. It also returns the winning
-          ad creative, which is used during the ad scoring process in the
+          ad creative, which is used during the ad scoring process in the{' '}
           <code className="text-upsed-tomato">scoreAd()</code> function.
         </p>
         <p>
@@ -171,14 +171,14 @@ export const SINGLE_SELLER_CONFIG = {
       <>
         <p>
           The SSP ad tag is responsible for initiating the on-device auction. It
-          does this by calling the
+          does this by calling the{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function.
         </p>
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
           In the current flow, the SSP ad tag passes signals and the contextual
-          ad winner, derived from the DSP&apos;s OpenRTB bid response, to the
+          ad winner, derived from the DSP&apos;s OpenRTB bid response, to the{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function.
           This bid response is sent by the SSP server and is used to initiate
           the auction process.
@@ -192,7 +192,7 @@ export const SINGLE_SELLER_CONFIG = {
       <>
         <p>
           This is a browser-based mechanism for accessing interest group
-          information that has been stored using the
+          information that has been stored using the{' '}
           <code className="text-upsed-tomato">joinAdInterestGroup()</code> API.
           It enables this information to be used in ad auctions to help display
           more relevant ad content while maintaining privacy standards.
@@ -214,7 +214,7 @@ export const SINGLE_SELLER_CONFIG = {
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome interacts with the
+          Chrome interacts with the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#31-fetching-real-time-data-from-a-trusted-server"
@@ -222,7 +222,7 @@ export const SINGLE_SELLER_CONFIG = {
             rel="noreferrer"
           >
             Key/Value trusted DSP bidding server
-          </a>
+          </a>{' '}
           to fetch real-time bidding signals, which are used to generate bids
           during ad auctions.
         </p>
@@ -243,7 +243,7 @@ export const SINGLE_SELLER_CONFIG = {
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls the
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#32-on-device-bidding"
@@ -251,7 +251,7 @@ export const SINGLE_SELLER_CONFIG = {
             rel="noreferrer"
           >
             <code className="text-upsed-tomato">generateBid()</code>
-          </a>
+          </a>{' '}
           DSP JavaScript function for each participating interest group. This
           function is crucial for determining bids during the on-device auction
           process.
@@ -282,7 +282,7 @@ export const SINGLE_SELLER_CONFIG = {
           (Real-Time Bidding) protocols.
         </p>
         <p className="mt-1">
-          DSP servers generate a bid when the
+          DSP servers generate a bid when the{' '}
           <code className="text-upsed-tomato">generateBid()</code> function is
           called from their respective DSP tags.
         </p>
@@ -302,7 +302,7 @@ export const SINGLE_SELLER_CONFIG = {
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome interacts with the
+          Chrome interacts with the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#25-additional-trusted-signals-directfromsellersignals"
@@ -310,7 +310,7 @@ export const SINGLE_SELLER_CONFIG = {
             rel="noreferrer"
           >
             Key/Value trusted SSP scoring server
-          </a>
+          </a>{' '}
           to fetch real-time scoring signals, which are used to evaluate bids
           during ad auctions.
         </p>
@@ -327,14 +327,14 @@ export const SINGLE_SELLER_CONFIG = {
           auction based on price, relevance, and publisher-defined criteria. It
           outputs a ranked list of bids, selecting the top bid as the winner for
           ad display. Any bid that is less than the contextual bid passed by the
-          SSP tag while calling the
+          SSP tag while calling the{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function is
           rejected.
         </p>
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls the
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#23-scoring-bids"
@@ -342,7 +342,7 @@ export const SINGLE_SELLER_CONFIG = {
             rel="noreferrer"
           >
             <code className="text-upsed-tomato">scoreAd()</code>
-          </a>
+          </a>{' '}
           SSP JavaScript function for each participating interest group. This
           function is crucial for determining the winning bid during the auction
           process.
@@ -365,7 +365,7 @@ export const SINGLE_SELLER_CONFIG = {
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls the
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#52-buyer-reporting-on-render-and-ad-events"
@@ -373,7 +373,7 @@ export const SINGLE_SELLER_CONFIG = {
             rel="noreferrer"
           >
             <code className="text-upsed-tomato">reportWin()</code>
-          </a>
+          </a>{' '}
           DSP JavaScript function to notify the DSP about their winning bid.
         </p>
       </>
@@ -394,7 +394,7 @@ export const SINGLE_SELLER_CONFIG = {
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls the
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#51-seller-reporting-on-render"
@@ -402,7 +402,7 @@ export const SINGLE_SELLER_CONFIG = {
             rel="noreferrer"
           >
             <code className="text-upsed-tomato">reportResult()</code>
-          </a>
+          </a>{' '}
           SSP JavaScript function to communicate the auction results to the SSP.
         </p>
       </>
@@ -416,7 +416,7 @@ export const SINGLE_SELLER_CONFIG = {
           The winning advertisement is presented once the protected audience
           auction process concludes. In cases where there are no successful bids
           or no interest group participation, the system defaults to displaying
-          the contextual advertisement that was originally provided in the
+          the contextual advertisement that was originally provided in the{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function
           call to the user.
         </p>
@@ -491,10 +491,10 @@ export const MULTI_SELLER_CONFIG = {
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
           The Publisher Ad Server tag transmits an ad request to the Publisher
-          Ad Server. It triggers an on-device auction by invoking the
+          Ad Server. It triggers an on-device auction by invoking the{' '}
           <a href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#21-initiating-an-on-device-auction">
             <code className="text-upsed-tomato">runAdAuction()</code>
-          </a>
+          </a>{' '}
           function.
         </p>
       </>
@@ -521,7 +521,7 @@ export const MULTI_SELLER_CONFIG = {
           bidding winner&apos;s value is considered for comparison, while all
           lower bids are automatically disqualified. The successful bid is
           transmitted to the Publisher Ad Tag as the contextual auction winner,
-          which subsequently serves as a reference point within the
+          which subsequently serves as a reference point within the{' '}
           <code className="text-upsed-tomato">scoreAd()</code> function
           implemented in the Protected Audience API.
         </p>
@@ -622,7 +622,7 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The <code className="text-upsed-tomato">scoreAd()</code> function
+          The <code className="text-upsed-tomato"> scoreAd()</code> function
           performs comprehensive evaluation and prioritization of bids during
           advertising auctions by analyzing factors such as bid price, content
           relevance, and custom publisher-specified criteria. It generates an
@@ -635,18 +635,18 @@ export const MULTI_SELLER_CONFIG = {
         <h4 className="font-bold mt-2">Role in Multi-Seller Configuration</h4>
         <p>
           Within multi-seller environments, the
-          <code className="text-upsed-tomato">scoreAd()</code> function
+          <code className="text-upsed-tomato"> scoreAd()</code> function
           systematically ranks bids originating from various component auctions
           and evaluates them against the contextual bid winner that was provided
           at the initiation of the
-          <code className="text-upsed-tomato">runAdAuction()</code> process. Any
-          bid with a value below the contextual bid winner is automatically
+          <code className="text-upsed-tomato"> runAdAuction()</code> process.
+          Any bid with a value below the contextual bid winner is automatically
           disqualified, while bids exceeding the contextual bid winner&apos;s
           value proceed to the comparative evaluation phase.
         </p>
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome executes the
+          Chrome executes the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#23-scoring-bids"
@@ -654,7 +654,7 @@ export const MULTI_SELLER_CONFIG = {
             rel="noreferrer"
           >
             <code className="text-upsed-tomato">scoreAd()</code>
-          </a>
+          </a>{' '}
           SSP JavaScript function independently for each interest group that
           participates in the auction.
         </p>
@@ -667,7 +667,7 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The <code className="text-upsed-tomato">reportWin()</code> function
+          The <code className="text-upsed-tomato"> reportWin()</code> function
           transmits a comprehensive notification to the successful DSP
           containing detailed auction information. This specialized function is
           engineered by the DSPs themselves and is invoked by either SSPs or the
@@ -677,7 +677,7 @@ export const MULTI_SELLER_CONFIG = {
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome executes the
+          Chrome executes the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#52-buyer-reporting-on-render-and-ad-events"
@@ -685,7 +685,7 @@ export const MULTI_SELLER_CONFIG = {
             rel="noreferrer"
           >
             <code className="text-upsed-tomato">reportWin()</code>
-          </a>
+          </a>{' '}
           DSP JavaScript function to communicate the auction results to the
           victorious DSP with relevant performance metrics.
         </p>
@@ -698,16 +698,16 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The <code className="text-upsed-tomato">reportResult()</code> function
-          distributes comprehensive auction outcome notifications to all
-          participating SSPs, documenting the winning bid and other critical
+          The <code className="text-upsed-tomato"> reportResult()</code>{' '}
+          function distributes comprehensive auction outcome notifications to
+          all participating SSPs, documenting the winning bid and other critical
           auction metrics. This function is developed by the SSPs themselves and
           is triggered by the ad server once the top-level auction concludes.
         </p>
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome initiates the
+          Chrome initiates the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#51-seller-reporting-on-render"
@@ -715,7 +715,7 @@ export const MULTI_SELLER_CONFIG = {
             rel="noreferrer"
           >
             <code className="text-upsed-tomato">reportResult()</code>
-          </a>
+          </a>{' '}
           SSP JavaScript function to communicate the final auction results to
           the relevant SSP with detailed performance data.
         </p>
