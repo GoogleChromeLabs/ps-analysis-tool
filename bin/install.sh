@@ -849,7 +849,7 @@ psat_check_psat_update() {
       # Update the PSAT_VERSION in the chrome_launcher.sh file itself
       if [[ -f "$ALIAS_SCRIPT_PATH" ]]; then
         echo "Updating PSAT_VERSION in $ALIAS_SCRIPT_PATH..."
-        sed -i "s/^export PSAT_VERSION=\".*\"/export PSAT_VERSION=\"\$latest_version\"/" "$ALIAS_SCRIPT_PATH" || {
+        sed -i '' "s|^export PSAT_VERSION=\".*\"|export PSAT_VERSION=\"\${latest_version}\"|" "$ALIAS_SCRIPT_PATH" || {
           echo "Warning: Failed to update PSAT_VERSION in $ALIAS_SCRIPT_PATH. Changes will only apply to current session."
         }
       fi
