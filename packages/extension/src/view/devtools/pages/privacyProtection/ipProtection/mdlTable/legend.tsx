@@ -22,7 +22,7 @@ import React from 'react';
 
 const Legend = () => {
   return (
-    <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] overflow-y-auto">
+    <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] overflow-y-auto text-raisin-black dark:text-bright-gray">
       <p className="px-2 py-1">
         The Masked Domain List (MDL) is part of Google&#39;s IP Protection
         initiative, designed to enhance user privacy. It comprises domains that,
