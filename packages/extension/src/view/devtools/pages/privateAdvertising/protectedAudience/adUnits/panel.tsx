@@ -163,7 +163,7 @@ const AdUnitsPanel = ({
             <p className="text-lg text-raisin-black dark:text-bright-gray">
               No ad units were recorded.
             </p>
-            {showEvaluationPlaceholder && (
+            {showEvaluationPlaceholder && pillToggle !== 'Prebid' && (
               <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
             )}
           </div>

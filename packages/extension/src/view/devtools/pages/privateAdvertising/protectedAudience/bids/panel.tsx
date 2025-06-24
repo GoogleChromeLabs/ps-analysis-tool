@@ -114,7 +114,7 @@ const Panel = ({
       {!isUsingCDP && panelPillToggle === 'PAAPI' ? (
         <div className="w-full h-full flex items-center justify-center">
           <p className="text-sm text-raisin-black dark:text-bright-gray">
-            To view ad units, enable PSAT to use CDP via the{' '}
+            To view bids data, enable PSAT to use CDP via the{' '}
             <button
               className="text-bright-navy-blue dark:text-jordy-blue"
               onClick={cdpNavigation}
@@ -134,7 +134,9 @@ const Panel = ({
                 receivedBids={receivedBids}
                 storage={storage}
                 setStorage={setStorage}
-                showEvaluationPlaceholder={!eeAnimatedTab}
+                showEvaluationPlaceholder={
+                  !eeAnimatedTab && panelPillToggle !== 'Prebid'
+                }
               />
             </div>
           )}
@@ -150,7 +152,9 @@ const Panel = ({
                 setSelectedRow={setSelectedRow}
                 selectedRow={selectedRow}
                 noBids={noBids}
-                showEvaluationPlaceholder={!eeAnimatedTab}
+                showEvaluationPlaceholder={
+                  !eeAnimatedTab && panelPillToggle !== 'Prebid'
+                }
               />
             </div>
           )}
@@ -169,7 +173,9 @@ const Panel = ({
                   </div>
                 ))
               ) : (
-                <Placeholder showEvaluationPlaceholder={true} />
+                <Placeholder
+                  showEvaluationPlaceholder={panelPillToggle !== 'Prebid'}
+                />
               )}
             </div>
           )}

@@ -123,6 +123,11 @@ class PrebidInterface {
       const pbjsGlobals: string[] = window._pbjsGlobals ?? [];
       if (pbjsGlobals?.length > 0) {
         pbjsGlobals.forEach((pbjsGlobal: string) => {
+          //@ts-ignore
+          if (!window[pbjsGlobal]?.getEvents) {
+            return;
+          }
+
           const pbjsClass = new this();
           //@ts-ignore
           pbjsClass.prebidInterface = window[pbjsGlobal] as typeof window.pbjs;
@@ -217,6 +222,10 @@ class PrebidInterface {
     const calculatedNoBids: PrebidNoBidsType = {};
     const calculatedReceivedBids: ReceivedBids[] = [];
 
+    if (!this.prebidInterface?.getEvents) {
+      return;
+    }
+
     this.prebidInterface
       ?.getEvents()
       .forEach(({ eventType, args, elapsedTime }) => {
@@ -238,7 +247,7 @@ class PrebidInterface {
             calculatedErrorEvents.push({
               type: args.type,
               message: args.arguments,
-              time: `${elapsedTime}ms`,
+              time: `${Math.round(elapsedTime)}ms`,
             });
             break;
           case 'bidRequested':
@@ -260,14 +269,16 @@ class PrebidInterface {
               bidCurrency: args.currency,
               uniqueAuctionId: args.auctionId,
               index: calculatedReceivedBids.length,
-              bid: args.price,
+              bid: args.price ?? args.cpm,
               ownerOrigin: args.bidder,
               time: args.responseTimestamp ?? Date.now(),
+              mediaContainerSize: [[args.width, args.height]],
               formattedTime: new Date(
                 args.responseTimestamp ?? Date.now()
               ).toISOString(),
               adUnitCode: args.adUnitCode,
               type: '',
+              adType: args.mediaType ?? '',
               eventType: 'BidAvailable',
             });
 
@@ -292,9 +303,9 @@ class PrebidInterface {
             });
             break;
           case 'bidTimeout':
-            args.forEach((element: BidTimeoutEvent) => {
-              calculatedEvents[element.auctionId].push({
-                ...args,
+            args.forEach((arg: BidTimeoutEvent) => {
+              calculatedEvents[arg.auctionId].push({
+                ...arg,
                 elapsedTime,
                 eventType,
               });
@@ -308,25 +319,25 @@ class PrebidInterface {
             });
             break;
           case 'noBid':
-            if (!calculatedNoBids[args.auctionId]) {
-              calculatedNoBids[args.auctionId] = {
+            if (!calculatedNoBids[args.adUnitCode]) {
+              calculatedNoBids[args.adUnitCode] = {
                 uniqueAuctionId: args.auctionId,
                 adUnitCode: args.adUnitCode,
                 mediaContainerSize: args.sizes,
                 bidder: [args.bidder],
               };
             } else {
-              calculatedNoBids[args.auctionId] = {
+              calculatedNoBids[args.adUnitCode] = {
                 adUnitCode: args.adUnitCode,
                 mediaContainerSize: [
                   ...mergeUnique2DArrays(
-                    calculatedNoBids[args.auctionId]?.mediaContainerSize ?? [],
+                    calculatedNoBids[args.adUnitCode]?.mediaContainerSize ?? [],
                     args?.sizes ?? []
                   ),
                 ],
                 bidder: Array.from(
                   new Set<string>([
-                    ...calculatedNoBids[args.auctionId].bidder,
+                    ...calculatedNoBids[args.adUnitCode].bidder,
                     args.bidder,
                   ])
                 ),
@@ -395,6 +406,10 @@ class PrebidInterface {
   }
 
   calculateAdUnit() {
+    if (!this.prebidInterface?.getEvents) {
+      return;
+    }
+
     const auctionInitEvents: AuctionEndEvent[] = [];
     const bidWonEvents: {
       [adUnitCode: string]: {

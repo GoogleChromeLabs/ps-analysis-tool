@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import React, { useEffect, useMemo, useState } from 'react';
+import type { PrebidNoBidsType } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -85,10 +86,23 @@ const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
 
   const { adsAndBidders, receivedBids, noBids, auctionEvents } = useMemo(() => {
     if (pillToggle === 'Prebid') {
+      const processedNobids = Object.entries(prebidNoBids ?? {}).reduce(
+        (acc, [key, value]) => {
+          value?.bidder.forEach(
+            (bid) =>
+              (acc[key + bid] = {
+                ...value,
+              })
+          );
+
+          return acc;
+        },
+        {} as PrebidNoBidsType
+      );
       return {
         adsAndBidders: prebidAdunits || {},
         receivedBids: prebidReceivedBids || [],
-        noBids: prebidNoBids || {},
+        noBids: processedNobids || {},
         auctionEvents: prebidAuctionEvents || {},
       };
     }
