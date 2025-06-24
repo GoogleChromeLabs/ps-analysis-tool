@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/report",
-  "version": "0.14.1",
+  "version": "1.0.0",
   "description": "Static HTML analysis report",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
