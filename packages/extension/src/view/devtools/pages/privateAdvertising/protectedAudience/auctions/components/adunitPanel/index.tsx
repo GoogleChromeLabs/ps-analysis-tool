@@ -37,6 +37,7 @@ interface AdunitPanelProps {
   noBidsCount: Record<string, number>;
   winnerBid: Record<string, string | null> | null;
   winningMediaContainer?: Record<string, number[]>;
+  isEE?: boolean;
 }
 
 const AdunitPanel = ({
@@ -48,6 +49,7 @@ const AdunitPanel = ({
   noBidsCount,
   winnerBid = null,
   winningMediaContainer = {},
+  isEE = false,
 }: AdunitPanelProps) => {
   const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
@@ -86,6 +88,7 @@ const AdunitPanel = ({
       setPillToggle={setPillToggle}
       highlightOption={highlightOption}
       setHighlightOption={setHighlightOption}
+      isEE={isEE}
     />
   );
 };
