@@ -274,7 +274,7 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
     name: I18n.getMessage('trackingProtection'),
     icon: PSTrackingProtectionIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description: 'Anti Covert Tracking Techniques.',
+    description: 'Anti covert tracking techniques.',
     url: LINKS.PS_TRACKING_PROTECTION.doc,
     buttons: [
       {
