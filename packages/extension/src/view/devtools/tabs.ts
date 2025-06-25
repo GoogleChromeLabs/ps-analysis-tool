@@ -424,29 +424,6 @@ const TABS: SidebarItems = {
     },
     dropdownOpen: true,
     children: {
-      [SIDEBAR_ITEMS_KEYS.HELP_CENTER]: {
-        title: () => 'Help Center',
-        panel: {
-          Element: HelpCenter,
-          skipPanelDisplay: true,
-          href: addUTMParams('https://support.google.com/privacysandbox'),
-        },
-        icon: {
-          Element: Help,
-          props: {
-            className: 'fill-granite-gray',
-          },
-        },
-        selectedIcon: {
-          Element: Help,
-          props: {
-            className: 'fill-bright-gray',
-          },
-        },
-        dropdownOpen: false,
-        children: {},
-        containerClassName: 'h-6',
-      },
       [SIDEBAR_ITEMS_KEYS.DEV_SITE]: {
         title: () => 'Dev Site',
         panel: {
@@ -462,6 +439,29 @@ const TABS: SidebarItems = {
         },
         selectedIcon: {
           Element: DevGuideIcon,
+          props: {
+            className: 'fill-bright-gray',
+          },
+        },
+        dropdownOpen: false,
+        children: {},
+        containerClassName: 'h-6',
+      },
+      [SIDEBAR_ITEMS_KEYS.HELP_CENTER]: {
+        title: () => 'Help Center',
+        panel: {
+          Element: HelpCenter,
+          skipPanelDisplay: true,
+          href: addUTMParams('https://support.google.com/privacysandbox'),
+        },
+        icon: {
+          Element: Help,
+          props: {
+            className: 'fill-granite-gray',
+          },
+        },
+        selectedIcon: {
+          Element: Help,
           props: {
             className: 'fill-bright-gray',
           },

@@ -372,7 +372,7 @@ export const LEARNING_BOX_ITEMS = [
     },
   },
   {
-    name: 'Wiki',
+    name: 'PSAT Wiki',
     icon: PSWikiIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
     title: 'Looking for in-depth guidance on using PSAT?',
