@@ -213,7 +213,7 @@ const AuctionTable = ({
             <>
               <div className="flex justify-between items-center p-2">
                 <p>
-                  <span className="font-semibold">Started by:</span>
+                  <span className="font-semibold">Started by: </span>
                   {auctionEvents?.[0]?.auctionConfig?.seller}
                 </p>
                 <p>

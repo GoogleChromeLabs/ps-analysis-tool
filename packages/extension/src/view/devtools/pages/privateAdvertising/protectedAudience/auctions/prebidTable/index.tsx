@@ -208,22 +208,22 @@ const PrebidTable = ({ auctionEvents, adUnit }: PrebidTableProps) => {
               <div className="flex flex-col gap-2 p-2">
                 <div className="flex justify-between items-center">
                   <p>
-                    <span className="font-semibold">Auction Id:</span>
+                    <span className="font-semibold">Auction Id: </span>
                     {auctionEvents[0]}
                   </p>
                   <p>
-                    <span className="font-semibold">Start Time:</span>
+                    <span className="font-semibold">Start Time: </span>
                     {new Date(auctionEvents?.[1][0].timestamp).toISOString()}
                   </p>
                 </div>
                 <div className="flex justify-between items-center">
                   <p>
-                    <span className="font-semibold">Timeout:</span>
+                    <span className="font-semibold">Timeout: </span>
                     {auctionEvents?.[1][0].timeout}ms
                   </p>
                   {auctionEndObject && (
                     <p>
-                      <span className="font-semibold">Auction Time:</span>{' '}
+                      <span className="font-semibold">Auction Time: </span>{' '}
                       {auctionEndObject?.auctionEnd -
                         auctionEndObject?.timestamp}
                       ms
