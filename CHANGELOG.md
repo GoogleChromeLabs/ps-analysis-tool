@@ -663,7 +663,10 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Feature: Prebid integration https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1078
 - Feature: Provide option to switch PB namespace https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1100
 - Feature: Update IP Protection panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1062
+- Fix: Develop QA fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1111
 - Fix: Failing E2E tests https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1072
+- Fix: GH actions https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1109
+- Fix: Handle PA EE issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1112
 - Fix: PB bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1103
 - Fix: QA bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1106
 - Fix: Sevice worker messaging https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1107
@@ -677,6 +680,7 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Enhancement: Group all tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1086
 - Enhancement: Highlight taxonomy tree node https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1091
 - Enhancement: Topic animation refactoring https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1002
+- Enhancement: Update info tab text https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1077
 - Enhancement: Updates on PB panels https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1104
 - Improvement: JSON view https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1096
 - Improvement: Persistent resizable trays https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1095
