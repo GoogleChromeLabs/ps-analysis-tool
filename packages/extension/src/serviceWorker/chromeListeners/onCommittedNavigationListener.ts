@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import { TABID_STORAGE } from '../../constants';
+import ARAStore from '../../store/ARAStore';
 import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
 import PAStore from '../../store/PAStore';
@@ -46,6 +47,12 @@ export const onCommittedNavigationListener = async ({
 
     if (!DataStore.tabs[tabId.toString()]) {
       dataStore.addTabData(tabId.toString());
+      dataStore.initialiseVariablesForNewTab(tabId.toString());
+      DataStore.tabs[tabId.toString()].devToolsOpenState = true;
+      cookieStore.initialiseVariablesForNewTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
+      PAStore.initialiseVariablesForNewTab(tabId.toString());
+      ARAStore.initialiseVariablesForNewTab(tabId.toString());
     }
 
     const queryParams = getQueryParams(url);
