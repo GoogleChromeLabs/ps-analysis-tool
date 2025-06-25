@@ -53,7 +53,7 @@ const Topics = () => {
           title: 'Explorable Explanation',
           content: {
             Element: ExplorableExplanation,
-            className: 'overflow-hidden',
+            className: 'overflow-hidden h-full',
             containerClassName: 'overflow-hidden',
           },
         },

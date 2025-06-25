@@ -328,7 +328,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const url =
           DataStore.requestIdToCDPURLMapping[tabId][
             loadingFinishedParams.requestId
-          ].url;
+          ]?.url;
 
         PAStore.parseRequestHeadersForPA(
           loadingFinishedParams.requestId,
@@ -346,7 +346,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         const url =
           DataStore.requestIdToCDPURLMapping[tabId][
             loadingFailedParams.requestId
-          ].url;
+          ]?.url;
 
         PAStore.parseRequestHeadersForPA(
           loadingFailedParams.requestId,
@@ -596,7 +596,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
         ARAStore.sources.sourceRegistration =
           ARAStore.sources.sourceRegistration.map((singleSource) => {
-            const host = new URL(DataStore.tabs[tabId].url).origin;
+            const host = isValidURL(DataStore.tabs[tabId]?.url)
+              ? new URL(DataStore.tabs[tabId]?.url).origin
+              : '';
             const sourceOriginHost = new URL(singleSource.sourceOrigin).origin;
             if (
               //@ts-ignore
@@ -684,7 +686,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             );
           }
 
-          const host = new URL(DataStore.tabs[tabId].url).origin;
+          const host = new URL(DataStore.tabs[tabId]?.url).origin;
           const sourceOriginHost = trigger.destination
             ? new URL(trigger.destination).origin
             : '';

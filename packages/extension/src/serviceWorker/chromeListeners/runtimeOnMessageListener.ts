@@ -107,7 +107,10 @@ export const runtimeOnMessageListener = async (
 
   const frameId = sender?.frameId ?? 0;
   const senderTabId = sender?.tab?.id;
-  if (!request?.payload?.tabId && !senderTabId) {
+  if (
+    (!request?.payload?.tabId && !senderTabId) ||
+    (senderTabId && !DataStore.tabs[senderTabId?.toString()])
+  ) {
     return;
   }
 
