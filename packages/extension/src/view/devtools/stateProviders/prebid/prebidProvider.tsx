@@ -191,7 +191,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       const newMatchRuleTarget = firstDifferent(
         targetsToUse.map(({ value }) => value),
-        Object.keys(ruleWhen)
+        Object.keys(ruleWhen[ruleType])
       );
 
       if (!newMatchRuleTarget) {
