@@ -44,6 +44,10 @@ export const onCommittedNavigationListener = async ({
       return;
     }
 
+    if (!DataStore.tabs[tabId.toString()]) {
+      dataStore.addTabData(tabId.toString());
+    }
+
     const queryParams = getQueryParams(url);
 
     if (queryParams.psat_cdp) {
