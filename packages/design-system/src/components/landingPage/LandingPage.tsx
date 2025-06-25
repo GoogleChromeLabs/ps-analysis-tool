@@ -84,7 +84,7 @@ const LandingPage = ({
       <div className="flex-1 w-full overflow-auto divide-y divide-hex-gray dark:divide-quartz flex flex-col">
         <div
           className={classNames(
-            'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz',
+            'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz flex-1',
             {
               'border-b border-american-silver dark:border-quartz': children,
             },
