@@ -1,6 +1,6 @@
 {
 	"name": "ps-analysis-tool",
-	"version": "0.14.1",
+	"version": "1.0.0",
 	"description": "Cookie Analysis Tool and CLI for analysis and understanding of cookie usage on web pages.",
 	"scripts": {
 		"build-storybook": "storybook build",
@@ -138,7 +138,7 @@
 		"vite-plugin-svgr": "^4.3.0",
 		"webpack": "^5.94.0",
 		"webpack-cli": "^5.1.4",
-		"webpack-dev-server": "^5.1.0",
+		"webpack-dev-server": "^5.2.1",
 		"webpack-node-externals": "^3.0.0",
 		"webpackbar": "^5.0.2"
 	},

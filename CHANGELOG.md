@@ -647,3 +647,46 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Misc patch fixes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1052
 - Miscellaneous updates and improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1049
 - Update diagram boxes to yellow for SSPs with minimal integration changes https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1051
+
+# v1.0.0
+
+## Changelog
+
+- Feature: Add PB adunits panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1080
+- Feature: Add PB bids UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1088
+- Feature: Add tabs grouping https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1069
+- Feature: Enhance display of IG Data https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1063
+- Feature: Integrate PB auction panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1085
+- Feature: PA timeline https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1101
+- Feature: PB tab UI https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1083
+- Feature: PB Timeline https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1089
+- Feature: Prebid integration https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1078
+- Feature: Provide option to switch PB namespace https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1100
+- Feature: Update IP Protection panel https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1062
+- Fix: Failing E2E tests https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1072
+- Fix: PB bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1103
+- Fix: QA bugs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1106
+- Fix: Sevice worker messaging https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1107
+- Fix: Storybook setup https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1033
+- Fix: Table layout https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1024
+- Fix: Table row highlight colors https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1076
+- Fix: Table vertical bar https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1087
+- Fix: Topics epoch revisit https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1075
+- Chore: Rename leftover CAT reference to PSAT https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1073
+- Deprecate and remove known breakages detection feature https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1097
+- Enhancement: Group all tabs https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1086
+- Enhancement: Highlight taxonomy tree node https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1091
+- Enhancement: Topic animation refactoring https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1002
+- Enhancement: Updates on PB panels https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1104
+- Improvement: JSON view https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1096
+- Improvement: Persistent resizable trays https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1095
+- Improvement: Upgrade Tailwind to v4 https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1068
+- Improvement: Upgrade to react 19 https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1067
+- Improvement: Vite warnings  https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1102
+- Improvement: Webpack migration to Vite https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1079
+- Redesign PS landing page and misc improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1084
+- Refactor: PB store and provider https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1092
+- Refactor: Split content script into functional parts https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1065
+- Refactor: UI improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1061
+- Refactor: Update Landing page component https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1094
+- Refactor: Use inheritance to re-organise stores and keep relevant data in respective stores. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1066
