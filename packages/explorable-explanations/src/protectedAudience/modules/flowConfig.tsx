@@ -98,7 +98,6 @@ export const SINGLE_SELLER_CONFIG = {
           connects publishers with various demand sources like DSPs, advertisers
           and ad exchanges to facilitate real-time bidding (RTB) auctions.
         </p>
-
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
           The SSP server receives ad requests from the SSP tag and forwards them
@@ -110,6 +109,8 @@ export const SINGLE_SELLER_CONFIG = {
           It runs a contextual auction and returns the winner along with the
           auction configuration to the SSP tags.
         </p>
+        <h4 className="font-bold mt-2">Examples</h4>
+        <p>Common examples of SSPs include Google Ad Manager and Magnite.</p>
       </>
     ),
   },
