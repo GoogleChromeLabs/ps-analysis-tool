@@ -24,23 +24,18 @@ export const ADVERTIZER_CONFIG = {
     info: (
       <>
         <p>
-          DSP tags are small script tags embedded in the advertiser&apos;s
-          webpage. They enable communication between the webpage and DSP
-          (Demand-Side Platform) servers. These tags are used to associate users
-          with interest groups, which are later utilized for retargeting and
-          building audiences for future ad campaigns.
+          DSP tags are scripts on an advertiser&apos;s webpage that facilitate
+          communication with Demand-Side Platform (DSP) servers. They are used
+          to associate users with interest groups for retargeting and audience
+          building in future ad campaigns.
         </p>
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          In the current flow, the DSP tag collects a range of anonymous data
-          about the user and their interaction with the website and send it to
-          DSP servers for processing. The DSP servers analyze this data and
-          return a JSON response. This response is then passed as a parameter to
-          the <code className="text-upsed-tomato">joinAdInterestGroup()</code>{' '}
-          function, which adds the user to specific interest groups. These
-          interest groups are crucial for targeting users with relevant ads in
-          future auctions.
+          DSP tags help determine the user’s interests, which are sent to DSP
+          servers for processing. The DSP servers return a JSON response used by
+          <code className="text-upsed-tomato">joinAdInterestGroup()</code> to
+          add users to interest groups for future ad auctions.
         </p>
       </>
     ),
@@ -50,24 +45,20 @@ export const ADVERTIZER_CONFIG = {
     info: (
       <>
         <p>
-          DSP servers on the advertiser&apos;s side are responsible for
-          analyzing anonymous interactions, processing information, and managing
-          interest categories. They evaluate website interactions and determine
-          if a visitor meets criteria for specific interest categories. These
-          determinations are based on information collected through the DSP
-          tags. DSPs are also the owners of these interest categories that
-          website visitors can become part of.
+          On the advertiser&apos;s side, DSP servers analyze anonymous user
+          interactions and manage interest categories, evaluating if visitors
+          meet criteria for specific categories based on data from DSP tags.
+          DSPs own these interest categories.
         </p>
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          In the current flow, DSP servers receive anonymized data from DSP
-          tags, process it, and send organized data back to the DSP tags. This
-          data is used to associate browsers with relevant interest categories.
-          These categories are stored in the visitor&apos;s browser and appear
-          as small bubbles in the diagram. They contain generalized information
-          about browser activity based on broad characteristics, location zones,
-          and browsing patterns while adhering to privacy guidelines like those
-          in the Protected Audience API.
+          DSP servers receive and process anonymized data from DSP tags, then
+          return organized data. This data associates browsers with relevant
+          interest groups, which are stored in the user&apos;s browser and
+          appear as small bubbles in the Explorable Explanation. They contain
+          generalized information about Browse activity based on broad
+          characteristics, locations and browsing patterns while adhering to
+          privacy guidelines such as those in the Protected Audience API.
         </p>
       </>
     ),
@@ -80,29 +71,19 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          An SSP tag is a script placed on the publisher&apos;s webpage that
-          allows the SSP (Supply-Side Platform) to initiate ad requests and
-          communicate with DSPs (Demand-Side Platforms). It performs the
-          following tasks:
+          An SSP Ad Tag is a script on a publisher&apos;s webpage that allows
+          the SSP to initiate ad requests and communicate with DSPs. It gathers
+          contextual page information, sends ad requests to the SSP server for
+          forwarding to DSPs via RTB, and receives RTB responses from the SSP
+          server.
         </p>
-        <ul className="list-disc ml-3 mt-1">
-          <li>Gathers contextual information about the page environment.</li>
-          <li>
-            Sends ad requests to the SSP server, which forwards the information
-            to DSPs using RTB (Real-Time Bidding) protocols.
-          </li>
-          <li>
-            Receives RTB responses from the SSP server and passes them back to
-            the SSP tag.
-          </li>
-        </ul>
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          In the current flow, the SSP ad tag sends an ad request to the SSP
-          server, indicating that the browser supports the Protected Audience
-          API. It also returns contextual auction responses to the{' '}
+          The SSP Ad Tag sends an ad request to the SSP server, signaling the
+          browser supports the Protected Audience API. It also returns
+          contextual auction responses to{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function,
-          which is responsible for initiating the on-device auction.
+          which is responsible for initiating the on-device auctions.
         </p>
       </>
     ),
@@ -112,29 +93,23 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          An SSP (Supply-Side Platform) is a platform that helps publishers
-          manage, sell, and optimize their ad inventory programmatically. It
-          connects publishers with multiple demand sources like DSPs,
-          advertisers, and ad exchanges to facilitate real-time bidding (RTB)
-          auctions.
+          An SSP (Supply-Side Platform) is a platform that enables publishers to
+          programmatically manage, sell, and optimize their ad inventory. It
+          connects publishers with various demand sources like DSPs, advertisers
+          and ad exchanges to facilitate real-time bidding (RTB) auctions.
         </p>
 
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
           The SSP server receives ad requests from the SSP tag and forwards them
           to DSPs, who bid on the ad space via RTB. It also returns the winning
-          ad creative, which is used during the ad scoring process in the{' '}
+          ad creative, which is used during the ad scoring process in the
           <code className="text-upsed-tomato">scoreAd()</code> function.
-        </p>
-        <p>
           Additionally, the SSP server sends contextual OpenRTB bid requests to
           DSPs, indicating that the browser supports the Protected Audience API.
           It runs a contextual auction and returns the winner along with the
           auction configuration to the SSP tags.
         </p>
-
-        <h4 className="font-bold mt-2">Examples</h4>
-        <p>Common examples of SSPs include Google Ad Manager and Magnite.</p>
       </>
     ),
   },
@@ -143,24 +118,20 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          On the publisher&apos;s side, DSP servers are responsible for
-          processing ad requests, evaluating bids, and serving ads based on
-          campaign targeting and bidding strategies. They handle tasks such as
-          bid generation, ad selection, and reporting during ad auctions
-          initiated by SSPs. The DSP server evaluates bid requests in real-time
-          using signals like interest groups, contextual relevance, and
-          advertiser budgets to decide whether to bid.
+          On the publisher&apos;s side, DSP servers process ad requests,
+          evaluate bids, and serve ads based on campaign targeting and bidding
+          strategies. They handle bid generation, ad selection, and reporting
+          for SSP-initiated ad auctions, evaluating real-time bid requests using
+          signals like interest groups, contextual relevance, and advertiser
+          budgets to decide whether to bid.
         </p>
         <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
           In the current flow, when contacted by the SSP during a contextual
-          auction, DSP servers respond with bids based on the results calculated
-          from ad requests received via the SSP. The DSPs and SSP communicate
-          using RTB (Real-Time Bidding) protocols.
-        </p>
-        <p className="mt-1">
-          DSP servers send an OpenRTB bid response containing signals for the
-          on-device auction, which is used to determine the winning ad.
+          auction, DSP servers respond with bids based on ad requests received
+          via the SSP, communicating via RTB (real-time bidding) protocols. DSP
+          servers send OpenRTB bid responses with signals for the on-device
+          auction.
         </p>
       </>
     ),
