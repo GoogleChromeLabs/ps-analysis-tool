@@ -177,7 +177,7 @@ const Table = ({
           </div>
         </>
       )}
-      <div className="w-full flex-1 h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz overflow-hidden">
+      <div className="w-full flex-1 h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz overflow-auto">
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"

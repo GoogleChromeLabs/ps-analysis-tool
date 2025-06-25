@@ -190,8 +190,8 @@ const useColumnResizing = (
           : undefined;
 
       setPersistedColumnsSizing(data as ColumnsSizing);
-      setAreSettingsLoaded(true);
     }
+    setAreSettingsLoaded(true);
   }, [getPreferences, tablePersistentSettingsKey]);
 
   // keep store in sync with the persisted columns sizing
@@ -209,6 +209,7 @@ const useColumnResizing = (
   // fixes the column widths when the component is mounted
   // so the columns don't resize when the user starts dragging
   const setColumnWidths = useCallback(() => {
+    console.log({ areSettingsLoaded });
     if (!areSettingsLoaded || isResizing) {
       return;
     }
@@ -219,6 +220,7 @@ const useColumnResizing = (
 
     // calculate initial column widths
     const columnsSizing: ColumnsSizing = {};
+    console.log('allHandles', allHandles.length);
 
     if (allHandles.length === 0) {
       return;
@@ -235,6 +237,7 @@ const useColumnResizing = (
       }
 
       if (columnId === lastHandleId) {
+        // TODO: calculate the remaining width if table is not full width
         setColumnFullWidth(columnElement);
         return;
       }
