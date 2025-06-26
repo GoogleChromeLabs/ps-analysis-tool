@@ -18,11 +18,11 @@
  */
 import * as d3 from 'd3';
 import Queue from 'queue';
-import { p5 } from '../p5';
 
 /**
  * Internal dependencies.
  */
+import { p5 } from '../p5';
 import config, { publisherData } from './config';
 import auctions, { WINNING_AD_DELAY } from './modules/auctions';
 import flow from './modules/flow';

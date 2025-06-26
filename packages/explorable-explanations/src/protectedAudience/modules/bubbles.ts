@@ -17,12 +17,12 @@
  * External dependencies.
  */
 import * as d3 from 'd3';
-import { p5 } from '../../p5';
 import type { Vector } from 'p5';
 
 /**
  * Internal dependencies.
  */
+import { p5 } from '../../p5';
 import app from '../app';
 import config from '../config';
 import * as utils from '../utils';
