@@ -8187,7 +8187,7 @@
     "message": "Enable trust in a user's authenticity to be conveyed from one context to another, to help sites combat fraud and distinguish bots from real humans—without passive tracking."
   },
   "antiCovertTrackingDescription": {
-    "message": "The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking."
+    "message": "The Privacy Sandbox initiative also includes efforts focused on anti covert tracking techniques, addressing specific methods such as fingerprinting and network-level tracking."
   },
   "noCookiesExempted": {
     "message": "No cookies were exempted by the browser."

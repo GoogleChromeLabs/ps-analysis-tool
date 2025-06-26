@@ -26390,7 +26390,7 @@ export default {
     },
     antiCovertTrackingDescription: {
       message:
-        'The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking.',
+        'The Privacy Sandbox initiative also includes efforts focused on anti covert tracking techniques, addressing specific methods such as fingerprinting and network-level tracking.',
     },
     noCookiesExempted: {
       message: 'No cookies were exempted by the browser.',
