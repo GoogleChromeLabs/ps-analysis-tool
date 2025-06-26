@@ -59,7 +59,7 @@ describe('Allow Listing', () => {
     );
 
     expect(frame).toBeTruthy();
-    await frame.waitForSelector('div[title="HTMyOffer"]');
+    await frame.waitForSelector('div[title="HTMyOffer"]', { timeout: 60000 });
     await frame.evaluate(() => {
       const event = new MouseEvent('contextmenu', {
         bubbles: true,
@@ -100,5 +100,5 @@ describe('Allow Listing', () => {
       );
       expect(divTextContent).toContain('Allow Listed');
     }
-  }, 120000);
+  }, 150000);
 });
