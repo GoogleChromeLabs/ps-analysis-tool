@@ -414,7 +414,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
       <div className="flex-1 h-full overflow-hidden flex flex-col">
         <main
           ref={mainRef}
-          className={classNames('w-full flex-1 relative overflow-auto', {
+          className={classNames('w-full flex-1 relative', {
             'overflow-hidden': selectedItemKey === 'privacy-sandbox',
             'overflow-auto': selectedItemKey !== 'privacy-sandbox',
           })}
