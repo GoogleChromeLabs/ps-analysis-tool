@@ -490,7 +490,7 @@ const TABS: SidebarItems = {
         panel: {
           Element: Demos,
           skipPanelDisplay: true,
-          href: 'https://privacy-sandbox-demos.dev',
+          href: 'https://domain-aaa.com/',
         },
         icon: {
           Element: DemosIcon,
