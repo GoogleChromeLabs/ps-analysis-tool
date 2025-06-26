@@ -60,7 +60,13 @@ const AdunitPanel = ({
     setSelectedAdUnit: actions.setSelectedAdUnit,
   }));
 
-  const [pillToggle, setPillToggle] = useState('Prebid');
+  const [pillToggle, setPillToggle] = useState(
+    bidsCount['prebid'] > 0 ||
+      noBidsCount['prebid'] > 0 ||
+      (bidsCount['paapi'] === 0 && noBidsCount['paapi'] === 0)
+      ? 'Prebid'
+      : 'PAAPI'
+  );
   const [highlightOption, setHighlightOption] = useState('');
 
   useEffect(() => {
