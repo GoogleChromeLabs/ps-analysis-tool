@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import SinonChrome from 'sinon-chrome';
+import { BlockedReason, CookieData } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -25,8 +26,18 @@ import SinonChrome from 'sinon-chrome';
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
 import data from '../../utils/test-data/cookieMockData';
-import synchnorousCookieStore from '../cookieStore';
-import dataStore from '../dataStore';
+import dataStore, { DataStore } from '../dataStore';
+import cookieStore from '../cookieStore';
+
+globalThis.fetch = function () {
+  return Promise.resolve({
+    json: () =>
+      Promise.resolve({
+        ...OpenCookieDatabase,
+      }),
+    text: () => Promise.resolve({}),
+  });
+} as unknown as typeof fetch;
 
 describe('SynchnorousCookieStore:', () => {
   beforeAll(() => {
@@ -43,40 +54,49 @@ describe('SynchnorousCookieStore:', () => {
   });
 
   beforeEach(() => {
-    dataStore.addTabData(123456);
-    dataStore.updateUrl(123456, 'https://bbc.com');
+    dataStore.addTabData('123456');
+    dataStore.updateUrl('123456', 'https://bbc.com');
+    cookieStore.initialiseVariablesForNewTab('123456');
   });
 
   afterEach(() => {
     dataStore.clear();
+    cookieStore.deinitialiseVariablesForTab('123456');
   });
 
   it('Should not update storage if there are no new cookies', () => {
-    synchnorousCookieStore.update(123456, []);
-    expect(Object.keys(dataStore.tabsData[123456]).length).toBe(0);
-    expect(dataStore.tabs[123456].newUpdatesCA).toBe(0);
+    cookieStore.update('123456', []);
+    expect(Object.keys(cookieStore.getTabsData('123456')).length).toBe(0);
+    expect(DataStore.tabs['123456'].newUpdatesCA).toBe(0);
   });
 
   it('Should add new cookie if cookie doesnt exist', () => {
-    expect(dataStore.tabsData[123456]['_cbcnn.com/']).toBeUndefined();
-    synchnorousCookieStore.update(123456, [data.tabCookies['_cb']]);
-    expect(dataStore.tabsData[123456]['_cbcnn.com/']).not.toBeUndefined();
-    expect(dataStore.tabs[123456].newUpdatesCA).toBe(1);
+    expect(cookieStore.getTabsData('123456')['_cbcnn.com/']).toBeUndefined();
+    cookieStore.update('123456', [data.tabCookies['_cb']]);
+    expect(
+      cookieStore.getTabsData('123456')['_cbcnn.com/']
+    ).not.toBeUndefined();
+    expect(DataStore.tabs['123456'].newUpdatesCA).toBe(1);
   });
 
   it('Should update cookie with new blocked reason', () => {
-    synchnorousCookieStore.update(123456, [
+    cookieStore.update('123456', [
       { ...data.tabCookies['_cb'], isBlocked: false, blockedReasons: [] },
     ]);
 
-    expect(dataStore.tabsData[123456]['_cbcnn.com/']?.isBlocked).toBe(false);
+    expect(cookieStore.getTabsData('123456')['_cbcnn.com/']?.isBlocked).toBe(
+      false
+    );
 
     expect(
-      dataStore.tabsData[123456]['_cbcnn.com/']?.blockedReasons?.length
+      (
+        cookieStore.getTabsData('123456')['_cbcnn.com/']
+          ?.blockedReasons as BlockedReason[]
+      )?.length
     ).toBe(0);
-    expect(dataStore.tabs[123456].newUpdatesCA).toBe(1);
+    expect(DataStore.tabs['123456'].newUpdatesCA).toBe(1);
 
-    synchnorousCookieStore.update(123456, [
+    cookieStore.update('123456', [
       {
         ...data.tabCookies['_cb'],
         isBlocked: false,
@@ -84,16 +104,18 @@ describe('SynchnorousCookieStore:', () => {
       },
     ]);
 
-    expect(dataStore.tabsData[123456]['_cbcnn.com/']?.isBlocked).toBe(true);
-
-    expect(dataStore.tabsData[123456]['_cbcnn.com/'].blockedReasons).toContain(
-      'InvalidDomain'
+    expect(cookieStore.getTabsData('123456')['_cbcnn.com/']?.isBlocked).toBe(
+      true
     );
-    expect(dataStore.tabs[123456].newUpdatesCA).toBe(2);
+
+    expect(
+      cookieStore.getTabsData('123456')['_cbcnn.com/'].blockedReasons
+    ).toContain('InvalidDomain');
+    expect(DataStore.tabs['123456'].newUpdatesCA).toBe(2);
   });
 
   it('Should persist the partition key from the previous set data', () => {
-    synchnorousCookieStore.update(123456, [
+    cookieStore.update('123456', [
       {
         ...data.tabCookies['_cb'],
         parsedCookie: {
@@ -105,11 +127,14 @@ describe('SynchnorousCookieStore:', () => {
     ]);
 
     expect(
-      dataStore.tabsData[123456]['_cbcnn.com/']?.parsedCookie?.partitionKey
+      (
+        cookieStore.getTabsData('123456')['_cbcnn.com/']
+          ?.parsedCookie as CookieData['parsedCookie']
+      )?.partitionKey
     ).toBe('https://bbc.com');
-    expect(dataStore.tabs[123456].newUpdatesCA).toBe(1);
+    expect(DataStore.tabs['123456'].newUpdatesCA).toBe(1);
 
-    synchnorousCookieStore.update(123456, [
+    cookieStore.update('123456', [
       {
         ...data.tabCookies['_cb'],
         parsedCookie: {
@@ -121,13 +146,16 @@ describe('SynchnorousCookieStore:', () => {
     ]);
 
     expect(
-      dataStore.tabsData[123456]['_cbcnn.com/']?.parsedCookie?.partitionKey
+      (
+        cookieStore.getTabsData('123456')['_cbcnn.com/']
+          ?.parsedCookie as CookieData['parsedCookie']
+      )?.partitionKey
     ).toBe('https://bbc.com');
-    expect(dataStore.tabs[123456].newUpdatesCA).toBe(2);
+    expect(DataStore.tabs['123456'].newUpdatesCA).toBe(2);
   });
 
   it('Should not update the data if tabId is not present', () => {
-    synchnorousCookieStore.update(12345, [
+    cookieStore.update('12345', [
       {
         ...data.tabCookies['_cb'],
         parsedCookie: {
@@ -137,69 +165,69 @@ describe('SynchnorousCookieStore:', () => {
         },
       },
     ]);
-    expect(dataStore.tabs[12345]?.newUpdatesCA).toBeUndefined();
+    expect(DataStore.tabs['12345']?.newUpdatesCA).toBeUndefined();
   });
 
   it('Should clear cookie store when clear is called', () => {
-    expect(dataStore.tabs[123456]).toBeDefined();
-    expect(dataStore.tabsData[123456]).toBeDefined();
+    expect(DataStore.tabs['123456']).toBeDefined();
+    expect(cookieStore.getTabsData('123456')).toBeDefined();
 
-    dataStore.clear();
+    cookieStore.clear();
 
-    expect(dataStore.tabs[123456]).toBeUndefined();
-    expect(dataStore.tabsData[123456]).toBeUndefined();
+    expect(DataStore.tabs['123456']).toBeUndefined();
+    expect(cookieStore.getTabsData('123456')).toBeUndefined();
   });
 
   it('Should return the tab url for tab if exists', () => {
-    expect(dataStore.getTabUrl(123456)).toBe('https://bbc.com');
-    expect(dataStore.getTabUrl(12345)).toBeNull();
+    expect(cookieStore.getTabUrl('123456')).toBe('https://bbc.com');
+    expect(cookieStore.getTabUrl('12345')).toBeNull();
   });
 
   it('Should update the url of tab if it exists', () => {
-    expect(dataStore.getTabUrl(123456)).toBe('https://bbc.com');
-    dataStore.updateUrl(123456, 'https://cnn.com');
-    expect(dataStore.getTabUrl(123456)).toBe('https://cnn.com');
+    expect(cookieStore.getTabUrl('123456')).toBe('https://bbc.com');
+    cookieStore.updateUrl('123456', 'https://cnn.com');
+    expect(cookieStore.getTabUrl('123456')).toBe('https://cnn.com');
   });
 
   it('Should add cookie exclusion reason and warning reason', () => {
-    synchnorousCookieStore.addCookieExclusionWarningReason(
+    cookieStore.addCookieExclusionWarningReason(
       '_cbcnn.com/',
       [],
       ['WarnSameSiteUnspecifiedCrossSiteContext'],
-      123456
+      '123456'
     );
 
-    expect(dataStore.tabsData[123456]['_cbcnn.com/'].warningReasons).toContain(
-      'WarnSameSiteUnspecifiedCrossSiteContext'
-    );
+    expect(
+      cookieStore.getTabsData('123456')['_cbcnn.com/'].warningReasons
+    ).toContain('WarnSameSiteUnspecifiedCrossSiteContext');
 
-    synchnorousCookieStore.addCookieExclusionWarningReason(
+    cookieStore.addCookieExclusionWarningReason(
       '_cbcnn.com/',
       ['SameSiteUnspecifiedTreatedAsLax'],
       [],
-      123456
+      '123456'
     );
 
-    expect(dataStore.tabsData[123456]['_cbcnn.com/'].blockedReasons).toContain(
-      'SameSiteUnspecifiedTreatedAsLax'
-    );
+    expect(
+      cookieStore.getTabsData('123456')['_cbcnn.com/'].blockedReasons
+    ).toContain('SameSiteUnspecifiedTreatedAsLax');
   });
 
   it('Should remove tabData', () => {
-    expect(dataStore.tabs[123456]).toBeDefined();
-    dataStore.removeTabData(123456);
-    expect(dataStore.tabs[123456]).toBeUndefined();
+    expect(DataStore.tabs['123456']).toBeDefined();
+    dataStore.removeTabData('123456');
+    expect(DataStore.tabs['123456']).toBeUndefined();
   });
 
   it('Should remove cookie', () => {
-    expect(dataStore.tabsData[123456]['_cbcnn.com/']).toBeUndefined();
+    expect(cookieStore.getTabsData('123456')['_cbcnn.com/']).toBeUndefined();
 
-    synchnorousCookieStore.update(123456, [data.tabCookies['_cb']]);
+    cookieStore.update('123456', [data.tabCookies['_cb']]);
 
-    expect(dataStore.tabsData[123456]['_cbcnn.com/']).toBeDefined();
+    expect(cookieStore.getTabsData('123456')['_cbcnn.com/']).toBeDefined();
 
-    dataStore.removeCookieData(123456);
+    cookieStore.removeCookieData('123456');
 
-    expect(dataStore.tabsData[123456]['_cbcnn.com/']).toBeUndefined();
+    expect(cookieStore.getTabsData('123456')['_cbcnn.com/']).toBeUndefined();
   });
 });

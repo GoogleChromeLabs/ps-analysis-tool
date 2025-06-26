@@ -23,7 +23,7 @@ import type { CookieTableData } from '@google-psat/common';
  * Internal dependencies.
  */
 import { WEBPAGE_PORT_NAME } from '../../../constants';
-import { useCookie, useProtectedAudience } from '../stateProviders';
+import { useCookie, usePrebid, useProtectedAudience } from '../stateProviders';
 import { isOnRWS } from '../../../contentScript/utils';
 
 interface Response {
@@ -60,6 +60,10 @@ const useFrameOverlay = (
       adsAndBidders: state.adsAndBidders,
     })
   );
+
+  const { prebidAdUnits } = usePrebid(({ state }) => ({
+    prebidAdUnits: state.prebidData?.adUnits,
+  }));
 
   const [isFrameSelectedFromDevTool, setIsFrameSelectedFromDevTool] =
     useState(false);
@@ -207,7 +211,7 @@ const useFrameOverlay = (
         (res) => {
           if (!chrome.runtime.lastError) {
             if (res) {
-              setCanStartInspecting(res.setInPage);
+              setCanStartInspecting(res.setInPagePrebidInterface);
             }
           }
         }
@@ -266,6 +270,7 @@ const useFrameOverlay = (
     }
   }, [setIsInspecting]);
 
+  // eslint-disable-next-line complexity
   useEffect(() => {
     try {
       if (selectedFrame) {
@@ -292,11 +297,26 @@ const useFrameOverlay = (
         portRef.current?.postMessage({
           isForProtectedAudience: true,
           selectedAdUnit,
-          numberOfBidders: adsAndBidders[selectedAdUnit]?.bidders?.length,
-          bidders: adsAndBidders[selectedAdUnit]?.bidders,
-          winningBid: adsAndBidders[selectedAdUnit]?.winningBid,
-          bidCurrency: adsAndBidders[selectedAdUnit]?.bidCurrency,
-          winningBidder: adsAndBidders[selectedAdUnit]?.winningBidder,
+          numberOfBidders:
+            adsAndBidders[selectedAdUnit]?.bidders?.length ??
+            prebidAdUnits[selectedAdUnit]?.bidders?.length ??
+            0,
+          bidders:
+            adsAndBidders[selectedAdUnit]?.bidders ??
+            prebidAdUnits[selectedAdUnit]?.bidders ??
+            [],
+          winningBid:
+            adsAndBidders[selectedAdUnit]?.winningBid ??
+            prebidAdUnits[selectedAdUnit]?.winningBid ??
+            null,
+          bidCurrency:
+            adsAndBidders[selectedAdUnit]?.bidCurrency ??
+            prebidAdUnits[selectedAdUnit]?.bidCurrency ??
+            null,
+          winningBidder:
+            adsAndBidders[selectedAdUnit]?.winningBidder ??
+            prebidAdUnits[selectedAdUnit]?.winningBidder ??
+            null,
           isInspecting,
         });
       }
@@ -311,6 +331,7 @@ const useFrameOverlay = (
     selectedFrame,
     selectedAdUnit,
     adsAndBidders,
+    prebidAdUnits,
   ]);
 
   useEffect(() => {

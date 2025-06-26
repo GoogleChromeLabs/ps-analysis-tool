@@ -17,67 +17,74 @@
 /**
  * External dependencies.
  */
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
+import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
-import HeaderResizer from './headerResizer';
 import { useTable, type TableColumn } from '../../useTable';
 import { ArrowDown } from '../../../../icons';
 
 interface HeaderCellProps {
-  index: number;
   cell: TableColumn;
   setIsRowFocused: (state: boolean) => void;
 }
 
-const HeaderCell = ({ index, cell, setIsRowFocused }: HeaderCellProps) => {
-  const { sortKey, sortOrder, isResizing, setSortKey, onMouseDown } = useTable(
-    ({ state, actions }) => ({
+const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
+  const { sortKey, sortOrder, setSortKey, isResizing, minColumnWidth } =
+    useTable(({ state, actions }) => ({
       sortKey: state.sortKey,
       sortOrder: state.sortOrder,
-      isResizing: state.isResizing,
       setSortKey: actions.setSortKey,
-      onMouseDown: actions.onMouseDown,
-    })
-  );
+      isResizing: state.isResizing,
+      minColumnWidth: state.minColumnWidth,
+    }));
 
   const handleOnClick = useCallback(() => {
     setSortKey(cell.accessorKey);
   }, [cell.accessorKey, setSortKey]);
 
-  const columnRef = useRef<HTMLTableHeaderCellElement>(null);
+  const initialWidth = cell.initialWidth
+    ? Math.max(cell.initialWidth || 0, cell.minWidth || 0) || 'auto'
+    : 'auto';
 
   return (
-    <div
-      ref={columnRef}
-      style={{ minWidth: cell.width }}
-      onClick={isResizing ? undefined : handleOnClick}
-      className={`relative select-none touch-none font-normal truncate flex-1 ${
-        !isResizing && 'hover:bg-gainsboro dark:hover:bg-outer-space'
-      }`}
-      data-testid="header-cell"
-    >
-      <div
-        className="w-full h-full flex items-center justify-between text-cool-grey dark:text-bright-gray"
-        onClick={() => setIsRowFocused(false)}
-        title={cell.header}
+    <>
+      <th
+        data-column-resize-id={cell.accessorKey}
+        onClick={isResizing ? undefined : handleOnClick}
+        className={classNames(
+          'select-none touch-none font-normal truncate sticky top-0 z-[100]',
+          'bg-anti-flash-white dark:bg-charleston-green border-b border-l border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz',
+          {
+            'hover:bg-gainsboro dark:hover:bg-outer-space': !isResizing,
+          }
+        )}
+        data-testid="header-cell"
+        data-min-width={cell.minWidth || minColumnWidth}
+        data-max-width={cell.maxWidth}
+        style={{ maxWidth: initialWidth, minWidth: initialWidth }}
       >
-        <p className="px-1 py-px truncate text-xs">{cell.header}</p>
-        <p className="mr-2 scale-125">
-          {sortKey === cell.accessorKey &&
-            {
-              asc: <ArrowDown className="transform rotate-180" />,
-              desc: <ArrowDown />,
-            }[sortOrder]}
-        </p>
-      </div>
-      <HeaderResizer
-        onMouseDown={() => {
-          onMouseDown(columnRef, index);
-        }}
-      />
-    </div>
+        <div
+          className="w-full h-full relative flex items-center justify-between text-cool-grey dark:text-bright-gray max-w"
+          onClick={() => setIsRowFocused(false)}
+          title={cell.header}
+        >
+          <div
+            className="absolute right-[-2px] cursor-ew-resize h-full w-2 z-50 top-0"
+            data-column-resize-handle={cell.accessorKey}
+          />
+          <p className="px-1 py-px truncate text-xs">{cell.header}</p>
+          <p className="mr-2 scale-125">
+            {sortKey === cell.accessorKey &&
+              {
+                asc: <ArrowDown className="transform rotate-180" />,
+                desc: <ArrowDown />,
+              }[sortOrder]}
+          </p>
+        </div>
+      </th>
+    </>
   );
 };
 

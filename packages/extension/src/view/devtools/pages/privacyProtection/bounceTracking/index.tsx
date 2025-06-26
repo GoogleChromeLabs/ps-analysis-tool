@@ -27,7 +27,7 @@ const BounceTracking = () => {
         isLandingPageContainer
         title={I18n.getMessage('bounceTrackingMitigation')}
         psInfoKey={PSInfoKey.BounceTracking}
-        extraClasses="max-w-2xl h-fit"
+        extraClasses="max-w-2xl h-fit p-4"
       />
     </div>
   );

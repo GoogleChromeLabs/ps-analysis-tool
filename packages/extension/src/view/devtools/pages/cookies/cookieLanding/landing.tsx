@@ -18,10 +18,6 @@
  */
 import React, { useCallback, useMemo } from 'react';
 import {
-  LibraryDetection,
-  useLibraryDetectionContext,
-} from '@google-psat/library-detection';
-import {
   MenuBar,
   type CookiesLandingSection,
   type MenuData,
@@ -29,6 +25,7 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import type { TabCookies } from '@google-psat/common';
+
 /**
  * Internal dependencies
  */
@@ -53,13 +50,6 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
 
   const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
-  const { libraryMatches, showLoader } = useLibraryDetectionContext(
-    ({ state }) => ({
-      libraryMatches: state.libraryMatches,
-      showLoader: state.showLoader,
-    })
-  );
-
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const defaultSections: CookiesLandingSection[] = [
       {
@@ -80,13 +70,6 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
           props: {
             tabCookies,
           },
-        },
-      },
-      {
-        name: I18n.getMessage('libraryDetection'),
-        link: 'library-detection',
-        panel: {
-          Element: LibraryDetection,
         },
       },
       {
@@ -127,23 +110,15 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
       url || '',
       unfilteredCookies || {},
       tabFrames || {},
-      libraryMatches,
       appliedFilters,
       isUsingCDP
     );
-  }, [
-    appliedFilters,
-    isUsingCDP,
-    libraryMatches,
-    tabFrames,
-    unfilteredCookies,
-    url,
-  ]);
+  }, [appliedFilters, isUsingCDP, tabFrames, unfilteredCookies, url]);
 
   return (
     <div>
       <MenuBar
-        disableReportDownload={showLoader}
+        disableReportDownload={false}
         downloadReport={
           Object.keys(unfilteredCookies ?? {}).length > 0
             ? _downloadReport

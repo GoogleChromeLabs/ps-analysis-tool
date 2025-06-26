@@ -16,7 +16,7 @@
 /**
  * Internal depencencies
  */
-import dataStore from '../store/dataStore';
+import { DataStore } from '../store/dataStore';
 const sendMessageWrapper = async (
   type: string,
   payload?: Record<string, any>,
@@ -28,8 +28,8 @@ const sendMessageWrapper = async (
       payload,
     });
 
-    if (tabId && !dataStore.tabs[tabId].devToolsOpenState) {
-      dataStore.tabs[tabId].devToolsOpenState = true;
+    if (tabId && !DataStore.tabs[tabId].devToolsOpenState) {
+      DataStore.tabs[tabId].devToolsOpenState = true;
     }
   } catch (error) {
     // Fail silently. The only error which will be thrown is receiving end does not exist.

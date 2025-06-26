@@ -16,12 +16,12 @@
 /**
  * External dependencies
  */
-import Protocol from 'devtools-protocol';
+import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies
  */
 import ARAStore from '../store/ARAStore';
-import dataStore from '../store/dataStore';
+import { DataStore } from '../store/dataStore';
 import convertKeysToCamelCase from '../store/utils/convertKeysToCamelCase';
 const readHeaderAndRegister = (
   headers: Protocol.Network.ResponseReceivedExtraInfoEvent['headers'],
@@ -40,7 +40,7 @@ const readHeaderAndRegister = (
   );
 
   if (triggerRegistration) {
-    const shouldRegisterTrigger = dataStore.sources.triggerRegistration.filter(
+    const shouldRegisterTrigger = ARAStore.sources.triggerRegistration.filter(
       (trigger) => trigger.requestUrl === requestUrl
     );
 
@@ -72,7 +72,7 @@ const readHeaderAndRegister = (
   if (sourceRegistration) {
     const jsonSource = convertKeysToCamelCase(JSON.parse(sourceRegistration));
 
-    const shouldRegisterSource = dataStore.sources.sourceRegistration.filter(
+    const shouldRegisterSource = ARAStore.sources.sourceRegistration.filter(
       (source) =>
         //@ts-ignore
         (source.eventId ?? source.sourceEventId) === jsonSource.sourceEventId
@@ -88,7 +88,7 @@ const readHeaderAndRegister = (
           ...jsonSource,
           reportingOrigin: new URL(requestUrl).origin,
           requestUrl: requestUrl,
-          sourceOrigin: dataStore.tabs[Number(tabId)]?.url ?? '',
+          sourceOrigin: DataStore.tabs[Number(tabId)]?.url ?? '',
           time: Date.now(),
         } as Protocol.Storage.AttributionReportingSourceRegistration,
         result:

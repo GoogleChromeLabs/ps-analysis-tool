@@ -17,14 +17,16 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../../store/dataStore';
+import dataStore, { DataStore } from '../../store/dataStore';
 import {
+  CS_GET_PREBID_DATA_RESPONSE,
   DEVTOOLS_CLOSE,
   DEVTOOLS_OPEN,
   DEVTOOLS_SET_JAVASCSCRIPT_COOKIE,
   INITIAL_SYNC,
   POPUP_CLOSE,
   POPUP_OPEN,
+  PREBID_SCANNING_STATUS,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
 } from '../../constants';
@@ -32,9 +34,14 @@ import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
+import sendUpdatedData from '../../store/utils/sendUpdatedData';
+import prebidStore from '../../store/prebidStore';
 
 // eslint-disable-next-line complexity
-export const runtimeOnMessageListener = async (request: any) => {
+export const runtimeOnMessageListener = async (
+  request: any,
+  sender: chrome.runtime.MessageSender
+) => {
   if (!request.type) {
     return;
   }
@@ -46,7 +53,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     const actionsPerformed: { [key: string]: boolean | number } = {};
 
     if (Object.keys(sessionStorage).includes('isUsingCDP')) {
-      dataStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
+      DataStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
       actionsPerformed.globalIsUsingCDP = true;
     }
 
@@ -57,7 +64,7 @@ export const runtimeOnMessageListener = async (request: any) => {
     });
 
     await chrome.storage.sync.set({
-      isUsingCDP: dataStore.globalIsUsingCDP,
+      isUsingCDP: DataStore.globalIsUsingCDP,
     });
 
     const tabs = await chrome.tabs.query({});
@@ -74,11 +81,15 @@ export const runtimeOnMessageListener = async (request: any) => {
         const currentTab = targets.filter(
           ({ tabId }) => tabId && id && tabId === id
         );
-        dataStore?.addTabData(id);
-        dataStore?.updateParentChildFrameAssociation(id, currentTab[0].id, '0');
+        dataStore?.addTabData(id.toString());
+        dataStore?.updateParentChildFrameAssociation(
+          id.toString(),
+          currentTab[0].id,
+          '0'
+        );
 
         try {
-          if (dataStore.globalIsUsingCDP) {
+          if (DataStore.globalIsUsingCDP) {
             await attachCDP({ tabId: id });
           }
         } catch (error) {
@@ -94,16 +105,21 @@ export const runtimeOnMessageListener = async (request: any) => {
     });
   }
 
-  if (!request?.payload?.tabId) {
+  const frameId = sender?.frameId ?? 0;
+  const senderTabId = sender?.tab?.id;
+  if (
+    (!request?.payload?.tabId && !senderTabId) ||
+    (senderTabId && !DataStore.tabs[senderTabId?.toString()])
+  ) {
     return;
   }
 
-  const incomingMessageTabId = request.payload.tabId;
+  const incomingMessageTabId = request.payload.tabId ?? senderTabId;
 
   if (DEVTOOLS_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string | boolean } = {};
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
 
@@ -113,15 +129,15 @@ export const runtimeOnMessageListener = async (request: any) => {
 
     dataStore?.updateDevToolsState(incomingMessageTabId, true);
 
-    if (dataStore?.tabsData[incomingMessageTabId]) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
+    if (cookieStore.getTabsData(incomingMessageTabId)) {
+      sendUpdatedData(incomingMessageTabId, true);
     }
   }
 
   if (POPUP_OPEN === incomingMessageType) {
     const dataToSend: { [key: string]: string } = {};
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
     await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
@@ -130,8 +146,8 @@ export const runtimeOnMessageListener = async (request: any) => {
 
     dataStore?.updatePopUpState(incomingMessageTabId, true);
 
-    if (dataStore?.tabsData[incomingMessageTabId]) {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(incomingMessageTabId, true);
+    if (cookieStore.getTabsData(incomingMessageTabId)) {
+      sendUpdatedData(incomingMessageTabId, true);
     }
   }
 
@@ -145,5 +161,33 @@ export const runtimeOnMessageListener = async (request: any) => {
 
   if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
     cookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
+  }
+
+  if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
+    if (request?.payload?.prebidExists === false) {
+      return;
+    }
+
+    if (request.payload.prebidData.pbjsNamespace) {
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][
+        `${frameId}#${request.payload.prebidData.pbjsNamespace}`
+      ] = {
+        prebidExists: true,
+        ...request.payload.prebidData,
+      };
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+    }
+  }
+
+  if (PREBID_SCANNING_STATUS === incomingMessageType) {
+    if (request?.payload?.prebidExists === false) {
+      //@ts-ignore -- We dont want to create a new object here, just add data whether or not prebid exists for this frame.
+      prebidStore.prebidEvents[incomingMessageTabId.toString()][`${frameId}`] =
+        {
+          prebidExists: false,
+        };
+      DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
+      return;
+    }
   }
 };

@@ -26,8 +26,8 @@ import {
   type InfoType,
   InfoIcon,
   JsonView,
+  ResizableTray,
 } from '@google-psat/design-system';
-import { Resizable } from 're-resizable';
 import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { I18n } from '@google-psat/i18n';
 
@@ -76,37 +76,31 @@ const SourceRegistrations = () => {
         cell: (_, details) =>
           calculateRegistrationDate((details as SourcesRegistration)?.time),
         enableHiding: false,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Source Origin',
         accessorKey: 'sourceOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Reporting Origin',
         accessorKey: 'reportingOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Cleared Debug Key',
         accessorKey: 'clearedDebugKey',
         cell: (info) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Source Type',
         accessorKey: 'type',
         cell: (info) => info,
-        widthWeightagePercentage: 10,
       },
       {
         header: 'Status',
         accessorKey: 'result',
         cell: (info) => info,
-        widthWeightagePercentage: 10,
       },
     ],
     []
@@ -214,10 +208,10 @@ const SourceRegistrations = () => {
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
-          height: '80%',
+          height: selectedJSON ? '50%' : '90%',
         }}
         enable={{
           bottom: true,
@@ -225,6 +219,7 @@ const SourceRegistrations = () => {
         minHeight="20%"
         maxHeight="90%"
         className="w-full flex flex-col"
+        trayId="source-registrations-table-bottom-tray"
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
@@ -250,8 +245,8 @@ const SourceRegistrations = () => {
             />
           </TableProvider>
         </div>
-      </Resizable>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+      </ResizableTray>
+      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
           <div className="text-xs py-1 px-1.5 h-full">
             <JsonView src={selectedJSON} />

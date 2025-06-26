@@ -18,6 +18,7 @@
  */
 import React, { useMemo } from 'react';
 import {
+  InfoCard,
   PSInfoKey,
   TabsProvider,
   type TabItems,
@@ -27,46 +28,54 @@ import {
  * Internal dependencies.
  */
 import Panel from './panel';
-import Overview from './overview';
 import ActiveSources from './activeSources';
 import SourceRegistrations from './sourceRegistrations';
 import TriggerRegistrations from './triggerRegistrations';
 
 const AttributionReporting = () => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: Overview,
-          props: {
-            infoKey: PSInfoKey.AttributionReporting,
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: InfoCard,
+            props: {
+              infoKey: PSInfoKey.AttributionReporting,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
+            },
+            className: 'p-4',
           },
-          className: 'p-4',
         },
-      },
-      {
-        title: 'Active Sources',
-        content: {
-          Element: ActiveSources,
-          className: 'overflow-hidden',
+      ],
+      Observability: [
+        {
+          title: 'Active Sources',
+          content: {
+            Element: ActiveSources,
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
+          },
         },
-      },
-      {
-        title: 'Source Registrations',
-        content: {
-          Element: SourceRegistrations,
-          className: 'overflow-hidden',
+        {
+          title: 'Source Registrations',
+          content: {
+            Element: SourceRegistrations,
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
+          },
         },
-      },
-      {
-        title: 'Trigger Registrations',
-        content: {
-          Element: TriggerRegistrations,
-          className: 'overflow-hidden',
+        {
+          title: 'Trigger Registrations',
+          content: {
+            Element: TriggerRegistrations,
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
+          },
         },
-      },
-    ],
+      ],
+    }),
     []
   );
 

@@ -1,7 +1,7 @@
 {
   "name": "Privacy Sandbox Analysis Tool",
   "description": "Tooling for understanding cookie usage and guidance on new privacy-preserving Chrome APIs.",
-  "version": "0.14.1",
+  "version": "1.0.0",
   "manifest_version": 3,
   "default_locale": "en",
   "icons": {
@@ -30,8 +30,19 @@
   "content_scripts": [
     {
       "js": ["content-script.js"],
+      "matches": ["*://*/*"]
+    },
+    {
+      "js": ["prebid-content-script.js"],
+      "all_frames": true,
       "matches": ["*://*/*"],
-      "all_frames": true
+      "run_at": "document_start"
+    },
+    {
+      "js": ["js-cookie-content-script.js"],
+      "matches": ["*://*/*"],
+      "all_frames": true,
+      "run_at": "document_start"
     }
   ],
   "action": {
@@ -40,7 +51,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["assets/data/*.json", "data/*json", "report/index.html"],
+      "resources": [
+        "assets/data/*.json",
+        "data/*json",
+        "report/index.html",
+        "prebid-interface.js"
+      ],
       "matches": ["*://*/*"]
     }
   ]
