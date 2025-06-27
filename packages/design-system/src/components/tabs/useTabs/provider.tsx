@@ -24,6 +24,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -35,6 +36,7 @@ export const TabsProvider = ({
   children,
   items,
   isGroup = true,
+  name,
 }: PropsWithChildren<TabsProviderProps>) => {
   const [groupedItems, setGroupedItems] = useState<TabItems>({});
 
@@ -126,6 +128,7 @@ export const TabsProvider = ({
       return { ...acc, [group]: groupTitles };
     }, {});
   }, [groupedItems]);
+
   const titles = useMemo(() => tabItems.map((item) => item.title), [tabItems]);
   const panel = tabItems?.[activeTab]?.content ?? {
     Element: null,
@@ -226,6 +229,39 @@ export const TabsProvider = ({
     },
     [groupedItems]
   );
+
+  useEffect(() => {
+    if (!name) {
+      return;
+    }
+
+    (async () => {
+      const sessionStorage = await getSessionStorage('tabs');
+
+      const _activeTab = sessionStorage[name].activeTab || 0;
+      const _activeGroup = sessionStorage[name].activeGroup || null;
+      setActiveTab(_activeTab);
+      setActiveGroup(_activeGroup);
+    })();
+  }, [name, setActiveTab, setActiveGroup]);
+
+  useEffect(() => {
+    if (!name) {
+      return;
+    }
+
+    (async () => {
+      await updateSessionStorage(
+        {
+          [name]: {
+            activeTab,
+            activeGroup,
+          },
+        },
+        'tabs'
+      );
+    })();
+  }, [name, activeTab, activeGroup]);
 
   return (
     <TabsContext.Provider

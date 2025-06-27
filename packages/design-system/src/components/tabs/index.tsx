@@ -71,6 +71,12 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
 
   const [isAnimating, setIsAnimating] = useState(false);
 
+  useEffect(() => {
+    if (activeGroup && activeGroup !== expandedGroup) {
+      setExpandedGroup(activeGroup);
+    }
+  }, [activeGroup, expandedGroup]);
+
   const handleGroupClick = useCallback(
     (group: string) => {
       if (isAnimating) {
