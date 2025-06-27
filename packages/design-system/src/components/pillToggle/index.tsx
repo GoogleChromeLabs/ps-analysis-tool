@@ -18,7 +18,7 @@
  */
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 import classNames from 'classnames';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface PillToggleProps {
   options: string[];
@@ -47,8 +47,11 @@ const PillToggle = ({
     }
   }, [highlightOption, pillToggle, setHighlightOption]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!persistenceKey) {
+      setLoading(false);
       return;
     }
 
@@ -58,11 +61,13 @@ const PillToggle = ({
       if (sessionStorage?.[persistenceKey]?.value) {
         setPillToggle(sessionStorage[persistenceKey].value);
       }
+
+      setLoading(false);
     })();
   }, [persistenceKey, setPillToggle]);
 
   useEffect(() => {
-    if (!persistenceKey) {
+    if (!persistenceKey || loading) {
       return;
     }
 
@@ -76,7 +81,7 @@ const PillToggle = ({
         'pillToggle'
       );
     })();
-  }, [persistenceKey, pillToggle]);
+  }, [loading, persistenceKey, pillToggle]);
 
   return (
     <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">
