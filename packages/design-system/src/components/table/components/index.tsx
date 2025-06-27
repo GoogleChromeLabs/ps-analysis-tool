@@ -185,7 +185,7 @@ const Table = ({
             enable={{
               right: true,
             }}
-            className="overflow-auto h-full"
+            className="h-full"
           >
             <TableFiltersSidebar
               filters={filters}
