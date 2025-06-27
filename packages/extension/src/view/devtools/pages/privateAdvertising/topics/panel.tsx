@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import { LandingPage, useTabs } from '@google-psat/design-system';
+import classNames from 'classnames';
 import React from 'react';
 
 const Panel = () => {
@@ -29,12 +30,15 @@ const Panel = () => {
       title="Topics"
       contentPanel={
         ActiveTabContent && (
-          <div className={className} data-testid="topics-content">
+          <div
+            className={classNames(className, 'h-full')}
+            data-testid="topics-content"
+          >
             <ActiveTabContent {...props} />
           </div>
         )
       }
-      extraClasses={containerClassName}
+      extraClasses={classNames(containerClassName, 'h-full')}
       {...props}
     />
   );
