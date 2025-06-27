@@ -50,6 +50,7 @@ const BidsPanel = ({ receivedBids, noBids }: BidsPanelProps) => {
             pillToggle={bidsPillToggle}
             setPillToggle={setBidsPillToggle}
             eeAnimatedTab={false}
+            persistenceKey="ee-bidsPillToggle"
           />
         </div>
       </div>

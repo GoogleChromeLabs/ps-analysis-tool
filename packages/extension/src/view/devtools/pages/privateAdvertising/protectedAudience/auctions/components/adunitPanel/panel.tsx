@@ -171,6 +171,7 @@ const Panel = ({
             eeAnimatedTab={false}
             highlightOption={highlightOption}
             setHighlightOption={setHighlightOption}
+            persistenceKey="auctionAdUnitPillToggle"
           />
         </div>
       )}

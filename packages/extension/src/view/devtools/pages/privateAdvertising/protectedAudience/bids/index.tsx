@@ -137,6 +137,7 @@ const Bids = () => {
             eeAnimatedTab={false}
             highlightOption={highlightOption}
             setHighlightOption={setHighlightOption}
+            persistenceKey="bidsPanelPillToggle"
           />
           <DoubleArrow
             width="30px"
@@ -152,6 +153,7 @@ const Bids = () => {
             pillToggle={bidsPillToggle}
             setPillToggle={setBidsPillToggle}
             eeAnimatedTab={false}
+            persistenceKey="bidsPillToggle"
           />
         </div>
         {bidsPillToggle === BidsPillOptions.Timeline &&

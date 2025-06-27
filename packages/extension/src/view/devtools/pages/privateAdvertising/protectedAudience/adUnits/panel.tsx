@@ -119,6 +119,7 @@ const AdUnitsPanel = ({
             eeAnimatedTab={Boolean(isEE)}
             highlightOption={highlightOption}
             setHighlightOption={setHighlightOption}
+            persistenceKey="adUnitsPillToggle"
           />
         </div>
       )}

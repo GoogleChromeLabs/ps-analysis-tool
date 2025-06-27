@@ -16,6 +16,7 @@
 /**
  * External dependencies.
  */
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 import classNames from 'classnames';
 import React, { useEffect } from 'react';
 
@@ -27,6 +28,7 @@ interface PillToggleProps {
   width?: string;
   highlightOption?: string;
   setHighlightOption?: (value: string) => void;
+  persistenceKey?: string;
 }
 
 const PillToggle = ({
@@ -37,12 +39,44 @@ const PillToggle = ({
   width = 'w-max',
   highlightOption,
   setHighlightOption,
+  persistenceKey,
 }: PillToggleProps) => {
   useEffect(() => {
     if (pillToggle === highlightOption) {
       setHighlightOption?.('');
     }
   }, [highlightOption, pillToggle, setHighlightOption]);
+
+  useEffect(() => {
+    if (!persistenceKey) {
+      return;
+    }
+
+    (async () => {
+      const sessionStorage = await getSessionStorage('pillToggle');
+
+      if (sessionStorage?.[persistenceKey]?.value) {
+        setPillToggle(sessionStorage[persistenceKey].value);
+      }
+    })();
+  }, [persistenceKey, setPillToggle]);
+
+  useEffect(() => {
+    if (!persistenceKey) {
+      return;
+    }
+
+    (async () => {
+      await updateSessionStorage(
+        {
+          [persistenceKey]: {
+            value: pillToggle,
+          },
+        },
+        'pillToggle'
+      );
+    })();
+  }, [persistenceKey, pillToggle]);
 
   return (
     <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">

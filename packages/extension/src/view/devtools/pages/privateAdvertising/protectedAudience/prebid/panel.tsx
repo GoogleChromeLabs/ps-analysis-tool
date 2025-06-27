@@ -86,6 +86,7 @@ const Panel = () => {
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={false}
+          persistenceKey="prebidPanelPillToggle"
         />
       </div>
       <div className="flex-1 overflow-auto my-1 text-outer-space-crayola">
