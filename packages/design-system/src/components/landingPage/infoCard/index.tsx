@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect, useState } from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -28,7 +29,6 @@ import {
   type PSInfo as PSInfoType,
   type PSInfoKeyType,
 } from './fetchPSInfo';
-import { I18n } from '@google-psat/i18n';
 import RenderLink from './renderLink';
 import LinkProcessor from '../../linkProcessor';
 

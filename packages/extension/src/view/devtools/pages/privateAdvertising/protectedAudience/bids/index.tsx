@@ -55,7 +55,12 @@ const Bids = () => {
   }));
 
   const [panelPillToggle, setPanelPillToggle] = useState<string>(
-    PanelOptions.Prebid
+    prebidReceivedBids?.length ||
+      Object.keys(prebidNoBids || {}).length ||
+      (Number(paapi.receivedBids?.length || 0) === 0 &&
+        Object.keys(paapi.noBids || {}).length === 0)
+      ? PanelOptions.Prebid
+      : PanelOptions.PAAPI
   );
   const [highlightOption, setHighlightOption] = useState<string>('');
 

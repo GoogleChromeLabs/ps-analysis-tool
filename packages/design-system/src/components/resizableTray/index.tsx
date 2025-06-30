@@ -18,10 +18,6 @@
  */
 import { Resizable, type ResizableProps } from 're-resizable';
 import React, { useEffect, useRef, useState } from 'react';
-
-/**
- * Internal dependencies.
- */
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
 interface ResizableTrayProps extends ResizableProps {

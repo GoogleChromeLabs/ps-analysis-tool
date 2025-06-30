@@ -412,7 +412,13 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         <Sidebar visibleWidth={sidebarWidth} />
       </Resizable>
       <div className="flex-1 h-full overflow-hidden flex flex-col">
-        <main ref={mainRef} className="w-full flex-1 relative overflow-auto">
+        <main
+          ref={mainRef}
+          className={classNames('w-full flex-1 relative', {
+            'overflow-hidden': selectedItemKey === 'privacy-sandbox',
+            'overflow-auto': selectedItemKey !== 'privacy-sandbox',
+          })}
+        >
           <div className="w-full h-full">
             <div className={layoutWidth + ' h-full z-1'}>
               {PanelElement && <PanelElement {...props} />}

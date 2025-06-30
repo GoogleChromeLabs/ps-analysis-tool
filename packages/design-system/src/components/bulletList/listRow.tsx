@@ -33,7 +33,7 @@ const ListRow = ({ row }: Props) => {
   const navigateTo = useSidebar(({ actions }) => actions.updateSelectedItemKey);
 
   const handleClick = useCallback(
-    (event: React.MouseEvent) => {
+    async (event: React.MouseEvent) => {
       event.preventDefault();
 
       if (row?.sidebarKey) {
@@ -42,9 +42,13 @@ const ListRow = ({ row }: Props) => {
       }
 
       if (chrome?.tabs) {
-        chrome.tabs.update({
-          url: row.link,
-        });
+        try {
+          await chrome.tabs.update({
+            url: row.link,
+          });
+        } catch (error) {
+          console.log('Failed to open link:', error);
+        }
       }
     },
     [navigateTo, row.link, row.sidebarKey]

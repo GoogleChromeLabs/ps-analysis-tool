@@ -70,7 +70,7 @@ class PrebidContentScript {
       }
 
       if (message?.payload?.type === TABID_STORAGE) {
-        window.top?.postMessage({
+        window.postMessage({
           type: SCRIPT_PREBID_INITIAL_SYNC,
         });
       }

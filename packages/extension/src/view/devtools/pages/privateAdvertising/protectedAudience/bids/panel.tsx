@@ -52,7 +52,7 @@ interface PanelProps {
   eeAnimatedTab?: boolean;
   bidsPillToggle: string;
   panelPillToggle: string;
-  timelines: PrebidEvents['auctionEvents'];
+  timelines?: PrebidEvents['auctionEvents'];
   zoomLevel?: number;
 }
 
@@ -80,7 +80,7 @@ const Panel = ({
       return Object.keys(noBids).length > 0;
     }
 
-    return Object.entries(timelines).length > 0;
+    return Object.entries(timelines || {}).length > 0;
   }, [bidsPillToggle, timelines, receivedBids.length, noBids]);
 
   const { setPAActiveTab, setPAStorage } = useTabs(({ actions }) => ({
@@ -111,7 +111,7 @@ const Panel = ({
 
   return (
     <>
-      {!isUsingCDP && panelPillToggle === 'PAAPI' ? (
+      {!isUsingCDP && panelPillToggle === 'PAAPI' && !eeAnimatedTab ? (
         <div className="w-full h-full flex items-center justify-center">
           <p className="text-sm text-raisin-black dark:text-bright-gray">
             To view bids data, enable PSAT to use CDP via the{' '}
@@ -159,7 +159,7 @@ const Panel = ({
             </div>
           )}
 
-          {bidsPillToggle === BidsPillOptions.Timeline && (
+          {bidsPillToggle === BidsPillOptions.Timeline && !eeAnimatedTab && (
             <div className="w-full h-full px-4 border-t border-american-silver dark:border-quartz">
               {timelines && Object.entries(timelines).length > 0 ? (
                 Object.entries(timelines).map(([auctionId, auction]) => (

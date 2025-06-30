@@ -16,11 +16,12 @@
 /**
  * External dependencies.
  */
-import type {
-  TabCookies,
-  TabFrames,
-  DataMapping,
-  CookieJsonDataType,
+import {
+  type TabCookies,
+  type TabFrames,
+  type DataMapping,
+  type CookieJsonDataType,
+  isValidURL,
 } from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
