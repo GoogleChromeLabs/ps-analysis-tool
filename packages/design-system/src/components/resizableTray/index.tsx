@@ -18,6 +18,10 @@
  */
 import { Resizable, type ResizableProps } from 're-resizable';
 import React, { useEffect, useRef, useState } from 'react';
+
+/**
+ * Internal dependencies.
+ */
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
 interface ResizableTrayProps extends ResizableProps {
@@ -37,15 +41,19 @@ export const usePersistentTray = (
   );
 
   const storageLoaded = useRef(false);
+
   useEffect(() => {
     const initializeHeight = async () => {
-      if (storageLoaded.current || !trayId) {
+      if (storageLoaded.current || !trayId || !chrome?.storage) {
         return;
       }
+
       const data = (await getSessionStorage(STORAGE_KEY)) || {};
+
       if (data[trayId]?.height) {
         setHeight(data[trayId].height);
       }
+
       storageLoaded.current = true;
     };
     initializeHeight();
@@ -56,7 +64,7 @@ export const usePersistentTray = (
   }, [trayId]);
 
   useEffect(() => {
-    if (storageLoaded.current && trayId) {
+    if (storageLoaded.current && trayId && chrome?.storage) {
       updateSessionStorage({ [trayId]: { height } }, STORAGE_KEY);
     }
   }, [height, trayId]);
