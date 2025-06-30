@@ -27,7 +27,9 @@ import {
   type InfoType,
   ResizableTray,
   SIDEBAR_ITEMS_KEYS,
+  Hammer,
 } from '@google-psat/design-system';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -80,7 +82,21 @@ const AuctionTable = ({
       {
         header: 'Interest Group Name',
         accessorKey: 'name',
-        cell: (info) => info,
+        cell: (info, details) => {
+          const eventType = details?.type;
+          return (
+            <div className="flex items-center gap-2">
+              {eventType === 'win' && <Hammer className="h-4 w-4" />}
+              <span
+                className={classNames({
+                  'text-[#5AAD6A] font-semibold': eventType === 'win',
+                })}
+              >
+                {info}
+              </span>
+            </div>
+          );
+        },
       },
       {
         header: 'Bid',
