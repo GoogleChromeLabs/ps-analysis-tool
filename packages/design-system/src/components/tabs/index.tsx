@@ -41,6 +41,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     shouldAddSpacer,
     getTabGroup,
     isGroup,
+    loading,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     activeGroup: state.activeGroup,
@@ -51,6 +52,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     shouldAddSpacer: actions.shouldAddSpacer,
     getTabGroup: actions.getTabGroup,
     isGroup: state.isGroup,
+    loading: state.loading,
   }));
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -58,8 +60,14 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
 
   useEffect(() => {
-    setExpandedGroup((groupedTitles && Object.keys(groupedTitles)[0]) || null);
-  }, [groupedTitles]);
+    if (loading) {
+      return;
+    }
+
+    if (activeGroup && expandedGroup === null) {
+      setExpandedGroup(activeGroup);
+    }
+  }, [activeGroup, expandedGroup, loading]);
 
   useEffect(() => {
     return () => {
@@ -70,12 +78,6 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
   }, []);
 
   const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    if (activeGroup && activeGroup !== expandedGroup) {
-      setExpandedGroup(activeGroup);
-    }
-  }, [activeGroup, expandedGroup]);
 
   const handleGroupClick = useCallback(
     (group: string) => {

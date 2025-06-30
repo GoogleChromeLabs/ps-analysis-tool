@@ -31,6 +31,7 @@ import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
  */
 import type { TabItems, TabsProviderProps } from './types';
 import { TabsContext, TabsStoreContext } from './context';
+import ProgressBar from '../../progressBar';
 
 export const TabsProvider = ({
   children,
@@ -129,10 +130,16 @@ export const TabsProvider = ({
     }, {});
   }, [groupedItems]);
 
+  const [loading, setLoading] = useState(true);
+
   const titles = useMemo(() => tabItems.map((item) => item.title), [tabItems]);
-  const panel = tabItems?.[activeTab]?.content ?? {
-    Element: null,
-  };
+  const panel = loading
+    ? {
+        Element: ProgressBar,
+      }
+    : tabItems?.[activeTab]?.content ?? {
+        Element: null,
+      };
 
   const setStorage = useCallback(
     (data: string, index?: number) => {
@@ -232,6 +239,8 @@ export const TabsProvider = ({
 
   useEffect(() => {
     if (!name) {
+      setActiveTab(0);
+      setLoading(false);
       return;
     }
 
@@ -239,11 +248,10 @@ export const TabsProvider = ({
       const sessionStorage = await getSessionStorage('tabs');
 
       const _activeTab = sessionStorage[name].activeTab || 0;
-      const _activeGroup = sessionStorage[name].activeGroup || null;
       setActiveTab(_activeTab);
-      setActiveGroup(_activeGroup);
+      setLoading(false);
     })();
-  }, [name, setActiveTab, setActiveGroup]);
+  }, [name, setActiveTab]);
 
   useEffect(() => {
     if (!name) {
@@ -255,13 +263,12 @@ export const TabsProvider = ({
         {
           [name]: {
             activeTab,
-            activeGroup,
           },
         },
         'tabs'
       );
     })();
-  }, [name, activeTab, activeGroup]);
+  }, [name, activeTab]);
 
   return (
     <TabsContext.Provider
@@ -274,6 +281,7 @@ export const TabsProvider = ({
           panel,
           storage,
           isGroup,
+          loading,
         },
         actions: {
           setStorage,
