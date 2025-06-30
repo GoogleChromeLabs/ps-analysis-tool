@@ -18,12 +18,12 @@
  */
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface PillToggleProps {
   options: string[];
-  pillToggle: string;
-  setPillToggle: (value: string) => void;
+  pillToggle: string | null;
+  setPillToggle: (value: string | null) => void;
   eeAnimatedTab: boolean;
   width?: string;
   highlightOption?: string;
@@ -41,6 +41,11 @@ const PillToggle = ({
   setHighlightOption,
   persistenceKey,
 }: PillToggleProps) => {
+  const defaultPillToggle = useRef(pillToggle);
+  useEffect(() => {
+    setPillToggle(null);
+  }, [setPillToggle]);
+
   useEffect(() => {
     if (pillToggle === highlightOption) {
       setHighlightOption?.('');
@@ -51,6 +56,7 @@ const PillToggle = ({
 
   useEffect(() => {
     if (!persistenceKey) {
+      setPillToggle(defaultPillToggle.current);
       setLoading(false);
       return;
     }
@@ -60,6 +66,8 @@ const PillToggle = ({
 
       if (sessionStorage?.[persistenceKey]?.value) {
         setPillToggle(sessionStorage[persistenceKey].value);
+      } else {
+        setPillToggle(defaultPillToggle.current);
       }
 
       setLoading(false);
@@ -82,6 +90,10 @@ const PillToggle = ({
       );
     })();
   }, [loading, persistenceKey, pillToggle]);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">

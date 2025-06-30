@@ -19,12 +19,12 @@
  */
 import React, { useState } from 'react';
 import { PillToggle } from '@google-psat/design-system';
+import type { NoBidsType, ReceivedBids } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import Panel from '../../../bids/panel';
-import type { NoBidsType, ReceivedBids } from '@google-psat/common';
 
 enum BidsPillOptions {
   ReceivedBids = 'Received Bids',
@@ -37,7 +37,7 @@ interface BidsPanelProps {
 }
 
 const BidsPanel = ({ receivedBids, noBids }: BidsPanelProps) => {
-  const [bidsPillToggle, setBidsPillToggle] = useState<string>(
+  const [bidsPillToggle, setBidsPillToggle] = useState<string | null>(
     BidsPillOptions.ReceivedBids
   );
 
@@ -54,13 +54,15 @@ const BidsPanel = ({ receivedBids, noBids }: BidsPanelProps) => {
           />
         </div>
       </div>
-      <Panel
-        receivedBids={receivedBids}
-        noBids={noBids}
-        bidsPillToggle={bidsPillToggle}
-        panelPillToggle="PAAPI"
-        eeAnimatedTab
-      />
+      {bidsPillToggle && (
+        <Panel
+          receivedBids={receivedBids}
+          noBids={noBids}
+          bidsPillToggle={bidsPillToggle}
+          panelPillToggle="PAAPI"
+          eeAnimatedTab
+        />
+      )}
     </div>
   );
 };

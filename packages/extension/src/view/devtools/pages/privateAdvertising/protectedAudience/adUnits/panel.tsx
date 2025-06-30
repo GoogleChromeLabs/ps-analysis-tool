@@ -52,8 +52,8 @@ interface AdUnitsPanelProps {
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   showEvaluationPlaceholder?: boolean;
   isEE?: boolean;
-  pillToggle: string;
-  setPillToggle: React.Dispatch<React.SetStateAction<string>>;
+  pillToggle: string | null;
+  setPillToggle: React.Dispatch<React.SetStateAction<string | null>>;
   highlightOption?: string;
   setHighlightOption?: (value: string) => void;
   navigateToSettings?: () => void;
@@ -123,53 +123,55 @@ const AdUnitsPanel = ({
           />
         </div>
       )}
-      <div className="flex flex-col flex-1 w-full overflow-auto">
-        {Object.keys(adsAndBidders || {}).length ||
-        Object.keys(auctionEvents || {}).length ? (
-          <>
-            <AdMatrix
-              adUnitsCount={adUnitsCount}
-              biddersCount={biddersCount.size}
-              bidsCount={bidsCount}
-              noBidsCount={noBidsCount}
-            />
-            <AdTable
-              adsAndBidders={adsAndBidders}
-              setSelectedAdUnit={setSelectedAdUnit}
-              selectedAdUnit={selectedAdUnit}
-              setIsInspecting={setIsInspecting}
-              isEE={isEE}
-              auctionEvents={
-                pillToggle === 'Prebid'
-                  ? (auctionEvents as PrebidEvents['auctionEvents'])
-                  : undefined
-              }
-            />
-          </>
-        ) : !isUsingCDP && pillToggle === 'PAAPI' ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <p className="text-sm text-raisin-black dark:text-bright-gray">
-              To view ad units, enable PSAT to use CDP via the{' '}
-              <button
-                className="text-bright-navy-blue dark:text-jordy-blue"
-                onClick={cdpNavigation}
-              >
-                Settings Page
-              </button>
-              .
-            </p>
-          </div>
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center">
-            <p className="text-lg text-raisin-black dark:text-bright-gray">
-              No ad units were recorded.
-            </p>
-            {showEvaluationPlaceholder && pillToggle !== 'Prebid' && (
-              <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
-            )}
-          </div>
-        )}
-      </div>
+      {(pillToggle || isEE) && (
+        <div className="flex flex-col flex-1 w-full overflow-auto">
+          {Object.keys(adsAndBidders || {}).length ||
+          Object.keys(auctionEvents || {}).length ? (
+            <>
+              <AdMatrix
+                adUnitsCount={adUnitsCount}
+                biddersCount={biddersCount.size}
+                bidsCount={bidsCount}
+                noBidsCount={noBidsCount}
+              />
+              <AdTable
+                adsAndBidders={adsAndBidders}
+                setSelectedAdUnit={setSelectedAdUnit}
+                selectedAdUnit={selectedAdUnit}
+                setIsInspecting={setIsInspecting}
+                isEE={isEE}
+                auctionEvents={
+                  pillToggle === 'Prebid'
+                    ? (auctionEvents as PrebidEvents['auctionEvents'])
+                    : undefined
+                }
+              />
+            </>
+          ) : !isUsingCDP && pillToggle === 'PAAPI' ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <p className="text-sm text-raisin-black dark:text-bright-gray">
+                To view ad units, enable PSAT to use CDP via the{' '}
+                <button
+                  className="text-bright-navy-blue dark:text-jordy-blue"
+                  onClick={cdpNavigation}
+                >
+                  Settings Page
+                </button>
+                .
+              </p>
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center">
+              <p className="text-lg text-raisin-black dark:text-bright-gray">
+                No ad units were recorded.
+              </p>
+              {showEvaluationPlaceholder && pillToggle !== 'Prebid' && (
+                <EvaluationEnvironment text="Please setup the <a>evaluation environment</a> before analyzing the ad units if you haven’t already." />
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -46,8 +46,8 @@ interface PanelProps {
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   winnerBid?: string | null;
   winningMediaContainer?: number[];
-  pillToggle: string;
-  setPillToggle: React.Dispatch<React.SetStateAction<string>>;
+  pillToggle: string | null;
+  setPillToggle: React.Dispatch<React.SetStateAction<string | null>>;
   highlightOption?: string;
   setHighlightOption?: React.Dispatch<React.SetStateAction<string>>;
   isEE?: boolean;
@@ -175,39 +175,43 @@ const Panel = ({
           />
         </div>
       )}
-      {biddersCount === 0 ? (
-        !isUsingCDP && pillToggle === 'PAAPI' ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <p className="text-sm text-raisin-black dark:text-bright-gray">
-              To view ad unit data, enable PSAT to use CDP via the{' '}
-              <button
-                className="text-bright-navy-blue dark:text-jordy-blue"
-                onClick={cdpNavigation}
-              >
-                Settings Page
-              </button>
-              .
-            </p>
-          </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <p className="text-sm text-raisin-black dark:text-bright-gray">
-              No data available for this ad unit.
-            </p>
-          </div>
-        )
-      ) : (
+      {(pillToggle || isEE) && (
         <>
-          <Matrix
-            biddersCount={biddersCount}
-            bidsCount={bidsCount}
-            noBidsCount={noBidsCount}
-          />
-          <div className="p-4 flex gap-4 flex-wrap">
-            {items.map((item) => (
-              <Tile key={item.name} item={item} />
-            ))}
-          </div>
+          {biddersCount === 0 ? (
+            !isUsingCDP && pillToggle === 'PAAPI' ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-sm text-raisin-black dark:text-bright-gray">
+                  To view ad unit data, enable PSAT to use CDP via the{' '}
+                  <button
+                    className="text-bright-navy-blue dark:text-jordy-blue"
+                    onClick={cdpNavigation}
+                  >
+                    Settings Page
+                  </button>
+                  .
+                </p>
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-sm text-raisin-black dark:text-bright-gray">
+                  No data available for this ad unit.
+                </p>
+              </div>
+            )
+          ) : (
+            <>
+              <Matrix
+                biddersCount={biddersCount}
+                bidsCount={bidsCount}
+                noBidsCount={noBidsCount}
+              />
+              <div className="p-4 flex gap-4 flex-wrap">
+                {items.map((item) => (
+                  <Tile key={item.name} item={item} />
+                ))}
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

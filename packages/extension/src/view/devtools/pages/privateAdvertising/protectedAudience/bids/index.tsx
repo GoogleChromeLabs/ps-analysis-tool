@@ -54,7 +54,7 @@ const Bids = () => {
     setStorage: actions.setStorage,
   }));
 
-  const [panelPillToggle, setPanelPillToggle] = useState<string>(
+  const [panelPillToggle, setPanelPillToggle] = useState<string | null>(
     prebidReceivedBids?.length ||
       Object.keys(prebidNoBids || {}).length ||
       (Number(paapi.receivedBids?.length || 0) === 0 &&
@@ -70,7 +70,7 @@ const Bids = () => {
     }
   }, [paapi]);
 
-  const [bidsPillToggle, setBidsPillToggle] = useState<string>(
+  const [bidsPillToggle, setBidsPillToggle] = useState<string | null>(
     BidsPillOptions.ReceivedBids
   );
 
@@ -172,16 +172,18 @@ const Bids = () => {
             </div>
           )}
       </div>
-      <Panel
-        receivedBids={receivedBids}
-        noBids={noBids}
-        storage={storage}
-        setStorage={setStorage}
-        bidsPillToggle={bidsPillToggle}
-        panelPillToggle={panelPillToggle}
-        timelines={timelines}
-        zoomLevel={zoomLevel}
-      />
+      {!panelPillToggle || !bidsPillToggle ? null : (
+        <Panel
+          receivedBids={receivedBids}
+          noBids={noBids}
+          storage={storage}
+          setStorage={setStorage}
+          bidsPillToggle={bidsPillToggle}
+          panelPillToggle={panelPillToggle}
+          timelines={timelines}
+          zoomLevel={zoomLevel}
+        />
+      )}
     </div>
   );
 };

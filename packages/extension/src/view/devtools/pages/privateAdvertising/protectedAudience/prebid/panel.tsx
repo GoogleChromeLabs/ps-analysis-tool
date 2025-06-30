@@ -41,7 +41,7 @@ enum PillToggleOptions {
 }
 
 const Panel = () => {
-  const [pillToggle, setPillToggle] = useState<string>(
+  const [pillToggle, setPillToggle] = useState<string | null>(
     PillToggleOptions.Config
   );
 
