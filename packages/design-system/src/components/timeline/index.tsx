@@ -205,8 +205,11 @@ const Timeline = ({
 
         {/*Timeout block*/}
         <div
-          className="absolute flex w-fit top-0"
-          style={{ height: childHeight }}
+          className="absolute flex top-0"
+          style={{
+            height: childHeight,
+            width: lines.length * TIME_DURATION * zoom,
+          }}
         >
           <div
             style={{
@@ -232,9 +235,10 @@ const Timeline = ({
 
         {/*Auction-End block*/}
         <div
-          className="absolute flex w-fit top-0"
+          className="absolute flex top-0"
           style={{
             height: childHeight,
+            width: lines.length * TIME_DURATION * zoom,
           }}
         >
           <div
