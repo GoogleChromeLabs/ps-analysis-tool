@@ -194,25 +194,6 @@ const prepareProtectedAudienceTimelineData = (
                     });
                   }
 
-                  if (winEvent) {
-                    bidders = bidders.map((bidder) => {
-                      const winnerHostname =
-                        winEvent.ownerOrigin &&
-                        isValidURL(winEvent.ownerOrigin ?? '')
-                          ? new URL(winEvent.ownerOrigin).hostname
-                          : '';
-
-                      if (
-                        winnerHostname &&
-                        winnerHostname === bidder.name &&
-                        winEvent.name === bidder.data?.name
-                      ) {
-                        bidder.type = BidderType.WON;
-                      }
-                      return bidder;
-                    });
-                  }
-
                   const loadedEvent = events.find(
                     (event) =>
                       event.type === 'loaded' &&
@@ -234,13 +215,14 @@ const prepareProtectedAudienceTimelineData = (
                     return;
                   }
 
+                  // If the bid event
                   bidders.push({
                     name: isValidURL(bidEvent?.ownerOrigin)
                       ? new URL(bidEvent.ownerOrigin).hostname
                       : '',
                     startTime:
-                      auctionEndTime * 1000 -
-                      ((loadedEvent.time * 1000) as number),
+                      ((loadedEvent.time * 1000) as number) -
+                      events[0].time * 1000,
                     endTime:
                       auctionEndTime * 1000 -
                       ((bidEvent?.time * 1000) as number),
@@ -251,6 +233,25 @@ const prepareProtectedAudienceTimelineData = (
                     data: bidEvent,
                   });
                 });
+
+                if (winEvent) {
+                  bidders = bidders.map((bidder) => {
+                    const winnerHostname =
+                      winEvent.ownerOrigin &&
+                      isValidURL(winEvent.ownerOrigin ?? '')
+                        ? new URL(winEvent.ownerOrigin).hostname
+                        : '';
+
+                    if (
+                      winnerHostname &&
+                      winnerHostname === bidder.name &&
+                      winEvent.name === bidder.data?.name
+                    ) {
+                      bidder.type = BidderType.WON;
+                    }
+                    return bidder;
+                  });
+                }
                 // see https://github.com/google/ads-privacy/blob/master/proposals/fledge-multiple-seller-testing/README.md#faq
                 //@todo once seller and buyer timeouts are in place calculate the auction timeout.
                 auctions[auctionId] = {
@@ -268,6 +269,8 @@ const prepareProtectedAudienceTimelineData = (
                         .slice(0, formattedTime.toString().length - 3)
                     )
                   ),
+                  auctionEndDuration:
+                    auctionEndTime * 1000 - events[0].time * 1000,
                   zoomLevel: 2,
                   adUnitCodes: adUnit,
                 };

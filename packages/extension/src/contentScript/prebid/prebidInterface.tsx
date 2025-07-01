@@ -335,12 +335,10 @@ class PrebidInterface {
                     args?.sizes ?? []
                   ),
                 ],
-                bidder: Array.from(
-                  new Set<string>([
-                    ...calculatedNoBids[args.adUnitCode].bidder,
-                    args.bidder,
-                  ])
-                ),
+                bidder: [
+                  ...calculatedNoBids[args.adUnitCode].bidder,
+                  args.bidder,
+                ],
                 uniqueAuctionId: args.auctionId,
               };
             }

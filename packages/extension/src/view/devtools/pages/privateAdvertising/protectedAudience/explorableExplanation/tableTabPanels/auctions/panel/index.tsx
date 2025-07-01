@@ -234,6 +234,7 @@ const AuctionPanel = ({
               biddersCount: biddersCount ?? 0,
               bidsCount: bidsCount,
               noBidsCount: noBidsCount[adUnit],
+              isEE: true,
             },
           },
           children: adUnitChildren,

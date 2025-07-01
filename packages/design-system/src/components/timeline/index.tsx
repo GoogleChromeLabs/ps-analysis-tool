@@ -72,11 +72,21 @@ const Timeline = ({
 
   const lines = Array.from({ length: lineCount });
 
+  const isAuctionEndBlockOverlappingTimeout = useRef(false);
+
   useEffect(() => {
     const _zoom = zoomLevel;
     setZoom(_zoom);
     setTimeoutBlockWidth(scrollWidth - auctionTimeout * _zoom);
-    setAuctionEndBlockWidth(scrollWidth - auctionEndDuration * _zoom);
+
+    isAuctionEndBlockOverlappingTimeout.current =
+      Math.abs(auctionEndDuration * _zoom - auctionTimeout * _zoom) <= 20;
+
+    setAuctionEndBlockWidth(
+      scrollWidth -
+        auctionEndDuration * _zoom +
+        (isAuctionEndBlockOverlappingTimeout.current ? 20 : 0)
+    );
   }, [scrollWidth, auctionTimeout, auctionEndDuration, zoomLevel]);
 
   useEffect(() => {
@@ -201,7 +211,12 @@ const Timeline = ({
           >
             <div className="bg-[#E90303] opacity-[4%] w-full h-full"></div>
             <span
-              className="absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center"
+              className={classNames(
+                'absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center',
+                {
+                  'left-5': isAuctionEndBlockOverlappingTimeout.current,
+                }
+              )}
               style={{ writingMode: 'vertical-rl' }}
             >
               Auction End: {formatDuration(String(auctionEndDuration))}ms

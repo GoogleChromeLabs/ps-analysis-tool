@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import type p5 from 'p5';
-
 /**
  * External dependencies.
  */
+import type p5 from 'p5';
 import type { PrebidJsGlobal } from '@google-psat/common';
 declare module '*.svg' {
   import React = require('react');

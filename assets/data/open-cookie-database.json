@@ -4259,6 +4259,19 @@
       "wildcard": "0"
     }
   ],
+  "__Secure-ROLLOUT_TOKEN": [
+    {
+      "platform": "Youtube",
+      "category": "Marketing",
+      "name": "__Secure-ROLLOUT_TOKEN",
+      "domain": "youtube.com (3rd party)",
+      "description": "OCD___Secure_ROLLOUT_TOKEN_description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
   "__adm_ui": [
     {
       "platform": "Admatic",
@@ -4565,6 +4578,45 @@
       "dataController": "Sonobi",
       "gdprUrl": "https://sonobi.com/privacy-policy/",
       "wildcard": "0"
+    }
+  ],
+  "__uin_mm": [
+    {
+      "platform": "Sonobi",
+      "category": "Marketing",
+      "name": "__uin_mm",
+      "domain": "sonobi.com",
+      "description": "OCD___uin_mm_description",
+      "retention": "OCD_retention_44_days",
+      "dataController": "Sonobi",
+      "gdprUrl": "https://sonobi.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__uir_mm": [
+    {
+      "platform": "Sonobi",
+      "category": "Marketing",
+      "name": "__uir_mm",
+      "domain": "sonobi.com",
+      "description": "OCD___uir_mm_description",
+      "retention": "OCD_retention_14_days",
+      "dataController": "Sonobi",
+      "gdprUrl": "https://sonobi.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "HAPLB8*": [
+    {
+      "platform": "Sonobi",
+      "category": "Marketing",
+      "name": "HAPLB8*",
+      "domain": "go.sonobi.com",
+      "description": "OCD_HAPLB8__description",
+      "retention": "OCD_retention_session",
+      "dataController": "Sonobi",
+      "gdprUrl": "https://sonobi.com/privacy-policy/",
+      "wildcard": "1"
     }
   ],
   "_dbefe": [
@@ -8511,32 +8563,6 @@
       "dataController": "Microsoft",
       "gdprUrl": "",
       "wildcard": "1"
-    }
-  ],
-  "__uin_mm": [
-    {
-      "platform": "Sonobi",
-      "category": "Marketing",
-      "name": "__uin_mm",
-      "domain": "sonobi.com",
-      "description": "OCD___uin_mm_description",
-      "retention": "OCD_retention_44_days",
-      "dataController": "Sonobi",
-      "gdprUrl": "https://sonobi.com/privacy-policy/",
-      "wildcard": "0"
-    }
-  ],
-  "__uir_mm": [
-    {
-      "platform": "Sonobi",
-      "category": "Marketing",
-      "name": "__uir_mm",
-      "domain": "sonobi.com",
-      "description": "OCD___uir_mm_description",
-      "retention": "OCD_retention_14_days",
-      "dataController": "Sonobi",
-      "gdprUrl": "https://sonobi.com/privacy-policy/",
-      "wildcard": "0"
     }
   ],
   "_cc_aud": [
@@ -15141,6 +15167,19 @@
       "wildcard": "0"
     }
   ],
+  "ttcsid*": [
+    {
+      "platform": "TikTok",
+      "category": "Marketing",
+      "name": "ttcsid*",
+      "domain": "tiktok.com",
+      "description": "OCD_ttcsid__description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "TikTok",
+      "gdprUrl": "https://www.tiktok.com/legal/page/eea/privacy-policy/en?lang=en",
+      "wildcard": "1"
+    }
+  ],
   "ahoy_visit": [
     {
       "platform": "Ahoy",
@@ -15269,19 +15308,6 @@
       "dataController": "Auth0",
       "gdprUrl": "",
       "wildcard": "0"
-    }
-  ],
-  "HAPLB8*": [
-    {
-      "platform": "Sonobi",
-      "category": "Marketing",
-      "name": "HAPLB8*",
-      "domain": "go.sonobi.com",
-      "description": "OCD_HAPLB8__description",
-      "retention": "OCD_retention_session",
-      "dataController": "Sonobi",
-      "gdprUrl": "https://sonobi.com/privacy-policy/",
-      "wildcard": "1"
     }
   ],
   "atidvisitor": [
@@ -28490,6 +28516,110 @@
       "retention": "OCD_retention_13_months",
       "dataController": "Microsoft",
       "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "tf_respondent_cc": [
+    {
+      "platform": "Typeform",
+      "category": "Functional",
+      "name": "tf_respondent_cc",
+      "domain": ".typeform.com",
+      "description": "OCD_tf_respondent_cc_description",
+      "retention": "OCD_retention_6_months",
+      "dataController": "Typeform",
+      "gdprUrl": "https://www.typeform.com",
+      "wildcard": "0"
+    }
+  ],
+  "attribution_user_id": [
+    {
+      "platform": "Typeform",
+      "category": "Marketing",
+      "name": "attribution_user_id",
+      "domain": ".typeform.com",
+      "description": "OCD_attribution_user_id_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Typeform",
+      "gdprUrl": "https://www.typeform.com",
+      "wildcard": "0"
+    }
+  ],
+  "_hp2_id": [
+    {
+      "platform": "Heap Analytics",
+      "category": "Analytics",
+      "name": "_hp2_id",
+      "domain": "",
+      "description": "OCD__hp2_id_description",
+      "retention": "OCD_retention_14_months",
+      "dataController": "Heap Analytics",
+      "gdprUrl": "https://www.heap.io/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "_hp2_ses_props": [
+    {
+      "platform": "Heap Analytics",
+      "category": "Analytics",
+      "name": "_hp2_ses_props",
+      "domain": "",
+      "description": "OCD__hp2_ses_props_description",
+      "retention": "OCD_retention_14_months",
+      "dataController": "Heap Analytics",
+      "gdprUrl": "https://www.heap.io/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "pi_opt_in": [
+    {
+      "platform": "Salesforce",
+      "category": "Analytics",
+      "name": "pi_opt_in",
+      "domain": "",
+      "description": "OCD_pi_opt_in_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Salesforce",
+      "gdprUrl": "https://www.salesforce.com/company/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "Hm_lpvt_": [
+    {
+      "platform": "Baidu",
+      "category": "Analytics",
+      "name": "Hm_lpvt_",
+      "domain": "",
+      "description": "OCD_Hm_lpvt__description",
+      "retention": "OCD_retention_session",
+      "dataController": "Baidu",
+      "gdprUrl": "https://privacy.baidu.com/policy/PrivacyPolicy",
+      "wildcard": "0"
+    }
+  ],
+  "Hm_lvt_": [
+    {
+      "platform": "Baidu",
+      "category": "Analytics",
+      "name": "Hm_lvt_",
+      "domain": "",
+      "description": "OCD_Hm_lvt__description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Baidu",
+      "gdprUrl": "https://privacy.baidu.com/policy/PrivacyPolicy",
+      "wildcard": "0"
+    }
+  ],
+  "HMACCOUNT": [
+    {
+      "platform": "Baidu",
+      "category": "Analytics",
+      "name": "HMACCOUNT",
+      "domain": "",
+      "description": "OCD_HMACCOUNT_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Baidu",
+      "gdprUrl": "https://privacy.baidu.com/policy/PrivacyPolicy",
       "wildcard": "0"
     }
   ]

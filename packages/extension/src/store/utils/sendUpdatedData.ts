@@ -13,16 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Internal dependencies
+ */
 import ARAStore from '../ARAStore';
 import cookieStore from '../cookieStore';
 import PAStore from '../PAStore';
 import prebidStore from '../prebidStore';
 
 /**
- * Internal dependencies
- * @param {number} tabId The window id.
- * @param {boolean} overrideForInitialSync Optional is only passed when we want to override the newUpdate condition for initial sync.
+ * Sends updated data to popup and developer tools for multiple store instances.
+ * Triggers data synchronization across different stores including cookie, PA, ARA, and prebid stores.
+ * @param {string} tabId - The ID of the browser tab to send the updated data to
+ * @param {boolean} overrideForInitialSync - Optional flag to override initial synchronization behavior. Defaults to false
  */
 function sendUpdatedData(tabId: string, overrideForInitialSync = false) {
   cookieStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);

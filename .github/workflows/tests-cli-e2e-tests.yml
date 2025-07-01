@@ -1,19 +1,24 @@
 name: PSAT E2E Tests
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
+    paths:
+      - '**.js'
+      - '**.cjs'
+      - '**.ts'
+      - '**.tsx'
+      - '**/package.json'
+      - 'package-lock.json'
     branches:
-      - develop
       - main
-      - release/*
-
   pull_request:
-    branches:
-      - develop
-      - main
-      - release/*
+    paths:
+      - '**.js'
+      - '**.cjs'
+      - '**.ts'
+      - '**.tsx'
+      - '**/package.json'
+      - 'package-lock.json'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -43,6 +48,8 @@ jobs:
         run: |
           ls 
           pwd 
+          rm -rf **/node_modules
+          rm -rf package-lock.json
           npm install || true
           npm run build:cli:dashboard
       - name: Install Xvfb

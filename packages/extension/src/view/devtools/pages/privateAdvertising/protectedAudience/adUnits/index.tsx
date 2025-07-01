@@ -75,7 +75,12 @@ const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
     };
   }, [setSelectedAdUnit]);
 
-  const [pillToggle, setPillToggle] = useState('Prebid');
+  const [pillToggle, setPillToggle] = useState(
+    (prebidAdunits && Object.keys(prebidAdunits).length > 0) ||
+      Object.keys(paapi.adsAndBidders || {}).length === 0
+      ? 'Prebid'
+      : 'PAAPI'
+  );
   const [highlightOption, setHighlightOption] = useState<string>();
 
   useEffect(() => {
