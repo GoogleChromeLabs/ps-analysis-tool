@@ -101,16 +101,14 @@ export function formNoBidData(
     events.find(
       (event) =>
         event.eventType === 'noBid' &&
-        //@ts-ignore
-        event.bidderRequestId === bid.bidderRequestId
+        (event as NoBid).bidderRequestId === bid.bidderRequestId
     )?.elapsedTime ?? 0;
 
   const bidRequestedElapsedTime =
     events.find(
       (event) =>
         event.eventType === 'bidRequested' &&
-        //@ts-ignore
-        event.bidderRequestId === bid.bidderRequestId
+        (event as BidRequestedEvent).bidderRequestId === bid.bidderRequestId
     )?.elapsedTime ?? 0;
   bidder.endTime =
     bidderRequest.start +

@@ -211,7 +211,7 @@ const useFrameOverlay = (
         (res) => {
           if (!chrome.runtime.lastError) {
             if (res) {
-              setCanStartInspecting(res.setInPage);
+              setCanStartInspecting(res.setInPagePrebidInterface);
             }
           }
         }

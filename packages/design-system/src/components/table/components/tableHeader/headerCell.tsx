@@ -18,12 +18,13 @@
  * External dependencies.
  */
 import React, { useCallback } from 'react';
+import classNames from 'classnames';
 /**
  * Internal dependencies.
  */
 import { useTable, type TableColumn } from '../../useTable';
 import { ArrowDown } from '../../../../icons';
-import classNames from 'classnames';
+
 interface HeaderCellProps {
   cell: TableColumn;
   setIsRowFocused: (state: boolean) => void;

@@ -50,6 +50,7 @@ interface PanelProps {
   setPillToggle: React.Dispatch<React.SetStateAction<string>>;
   highlightOption?: string;
   setHighlightOption?: React.Dispatch<React.SetStateAction<string>>;
+  isEE?: boolean;
 }
 
 const Panel = ({
@@ -68,6 +69,7 @@ const Panel = ({
   setPillToggle,
   highlightOption,
   setHighlightOption,
+  isEE = false,
 }: PanelProps) => {
   const items = useMemo(
     () => [
@@ -160,16 +162,18 @@ const Panel = ({
 
   return (
     <div className="flex flex-col h-full w-full ">
-      <div className="p-4">
-        <PillToggle
-          options={['Prebid', 'PAAPI']}
-          pillToggle={pillToggle}
-          setPillToggle={setPillToggle}
-          eeAnimatedTab={false}
-          highlightOption={highlightOption}
-          setHighlightOption={setHighlightOption}
-        />
-      </div>
+      {!isEE && (
+        <div className="p-4">
+          <PillToggle
+            options={['Prebid', 'PAAPI']}
+            pillToggle={pillToggle}
+            setPillToggle={setPillToggle}
+            eeAnimatedTab={false}
+            highlightOption={highlightOption}
+            setHighlightOption={setHighlightOption}
+          />
+        </div>
+      )}
       {biddersCount === 0 ? (
         !isUsingCDP && pillToggle === 'PAAPI' ? (
           <div className="w-full h-full flex items-center justify-center">

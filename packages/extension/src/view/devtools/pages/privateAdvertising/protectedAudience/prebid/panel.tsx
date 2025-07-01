@@ -80,7 +80,7 @@ const Panel = () => {
 
   return (
     <div className="flex flex-col pt-4 h-full w-full bg-lotion dark:bg-raisin-black">
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-4 mb-4">
         <PillToggle
           options={Object.values(PillToggleOptions)}
           pillToggle={pillToggle}
@@ -88,8 +88,8 @@ const Panel = () => {
           eeAnimatedTab={false}
         />
       </div>
-      <div className="flex-1 overflow-auto text-outer-space-crayola">
-        <div className="w-full h-full border-american-silver dark:border-quartz overflow-auto mt-4">
+      <div className="flex-1 overflow-auto my-1 text-outer-space-crayola">
+        <div className="w-full h-full border-american-silver dark:border-quartz">
           {containerToShow}
         </div>
       </div>

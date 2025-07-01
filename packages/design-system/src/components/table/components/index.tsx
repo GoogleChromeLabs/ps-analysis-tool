@@ -19,6 +19,7 @@
  */
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Resizable } from 're-resizable';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -30,7 +31,7 @@ import { useTable } from '../useTable';
 import TableTopBar from './tableTopBar';
 import TableChipsBar from './filtersSidebar/chips';
 import TableFiltersSidebar from './filtersSidebar';
-import classNames from 'classnames';
+
 interface TableProps {
   selectedKey: string | undefined | null;
   isFiltersSidebarOpen?: boolean;

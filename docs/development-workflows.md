@@ -29,7 +29,7 @@ npm run build:ext
 
 To run the CLI in development mode for continuous changes only for the cli package, use:
 ```bash
-npm run vite:dev:cli
+npm run webpack:dev:cli
 ```
 
 If you are making continuous changes in the CLI or any packages it relies on, use:

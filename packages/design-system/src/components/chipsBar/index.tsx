@@ -60,7 +60,7 @@ const ChipsBar = ({
   return (
     <div
       className={
-        'w-full h-fit px-2 flex items-center overflow-x-auto bg-anti-flash-white dark:bg-raisin-black'
+        'w-full min-h-[20px] h-fit px-2 flex items-center overflow-x-auto bg-anti-flash-white dark:bg-raisin-black box-border'
       }
     >
       {appliedFiltersCount > 0 && !hideClearAll && (

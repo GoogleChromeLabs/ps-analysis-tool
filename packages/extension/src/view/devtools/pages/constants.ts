@@ -274,7 +274,7 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
     name: I18n.getMessage('trackingProtection'),
     icon: PSTrackingProtectionIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING,
-    description: 'Limit covert tracking techniques.',
+    description: 'Anti covert tracking techniques.',
     url: LINKS.PS_TRACKING_PROTECTION.doc,
     buttons: [
       {
@@ -372,7 +372,7 @@ export const LEARNING_BOX_ITEMS = [
     },
   },
   {
-    name: 'Wiki',
+    name: 'PSAT Wiki',
     icon: PSWikiIcon,
     sidebarKey: SIDEBAR_ITEMS_KEYS.WIKI,
     title: 'Looking for in-depth guidance on using PSAT?',

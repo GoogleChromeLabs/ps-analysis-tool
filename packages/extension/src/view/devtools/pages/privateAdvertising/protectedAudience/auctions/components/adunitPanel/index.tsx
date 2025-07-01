@@ -37,6 +37,7 @@ interface AdunitPanelProps {
   noBidsCount: Record<string, number>;
   winnerBid: Record<string, string | null> | null;
   winningMediaContainer?: Record<string, number[]>;
+  isEE?: boolean;
 }
 
 const AdunitPanel = ({
@@ -48,6 +49,7 @@ const AdunitPanel = ({
   noBidsCount,
   winnerBid = null,
   winningMediaContainer = {},
+  isEE = false,
 }: AdunitPanelProps) => {
   const { isInspecting, setIsInspecting } = useCookie(({ state, actions }) => ({
     isInspecting: state.isInspecting,
@@ -58,7 +60,13 @@ const AdunitPanel = ({
     setSelectedAdUnit: actions.setSelectedAdUnit,
   }));
 
-  const [pillToggle, setPillToggle] = useState('Prebid');
+  const [pillToggle, setPillToggle] = useState(
+    bidsCount['prebid'] > 0 ||
+      noBidsCount['prebid'] > 0 ||
+      (bidsCount['paapi'] === 0 && noBidsCount['paapi'] === 0)
+      ? 'Prebid'
+      : 'PAAPI'
+  );
   const [highlightOption, setHighlightOption] = useState('');
 
   useEffect(() => {
@@ -86,6 +94,7 @@ const AdunitPanel = ({
       setPillToggle={setPillToggle}
       highlightOption={highlightOption}
       setHighlightOption={setHighlightOption}
+      isEE={isEE}
     />
   );
 };

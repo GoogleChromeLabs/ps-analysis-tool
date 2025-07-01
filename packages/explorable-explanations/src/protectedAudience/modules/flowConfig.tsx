@@ -24,17 +24,18 @@ export const ADVERTIZER_CONFIG = {
     info: (
       <>
         <p>
-          These are script tags embedded in the advertiser&apos;s webpage that
-          enable communication with DSP servers. DSP tags help associate users
-          with interest groups for retargeting and audience building in future
-          ad campaigns.
+          DSP tags are scripts on an advertiser&apos;s webpage that facilitate
+          communication with Demand-Side Platform (DSP) servers. They are used
+          to associate users with interest groups for retargeting and audience
+          building in future ad campaigns.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          They collect user data, which is sent to DSP servers for processing
-          (see the next DSPs box) and the received JSON response from DSP
-          servers is passed as a parameter to the{' '}
-          <code className="text-upsed-tomato">joinAdInterestGroup()</code>{' '}
-          function to join interest groups.
+          DSP tags help determine the user’s interests, which are sent to DSP
+          servers for processing. The DSP servers return a JSON response used by
+          <code className="text-upsed-tomato">joinAdInterestGroup()</code> to
+          add users to interest groups for future ad auctions.
         </p>
       </>
     ),
@@ -44,20 +45,20 @@ export const ADVERTIZER_CONFIG = {
     info: (
       <>
         <p>
-          DSP servers on the advertiser&apos;s side handle user tracking, data
-          processing, and interest group management. They process user behavior
-          and decide if the user should be added to specific interest groups.
-          (called from the DSP Tag). DSPs are the owners of the interest groups
-          that the user joins.
+          On the advertiser&apos;s side, DSP servers analyze anonymous user
+          interactions and manage interest categories, evaluating if visitors
+          meet criteria for specific categories based on data from DSP tags.
+          DSPs own these interest categories.
         </p>
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          It receives the user data from the DSP tags, processes it, and sends
-          JSON responses to the DSP tags for joining interest groups (see DSP
-          Tags box). These <strong>interest groups</strong> are added to the
-          user&apos;s browser and are shown with small bubbles here. They store
-          user profiles based on demographics, location, and behavior while
-          ensuring compliance with privacy standards like the Protected Audience
-          API.
+          DSP servers receive and process anonymized data from DSP tags, then
+          return organized data. This data associates browsers with relevant
+          interest groups, which are stored in the user&apos;s browser and
+          appear as small bubbles in the Explorable Explanation. They contain
+          generalized information about Browse activity based on broad
+          characteristics, locations and browsing patterns while adhering to
+          privacy guidelines such as those in the Protected Audience API.
         </p>
       </>
     ),
@@ -69,28 +70,20 @@ export const SINGLE_SELLER_CONFIG = {
     title: 'SSP Ad Tag',
     info: (
       <>
-        <div>
-          <p>
-            An SSP tag is a script placed on the publisher&apos;s page that
-            enables the SSP to initiate ad requests and pass them to DSPs. It
-            does the following:
-          </p>
-          <ul className="list-disc ml-3 mt-1">
-            <li>Collects contextual data about the page and user.</li>
-            <li>
-              Sends ad requests to SSP server which then forwards those data to
-              DSPs via RTB protocols.
-            </li>
-            <li>
-              Returns the RTB responses from the SSP server to the SSP tag.
-            </li>
-          </ul>
-        </div>
+        <p>
+          An SSP Ad Tag is a script on a publisher&apos;s webpage that allows
+          the SSP to initiate ad requests and communicate with DSPs. It gathers
+          contextual page information, sends ad requests to the SSP server for
+          forwarding to DSPs via RTB, and receives RTB responses from the SSP
+          server.
+        </p>
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          The SSP ad tag sends an ad request to the SSP server indicating that
-          the browser supports Protected Audience API. It also returns
-          contextual auction responses to the{' '}
-          <code className="text-upsed-tomato">runAdAuction()</code> function.
+          The SSP Ad Tag sends an ad request to the SSP server, signaling the
+          browser supports the Protected Audience API. It also returns
+          contextual auction responses to{' '}
+          <code className="text-upsed-tomato">runAdAuction()</code> function,
+          which is responsible for initiating the on-device auctions.
         </p>
       </>
     ),
@@ -100,24 +93,24 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          An SSP is a platform that helps publishers manage, sell, and optimize
-          their ad inventory programmatically. It connects publishers with
-          multiple demand sources like DSPs, advertisers, and ad exchanges to
-          facilitate real-time bidding (RTB) auctions.
+          An SSP (Supply-Side Platform) is a platform that enables publishers to
+          programmatically manage, sell, and optimize their ad inventory. It
+          connects publishers with various demand sources like DSPs, advertisers
+          and ad exchanges to facilitate real-time bidding (RTB) auctions.
         </p>
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
-          The SSP server sends ad requests received from the SSP Tag to the DSPs
-          who bid on the ad space via RTB. It also returns the winning ad
-          creative that is used while scoring the ad in{' '}
-          <code className="text-upsed-tomato">scoreAd()</code>.
+          The SSP server receives ad requests from the SSP tag and forwards them
+          to DSPs, who bid on the ad space via RTB. It also returns the winning
+          ad creative, which is used during the ad scoring process in the
+          <code className="text-upsed-tomato">scoreAd()</code> function.
+          Additionally, the SSP server sends contextual OpenRTB bid requests to
+          DSPs, indicating that the browser supports the Protected Audience API.
+          It runs a contextual auction and returns the winner along with the
+          auction configuration to the SSP tags.
         </p>
-        <p>Example: Google Ad Manager, Magnite.</p>
-        <p className="mt-1">
-          SSP server sends contextual OpenRTB bid requests to DSP indicating
-          that the browser supports Protected Audience API. It also runs
-          contextual auction and returns the winner along with auctions
-          configuration to SSP tags.
-        </p>
+        <h4 className="font-bold mt-2">Examples</h4>
+        <p>Common examples of SSPs include Google Ad Manager and Magnite.</p>
       </>
     ),
   },
@@ -126,21 +119,20 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          On the publisher side, DSP servers process ad requests, evaluate bids,
-          and serve ads based on campaign targeting and bidding strategies. They
-          handle bid generation, ad selection, and reporting during ad auctions
-          initiated by SSPs. The DSP server evaluates bid requests in real-time,
-          using signals such as interest groups, contextual relevance, and
-          advertiser budgets to decide whether to bid.
+          On the publisher&apos;s side, DSP servers process ad requests,
+          evaluate bids, and serve ads based on campaign targeting and bidding
+          strategies. They handle bid generation, ad selection, and reporting
+          for SSP-initiated ad auctions, evaluating real-time bid requests using
+          signals like interest groups, contextual relevance, and advertiser
+          budgets to decide whether to bid.
         </p>
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
-          When contacted by SSP during contextual auction they respond with bids
-          based on the results calculated on the basis of ad requests received
-          via SSP. The DSPs and the SSP communicate using RTB protocols.
-        </p>
-        <p className="mt-1">
-          DSP responds with an OpenRTB bid response containing signals for the
-          on-device auction.
+          In the current flow, when contacted by the SSP during a contextual
+          auction, DSP servers respond with bids based on ad requests received
+          via the SSP, communicating via RTB (real-time bidding) protocols. DSP
+          servers send OpenRTB bid responses with signals for the on-device
+          auction.
         </p>
       </>
     ),
@@ -150,10 +142,18 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          SSP ad tag initiates the on-device auction by calling{' '}
-          <code className="text-upsed-tomato">runAdAuction()</code>, passing in
-          signals and contextual ad winner from DSP&apos;s openRTB bid response
-          which was sent by the SSP server.
+          The SSP ad tag is responsible for initiating the on-device auction. It
+          does this by calling the{' '}
+          <code className="text-upsed-tomato">runAdAuction()</code> function.
+        </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
+        <p>
+          In the current flow, the SSP ad tag passes signals and the contextual
+          ad winner, derived from the DSP&apos;s OpenRTB bid response, to the{' '}
+          <code className="text-upsed-tomato">runAdAuction()</code> function.
+          This bid response is sent by the SSP server and is used to initiate
+          the auction process.
         </p>
       </>
     ),
@@ -163,11 +163,11 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A browser-based mechanism for retrieving user interest group data,
-          stored using the{' '}
-          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API,
-          for use in ad auctions. This ensures ads match user preferences while
-          preserving privacy.
+          This is a browser-based mechanism for accessing interest group
+          information that has been stored using the{' '}
+          <code className="text-upsed-tomato">joinAdInterestGroup()</code> API.
+          It enables this information to be used in ad auctions to help display
+          more relevant ad content while maintaining privacy standards.
         </p>
       </>
     ),
@@ -178,13 +178,15 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A secure DSP-side server that handles bid generation using key/value
-          pairs for interest group and contextual data. It ensures data
-          processing aligns with privacy requirements, creating competitive bids
+          A secure DSP-side server that generates bids using key/value pairs for
+          interest group and contextual data. It ensures that data processing
+          complies with privacy requirements while creating competitive bids
           based on predefined values.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome interacts with the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#31-fetching-real-time-data-from-a-trusted-server"
@@ -193,7 +195,8 @@ export const SINGLE_SELLER_CONFIG = {
           >
             Key/Value trusted DSP bidding server
           </a>{' '}
-          to fetch real-time bidding signals.
+          to fetch real-time bidding signals, which are used to generate bids
+          during ad auctions.
         </p>
       </>
     ),
@@ -206,11 +209,13 @@ export const SINGLE_SELLER_CONFIG = {
         <p>
           A DSP-side function that generates a bid for an auction based on
           interest group data, contextual signals, and advertiser preferences.
-          Outputs include bid amount, ad creative, and metadata, ensuring
-          relevance and competitiveness in the auction.
+          The outputs include the bid amount, ad creative, and metadata,
+          ensuring relevance and competitiveness in the auction.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#32-on-device-bidding"
@@ -219,7 +224,9 @@ export const SINGLE_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">generateBid()</code>
           </a>{' '}
-          DSP JavaScript function for each participating interest group.
+          DSP JavaScript function for each participating interest group. This
+          function is crucial for determining bids during the on-device auction
+          process.
         </p>
       </>
     ),
@@ -228,21 +235,26 @@ export const SINGLE_SELLER_CONFIG = {
     title: 'DSP 1',
     info: (
       <>
+        <h4 className="font-bold mt-2">Overview</h4>
         <p>
-          On the publisher side, DSP servers process ad requests, evaluate bids,
-          and serve ads based on campaign targeting and bidding strategies. They
-          handle bid generation, ad selection, and reporting during ad auctions
-          initiated by SSPs. The DSP server evaluates bid requests in real-time,
-          using signals such as interest groups, contextual relevance, and
+          On the publisher&apos;s side, DSP servers are responsible for
+          processing ad requests, evaluating bids, and serving ads based on
+          campaign targeting and bidding strategies. They handle tasks such as
+          bid generation, ad selection, and reporting during ad auctions
+          initiated by SSPs. The DSP server evaluates bid requests in real-time
+          using signals like interest groups, contextual relevance, and
           advertiser budgets to decide whether to bid.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
-          When contacted by SSP during contextual auction they respond with bids
-          based on the results calculated on the basis of ad requests received
-          via SSP. The DSPs and the SSP communicate using RTB protocols.
+          When contacted by the SSP during a contextual auction, DSP servers
+          respond with bids based on the results calculated from ad requests
+          received via the SSP. The DSPs and SSP communicate using RTB
+          (Real-Time Bidding) protocols.
         </p>
         <p className="mt-1">
-          DSP responds with a bid when{' '}
+          DSP servers generate a bid when the{' '}
           <code className="text-upsed-tomato">generateBid()</code> function is
           called from their respective DSP tags.
         </p>
@@ -259,8 +271,10 @@ export const SINGLE_SELLER_CONFIG = {
           facilitation. It uses key/value pairs to evaluate bids and ensures
           data privacy and compliance during ad auctions.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome interacts with the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#25-additional-trusted-signals-directfromsellersignals"
@@ -269,7 +283,8 @@ export const SINGLE_SELLER_CONFIG = {
           >
             Key/Value trusted SSP scoring server
           </a>{' '}
-          to fetch real-time scoring signals.
+          to fetch real-time scoring signals, which are used to evaluate bids
+          during ad auctions.
         </p>
       </>
     ),
@@ -281,13 +296,17 @@ export const SINGLE_SELLER_CONFIG = {
       <>
         <p>
           An SSP-side function that evaluates and ranks bids during an ad
-          auction based on price, relevance, and publisher-defined criteria.
-          Outputs a ranked list of bids, selecting the top bid as the winner for
+          auction based on price, relevance, and publisher-defined criteria. It
+          outputs a ranked list of bids, selecting the top bid as the winner for
           ad display. Any bid that is less than the contextual bid passed by the
-          SSP tag while calling the runAdAuction is rejected.
+          SSP tag while calling the{' '}
+          <code className="text-upsed-tomato">runAdAuction()</code> function is
+          rejected.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#23-scoring-bids"
@@ -296,7 +315,9 @@ export const SINGLE_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">scoreAd()</code>
           </a>{' '}
-          SSP JavaScript function for each participating interest group.
+          SSP JavaScript function for each participating interest group. This
+          function is crucial for determining the winning bid during the auction
+          process.
         </p>
       </>
     ),
@@ -307,13 +328,16 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A function executed by the winning DSP to log auction details,
-          including bid price and ad performance, for reporting and
-          optimization. It ensures transparency for campaign performance and
-          provides data for analytics and billing.
+          A function executed by the winning DSP to record auction results,
+          including bid price and ad performance metrics, for reporting and
+          campaign optimization purposes. It ensures transparency in campaign
+          performance tracking and provides essential data for analytics and
+          billing processes.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#52-buyer-reporting-on-render-and-ad-events"
@@ -322,7 +346,7 @@ export const SINGLE_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">reportWin()</code>
           </a>{' '}
-          DSP JavaScript function to report the winner to DSP.
+          DSP JavaScript function to notify the DSP about their winning bid.
         </p>
       </>
     ),
@@ -333,12 +357,16 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A function executed by the SSP or publisher to log auction results,
-          providing transparency and analytics to all parties. It tracks metrics
-          such as winning bids, auction details, and ad performance.
+          A function executed by the SSP or publisher to record auction
+          outcomes, providing transparency and detailed analytics to all
+          participating parties. It captures key metrics including winning bid
+          values, comprehensive auction details, and subsequent ad performance
+          indicators.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome calls the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#51-seller-reporting-on-render"
@@ -347,7 +375,7 @@ export const SINGLE_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">reportResult()</code>
           </a>{' '}
-          SSP JavaScript function to report the winner to SSP.
+          SSP JavaScript function to communicate the auction results to the SSP.
         </p>
       </>
     ),
@@ -357,11 +385,12 @@ export const SINGLE_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The winning ad is displayed after the protected audience auction is
-          completed. In case where there is no winning bid or no interest group
-          bids then the contextual ad which was sent in{' '}
+          The winning advertisement is presented once the protected audience
+          auction process concludes. In cases where there are no successful bids
+          or no interest group participation, the system defaults to displaying
+          the contextual advertisement that was originally provided in the{' '}
           <code className="text-upsed-tomato">runAdAuction()</code> function
-          will be shown to the user.
+          call to the user.
         </p>
       </>
     ),
@@ -375,13 +404,18 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The header bidding tag loads on the browser and initiates the header
-          bidding process using libraries like Pre-bid or Amazon TAM. This
-          maximizes competition and potentially increases revenue.
+          The header bidding tag activates within the browser environment and
+          launches the header bidding process by utilizing specialized libraries
+          such as Pre-bid or Amazon TAM. This strategic approach enhances
+          competitive bidding and offers significant potential for revenue
+          improvement.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          The SSP adapter sends ad requests to the SSP server indicating that
-          the browser supports Protected Audience API.
+          The SSP adapter transmits ad requests to the SSP server, specifically
+          indicating that the user&apos;s browser has compatibility with the
+          Protected Audience API.
         </p>
       </>
     ),
@@ -395,35 +429,41 @@ export const MULTI_SELLER_CONFIG = {
       <>
         <p>
           These are script tags embedded in the advertiser&apos;s webpage that
-          enable communication with publisher ad tag webpage. When a user visits
-          a webpage with an ad tag, the tag signals along with header bidding
-          winner to the publisher&apos;s ad server that there&apos;s an
-          opportunity to show an ad.
+          facilitate communication with the publisher&apos;s ad tag webpage.
+          When a user navigates to a webpage containing an ad tag, this tag
+          signals to the publisher&apos;s ad server, along with the header
+          bidding winner information, that there is an opportunity to display an
+          advertisement.
         </p>
-        <p className="mt-1">
-          The ad tag contains key information about the ad space, such as:
-        </p>
+
+        <h4 className="font-bold mt-2">Key Information in Ad Tags</h4>
         <ul className="list-disc ml-4 mt-1">
           <li>
-            <strong>Ad unit ID:</strong> This identifies the specific ad slot on
-            the page.
+            <strong>Ad unit ID:</strong> Identifies the specific ad placement
+            location on the webpage.
           </li>
           <li>
-            <strong>Ad size:</strong> Specifies the dimensions of the ad slot
-            (e.g., 300x250 pixels).
+            <strong>Ad size:</strong> Defines the exact dimensions of the ad
+            placement area (e.g., 300x250 pixels).
           </li>
           <li>
-            <strong>Page context:</strong> May include information about the
-            webpage content, user demographics, or other targeting parameters.
+            <strong>Page context:</strong> May include detailed information
+            about the webpage content, user demographic data, or various
+            targeting parameters.
           </li>
         </ul>
+
+        <h4 className="font-bold mt-2">Importance in Ad Delivery</h4>
         <p className="mt-2">
-          These tags are crucial for the ad delivery process, ensuring that the
-          right ads are shown to the right users at the right time.
+          These tags play a vital role in the ad delivery ecosystem, ensuring
+          optimal matching between advertisements, target audiences, and
+          appropriate timing.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          The Publisher Ad Server tag sends an ad request to the Publisher Ad
-          Server. It initiates on-device auction by calling{' '}
+          The Publisher Ad Server tag transmits an ad request to the Publisher
+          Ad Server. It triggers an on-device auction by invoking the{' '}
           <a href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#21-initiating-an-on-device-auction">
             <code className="text-upsed-tomato">runAdAuction()</code>
           </a>{' '}
@@ -438,22 +478,24 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The publisher ad server is the central hub that controls and manages
-          the entire ad-serving process on a publisher&apos;s website or app. It
-          also does a couple of other tasks like delivering and optimizing ads,
-          tracking performance, and generating reports, and integrates with
-          other ad tech platforms. It also does a couple of other tasks like
-          delivering and optimizing ads, tracks performance and generating
-          reports, and integrating with other ad tech platforms. The publisher
-          ad server will also run a contextual auction with the data from header
-          bidding as a comparison source.
+          The publisher ad server functions as the primary control center that
+          orchestrates and supervises the complete ad-serving ecosystem across a
+          publisher&apos;s digital properties. It executes essential operations
+          including ad delivery optimization, performance monitoring, analytics
+          reporting, and seamless integration with various ad technology
+          platforms. Furthermore, it conducts contextual auctions utilizing data
+          obtained from header bidding as a comparative benchmark.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p>
-          Any bid that is higher than the header bidding winner will be accepted
-          for comparison other bids will be rejected. The winning bid is sent to
-          the Publisher Ad Tag as the contextual ad winner which will be used in{' '}
-          <code className="text-upsed-tomato">scoreAd()</code> function in
-          Protected Audience API.
+          Within the current operational flow, any bid exceeding the header
+          bidding winner&apos;s value is considered for comparison, while all
+          lower bids are automatically disqualified. The successful bid is
+          transmitted to the Publisher Ad Tag as the contextual auction winner,
+          which subsequently serves as a reference point within the{' '}
+          <code className="text-upsed-tomato">scoreAd()</code> function
+          implemented in the Protected Audience API.
         </p>
       </>
     ),
@@ -463,18 +505,24 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A multi-seller auction involves multiple sellers offering their
-          inventory simultaneously, enabling multiple buyers (advertisers or
-          DSPs) to bid on available items. The auction typically takes place on
-          a shared platform (e.g., an SSP or ad exchange), where all
-          sellers&apos; inventories are pooled for bidding.
+          A multi-seller auction framework enables numerous sellers to present
+          their inventory concurrently, allowing multiple buyers (including
+          advertisers and DSPs) to compete for available advertising
+          opportunities. This auction model typically operates on a centralized
+          platform (such as an SSP or ad exchange), where the inventories from
+          all participating sellers are consolidated to facilitate efficient
+          bidding.
         </p>
+
+        <h4 className="font-bold mt-2">How It Works</h4>
         <p>
-          Each seller conducts a component auction, selecting a winner to
-          represent them in the top-level auction. The top-level auction
-          determines the overall winner, whose ad gets displayed. This structure
-          optimizes revenue for sellers while ensuring fair competition among
-          buyers.
+          Each participating seller manages their individual component auction,
+          selecting a single winning bid to represent them in the overarching
+          top-level auction. The top-level auction then evaluates all these
+          representative bids to determine the ultimate winner, whose
+          advertisement will be displayed. This hierarchical structure maximizes
+          revenue potential for sellers while maintaining competitive fairness
+          across the buyer ecosystem.
         </p>
       </>
     ),
@@ -484,17 +532,25 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          An SSP is a platform that helps publishers manage, sell, and optimize
-          their ad inventory programmatically. It connects publishers with
-          multiple demand sources like DSPs, advertisers, and ad exchanges to
-          facilitate real-time bidding (RTB) auctions.
+          An SSP (Supply-Side Platform) functions as a comprehensive technology
+          solution that assists publishers in efficiently managing, monetizing,
+          and optimizing their advertising inventory through programmatic
+          methods. It creates valuable connections between publishers and
+          various demand sources including DSPs, advertisers, and ad exchanges
+          to enable sophisticated real-time bidding (RTB) auction processes.
         </p>
-        <p>Example: Google Ad Manager, Magnite.</p>
-        <p>In this case it conducts an sub auction</p>
         <p>
-          The winner of the auction is selected and they are allowed to bid
-          again on the top level auction. The winner of the top level auction
-          gets to display ad.
+          <strong>Examples:</strong> Google Ad Manager, Magnite.
+        </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
+        <p>
+          Within this specific implementation, the SSP orchestrates a
+          preliminary sub-auction to identify a leading bid. The winner of this
+          initial sub-auction earns the opportunity to participate in the
+          subsequent top-level auction. Ultimately, the participant who secures
+          victory in the top-level auction gains the privilege of displaying
+          their advertisement to the user.
         </p>
       </>
     ),
@@ -504,15 +560,24 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          A component auction is conducted by a single seller among a collection
-          of buyers as part of a multi-seller auction process. The winner of
-          each component auction advances to the top-level auction, which
-          determines the final ad to be displayed. In unified flows, the
-          top-level auction includes winners from both contextual and Protected
-          Audience auctions. Each component auction adheres to the single-seller
-          unified flow outlined in the{' '}
-          <em>Bidding and Auction Services Design</em>.
+          A component auction represents a specialized auction process conducted
+          by an individual seller among multiple participating buyers as an
+          integral part of a broader multi-seller auction framework. The
+          successful bidder from each component auction progresses to
+          participate in the top-level auction, which ultimately determines
+          which advertisement will be presented to the user.
         </p>
+
+        <h4 className="font-bold mt-2">Unified Flows</h4>
+        <p>
+          Within unified flow implementations, the top-level auction
+          incorporates winning bids from both traditional contextual auctions
+          and the more privacy-focused Protected Audience auctions. Each
+          individual component auction strictly follows the single-seller
+          unified flow methodology as detailed in the
+          <em>Bidding and Auction Services Design</em> documentation.
+        </p>
+
         <a
           className="text-bright-navy-blue"
           href="https://github.com/privacysandbox/protected-auction-services-docs/blob/main/bidding_auction_services_multi_seller_auctions.md#component-auction"
@@ -529,25 +594,31 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The <code className="text-upsed-tomato">scoreAd()</code> function
-          evaluates and ranks bids during an ad auction based on price,
-          relevance, and publisher-defined criteria. The function outputs a
-          ranked list of bids, selecting the top bid as the winner for ad
-          display.It is implemented by the SSP or publisher, and called by the
-          SSPs to determine the winning bid. It ranks bids from the component
-          auctions. It is implemented by the SSP or publisher, and called by the
-          SSPs to determine the winning bid.
+          The <code className="text-upsed-tomato"> scoreAd()</code> function
+          performs comprehensive evaluation and prioritization of bids during
+          advertising auctions by analyzing factors such as bid price, content
+          relevance, and custom publisher-specified criteria. It generates an
+          ordered list of bids and identifies the highest-ranked bid as the
+          auction winner for advertisement display. This critical function is
+          developed and maintained by the SSP or publisher and is invoked by
+          SSPs to determine which bid ultimately succeeds.
         </p>
+
+        <h4 className="font-bold mt-2">Role in Multi-Seller Configuration</h4>
         <p>
-          The <code className="text-upsed-tomato">scoreAd()</code> function in
-          multi-seller configuration ranks bids from the component auctions and
-          compares with the contextual bid winner passed during the start of the
-          runAdAunction. Any bid less than the contextual bid winner is rejected
-          and bids higher than contextual bid winner are accepted for
-          comparison.
+          Within multi-seller environments, the
+          <code className="text-upsed-tomato"> scoreAd()</code> function
+          systematically ranks bids originating from various component auctions
+          and evaluates them against the contextual bid winner that was provided
+          at the initiation of the
+          <code className="text-upsed-tomato"> runAdAuction()</code> process.
+          Any bid with a value below the contextual bid winner is automatically
+          disqualified, while bids exceeding the contextual bid winner&apos;s
+          value proceed to the comparative evaluation phase.
         </p>
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome executes the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#23-scoring-bids"
@@ -556,7 +627,8 @@ export const MULTI_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">scoreAd()</code>
           </a>{' '}
-          SSP JavaScript function for each participating interest group.
+          SSP JavaScript function independently for each interest group that
+          participates in the auction.
         </p>
       </>
     ),
@@ -567,13 +639,17 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The <code className="text-upsed-tomato">reportWin()</code> function
-          sends report to the winning DSP to log auction details. It implemented
-          by the DSPs, and called by the SSPs or adServer to log the auction
-          details.
+          The <code className="text-upsed-tomato"> reportWin()</code> function
+          transmits a comprehensive notification to the successful DSP
+          containing detailed auction information. This specialized function is
+          engineered by the DSPs themselves and is invoked by either SSPs or the
+          ad server to create a permanent record of the auction parameters and
+          outcomes.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome executes the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#52-buyer-reporting-on-render-and-ad-events"
@@ -582,7 +658,8 @@ export const MULTI_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">reportWin()</code>
           </a>{' '}
-          DSP JavaScript function to report winner to DSP.
+          DSP JavaScript function to communicate the auction results to the
+          victorious DSP with relevant performance metrics.
         </p>
       </>
     ),
@@ -593,13 +670,16 @@ export const MULTI_SELLER_CONFIG = {
     info: (
       <>
         <p>
-          The <code className="text-upsed-tomato">reportResult()</code> function
-          sends report to all the SSPs to log the winner and all the other
-          details to log the auction details. It is implemented by the SSPs, and
-          called by the adServer at the end of top-level auction.
+          The <code className="text-upsed-tomato"> reportResult()</code>{' '}
+          function distributes comprehensive auction outcome notifications to
+          all participating SSPs, documenting the winning bid and other critical
+          auction metrics. This function is developed by the SSPs themselves and
+          is triggered by the ad server once the top-level auction concludes.
         </p>
+
+        <h4 className="font-bold mt-2">Role in the Current Flow</h4>
         <p className="mt-1">
-          Chrome calls{' '}
+          Chrome initiates the{' '}
           <a
             className="text-bright-navy-blue"
             href="https://github.com/WICG/turtledove/blob/main/FLEDGE.md#51-seller-reporting-on-render"
@@ -608,7 +688,8 @@ export const MULTI_SELLER_CONFIG = {
           >
             <code className="text-upsed-tomato">reportResult()</code>
           </a>{' '}
-          SSP JavaScript function to report winner to SSP.
+          SSP JavaScript function to communicate the final auction results to
+          the relevant SSP with detailed performance data.
         </p>
       </>
     ),
