@@ -43,6 +43,13 @@ const mockUseSidebar = useSidebar as jest.Mock;
 describe('Private advertising Landing Pages', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome.storage.session = {
+      get: () =>
+        Promise.resolve({
+          activeTab: undefined,
+        }),
+      set: () => Promise.resolve(),
+    };
     globalThis.fetch = function () {
       return Promise.resolve({
         json: () =>

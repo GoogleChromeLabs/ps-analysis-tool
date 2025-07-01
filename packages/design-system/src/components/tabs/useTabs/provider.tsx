@@ -245,7 +245,13 @@ export const TabsProvider = ({
     }
 
     (async () => {
-      const sessionStorage = await getSessionStorage('tabs');
+      const sessionStorage = (await getSessionStorage('tabs')) || {};
+
+      if (!sessionStorage[name]) {
+        sessionStorage[name] = {
+          activeTab: 0,
+        };
+      }
 
       const _activeTab = sessionStorage[name].activeTab || 0;
       setActiveTab(_activeTab);
