@@ -53,6 +53,10 @@ const ChipsBar = ({
     return acc;
   }, 0);
 
+  if (appliedFiltersCount === 0) {
+    return null;
+  }
+
   return (
     <div
       className={
