@@ -50,8 +50,8 @@ interface PanelProps {
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
   eeAnimatedTab?: boolean;
-  bidsPillToggle: string;
-  panelPillToggle: string;
+  bidsPillToggle: string | null;
+  panelPillToggle: string | null;
   timelines?: PrebidEvents['auctionEvents'];
   zoomLevel?: number;
 }

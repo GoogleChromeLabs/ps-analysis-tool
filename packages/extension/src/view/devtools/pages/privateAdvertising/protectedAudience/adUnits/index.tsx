@@ -75,7 +75,7 @@ const AdUnits = ({ navigateToSettings }: AdUnitsProps) => {
     };
   }, [setSelectedAdUnit]);
 
-  const [pillToggle, setPillToggle] = useState(
+  const [pillToggle, setPillToggle] = useState<string | null>(
     (prebidAdunits && Object.keys(prebidAdunits).length > 0) ||
       Object.keys(paapi.adsAndBidders || {}).length === 0
       ? 'Prebid'

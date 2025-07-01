@@ -16,17 +16,19 @@
 /**
  * External dependencies.
  */
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 import classNames from 'classnames';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface PillToggleProps {
   options: string[];
-  pillToggle: string;
-  setPillToggle: (value: string) => void;
+  pillToggle: string | null;
+  setPillToggle: (value: string | null) => void;
   eeAnimatedTab: boolean;
   width?: string;
   highlightOption?: string;
   setHighlightOption?: (value: string) => void;
+  persistenceKey?: string;
 }
 
 const PillToggle = ({
@@ -37,12 +39,61 @@ const PillToggle = ({
   width = 'w-max',
   highlightOption,
   setHighlightOption,
+  persistenceKey,
 }: PillToggleProps) => {
+  const defaultPillToggle = useRef(pillToggle);
+  useEffect(() => {
+    setPillToggle(null);
+  }, [setPillToggle]);
+
   useEffect(() => {
     if (pillToggle === highlightOption) {
       setHighlightOption?.('');
     }
   }, [highlightOption, pillToggle, setHighlightOption]);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!persistenceKey) {
+      setPillToggle(defaultPillToggle.current);
+      setLoading(false);
+      return;
+    }
+
+    (async () => {
+      const sessionStorage = await getSessionStorage('pillToggle');
+
+      if (sessionStorage?.[persistenceKey]?.value) {
+        setPillToggle(sessionStorage[persistenceKey].value);
+      } else {
+        setPillToggle(defaultPillToggle.current);
+      }
+
+      setLoading(false);
+    })();
+  }, [persistenceKey, setPillToggle]);
+
+  useEffect(() => {
+    if (!persistenceKey || loading) {
+      return;
+    }
+
+    (async () => {
+      await updateSessionStorage(
+        {
+          [persistenceKey]: {
+            value: pillToggle,
+          },
+        },
+        'pillToggle'
+      );
+    })();
+  }, [loading, persistenceKey, pillToggle]);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <div className="h-8 border rounded-full w-max border-gray-300 dark:border-quartz text-sm">
