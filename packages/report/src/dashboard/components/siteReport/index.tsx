@@ -22,7 +22,6 @@ import {
   noop,
   type CompleteJson,
   type CookieJsonDataType,
-  type LibraryData,
 } from '@google-psat/common';
 import { SidebarProvider, type SidebarItems } from '@google-psat/design-system';
 /**
@@ -41,7 +40,6 @@ interface SiteReportProps {
   completeJson: CompleteJson[] | null;
   selectedSite: string | null;
   path: string;
-  libraryMatches: LibraryData | null;
   query?: string;
   clearQuery?: () => void;
 }
@@ -51,7 +49,6 @@ const SiteReport = ({
   completeJson,
   selectedSite,
   path,
-  libraryMatches,
   query = '',
   clearQuery = noop,
 }: SiteReportProps) => {
@@ -61,7 +58,6 @@ const SiteReport = ({
     <ContentStoreProvider
       cookies={cookies}
       completeJson={completeJson}
-      libraryMatches={libraryMatches}
       path={path}
     >
       <SidebarProvider data={data}>

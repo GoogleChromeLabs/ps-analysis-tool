@@ -83,7 +83,7 @@ const data: {
       headerType: 'response',
       isFirstParty: true,
       isBlocked: false,
-      frameIdList: [1],
+      frameIdList: ['1'],
     },
     [uncategorized3pCookie.name]: {
       parsedCookie: uncategorized3pCookie,
@@ -92,7 +92,7 @@ const data: {
       headerType: 'response',
       isFirstParty: false,
       isBlocked: false,
-      frameIdList: [1],
+      frameIdList: ['1'],
     },
     [known1pCookie.name]: {
       parsedCookie: known1pCookie,
@@ -111,7 +111,7 @@ const data: {
       headerType: 'response',
       isFirstParty: true,
       isBlocked: false,
-      frameIdList: [1],
+      frameIdList: ['1'],
     },
     [known3pCookie.name]: {
       parsedCookie: known3pCookie,
@@ -131,7 +131,7 @@ const data: {
       headerType: 'response',
       isFirstParty: false,
       isBlocked: false,
-      frameIdList: [1],
+      frameIdList: ['1'],
     },
     [known3pCookieWithValue.name]: {
       parsedCookie: known3pCookieWithValue,
@@ -151,13 +151,13 @@ const data: {
       headerType: 'response',
       isFirstParty: false,
       isBlocked: false,
-      frameIdList: [1],
+      frameIdList: ['1'],
     },
   },
   tabUrl: 'https://edition.cnn.com/',
   tabFrames: {
     'https://edition.cnn.com/': {
-      frameIds: [1],
+      frameIds: ['1'],
     },
   },
   selectedFrame: 'https://edition.cnn.com/',

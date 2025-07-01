@@ -21,7 +21,6 @@ import { useCallback, useMemo, useState } from 'react';
 import {
   noop,
   type CompleteJson,
-  type LibraryData,
   type TabCookies,
   type TabFrames,
   extractCookies,
@@ -41,7 +40,6 @@ interface CookiesTabProps {
   tabFrames: TabFrames;
   completeJson: CompleteJson[] | null;
   path: string;
-  libraryMatches: { [url: string]: LibraryData } | null;
   query?: string;
   clearQuery?: () => void;
 }
@@ -52,43 +50,11 @@ const CookiesTab = ({
   tabFrames,
   completeJson,
   path,
-  libraryMatches,
   query = '',
   clearQuery = noop,
 }: CookiesTabProps) => {
   const isKeySelected = useSidebar(({ actions }) => actions.isKeySelected);
   const [appliedFilters, setAppliedFilters] = useState<TableFilter>({});
-
-  const [siteMapLibraryMatches, libraryMatchesUrlCount] = useMemo(() => {
-    const _libraryMatchesUrlCount: {
-      [key: string]: number;
-    } = {};
-
-    const _siteMapLibraryMatches =
-      completeJson?.reduce<CompleteJson['libraryMatches']>((acc, data) => {
-        const _libraryMatches = data.libraryMatches;
-
-        Object.keys(_libraryMatches).forEach((key) => {
-          acc[key] =
-            // @ts-ignore
-            acc[key]?.matches?.length || acc[key]?.domQuerymatches?.length
-              ? acc[key]
-              : _libraryMatches[key];
-
-          if (
-            Object.keys(_libraryMatches[key]?.matches ?? {}).length ||
-            Object.keys(_libraryMatches[key]?.domQuerymatches ?? {}).length
-          ) {
-            _libraryMatchesUrlCount[key] =
-              (_libraryMatchesUrlCount[key] || 0) + 1;
-          }
-        });
-
-        return acc;
-      }, {}) || {};
-
-    return [_siteMapLibraryMatches, _libraryMatchesUrlCount];
-  }, [completeJson]);
 
   const downloadReport = useCallback(async () => {
     if (!Array.isArray(completeJson)) {
@@ -122,8 +88,6 @@ const CookiesTab = ({
         <AssembledCookiesLanding
           tabCookies={tabCookies}
           tabFrames={tabFrames}
-          libraryMatches={siteMapLibraryMatches}
-          libraryMatchesUrlCount={libraryMatchesUrlCount}
           downloadReport={downloadReport}
           menuBarScrollContainerId="dashboard-sitemap-layout-container"
           setAppliedFilters={setAppliedFilters}
@@ -137,9 +101,6 @@ const CookiesTab = ({
           completeJson={siteFilteredCompleteJson}
           selectedSite={selectedSite || ''}
           path={path}
-          libraryMatches={
-            libraryMatches && selectedSite ? libraryMatches[selectedSite] : {}
-          }
           query={query}
           clearQuery={clearQuery}
         />

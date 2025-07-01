@@ -16,12 +16,12 @@
 /**
  * External dependencies.
  */
-import type {
-  LibraryData,
-  TabCookies,
-  TabFrames,
-  DataMapping,
-  CookieJsonDataType,
+import {
+  type TabCookies,
+  type TabFrames,
+  type DataMapping,
+  type CookieJsonDataType,
+  isValidURL,
 } from '@google-psat/common';
 import {
   prepareCookieStatsComponents,
@@ -30,13 +30,11 @@ import {
   type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
-import isValidURL from './isValidURL';
 
 /**
  * Utility function to generate report object.
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
- * @param libraryMatches Library matches
  * @param url Top level URL.
  * @param filters Filter applied to the landing page.
  * @returns Report Object
@@ -44,7 +42,6 @@ import isValidURL from './isValidURL';
 export async function generateReportObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData,
   url: string,
   filters: TableFilter
 ) {
@@ -99,7 +96,6 @@ export async function generateReportObject(
     blockedCookieDataMapping,
     showBlockedInfoIcon: true,
     frameStateCreator,
-    libraryMatches,
     exemptedCookiesDataMapping,
     showFramesSection: true,
     showBlockedCategory: false,
@@ -113,19 +109,16 @@ export async function generateReportObject(
  * Utility function to generate dashboard report object.
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
- * @param libraryMatches Library matches
  * @param url Top level URL.
  * @returns Dashboard Report Object
  */
 export function generateDashboardObject(
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData,
   url: string
 ) {
   const completeJSON = {
     pageUrl: isValidURL(url) ? new URL(url).origin : '',
-    libraryMatches,
     cookieData: generateCookieDataForDashboard(tabCookies, tabFrames),
   };
 

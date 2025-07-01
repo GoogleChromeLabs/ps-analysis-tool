@@ -17,13 +17,7 @@
  * External dependencies
  */
 import React, { useEffect, useRef, useMemo } from 'react';
-import {
-  Breadcrumbs,
-  Tabs,
-  useSidebar,
-  useTabs,
-} from '@google-psat/design-system';
-import classNames from 'classnames';
+import { LandingPage, useTabs } from '@google-psat/design-system';
 import { isEqual } from 'lodash-es';
 
 /**
@@ -35,15 +29,10 @@ const Panel = () => {
   const { panel, highlightTab } = useTabs(({ state, actions }) => ({
     panel: state.panel,
     highlightTab: actions.highlightTab,
-    activeTab: state.activeTab,
   }));
 
   const ActiveTabContent = panel.Element;
-  const { className, props } = panel;
-
-  const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
-    extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
-  }));
+  const { props, className, containerClassName } = panel;
 
   const { sourcesRegistration, triggerRegistration, filter } =
     useAttributionReporting(({ state }) => ({
@@ -130,27 +119,21 @@ const Panel = () => {
   }, [filteredTriggerRegistration, highlightTab]);
 
   return (
-    <div
-      data-testid="attribution-reporting-content"
-      className="h-screen w-full flex flex-col overflow-hidden"
-    >
-      <div className="p-4 flex flex-col gap-1">
-        <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
-          <h1 className="text-left">Attribution Reporting</h1>
-        </div>
-        <Breadcrumbs items={extractSelectedItemKeyTitles()} />
-      </div>
-
-      <Tabs />
-      <div
-        className={classNames('overflow-auto', className)}
-        style={{
-          minHeight: 'calc(100% - 93px)',
-        }}
-      >
-        {ActiveTabContent && <ActiveTabContent {...props} />}
-      </div>
-    </div>
+    <LandingPage
+      title="Attribution Reporting"
+      contentPanel={
+        ActiveTabContent && (
+          <div
+            className={className}
+            data-testid="attribution-reporting-content"
+          >
+            <ActiveTabContent {...props} />
+          </div>
+        )
+      }
+      extraClasses={containerClassName}
+      {...props}
+    />
   );
 };
 

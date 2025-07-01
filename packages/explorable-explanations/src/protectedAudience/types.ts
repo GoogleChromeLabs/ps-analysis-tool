@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies.
  */
 import type p5 from 'p5';
+
+declare global {
+  interface Window {
+    p5: typeof p5;
+  }
+}
 
 export type Bubble = {
   id?: string;

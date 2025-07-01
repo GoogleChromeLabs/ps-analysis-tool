@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { createContext, noop } from '@google-psat/common';
+import { createContext, noop, type Context } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -41,7 +41,11 @@ export interface SidebarStoreContext {
   };
   actions: {
     setIsSidebarFocused: React.Dispatch<boolean>;
-    updateSelectedItemKey: (key: string | null, queryString?: string) => void;
+    updateSelectedItemKey: (
+      key: string | null,
+      queryString?: string,
+      skipPanelDisplay?: boolean
+    ) => void;
     onKeyNavigation: (
       event: React.KeyboardEvent<HTMLDivElement>,
       key: string | null
@@ -84,4 +88,5 @@ export const initialState: SidebarStoreContext = {
   },
 };
 
-export const SidebarContext = createContext<SidebarStoreContext>(initialState);
+export const SidebarContext: Context<SidebarStoreContext> =
+  createContext<SidebarStoreContext>(initialState);

@@ -18,6 +18,7 @@
  * External dependencies.
  */
 import React, { useEffect, useState } from 'react';
+import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies.
@@ -28,13 +29,15 @@ import {
   type PSInfo as PSInfoType,
   type PSInfoKeyType,
 } from './fetchPSInfo';
-import { I18n } from '@google-psat/i18n';
+import RenderLink from './renderLink';
+import LinkProcessor from '../../linkProcessor';
 
 interface InfoCardProps {
   infoKey: PSInfoKeyType;
+  explainers?: Record<string, string[]>;
 }
 
-const InfoCard = ({ infoKey }: InfoCardProps) => {
+const InfoCard = ({ infoKey, explainers }: InfoCardProps) => {
   const [PSInfo, setPSInfo] = useState({} as PSInfoType);
 
   useEffect(() => {
@@ -48,18 +51,45 @@ const InfoCard = ({ infoKey }: InfoCardProps) => {
   return (
     <>
       {Object.keys(PSInfo).length ? (
-        <div className="max-w-2xl">
-          <p
-            className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
-            dangerouslySetInnerHTML={{
-              __html:
-                PSInfo.useI18n === false
-                  ? PSInfo.description
-                  : I18n.getMessage(PSInfo.description),
-            }}
-          />
-          <LearnMoreDropdown PSInfo={PSInfo} />
-        </div>
+        <>
+          <div className="max-w-2xl">
+            {PSInfo.useI18n === false ? (
+              <p className="mb-3 text-raisin-black dark:text-bright-gray text-sm">
+                <LinkProcessor
+                  text={PSInfo.description}
+                  links={PSInfo.links}
+                  sameTab
+                />
+              </p>
+            ) : (
+              <p
+                className="mb-3 text-raisin-black dark:text-bright-gray text-sm"
+                dangerouslySetInnerHTML={{
+                  __html: I18n.getMessage(PSInfo.description),
+                }}
+              />
+            )}
+            {Object.keys(explainers || {}).map((key) => (
+              <div
+                className="flow-root border-t border-gray-200 dark:border-gray-500"
+                key={key}
+              >
+                <ul
+                  role="list"
+                  className="divide-y divide-gray-200 dark:divide-gray-500"
+                >
+                  <RenderLink
+                    key={key}
+                    label={explainers?.[key][0] || ''}
+                    linkLabel={explainers?.[key][1] || ''}
+                    link={explainers?.[key][2] || ''}
+                  />
+                </ul>
+              </div>
+            ))}
+            <LearnMoreDropdown PSInfo={PSInfo} />
+          </div>
+        </>
       ) : (
         <div className="w-full h-full flex items-center justify-center">
           <div className="w-10 h-10 rounded-full animate-spin border-t-transparent border-solid border-blue-700 border-4" />

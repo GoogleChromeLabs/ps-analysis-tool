@@ -45,7 +45,8 @@
     "out/**",
     "data/**",
     "assets/**/*.js",
-    "coverage/**"
+    "coverage/**",
+    "**/stories/dummy-data.ts"
   ],
   "rules": {
     "array-callback-return": "error",

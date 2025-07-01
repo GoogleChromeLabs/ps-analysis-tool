@@ -26,10 +26,10 @@ import { I18n } from '@google-psat/i18n';
 import { useSettings } from '../../../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
-import InformationIcon from '../../../../../../../../assets/icons/information-icon.svg';
+import InformationIcon from '../../../../../../../../assets/icons/information-icon.svg?react';
 // @ts-ignore
 // eslint-disable-next-line import/no-relative-packages
-import Done from '../../../../../../../../assets/icons/done.svg';
+import Done from '../../../../../../../../assets/icons/done.svg?react';
 
 const InformationContainer = () => {
   const {
@@ -173,9 +173,9 @@ const InformationContainer = () => {
               className="-ml-8 -mt-1"
             >
               {copying ? (
-                <Done className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+                <Done className="active:text-mischka dark:text-bright-gray dark:active:text-mischka" />
               ) : (
-                <Copy className="active:text-mischka dark:text-bright-gray active:dark:text-mischka" />
+                <Copy className="active:text-mischka dark:text-bright-gray dark:active:text-mischka" />
               )}
             </button>
           </div>

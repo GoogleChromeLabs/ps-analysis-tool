@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/cli",
-  "version": "0.14.1",
+  "version": "1.0.0-1",
   "description": "CLI tool for analysis",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
@@ -16,8 +16,8 @@
     "dist-types"
   ],
   "scripts": {
-    "build": "webpack --config ../../cli.webpack.config.cjs ",
-    "dev": "webpack --config ../../cli.webpack.config.cjs --watch",
+    "build": "webpack --config ./webpack.config.cjs ",
+    "dev": "webpack --config ./cli.webpack.config.cjs --watch",
     "prebuild": "rimraf dist dist-types tsconfig.tsbuildinfo",
     "publish:local": "npm publish --registry=http://localhost:4873",
     "publish:remote": "npm publish --access=public --registry=https://registry.npmjs.org",
@@ -49,7 +49,6 @@
     "@google-psat/cli-dashboard": "*",
     "@google-psat/common": "*",
     "@google-psat/i18n": "*",
-    "@google-psat/library-detection": "*",
     "boxen": "^8.0.1",
     "chalk": "^5.3.0",
     "commander": "^10.0.1",

@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-import { fetchLocalData } from '@google-psat/common';
+/**
+ * External dependencies
+ */
 import {
   noop,
   ProgressBar,
   Table,
   TableProvider,
+  type TableFilter,
   type TableColumn,
   type TableRow,
+  Link,
+  ResizableTray,
 } from '@google-psat/design-system';
 import React, { useEffect, useMemo, useState } from 'react';
+
+/**
+ * Internal dependencies
+ */
+import Legend from './legend';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -34,13 +44,38 @@ const MDLTable = () => {
 
   useEffect(() => {
     (async () => {
-      const data = await fetchLocalData('data/mdl.json');
+      const data = await fetch(
+        'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md'
+      );
+
+      if (!data.ok) {
+        throw new Error(`HTTP error! status: ${data.status}`);
+      }
+
+      const text = await data.text();
+
+      const lines = text
+        .split('\n')
+        .filter((line) => line.includes('|'))
+        .slice(2);
+
+      const mdlData = lines.map((line) =>
+        line.split('|').map((item) => item.trim())
+      );
 
       setTableData(() =>
-        data.map((item: string[]) => ({
-          domain: item[0],
-          owner: item[1],
-        }))
+        mdlData.map((item: string[]) => {
+          let owner = item[1];
+
+          if (item[1].includes('PSL Domain')) {
+            owner = 'PSL Domain';
+          }
+
+          return {
+            domain: item[0],
+            owner,
+          };
+        })
       );
     })();
   }, []);
@@ -55,9 +90,32 @@ const MDLTable = () => {
       {
         header: 'Owner',
         accessorKey: 'owner',
-        cell: (info) => info,
+        cell: (info) => {
+          if (info === 'PSL Domain') {
+            return (
+              <Link
+                href="https://en.wikipedia.org/wiki/Public_Suffix_List"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PSL Domain
+              </Link>
+            );
+          }
+
+          return info;
+        },
       },
     ],
+    []
+  );
+
+  const filters = useMemo<TableFilter>(
+    () => ({
+      owner: {
+        title: 'Owner',
+      },
+    }),
     []
   );
 
@@ -70,17 +128,40 @@ const MDLTable = () => {
   }
 
   return (
-    <TableProvider
-      tableColumns={tableColumns}
-      data={tableData}
-      onRowClick={(rowData) => {
-        setSelectedKey(rowData?.domain || null);
-      }}
-      onRowContextMenu={noop}
-      getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
-    >
-      <Table selectedKey={selectedKey} hideFiltering hideSearch />
-    </TableProvider>
+    <div className="w-full h-full flex flex-col">
+      <TableProvider
+        tableColumns={tableColumns}
+        tableFilterData={filters}
+        tableSearchKeys={['domain', 'owner']}
+        data={tableData}
+        onRowClick={(rowData) => {
+          setSelectedKey(rowData?.domain || null);
+        }}
+        onRowContextMenu={noop}
+        getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
+        tablePersistentSettingsKey="mdlTable"
+      >
+        <ResizableTray
+          defaultSize={{
+            width: '100%',
+            height: '85%',
+          }}
+          minHeight="15%"
+          maxHeight="95%"
+          enable={{
+            top: false,
+            right: false,
+            bottom: true,
+            left: false,
+          }}
+          className="h-full flex"
+          trayId="mdl-table-bottom-tray"
+        >
+          <Table selectedKey={selectedKey} />
+        </ResizableTray>
+        <Legend />
+      </TableProvider>
+    </div>
   );
 };
 

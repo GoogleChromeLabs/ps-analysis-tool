@@ -24,18 +24,8 @@ import {
   type NoBidsType,
   type AdsAndBiddersType,
   noop,
-  type singleAuctionEvent,
+  type AuctionEventsType,
 } from '@google-psat/common';
-
-export type AuctionEventsType = {
-  [adunit: string]: {
-    [time: string]: {
-      [sellerURL: string]: {
-        [auctionHostURL: string]: singleAuctionEvent[];
-      };
-    };
-  };
-};
 
 export interface ProtectedAudienceContextType {
   state: {
@@ -46,13 +36,15 @@ export interface ProtectedAudienceContextType {
     noBids: NoBidsType;
     adsAndBidders: AdsAndBiddersType;
     selectedAdUnit: string | null;
+    sortOrder: 'asc' | 'desc';
   };
   actions: {
     setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
+    setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
   };
 }
 
-const initialState: ProtectedAudienceContextType = {
+export const initialState: ProtectedAudienceContextType = {
   state: {
     auctionEvents: null,
     interestGroupDetails: [],
@@ -61,9 +53,11 @@ const initialState: ProtectedAudienceContextType = {
     noBids: {},
     adsAndBidders: {},
     selectedAdUnit: null,
+    sortOrder: 'asc',
   },
   actions: {
     setSelectedAdUnit: noop,
+    setSortOrder: noop,
   },
 };
 

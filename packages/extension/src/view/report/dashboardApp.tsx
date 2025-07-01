@@ -16,31 +16,33 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   type CompleteJson,
   type CookieFrameStorageType,
-  type LibraryData,
   extractCookies,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { SiteReport } from '@google-psat/report';
-
-/**
- * Internal dependencies
- */
-import './app.css';
+import '@google-psat/design-system/theme.css';
 
 const App = () => {
   const [cookies, setCookies] = useState<CookieFrameStorageType>({});
   const [completeJsonReport, setCompleteJsonReport] = useState<
     CompleteJson[] | null
   >(null);
-  const [libraryMatches, setLibraryMatches] = useState<{
-    [key: string]: LibraryData;
-  } | null>(null);
 
-  useEffect(() => {
+  const handleDarkThemeChange = useCallback(() => {
+    const setThemeMode = (isDarkMode: boolean) => {
+      if (isDarkMode) {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
+      } else {
+        document.body.classList.add('light');
+        document.body.classList.remove('dark');
+      }
+    };
+
     const bodyTag = document.querySelector('body');
 
     if (!bodyTag) {
@@ -48,11 +50,26 @@ const App = () => {
     }
 
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      bodyTag.classList.add('dark');
+      setThemeMode(true);
+    } else {
+      setThemeMode(false);
     }
 
     bodyTag.style.fontSize = '75%';
   }, []);
+
+  useEffect(() => {
+    handleDarkThemeChange();
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', handleDarkThemeChange);
+
+    return () => {
+      window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .removeEventListener('change', handleDarkThemeChange);
+    };
+  }, [handleDarkThemeChange]);
 
   useEffect(() => {
     sessionStorage.clear();
@@ -64,16 +81,11 @@ const App = () => {
     const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);
 
-    let _cookies: CookieFrameStorageType = {},
-      _libraryMatches: {
-        [key: string]: LibraryData;
-      } = {};
+    let _cookies: CookieFrameStorageType = {};
 
     _cookies = extractCookies(data[0].cookieData, data[0].pageUrl, true);
-    _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
 
     setCookies(_cookies);
-    setLibraryMatches(_libraryMatches);
   }, []);
 
   if (!completeJsonReport) {
@@ -89,11 +101,6 @@ const App = () => {
         selectedSite={completeJsonReport[0].pageUrl}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
-        libraryMatches={
-          libraryMatches
-            ? libraryMatches[Object.keys(libraryMatches ?? {})[0]]
-            : null
-        }
       />
     </div>
   );

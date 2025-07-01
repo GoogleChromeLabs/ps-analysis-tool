@@ -21,15 +21,13 @@ import {
   CookieFrameStorageType,
   ErroredOutUrlsData,
 } from '../cookies.types';
-import { LibraryData } from '../libraryDetection.types';
 import extractCookies from './extractCookies';
 
 const extractReportData = (data: CompleteJson[]) => {
   const landingPageCookies = {};
-  const consolidatedLibraryMatches: { [url: string]: LibraryData } = {};
   const erroredOutUrlsData: ErroredOutUrlsData[] = [];
 
-  data.forEach(({ cookieData, pageUrl, libraryMatches, erroredOutUrls }) => {
+  data.forEach(({ cookieData, pageUrl, erroredOutUrls }) => {
     erroredOutUrlsData.push(...(erroredOutUrls ?? []));
 
     if (
@@ -43,22 +41,17 @@ const extractReportData = (data: CompleteJson[]) => {
       extractCookies(cookieData, pageUrl, true),
       landingPageCookies
     );
-
-    consolidatedLibraryMatches[pageUrl] = libraryMatches;
   });
 
-  data.forEach(({ cookieData, pageUrl, libraryMatches }) => {
+  data.forEach(({ cookieData, pageUrl }) => {
     formatCookieData(
       extractCookies(cookieData, pageUrl, true),
       landingPageCookies
     );
-
-    consolidatedLibraryMatches[pageUrl] = libraryMatches;
   });
 
   return {
     landingPageCookies,
-    consolidatedLibraryMatches,
     erroredOutUrlsData,
   };
 };

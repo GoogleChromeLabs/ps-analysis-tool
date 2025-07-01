@@ -1589,7 +1589,7 @@
     "message": "Attribution"
   },
   "trackingProtection": {
-    "message": "Tracking Protection"
+    "message": "Privacy Protection"
   },
   "bounceTracking": {
     "message": "Bounce Tracking"
@@ -8187,7 +8187,7 @@
     "message": "Enable trust in a user's authenticity to be conveyed from one context to another, to help sites combat fraud and distinguish bots from real humans—without passive tracking."
   },
   "antiCovertTrackingDescription": {
-    "message": "The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking."
+    "message": "The Privacy Sandbox initiative also includes efforts focused on anti covert tracking techniques, addressing specific methods such as fingerprinting and network-level tracking."
   },
   "noCookiesExempted": {
     "message": "No cookies were exempted by the browser."
@@ -9451,5 +9451,38 @@
   },
   "RWS_rationale_https___lucyhealth_io": {
     "message": "blood sugar monitoring and management platform"
+  },
+  "OCD___Secure_ROLLOUT_TOKEN_description": {
+    "message": "\tRegisters a unique ID to keep statistics of what videos from YouTube the user has seen."
+  },
+  "OCD_ttcsid__description": {
+    "message": "The TikTok cookie ttcsid likely serves as a session identifier, helping to maintain user sessions and track interactions across the platform. Its purpose is probably to manage user authentication or personalize content based on activity, similar to other session-related cookies used by TikTok."
+  },
+  "OCD_tf_respondent_cc_description": {
+    "message": "This cookie is used to make sure forms on the website work properly."
+  },
+  "OCD_attribution_user_id_description": {
+    "message": "This cookie helps us in attributing the conversion to the correct channel"
+  },
+  "OCD__hp2_id_description": {
+    "message": "Store a unique user ID, Store and track interaction."
+  },
+  "OCD_retention_14_months": {
+    "message": "14 months"
+  },
+  "OCD__hp2_ses_props_description": {
+    "message": "Store a unique user ID, Store and track interaction."
+  },
+  "OCD_pi_opt_in_description": {
+    "message": "If tracking opt-in preferences is enabled, the cookie is set with a true or false value when the visitor opts in or out of tracking"
+  },
+  "OCD_Hm_lpvt__description": {
+    "message": "Record the most recent access timestamp"
+  },
+  "OCD_Hm_lvt__description": {
+    "message": "Record the first access timestamp"
+  },
+  "OCD_HMACCOUNT_description": {
+    "message": "Used to send data to Baidu about the visitors device and behaviour. Tracks the visitor across devices and marketing channels."
   }
 }

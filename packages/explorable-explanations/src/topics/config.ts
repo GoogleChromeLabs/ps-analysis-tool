@@ -16,7 +16,7 @@
 
 export const config = {
   canvas: {
-    height: 500,
+    height: 600,
   },
   timeline: {
     position: { x: 0, y: 180 },

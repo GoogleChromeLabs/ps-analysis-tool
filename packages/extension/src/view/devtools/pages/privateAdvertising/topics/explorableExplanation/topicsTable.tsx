@@ -118,13 +118,11 @@ const TopicsTable = ({
           </button>
         ),
         enableHiding: false,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Access Count',
         accessorKey: 'count',
         cell: (info: InfoType) => info,
-        widthWeightagePercentage: 20,
       },
       {
         header: 'Observed-by context domains',
@@ -136,7 +134,6 @@ const TopicsTable = ({
             setHighlightAdTech={setHighlightAdTech}
           />
         ),
-        widthWeightagePercentage: 60,
       },
     ],
     [highlightAdTech, setHighlightAdTech, topicsNavigator]

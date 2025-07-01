@@ -17,121 +17,96 @@
 /**
  * External dependencies.
  */
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import ProgressBar from '../progressBar';
 import SupportLink from './supportLink';
 import QuickLinksList from './quickLinksList';
 import { PSInfoKeyType } from './infoCard/fetchPSInfo';
 import InfoCard from './infoCard';
 import Breadcrumbs from '../breadcrumbs';
 import { useSidebar } from '../sidebar';
+import Tabs from '../tabs';
 
 export interface LandingPageProps {
   title?: string;
   hideTitle?: boolean;
   children?: ReactNode;
   psInfoKey?: PSInfoKeyType;
-  iframeSrc?: string;
   contentPanel?: ReactNode;
   containerStyles?: string;
-  iframeBorderClass?: string;
-  extraClasses?: string;
   showQuickLinks?: boolean;
   showSupportLink?: boolean;
-  hasTabs?: boolean;
   isLandingPageContainer?: boolean;
+  extraClasses?: string;
 }
 
 const LandingPage = ({
   title,
   hideTitle,
   psInfoKey,
-  iframeSrc,
-  iframeBorderClass,
   children,
-  extraClasses,
   containerStyles = '',
   contentPanel,
   showQuickLinks = true,
   showSupportLink = false,
-  hasTabs = false,
   isLandingPageContainer = false,
+  extraClasses = '',
 }: LandingPageProps) => {
-  const [loading, setLoading] = useState(iframeSrc ? true : false);
   const { extractSelectedItemKeyTitles } = useSidebar(({ actions }) => ({
     extractSelectedItemKeyTitles: actions.extractSelectedItemKeyTitles,
   }));
 
   return (
-    <div className={`w-full h-full ${containerStyles}`}>
-      {loading && <ProgressBar additionalStyles="w-1/3 mx-auto h-full" />}
-      <div
-        className={classNames(
-          { hidden: loading },
-          'w-full h-full flex flex-col',
-          { 'divide-y divide-hex-gray dark:divide-quartz ': !hasTabs }
-        )}
-      >
-        {!hideTitle && (
-          <div className="flex justify-between">
+    <div
+      className={`w-full h-full flex flex-col divide-y divide-hex-gray dark:divide-quartz overflow-hidden ${containerStyles}`}
+    >
+      {!hideTitle && (
+        <div className="flex justify-between">
+          <div>
             <div className="p-4 flex flex-col gap-1">
               <div className="flex gap-2 text-2xl font-bold items-baseline text-raisin-black dark:text-bright-gray">
                 {title && <h1 className="text-left">{title}</h1>}
               </div>
               <Breadcrumbs items={extractSelectedItemKeyTitles()} />
             </div>
-            <div className="p-4 flex items-center">
-              {showSupportLink && <SupportLink />}
-            </div>
+            <Tabs showBottomBorder={false} />
           </div>
-        )}
-        <div className={'flex-1'}>
+          <div className="p-4 flex items-center">
+            {showSupportLink && <SupportLink />}
+          </div>
+        </div>
+      )}
+
+      <div className="flex-1 w-full overflow-auto divide-y divide-hex-gray dark:divide-quartz flex flex-col">
+        <div
+          className={classNames(
+            'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz flex-1',
+            {
+              'border-b border-american-silver dark:border-quartz': children,
+            },
+            extraClasses
+          )}
+        >
+          {psInfoKey && <InfoCard infoKey={psInfoKey} />}
+          {contentPanel && <>{contentPanel}</>}
+        </div>
+
+        {children && (
           <div
+            id="#__psat-main-content"
             className={classNames(
-              'h-full w-full flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz py-2',
-              {
-                'border-b border-american-silver dark:border-quartz': children,
-              },
-              {
-                'px-4 py-6': !hasTabs,
-              },
+              'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz',
               extraClasses
             )}
           >
-            {iframeSrc && (
-              <iframe
-                src={iframeSrc}
-                height="100%"
-                onLoad={() => {
-                  setLoading(false);
-                }}
-                className={classNames(
-                  'w-full md:w-[95%] md:m-auto rounded-xl',
-                  iframeBorderClass
-                )}
-              />
-            )}
-            {psInfoKey && <InfoCard infoKey={psInfoKey} />}
-            {contentPanel && <>{contentPanel}</>}
+            {children}
           </div>
+        )}
 
-          {children && (
-            <div
-              id="#__psat-main-content"
-              className={classNames(
-                'flex flex-col gap-6 divide-y divide-american-silver dark:divide-quartz px-4 py-6',
-                extraClasses
-              )}
-            >
-              {children}
-            </div>
-          )}
-        </div>
         {isLandingPageContainer && showQuickLinks && <QuickLinksList />}
       </div>
     </div>

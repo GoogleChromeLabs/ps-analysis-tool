@@ -8,7 +8,8 @@
     "src",
     "../../node_modules/@types/jest/index.d.ts",
     "src/**/*.json",
-    "../design-system/src/components/landingPage/getStoryPlayerMarkup.ts"
+    "../design-system/src/components/landingPage/getStoryPlayerMarkup.ts",
+    "../common/src/prebidGlobal.types.ts"
   ],
   "exclude": ["**/tests/**/*.ts", "**/tests/**/*.tsx"],
   "references": [
@@ -17,5 +18,8 @@
       "path": "../design-system"
     },
     { "path": "../i18n" }
-  ]
+  ],
+  "ts-node": {
+    "esm": true
+  }
 }
