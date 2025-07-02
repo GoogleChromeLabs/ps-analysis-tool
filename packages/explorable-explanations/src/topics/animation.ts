@@ -163,9 +163,34 @@ class TopicsAnimation {
     this.drawInfoBox(index, this.webVisits[index].website);
   };
 
+  drawDatetime = (index: number) => {
+    const p = this.p;
+
+    const position = this.circlePositions[index];
+    const previousPosition =
+      this.circlePositions?.[index - 1] || config.timeline.position;
+    const circleDiameter = config.timeline.circleProps.diameter;
+    const { diameter, horizontalSpacing } = config.timeline.circleProps;
+    const circleVerticalSpace = horizontalSpacing - 30 + diameter;
+    const currentCircle = this.webVisits[index];
+    const xPosition = horizontalSpacing + circleVerticalSpace * index;
+
+    p.push();
+    p.text(currentCircle.datetime, xPosition, 35);
+    p.stroke('#1A73E8');
+    p.line(
+      previousPosition.x + (index !== 0 ? circleDiameter / 2 : 0),
+      previousPosition.y,
+      position.x - circleDiameter / 2,
+      position.y
+    );
+    p.pop();
+  };
+
   drawUserVisitedDone = (index: number) => {
     this.resetInfoBox(index);
     this.drawCircle(index, true);
+    this.drawDatetime(index);
   };
 
   drawUserVisited = (visitIndex: number) => {
@@ -189,29 +214,8 @@ class TopicsAnimation {
       user.height
     );
 
-    const position = this.circlePositions[visitIndex];
-    const previousPosition =
-      this.circlePositions?.[visitIndex - 1] || config.timeline.position;
-    const circleDiameter = config.timeline.circleProps.diameter;
-    const { diameter, horizontalSpacing } = config.timeline.circleProps;
-    const circleVerticalSpace = horizontalSpacing - 30 + diameter;
-    const xPosition = horizontalSpacing + circleVerticalSpace * visitIndex;
-    const currentCircle = this.webVisits[visitIndex];
-
-    if (!this.isInteractive) {
-      p.push();
-      p.text(currentCircle.datetime, xPosition, 35);
-      p.stroke('#1A73E8');
-      p.line(
-        previousPosition.x + (visitIndex !== 0 ? circleDiameter / 2 : 0),
-        previousPosition.y,
-        position.x - circleDiameter / 2,
-        position.y
-      );
-      p.pop();
-    }
-
-    const currentSite = currentCircle.website;
+    const currentSite = this.webVisits[visitIndex].website;
+    this.drawDatetime(visitIndex);
     this.drawInfoBox(visitIndex, currentSite);
     this.drawSmallCircles(visitIndex, currentSite);
   };
@@ -493,6 +497,11 @@ class TopicsAnimation {
     this.prevVisitedCircleIndex = -1;
     this.visitIndex = 0;
     this.inspectedCircles.clear();
+  };
+
+  public destroy = () => {
+    this.reset();
+    this.p.remove();
   };
 
   public setCurrentVisitIndex = (visitIndex: number) => {

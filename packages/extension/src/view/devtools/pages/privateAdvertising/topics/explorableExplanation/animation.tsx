@@ -40,6 +40,7 @@ const Animation = ({
   const node = useRef<HTMLDivElement>(null);
   const loadingTextCoverRef = useRef<HTMLDivElement>(null);
   const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
+
   const { isPlaying, epochSiteVisited, epochs, activeEpoch } = topicsState;
 
   const sitesVisited = epochSiteVisited[activeEpoch];
@@ -85,6 +86,14 @@ const Animation = ({
       new p5(init, node.current);
     }
   }, [topicsDispatch, topicsState.activeEpoch, animation, handleUserVisit]);
+
+  useEffect(() => {
+    return () => {
+      if (animation) {
+        animation.destroy();
+      }
+    };
+  }, [animation]);
 
   /* sync animation with state/callbacks - start */
   useEffect(() => {
