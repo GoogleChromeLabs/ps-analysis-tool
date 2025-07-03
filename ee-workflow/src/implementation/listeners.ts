@@ -58,13 +58,6 @@ export const arrowClick = (
   },
   playButton: HTMLElement | null
 ) => {
-  if (
-    (!mainCanvas.isPaused() && mainCanvas.isLooping()) ||
-    !mainCanvas.isUsingHelperQueue()
-  ) {
-    return;
-  }
-
   if (!mainCanvas.isPaused()) {
     mainCanvas.togglePause(true);
     onNoLoopEvent(playButton);
@@ -88,6 +81,9 @@ export const arrowClick = (
     expanded.animator = animator;
     mainCanvas.loadSnapshotAndReDraw(animator.getId(), { x: 0, y: 30 });
   }
+
+  mainCanvas.togglePause(true);
+  onNoLoopEvent(playButton);
 };
 
 export const playClick = (
