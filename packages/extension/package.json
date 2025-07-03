@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "prebuild": "rimraf ../../dist/extension",
-    "dev": "npm run prebuild && cross-env NODE_ENV=development npm run build",
+    "dev": "cross-env NODE_ENV=development npm run build",
     "build": "cross-env VITE_CJS_IGNORE_WARNING=true NODE_NO_WARNINGS=1 node --loader ts-node/esm ../../vite.extension.config.mts"
   },
   "bugs": {

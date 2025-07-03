@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies:
+ */
 import path, { resolve } from 'node:path';
+import { readdirSync } from 'node:fs';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { readdirSync } from 'node:fs';
 import svgr from 'vite-plugin-svgr';
 
 const __filename = fileURLToPath(import.meta.url);

@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * External dependencies:
  */
 import { build, defineConfig, mergeConfig } from 'vite';
+import { viteSingleFile } from 'vite-plugin-singlefile';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'path';
 
 /**
  * Internal dependencies:
  */
-import { viteSingleFile } from 'vite-plugin-singlefile';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 import baseConfig, { __dirname } from './vite.shared.config.mjs';
 
 const isDev = process.env.NODE_ENV === 'development';
