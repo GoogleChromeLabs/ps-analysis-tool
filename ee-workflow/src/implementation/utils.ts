@@ -125,7 +125,7 @@ export const arcTravelInit = (
         _figure.draw();
       }
 
-      if (Math.ceil(currentDiameter) === Math.ceil(diameter)) {
+      if (Math.ceil(currentDiameter) >= Math.ceil(diameter)) {
         clearTravelMarks(p);
         _figure.setDiameter(0);
         mainCanvas.loadAnimatorPartAndDraw(figure.getAnimatorId());
