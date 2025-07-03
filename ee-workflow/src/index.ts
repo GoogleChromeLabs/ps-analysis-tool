@@ -87,6 +87,13 @@ const mainFF = new FigureFactory(mainCanvas);
 const IGCanvas = new Main(true);
 const IGFF = new FigureFactory(IGCanvas);
 IGCanvas.togglePause(true);
+let wasIGPlaying = false;
+const getWasIGPlaying = () => {
+  return wasIGPlaying;
+};
+const setWasIGPlaying = (value: boolean) => {
+  wasIGPlaying = value;
+};
 
 // Control panel
 const prevButton = document.getElementById('prev');
@@ -107,6 +114,9 @@ playButton?.addEventListener(
   playClick.bind(
     null,
     mainCanvas,
+    IGCanvas,
+    getWasIGPlaying,
+    setWasIGPlaying,
     playButton,
     expanded,
     downArrowImageLoader,
@@ -133,7 +143,10 @@ resetButton?.addEventListener(
     null,
     expanded,
     mainCanvas,
+    IGCanvas,
     playButton,
+    getWasIGPlaying,
+    setWasIGPlaying,
     downArrowImageLoader
   )
 );
@@ -199,6 +212,9 @@ nodes.forEach((node, index) => {
         if (mainCanvas.isPaused()) {
           playClick(
             mainCanvas,
+            IGCanvas,
+            getWasIGPlaying,
+            setWasIGPlaying,
             playButton,
             expanded,
             downArrowImageLoader,

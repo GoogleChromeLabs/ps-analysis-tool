@@ -88,6 +88,9 @@ export const arrowClick = (
 
 export const playClick = (
   mainCanvas: Main,
+  IGCanvas: Main,
+  getWasIGPlaying: () => boolean,
+  setWasIGPlaying: (value: boolean) => void,
   playButton: HTMLElement | null,
   expanded: {
     wasExpanded: boolean;
@@ -108,10 +111,23 @@ export const playClick = (
     mainCanvas.loadAnimatorPartAndDraw(undefined, loadAnimator);
   }
 
-  mainCanvas.togglePause();
+  let isPaused = mainCanvas.isPaused();
+
+  if (!IGCanvas.isPaused()) {
+    setWasIGPlaying(true);
+    IGCanvas.togglePause(true);
+    isPaused = true;
+  } else if (getWasIGPlaying()) {
+    IGCanvas.togglePause(false);
+    setWasIGPlaying(false);
+    isPaused = false;
+  } else {
+    mainCanvas.togglePause();
+    isPaused = mainCanvas.isPaused();
+  }
 
   if (playButton) {
-    if (mainCanvas.isPaused()) {
+    if (isPaused) {
       playButton.innerHTML =
         '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M320-203v-560l440 280-440 280Zm60-280Zm0 171 269-171-269-171v342Z"/></svg>';
     } else {
@@ -158,13 +174,31 @@ export const resetButtonClick = (
     animator: Animator | null;
   },
   mainCanvas: Main,
+  IGCanvas: Main,
   playButton: HTMLElement | null,
+  getWasIGPlaying: () => boolean,
+  setWasIGPlaying: (value: boolean) => void,
   downArrowImageLoader: () => p5.Image
 ) => {
   if (expanded.wasExpanded) {
-    playClick(mainCanvas, playButton, expanded, downArrowImageLoader, true);
+    playClick(
+      mainCanvas,
+      IGCanvas,
+      getWasIGPlaying,
+      setWasIGPlaying,
+      playButton,
+      expanded,
+      downArrowImageLoader,
+      true
+    );
   }
 
+  if (mainCanvas.isPaused() && !IGCanvas.isPaused()) {
+    IGCanvas.togglePause();
+    mainCanvas.togglePause();
+  }
+
+  IGCanvas.clear();
   mainCanvas.reset();
 };
 

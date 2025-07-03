@@ -669,6 +669,43 @@ class Main {
   }
 
   /**
+   * Clears the canvas and resets all queues, snapshots, and traveller state.
+   */
+  clear() {
+    this.figureToStart = undefined;
+    this.checkpoints.clear();
+    this.snapshot.length = 0;
+    this.groupSnapshot.length = 0;
+    this.stepsQueue.length = 0;
+    this.groupStepsQueue.length = 0;
+    this.animatorStepsQueue.length = 0;
+    this.instantQueue.length = 0;
+    this.groupInstantQueue.length = 0;
+    this.animatorInstantQueue.length = 0;
+
+    const object = this.traveller?.getObject();
+    if (object instanceof Group) {
+      object.getFigures().forEach((figure) => {
+        if (figure.getCanTravel()) {
+          figure.resetTraveller();
+          figure.setShouldTravel(true);
+        }
+      });
+    } else {
+      object?.resetTraveller();
+      object?.setShouldTravel(true);
+    }
+
+    this.traveller = null;
+    this.isTravelling = false;
+    this.usingHelperQueue = false;
+    this.helperQueue.length = 0;
+    this.helperGroupQueue.length = 0;
+    this.helperAnimatorQueue.length = 0;
+    this.p5.clear();
+  }
+
+  /**
    * If a animator is still rendering, it will be reset and the already rendered figures/group will be removed from the snapshot and readded to the queue.
    * @param checkpoint - The checkpoint to load.
    * @returns - Whether the checkpoint was part of the animator.
