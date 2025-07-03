@@ -30,6 +30,7 @@ export interface singleAuctionEvent {
   componentSellerOrigin?: string;
   time: number;
   auctionConfig?: object;
+  url?: string;
   interestGroupConfig?: Protocol.Storage.InterestGroupAccessedEvent;
   parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
   eventType:

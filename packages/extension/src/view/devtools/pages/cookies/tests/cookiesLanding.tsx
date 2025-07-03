@@ -16,18 +16,18 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import SinonChrome from 'sinon-chrome';
 import { CookiesLanding } from '@google-psat/design-system';
+import { I18n } from '@google-psat/i18n';
+
 /**
  * Internal dependencies.
  */
 import AssembledCookiesLanding from '../cookieLanding';
 import { useCookie, useSettings } from '../../../stateProviders';
 import data from '../../../../../utils/test-data/cookieMockData';
-import { I18n } from '@google-psat/i18n';
 
 jest.mock('../../../stateProviders', () => ({
   useCookie: jest.fn(),
@@ -161,6 +161,7 @@ describe('CookiesLanding', () => {
 
   it('renders CookiesLanding with data', () => {
     mockUseCookieStore.mockReturnValue({
+      unfilteredCookies: data.tabCookies,
       tabCookies: data.tabCookies,
       tabFrames: data.tabFrames,
       frameHasCookies: {

@@ -408,6 +408,8 @@
   --background-color-transparent: transparent;
   --background-color-black: #000;
   --background-color-white: #fff;
+  --background-color-hsl-dark: hsl(var(--color-message-box-dark));
+  --background-color-hsl-light: hsla(var(--color-message-box-light) / 10%);
 
   --background-color-slate-gray: #ECECEC;
 
@@ -710,8 +712,8 @@
   --background-color-outer-space-crayola: #303942;
   --background-color-outer-space: #454545;
   --background-color-medium-persian-blue: #0e639c;
-  --background-color-hsl-dark: hsl(var(--color-message-box-dark));
-  --background-color-hsl-light: hsla(var(--color-message-box-light) / 10%);
+  --background-color-hsl-dark: hsl(33deg 14% 18%);
+  --background-color-hsl-light: hsla(30deg 100% 75% / 10%);
   --background-color-dark-blue: #0b57d0;
   --background-color-light-blue: #abc7fa;
   --background-color-dynamic-grey: #fbfbfb;

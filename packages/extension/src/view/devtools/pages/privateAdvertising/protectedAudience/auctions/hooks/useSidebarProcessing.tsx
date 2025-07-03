@@ -64,6 +64,7 @@ const useSidebarProcessing = () => {
     adUnitsBidsCount,
     adUnitsNoBidsCount,
     adUnitsBidders,
+    receivedBids: processedReceivedBids,
     adUnitsWinnerBid,
     adUnitsWinnerContainerSize,
     getPAData,
@@ -98,6 +99,10 @@ const useSidebarProcessing = () => {
           prebid: 0,
           paapi: 0,
         };
+        const receivedBids = processedReceivedBids || {
+          prebid: [],
+          paapi: [],
+        };
 
         adUnitContainerChildren[adUnit] = {
           title: adUnit,
@@ -106,6 +111,7 @@ const useSidebarProcessing = () => {
             props: {
               adunit: adUnit,
               mediaContainerSize,
+              receivedBids,
               bidders,
               biddersCount,
               bidsCount,
@@ -216,6 +222,7 @@ const useSidebarProcessing = () => {
       return newSidebarData;
     });
   }, [
+    processedReceivedBids,
     adUnits,
     adUnitsAuctionId,
     adUnitsBidders,

@@ -274,11 +274,8 @@ class PAStore extends DataStore {
 
       this.getAuctionEventsArray(tabId, uniqueAuctionId).push({
         uniqueAuctionId,
+        url,
         index: this.getAuctionEventsArray(tabId, uniqueAuctionId).length,
-        bidCurrency: auctionConfig?.bidCurrency ?? '',
-        bid: auctionConfig?.bid ?? null,
-        name: auctionConfig?.name ?? '',
-        ownerOrigin: auctionConfig?.ownerOrigin ?? url ?? '',
         type: method + type,
         formattedTime:
           this.getAuctionEventsArray(tabId, uniqueAuctionId).length === 0
@@ -369,25 +366,26 @@ class PAStore extends DataStore {
       bidCurrency: initialBidCurrencyValue,
     } = interestGroupAccessedParams;
 
-    let bid;
+    let bid, bidCurrency;
 
     if (initialBidValue) {
       bid = initialBidValue;
+      bidCurrency = initialBidCurrencyValue;
     }
 
     if (uniqueAuctionId && !initialBidValue && type === 'win') {
-      bid = this.getAuctionEventsArray(tabId, uniqueAuctionId).filter(
-        ({
-          type: storedType,
-          eventType,
-          interestGroupConfig: { uniqueAuctionId: eventAuctionId } = {},
-        }) =>
-          storedType === 'bid' &&
-          eventType === 'interestGroupAccessed' &&
-          eventAuctionId &&
-          uniqueAuctionId &&
-          eventAuctionId === interestGroupAccessedParams.uniqueAuctionId
-      )?.[0]?.bid;
+      const { bid: _bid, bidCurrency: _bidCurrency } =
+        this.getAuctionEventsArray(tabId, uniqueAuctionId).filter(
+          ({ type: storedType, eventType, uniqueAuctionId: eventAuctionId }) =>
+            (storedType === 'bid' || storedType === 'topLevelBid') &&
+            eventType === 'interestGroupAccessed' &&
+            eventAuctionId &&
+            uniqueAuctionId &&
+            eventAuctionId === interestGroupAccessedParams.uniqueAuctionId
+        )?.[0] ?? {};
+
+      bid = _bid;
+      bidCurrency = _bidCurrency;
     }
 
     eventData = {
@@ -419,8 +417,8 @@ class PAStore extends DataStore {
       eventData.bid = bid;
     }
 
-    if (initialBidCurrencyValue) {
-      eventData.bidCurrency = initialBidCurrencyValue;
+    if (bidCurrency) {
+      eventData.bidCurrency = bidCurrency;
     }
 
     this.getAuctionEventsArray(tabId, uniqueAuctionId).push(eventData);
