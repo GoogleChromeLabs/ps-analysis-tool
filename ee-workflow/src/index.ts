@@ -99,13 +99,13 @@ const setWasIGPlaying = (value: boolean) => {
 const prevButton = document.getElementById('prev');
 prevButton?.addEventListener(
   'click',
-  prevButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+  prevButtonClick.bind(null, expanded.wasExpanded, mainCanvas, IGCanvas)
 );
 
 const stepPrevButton = document.getElementById('step-prev');
 stepPrevButton?.addEventListener(
   'click',
-  stepPrevButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+  stepPrevButtonClick.bind(null, expanded.wasExpanded, mainCanvas, IGCanvas)
 );
 
 const playButton = document.getElementById('play');
@@ -127,13 +127,13 @@ playButton?.addEventListener(
 const stepNextButton = document.getElementById('step-next');
 stepNextButton?.addEventListener(
   'click',
-  stepNextButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+  stepNextButtonClick.bind(null, expanded.wasExpanded, mainCanvas, IGCanvas)
 );
 
 const nextButton = document.getElementById('next');
 nextButton?.addEventListener(
   'click',
-  nextButtonClick.bind(null, expanded.wasExpanded, mainCanvas)
+  nextButtonClick.bind(null, expanded.wasExpanded, mainCanvas, IGCanvas)
 );
 
 const resetButton = document.getElementById('reset');
@@ -164,6 +164,7 @@ interactiveCheckbox?.addEventListener(
     null,
     setIsInteractive,
     mainCanvas,
+    IGCanvas,
     playButton
   )
 );

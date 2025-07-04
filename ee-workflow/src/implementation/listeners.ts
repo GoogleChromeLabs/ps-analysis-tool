@@ -29,19 +29,39 @@ export const figureDraw = (e: Event) => {
   }
 };
 
-export const prevButtonClick = (wasExpanded: boolean, mainCanvas: Main) => {
+export const prevButtonClick = (
+  wasExpanded: boolean,
+  mainCanvas: Main,
+  IGCanvas: Main
+) => {
   if (wasExpanded) {
     return;
   }
 
+  if (mainCanvas.isPaused() && !IGCanvas.isPaused()) {
+    IGCanvas.togglePause();
+    mainCanvas.togglePause();
+  }
+
+  IGCanvas.clear();
   mainCanvas.loadPreviousCheckpoint();
 };
 
-export const stepPrevButtonClick = (wasExpanded: boolean, mainCanvas: Main) => {
+export const stepPrevButtonClick = (
+  wasExpanded: boolean,
+  mainCanvas: Main,
+  IGCanvas: Main
+) => {
   if (wasExpanded) {
     return;
   }
 
+  if (mainCanvas.isPaused() && !IGCanvas.isPaused()) {
+    IGCanvas.togglePause();
+    mainCanvas.togglePause();
+  }
+
+  IGCanvas.clear();
   mainCanvas.stepBack();
 };
 
@@ -151,19 +171,39 @@ export const onNoLoopEvent = (playButton: HTMLElement | null) => {
   }
 };
 
-export const stepNextButtonClick = (wasExpanded: boolean, mainCanvas: Main) => {
+export const stepNextButtonClick = (
+  wasExpanded: boolean,
+  mainCanvas: Main,
+  IGCanvas: Main
+) => {
   if (wasExpanded) {
     return;
   }
 
+  if (mainCanvas.isPaused() && !IGCanvas.isPaused()) {
+    IGCanvas.togglePause();
+    mainCanvas.togglePause();
+  }
+
+  IGCanvas.clear();
   mainCanvas.stepNext();
 };
 
-export const nextButtonClick = (wasExpanded: boolean, mainCanvas: Main) => {
+export const nextButtonClick = (
+  wasExpanded: boolean,
+  mainCanvas: Main,
+  IGCanvas: Main
+) => {
   if (wasExpanded) {
     return;
   }
 
+  if (mainCanvas.isPaused() && !IGCanvas.isPaused()) {
+    IGCanvas.togglePause();
+    mainCanvas.togglePause();
+  }
+
+  IGCanvas.clear();
   mainCanvas.loadNextCheckpoint();
 };
 
@@ -214,6 +254,7 @@ export const speedSliderChange = (mainCanvas: Main, e: Event) => {
 export const interactiveCheckboxOnChange = (
   setIsInteractive: (isInteractive: boolean) => void,
   mainCanvas: Main,
+  IGCanvas: Main,
   playButton: HTMLElement | null,
   e: Event
 ) => {
