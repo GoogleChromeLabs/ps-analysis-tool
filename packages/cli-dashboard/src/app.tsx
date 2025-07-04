@@ -16,22 +16,17 @@
 /**
  * External dependencies
  */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   type CompleteJson,
   type CookieFrameStorageType,
-  type LibraryData,
   type ErroredOutUrlsData,
   extractReportData,
   extractCookies,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { SiteMapReport, SiteReport } from '@google-psat/report';
-
-/**
- * Internal dependencies
- */
-import './app.css';
+import '@google-psat/design-system/theme.css';
 
 enum DisplayType {
   SITEMAP,
@@ -52,11 +47,17 @@ const App = () => {
     []
   );
 
-  const [libraryMatches, setLibraryMatches] = useState<{
-    [key: string]: LibraryData;
-  } | null>(null);
+  const handleDarkThemeChange = useCallback(() => {
+    const setThemeMode = (isDarkMode: boolean) => {
+      if (isDarkMode) {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
+      } else {
+        document.body.classList.add('light');
+        document.body.classList.remove('dark');
+      }
+    };
 
-  useEffect(() => {
     const bodyTag = document.querySelector('body');
 
     if (!bodyTag) {
@@ -64,12 +65,26 @@ const App = () => {
     }
 
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      bodyTag.classList.add('dark');
+      setThemeMode(true);
+    } else {
+      setThemeMode(false);
     }
 
     bodyTag.style.fontSize = '75%';
   }, []);
 
+  useEffect(() => {
+    handleDarkThemeChange();
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', handleDarkThemeChange);
+
+    return () => {
+      window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .removeEventListener('change', handleDarkThemeChange);
+    };
+  }, [handleDarkThemeChange]);
   const [type, setType] = useState<DisplayType>(DisplayType.SITE);
 
   useEffect(() => {
@@ -102,24 +117,18 @@ const App = () => {
     const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);
 
-    let _cookies: CookieFrameStorageType = {},
-      _libraryMatches: {
-        [key: string]: LibraryData;
-      } = {};
+    let _cookies: CookieFrameStorageType = {};
 
     if (type === DisplayType.SITEMAP) {
       const extractedData = extractReportData(data);
 
-      _libraryMatches = extractedData.consolidatedLibraryMatches;
       setLandingPageCookies(extractedData.landingPageCookies);
       setErroredOutUrls(extractedData.erroredOutUrlsData);
     } else {
       _cookies = extractCookies(data[0].cookieData, '', true);
-      _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
     }
 
     setCookies(_cookies);
-    setLibraryMatches(_libraryMatches);
   }, [type]);
 
   if (type === DisplayType.SITEMAP) {
@@ -130,7 +139,6 @@ const App = () => {
         completeJson={completeJsonReport}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
-        libraryMatches={libraryMatches}
       />
     );
   }
@@ -144,11 +152,6 @@ const App = () => {
         selectedSite={globalThis?.PSAT_DATA?.selectedSite}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
-        libraryMatches={
-          libraryMatches
-            ? libraryMatches[Object.keys(libraryMatches ?? {})[0]]
-            : null
-        }
       />
     </div>
   );

@@ -31,6 +31,7 @@ export const runtimeOnInstalledListener = async (
     await chrome.storage.sync.set({
       isUsingCDP: false,
     });
+    await updateGlobalVariableAndAttachCDP();
   }
 
   if (details.reason === 'update') {

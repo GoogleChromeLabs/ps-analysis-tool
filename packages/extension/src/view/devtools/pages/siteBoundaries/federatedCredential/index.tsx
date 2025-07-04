@@ -27,7 +27,7 @@ const FederatedCredential = () => {
         isLandingPageContainer
         title={I18n.getMessage('fedcm')}
         psInfoKey={PSInfoKey.FedCM}
-        extraClasses="max-w-2xl h-fit"
+        extraClasses="max-w-2xl h-fit p-4"
       />
     </div>
   );

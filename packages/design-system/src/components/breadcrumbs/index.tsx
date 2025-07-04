@@ -54,7 +54,7 @@ const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
                 'font-bold': index === items.length - 1,
               },
               {
-                'cursor-pointer hover:text-blue-500 hover:dark:text-blue-400 active:opacity-70':
+                'cursor-pointer hover:text-blue-500 dark:hover:text-blue-400 active:opacity-70':
                   index !== items.length - 1,
               }
             )}

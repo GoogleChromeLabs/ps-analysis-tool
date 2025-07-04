@@ -44,7 +44,7 @@ const Chip = ({
       {hideCloseIcon ? null : (
         <button
           onClick={toggleFilterSelection}
-          className="w-1.5 h-1.5 text-gray-600 hover:text-gray-800 focus:outline-none ml-1"
+          className="w-1.5 h-1.5 text-gray-600 hover:text-gray-800 focus:outline-hidden ml-1"
         >
           <ClearIcon className="text-mischka" />
         </button>

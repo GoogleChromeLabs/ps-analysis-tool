@@ -25,7 +25,7 @@ import SinonChrome from 'sinon-chrome';
 // eslint-disable-next-line import/no-unresolved
 import OpenCookieDatabase from 'ps-analysis-tool/assets/data/open-cookie-database.json';
 import { onTabCreatedListener } from '../tabOnCreatedListener';
-import dataStore from '../../../store/dataStore';
+import { DataStore } from '../../../store/dataStore';
 
 describe('chrome.tabs.onCreated.addListener', () => {
   beforeAll(() => {
@@ -60,6 +60,6 @@ describe('chrome.tabs.onCreated.addListener', () => {
 
     await new Promise((r) => setTimeout(r, 2000));
 
-    expect(Object.keys(dataStore.tabs).length).toBeLessThanOrEqual(1);
+    expect(Object.keys(DataStore.tabs).length).toBeLessThanOrEqual(1);
   });
 });

@@ -17,18 +17,26 @@
 /**
  * External dependencies.
  */
-import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { getValueByKey } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
 import useColumnSorting from './useColumnSorting';
 import useColumnVisibility from './useColumnVisibility';
-import useColumnResizing from './useColumnResizing';
 import useFiltering from './useFiltering';
 import useSearch from './useSearch';
 import { TableContext } from './context';
-import { TableRow, TableProviderProps } from './types';
+import { TableRow, TableProviderProps, TableData } from './types';
+import useColumnResizing from './useColumnResizing';
+
+const MIN_COLUMN_WIDTH = 80;
 
 export const TableProvider = ({
   data,
@@ -44,36 +52,31 @@ export const TableProvider = ({
   hasVerticalBar,
   getVerticalBarColorHash,
   isRowSelected,
+  minColumnWidth = MIN_COLUMN_WIDTH,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
+  const [allData, setAllData] = useState(data);
+  const [paginatedData, setPaginatedData] = useState<TableData[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setAllData(data);
+    }
+  }, [data]);
+
   const commonKey = useMemo(() => {
     if (!tablePersistentSettingsKey) {
       return undefined;
     }
-
     const keys = tablePersistentSettingsKey.split('#');
-
     return keys[0];
   }, [tablePersistentSettingsKey]);
 
-  const {
-    visibleColumns,
-    hideColumn,
-    toggleVisibility,
-    areAllColumnsVisible,
-    showColumn,
-    isColumnHidden,
-  } = useColumnVisibility(tableColumns, commonKey);
-
-  const allTableColumnsKeys = useMemo(() => {
-    return tableColumns.map(({ accessorKey }) => accessorKey);
-  }, [tableColumns]);
-
-  const { columns, tableContainerRef, onMouseDown, isResizing } =
-    useColumnResizing(visibleColumns, allTableColumnsKeys, commonKey);
-
-  const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
-    useColumnSorting(data, tableColumns, commonKey);
+  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
+    allData,
+    tableSearchKeys,
+    commonKey
+  );
 
   const {
     filters,
@@ -85,27 +88,69 @@ export const TableProvider = ({
     resetFilters,
     isSelectAllFilterSelected,
   } = useFiltering(
-    sortedData,
+    searchFilteredData,
     tableFilterData,
     tablePersistentSettingsKey,
     commonKey
   );
 
-  const { searchValue, setSearchValue, searchFilteredData } = useSearch(
-    filteredData,
-    tableSearchKeys,
-    commonKey
+  const loadMoreData = useCallback(() => {
+    setPaginatedData((prevData) => {
+      const start = prevData.length;
+      const end = start + 500;
+      const _paginatedData = filteredData.slice(start, end);
+      return [...prevData, ..._paginatedData];
+    });
+  }, [filteredData]);
+
+  const hasMoreData = useMemo(() => {
+    if (paginatedData.length < filteredData.length) {
+      return true;
+    }
+
+    return false;
+  }, [filteredData.length, paginatedData.length]);
+
+  const count = useMemo(() => {
+    return filteredData.length;
+  }, [filteredData]);
+
+  useEffect(() => {
+    if (filteredData.length) {
+      const start = 0;
+      const end = start + 500;
+      const _paginatedData = filteredData.slice(start, end);
+      setPaginatedData(_paginatedData);
+    } else {
+      setPaginatedData([]);
+    }
+  }, [filteredData]);
+
+  const {
+    visibleColumns,
+    hideColumn,
+    toggleVisibility,
+    areAllColumnsVisible,
+    showColumn,
+    isColumnHidden,
+  } = useColumnVisibility(tableColumns, commonKey);
+
+  const { isResizing, setColumnWidths, tableContainerRef } = useColumnResizing(
+    tablePersistentSettingsKey
   );
+
+  const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
+    useColumnSorting(paginatedData, tableColumns, commonKey);
 
   const [rows, setRows] = useState<TableRow[]>([]);
 
   useEffect(() => {
-    const newRows = searchFilteredData.map((_data) => {
+    const newRows = sortedData.map((_data) => {
       const row = {
         originalData: _data,
       } as TableRow;
 
-      columns.forEach((column) => {
+      visibleColumns.forEach((column) => {
         const value = getValueByKey(column.accessorKey, _data);
         row[column.accessorKey] = {
           value: () => column.cell(value, _data) as React.JSX.Element,
@@ -116,7 +161,7 @@ export const TableProvider = ({
     });
 
     setRows(newRows);
-  }, [searchFilteredData, columns]);
+  }, [searchFilteredData, sortedData, visibleColumns]);
 
   const hideableColumns = useMemo(
     () => tableColumns.filter((column) => column.enableHiding !== false),
@@ -132,22 +177,30 @@ export const TableProvider = ({
       onRowClick(null);
     }
   }, [isRowSelected, onRowClick, rows]);
+
+  useEffect(() => {
+    setColumnWidths();
+  }, [setColumnWidths, rows]);
+
   return (
     <TableContext.Provider
       value={{
         state: {
-          columns,
+          columns: visibleColumns,
+          tableContainerRef,
           hideableColumns,
           rows,
           sortKey,
           sortOrder,
           areAllColumnsVisible,
-          tableContainerRef,
           isResizing,
           filters,
           selectedFilters,
           isFiltering,
           searchValue,
+          hasMoreData,
+          count,
+          minColumnWidth,
         },
         actions: {
           setSortKey,
@@ -156,7 +209,6 @@ export const TableProvider = ({
           toggleVisibility,
           showColumn,
           isColumnHidden,
-          onMouseDown,
           toggleFilterSelection,
           toggleSelectAllFilter,
           resetFilters,
@@ -169,6 +221,7 @@ export const TableProvider = ({
           exportTableData,
           hasVerticalBar,
           getVerticalBarColorHash,
+          loadMoreData,
         },
       }}
     >

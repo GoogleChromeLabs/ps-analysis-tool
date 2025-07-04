@@ -41,7 +41,7 @@ export interface ContentPanelProps {
     description: () => string;
     url: string;
     storyUrl?: string;
-    onClick: () => void;
+    onStoryIconClick: (event: React.MouseEvent<HTMLDivElement>) => void;
     sidebarItemKey?: SIDEBAR_ITEMS_KEYS;
   }[];
 }
@@ -50,6 +50,18 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
   const updateSelectedItemKey = useSidebar(
     ({ actions }) => actions.updateSelectedItemKey
   );
+
+  const clickHandler = (
+    sidebarItemKey: SIDEBAR_ITEMS_KEYS | undefined,
+    url = ''
+  ) => {
+    if (sidebarItemKey) {
+      updateSelectedItemKey(sidebarItemKey);
+    }
+    if (url) {
+      chrome.tabs.update({ url: addUTMParams(url) });
+    }
+  };
 
   return (
     <div className="px-2">
@@ -62,17 +74,11 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
 
           return (
             <div
-              className="w-72 min-h-80 bg-[#FDFDFD] dark:bg-charleston-green hover:bg-[#FAFAFA] hover:dark:bg-[#1E1E1E] rounded-xl border-2 border-gray-300 dark:border-quartz p-5 relative"
+              className="w-72 min-h-80 hover:bg-light-gray dark:hover:bg-charleston-green rounded-xl border-2 border-gray-300 dark:border-quartz p-5 relative hover:shadow-sm hover:scale-[1.03] transition-all duration-150 ease-in-out cursor-pointer"
+              onClick={() => clickHandler(item.sidebarItemKey, item.url)}
               key={index}
             >
-              <div
-                className="w-14 h-14 flex justify-center items-center rounded-full mb-5 cursor-pointer relative"
-                onClick={() =>
-                  item.sidebarItemKey
-                    ? updateSelectedItemKey(item.sidebarItemKey)
-                    : null
-                }
-              >
+              <div className="w-14 h-14 flex justify-center items-center rounded-full mb-5 relative">
                 <PSNumberCircleIcon className="absolute inset-0 w-full h-full object-cover" />
                 <div className={`w-9 h-9 flex justify-center items-center`}>
                   <span className="text-xxl text-bright-navy-blue dark:black font-bold">
@@ -81,12 +87,7 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
                 </div>
               </div>
               <h3
-                className={`text-lg font-medium inline-block mb-5 cursor-pointer text-raisin-black dark:text-bright-gray`}
-                onClick={() =>
-                  item.sidebarItemKey
-                    ? updateSelectedItemKey(item.sidebarItemKey)
-                    : null
-                }
+                className={`text-lg font-medium inline-block mb-5 text-raisin-black dark:text-bright-gray`}
               >
                 {item.title()}
               </h3>
@@ -94,11 +95,11 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
                 {item.description()}
               </p>
               <div className="absolute top-10 right-5 flex gap-2">
-                {item.onClick && item?.storyUrl && (
+                {item.onStoryIconClick && item?.storyUrl && (
                   <div
                     className="w-4 h-4 cursor-pointer"
                     title="View Story"
-                    onClick={item.onClick}
+                    onClick={item.onStoryIconClick}
                   >
                     <WebStoriesIcon
                       className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
@@ -108,7 +109,11 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
                   </div>
                 )}
                 <div className="w-4 h-4" title="View Documentation">
-                  <Link href={addUTMParams(item.url)} rel="noreferer">
+                  <Link
+                    href={addUTMParams(item.url)}
+                    stopPropogation={true}
+                    rel="noreferer"
+                  >
                     <DescriptionIcon
                       height="20"
                       width="20"
@@ -117,7 +122,11 @@ const ContentPanel = ({ title, content }: ContentPanelProps) => {
                   </Link>
                 </div>
                 <div className="w-4 h-4 cursor-pointer" title="Search">
-                  <Link href={addUTMParams(searchURL)} rel="noreferer">
+                  <Link
+                    href={addUTMParams(searchURL)}
+                    stopPropogation={true}
+                    rel="noreferer"
+                  >
                     <SearchIcon
                       className="dark:fill-bright-gray fill-granite-gray group-hover:text-blue-500"
                       height="20"

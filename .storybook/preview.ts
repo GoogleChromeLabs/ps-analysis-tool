@@ -2,7 +2,9 @@
  * External dependencies.
  */
 import type { Preview } from '@storybook/react';
-import 'tailwindcss/tailwind.css';
+import { withThemeByClassName } from '@storybook/addon-themes';
+import 'tailwindcss/index.css';
+import '@google-psat/design-system/theme.css';
 
 const preview: Preview = {
   parameters: {
@@ -17,3 +19,14 @@ const preview: Preview = {
 };
 
 export default preview;
+
+export const decorators = [
+  withThemeByClassName({
+    themes: {
+      light: 'light',
+      dark: 'dark',
+    },
+    defaultTheme: 'light',
+    parentSelector: 'body',
+  }),
+];

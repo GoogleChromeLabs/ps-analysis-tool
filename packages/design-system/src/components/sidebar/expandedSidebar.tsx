@@ -28,9 +28,13 @@ import { useSidebar } from './useSidebar';
 
 interface ExpandedSidebarProps {
   visibleWidth?: number;
+  shouldScrollToLatestItem?: boolean;
 }
 
-const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
+const ExpandedSidebar = ({
+  visibleWidth,
+  shouldScrollToLatestItem = false,
+}: ExpandedSidebarProps) => {
   const {
     sidebarItems,
     setIsSidebarFocused,
@@ -102,6 +106,7 @@ const ExpandedSidebar = ({ visibleWidth }: ExpandedSidebarProps) => {
       )}
       {Object.entries(sidebarItems).map(([itemKey, sidebarItem]) => (
         <SidebarChild
+          shouldScrollToLatestItem={shouldScrollToLatestItem}
           didUserInteract={didUserInteract}
           setDidUserInteract={setDidUserInteract}
           itemKey={itemKey}

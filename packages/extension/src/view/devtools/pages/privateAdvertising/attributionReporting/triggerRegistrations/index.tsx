@@ -26,8 +26,8 @@ import {
   type InfoType,
   InfoIcon,
   JsonView,
+  ResizableTray,
 } from '@google-psat/design-system';
-import { Resizable } from 're-resizable';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
 
@@ -180,13 +180,11 @@ const TriggerRegistrations = () => {
         header: 'Destination',
         accessorKey: 'destination',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Reporting Origin',
         accessorKey: 'reportingOrigin',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Registration Time',
@@ -194,19 +192,16 @@ const TriggerRegistrations = () => {
         cell: (_, details) =>
           calculateRegistrationDate((details as TriggerRegistration)?.time),
         enableHiding: false,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Event Level Result',
         accessorKey: 'eventLevel',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
       {
         header: 'Aggregetable Result',
         accessorKey: 'aggregatable',
         cell: (info) => info,
-        widthWeightagePercentage: 15,
       },
     ],
     []
@@ -214,10 +209,10 @@ const TriggerRegistrations = () => {
 
   return (
     <div className="w-full h-full text-outer-space-crayola dark:text-bright-gray flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
-          height: '80%',
+          height: selectedJSON ? '50%' : '90%',
         }}
         enable={{
           bottom: true,
@@ -225,6 +220,7 @@ const TriggerRegistrations = () => {
         minHeight="20%"
         maxHeight="90%"
         className="w-full flex flex-col"
+        trayId="trigger-registrations-table-bottom-tray"
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
@@ -250,8 +246,8 @@ const TriggerRegistrations = () => {
             />
           </TableProvider>
         </div>
-      </Resizable>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+      </ResizableTray>
+      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
         {selectedJSON ? (
           <div className="text-xs py-1 px-1.5 h-full">
             <JsonView src={selectedJSON} />

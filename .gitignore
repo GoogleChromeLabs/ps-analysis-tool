@@ -34,3 +34,6 @@ packages/*/dist-types
 #puppeteer artifact
 tmp
 
+
+*storybook.log
+**/storybook-static

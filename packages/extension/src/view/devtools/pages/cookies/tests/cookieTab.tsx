@@ -55,6 +55,16 @@ jest.mock(
   })
 );
 
+jest.mock(
+  '../../../../../../../design-system/src/components/table/useTable/useColumnResizing',
+  () =>
+    jest.fn(() => ({
+      isResizing: false,
+      setColumnWidths: jest.fn(),
+      tableContainerRef: null,
+    }))
+);
+
 const mockUseCookieStore = useCookie as jest.Mock;
 const mockUseTablePersistentSettingStore =
   useTablePersistentSettingsStore as jest.Mock;
@@ -184,46 +194,24 @@ describe('CookieTab', () => {
     fireEvent.click(headerCell);
 
     const firstRow = (await screen.findAllByTestId('body-row'))[0];
-    waitFor(
-      async () => {
-        expect(
-          await within(firstRow).findByText('KRTBCOOKIE_290')
-        ).toBeInTheDocument();
-      },
-      { interval: 1000 }
-    );
+    expect(
+      await within(firstRow).findByText('KRTBCOOKIE_290')
+    ).toBeInTheDocument();
 
     const lastRow = (await screen.findAllByTestId('body-row'))[3];
-    waitFor(
-      async () => {
-        expect(
-          await within(lastRow).findByText('pubsyncexp')
-        ).toBeInTheDocument();
-      },
-      { interval: 1000 }
-    );
+    expect(await within(lastRow).findByText('pubsyncexp')).toBeInTheDocument();
 
     fireEvent.click(headerCell);
 
     const firstRowAfterReverse = (await screen.findAllByTestId('body-row'))[0];
-    waitFor(
-      async () => {
-        expect(
-          await within(firstRowAfterReverse).findByText('pubsyncexp')
-        ).toBeInTheDocument();
-      },
-      { interval: 1000 }
-    );
+    expect(
+      await within(firstRowAfterReverse).findByText('pubsyncexp')
+    ).toBeInTheDocument();
 
     const lastRowAfterReverse = (await screen.findAllByTestId('body-row'))[3];
-    waitFor(
-      async () => {
-        expect(
-          await within(lastRowAfterReverse).findByText('KRTBCOOKIE_290')
-        ).toBeInTheDocument();
-      },
-      { interval: 1000 }
-    );
+    expect(
+      await within(lastRowAfterReverse).findByText('KRTBCOOKIE_290')
+    ).toBeInTheDocument();
   });
 
   it('should open column menu when right click on header cell', async () => {
@@ -266,9 +254,9 @@ describe('CookieTab', () => {
     const columnMenuOverlay = await screen.findByTestId('column-menu-overlay');
     fireEvent.click(columnMenuOverlay);
 
-    setTimeout(() => {
+    await waitFor(() => {
       expect(screen.queryByTestId('column-menu')).not.toBeInTheDocument();
-    }, 1000);
+    });
   });
 
   it('should render a cookie card with placeholder text when no cookie is selected', async () => {
@@ -310,7 +298,7 @@ describe('CookieTab', () => {
     render(
       <CookieDetails
         isUsingCDP={false}
-        selectedFrameCookie={{ 1: firstCookie }}
+        selectedFrameCookie={{ '1': firstCookie }}
       />
     );
     const card = await screen.findByTestId('cookie-card');
@@ -327,7 +315,7 @@ describe('CookieTab', () => {
       <CookieDetails
         isUsingCDP={false}
         selectedFrameCookie={{
-          1: mockResponse.tabCookies[known1pCookie.name],
+          '1': mockResponse.tabCookies[known1pCookie.name],
         }}
       />
     );
@@ -345,7 +333,7 @@ describe('CookieTab', () => {
       <CookieDetails
         isUsingCDP={false}
         selectedFrameCookie={{
-          1: mockResponse.tabCookies[uncategorized1pCookie.name],
+          '1': mockResponse.tabCookies[uncategorized1pCookie.name],
         }}
       />
     );
@@ -380,7 +368,7 @@ describe('CookieTab', () => {
       <CookieDetails
         isUsingCDP={false}
         selectedFrameCookie={{
-          1: mockResponse.tabCookies[known3pCookieWithValue.name],
+          '1': mockResponse.tabCookies[known3pCookieWithValue.name],
         }}
       />
     );
@@ -394,8 +382,5 @@ describe('CookieTab', () => {
     expect(
       await within(card).findByText('known3p_Cookie-with value')
     ).toBeInTheDocument();
-  });
-  afterAll(() => {
-    jest.clearAllMocks();
   });
 });

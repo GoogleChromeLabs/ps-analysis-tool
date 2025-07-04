@@ -16,12 +16,13 @@
 /**
  * External dependencies.
  */
-import p5 from 'p5';
 import * as d3 from 'd3';
+import type { Vector } from 'p5';
 
 /**
  * Internal dependencies.
  */
+import { p5 } from '../../p5';
 import app from '../app';
 import config from '../config';
 import * as utils from '../utils';
@@ -44,7 +45,7 @@ type PositionOfCircle = {
   x?: number;
   y?: number;
   color?: string;
-  target?: p5.Vector;
+  target?: Vector;
   distance?: number;
   speed?: number;
 };

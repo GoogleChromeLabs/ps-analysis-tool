@@ -17,7 +17,8 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../../../store/dataStore';
+import { DataStore } from '../../../store/dataStore';
+import sendUpdatedData from '../../../store/utils/sendUpdatedData';
 import { getAndParseNetworkCookies } from '../../../utils/getAndParseNetworkCookies';
 
 const setupIntervals = () => {
@@ -29,22 +30,22 @@ const setupIntervals = () => {
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
-    if (Object.keys(dataStore?.tabsData ?? {}).length === 0) {
+    if (Object.keys(DataStore.tabs ?? {}).length === 0) {
       return;
     }
 
-    Object.keys(dataStore?.tabsData ?? {}).forEach((key) => {
-      dataStore?.sendUpdatedDataToPopupAndDevTools(Number(key));
+    Object.keys(DataStore.tabs ?? {}).forEach((key) => {
+      sendUpdatedData(key);
     });
   }, 1200);
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
   setInterval(() => {
-    if (Object.keys(dataStore?.tabsData ?? {}).length === 0) {
+    if (Object.keys(DataStore.tabs ?? {}).length === 0) {
       return;
     }
 
-    Object.keys(dataStore?.tabsData ?? {}).forEach((key) => {
+    Object.keys(DataStore.tabs ?? {}).forEach((key) => {
       getAndParseNetworkCookies(key);
     });
   }, 5000);

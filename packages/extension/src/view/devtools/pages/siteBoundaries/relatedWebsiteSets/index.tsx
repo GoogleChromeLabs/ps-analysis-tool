@@ -33,29 +33,38 @@ import Panel from './panel';
 
 const RelatedWebsiteSets = () => {
   const tabItems = useMemo<TabItems>(
-    () => [
-      {
-        title: 'Overview',
-        content: {
-          Element: InfoCard,
-          props: {
-            infoKey: PSInfoKey.RelatedWebsiteSets,
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: InfoCard,
+            props: {
+              infoKey: PSInfoKey.RelatedWebsiteSets,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
+            },
+            className: 'p-4',
           },
         },
-      },
-      {
-        title: 'Membership',
-        content: {
-          Element: Insights,
+        {
+          title: 'JSON Generator',
+          content: {
+            Element: RWSJsonGenerator,
+            className: 'p-4',
+          },
         },
-      },
-      {
-        title: 'JSON Generator',
-        content: {
-          Element: RWSJsonGenerator,
+      ],
+      Observability: [
+        {
+          title: 'Membership',
+          content: {
+            Element: Insights,
+            className: 'p-4',
+          },
         },
-      },
-    ],
+      ],
+    }),
     []
   );
 
