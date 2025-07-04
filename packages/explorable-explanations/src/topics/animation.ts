@@ -178,12 +178,15 @@ class TopicsAnimation {
     p.push();
     p.text(currentCircle.datetime, xPosition, 35);
     p.stroke('#1A73E8');
-    p.line(
-      previousPosition.x + (index !== 0 ? circleDiameter / 2 : 0),
-      previousPosition.y,
-      position.x - circleDiameter / 2,
-      position.y
-    );
+    // don't draw line in interactive mode, it's not sequential
+    if (!this.isInteractive) {
+      p.line(
+        previousPosition.x + (index !== 0 ? circleDiameter / 2 : 0),
+        previousPosition.y,
+        position.x - circleDiameter / 2,
+        position.y
+      );
+    }
     p.pop();
   };
 
