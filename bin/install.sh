@@ -731,12 +731,11 @@ psat_check_chrome_update() {
       # Download the latest setup script from the repository
       local temp_script="/tmp/setup_chrome_testing_latest.sh"
 
-      # TODO: Update this URL from launcher-update to main after testing and before merging to main
-      echo "Downloading latest script from: https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/launcher-update/bin/install.sh"
+      echo "Downloading latest script from: https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/bin/install.sh"
       echo "Saving to: \$temp_script"
 
-      # TODO: Update this URL from launcher-update to main after testing and before merging to main
-      curl -s -f -L "https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/launcher-update/bin/install.sh" -o "\$temp_script" || {
+      # Download the latest setup script
+      curl -s -f -L "https://raw.githubusercontent.com/GoogleChromeLabs/ps-analysis-tool/main/bin/install.sh" -o "\$temp_script" || {
         echo "Error: Failed to download the latest setup script. Update aborted."
         return 1
       }
