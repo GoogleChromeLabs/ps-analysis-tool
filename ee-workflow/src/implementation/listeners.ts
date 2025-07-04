@@ -242,19 +242,25 @@ export const resetButtonClick = (
   mainCanvas.reset();
 };
 
-export const speedSliderChange = (mainCanvas: Main, e: Event) => {
+export const speedSliderChange = (
+  mainCanvas: Main,
+  IGCanvas: Main,
+  e: Event
+) => {
   const target = e.target as HTMLInputElement;
   const value = parseFloat(target.value);
 
   if (mainCanvas) {
     mainCanvas.updateSpeed(value);
   }
+
+  if (IGCanvas) {
+    IGCanvas.updateSpeed(value);
+  }
 };
 
 export const interactiveCheckboxOnChange = (
   setIsInteractive: (isInteractive: boolean) => void,
-  mainCanvas: Main,
-  IGCanvas: Main,
   playButton: HTMLElement | null,
   e: Event
 ) => {
@@ -262,6 +268,5 @@ export const interactiveCheckboxOnChange = (
 
   setIsInteractive(value);
 
-  mainCanvas.togglePause(value);
-  onNoLoopEvent(playButton);
+  playButton?.click();
 };

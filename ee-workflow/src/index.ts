@@ -154,19 +154,13 @@ resetButton?.addEventListener(
 const speedSlider = document.getElementById('speed');
 speedSlider?.addEventListener(
   'input',
-  speedSliderChange.bind(null, mainCanvas)
+  speedSliderChange.bind(null, mainCanvas, IGCanvas)
 );
 
 const interactiveCheckbox = document.getElementById('interactive');
 interactiveCheckbox?.addEventListener(
   'click',
-  interactiveCheckboxOnChange.bind(
-    null,
-    setIsInteractive,
-    mainCanvas,
-    IGCanvas,
-    playButton
-  )
+  interactiveCheckboxOnChange.bind(null, setIsInteractive, playButton)
 );
 
 // Event listeners
