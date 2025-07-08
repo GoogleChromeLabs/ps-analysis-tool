@@ -43,12 +43,14 @@ interface AuctionTableProps {
   parentOrigin?: string;
   startDate?: string;
   updateSelectedItemKey?: (key: string) => void;
+  componentAuctionCount?: number;
 }
 
 const AuctionTable = ({
   auctionEvents,
   parentOrigin = '',
   startDate = '',
+  componentAuctionCount = 0,
   updateSelectedItemKey = noop,
 }: AuctionTableProps) => {
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
@@ -227,18 +229,26 @@ const AuctionTable = ({
             trayId="auctions-table-bottom-tray"
           >
             <>
-              <div className="flex justify-between items-center p-2">
-                <p>
-                  <span className="font-semibold">Started by: </span>
-                  {auctionEvents?.[0]?.auctionConfig?.seller}
-                </p>
-                <p>
-                  {startDate
-                    ? startDate
-                    : new Date(
-                        auctionEvents?.[0]?.time * 1000 || ''
-                      ).toUTCString()}
-                </p>
+              <div className="flex flex-col p-2">
+                <div className="flex justify-between items-center gap-2">
+                  <p>
+                    <span className="font-semibold">Started by: </span>
+                    {auctionEvents?.[0]?.auctionConfig?.seller}
+                  </p>
+                  <p>
+                    {startDate
+                      ? startDate
+                      : new Date(
+                          auctionEvents?.[0]?.time * 1000 || ''
+                        ).toUTCString()}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <p>
+                    <span className="font-semibold">Component Auctions: </span>
+                    {componentAuctionCount}
+                  </p>
+                </div>
               </div>
               <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
                 <TableProvider

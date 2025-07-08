@@ -202,6 +202,7 @@ const useSidebarProcessing = () => {
             panel: {
               Element: AuctionTable,
               props: {
+                componentAuctionCount: Object.keys(PAData[key].children).length,
                 auctionEvents: PAData[key].auctionEvents,
                 parentOrigin: PAData[key].parentOrigin,
                 startDate: PAData[key].startDate,
