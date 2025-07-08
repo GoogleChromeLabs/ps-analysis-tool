@@ -79,13 +79,13 @@ const expanded: {
   wasExpanded: false,
 };
 
-const container = document.getElementById('canvas-container') ?? undefined;
+const container = document.getElementById('canvas-container')!;
 
 const mainCanvas = new Main(undefined, container, idToStart, preloader, true);
-const mainFF = new FigureFactory(mainCanvas);
+const mainFF = new FigureFactory(mainCanvas, container);
 
 const IGCanvas = new Main(true);
-const IGFF = new FigureFactory(IGCanvas);
+const IGFF = new FigureFactory(IGCanvas, container);
 IGCanvas.togglePause(true);
 let wasIGPlaying = false;
 const getWasIGPlaying = () => {

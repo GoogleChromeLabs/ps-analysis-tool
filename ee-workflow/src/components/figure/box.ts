@@ -46,6 +46,7 @@ export default class Box extends Figure {
     y: number,
     width: number,
     height: number,
+    canvasContainer: HTMLElement,
     id?: string,
     fill?: string,
     stroke?: string,
@@ -62,6 +63,7 @@ export default class Box extends Figure {
       fill,
       stroke,
       tags,
+      canvasContainer,
       mouseClicked,
       mouseMoved,
       onLeave
@@ -82,6 +84,37 @@ export default class Box extends Figure {
     } else {
       this.runSideEffect = true;
     }
+  }
+
+  protected isPointInViewPort() {
+    if (!this.canvasContainer) {
+      return false;
+    }
+
+    const rect = this.canvasContainer?.getBoundingClientRect();
+
+    const scrollTop = this.canvasContainer?.scrollTop;
+    const top = scrollTop;
+    const bottom = scrollTop + rect.height;
+
+    const scrollLeft = this.canvasContainer?.scrollLeft;
+    const left = scrollLeft;
+    const right = scrollLeft + rect.width;
+
+    return (
+      this.x + this.width / 2 >= left &&
+      this.x + this.width / 2 <= right &&
+      this.y + this.height / 2 >= top &&
+      this.y + this.height / 2 <= bottom
+    );
+  }
+
+  scroll() {
+    this.canvasContainer?.scrollTo({
+      top: this.y + this.height / 2,
+      left: this.x + this.width / 2,
+      behavior: 'smooth',
+    });
   }
 
   isHovering(): boolean {

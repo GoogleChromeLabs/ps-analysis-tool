@@ -64,7 +64,7 @@ export default class FigureFactory {
     middle: { x: 0, y: 0 },
   };
 
-  constructor(canvasRunner: Main) {
+  constructor(canvasRunner: Main, protected canvasContainer: HTMLElement) {
     this.canvasRunner = canvasRunner;
   }
 
@@ -124,6 +124,7 @@ export default class FigureFactory {
       possibleY,
       width,
       height,
+      this.canvasContainer,
       id,
       fill,
       stroke,
@@ -170,6 +171,7 @@ export default class FigureFactory {
       possibleX,
       possibleY,
       diameter,
+      this.canvasContainer,
       id,
       fill,
       stroke,
@@ -224,6 +226,7 @@ export default class FigureFactory {
       imageLoader,
       width,
       height,
+      this.canvasContainer,
       id,
       tags,
       mouseClicked,
@@ -277,6 +280,7 @@ export default class FigureFactory {
       possibleY,
       endX,
       endY,
+      this.canvasContainer,
       id,
       stroke,
       hasArrow,
@@ -380,6 +384,7 @@ export default class FigureFactory {
       possibleX,
       possibleY,
       text,
+      this.canvasContainer,
       id,
       size,
       fill,
@@ -432,6 +437,7 @@ export default class FigureFactory {
       diameter,
       startAngle,
       stopAngle,
+      this.canvasContainer,
       id,
       fill,
       stroke,

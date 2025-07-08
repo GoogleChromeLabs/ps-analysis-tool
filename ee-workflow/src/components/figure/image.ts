@@ -52,6 +52,7 @@ export default class Image extends Figure {
     imageLoader: () => p5.Image,
     width: number,
     height: number,
+    canvasContainer: HTMLElement,
     id?: string,
     tags?: string[],
     mouseClicked?: (figure: Figure) => void,
@@ -66,6 +67,7 @@ export default class Image extends Figure {
       undefined,
       undefined,
       tags,
+      canvasContainer,
       mouseClicked,
       mouseMoved,
       onLeave
@@ -86,6 +88,34 @@ export default class Image extends Figure {
     } else {
       this.runSideEffect = true;
     }
+  }
+
+  protected isPointInViewPort(): boolean {
+    if (!this.canvasContainer) {
+      return false;
+    }
+
+    const rect = this.canvasContainer.getBoundingClientRect();
+    const xInViewPort =
+      this.x - this.width / 2 >= rect.left &&
+      this.x + this.width / 2 <= rect.right;
+    const yInViewPort =
+      this.y - this.height / 2 >= rect.top &&
+      this.y + this.height / 2 <= rect.bottom;
+
+    return xInViewPort && yInViewPort;
+  }
+
+  scroll(): void {
+    if (!this.canvasContainer) {
+      return;
+    }
+
+    this.canvasContainer.scrollTo({
+      top: this.y - window.innerHeight / 2 + this.height / 2,
+      left: this.x - window.innerWidth / 2 + this.width / 2,
+      behavior: 'smooth',
+    });
   }
 
   isHovering(): boolean {

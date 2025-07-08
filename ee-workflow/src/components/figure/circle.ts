@@ -36,6 +36,7 @@ export default class Circle extends Figure {
     x: number,
     y: number,
     diameter: number,
+    canvasContainer: HTMLElement,
     id?: string,
     fill?: string,
     stroke?: string,
@@ -52,6 +53,7 @@ export default class Circle extends Figure {
       fill,
       stroke,
       tags,
+      canvasContainer,
       mouseClicked,
       mouseMoved,
       onLeave
@@ -71,6 +73,34 @@ export default class Circle extends Figure {
     } else {
       this.runSideEffect = true;
     }
+  }
+
+  protected isPointInViewPort() {
+    if (!this.canvasContainer) {
+      return false;
+    }
+
+    const rect = this.canvasContainer?.getBoundingClientRect();
+    const xInViewPort =
+      this.x - this.diameter / 2 >= rect.left &&
+      this.x + this.diameter / 2 <= rect.right;
+    const yInViewPort =
+      this.y - this.diameter / 2 >= rect.top &&
+      this.y + this.diameter / 2 <= rect.bottom;
+
+    return xInViewPort && yInViewPort;
+  }
+
+  scroll() {
+    if (!this.canvasContainer) {
+      return;
+    }
+
+    this.canvasContainer.scrollTo({
+      top: this.y + this.diameter / 2,
+      left: this.x + this.diameter / 2,
+      behavior: 'smooth',
+    });
   }
 
   isHovering(): boolean {

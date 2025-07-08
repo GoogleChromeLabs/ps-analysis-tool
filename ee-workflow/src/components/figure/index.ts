@@ -119,6 +119,7 @@ export default abstract class Figure {
    * @param fill - The fill color of the figure.
    * @param stroke - The stroke color of the figure.
    * @param tags - The tags of the figure for bucketing.
+   * @param canvasContainer - Canvas HTML container.
    * @param mouseClickedHandler - The function to be executed when the figure is clicked.
    * @param mouseMovedHandler - The function to be executed when the figure is hovered.
    * @param onLeaveHandler - The function to be executed when the figure is unhovered.
@@ -131,6 +132,7 @@ export default abstract class Figure {
     protected fill: string = 'black',
     protected stroke: string = 'black',
     protected tags: string[] = [],
+    protected canvasContainer: HTMLElement | null = null,
     public mouseClickedHandler?: (figure: Figure) => void,
     public mouseMovedHandler?: (figure: Figure) => void,
     public onLeaveHandler?: (figure: Figure) => void
@@ -152,6 +154,17 @@ export default abstract class Figure {
    * Method to draw the figure.
    */
   abstract draw(): void;
+
+  /**
+   * Method to scroll figure into view.
+   */
+  abstract scroll(): void;
+
+  /**
+   * Method to check if the figure is in the viewport.
+   * @returns {boolean} - true if the figure is in the viewport, false otherwise
+   */
+  protected abstract isPointInViewPort(): boolean;
 
   /**
    * Method to check if the figure is being hovered.

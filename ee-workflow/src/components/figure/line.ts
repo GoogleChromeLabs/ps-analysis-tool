@@ -46,6 +46,7 @@ export default class Line extends Figure {
     y: number,
     endX: number,
     endY: number,
+    canvasContainer: HTMLElement,
     id?: string,
     stroke?: string,
     hasArrow?: boolean,
@@ -62,6 +63,7 @@ export default class Line extends Figure {
       undefined,
       stroke,
       tags,
+      canvasContainer,
       mouseClicked,
       mouseMoved,
       onLeave
@@ -101,6 +103,39 @@ export default class Line extends Figure {
     } else {
       this.runSideEffect = true;
     }
+  }
+
+  protected isPointInViewPort(): boolean {
+    if (!this.canvasContainer) {
+      return false;
+    }
+
+    const rect = this.canvasContainer.getBoundingClientRect();
+    const scrollTop = this.canvasContainer.scrollTop;
+    const scrollLeft = this.canvasContainer.scrollLeft;
+
+    return (
+      this.x >= scrollLeft &&
+      this.x <= scrollLeft + rect.width &&
+      this.y >= scrollTop &&
+      this.y <= scrollTop + rect.height &&
+      this.endX >= scrollLeft &&
+      this.endX <= scrollLeft + rect.width &&
+      this.endY >= scrollTop &&
+      this.endY <= scrollTop + rect.height
+    );
+  }
+
+  scroll() {
+    if (!this.canvasContainer) {
+      return;
+    }
+
+    this.canvasContainer.scrollTo({
+      top: this.y - window.innerHeight / 2 + Math.abs(this.endY - this.y) / 2,
+      left: this.x - window.innerWidth / 2 + Math.abs(this.endX - this.x) / 2,
+      behavior: 'smooth',
+    });
   }
 
   getEndX(): number {

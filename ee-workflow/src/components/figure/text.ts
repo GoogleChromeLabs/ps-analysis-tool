@@ -41,6 +41,7 @@ export default class Text extends Figure {
     x: number,
     y: number,
     str: string,
+    canvasContainer: HTMLElement,
     id?: string,
     size?: number,
     fill?: string,
@@ -57,6 +58,7 @@ export default class Text extends Figure {
       fill,
       undefined,
       tags,
+      canvasContainer,
       mouseClicked,
       mouseMoved,
       onLeave
@@ -78,6 +80,35 @@ export default class Text extends Figure {
     } else {
       this.runSideEffect = true;
     }
+  }
+
+  protected isPointInViewPort() {
+    if (!this.canvasContainer) {
+      return false;
+    }
+
+    const rect = this.canvasContainer.getBoundingClientRect();
+    const scrollTop = this.canvasContainer.scrollTop;
+    const scrollLeft = this.canvasContainer.scrollLeft;
+
+    return (
+      this.x >= rect.left + scrollLeft &&
+      this.x <= rect.right + scrollLeft &&
+      this.y >= rect.top + scrollTop &&
+      this.y <= rect.bottom + scrollTop
+    );
+  }
+
+  scroll() {
+    if (!this.canvasContainer) {
+      return;
+    }
+
+    this.canvasContainer.scrollTo({
+      top: this.y - window.innerHeight / 2 + this.size / 2,
+      left: this.x - window.innerWidth / 2 + this.size / 2,
+      behavior: 'smooth',
+    });
   }
 
   mouseMoved() {

@@ -52,6 +52,7 @@ export default class Arc extends Figure {
     diameter: number,
     startAngle: number,
     stopAngle: number,
+    canvasContainer: HTMLElement,
     id?: string,
     fill?: string,
     stroke?: string,
@@ -68,6 +69,7 @@ export default class Arc extends Figure {
       fill,
       stroke,
       tags,
+      canvasContainer,
       mouseClicked,
       mouseMoved,
       onLeave
@@ -96,6 +98,34 @@ export default class Arc extends Figure {
     } else {
       this.runSideEffect = true;
     }
+  }
+
+  protected isPointInViewPort() {
+    if (!this.canvasContainer) {
+      return false;
+    }
+
+    const rect = this.canvasContainer.getBoundingClientRect();
+
+    const scrollTop = this.canvasContainer.scrollTop;
+    const top = scrollTop;
+    const bottom = scrollTop + rect.height;
+
+    const scrollLeft = this.canvasContainer.scrollLeft;
+    const left = scrollLeft;
+    const right = scrollLeft + rect.width;
+
+    return (
+      this.x >= left && this.x <= right && this.y >= top && this.y <= bottom
+    );
+  }
+
+  scroll() {
+    this.canvasContainer?.scrollTo({
+      top: this.y,
+      left: this.x,
+      behavior: 'smooth',
+    });
   }
 
   isHovering(): boolean {

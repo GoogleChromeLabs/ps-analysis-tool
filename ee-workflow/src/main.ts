@@ -202,8 +202,8 @@ class Main {
    * Sets up the canvas.
    */
   private setUp() {
-    const containerWidth = this.container?.clientWidth || 1600;
-    const containerHeight = this.container?.clientHeight || 1600;
+    const containerWidth = 1600;
+    const containerHeight = 1600;
 
     this.p5.createCanvas(containerWidth, containerHeight).position(0, 50);
   }
@@ -484,10 +484,7 @@ class Main {
   }
 
   private windowResized() {
-    this.p5.resizeCanvas(
-      this.container?.clientWidth || 1600,
-      this.container?.clientHeight || 1600
-    );
+    this.p5.resizeCanvas(1600, 1600);
     this.loadAnimatorPartAndDraw(undefined, true);
   }
 
