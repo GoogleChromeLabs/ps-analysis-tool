@@ -23,13 +23,13 @@ import type {
   NoBidsType,
   ReceivedBids,
   singleAuctionEvent,
+  AuctionEventsType,
 } from '@google-psat/common';
 import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import type { AuctionEventsType } from '../../../../../../stateProviders/protectedAudience/context';
 import AuctionPanel from './panel';
 
 interface AuctionsContainerProps {
@@ -46,8 +46,6 @@ interface AuctionsContainerProps {
   selectedAdUnit?: string;
   selectedDateTime?: string;
   isEE?: boolean;
-  sortOrder?: string;
-  setSortOrder?: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
 }
 
 const AuctionsContainer = ({
@@ -59,8 +57,6 @@ const AuctionsContainer = ({
   selectedAdUnit,
   selectedDateTime,
   isEE = true,
-  sortOrder,
-  setSortOrder,
   adsAndBidders,
 }: AuctionsContainerProps) => {
   return (
@@ -76,8 +72,6 @@ const AuctionsContainer = ({
         customAdsAndBidders={customAdsAndBidders}
         setSidebarData={setSidebarData}
         auctionEvents={auctionEvents}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
         adsAndBidders={adsAndBidders}
       />
     </SidebarProvider>

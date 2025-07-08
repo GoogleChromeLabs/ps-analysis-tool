@@ -34,11 +34,31 @@ import AdunitPanel from '../components/adunitPanel';
 import PrebidTable from '../prebidTable';
 import AuctionTable from '../components/table';
 import Placeholder from '../components/placeholder';
+import SortButton from '../../../../sortButton';
+import { usePrebid, useProtectedAudience } from '../../../../../stateProviders';
 
 const useSidebarProcessing = () => {
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
+  const { sortOrder, setSortOrder, _paAuctionEvents } = useProtectedAudience(
+    ({ state, actions }) => ({
+      sortOrder: state.sortOrder,
+      setSortOrder: actions.setSortOrder,
+      _paAuctionEvents: state.auctionEvents,
+    })
+  );
+
+  const { _prebidAuctionEvents } = usePrebid(({ state }) => ({
+    _prebidAuctionEvents: state.prebidData?.auctionEvents || {},
   }));
+
+  const changedValue = useRef({ oldAuctionEvents: {}, oldSortOrder: '' });
+
+  const { updateSelectedItemKey, isSidebarFocused, isKeySelected } = useSidebar(
+    ({ state, actions }) => ({
+      updateSelectedItemKey: actions.updateSelectedItemKey,
+      isSidebarFocused: state.isSidebarFocused,
+      isKeySelected: actions.isKeySelected,
+    })
+  );
 
   const [sidebarData, setSidebarData] = useState<SidebarItems>({
     adunits: {
@@ -70,6 +90,18 @@ const useSidebarProcessing = () => {
     getPAData,
     getPrebidData,
   } = useDataProcessing();
+
+  useEffect(() => {
+    return () => {
+      changedValue.current = {
+        oldAuctionEvents: {
+          _prebidAuctionEvents,
+          _paAuctionEvents,
+        },
+        oldSortOrder: sortOrder ?? '',
+      };
+    };
+  }, [_paAuctionEvents, _prebidAuctionEvents, sortOrder]);
 
   useEffect(() => {
     setSidebarData((prevSidebarData) => {
@@ -209,6 +241,14 @@ const useSidebarProcessing = () => {
         adUnitContainerChildren[adUnit].children = {
           ...adUnitChildren,
         };
+        adUnitContainerChildren[adUnit].extraInterfaceToTitle = {
+          Element: SortButton,
+          props: {
+            setSortOrder,
+            sortOrder,
+            isSidebarFocused: isSidebarFocused && isKeySelected(adUnit),
+          },
+        };
       });
 
       if (adUnits.length === 0) {
@@ -217,6 +257,42 @@ const useSidebarProcessing = () => {
         newSidebarData.adunits.children = {
           ...adUnitContainerChildren,
         };
+        if (sortOrder === 'asc') {
+          Object.keys(newSidebarData['adunits'].children).forEach((adUnit) => {
+            const sortedKeys = Object.keys(
+              newSidebarData['adunits'].children[adUnit].children
+            ).sort((a, b) => {
+              return (
+                new Date(a.split('||')[0]).getTime() -
+                new Date(b.split('||')[0]).getTime()
+              );
+            });
+            newSidebarData['adunits'].children[adUnit].children =
+              sortedKeys.reduce((acc, key) => {
+                acc[key] =
+                  newSidebarData['adunits'].children[adUnit].children[key];
+                return acc;
+              }, {} as SidebarItems);
+          });
+        } else {
+          Object.keys(newSidebarData['adunits'].children).forEach((adUnit) => {
+            const sortedKeys = Object.keys(
+              newSidebarData['adunits'].children[adUnit].children
+            ).sort((a, b) => {
+              return (
+                new Date(b.split('||')[0]).getTime() -
+                new Date(a.split('||')[0]).getTime()
+              );
+            });
+
+            newSidebarData['adunits'].children[adUnit].children =
+              sortedKeys.reduce((acc, key) => {
+                acc[key] =
+                  newSidebarData['adunits'].children[adUnit].children[key];
+                return acc;
+              }, {} as SidebarItems);
+          });
+        }
       }
 
       return newSidebarData;
@@ -235,6 +311,10 @@ const useSidebarProcessing = () => {
     getPAData,
     getPrebidData,
     updateSelectedItemKey,
+    setSortOrder,
+    sortOrder,
+    isSidebarFocused,
+    isKeySelected,
   ]);
 
   const { storage, setStorage } = useTabs(({ state, actions }) => ({

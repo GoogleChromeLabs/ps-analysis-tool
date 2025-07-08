@@ -88,6 +88,9 @@ const ProtectedAudience = () => {
           title: 'Auctions',
           content: {
             Element: Auctions,
+            props: {
+              isEE: false,
+            },
             className: 'overflow-hidden h-full',
             containerClassName: 'h-full',
           },
