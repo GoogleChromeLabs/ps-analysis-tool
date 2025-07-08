@@ -488,7 +488,7 @@ class Main {
       this.container?.clientWidth || 1600,
       this.container?.clientHeight || 1600
     );
-    this.loadAnimatorPartAndDraw();
+    this.loadAnimatorPartAndDraw(undefined, true);
   }
 
   /**
