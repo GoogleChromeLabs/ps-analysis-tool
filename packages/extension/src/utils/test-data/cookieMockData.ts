@@ -77,7 +77,10 @@ const data: {
 } = {
   tabCookies: {
     [uncategorized1pCookie.name]: {
-      parsedCookie: uncategorized1pCookie,
+      parsedCookie: {
+        ...uncategorized1pCookie,
+        partitionKey: '',
+      },
       analytics: { ...emptyAnalytics },
       url: 'https://edition.cnn.com/whatever/api',
       headerType: 'response',
@@ -86,7 +89,10 @@ const data: {
       frameIdList: ['1'],
     },
     [uncategorized3pCookie.name]: {
-      parsedCookie: uncategorized3pCookie,
+      parsedCookie: {
+        ...uncategorized3pCookie,
+        partitionKey: '',
+      },
       analytics: { ...emptyAnalytics },
       url: 'https://api.pubmatic.com/whatever/api',
       headerType: 'response',
@@ -95,7 +101,10 @@ const data: {
       frameIdList: ['1'],
     },
     [known1pCookie.name]: {
-      parsedCookie: known1pCookie,
+      parsedCookie: {
+        ...known1pCookie,
+        partitionKey: '',
+      },
       analytics: {
         platform: 'Quantcast',
         category: 'Marketing',
@@ -114,7 +123,10 @@ const data: {
       frameIdList: ['1'],
     },
     [known3pCookie.name]: {
-      parsedCookie: known3pCookie,
+      parsedCookie: {
+        ...known3pCookie,
+        partitionKey: '',
+      },
       analytics: {
         platform: 'PubMatic',
         category: 'Marketing',
@@ -134,7 +146,10 @@ const data: {
       frameIdList: ['1'],
     },
     [known3pCookieWithValue.name]: {
-      parsedCookie: known3pCookieWithValue,
+      parsedCookie: {
+        ...known3pCookieWithValue,
+        partitionKey: '',
+      },
       analytics: {
         platform: 'PubMatic',
         category: 'Marketing',

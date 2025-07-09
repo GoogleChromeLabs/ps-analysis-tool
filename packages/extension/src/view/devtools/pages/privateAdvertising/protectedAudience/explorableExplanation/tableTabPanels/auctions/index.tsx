@@ -23,13 +23,13 @@ import type {
   AdsAndBiddersType,
   NoBidsType,
   singleAuctionEvent,
+  AuctionEventsType,
 } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import AdUnitsPanel from '../../../adUnits/panel';
-import type { AuctionEventsType } from '../../../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from './container';
 
 interface AuctionsProps {

@@ -27,7 +27,9 @@ import {
   type InfoType,
   ResizableTray,
   SIDEBAR_ITEMS_KEYS,
+  Hammer,
 } from '@google-psat/design-system';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -41,12 +43,14 @@ interface AuctionTableProps {
   parentOrigin?: string;
   startDate?: string;
   updateSelectedItemKey?: (key: string) => void;
+  componentAuctionCount?: number;
 }
 
 const AuctionTable = ({
   auctionEvents,
   parentOrigin = '',
   startDate = '',
+  componentAuctionCount = 0,
   updateSelectedItemKey = noop,
 }: AuctionTableProps) => {
   const [selectedJSON, setSelectedJSON] = useState<singleAuctionEvent | null>(
@@ -80,7 +84,21 @@ const AuctionTable = ({
       {
         header: 'Interest Group Name',
         accessorKey: 'name',
-        cell: (info) => info,
+        cell: (info, details) => {
+          const eventType = details?.type;
+          return (
+            <div className="flex items-center gap-2">
+              {eventType === 'win' && <Hammer className="h-4 w-4" />}
+              <span
+                className={classNames({
+                  'text-[#5AAD6A] font-semibold': eventType === 'win',
+                })}
+              >
+                {info}
+              </span>
+            </div>
+          );
+        },
       },
       {
         header: 'Bid',
@@ -211,18 +229,26 @@ const AuctionTable = ({
             trayId="auctions-table-bottom-tray"
           >
             <>
-              <div className="flex justify-between items-center p-2">
-                <p>
-                  <span className="font-semibold">Started by: </span>
-                  {auctionEvents?.[0]?.auctionConfig?.seller}
-                </p>
-                <p>
-                  {startDate
-                    ? startDate
-                    : new Date(
-                        auctionEvents?.[0]?.time * 1000 || ''
-                      ).toUTCString()}
-                </p>
+              <div className="flex flex-col p-2">
+                <div className="flex justify-between items-center gap-2">
+                  <p>
+                    <span className="font-semibold">Started by: </span>
+                    {auctionEvents?.[0]?.auctionConfig?.seller}
+                  </p>
+                  <p>
+                    {startDate
+                      ? startDate
+                      : new Date(
+                          auctionEvents?.[0]?.time * 1000 || ''
+                        ).toUTCString()}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <p>
+                    <span className="font-semibold">Component Auctions: </span>
+                    {componentAuctionCount}
+                  </p>
+                </div>
               </div>
               <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
                 <TableProvider

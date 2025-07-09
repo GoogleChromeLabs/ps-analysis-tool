@@ -475,6 +475,13 @@ const useDataProcessing = () => {
     [isMultiSeller, paapi.auctionEvents]
   );
 
+  const receivedBids = useMemo(() => {
+    return {
+      prebid: prebidReceivedBids,
+      paapi: paapi.receivedBids,
+    };
+  }, [prebidReceivedBids, paapi.receivedBids]);
+
   return {
     adUnits,
     adUnitsTimestamp,
@@ -485,6 +492,7 @@ const useDataProcessing = () => {
     adUnitsBidders,
     adUnitsWinnerBid,
     adUnitsWinnerContainerSize,
+    receivedBids,
     getPrebidData,
     getPAData,
   };

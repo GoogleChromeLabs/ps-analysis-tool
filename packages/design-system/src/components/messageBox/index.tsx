@@ -21,14 +21,31 @@ import React from 'react';
 interface MessageBoxProps {
   headerText: string;
   bodyText: string;
+  width?: string;
+  additionalClasses?: string;
+  bodyTextClass?: string;
+  headerTextClass?: string;
 }
-const MessageBox = ({ headerText, bodyText }: MessageBoxProps) => {
+const MessageBox = ({
+  headerText,
+  bodyText,
+  width = 'max-w-2xl',
+  additionalClasses = '',
+  bodyTextClass = '',
+  headerTextClass = '',
+}: MessageBoxProps) => {
   return (
-    <div className="bg-hsl-light dark:hsl-dark py-4 my-3 px-3 leading-5 max-w-2xl">
-      <p className="text-warning-red dark:text-warning-orange font-bold">
+    <div
+      className={`bg-hsl-light dark:hsl-dark py-4 my-3 px-3 leading-5 ${width} ${additionalClasses}`}
+    >
+      <p
+        className={`text-warning-red dark:text-warning-orange font-bold ${headerTextClass}`}
+      >
         {headerText}
       </p>
-      <p className="text-raisin-black dark:text-bright-gray">{bodyText}</p>
+      <p className={`text-raisin-black dark:text-bright-gray ${bodyTextClass}`}>
+        {bodyText}
+      </p>
     </div>
   );
 };
