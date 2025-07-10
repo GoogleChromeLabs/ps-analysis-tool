@@ -90,7 +90,7 @@ const Bar = ({
             }
           )}
         >
-          <span className="pr-2 text-xs dark:text-bright-gray flex">
+          <span className="pr-2 text-xs dark:text-bright-gray flex text-nowrap">
             {String(bidder.name)}
             <span className="text-granite-gray dark:text-bright-gray ml-1">
               {bidder.type === BidderType.NO_BID && ' (no bid)'}
