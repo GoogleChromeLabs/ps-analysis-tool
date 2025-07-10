@@ -234,7 +234,6 @@ const useColumnResizing = (
       }
 
       if (columnId === lastHandleId) {
-        // TODO: calculate the remaining width if table is not full width
         setColumnFullWidth(columnElement);
         return;
       }
