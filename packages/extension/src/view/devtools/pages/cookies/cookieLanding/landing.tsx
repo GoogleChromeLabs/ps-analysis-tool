@@ -19,6 +19,7 @@
 import React, { useCallback, useMemo } from 'react';
 import {
   MenuBar,
+  MessageBox,
   type CookiesLandingSection,
   type MenuData,
   type TableFilter,
@@ -115,15 +116,26 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
     );
   }, [appliedFilters, isUsingCDP, tabFrames, unfilteredCookies, url]);
 
+  if (Object.keys(unfilteredCookies ?? {}).length === 0) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <MessageBox
+          additionalClasses="flex items-center justify-center flex-col"
+          width="w-full"
+          bodyTextClass="text-sm"
+          headerTextClass="text-lg"
+          headerText={I18n.getMessage('noCookies')}
+          bodyText={I18n.getMessage('tryReloading')}
+        />
+      </div>
+    );
+  }
+
   return (
     <div>
       <MenuBar
         disableReportDownload={false}
-        downloadReport={
-          Object.keys(unfilteredCookies ?? {}).length > 0
-            ? _downloadReport
-            : undefined
-        }
+        downloadReport={_downloadReport}
         menuData={menuData}
         scrollContainerId="cookies-landing-scroll-container"
       />

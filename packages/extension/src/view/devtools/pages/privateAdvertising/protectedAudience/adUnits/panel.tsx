@@ -133,6 +133,7 @@ const AdUnitsPanel = ({
               noBidsCount={noBidsCount}
             />
             <AdTable
+              receivedBids={receivedBids}
               adsAndBidders={adsAndBidders}
               setSelectedAdUnit={setSelectedAdUnit}
               selectedAdUnit={selectedAdUnit}
