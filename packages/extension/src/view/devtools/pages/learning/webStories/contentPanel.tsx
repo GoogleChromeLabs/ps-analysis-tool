@@ -90,7 +90,7 @@ const WebStories = ({ storyOpened }: WebStoriesProps) => {
 								dark:bg-[url(data:image/svg+xml;base64,Cjxzdmcgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im03IDkuNDUgMy44NS01LjZoLTcuNyIgZmlsbD0iI0MyQzdDOSIvPjwvc3ZnPgo=)]"
                 style={{
                   backgroundPositionX: '100%',
-                  backgroundPositionY: '4px',
+                  backgroundPositionY: '-2px',
                 }}
               >
                 <option value="latest">Latest</option>

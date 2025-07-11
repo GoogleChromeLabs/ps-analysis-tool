@@ -18,7 +18,7 @@
  * External dependencies
  */
 import React, { useEffect, useState } from 'react';
-
+import type { ReceivedBids } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -37,6 +37,7 @@ interface AdunitPanelProps {
   noBidsCount: Record<string, number>;
   winnerBid: Record<string, string | null> | null;
   winningMediaContainer?: Record<string, number[]>;
+  receivedBids?: Record<string, ReceivedBids[]>;
   isEE?: boolean;
 }
 
@@ -48,6 +49,7 @@ const AdunitPanel = ({
   bidsCount,
   noBidsCount,
   winnerBid = null,
+  receivedBids = {},
   winningMediaContainer = {},
   isEE = false,
 }: AdunitPanelProps) => {
@@ -79,6 +81,7 @@ const AdunitPanel = ({
 
   return (
     <Panel
+      receivedBids={receivedBids[pillLowerCase]}
       adunit={adunit}
       mediaContainerSize={mediaContainerSize[pillLowerCase]}
       bidders={bidders[pillLowerCase]}

@@ -55,7 +55,7 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
         onClick={isResizing ? undefined : handleOnClick}
         className={classNames(
           'select-none touch-none font-normal truncate sticky top-0 z-[100]',
-          'bg-anti-flash-white dark:bg-charleston-green border-b border-l border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz',
+          'bg-anti-flash-white dark:bg-charleston-green border-b border-american-silver dark:border-quartz',
           {
             'hover:bg-gainsboro dark:hover:bg-outer-space': !isResizing,
           }

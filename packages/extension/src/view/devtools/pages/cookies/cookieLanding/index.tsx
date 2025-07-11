@@ -17,7 +17,7 @@
 /**
  * External dependencies
  */
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo, useMemo, useState, useEffect } from 'react';
 import {
   getCookieKey,
   noop,
@@ -48,6 +48,14 @@ const AssembledCookiesLanding = () => {
 
   const filter = useGlobalFiltering(cookies, '', noop);
 
+  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(tabCookies ?? {}).length === 0) {
+      setShowFilterSidebar(false);
+    }
+  }, [showFilterSidebar, tabCookies]);
+
   const cookiesByKey = useMemo(() => {
     return filter.filteredData.reduce<TabCookies>((acc, cookie) => {
       const cookieKey = getCookieKey((cookie as CookieTableData).parsedCookie);
@@ -62,26 +70,26 @@ const AssembledCookiesLanding = () => {
     }, {});
   }, [filter.filteredData]);
 
-  const [showFilterSidebar, setShowFilterSidebar] = useState(false);
-
   return (
     <div className="h-full flex flex-col">
-      <div className="flex justify-center items-center gap-2 flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
-        <button
-          className="w-3 h-3 m-1 px-1"
-          onClick={() => setShowFilterSidebar(!showFilterSidebar)}
-          title={I18n.getMessage('openFilterOptions')}
-        >
-          <FilterIcon
-            className={
-              showFilterSidebar
-                ? 'text-royal-blue dark:text-medium-persian-blue'
-                : 'text-mischka'
-            }
-          />
-        </button>
-        <TableChipsBar {...filter} />
-      </div>
+      {Object.keys(tabCookies ?? {}).length > 0 && (
+        <div className="flex justify-left items-center gap-2 flex-1 border-b border-gray-300 dark:border-quartz bg-anti-flash-white dark:bg-raisin-black">
+          <button
+            className="w-3 h-3 m-1 px-1"
+            onClick={() => setShowFilterSidebar(!showFilterSidebar)}
+            title={I18n.getMessage('openFilterOptions')}
+          >
+            <FilterIcon
+              className={
+                showFilterSidebar
+                  ? 'text-royal-blue dark:text-medium-persian-blue'
+                  : 'text-mischka'
+              }
+            />
+          </button>
+          <TableChipsBar {...filter} />
+        </div>
+      )}
       <div
         className="flex grow-0"
         style={{

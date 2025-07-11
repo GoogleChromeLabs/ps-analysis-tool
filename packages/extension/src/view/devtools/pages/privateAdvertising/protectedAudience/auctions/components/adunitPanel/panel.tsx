@@ -26,7 +26,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
 } from '@google-psat/design-system';
-
+import type { ReceivedBids } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -50,6 +50,7 @@ interface PanelProps {
   setPillToggle: React.Dispatch<React.SetStateAction<string | null>>;
   highlightOption?: string;
   setHighlightOption?: React.Dispatch<React.SetStateAction<string>>;
+  receivedBids?: ReceivedBids[];
   isEE?: boolean;
 }
 
@@ -62,6 +63,7 @@ const Panel = ({
   noBidsCount,
   isInspecting,
   setIsInspecting,
+  receivedBids,
   setSelectedAdUnit,
   winnerBid = null,
   winningMediaContainer = [],
@@ -118,13 +120,21 @@ const Panel = ({
         name: 'Bidders',
         Icon: MoneyIcon,
         pills: [
-          ...(bidders || []).map((bidder) => ({
-            name: bidder,
-            className:
+          ...(bidders || []).map((bidder) => {
+            const receivedBidsClassname = receivedBids?.find(
+              (bid) => bid.ownerOrigin === bidder && adunit === bid.adUnitCode
+            )
+              ? '!border-[#438ED9] !text-[#438ED9] !bg-[#F5F5F5]'
+              : '';
+            const winningBidClassname =
               winnerBid === bidder
                 ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
-                : '',
-          })),
+                : '';
+            return {
+              name: bidder,
+              className: winningBidClassname ?? receivedBidsClassname,
+            };
+          }),
         ],
       },
     ],
@@ -136,6 +146,7 @@ const Panel = ({
       setIsInspecting,
       setSelectedAdUnit,
       winningMediaContainer,
+      receivedBids,
       winnerBid,
     ]
   );
