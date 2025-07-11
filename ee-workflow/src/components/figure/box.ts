@@ -51,6 +51,7 @@ export default class Box extends Figure {
     fill?: string,
     stroke?: string,
     tags?: string[],
+    dispatcherId?: string,
     mouseClicked?: (figure: Figure) => void,
     mouseMoved?: (figure: Figure) => void,
     onLeave?: (figure: Figure) => void
@@ -64,6 +65,7 @@ export default class Box extends Figure {
       stroke,
       tags,
       canvasContainer,
+      dispatcherId,
       mouseClicked,
       mouseMoved,
       onLeave

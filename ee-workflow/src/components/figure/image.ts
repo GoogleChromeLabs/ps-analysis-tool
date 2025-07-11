@@ -55,6 +55,7 @@ export default class Image extends Figure {
     canvasContainer: HTMLElement,
     id?: string,
     tags?: string[],
+    dispatcherId?: string,
     mouseClicked?: (figure: Figure) => void,
     mouseMoved?: (figure: Figure) => void,
     onLeave?: (figure: Figure) => void
@@ -68,6 +69,7 @@ export default class Image extends Figure {
       undefined,
       tags,
       canvasContainer,
+      dispatcherId,
       mouseClicked,
       mouseMoved,
       onLeave

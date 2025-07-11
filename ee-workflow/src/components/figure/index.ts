@@ -106,6 +106,11 @@ export default abstract class Figure {
   protected isCheckpoint = false;
 
   /**
+   * Whether the figure is a dispatcher.
+   */
+  protected isDispatcher = false;
+
+  /**
    * The number of objects created.
    */
   static objectCount = 0;
@@ -120,6 +125,7 @@ export default abstract class Figure {
    * @param stroke - The stroke color of the figure.
    * @param tags - The tags of the figure for bucketing.
    * @param canvasContainer - Canvas HTML container.
+   * @param dispatcherId - The id to dispatch when the figure is drawn.
    * @param mouseClickedHandler - The function to be executed when the figure is clicked.
    * @param mouseMovedHandler - The function to be executed when the figure is hovered.
    * @param onLeaveHandler - The function to be executed when the figure is unhovered.
@@ -133,6 +139,7 @@ export default abstract class Figure {
     protected stroke: string = 'black',
     protected tags: string[] = [],
     protected canvasContainer: HTMLElement | null = null,
+    protected dispatcherId?: string,
     public mouseClickedHandler?: (figure: Figure) => void,
     public mouseMovedHandler?: (figure: Figure) => void,
     public onLeaveHandler?: (figure: Figure) => void

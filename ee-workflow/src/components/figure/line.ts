@@ -51,6 +51,7 @@ export default class Line extends Figure {
     stroke?: string,
     hasArrow?: boolean,
     tags?: string[],
+    dispatcherId?: string,
     mouseClicked?: (figure: Figure) => void,
     mouseMoved?: (figure: Figure) => void,
     onLeave?: (figure: Figure) => void
@@ -64,6 +65,7 @@ export default class Line extends Figure {
       stroke,
       tags,
       canvasContainer,
+      dispatcherId,
       mouseClicked,
       mouseMoved,
       onLeave

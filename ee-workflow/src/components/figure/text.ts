@@ -46,6 +46,7 @@ export default class Text extends Figure {
     size?: number,
     fill?: string,
     tags?: string[],
+    dispatcherId?: string,
     mouseClicked?: (figure: Figure) => void,
     mouseMoved?: (figure: Figure) => void,
     onLeave?: (figure: Figure) => void
@@ -59,6 +60,7 @@ export default class Text extends Figure {
       undefined,
       tags,
       canvasContainer,
+      dispatcherId,
       mouseClicked,
       mouseMoved,
       onLeave

@@ -43,6 +43,7 @@ type FigureParams = {
   stroke?: string;
   tags?: string[];
   shouldTravel?: boolean;
+  isDispatcher?: boolean;
   travelInit?: (figure: Figure, ...args: any) => void;
   nextTipHelper?: (
     nextCoordinates: NextCoordinates,
@@ -55,6 +56,7 @@ type FigureParams = {
 
 export default class FigureFactory {
   private canvasRunner: Main;
+  private dispatcherCounter = 0;
 
   private nextCoordinates: NextCoordinates = {
     left: { x: 0, y: 0 },
@@ -64,7 +66,11 @@ export default class FigureFactory {
     middle: { x: 0, y: 0 },
   };
 
-  constructor(canvasRunner: Main, protected canvasContainer: HTMLElement) {
+  constructor(
+    canvasRunner: Main,
+    protected canvasContainer: HTMLElement,
+    protected id = 'factory'
+  ) {
     this.canvasRunner = canvasRunner;
   }
 
@@ -98,6 +104,12 @@ export default class FigureFactory {
     };
   }
 
+  private createDispatcherId(isDispatcher: boolean): string | undefined {
+    return isDispatcher
+      ? `dispatcher-${this.dispatcherCounter++}-${this.id}`
+      : undefined;
+  }
+
   box({
     id,
     x,
@@ -111,6 +123,7 @@ export default class FigureFactory {
     mouseClicked,
     mouseMoved,
     onLeave,
+    isDispatcher = false,
   }: FigureParams & {
     width: number;
     height: number;
@@ -129,6 +142,7 @@ export default class FigureFactory {
       fill,
       stroke,
       tags,
+      this.createDispatcherId(isDispatcher),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -159,6 +173,7 @@ export default class FigureFactory {
     mouseClicked,
     mouseMoved,
     onLeave,
+    isDispatcher = false,
   }: FigureParams & {
     diameter: number;
   }): Circle {
@@ -176,6 +191,7 @@ export default class FigureFactory {
       fill,
       stroke,
       tags,
+      this.createDispatcherId(isDispatcher),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -210,6 +226,7 @@ export default class FigureFactory {
     mouseClicked,
     mouseMoved,
     onLeave,
+    isDispatcher = false,
   }: FigureParams & {
     imageLoader: () => p5.Image;
     width: number;
@@ -229,6 +246,7 @@ export default class FigureFactory {
       this.canvasContainer,
       id,
       tags,
+      this.createDispatcherId(isDispatcher),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -261,6 +279,7 @@ export default class FigureFactory {
     mouseClicked,
     mouseMoved,
     onLeave,
+    isDispatcher = false,
   }: FigureParams & {
     endX?: number;
     endY?: number;
@@ -285,6 +304,7 @@ export default class FigureFactory {
       stroke,
       hasArrow,
       tags,
+      this.createDispatcherId(isDispatcher),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -371,6 +391,7 @@ export default class FigureFactory {
     mouseClicked,
     mouseMoved,
     onLeave,
+    isDispatcher = false,
   }: FigureParams & {
     text: string;
     size?: number;
@@ -389,6 +410,7 @@ export default class FigureFactory {
       size,
       fill,
       tags,
+      this.createDispatcherId(isDispatcher),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -421,6 +443,7 @@ export default class FigureFactory {
     mouseMoved,
     onLeave,
     nextTipHelper,
+    isDispatcher = false,
   }: FigureParams & {
     diameter: number;
     startAngle: number;
@@ -442,6 +465,7 @@ export default class FigureFactory {
       fill,
       stroke,
       tags,
+      this.createDispatcherId(isDispatcher),
       mouseClicked,
       mouseMoved,
       onLeave
