@@ -132,7 +132,11 @@ const App: React.FC = () => {
     setSidebarData((prev) => {
       const newSidebarData = { ...prev };
       newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].containerClassName =
-        incognitoAccess ? '' : 'pointer-events-none opacity-50';
+        incognitoAccess ? '' : 'disabled opacity-50';
+      newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle =
+        incognitoAccess
+          ? 'Open in Incognito'
+          : 'You will be redirected to the settings page, please enable incognito access for this extension.';
 
       if (newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel) {
         newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.cta =

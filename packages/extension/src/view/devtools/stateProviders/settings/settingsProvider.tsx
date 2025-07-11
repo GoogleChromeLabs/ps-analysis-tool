@@ -143,6 +143,11 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const openIncognitoTab = useCallback(async () => {
     if (!incognitoAccess) {
+      chrome.tabs.create({
+        url: 'chrome://extensions/?id=' + chrome.runtime.id,
+        active: true,
+        windowId: chrome.windows.WINDOW_ID_CURRENT,
+      });
       return;
     }
 
@@ -154,6 +159,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         chrome.tabs.create({
           url: 'https://example.com',
           windowId: incognitoTab.windowId,
+          active: true,
         });
         return;
       }
