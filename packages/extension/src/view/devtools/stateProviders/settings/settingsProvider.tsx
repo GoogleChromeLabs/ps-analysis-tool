@@ -163,7 +163,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       incognito: true,
       url: 'https://example.com',
     });
-  }, []);
+  }, [incognitoAccess]);
 
   useEffect(() => {
     if (navigator.userAgent) {
