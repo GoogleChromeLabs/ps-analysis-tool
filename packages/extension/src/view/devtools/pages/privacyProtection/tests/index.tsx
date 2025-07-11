@@ -44,6 +44,10 @@ const mockUseSidebar = useSidebar as jest.Mock;
 describe('PrivacyProtection Landing Pages', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
+    globalThis.chrome.storage.session = {
+      get: () => Promise.resolve({}),
+      set: () => Promise.resolve(),
+    };
     globalThis.fetch = function () {
       return Promise.resolve({
         json: () =>
