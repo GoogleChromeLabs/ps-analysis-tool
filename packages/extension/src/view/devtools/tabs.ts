@@ -49,6 +49,7 @@ import {
   ProtectionIcon,
   SiteBoundariesIconWhite,
   DemosIcon,
+  IncognitoIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { addUTMParams } from '@google-psat/common';
@@ -549,6 +550,30 @@ const TABS: SidebarItems = {
     },
     selectedIcon: {
       Element: SettingsIcon,
+      props: {
+        className: 'fill-bright-gray w-4 h-4',
+      },
+    },
+    dropdownOpen: false,
+    addSpacer: false,
+    children: {},
+    containerClassName: 'h-6',
+    addDivider: true,
+  },
+  [SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB]: {
+    title: 'Open in Incognito',
+    panel: {
+      skipPanelDisplay: true,
+      cta: () => null,
+    },
+    icon: {
+      Element: IncognitoIcon,
+      props: {
+        className: 'fill-granite-gray w-4 h-4',
+      },
+    },
+    selectedIcon: {
+      Element: IncognitoIcon,
       props: {
         className: 'fill-bright-gray w-4 h-4',
       },

@@ -34,7 +34,7 @@ import AdunitPanel from '../components/adunitPanel';
 import PrebidTable from '../prebidTable';
 import AuctionTable from '../components/table';
 import Placeholder from '../components/placeholder';
-import SortButton from '../../../../sortButton';
+import SortButton from '../components/sortButton';
 import { usePrebid, useProtectedAudience } from '../../../../../stateProviders';
 
 const useSidebarProcessing = () => {
