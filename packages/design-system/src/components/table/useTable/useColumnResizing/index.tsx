@@ -28,11 +28,11 @@ const getColumnElement = (columnId: string) => {
 };
 
 const getColumnMinWidth = (columnElement: HTMLElement) => {
-  return Number(columnElement?.dataset.minWidth) || undefined;
+  return Number(columnElement?.dataset.minWidth) || 0;
 };
 
 const getColumnMaxWidth = (columnElement: HTMLElement) => {
-  return Number(columnElement?.dataset.maxWidth) || undefined;
+  return Number(columnElement?.dataset.maxWidth) || Number.POSITIVE_INFINITY;
 };
 
 const getColumnWidth = (columnElement: HTMLElement) => {
@@ -53,6 +53,10 @@ const setColumnFullWidth = (columnElement: HTMLElement) => {
   columnElement.style.width = '100%';
   columnElement.style.minWidth = '100%';
   columnElement.style.maxWidth = '100%';
+};
+
+const getColumnInitialWidth = (columnElement: HTMLElement) => {
+  return Number(columnElement?.dataset.initialWidth) || undefined;
 };
 
 export type UseColumnResizing = {
@@ -121,10 +125,8 @@ const useColumnResizing = (
         const maxWidth = getColumnMaxWidth(columnElement);
         const newDiffX = startX.current - event.screenX;
         const newWidth = startingColumnWidth.current - newDiffX;
-        if (
-          (maxWidth && newWidth > maxWidth) ||
-          (minWidth && newWidth < minWidth)
-        ) {
+        // not allow resizing to be less than minWidth or greater than maxWidth
+        if (newWidth > maxWidth || newWidth < minWidth) {
           return;
         }
         setColumnWidth(columnElement, newWidth);
@@ -244,15 +246,28 @@ const useColumnResizing = (
         return;
       }
 
-      // don't set any width if it's already set
-      if (columnElement.style.maxWidth !== '') {
-        columnsSizing[columnId] = getColumnWidth(columnElement) || 0;
-        return;
-      }
-
+      const initialWidth = getColumnInitialWidth(columnElement);
       const minWidth = getColumnMinWidth(columnElement);
+      const maxWidth = getColumnMaxWidth(columnElement);
       const colWidth = getColumnWidth(columnElement);
-      const width = Math.max(minWidth || 0, colWidth || 0);
+      let width = 0;
+      if (initialWidth) {
+        if (initialWidth > maxWidth) {
+          width = maxWidth;
+        } else if (initialWidth < minWidth) {
+          width = minWidth;
+        } else {
+          width = initialWidth;
+        }
+      } else {
+        if (colWidth > maxWidth) {
+          width = maxWidth;
+        } else if (colWidth < minWidth) {
+          width = minWidth;
+        } else {
+          width = colWidth;
+        }
+      }
       setColumnWidth(columnElement, width);
       columnsSizing[columnId] = width;
     });
