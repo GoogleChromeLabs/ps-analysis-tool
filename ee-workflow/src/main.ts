@@ -953,6 +953,10 @@ class Main {
       dispatchId: lastDispatchedId,
     });
 
+    this.dispatchCustomEvent('figureDraw', {
+      figureId: [...this.snapshot].pop()?.getId(),
+    });
+
     return checkpoint;
   }
 
@@ -1493,6 +1497,12 @@ class Main {
         figure.draw();
       }
     }
+
+    this.checkpoints.delete(lastSnapshotObject.getId());
+
+    this.dispatchCustomEvent('figureDraw', {
+      figureId: [...this.snapshot].pop()?.getId() || '',
+    });
 
     if (lastSnapshotObject.canDispatch()) {
       this.dispatchCustomEvent('dispatchId', {
