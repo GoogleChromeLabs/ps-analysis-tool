@@ -108,7 +108,7 @@ export default abstract class Figure {
   /**
    * Whether the figure is a dispatcher.
    */
-  protected isDispatcher = false;
+  protected toDispatch = false;
 
   /**
    * The number of objects created.
@@ -155,6 +155,7 @@ export default abstract class Figure {
     this.onLeaveHandler = onLeaveHandler;
     this.runSideEffect = true;
     this.creationOrder = Figure.objectCount;
+    this.toDispatch = this.dispatcherId !== undefined;
   }
 
   /**
@@ -504,5 +505,35 @@ export default abstract class Figure {
    */
   getCreationOrder(): number {
     return this.creationOrder;
+  }
+
+  /**
+   * Check if the figure can dispatch.
+   * @returns Whether the figure can dispatch.
+   */
+  canDispatch(): boolean {
+    return this.dispatcherId !== undefined;
+  }
+
+  /**
+   * Check if the figure should dispatch.
+   * @returns Whether the figure should dispatch.
+   */
+  shouldDispatch(): boolean {
+    return this.toDispatch;
+  }
+
+  /**
+   * Set whether the figure should dispatch.
+   * @param value - boolean indicating if the figure should dispatch.
+   */
+  setToDispatch(value: boolean) {
+    if (this.dispatcherId) {
+      this.toDispatch = value;
+    }
+  }
+
+  getDispatchId() {
+    return this.dispatcherId;
   }
 }

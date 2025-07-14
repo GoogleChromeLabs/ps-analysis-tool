@@ -155,6 +155,11 @@ class Main {
   private helperAnimatorQueue: Animator[] = [];
 
   /**
+   * Set of dispatched IDs.
+   */
+  private dispatchedIds: Set<string> = new Set();
+
+  /**
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
@@ -230,6 +235,16 @@ class Main {
       figureId: object.getId(),
     });
     object.setThrow(true);
+
+    if (object.shouldDispatch()) {
+      this.dispatchedIds.add(object.getDispatchId() || '');
+
+      this.dispatchCustomEvent('dispatchId', {
+        dispatchId: object.getDispatchId(),
+      });
+
+      object.setToDispatch(false);
+    }
   }
 
   /**
@@ -751,6 +766,11 @@ class Main {
           figure.resetTraveller();
         }
 
+        if (figure.canDispatch()) {
+          this.dispatchedIds.delete(figure.getDispatchId() || '');
+          figure.setToDispatch(true);
+        }
+
         if (figure.getId()) {
           isCheckpointLoaded = figure.getId() === checkpoint;
         }
@@ -815,6 +835,7 @@ class Main {
    * Loads the previous checkpoint. This will re-render instantly all figures up to the previous checkpoint and start the queue from there.
    * @returns - The previous checkpoint.
    */
+  // eslint-disable-next-line complexity
   loadPreviousCheckpoint() {
     const checkpoint = this.popPreviousCheckpoint();
 
@@ -880,6 +901,11 @@ class Main {
         if (figure.getAnimatorId()) {
           toCheckAnimators.add(figure.getAnimatorId());
         }
+
+        if (figure.canDispatch()) {
+          this.dispatchedIds.delete(figure.getDispatchId() || '');
+          figure.setToDispatch(true);
+        }
       }
     }
 
@@ -920,6 +946,12 @@ class Main {
 
     this.togglePause(false);
     this.reDrawAll();
+
+    const lastDispatchedId = Array.from(this.dispatchedIds).pop();
+
+    this.dispatchCustomEvent('dispatchId', {
+      dispatchId: lastDispatchedId,
+    });
 
     return checkpoint;
   }
@@ -1387,6 +1419,11 @@ class Main {
       lastSnapshotObject?.setShouldTravel(true);
     }
 
+    if (lastSnapshotObject.getDispatchId()) {
+      this.dispatchedIds.delete(lastSnapshotObject.getDispatchId() || '');
+      lastSnapshotObject.setToDispatch(true);
+    }
+
     lastSnapshotObject.setThrow(false);
 
     let animator: Animator | null = null;
@@ -1421,6 +1458,11 @@ class Main {
           object.resetTraveller();
         }
 
+        if (object.canDispatch()) {
+          this.dispatchedIds.delete(object.getDispatchId() || '');
+          object.setToDispatch(true);
+        }
+
         this.snapshot.pop();
       });
 
@@ -1450,6 +1492,12 @@ class Main {
       } else {
         figure.draw();
       }
+    }
+
+    if (lastSnapshotObject.canDispatch()) {
+      this.dispatchCustomEvent('dispatchId', {
+        dispatchId: Array.from(this.dispatchedIds).pop(),
+      });
     }
   }
 
@@ -1519,6 +1567,11 @@ class Main {
         figure.resetTraveller();
       }
 
+      if (figure.canDispatch()) {
+        this.dispatchedIds.delete(figure.getDispatchId() || '');
+        figure.setToDispatch(true);
+      }
+
       if (figure.getIsCheckpoint()) {
         break;
       }
@@ -1559,9 +1612,15 @@ class Main {
       const figure = figures[i];
       figure.setThrow(false);
       figure.shouldRunSideEffect(true);
+
       if (figure.getCanTravel()) {
         figure.setShouldTravel(true);
         figure.resetTraveller();
+      }
+
+      if (figure.canDispatch()) {
+        this.dispatchedIds.delete(figure.getDispatchId() || '');
+        figure.setToDispatch(true);
       }
     }
 
@@ -1581,6 +1640,10 @@ class Main {
     this.stepsQueue = [...figures.slice(figureIndex)];
     this.groupStepsQueue = [...groups];
     this.animatorStepsQueue = [...animators];
+
+    this.dispatchCustomEvent('dispatchId', {
+      dispatchId: Array.from(this.dispatchedIds).pop(),
+    });
 
     this.p5.clear();
   }

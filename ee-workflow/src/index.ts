@@ -170,6 +170,11 @@ document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
 
 document.addEventListener('figureDraw', figureDraw);
 
+document.addEventListener('dispatchId', () => {
+  // const { dispatchId } = event.detail;
+  // console.log('Dispatch ID:', dispatchId);
+});
+
 // Timeline
 mainCanvas.addFigure(
   mainFF.line({
@@ -397,6 +402,7 @@ const drawIGFlow = (x: number, y: number, bubbleCount: number) => {
         playButton
       );
     },
+    isDispatcher: true,
   });
 
   mainCanvas.addFigure(image);
@@ -798,6 +804,7 @@ const drawPublisherFlow = (x: number, y: number) => {
         playButton
       );
     },
+    isDispatcher: true,
   });
 
   mainCanvas.addFigure(image);
