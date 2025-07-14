@@ -38,7 +38,7 @@ export default defineConfig({
     alias: aliases,
   },
   build: {
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 5000,
   },
 });
 

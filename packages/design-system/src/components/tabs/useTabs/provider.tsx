@@ -24,17 +24,20 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import type { TabItems, TabsProviderProps } from './types';
 import { TabsContext, TabsStoreContext } from './context';
+import ProgressBar from '../../progressBar';
 
 export const TabsProvider = ({
   children,
   items,
   isGroup = true,
+  name,
 }: PropsWithChildren<TabsProviderProps>) => {
   const [groupedItems, setGroupedItems] = useState<TabItems>({});
 
@@ -126,10 +129,17 @@ export const TabsProvider = ({
       return { ...acc, [group]: groupTitles };
     }, {});
   }, [groupedItems]);
+
+  const [loading, setLoading] = useState(true);
+
   const titles = useMemo(() => tabItems.map((item) => item.title), [tabItems]);
-  const panel = tabItems?.[activeTab]?.content ?? {
-    Element: null,
-  };
+  const panel = loading
+    ? {
+        Element: ProgressBar,
+      }
+    : tabItems?.[activeTab]?.content ?? {
+        Element: null,
+      };
 
   const setStorage = useCallback(
     (data: string, index?: number) => {
@@ -227,6 +237,45 @@ export const TabsProvider = ({
     [groupedItems]
   );
 
+  useEffect(() => {
+    if (!name) {
+      setActiveTab(0);
+      setLoading(false);
+      return;
+    }
+
+    (async () => {
+      const sessionStorage = (await getSessionStorage('tabs')) || {};
+
+      if (!sessionStorage[name]) {
+        sessionStorage[name] = {
+          activeTab: 0,
+        };
+      }
+
+      const _activeTab = sessionStorage[name].activeTab || 0;
+      setActiveTab(_activeTab);
+      setLoading(false);
+    })();
+  }, [name, setActiveTab]);
+
+  useEffect(() => {
+    if (!name) {
+      return;
+    }
+
+    (async () => {
+      await updateSessionStorage(
+        {
+          [name]: {
+            activeTab,
+          },
+        },
+        'tabs'
+      );
+    })();
+  }, [name, activeTab]);
+
   return (
     <TabsContext.Provider
       value={{
@@ -238,6 +287,7 @@ export const TabsProvider = ({
           panel,
           storage,
           isGroup,
+          loading,
         },
         actions: {
           setStorage,

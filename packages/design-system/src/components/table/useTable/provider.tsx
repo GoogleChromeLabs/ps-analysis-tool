@@ -135,9 +135,8 @@ export const TableProvider = ({
     isColumnHidden,
   } = useColumnVisibility(tableColumns, commonKey);
 
-  const { isResizing, setColumnWidths, tableContainerRef } = useColumnResizing(
-    tablePersistentSettingsKey
-  );
+  const { isResizing, setColumnWidths, tableContainerRef, tableRef } =
+    useColumnResizing(tablePersistentSettingsKey);
 
   const { sortedData, sortKey, sortOrder, setSortKey, setSortOrder } =
     useColumnSorting(paginatedData, tableColumns, commonKey);
@@ -201,6 +200,7 @@ export const TableProvider = ({
           hasMoreData,
           count,
           minColumnWidth,
+          tableRef,
         },
         actions: {
           setSortKey,

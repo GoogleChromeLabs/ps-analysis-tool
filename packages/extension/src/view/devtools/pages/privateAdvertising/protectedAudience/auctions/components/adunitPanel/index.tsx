@@ -62,7 +62,7 @@ const AdunitPanel = ({
     setSelectedAdUnit: actions.setSelectedAdUnit,
   }));
 
-  const [pillToggle, setPillToggle] = useState(
+  const [pillToggle, setPillToggle] = useState<string | null>(
     bidsCount['prebid'] > 0 ||
       noBidsCount['prebid'] > 0 ||
       (bidsCount['paapi'] === 0 && noBidsCount['paapi'] === 0)
@@ -77,7 +77,7 @@ const AdunitPanel = ({
     }
   }, [bidsCount, noBidsCount]);
 
-  const pillLowerCase = pillToggle.toLowerCase();
+  const pillLowerCase = pillToggle?.toLowerCase() || '';
 
   return (
     <Panel
