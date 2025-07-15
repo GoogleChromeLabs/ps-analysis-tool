@@ -694,3 +694,13 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Refactor: UI improvements https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1061
 - Refactor: Update Landing page component https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1094
 - Refactor: Use inheritance to re-organise stores and keep relevant data in respective stores. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1066
+
+#v1.1.0
+- Feature: Add script blocking column https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1122
+- Enhancement: Add tabs and pills persistence https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1117
+- Improvement: EE datetime interactive mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1120
+- Improvement: Vite watch https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1110
+- Fix: Table column initial width https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1124
+- Fix: Table column resize https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1105
+- Fix: UI issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1121
+- Fix: Update text and line position calculation in timeline https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1118
