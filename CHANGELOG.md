@@ -696,6 +696,9 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Refactor: Use inheritance to re-organise stores and keep relevant data in respective stores. https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1066
 
 #v1.1.0
+
+## Changelog
+
 - Feature: Add script blocking column https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1122
 - Enhancement: Add tabs and pills persistence https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1117
 - Improvement: EE datetime interactive mode https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1120
