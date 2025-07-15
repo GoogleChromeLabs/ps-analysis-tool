@@ -30,13 +30,15 @@ export interface singleAuctionEvent {
   componentSellerOrigin?: string;
   time: number;
   auctionConfig?: object;
+  url?: string;
   interestGroupConfig?: Protocol.Storage.InterestGroupAccessedEvent;
   parentAuctionId?: Protocol.Storage.InterestGroupAuctionId;
   eventType:
     | 'interestGroupAuctionEventOccurred'
     | 'interestGroupAuctionNetworkRequestCompleted'
     | 'interestGroupAuctionNetworkRequestCreated'
-    | 'interestGroupAccessed';
+    | 'interestGroupAccessed'
+    | 'BidAvailable';
 }
 
 export interface auctionData {
@@ -71,6 +73,15 @@ export type NoBidsType = {
   };
 };
 
+export type PrebidNoBidsType = {
+  [adUnitCode: string]: {
+    bidder: string[];
+    uniqueAuctionId: string;
+    adUnitCode?: string;
+    mediaContainerSize?: number[][];
+  };
+};
+
 export type AdsAndBiddersTypeData = {
   adUnitCode: string;
   bidders: string[];
@@ -78,6 +89,7 @@ export type AdsAndBiddersTypeData = {
   winningBid: number;
   bidCurrency: string;
   winningBidder: string;
+  winningMediaContainerSize?: number[][];
 };
 
 export type AdsAndBiddersType = {
@@ -88,4 +100,26 @@ export type ReceivedBids = singleAuctionEvent & {
   adUnitCode?: string;
   mediaContainerSize?: number[][];
   adType?: string;
+};
+
+export interface PrebidDebugModuleConfig {
+  enabled?: boolean;
+  intercept: PrebidDebugModuleConfigRule[];
+}
+
+export interface PrebidDebugModuleConfigRule {
+  when: { [key: string]: string | number };
+  then: {
+    [key: string]: string | number;
+  };
+}
+
+export type AuctionEventsType = {
+  [adunit: string]: {
+    [time: string]: {
+      [sellerURL: string]: {
+        [auctionHostURL: string]: singleAuctionEvent[];
+      };
+    };
+  };
 };

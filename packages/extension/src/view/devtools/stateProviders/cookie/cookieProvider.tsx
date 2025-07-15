@@ -25,7 +25,7 @@ import React, {
   useMemo,
 } from 'react';
 import { type TabCookies } from '@google-psat/common';
-import { isEqual } from 'lodash-es';
+import { isEqual, throttle } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -53,6 +53,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const [tabCookies, setTabCookies] =
     useState<CookieStoreContext['state']['tabCookies']>(null);
+
+  const setTabCookiesThrottled = useMemo(() => {
+    return throttle(setTabCookies, 1000);
+  }, [setTabCookies]);
 
   const [isInspecting, setIsInspecting] =
     useState<CookieStoreContext['state']['isInspecting']>(false);
@@ -238,7 +242,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     async (message: {
       type: string;
       payload: {
-        tabId?: number;
+        tabId?: string;
         cookieData?: TabCookies;
         exceedingLimitations?: boolean;
         extraData?: {
@@ -289,7 +293,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         const frameData = message.payload.extraData?.extraFrameData ?? {};
 
         if (tabId.toString() === message.payload.tabId.toString()) {
-          setTabCookies((prevState) => {
+          setTabCookiesThrottled((prevState) => {
             if (Object.keys(data).length > 0) {
               if (isEqual(prevState ?? {}, data)) {
                 return prevState;
@@ -302,7 +306,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         }
       }
     },
-    [getAllFramesForCurrentTab]
+    [getAllFramesForCurrentTab, setTabCookiesThrottled]
   );
 
   useEffect(() => {

@@ -24,22 +24,82 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
-import { TabsProviderProps } from './types';
-import { TabsContext } from './context';
+import type { TabItems, TabsProviderProps } from './types';
+import { TabsContext, TabsStoreContext } from './context';
+import ProgressBar from '../../progressBar';
 
 export const TabsProvider = ({
   children,
   items,
+  isGroup = true,
+  name,
 }: PropsWithChildren<TabsProviderProps>) => {
-  const [tabItems, setTabItems] = useState(items);
-  const [activeTab, setActiveTab] = useState(0);
+  const [groupedItems, setGroupedItems] = useState<TabItems>({});
+
+  useEffect(() => {
+    if (!isGroup && Array.isArray(items)) {
+      setGroupedItems(
+        items.reduce<TabItems>((acc, item, index) => {
+          acc[`group-${index}`] = [item];
+
+          return acc;
+        }, {})
+      );
+    } else {
+      setGroupedItems(items as TabItems);
+    }
+  }, [isGroup, items]);
+
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveGroup((prev) =>
+      prev === null ? Object.keys(groupedItems)[0] ?? null : prev
+    );
+  }, [groupedItems]);
+
+  const [activeTab, _setActiveTab] = useState(0);
   const activeTabRef = useRef(activeTab);
+  const groupItemsRef = useRef(groupedItems);
+
+  useEffect(() => {
+    groupItemsRef.current = groupedItems;
+  }, [groupedItems]);
+
+  const setActiveTab = useCallback((tab: number) => {
+    activeTabRef.current = tab;
+    _setActiveTab(tab);
+
+    let trackedIndex = 0;
+    const group = Object.entries(groupItemsRef.current).find(([, _items]) => {
+      const groupTitles = _items.map((item) => {
+        return {
+          title: item.title,
+          index: trackedIndex++,
+        };
+      });
+
+      return groupTitles.some(({ index }) => index === tab);
+    });
+
+    if (group) {
+      setActiveGroup(group[0]);
+    } else {
+      setActiveGroup(null);
+    }
+  }, []);
+
+  const tabItems = useMemo(() => {
+    return Object.values(groupedItems).flat();
+  }, [groupedItems]);
+
   const [storage, _setStorage] = useState<string[]>(
-    Array(items.length).fill('')
+    Array(tabItems.length).fill('')
   );
   const [highlightedTabs, setHighlightedTabs] = useState<
     Record<number, number | boolean>
@@ -50,12 +110,36 @@ export const TabsProvider = ({
   }, [activeTab]);
 
   useEffect(() => {
-    setTabItems(items);
-    _setStorage(Array(items.length).fill(''));
-  }, [items]);
+    _setStorage(Array(tabItems.length).fill(''));
+  }, [tabItems.length]);
+
+  const groupedTitles = useMemo(() => {
+    let trackedIndex = 0;
+
+    return Object.entries(groupedItems).reduce<
+      TabsStoreContext['state']['groupedTitles']
+    >((acc, [group, _items]) => {
+      const groupTitles = _items.map((item) => {
+        return {
+          title: item.title,
+          index: trackedIndex++,
+        };
+      });
+
+      return { ...acc, [group]: groupTitles };
+    }, {});
+  }, [groupedItems]);
+
+  const [loading, setLoading] = useState(true);
 
   const titles = useMemo(() => tabItems.map((item) => item.title), [tabItems]);
-  const panel = tabItems[activeTab].content;
+  const panel = loading
+    ? {
+        Element: ProgressBar,
+      }
+    : tabItems?.[activeTab]?.content ?? {
+        Element: null,
+      };
 
   const setStorage = useCallback(
     (data: string, index?: number) => {
@@ -124,19 +208,86 @@ export const TabsProvider = ({
 
   const shouldAddSpacer = useCallback(
     (index: number) => {
-      return Boolean(tabItems[index].addSpacer);
+      return Boolean(tabItems[index]?.addSpacer);
     },
     [tabItems]
   );
+
+  const getTabGroup = useCallback(
+    (tab: number) => {
+      let group = '';
+      let tracker = 0;
+
+      Object.entries(groupedItems).forEach(([groupKey, data]) => {
+        if (group) {
+          return;
+        }
+
+        if (tracker + data.length < tab + 1) {
+          tracker += data.length;
+        } else {
+          group = groupKey;
+
+          return;
+        }
+      });
+
+      return group;
+    },
+    [groupedItems]
+  );
+
+  useEffect(() => {
+    if (!name) {
+      setActiveTab(0);
+      setLoading(false);
+      return;
+    }
+
+    (async () => {
+      const sessionStorage = (await getSessionStorage('tabs')) || {};
+
+      if (!sessionStorage[name]) {
+        sessionStorage[name] = {
+          activeTab: 0,
+        };
+      }
+
+      const _activeTab = sessionStorage[name].activeTab || 0;
+      setActiveTab(_activeTab);
+      setLoading(false);
+    })();
+  }, [name, setActiveTab]);
+
+  useEffect(() => {
+    if (!name) {
+      return;
+    }
+
+    (async () => {
+      await updateSessionStorage(
+        {
+          [name]: {
+            activeTab,
+          },
+        },
+        'tabs'
+      );
+    })();
+  }, [name, activeTab]);
 
   return (
     <TabsContext.Provider
       value={{
         state: {
           activeTab,
+          activeGroup,
+          groupedTitles,
           titles,
           panel,
           storage,
+          isGroup,
+          loading,
         },
         actions: {
           setStorage,
@@ -144,6 +295,7 @@ export const TabsProvider = ({
           highlightTab,
           isTabHighlighted,
           shouldAddSpacer,
+          getTabGroup,
         },
       }}
     >

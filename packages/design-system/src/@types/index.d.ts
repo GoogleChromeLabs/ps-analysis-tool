@@ -19,6 +19,21 @@ declare module '*.svg' {
   export default ReactComponent;
 }
 
+declare module '*.svg?react' {
+  import * as React from 'react';
+
+  const ReactComponent: React.FunctionComponent<
+    React.ComponentProps<'svg'> & {
+      title?: string;
+      titleId?: string;
+      desc?: string;
+      descId?: string;
+    }
+  >;
+
+  export default ReactComponent;
+}
+
 type BulletListItem = {
   title: string;
   link?: string;
@@ -26,3 +41,9 @@ type BulletListItem = {
   sidebarKey?: string;
   pubDate?: string;
 };
+
+declare module 'entities/decode' {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type EntityDecoder = any;
+  export { EntityDecoder };
+}

@@ -18,9 +18,12 @@
  * External dependencies
  */
 import { useMemo, useState } from 'react';
-import { Resizable } from 're-resizable';
 import { type CookieTableData } from '@google-psat/common';
-import { CookieTable, CookieDetails } from '@google-psat/design-system';
+import {
+  CookieTable,
+  CookieDetails,
+  ResizableTray,
+} from '@google-psat/design-system';
 /**
  * Internal dependencies
  */
@@ -76,7 +79,7 @@ const CookiesListing = ({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
           height: '80%',
@@ -87,6 +90,7 @@ const CookiesListing = ({
           bottom: true,
         }}
         className="h-full flex"
+        trayId="report-cookiesListing"
       >
         <CookieTable
           data={cookies}
@@ -101,7 +105,7 @@ const CookiesListing = ({
           isCLI={isCLI}
           hostname={path}
         />
-      </Resizable>
+      </ResizableTray>
       <CookieDetails
         showBlockedCookies
         isUsingCDP={true}

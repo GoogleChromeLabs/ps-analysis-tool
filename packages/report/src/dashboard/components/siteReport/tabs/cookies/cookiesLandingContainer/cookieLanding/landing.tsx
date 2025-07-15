@@ -18,7 +18,7 @@
  * External dependencies.
  */
 import { useMemo } from 'react';
-import type { LibraryData, TabCookies, TabFrames } from '@google-psat/common';
+import type { TabCookies, TabFrames } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import {
   type CookiesLandingSection,
@@ -30,7 +30,6 @@ import {
  */
 import CookiesSection from './cookiesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
-import KnownBreakages from './knownBreakages';
 import ExemptedCookiesSection from './exemptedCookiesSection';
 import FramesSection from './framesSection';
 
@@ -39,7 +38,6 @@ interface LandingProps {
   tabCookies: TabCookies;
   cookiesWithIssues: TabCookies;
   downloadReport?: () => Promise<void>;
-  libraryMatches: LibraryData | null;
   isSiteMapLandingContainer?: boolean;
   menuBarScrollContainerId?: string;
   libraryMatchesUrlCount?: {
@@ -52,8 +50,6 @@ const Landing = ({
   tabCookies,
   cookiesWithIssues,
   downloadReport,
-  libraryMatches,
-  libraryMatchesUrlCount,
   menuBarScrollContainerId = 'dashboard-layout-container',
 }: LandingProps) => {
   const sections: Array<CookiesLandingSection> = useMemo(() => {
@@ -78,17 +74,6 @@ const Landing = ({
             tabCookies,
             cookiesWithIssues,
             tabFrames,
-          },
-        },
-      },
-      {
-        name: I18n.getMessage('knownBreakages'),
-        link: 'known-breakages',
-        panel: {
-          Element: KnownBreakages,
-          props: {
-            libraryMatches: libraryMatches ?? {},
-            libraryMatchesUrlCount,
           },
         },
       },
@@ -125,13 +110,7 @@ const Landing = ({
     }
 
     return baseSections;
-  }, [
-    cookiesWithIssues,
-    libraryMatches,
-    libraryMatchesUrlCount,
-    tabCookies,
-    tabFrames,
-  ]);
+  }, [cookiesWithIssues, tabCookies, tabFrames]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),

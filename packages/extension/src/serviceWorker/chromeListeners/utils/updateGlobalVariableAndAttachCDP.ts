@@ -16,7 +16,11 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../../../store/dataStore';
+import ARAStore from '../../../store/ARAStore';
+import cookieStore from '../../../store/cookieStore';
+import dataStore, { DataStore } from '../../../store/dataStore';
+import PAStore from '../../../store/PAStore';
+import prebidStore from '../../../store/prebidStore';
 import attachCDP from '../../attachCDP';
 
 const updateGlobalVariableAndAttachCDP = async () => {
@@ -24,28 +28,34 @@ const updateGlobalVariableAndAttachCDP = async () => {
 
   const preSetSettings = await chrome.storage.sync.get();
 
-  dataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
+  DataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
 
   const allTabs = await chrome.tabs.query({});
   const targets = await chrome.debugger.getTargets();
 
   allTabs.forEach((tab) => {
-    if (!tab.id || !tab.url?.startsWith('https://')) {
+    if (!tab.id || !tab.url?.startsWith('http')) {
       return;
     }
 
-    dataStore?.addTabData(tab.id);
+    dataStore?.addTabData(tab.id.toString());
+    dataStore.initialiseVariablesForNewTab(tab.id.toString());
+    cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
-    if (dataStore.globalIsUsingCDP) {
-      dataStore.initialiseVariablesForNewTab(tab.id.toString());
+    prebidStore.deinitialiseVariablesForTab(tab.id.toString());
+    prebidStore.initialiseVariablesForNewTabAndFrame(tab.id.toString(), 0);
 
+    PAStore.initialiseVariablesForNewTab(tab.id.toString());
+    ARAStore.initialiseVariablesForNewTab(tab.id.toString());
+
+    if (DataStore.globalIsUsingCDP) {
       attachCDP({ tabId: tab.id });
 
       const currentTab = targets.filter(
         ({ tabId }) => tabId && tab.id && tabId === tab.id
       );
       dataStore?.updateParentChildFrameAssociation(
-        tab.id,
+        tab.id.toString(),
         currentTab[0].id,
         '0'
       );

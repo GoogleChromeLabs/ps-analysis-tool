@@ -20,18 +20,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   type CompleteJson,
   type CookieFrameStorageType,
-  type LibraryData,
   type ErroredOutUrlsData,
   extractReportData,
   extractCookies,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import { SiteMapReport, SiteReport } from '@google-psat/report';
-
-/**
- * Internal dependencies
- */
-import './app.css';
+import '@google-psat/design-system/theme.css';
 
 enum DisplayType {
   SITEMAP,
@@ -51,10 +46,6 @@ const App = () => {
   const [erroredOutUrls, setErroredOutUrls] = useState<ErroredOutUrlsData[]>(
     []
   );
-
-  const [libraryMatches, setLibraryMatches] = useState<{
-    [key: string]: LibraryData;
-  } | null>(null);
 
   const handleDarkThemeChange = useCallback(() => {
     const setThemeMode = (isDarkMode: boolean) => {
@@ -126,24 +117,18 @@ const App = () => {
     const data: CompleteJson[] = globalThis?.PSAT_DATA?.json;
     setCompleteJsonReport(data);
 
-    let _cookies: CookieFrameStorageType = {},
-      _libraryMatches: {
-        [key: string]: LibraryData;
-      } = {};
+    let _cookies: CookieFrameStorageType = {};
 
     if (type === DisplayType.SITEMAP) {
       const extractedData = extractReportData(data);
 
-      _libraryMatches = extractedData.consolidatedLibraryMatches;
       setLandingPageCookies(extractedData.landingPageCookies);
       setErroredOutUrls(extractedData.erroredOutUrlsData);
     } else {
       _cookies = extractCookies(data[0].cookieData, '', true);
-      _libraryMatches = { [data[0].pageUrl]: data[0].libraryMatches };
     }
 
     setCookies(_cookies);
-    setLibraryMatches(_libraryMatches);
   }, [type]);
 
   if (type === DisplayType.SITEMAP) {
@@ -154,7 +139,6 @@ const App = () => {
         completeJson={completeJsonReport}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
-        libraryMatches={libraryMatches}
       />
     );
   }
@@ -168,11 +152,6 @@ const App = () => {
         selectedSite={globalThis?.PSAT_DATA?.selectedSite}
         // @ts-ignore
         path={globalThis?.PSAT_DATA?.selectedSite}
-        libraryMatches={
-          libraryMatches
-            ? libraryMatches[Object.keys(libraryMatches ?? {})[0]]
-            : null
-        }
       />
     </div>
   );

@@ -23,23 +23,21 @@ import {
   RestartIcon,
   NextIcon,
   PreviousIcon,
+  Slider,
 } from '@google-psat/design-system';
+// @ts-ignore package does not have types
 import { app } from '@google-psat/explorable-explanations';
 import React from 'react';
 import classNames from 'classnames';
-
-/**
- * Internal dependencies.
- */
-import Slider from './slider';
-
 interface HeaderProps {
   play: boolean;
   setPlay: () => void;
   reset: () => void;
   historyCount: number;
   sliderStep: number;
-  setSliderStep: React.Dispatch<React.SetStateAction<number>>;
+  setSliderStep:
+    | React.Dispatch<React.SetStateAction<number>>
+    | ((step: number) => void);
   showNextPrevButtons: boolean;
   extraInterface?: React.ReactNode;
   disablePlayButton?: boolean;

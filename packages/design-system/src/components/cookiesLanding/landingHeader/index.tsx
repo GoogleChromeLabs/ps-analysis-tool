@@ -68,7 +68,7 @@ const LandingHeader = ({
                       circleData.onClick,
                   })}
                   pieChartExtraClasses={classnames({
-                    'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] group-hover:dark:bg-[#191919] rounded-full':
+                    'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] dark:group-hover:bg-[#191919] rounded-full':
                       circleData.onClick,
                   })}
                 />

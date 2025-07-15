@@ -18,7 +18,7 @@ export default {
   json: [
     {
       pageUrl: 'https://blog.fellyph.com.br',
-      psatVersion: '0.14.1',
+      psatVersion: '1.0.0',
       cookieData: {
         'https://td.doubleclick.net': {
           frameCookies: {
@@ -208,7 +208,7 @@ export default {
     },
     {
       pageUrl: 'https://globo.com',
-      psatVersion: '0.14.1',
+      psatVersion: '1.0.0',
       cookieData: {
         'https://td.doubleclick.net': {
           frameCookies: {
@@ -2621,7 +2621,7 @@ export default {
     },
     {
       pageUrl: 'https://www.india.com',
-      psatVersion: '0.14.1',
+      psatVersion: '1.0.0',
       cookieData: {
         'https://www.india.com': {
           frameCookies: {
@@ -9798,7 +9798,7 @@ export default {
     },
     {
       pageUrl: 'https://uol.com.br',
-      psatVersion: '0.14.1',
+      psatVersion: '1.0.0',
       cookieData: {
         'https://www.uol.com.br': {
           frameCookies: {
@@ -18439,7 +18439,7 @@ export default {
       message: 'Attribution',
     },
     trackingProtection: {
-      message: 'Tracking Protection',
+      message: 'Privacy Protection',
     },
     bounceTracking: {
       message: 'Bounce Tracking',
@@ -26390,7 +26390,7 @@ export default {
     },
     antiCovertTrackingDescription: {
       message:
-        'The Privacy Sandbox initiative also includes efforts designed to limit covert tracking, including addressing specific covert tracking techniques such as fingerprinting and network-level tracking.',
+        'The Privacy Sandbox initiative also includes efforts focused on anti covert tracking techniques, addressing specific methods such as fingerprinting and network-level tracking.',
     },
     noCookiesExempted: {
       message: 'No cookies were exempted by the browser.',
@@ -27729,5 +27729,5 @@ export default {
     },
   },
   dateTime: '09 September, 2024, 05:27:35pm Asia/Calcutta',
-  psatVersion: '0.14.1',
+  psatVersion: '1.0.0',
 };

@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
     "outDir": "dist",
     "declarationDir": "dist-types",
     "composite": true,
@@ -18,7 +19,8 @@
     "**/tests/**/*.ts",
     "**/tests/**/*.tsx",
     "**/dist/**/*",
-    "**/dist-types/**/*"
+    "**/dist-types/**/*",
+    "**/stories/**"
   ],
   "references": [
     {

@@ -16,7 +16,10 @@
 /**
  * Internal dependencies
  */
-import dataStore from '../../store/dataStore';
+import cookieStore from '../../store/cookieStore';
+import dataStore, { DataStore } from '../../store/dataStore';
+import PAStore from '../../store/PAStore';
+import prebidStore from '../../store/prebidStore';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   try {
@@ -26,16 +29,24 @@ export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
 
     const targets = await chrome.debugger.getTargets();
 
-    dataStore?.addTabData(tab.id);
+    dataStore?.addTabData(tab.id.toString());
     dataStore.initialiseVariablesForNewTab(tab.id.toString());
+    cookieStore.deinitialiseVariablesForTab(tab.id.toString());
+    cookieStore.initialiseVariablesForNewTab(tab.id.toString());
 
-    if (dataStore.globalIsUsingCDP) {
+    prebidStore.deinitialiseVariablesForTab(tab.id.toString());
+    prebidStore.initialiseVariablesForNewTabAndFrame(tab.id.toString(), 0);
+
+    PAStore.deinitialiseVariablesForTab(tab.id.toString());
+    PAStore.initialiseVariablesForNewTab(tab.id.toString());
+
+    if (DataStore.globalIsUsingCDP) {
       const currentTab = targets.filter(
         ({ tabId }) => tabId && tab.id && tabId === tab.id
       );
 
       dataStore.updateParentChildFrameAssociation(
-        tab.id,
+        tab.id.toString(),
         currentTab[0].id,
         '0'
       );

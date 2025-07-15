@@ -18,53 +18,21 @@
  * External Dependencies
  */
 import React from 'react';
-import {
-  LandingPageContainer,
-  SIDEBAR_ITEMS_KEYS,
-} from '@google-psat/design-system';
+import { LandingPageContainer } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const content = [
-  {
-    title: () => I18n.getMessage('topics'),
-    description: () => I18n.getMessage('topicsDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/topics',
-    storyUrl: 'https://privacysandbox-stories.com/web-stories/the-topics-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.TOPICS,
-  },
-  {
-    title: () => I18n.getMessage('protectedAudience'),
-    description: () => I18n.getMessage('protectedAudienceDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/protected-audience',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/the-protected-audience-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PROTECTED_AUDIENCE,
-  },
-  {
-    title: () => I18n.getMessage('attributionReporting'),
-    description: () => I18n.getMessage('attributionReportingDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/attribution-reporting',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/the-attribution-reporting-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.ATTRIBUTION_REPORTING,
-  },
-  {
-    title: () => I18n.getMessage('privateAggregation'),
-    description: () => I18n.getMessage('privateAggregationDescription'),
-    url: 'https://developers.google.com/privacy-sandbox/relevance/private-aggregation',
-    storyUrl:
-      'https://privacysandbox-stories.com/web-stories/private-aggregation-api/',
-    sidebarItemKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
-  },
-];
+/**
+ * Internal dependencies.
+ */
+import { PRIVATE_ADVERTISING_CONTENT } from '../constants';
 
 const PrivateAdvertising = () => {
   return (
     <LandingPageContainer
       title={I18n.getMessage('privateAdvertising')}
-      extraClasses="min-h-[78vh] w-full"
+      extraClasses="w-full p-4"
       contentPanelTitle={I18n.getMessage('privateAdvertisingDescription')}
-      content={content}
+      content={PRIVATE_ADVERTISING_CONTENT}
       titleStyles="text-blue-600"
     />
   );

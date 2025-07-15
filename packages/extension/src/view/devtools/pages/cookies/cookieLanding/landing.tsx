@@ -18,17 +18,15 @@
  */
 import React, { useCallback, useMemo } from 'react';
 import {
-  LibraryDetection,
-  useLibraryDetectionContext,
-} from '@google-psat/library-detection';
-import {
   MenuBar,
+  MessageBox,
   type CookiesLandingSection,
   type MenuData,
   type TableFilter,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import type { TabCookies } from '@google-psat/common';
+
 /**
  * Internal dependencies
  */
@@ -53,13 +51,6 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
 
   const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
-  const { libraryMatches, showLoader } = useLibraryDetectionContext(
-    ({ state }) => ({
-      libraryMatches: state.libraryMatches,
-      showLoader: state.showLoader,
-    })
-  );
-
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const defaultSections: CookiesLandingSection[] = [
       {
@@ -80,13 +71,6 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
           props: {
             tabCookies,
           },
-        },
-      },
-      {
-        name: I18n.getMessage('libraryDetection'),
-        link: 'library-detection',
-        panel: {
-          Element: LibraryDetection,
         },
       },
       {
@@ -127,28 +111,31 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
       url || '',
       unfilteredCookies || {},
       tabFrames || {},
-      libraryMatches,
       appliedFilters,
       isUsingCDP
     );
-  }, [
-    appliedFilters,
-    isUsingCDP,
-    libraryMatches,
-    tabFrames,
-    unfilteredCookies,
-    url,
-  ]);
+  }, [appliedFilters, isUsingCDP, tabFrames, unfilteredCookies, url]);
+
+  if (Object.keys(unfilteredCookies ?? {}).length === 0) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <MessageBox
+          additionalClasses="flex items-center justify-center flex-col"
+          width="w-full"
+          bodyTextClass="text-sm"
+          headerTextClass="text-lg"
+          headerText={I18n.getMessage('noCookies')}
+          bodyText={I18n.getMessage('tryReloading')}
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
       <MenuBar
-        disableReportDownload={showLoader}
-        downloadReport={
-          Object.keys(unfilteredCookies ?? {}).length > 0
-            ? _downloadReport
-            : undefined
-        }
+        disableReportDownload={false}
+        downloadReport={_downloadReport}
         menuData={menuData}
         scrollContainerId="cookies-landing-scroll-container"
       />

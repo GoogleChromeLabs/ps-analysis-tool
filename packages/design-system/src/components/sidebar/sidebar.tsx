@@ -29,9 +29,13 @@ import ExpandedSidebar from './expandedSidebar';
 
 interface SidebarProps {
   visibleWidth?: number;
+  shouldScrollToLatestItem?: boolean;
 }
 
-const Sidebar = ({ visibleWidth }: SidebarProps) => {
+const Sidebar = ({
+  visibleWidth,
+  shouldScrollToLatestItem = false,
+}: SidebarProps) => {
   const { isCollapsed } = useSidebar(({ state }) => ({
     isCollapsed: state.isCollapsed,
   }));
@@ -52,7 +56,10 @@ const Sidebar = ({ visibleWidth }: SidebarProps) => {
       {isCollapsed ? (
         <CollapsedSidebar />
       ) : (
-        <ExpandedSidebar visibleWidth={visibleWidth} />
+        <ExpandedSidebar
+          shouldScrollToLatestItem={shouldScrollToLatestItem}
+          visibleWidth={visibleWidth}
+        />
       )}
     </div>
   );

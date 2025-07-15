@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/extension",
-  "version": "0.14.1",
+  "version": "1.0.0",
   "description": "Chrome extension for cookie analysis",
   "repository": {
     "type": "git",
@@ -8,13 +8,9 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "webpack --config ../../extension.webpack.config.cjs --watch",
     "prebuild": "rimraf ../../dist/extension",
-    "build": "webpack --config ../../extension.webpack.config.cjs",
-    "publish:local": "",
-    "publish:remote": "",
-    "unpublish:local": "",
-    "unpublish:remote": ""
+    "dev": "cross-env NODE_ENV=development npm run build",
+    "build": "cross-env VITE_CJS_IGNORE_WARNING=true NODE_NO_WARNINGS=1 node --loader ts-node/esm ../../vite.extension.config.mts"
   },
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"
@@ -30,9 +26,8 @@
     "@google-psat/design-system": "*",
     "@google-psat/explorable-explanations": "*",
     "@google-psat/i18n": "*",
-    "@google-psat/library-detection": "*",
     "@google-psat/report": "*",
-    "@p5-wrapper/react": "^4.4.2",
+    "@p5-wrapper/react": "^5.0.0-rc.2",
     "@types/lodash-es": "^4.17.12",
     "classnames": "^2.3.2",
     "d3": "^7.9.0",
@@ -43,11 +38,11 @@
     "marked-alert": "^2.0.2",
     "mermaid": "^11.2.0",
     "p-queue": "^7.3.4",
-    "p5": "^1.11.0",
-    "re-resizable": "^6.9.9",
-    "react": "^18.2.0",
-    "react-copy-to-clipboard": "^5.1.0",
-    "react-dom": "^18.2.0",
+    "p5": "^1.11.7",
+    "re-resizable": "^6.11.2",
+    "react": "^19.1.0",
+    "react-copy-to-clipboard-ts": "^1.1.0",
+    "react-dom": "^19.1.0",
     "react-error-boundary": "^4.0.11",
     "simple-cookie": "^1.0.15",
     "tldts": "^6.0.14",
@@ -57,11 +52,12 @@
   },
   "devDependencies": {
     "@types/p5": "^1.7.6",
-    "@types/react-copy-to-clipboard": "^5.0.4",
     "devtools-protocol": "^0.0.1345247",
-    "html-inline-script-webpack-plugin": "^3.2.1",
     "puppeteer": "22.15.0",
     "puppeteer-extra": "3.3.6",
-    "puppeteer-extra-plugin-user-preferences": "^2.4.1"
+    "puppeteer-extra-plugin-user-preferences": "^2.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
   }
 }

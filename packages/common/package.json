@@ -1,7 +1,8 @@
 {
   "name": "@google-psat/common",
-  "version": "0.14.1",
+  "version": "1.0.0-1",
   "description": "A package for common utilities that are being used in multiple packages",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist-types/index.d.ts",
   "source": "src/index.ts",
@@ -39,7 +40,8 @@
     "@google-psat/i18n": "*",
     "@types/lodash-es": "^4.17.12",
     "lodash-es": "^4.17.21",
-    "tldts": "^6.0.14"
+    "tldts": "^6.0.14",
+    "use-context-selector": "^1.4.1"
   },
   "devDependencies": {
     "devtools-protocol": "^0.0.1345247"

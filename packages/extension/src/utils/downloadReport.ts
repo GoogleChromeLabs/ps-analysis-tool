@@ -18,9 +18,9 @@
  */
 import {
   getCurrentDateAndTime,
-  type LibraryData,
   type TabCookies,
   type TabFrames,
+  isValidURL,
 } from '@google-psat/common';
 import { saveAs } from 'file-saver';
 import { I18n } from '@google-psat/i18n';
@@ -30,14 +30,12 @@ import type { TableFilter } from '@google-psat/design-system';
  * Internal dependencies.
  */
 import { generateDashboardObject } from './generateReportObject';
-import isValidURL from './isValidURL';
 
 /**
  * Utility function to download report.
  * @param url Top level URL.
  * @param tabCookies Tab cookies.
  * @param tabFrames Tab frames.
- * @param libraryMatches Libary matches
  * @param appliedFilters Applied filters.
  * @param isUsingCDP CDP status.
  */
@@ -45,7 +43,6 @@ export default async function downloadReport(
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData,
   appliedFilters: TableFilter,
   isUsingCDP: boolean
 ) {
@@ -53,7 +50,6 @@ export default async function downloadReport(
     url,
     tabCookies,
     tabFrames,
-    libraryMatches,
     appliedFilters,
     isUsingCDP
   );
@@ -65,7 +61,6 @@ export const generateDashboard = async (
   url: string,
   tabCookies: TabCookies,
   tabFrames: TabFrames,
-  libraryMatches: LibraryData,
   appliedFilters: TableFilter,
   isUsingCDP: boolean
 ) => {
@@ -76,12 +71,7 @@ export const generateDashboard = async (
   // Injections
   const script = reportDom.createElement('script');
 
-  const reportData = generateDashboardObject(
-    tabCookies,
-    tabFrames,
-    libraryMatches,
-    url
-  );
+  const reportData = generateDashboardObject(tabCookies, tabFrames, url);
 
   const locale = I18n.getLocale();
   const translations = await I18n.fetchMessages(locale);

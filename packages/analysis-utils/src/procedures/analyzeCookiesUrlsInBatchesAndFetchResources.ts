@@ -20,8 +20,6 @@
 import {
   type CookieData,
   type CookieDatabase,
-  LibraryData,
-  type LibraryMatchers,
   type SingleURLError,
   removeAndAddNewSpinnerText,
   type Selectors,
@@ -34,7 +32,6 @@ import { analyzeCookiesUrlsAndFetchResources } from './analyzeCookiesUrlsAndFetc
 
 export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
   urls: string[],
-  Libraries: LibraryMatchers[],
   isHeadless: boolean,
   delayTime: number,
   cookieDictionary: CookieDatabase,
@@ -61,7 +58,6 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
         content: string;
         type?: string;
       }[];
-      domQueryMatches: LibraryData;
       erroredOutUrls: Record<string, SingleURLError[]>;
     }[] = [];
 
@@ -81,7 +77,6 @@ export const analyzeCookiesUrlsInBatchesAndFetchResources = async (
       const cookieAnalysisAndFetchedResources =
         await analyzeCookiesUrlsAndFetchResources(
           urlsWindow,
-          Libraries,
           isHeadless,
           delayTime,
           cookieDictionary,

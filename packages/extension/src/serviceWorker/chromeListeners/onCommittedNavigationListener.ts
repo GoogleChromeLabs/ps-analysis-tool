@@ -17,7 +17,11 @@
  * Internal dependencies
  */
 import { TABID_STORAGE } from '../../constants';
-import dataStore from '../../store/dataStore';
+import ARAStore from '../../store/ARAStore';
+import cookieStore from '../../store/cookieStore';
+import dataStore, { DataStore } from '../../store/dataStore';
+import PAStore from '../../store/PAStore';
+import prebidStore from '../../store/prebidStore';
 import getQueryParams from '../../utils/getQueryParams';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
@@ -41,6 +45,16 @@ export const onCommittedNavigationListener = async ({
       return;
     }
 
+    if (!DataStore.tabs[tabId.toString()]) {
+      dataStore.addTabData(tabId.toString());
+      dataStore.initialiseVariablesForNewTab(tabId.toString());
+      DataStore.tabs[tabId.toString()].devToolsOpenState = true;
+      cookieStore.initialiseVariablesForNewTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
+      PAStore.initialiseVariablesForNewTab(tabId.toString());
+      ARAStore.initialiseVariablesForNewTab(tabId.toString());
+    }
+
     const queryParams = getQueryParams(url);
 
     if (queryParams.psat_cdp) {
@@ -48,23 +62,31 @@ export const onCommittedNavigationListener = async ({
         isUsingCDP: queryParams.psat_cdp === 'on',
       });
 
-      dataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
+      DataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
     }
 
     const targets = await chrome.debugger.getTargets();
-    const mainFrameId = dataStore?.globalIsUsingCDP
+    const mainFrameId = DataStore?.globalIsUsingCDP
       ? targets.filter((target) => target.tabId && target.tabId === tabId)[0]
           ?.id
       : 0;
 
-    dataStore?.updateUrl(tabId, url);
+    dataStore?.updateUrl(tabId.toString(), url);
 
     if (url && !url.startsWith('chrome')) {
-      dataStore?.removeCookieData(tabId);
+      cookieStore?.removeCookieData(tabId.toString());
+      cookieStore.deinitialiseVariablesForTab(tabId.toString());
+      cookieStore.initialiseVariablesForNewTab(tabId.toString());
 
-      if (dataStore.globalIsUsingCDP) {
-        dataStore.deinitialiseVariablesForTab(tabId.toString());
-        dataStore.initialiseVariablesForNewTab(tabId.toString());
+      prebidStore.deinitialiseVariablesForTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(
+        tabId.toString(),
+        frameId
+      );
+
+      if (DataStore.globalIsUsingCDP) {
+        PAStore.deinitialiseVariablesForTab(tabId.toString());
+        PAStore.initialiseVariablesForNewTab(tabId.toString());
 
         await attachCDP({ tabId });
 
@@ -78,12 +100,16 @@ export const onCommittedNavigationListener = async ({
           }
         );
 
-        dataStore.updateParentChildFrameAssociation(tabId, targetId, '0');
+        dataStore.updateParentChildFrameAssociation(
+          tabId.toString(),
+          targetId,
+          '0'
+        );
       }
     }
 
     const tabs = await chrome.tabs.query({});
-    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('https'));
+    const qualifyingTabs = tabs.filter((_tab) => _tab.url?.startsWith('http'));
 
     await sendMessageWrapper(
       'EXCEEDING_LIMITATION_UPDATE',

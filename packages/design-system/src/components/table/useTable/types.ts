@@ -26,6 +26,42 @@ import type {
   SourcesData,
 } from '@google-psat/common';
 
+export type PrebidConfigTableData = {
+  name: string;
+  value: string | number | boolean;
+  index: number;
+};
+
+export type PrebidPriceGranularityTableData = {
+  bucket: string;
+  precision: number;
+  minimum: number;
+  maximum: number;
+  increment: number;
+  index: number;
+};
+
+export type PrebidConsentManagementTableData = {
+  platform: 'gdpr' | 'usp';
+  api: 'iab' | 'static' | 'iabnonsupport' | 'none';
+  timeout?: number;
+  allowAuctionWithoutConsent?: boolean;
+  defaultGdprScope?: boolean;
+};
+
+export type PrebidUserIdsTableData = {
+  name: string;
+  type?: 'cookie' | 'html5';
+  expires?: number;
+  storageName?: string;
+};
+
+export type UserEID = {
+  userId: string;
+  aType: number;
+  source: string;
+};
+
 export type TableData = (
   | CookieTableData
   | InterestGroups
@@ -35,6 +71,11 @@ export type TableData = (
   | ErroredOutUrlsData
   | SourcesData
   | ClassificationResult
+  | PrebidConfigTableData
+  | PrebidPriceGranularityTableData
+  | PrebidConsentManagementTableData
+  | PrebidUserIdsTableData
+  | UserEID
 ) & {
   highlighted?: boolean;
 };
@@ -58,9 +99,10 @@ export type TableColumn = {
     Element: (props: any) => React.JSX.Element;
   };
   showBodyCellPrefixIcon?: (row: TableRow) => boolean;
-  widthWeightagePercentage?: number;
-  width?: number; // For internal use only
   sortingComparator?: (a: InfoType, b: InfoType) => number;
+  initialWidth?: number;
+  minWidth?: number;
+  maxWidth?: number;
 };
 
 export type TableRow = {
@@ -124,4 +166,7 @@ export interface TableProviderProps {
   hasVerticalBar?: (row: TableRow) => boolean;
   getVerticalBarColorHash?: (row: TableRow) => string;
   isRowSelected?: (cookie: TableData | null) => boolean;
+  tableContainerRef?: React.RefObject<HTMLDivElement>;
+  tableRef?: React.RefObject<HTMLTableElement>;
+  minColumnWidth?: number;
 }

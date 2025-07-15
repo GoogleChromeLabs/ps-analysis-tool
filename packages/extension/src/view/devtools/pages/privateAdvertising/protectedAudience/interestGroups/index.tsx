@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSidebar, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
 
 /**
@@ -40,6 +40,11 @@ const InterestGroups = () => {
     updateSelectedItemKey: actions.updateSelectedItemKey,
   }));
 
+  const cdpNavigation = useCallback(() => {
+    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
+    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
+  }, [updateSelectedItemKey]);
+
   if (!isUsingCDP) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -47,12 +52,7 @@ const InterestGroups = () => {
           To view interest group events, enable PSAT to use CDP via the{' '}
           <button
             className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={() => {
-              document
-                .getElementById('cookies-landing-scroll-container')
-                ?.scrollTo(0, 0);
-              updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-            }}
+            onClick={cdpNavigation}
           >
             Settings Page
           </button>

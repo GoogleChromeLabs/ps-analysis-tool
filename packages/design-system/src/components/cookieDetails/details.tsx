@@ -169,7 +169,7 @@ const Details = ({
         isUsingCDP &&
         shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
-            <InboundIcon className="stroke-[#FE8455] scale-150" />
+            <InboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {I18n.getMessage('blockedInAtLeastOne', ['responses'])}
             </p>
@@ -184,7 +184,7 @@ const Details = ({
         isUsingCDP &&
         shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
-            <InboundIcon className="stroke-[#D8302F] scale-150" />
+            <InboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {I18n.getMessage('blockedInAll', ['responses'])}
             </p>
@@ -199,7 +199,7 @@ const Details = ({
         isUsingCDP &&
         shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
-            <OutboundIcon className="stroke-[#FE8455] scale-150" />
+            <OutboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {I18n.getMessage('blockedInAtLeastOne', ['requests'])}
             </p>
@@ -214,7 +214,7 @@ const Details = ({
         isUsingCDP &&
         shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
-            <OutboundIcon className="stroke-[#D8302F] scale-150" />
+            <OutboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {I18n.getMessage('blockedInAll', ['requests'])}
             </p>
@@ -230,7 +230,7 @@ const Details = ({
         isUsingCDP &&
         shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
-            <OutboundInboundIcon className="stroke-[#D8302F] scale-150" />
+            <OutboundInboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {I18n.getMessage('blockedInAllRequestResponse')}
             </p>
@@ -246,7 +246,7 @@ const Details = ({
         isUsingCDP &&
         shouldShowBlockedCookieDescription && (
           <div className="flex gap-1 items-center mb-4">
-            <OutboundInboundIcon className="stroke-[#FE8455] scale-150" />
+            <OutboundInboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
               {I18n.getMessage('blockedInSomeRequestResponse')}
             </p>

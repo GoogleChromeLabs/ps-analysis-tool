@@ -24,7 +24,8 @@ import {
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { getSessionStorage } from '@google-psat/common';
-
+import 'github-markdown-css/github-markdown.css';
+import '@google-psat/design-system/theme.css';
 /**
  * Internal dependencies.
  */
@@ -95,12 +96,9 @@ const App: React.FC = () => {
       }
 
       const data = await getSessionStorage('persistentSetting');
-      const syncData = await chrome.storage.sync.get();
 
       if (data?.selectedSidebarItem) {
         setDefaultSelectedItemKey(data?.selectedSidebarItem);
-      } else if (syncData?.psLandingPageViewed) {
-        setDefaultSelectedItemKey(SIDEBAR_ITEMS_KEYS.DASHBOARD);
       }
 
       if (data?.sidebarCollapsedState) {
@@ -113,7 +111,7 @@ const App: React.FC = () => {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
           newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
-            SIDEBAR_ITEMS_KEYS.ANTI_COVERT_TRACKING
+            SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
           ].children[SIDEBAR_ITEMS_KEYS.COOKIES].dropdownOpen =
             data?.cookieDropdownOpen;
           return newSidebarData;

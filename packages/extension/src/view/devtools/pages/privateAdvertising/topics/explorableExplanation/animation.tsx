@@ -17,110 +17,130 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef, useState } from 'react';
-import p5 from 'p5';
-import { topicsAnimation } from '@google-psat/explorable-explanations';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+// @ts-ignore package does not have types
+import { TopicsAnimation } from '@google-psat/explorable-explanations';
+import p5 from '../../../../../../utils/p5';
 
-interface AnimationProps {
-  epoch: { datetime: string; website: string; topics: string[] }[];
-  isAnimating: boolean;
-  siteAdTechs: Record<string, string[]>;
-  visitIndexStart: number;
-  handleUserVisit: (visitIndex: number, updateTopics?: boolean) => void;
-  isPlaying: boolean;
-  resetAnimation: boolean;
-  speedMultiplier: number;
-  isInteractive: boolean;
-  setPAActiveTab: (tabIndex: number) => void;
-  setHighlightAdTech: React.Dispatch<React.SetStateAction<string | null>>;
-  setCurrentVisitIndexCallback: React.Dispatch<
-    React.SetStateAction<(() => number) | undefined>
-  >;
-}
+/**
+ * Internal dependencies
+ */
+import type {
+  TopicsExplorableExplanationAction,
+  TopicsExplorableExplanationState,
+} from './useTopicsExplorableExplanation';
 
 const Animation = ({
-  epoch,
-  isAnimating,
-  siteAdTechs,
-  visitIndexStart,
-  handleUserVisit,
-  isPlaying,
-  resetAnimation,
-  speedMultiplier,
-  isInteractive,
-  setPAActiveTab,
-  setHighlightAdTech,
-  setCurrentVisitIndexCallback,
-}: AnimationProps) => {
-  const node = useRef(null);
-  const [togglePlayCallback, setTogglePlayCallback] =
-    useState<(state: boolean) => void>();
-  const [resetCallback, setResetCallback] = useState<() => void>();
-  const [speedMultiplierCallback, setSpeedMultiplierCallback] =
-    useState<(speed: number) => void>();
-  const animationRef = useRef(isAnimating);
+  topicsState,
+  topicsDispatch,
+}: {
+  topicsState: TopicsExplorableExplanationState;
+  topicsDispatch: React.Dispatch<TopicsExplorableExplanationAction>;
+}) => {
+  const node = useRef<HTMLDivElement>(null);
+  const loadingTextCoverRef = useRef<HTMLDivElement>(null);
+  const [animation, setAnimation] = useState<TopicsAnimation | null>(null);
+
+  const { isPlaying, epochSiteVisited, epochs, activeEpoch } = topicsState;
+
+  const sitesVisited = epochSiteVisited[activeEpoch];
+  const currentVisitedIndex = sitesVisited.size;
+  const currentEpoch = epochs[activeEpoch];
+
+  const handleUserVisit = useCallback(
+    (visitIndex: number) => {
+      topicsDispatch({
+        type: 'setEpochSiteVisited',
+        payload: { epochIndex: topicsState.activeEpoch, siteIndex: visitIndex },
+      });
+    },
+    [topicsDispatch, topicsState.activeEpoch]
+  );
+
+  const handleHighlightAdTech = useCallback(
+    (highlightAdTech: string | null) => {
+      topicsDispatch({
+        type: 'setHighlightAdTech',
+        payload: { highlightAdTech },
+      });
+    },
+    [topicsDispatch]
+  );
 
   useEffect(() => {
-    // Using the useRef hook to store the current value of isAnimating because the animation should not be re-rendered when the value of isAnimating changes.
-    animationRef.current = isAnimating;
-  }, [isAnimating, visitIndexStart]);
-
-  useEffect(() => {
-    const tAnimation = (p: p5) => {
-      const { togglePlay, reset, updateSpeedMultiplier, getCurrentVisitIndex } =
-        topicsAnimation(
-          p,
-          epoch,
-          animationRef.current,
-          siteAdTechs,
-          visitIndexStart,
-          animationRef.current
-            ? handleUserVisit
-            : (idx: number) => handleUserVisit(idx, false),
-          setHighlightAdTech,
-          isInteractive
-        );
-
-      setTogglePlayCallback(() => togglePlay);
-      setResetCallback(() => reset);
-      setSpeedMultiplierCallback(() => updateSpeedMultiplier);
-      setCurrentVisitIndexCallback(() => getCurrentVisitIndex);
+    const init = (sketch: typeof p5) => {
+      const instance = new TopicsAnimation({
+        p: sketch,
+        onReady: () => {
+          if (loadingTextCoverRef.current) {
+            loadingTextCoverRef.current.remove();
+          }
+        },
+      });
+      setAnimation(instance);
     };
 
-    const p = node.current ? new p5(tAnimation, node.current) : null;
-
-    return () => {
-      p?.remove();
-    };
-  }, [
-    epoch,
-    handleUserVisit,
-    isInteractive,
-    setCurrentVisitIndexCallback,
-    setHighlightAdTech,
-    setPAActiveTab,
-    siteAdTechs,
-    visitIndexStart,
-  ]);
-
-  useEffect(() => {
-    togglePlayCallback?.(isPlaying);
-  }, [isPlaying, togglePlayCallback]);
-
-  useEffect(() => {
-    if (resetAnimation) {
-      resetCallback?.();
+    // keep only one instance of p5
+    if (node.current && !animation) {
+      // eslint-disable-next-line no-new
+      new p5(init, node.current);
     }
-  }, [resetAnimation, resetCallback]);
+  }, [topicsDispatch, topicsState.activeEpoch, animation, handleUserVisit]);
 
   useEffect(() => {
-    speedMultiplierCallback?.(speedMultiplier);
-  }, [speedMultiplier, speedMultiplierCallback]);
+    return () => {
+      if (animation) {
+        animation.destroy();
+      }
+    };
+  }, [animation]);
+
+  /* sync animation with state/callbacks - start */
+  useEffect(() => {
+    animation?.togglePlay(isPlaying);
+  }, [isPlaying, animation]);
+
+  useEffect(() => {
+    animation?.setCurrentVisitIndex(currentVisitedIndex);
+  }, [currentVisitedIndex, animation]);
+
+  useEffect(() => {
+    if (currentEpoch) {
+      animation?.setWebVisits(currentEpoch.webVisits);
+    }
+  }, [currentEpoch, animation]);
+
+  useEffect(() => {
+    animation?.setSiteAdTechs(topicsState.siteAdTechs);
+  }, [topicsState.siteAdTechs, animation]);
+
+  useEffect(() => {
+    animation?.setInteractiveMode(topicsState.isInteractive);
+  }, [topicsState.isInteractive, animation]);
+
+  useEffect(() => {
+    animation?.updateSpeedMultiplier(topicsState.sliderStep);
+  }, [topicsState.sliderStep, animation]);
+
+  useEffect(() => {
+    animation?.setHandleHighlighTech(handleHighlightAdTech);
+  }, [animation, handleHighlightAdTech]);
+
+  useEffect(() => {
+    animation?.setHandleUserVisit(handleUserVisit);
+  }, [animation, handleUserVisit]);
+
+  useEffect(() => {
+    animation?.setInspectedCircles(sitesVisited);
+  }, [animation, sitesVisited]);
+  /* sync animation with state/callbacks - end */
 
   return (
     <div className="relative h-full">
       <div ref={node} className="overflow-auto bg-white h-full" />
+      {/* used for covering loading text when loading */}
       <div
+        ref={loadingTextCoverRef}
         id="loading-text-cover"
         className="absolute top-0 left-0 w-20 h-10 bg-white z-50"
       />
@@ -128,4 +148,4 @@ const Animation = ({
   );
 };
 
-export default Animation;
+export default memo(Animation);

@@ -47,11 +47,11 @@ import {
   type CurrentSiteData,
   type StepType,
 } from './auctionEventTransformers';
-import BidsPanel from '../bids/panel';
 import type { AuctionEventsType } from '../../../../stateProviders/protectedAudience/context';
 import Auctions from './tableTabPanels/auctions';
 import Legend from './tableTabPanels/legend';
 import { transformInterestGroup } from './interestGroupTransformer';
+import BidsPanel from './tableTabPanels/bids';
 
 const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
@@ -349,7 +349,7 @@ const ExplorableExplanation = () => {
     color: string;
   } | null>(null);
 
-  const tabItems = useMemo<TabItems>(
+  const tabItems = useMemo<TabItems[keyof TabItems]>(
     () => [
       {
         title: 'Interest Groups',
@@ -384,8 +384,7 @@ const ExplorableExplanation = () => {
             receivedBids: Object.keys(auctionsData?.receivedBids ?? {})
               .map((key: string) => auctionsData?.receivedBids?.[key] ?? [])
               .flat(),
-            noBids: auctionsData?.noBids ?? {},
-            eeAnimatedTab: true,
+            noBids: Object.values(auctionsData?.noBids || {}),
           },
         },
       },
@@ -417,7 +416,7 @@ const ExplorableExplanation = () => {
   );
 
   return (
-    <TabsProvider items={tabItems} name="explorableExplanation">
+    <TabsProvider items={tabItems} name="explorableExplanation" isGroup={false}>
       <Panel
         currentSiteData={currentSiteData}
         setCurrentSite={_setCurrentSiteData}

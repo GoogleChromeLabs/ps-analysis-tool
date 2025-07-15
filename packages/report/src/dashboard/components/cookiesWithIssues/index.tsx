@@ -18,9 +18,12 @@
  * External dependencies.
  */
 import { useState } from 'react';
-import { Resizable } from 're-resizable';
 import { type CookieTableData } from '@google-psat/common';
-import { CookieTable, CookieDetails } from '@google-psat/design-system';
+import {
+  CookieTable,
+  CookieDetails,
+  ResizableTray,
+} from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -55,13 +58,14 @@ const CookiesWithIssues = ({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <Resizable
+      <ResizableTray
         defaultSize={{
           width: '100%',
           height: '80%',
         }}
         minHeight="6%"
         maxHeight="95%"
+        trayId="cookies-with-issues-table"
         enable={{
           top: false,
           right: false,
@@ -83,7 +87,7 @@ const CookiesWithIssues = ({
           isCLI={isCLI}
           hostname={hostName}
         />
-      </Resizable>
+      </ResizableTray>
       <CookieDetails
         showBlockedCookies
         selectedFrameCookie={selectedFrameCookie}

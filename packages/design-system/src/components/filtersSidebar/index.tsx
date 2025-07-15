@@ -106,7 +106,7 @@ const FiltersSidebar = ({
 
   return (
     <div
-      className="h-full overflow-auto p-3 pt-0"
+      className="h-full overflow-clip p-3 pt-0"
       data-testid="filters-sidebar"
     >
       <a
