@@ -174,7 +174,7 @@ class Main {
     private preloader?: (p: p5) => void,
     performanceCheck = false
   ) {
-    this.p5 = new p5(this.init.bind(this), container);
+    this.p5 = new p5(this.init.bind(this), this.container);
 
     if (performanceCheck) {
       this.stats = new Stats();
@@ -197,6 +197,9 @@ class Main {
     p.windowResized = this.windowResized.bind(this);
   }
 
+  /**
+   * Preloads assets before setup.
+   */
   private preload() {
     if (this.preloader) {
       this.preloader(this.p5);
@@ -213,6 +216,11 @@ class Main {
     this.p5.createCanvas(containerWidth, containerHeight).position(0, 50);
   }
 
+  /**
+   * Dispatches a custom event with the given name and data.
+   * @param eventName - The name of the event to dispatch.
+   * @param data - The data to include in the event.
+   */
   private dispatchCustomEvent(eventName: string, data: any) {
     const event = new CustomEvent(eventName, {
       detail: data,
@@ -230,7 +238,7 @@ class Main {
     }
 
     this.snapshot.push(object);
-    // custom event listener for figure draw
+
     this.dispatchCustomEvent('figureDraw', {
       figureId: object.getId(),
     });
@@ -252,19 +260,19 @@ class Main {
    * @param queue - The queue of figures.
    * @param groupQueue - The queue of groups.
    * @param shouldDraw - Whether to draw the group.
-   * @param isRestarting - Whether the draw is restarting from a figure.
+   * @param isSkippingQueue - Whether the draw is skipping through the queue.
    */
   private processGroup(
     queue: Figure[],
     groupQueue: Group[],
     shouldDraw = true,
-    isRestarting = false
+    isSkippingQueue = false
   ) {
     const group = groupQueue.shift();
 
     if (group) {
       if (shouldDraw) {
-        if (isRestarting) {
+        if (isSkippingQueue) {
           group.shouldRunSideEffect(false);
         }
 
@@ -295,7 +303,7 @@ class Main {
    * @param groupQueue - The queue of groups.
    * @param animatorQueue - The queue of animators.
    * @param shouldDraw - Whether to draw the animator.
-   * @param isRestarting - Whether the draw is restarting from a figure.
+   * @param isSkippingQueue - Whether the draw is skipping through the queue.
    * @param skipRedrawAll - Whether to skip redrawing all figures after the animator.
    */
   private processAnimator(
@@ -304,20 +312,20 @@ class Main {
     groupQueue: Group[],
     animatorQueue: Animator[],
     shouldDraw = true,
-    isRestarting = false,
+    isSkippingQueue = false,
     skipRedrawAll = false
   ) {
     const animator = animatorQueue[0];
 
     if (animator) {
-      if (isRestarting) {
+      if (isSkippingQueue) {
         animator.shouldRunSideEffect(false);
       }
 
       const isDone = animator.draw(!shouldDraw);
 
       if (firstObject.getGroupId()) {
-        this.processGroup(queue, groupQueue, false, isRestarting);
+        this.processGroup(queue, groupQueue, false, isSkippingQueue);
       } else {
         if (!firstObject.getThrow()) {
           this.saveToSnapshot(firstObject);
@@ -345,12 +353,12 @@ class Main {
    * Runs the drawing process for the current queue.
    * @param useInstantQueue - Whether to use the instant queue.
    * @param skipDraw - Whether to skip drawing.
-   * @param isSkipping - Whether to skip through the queue.
+   * @param isSkippingQueue - Whether to skip through the queue.
    */
   private runner(
     useInstantQueue = false,
     skipDraw = false,
-    isSkipping = false
+    isSkippingQueue = false
   ) {
     let queue: Figure[] = [];
     let groupQueue: Group[] = [];
@@ -382,7 +390,7 @@ class Main {
           firstObject.getGroupId() ? groupQueue[0] : firstObject
         );
 
-        if (skipDraw || useInstantQueue || isSkipping) {
+        if (skipDraw || useInstantQueue || isSkippingQueue) {
           this.traveller.completeTravelling(skipDraw);
           this.traveller = null;
           this.isTravelling = false;
@@ -398,14 +406,14 @@ class Main {
           groupQueue,
           animatorQueue,
           !skipDraw,
-          isSkipping,
+          isSkippingQueue,
           useInstantQueue
         );
       } else if (firstObject.getGroupId()) {
-        this.processGroup(queue, groupQueue, !skipDraw, isSkipping);
+        this.processGroup(queue, groupQueue, !skipDraw, isSkippingQueue);
       } else {
         if (!skipDraw) {
-          if (isSkipping) {
+          if (isSkippingQueue) {
             firstObject.shouldRunSideEffect(false);
           }
 
@@ -657,10 +665,18 @@ class Main {
     return this.pause;
   }
 
+  /**
+   * Whether the draw function is looping or not.
+   * @returns Whether the draw function is looping or not.
+   */
   isLooping() {
     return !this.noLoop;
   }
 
+  /**
+   * Checks if the helper queue is being used.
+   * @returns Whether the helper queue is being used.
+   */
   isUsingHelperQueue() {
     return this.usingHelperQueue;
   }
@@ -718,7 +734,7 @@ class Main {
   }
 
   /**
-   * If a animator is still rendering, it will be reset and the already rendered figures/group will be removed from the snapshot and readded to the queue.
+   * If a animator is still rendering, it will be reset the half rendered animator and the already rendered figures/groups of that animator will be removed from the snapshot and readded to the queue.
    * @param checkpoint - The checkpoint to load.
    * @returns - Whether the checkpoint was part of the animator.
    */
@@ -1048,7 +1064,8 @@ class Main {
   }
 
   /**
-   * Loads a snapshot of figures, groups, and animators from the snapshot arrays.
+   * Loads a snapshot of figures, groups, and animators from the snapshot arrays to the instant queues.
+   * After instant queues are filled, the draw loop will handle the instant rendering.
    * @param animatorIdToDraw - The ID of the animator to draw.
    */
   loadSnapshot(animatorIdToDraw?: string) {
@@ -1097,6 +1114,7 @@ class Main {
 
   /**
    * Loads a snapshot of figures, groups, and animators from the snapshot arrays and draws them instantly.
+   * Used to render figures instantly when expand functionality is required.
    * @param animatorIdToDraw - The ID of the animator to draw.
    * @param shift - The shift to apply to the figures.
    * @param shift.x - The x-coordinate shift.
@@ -1148,7 +1166,7 @@ class Main {
   }
 
   /**
-   * Loads and draws an completed animator part instantly.
+   * Loads and draws half-completed animator instantly.
    * @param animatorId - The ID of the animator to load.
    * @param useQueue - Whether to use the queue.
    */
@@ -1366,6 +1384,9 @@ class Main {
     return this.checkpoints.size - 1;
   }
 
+  /**
+   * Steps to the next figure in the queue.
+   */
   stepNext() {
     this.togglePause(true);
     this.dispatchCustomEvent('noLoop', {
@@ -1405,6 +1426,9 @@ class Main {
     this.runner(false, false, true);
   }
 
+  /**
+   * Steps back to the last rendered figure in the snapshot.
+   */
   stepBack() {
     this.togglePause(true);
     this.dispatchCustomEvent('noLoop', {
@@ -1512,7 +1536,7 @@ class Main {
   }
 
   /**
-   * Resets the queues and snapshots, load figures in correct order.
+   * Resets the helper queue, and reloads the queues with correct creation order.
    */
   resetAfterHelperQueue() {
     this.helperQueue = [];
@@ -1670,7 +1694,45 @@ class Main {
     this.usingHelperQueue = value;
   }
 
-  // eslint-disable-next-line complexity
+  /**
+   * Handles switching to the helper queue.
+   */
+  private handleSwitchToHelperQueue() {
+    while (this.stepsQueue.length && !this.stepsQueue?.[0].getIsCheckpoint()) {
+      if (
+        this.stepsQueue[0].getAnimatorId() &&
+        this.stepsQueue[0].getAnimatorId() !==
+          this.helperQueue[this.helperQueue.length - 1]?.getAnimatorId()
+      ) {
+        const animator = this.animatorStepsQueue.shift();
+
+        if (animator) {
+          this.helperAnimatorQueue.push(animator);
+        }
+      }
+
+      if (
+        this.stepsQueue[0].getGroupId() &&
+        this.stepsQueue[0].getGroupId() !==
+          this.helperQueue[this.helperQueue.length - 1]?.getGroupId()
+      ) {
+        const group = this.groupStepsQueue.shift();
+
+        if (group) {
+          this.helperGroupQueue.push(group);
+        }
+      }
+
+      this.helperQueue.push(this.stepsQueue.shift()!);
+    }
+
+    this.togglePause(false);
+  }
+
+  /**
+   * Loads a checkpoint into the helper queue.
+   * @param checkpoint - The checkpoint to load into the helper queue.
+   */
   loadCheckpointToHelper(checkpoint: string) {
     if (this.helperQueue.length) {
       return;
@@ -1681,43 +1743,14 @@ class Main {
 
     const recentCheckpoint = [...this.checkpoints].pop();
 
+    // If the recent checkpoint is the same as the one we are trying to load
     if (recentCheckpoint === checkpoint) {
-      while (
-        this.stepsQueue.length &&
-        !this.stepsQueue?.[0].getIsCheckpoint()
-      ) {
-        if (
-          this.stepsQueue[0].getAnimatorId() &&
-          this.stepsQueue[0].getAnimatorId() !==
-            this.helperQueue[this.helperQueue.length - 1]?.getAnimatorId()
-        ) {
-          const animator = this.animatorStepsQueue.shift();
-
-          if (animator) {
-            this.helperAnimatorQueue.push(animator);
-          }
-        }
-
-        if (
-          this.stepsQueue[0].getGroupId() &&
-          this.stepsQueue[0].getGroupId() !==
-            this.helperQueue[this.helperQueue.length - 1]?.getGroupId()
-        ) {
-          const group = this.groupStepsQueue.shift();
-
-          if (group) {
-            this.helperGroupQueue.push(group);
-          }
-        }
-
-        this.helperQueue.push(this.stepsQueue.shift()!);
-      }
-
-      this.togglePause(false);
-
+      this.handleSwitchToHelperQueue();
       return;
     }
 
+    // If the recent checkpoint is not the same as the one we are trying to load
+    // Reset the half-rendered animator and re-draw the snapshot
     if (
       recentCheckpoint &&
       this.stepsQueue.length &&
@@ -1731,6 +1764,7 @@ class Main {
       this.loadSnapshotAndReDraw();
     }
 
+    // Load the checkpoint into the helper queue
     if (this.stepsQueue.length) {
       let foundCheckpoint = false;
 
