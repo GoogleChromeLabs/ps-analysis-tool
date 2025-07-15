@@ -9484,5 +9484,8 @@
   },
   "OCD_HMACCOUNT_description": {
     "message": "Used to send data to Baidu about the visitors device and behaviour. Tracks the visitor across devices and marketing channels."
+  },
+  "OCD__gtmeec_description": {
+    "message": "Used by Meta to store user data for reuse, enabling more efficient and accurate tracking and targeting."
   }
 }
