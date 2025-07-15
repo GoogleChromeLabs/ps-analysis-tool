@@ -99,13 +99,8 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           const isDomainInAllowList = Boolean(
             (row.originalData as CookieTableData)?.isDomainInAllowList
           );
-          const isFirstParty = (row.originalData as CookieTableData)
-            ?.isFirstParty;
 
-          return (
-            (showBlockedCookies && isBlocked && !isFirstParty) ||
-            isDomainInAllowList
-          );
+          return (showBlockedCookies && isBlocked) || isDomainInAllowList;
         },
         minWidth: 45,
       },
@@ -516,23 +511,19 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
           onClick={getCookiesSetByJavascript}
           title={I18n.getMessage('refreshJSCookies')}
         />
-        <div className="flex items-center w-max">
+        <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center w-max">
           <input
-            type="checkbox"
-            checked={showBlockedCookies}
             id="show-blocked-cookies"
-            className="ml-1"
-            onChange={(e) => {
-              setShowBlockedCookies(e.target.checked);
-            }}
+            role="checkbox"
+            type="checkbox"
+            className="ml-1 cursor-pointer"
+            defaultChecked={showBlockedCookies}
+            onChange={() => setShowBlockedCookies((prev) => !prev)}
           />
-          <label
-            htmlFor="show-blocked-cookies"
-            className="ml-1 text-xs leading-none"
-          >
-            Show blocked 3p cookies
-          </label>
-        </div>
+          <span className="ml-1 text-xs leading-none">
+            Show blocked cookies
+          </span>
+        </label>
       </>
     );
   }, [getCookiesSetByJavascript, setShowBlockedCookies, showBlockedCookies]);

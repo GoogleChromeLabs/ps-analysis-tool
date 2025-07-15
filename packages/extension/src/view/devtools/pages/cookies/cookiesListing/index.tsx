@@ -82,7 +82,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
             cookie?.blockedReasons &&
             cookie?.blockedReasons.length !== 0;
 
-          return cookie.isFirstParty ? true : !isCookieBlocked;
+          return isCookieBlocked;
         });
   }, [tableData, tabFrames, selectedFrame, showBlockedCookies]);
 
