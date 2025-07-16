@@ -19,6 +19,7 @@ export type SidebarComponent = {
   href?: string;
   props?: Record<string, unknown>;
   skipPanelDisplay?: boolean;
+  cta?: () => void;
 };
 
 export type SidebarItemValue = {

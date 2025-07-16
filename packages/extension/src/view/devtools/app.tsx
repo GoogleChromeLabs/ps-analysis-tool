@@ -33,6 +33,8 @@ import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
+import { useSettings } from './stateProviders';
+import { getCurrentTab } from '../../utils/getCurrentTab';
 
 const setThemeMode = (isDarkMode: boolean) => {
   if (isDarkMode) {
@@ -70,6 +72,13 @@ const App: React.FC = () => {
       : 'Something went wrong.',
     buttonText: I18n.getMessage('refreshPanel'),
   });
+
+  const { incognitoAccess, openIncognitoTab } = useSettings(
+    ({ state, actions }) => ({
+      incognitoAccess: state.incognitoAccess,
+      openIncognitoTab: actions.openIncognitoTab,
+    })
+  );
 
   // update theme mode when the browser theme changes
   useEffect(() => {
@@ -119,6 +128,38 @@ const App: React.FC = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const currentTab = await getCurrentTab();
+
+      if (currentTab?.incognito) {
+        setSidebarData((prev) => {
+          const newSidebarData = { ...prev };
+          delete newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB];
+          return newSidebarData;
+        });
+        return;
+      }
+      setSidebarData((prev) => {
+        const newSidebarData = { ...prev };
+        newSidebarData[
+          SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB
+        ].containerClassName = incognitoAccess ? '' : 'disabled opacity-50';
+        newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle =
+          incognitoAccess
+            ? 'Open in Incognito'
+            : 'You will be redirected to the settings page, please enable incognito access for this extension.';
+
+        if (newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel) {
+          newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.cta =
+            openIncognitoTab;
+        }
+
+        return newSidebarData;
+      });
+    })();
+  }, [incognitoAccess, openIncognitoTab]);
 
   if (collapsedState === null) {
     return null;
