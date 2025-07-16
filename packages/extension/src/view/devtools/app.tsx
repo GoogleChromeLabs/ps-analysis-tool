@@ -34,6 +34,7 @@ import './app.css';
 import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
 import { useSettings } from './stateProviders';
+import { getCurrentTab } from '../../utils/getCurrentTab';
 
 const setThemeMode = (isDarkMode: boolean) => {
   if (isDarkMode) {
@@ -129,22 +130,30 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setSidebarData((prev) => {
-      const newSidebarData = { ...prev };
-      newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].containerClassName =
-        incognitoAccess ? '' : 'disabled opacity-50';
-      newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle =
-        incognitoAccess
-          ? 'Open in Incognito'
-          : 'You will be redirected to the settings page, please enable incognito access for this extension.';
+    (async () => {
+      const currentTab = await getCurrentTab();
 
-      if (newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel) {
-        newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.cta =
-          openIncognitoTab;
+      if (currentTab?.incognito) {
+        return;
       }
+      setSidebarData((prev) => {
+        const newSidebarData = { ...prev };
+        newSidebarData[
+          SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB
+        ].containerClassName = incognitoAccess ? '' : 'disabled opacity-50';
+        newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle =
+          incognitoAccess
+            ? 'Open in Incognito'
+            : 'You will be redirected to the settings page, please enable incognito access for this extension.';
 
-      return newSidebarData;
-    });
+        if (newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel) {
+          newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.cta =
+            openIncognitoTab;
+        }
+
+        return newSidebarData;
+      });
+    })();
   }, [incognitoAccess, openIncognitoTab]);
 
   if (collapsedState === null) {
