@@ -161,6 +161,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           windowId: incognitoTab.windowId,
           active: true,
         });
+        chrome.windows.update(incognitoTab.windowId, { focused: true });
         return;
       }
     }

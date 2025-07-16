@@ -134,6 +134,11 @@ const App: React.FC = () => {
       const currentTab = await getCurrentTab();
 
       if (currentTab?.incognito) {
+        setSidebarData((prev) => {
+          const newSidebarData = { ...prev };
+          delete newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB];
+          return newSidebarData;
+        });
         return;
       }
       setSidebarData((prev) => {
