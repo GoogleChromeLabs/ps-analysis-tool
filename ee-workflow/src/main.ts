@@ -643,8 +643,14 @@ class Main {
 
     if (this.pause) {
       this.p5.noLoop();
+      this.dispatchCustomEvent('noLoop', {
+        message: 'Animation paused',
+      });
     } else {
       this.p5.loop();
+      this.dispatchCustomEvent('loop', {
+        message: 'Animation resumed',
+      });
     }
   }
 
@@ -662,7 +668,7 @@ class Main {
    * @returns Whether the drawing process is paused.
    */
   isPaused() {
-    return this.pause;
+    return this.pause || this.noLoop;
   }
 
   /**
@@ -686,7 +692,9 @@ class Main {
    */
   reset() {
     if (this.usingHelperQueue) {
+      this.togglePause(false);
       this.resetAfterHelperQueue();
+      this.togglePause(true);
       return;
     }
 
@@ -1680,6 +1688,10 @@ class Main {
     });
 
     this.p5.clear();
+
+    while (this.instantQueue.length) {
+      this.runner(true);
+    }
   }
 
   /**
