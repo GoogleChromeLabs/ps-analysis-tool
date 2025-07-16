@@ -50,8 +50,8 @@ interface PanelProps {
   storage?: string[];
   setStorage?: (data: string, index: number) => void;
   eeAnimatedTab?: boolean;
-  bidsPillToggle: string;
-  panelPillToggle: string;
+  bidsPillToggle: string | null;
+  panelPillToggle: string | null;
   timelines?: PrebidEvents['auctionEvents'];
   zoomLevel?: number;
 }
@@ -77,7 +77,7 @@ const Panel = ({
     }
 
     if (bidsPillToggle === BidsPillOptions.NoBids) {
-      return Object.keys(noBids).length > 0;
+      return Object.keys(noBids || {}).length > 0;
     }
 
     return Object.entries(timelines || {}).length > 0;
@@ -145,7 +145,7 @@ const Panel = ({
             <div
               className={classNames(
                 'h-full border-r border-t border-american-silver dark:border-quartz',
-                Object.keys(noBids).length > 0 ? 'w-[42rem]' : 'w-full'
+                Object.keys(noBids).length > 0 ? 'max-w-[43rem]' : 'w-full'
               )}
             >
               <NoBidsTable

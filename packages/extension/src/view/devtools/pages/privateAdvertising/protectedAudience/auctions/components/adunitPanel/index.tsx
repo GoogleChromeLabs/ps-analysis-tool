@@ -18,7 +18,7 @@
  * External dependencies
  */
 import React, { useEffect, useState } from 'react';
-
+import type { ReceivedBids } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -37,6 +37,7 @@ interface AdunitPanelProps {
   noBidsCount: Record<string, number>;
   winnerBid: Record<string, string | null> | null;
   winningMediaContainer?: Record<string, number[]>;
+  receivedBids?: Record<string, ReceivedBids[]>;
   isEE?: boolean;
 }
 
@@ -48,6 +49,7 @@ const AdunitPanel = ({
   bidsCount,
   noBidsCount,
   winnerBid = null,
+  receivedBids = {},
   winningMediaContainer = {},
   isEE = false,
 }: AdunitPanelProps) => {
@@ -60,7 +62,7 @@ const AdunitPanel = ({
     setSelectedAdUnit: actions.setSelectedAdUnit,
   }));
 
-  const [pillToggle, setPillToggle] = useState(
+  const [pillToggle, setPillToggle] = useState<string | null>(
     bidsCount['prebid'] > 0 ||
       noBidsCount['prebid'] > 0 ||
       (bidsCount['paapi'] === 0 && noBidsCount['paapi'] === 0)
@@ -75,10 +77,11 @@ const AdunitPanel = ({
     }
   }, [bidsCount, noBidsCount]);
 
-  const pillLowerCase = pillToggle.toLowerCase();
+  const pillLowerCase = pillToggle?.toLowerCase() || '';
 
   return (
     <Panel
+      receivedBids={receivedBids[pillLowerCase]}
       adunit={adunit}
       mediaContainerSize={mediaContainerSize[pillLowerCase]}
       bidders={bidders[pillLowerCase]}

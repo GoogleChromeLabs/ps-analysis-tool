@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Resizable } from 're-resizable';
 import classNames from 'classnames';
 
@@ -72,6 +72,7 @@ const Table = ({
     tableContainerRef,
     loadMoreData,
     hasMoreData,
+    tableRef,
   } = useTable(({ state, actions }) => ({
     filters: state.filters,
     isSelectAllFilterSelected: actions.isSelectAllFilterSelected,
@@ -87,6 +88,7 @@ const Table = ({
     tableContainerRef: state.tableContainerRef,
     loadMoreData: actions.loadMoreData,
     hasMoreData: state.hasMoreData,
+    tableRef: state.tableRef,
   }));
 
   const [showColumnsMenu, setShowColumnsMenu] = useState(false);
@@ -97,12 +99,11 @@ const Table = ({
     y: 0,
   });
   const [isRowFocused, setIsRowFocused] = useState(false);
-  const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        tableRef.current &&
+        tableRef?.current &&
         !tableRef.current.contains(event.target as Node)
       ) {
         setIsRowFocused(false);
@@ -117,7 +118,7 @@ const Table = ({
         true
       );
     };
-  }, []);
+  }, [tableRef]);
 
   useEffect(() => {
     if (selectedKey === undefined) {
@@ -151,7 +152,7 @@ const Table = ({
   );
 
   return (
-    <div className="w-full h-full flex flex-col text-raisin-black dark:text-bright-gray">
+    <div className="w-full h-full flex flex-col text-raisin-black dark:text-bright-gray overflow-hidden">
       {!hideTableTopBar && (
         <>
           <TableTopBar
@@ -177,7 +178,7 @@ const Table = ({
           </div>
         </>
       )}
-      <div className="w-full flex-1 h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz overflow-hidden">
+      <div className="w-full flex-1 h-full flex divide-x divide-american-silver dark:divide-quartz border-t border-gray-300 dark:border-quartz overflow-auto">
         {showFilterSidebar && (
           <Resizable
             minWidth="100px"
@@ -185,7 +186,7 @@ const Table = ({
             enable={{
               right: true,
             }}
-            className="overflow-auto h-full"
+            className="h-full"
           >
             <TableFiltersSidebar
               filters={filters}
@@ -208,9 +209,9 @@ const Table = ({
             position={columnPosition}
           />
           <table
-            className="h-full w-full table-auto border-separate border-spacing-0 relative"
+            className="h-full w-full table-fixed border-separate border-spacing-0 relative border-r border-american-silver dark:border-quartz overflow-clip"
             style={{
-              minWidth: minWidth ?? '70rem',
+              minWidth: minWidth ?? 'auto',
             }}
             ref={tableRef}
           >

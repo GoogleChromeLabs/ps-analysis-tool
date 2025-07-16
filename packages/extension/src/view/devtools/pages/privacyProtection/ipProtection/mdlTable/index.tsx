@@ -71,9 +71,12 @@ const MDLTable = () => {
             owner = 'PSL Domain';
           }
 
+          const scriptBlocking = item[2];
+
           return {
             domain: item[0],
             owner,
+            scriptBlocking,
           };
         })
       );
@@ -86,6 +89,7 @@ const MDLTable = () => {
         header: 'Domain',
         accessorKey: 'domain',
         cell: (info) => info,
+        initialWidth: 100,
       },
       {
         header: 'Owner',
@@ -105,6 +109,12 @@ const MDLTable = () => {
 
           return info;
         },
+        initialWidth: 100,
+      },
+      {
+        header: 'Impacted by Script Blocking',
+        accessorKey: 'scriptBlocking',
+        cell: (info) => info,
       },
     ],
     []

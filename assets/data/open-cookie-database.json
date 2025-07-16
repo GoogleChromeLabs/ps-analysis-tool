@@ -28622,5 +28622,18 @@
       "gdprUrl": "https://privacy.baidu.com/policy/PrivacyPolicy",
       "wildcard": "0"
     }
+  ],
+  "_gtmeec": [
+    {
+      "platform": "Stape",
+      "category": "Marketing",
+      "name": "_gtmeec",
+      "domain": "",
+      "description": "OCD__gtmeec_description",
+      "retention": "OCD_retention_3_months",
+      "dataController": "Stape",
+      "gdprUrl": "https://stape.io/privacy-notice",
+      "wildcard": "0"
+    }
   ]
 }
