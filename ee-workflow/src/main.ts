@@ -1547,44 +1547,77 @@ class Main {
    * Resets the helper queue, and reloads the queues with correct creation order.
    */
   resetAfterHelperQueue() {
-    this.helperQueue = [];
-    this.helperGroupQueue = [];
-    this.helperAnimatorQueue = [];
     this.figureToStart = undefined;
     this.checkpoints = new Set<string>();
     this.p5.clear();
 
-    if (this.isTravelling) {
-      this.traveller?.completeTravelling();
-      this.traveller = null;
-      this.isTravelling = false;
+    while (this.isTravelling) {
+      this.runTraveller();
     }
 
-    const figures = [
-      ...new Set<Figure>(
-        [...this.stepsQueue, ...this.instantQueue, ...this.snapshot].sort(
-          (a, b) => a.getCreationOrder() - b.getCreationOrder()
-        )
-      ),
+    let figures = [
+      ...[
+        ...this.stepsQueue,
+        ...this.instantQueue,
+        ...this.snapshot,
+        ...this.helperQueue,
+      ].sort((a, b) => a.getCreationOrder() - b.getCreationOrder()),
     ];
-    const groups = [
-      ...new Set<Group>(
-        [
-          ...this.groupStepsQueue,
-          ...this.groupInstantQueue,
-          ...this.groupSnapshot,
-        ].sort((a, b) => a.getCreationOrder() - b.getCreationOrder())
-      ),
+    const figuresCreationSet = new Set(
+      figures.map((figure) => figure.getCreationOrder())
+    );
+    figures = figures.filter((figure) => {
+      if (figuresCreationSet.has(figure.getCreationOrder())) {
+        figuresCreationSet.delete(figure.getCreationOrder());
+        return true;
+      }
+
+      return false;
+    });
+
+    let groups = [
+      ...[
+        ...this.groupStepsQueue,
+        ...this.groupInstantQueue,
+        ...this.groupSnapshot,
+        ...this.helperGroupQueue,
+      ].sort((a, b) => a.getCreationOrder() - b.getCreationOrder()),
     ];
-    const animators = [
-      ...new Set<Animator>(
-        [
-          ...this.animatorStepsQueue,
-          ...this.animatorInstantQueue,
-          ...this.animatorSnapshot,
-        ].sort((a, b) => a.getCreationOrder() - b.getCreationOrder())
-      ),
+    const groupsCreationSet = new Set(
+      groups.map((group) => group.getCreationOrder())
+    );
+    groups = groups.filter((group) => {
+      if (groupsCreationSet.has(group.getCreationOrder())) {
+        groupsCreationSet.delete(group.getCreationOrder());
+        return true;
+      }
+
+      return false;
+    });
+
+    let animators = [
+      ...[
+        ...this.animatorStepsQueue,
+        ...this.animatorInstantQueue,
+        ...this.animatorSnapshot,
+        ...this.helperAnimatorQueue,
+      ].sort((a, b) => a.getCreationOrder() - b.getCreationOrder()),
     ];
+    const animatorCreationSet = new Set(
+      animators.map((animator) => animator.getCreationOrder())
+    );
+    animators = animators.filter((animator) => {
+      if (animatorCreationSet.has(animator.getCreationOrder())) {
+        animatorCreationSet.delete(animator.getCreationOrder());
+        return true;
+      }
+
+      return false;
+    });
+
+    this.helperQueue = [];
+    this.helperGroupQueue = [];
+    this.helperAnimatorQueue = [];
 
     this.instantQueue = [];
     this.groupInstantQueue = [];
