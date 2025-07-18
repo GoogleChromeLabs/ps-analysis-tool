@@ -1778,8 +1778,21 @@ class Main {
    * Loads a checkpoint into the helper queue.
    * @param checkpoint - The checkpoint to load into the helper queue.
    */
+  // eslint-disable-next-line complexity
   loadCheckpointToHelper(checkpoint: string) {
     if (this.helperQueue.length) {
+      if (!this.helperQueue[0].getIsCheckpoint()) {
+        let index = this.snapshot.length - 1;
+        while (index >= 0 && !this.snapshot[index].getIsCheckpoint()) {
+          index--;
+        }
+
+        while (index < this.snapshot.length) {
+          this.snapshot[index].draw();
+          index++;
+        }
+      }
+
       return;
     }
 
