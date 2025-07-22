@@ -34,6 +34,7 @@ export interface CookieStoreContext {
     contextInvalidated: boolean;
     canStartInspecting: boolean;
     frameHasCookies: Record<string, boolean> | null;
+    showBlockedCookies: boolean;
   };
   actions: {
     setSelectedFrame: (key: string | null) => void;
@@ -41,6 +42,7 @@ export interface CookieStoreContext {
     getCookiesSetByJavascript: () => void;
     setContextInvalidated: React.Dispatch<React.SetStateAction<boolean>>;
     setCanStartInspecting: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowBlockedCookies: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -55,8 +57,10 @@ const initialState: CookieStoreContext = {
     contextInvalidated: false,
     canStartInspecting: false,
     frameHasCookies: null,
+    showBlockedCookies: false,
   },
   actions: {
+    setShowBlockedCookies: noop,
     setSelectedFrame: noop,
     setIsInspecting: noop,
     getCookiesSetByJavascript: noop,
