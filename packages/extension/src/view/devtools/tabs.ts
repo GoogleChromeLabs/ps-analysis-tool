@@ -49,6 +49,8 @@ import {
   ProtectionIcon,
   SiteBoundariesIconWhite,
   DemosIcon,
+  BlockIcon,
+  BlockIconWhite,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { addUTMParams } from '@google-psat/common';
@@ -336,6 +338,25 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: ProtectionIcon,
+              props: {
+                className: 'fill-bright-gray relative right-[3px]',
+              },
+            },
+            children: {},
+          },
+          [SIDEBAR_ITEMS_KEYS.SCRIPT_BLOCKING]: {
+            title: () => 'Script Blocking',
+            panel: {
+              Element: IPProtection,
+            },
+            icon: {
+              Element: BlockIcon,
+              props: {
+                className: 'fill-granite-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: BlockIconWhite,
               props: {
                 className: 'fill-bright-gray relative right-[3px]',
               },

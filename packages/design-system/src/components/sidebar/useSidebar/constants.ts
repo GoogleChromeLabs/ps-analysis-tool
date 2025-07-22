@@ -42,5 +42,6 @@ export enum SIDEBAR_ITEMS_KEYS {
   STORAGE_ACCESS = 'storage-access',
   FEDERATED_CREDENTIAL = 'federated-credential',
   IP_PROTECTION = 'ip-protection',
+  SCRIPT_BLOCKING = 'script-blocking',
   PRIVATE_STATE_TOKENS = 'private-state-tokens',
 }
