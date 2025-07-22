@@ -84,6 +84,7 @@ import {
   FederatedCredential,
   IPProtection,
   PrivateStateTokens,
+  ScriptBlocking,
 } from './pages';
 import HelpCenter from './pages/learning/helpCenter';
 import Demos from './pages/learning/demos';
@@ -347,7 +348,7 @@ const TABS: SidebarItems = {
           [SIDEBAR_ITEMS_KEYS.SCRIPT_BLOCKING]: {
             title: () => 'Script Blocking',
             panel: {
-              Element: IPProtection,
+              Element: ScriptBlocking,
             },
             icon: {
               Element: BlockIcon,
