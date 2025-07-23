@@ -35,6 +35,12 @@ import React, { useEffect, useMemo, useState } from 'react';
  */
 import Legend from './legend';
 
+export const IMPACTED_BY_SCRIPT_BLOCKING = {
+  NONE: 'Not Impacted By Script Blocking',
+  PARTIAL: 'Some URLs are Blocked',
+  ENTIRE: 'Entire Domain Blocked',
+};
+
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
@@ -44,24 +50,24 @@ const MDLTable = () => {
 
   useEffect(() => {
     (async () => {
-      const data = await fetch(
+      const response = await fetch(
         'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md'
       );
 
-      if (!data.ok) {
-        throw new Error(`HTTP error! status: ${data.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const text = await data.text();
+      const text = await response.text();
 
       const lines = text
         .split('\n')
         .filter((line) => line.includes('|'))
         .slice(2);
 
-      const mdlData = lines.map((line) =>
-        line.split('|').map((item) => item.trim())
-      );
+      const mdlData = lines
+        .map((line) => line.split('|').map((item) => item.trim()))
+        .filter((item) => item[2] !== IMPACTED_BY_SCRIPT_BLOCKING.NONE);
 
       setTableData(() =>
         mdlData.map((item: string[]) => {
