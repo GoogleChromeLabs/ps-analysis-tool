@@ -30,10 +30,10 @@ const Panel = () => {
 
   return (
     <LandingPage
-      title="IP Protection"
+      title="Script Blocking"
       contentPanel={
         ActiveTabContent && (
-          <div className={className} data-testid="ip-protection-content">
+          <div className={className} data-testid="script-blocking-content">
             <ActiveTabContent {...props} />
           </div>
         )

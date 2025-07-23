@@ -67,8 +67,36 @@ export class DataStore {
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
       isPAAnalysisEnabled: boolean;
+      uniqueResponseDomains: string[];
     };
   } = {};
+
+  updateUniqueResponseDomains(tabId: string, requestId: string) {
+    if (!DataStore.requestIdToCDPURLMapping[tabId]) {
+      return;
+    }
+
+    const request = DataStore.requestIdToCDPURLMapping[tabId][requestId];
+
+    if (
+      !request ||
+      !isValidURL(request.url) ||
+      request.url.startsWith('chrome://') ||
+      request.url.startsWith('chrome-extension://') ||
+      request.url.startsWith('file://')
+    ) {
+      return;
+    }
+
+    const hostname = new URL(request.url).hostname;
+
+    if (
+      !DataStore.tabs[tabId].uniqueResponseDomains.includes(hostname) &&
+      hostname !== 'null'
+    ) {
+      DataStore.tabs[tabId].uniqueResponseDomains.push(hostname);
+    }
+  }
 
   /**
    * This function adds frame to the appropriate tab.
@@ -189,6 +217,7 @@ export class DataStore {
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
       isPAAnalysisEnabled: true,
+      uniqueResponseDomains: [],
     };
   }
 
