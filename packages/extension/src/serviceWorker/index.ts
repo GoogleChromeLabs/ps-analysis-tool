@@ -29,6 +29,8 @@ import PAStore from '../store/PAStore';
 import ARAStore from '../store/ARAStore';
 import attachCDP from './attachCDP';
 import readHeaderAndRegister from './readHeaderAndRegister';
+import PRTStore from '../store/PRTStore';
+import { isEqual } from 'lodash-es';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -360,6 +362,32 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.requestWillBeSentExtraInfo') {
         const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
+
+        if (extractHeader('Sec-Probabilistic-Reveal-Token', headers)) {
+          const decodedToken = await PRTStore.decryptTokenHeader(
+            headers['Sec-Probabilistic-Reveal-Token'] ??
+              headers['sec-probabilistic-reveal-token']
+          );
+          const plainTextToken = await PRTStore.getPlaintextToken(decodedToken);
+
+          if (
+            plainTextToken &&
+            !PRTStore.tabTokens[tabId].plainTextToken.some((token) =>
+              isEqual(token, plainTextToken)
+            )
+          ) {
+            PRTStore.tabTokens[tabId].plainTextToken.push(plainTextToken);
+          }
+
+          if (
+            decodedToken &&
+            !PRTStore.tabTokens[tabId].decryptedToken.some((token) =>
+              isEqual(token, decodedToken)
+            )
+          ) {
+            PRTStore.tabTokens[tabId].decryptedToken.push(decodedToken);
+          }
+        }
 
         if (DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           if (extractHeader('Attribution-Reporting-Eligible', headers)) {

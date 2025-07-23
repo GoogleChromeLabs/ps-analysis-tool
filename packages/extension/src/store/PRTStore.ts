@@ -21,6 +21,8 @@ import type {
   PlaintTextToken,
   ProbablisticRevealToken,
 } from '@google-psat/common';
+import { ec as ellipticEc } from 'elliptic';
+
 /**
  * Internal dependencies.
  */
@@ -247,7 +249,7 @@ class PRTStore extends DataStore {
       const keyData = await response.json();
 
       //@ts-ignore
-      const ec = new window.elliptic.ec('p256');
+      const ec = new ellipticEc('p256');
 
       const dB64 = keyData.eg.d;
       const dHex = atob(dB64.replace(/_/g, '/').replace(/-/g, '+'))
@@ -289,7 +291,7 @@ class PRTStore extends DataStore {
       return {
         plaintext,
         hmacSecret,
-      };
+      } as unknown as DecryptedToken;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log(`Error: ${e}`);
@@ -331,7 +333,7 @@ class PRTStore extends DataStore {
         ordinal,
         signal,
         hmacValid,
-      };
+      } as PlaintTextToken;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log('Cannot parse plaintext.', e);
