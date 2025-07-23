@@ -33,6 +33,7 @@ import {
   useProtectedAudience,
   useSettings,
   usePrebid,
+  useProbabilisticRevealTokens,
 } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -60,6 +61,8 @@ const mockUseTablePersistentSettingStore =
 const mockUseProtectedAudienceStore = useProtectedAudience as jest.Mock;
 const mockUseSettingsStore = useSettings as jest.Mock;
 const mockPrebidStore = usePrebid as jest.Mock;
+const mockProbabilisticRevealTokensStore =
+  useProbabilisticRevealTokens as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {
@@ -256,6 +259,13 @@ describe('App', () => {
       setPreferences: noop,
     });
     mockUseSettingsStore.mockReturnValue({ isUsingCDP: false });
+    mockProbabilisticRevealTokensStore.mockReturnValue({
+      state: {
+        plainTextTokens: [],
+        decodedTokens: [],
+        prtTokens: [],
+      },
+    });
 
     act(() => {
       render(<App />);
