@@ -20,6 +20,7 @@ import ARAStore from '../ARAStore';
 import cookieStore from '../cookieStore';
 import PAStore from '../PAStore';
 import prebidStore from '../prebidStore';
+import dataStore from '../dataStore';
 
 /**
  * Sends updated data to popup and developer tools for multiple store instances.
@@ -32,6 +33,7 @@ function sendUpdatedData(tabId: string, overrideForInitialSync = false) {
   PAStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
   ARAStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
   prebidStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
+  dataStore.sendUpdatedDataToPopupAndDevTools(tabId);
 }
 
 export default sendUpdatedData;

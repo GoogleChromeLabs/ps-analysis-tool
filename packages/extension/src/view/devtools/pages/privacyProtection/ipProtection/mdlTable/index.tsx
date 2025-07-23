@@ -89,7 +89,7 @@ const MDLTable = () => {
         header: 'Domain',
         accessorKey: 'domain',
         cell: (info) => info,
-        initialWidth: 100,
+        initialWidth: 150,
       },
       {
         header: 'Owner',
@@ -109,12 +109,7 @@ const MDLTable = () => {
 
           return info;
         },
-        initialWidth: 100,
-      },
-      {
-        header: 'Impacted by Script Blocking',
-        accessorKey: 'scriptBlocking',
-        cell: (info) => info,
+        initialWidth: 150,
       },
     ],
     []

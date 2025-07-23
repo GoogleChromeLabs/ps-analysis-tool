@@ -98,6 +98,31 @@ export class DataStore {
     }
   }
 
+  async sendUpdatedDataToPopupAndDevTools(tabId: string) {
+    if (!DataStore.tabs[tabId]) {
+      return;
+    }
+
+    try {
+      if (
+        DataStore.tabs[tabId].devToolsOpenState ||
+        DataStore.tabs[tabId].popupOpenState
+      ) {
+        await chrome.runtime.sendMessage({
+          type: 'EXTRAS_EVENTS', // For sending extra data.
+          payload: {
+            uniqueResponseDomains: DataStore.tabs[tabId].uniqueResponseDomains,
+            tabId: Number(tabId),
+          },
+        });
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn(error);
+      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
+    }
+  }
+
   /**
    * This function adds frame to the appropriate tab.
    * @param {number} tabId The tabId of the event to which the event is pointing to.
