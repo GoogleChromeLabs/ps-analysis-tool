@@ -23,6 +23,7 @@ import { isValidURL } from '@google-psat/common';
  * Internal dependencies.
  */
 import { doesFrameExist } from '../utils/doesFrameExist';
+import { EXTRA_DATA } from '../constants';
 
 export class DataStore {
   /**
@@ -109,7 +110,7 @@ export class DataStore {
         DataStore.tabs[tabId].popupOpenState
       ) {
         await chrome.runtime.sendMessage({
-          type: 'EXTRAS_EVENTS', // For sending extra data.
+          type: EXTRA_DATA, // For sending extra data.
           payload: {
             uniqueResponseDomains: DataStore.tabs[tabId].uniqueResponseDomains,
             tabId: Number(tabId),
