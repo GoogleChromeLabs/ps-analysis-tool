@@ -20,6 +20,7 @@ import type {
   DecryptedToken,
   PlaintTextToken,
   ProbablisticRevealToken,
+  PRTMetadata,
 } from '@google-psat/common';
 import { ec as ellipticEc } from 'elliptic';
 
@@ -39,6 +40,9 @@ type TabToken = {
     plainTextToken: PlaintTextToken[];
     decryptedToken: DecryptedToken[];
     prtToken: ProbablisticRevealToken[];
+    perTokenMetadata: {
+      [prtHeader: string]: PRTMetadata;
+    };
   };
 };
 
@@ -46,6 +50,9 @@ type SingleTabTokens = {
   plainTextToken: PlaintTextToken[];
   decryptedToken: DecryptedToken[];
   prtToken: ProbablisticRevealToken[];
+  perTokenMetadata: {
+    [prtHeader: string]: PRTMetadata;
+  };
 };
 
 class PRTStore extends DataStore {
@@ -80,6 +87,7 @@ class PRTStore extends DataStore {
       plainTextToken: [],
       decryptedToken: [],
       prtToken: [],
+      perTokenMetadata: {},
     };
     //@ts-ignore
     globalThis.PSAT = {
@@ -94,22 +102,25 @@ class PRTStore extends DataStore {
    * @param {number} tabId The url whose url needs to be update.
    * @param {boolean | undefined} overrideForInitialSync Override the condition.
    */
-  async processAndSendTokens(tabId: string, overrideForInitialSync: boolean) {
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: string,
+    overrideForInitialSync: boolean
+  ) {
     try {
       if (DataStore.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
         return;
       }
 
-      const tokenData = this.tabTokens[tabId];
+      const tokenData = {
+        ...this.tabTokens[tabId],
+        perTokenMetadata: Object.values(this.tabTokens[tabId].perTokenMetadata),
+      };
 
       await chrome.runtime.sendMessage({
         type: TAB_TOKEN_DATA,
         payload: {
           tabId,
-          tokenData: tokenData,
-          extraData: {
-            extraFrameData: DataStore.tabs[tabId].frameIDURLSet,
-          },
+          tokens: tokenData,
         },
       });
 
@@ -305,7 +316,7 @@ class PRTStore extends DataStore {
    * @returns {Promise<PlaintTextToken | null>} A promise that resolves to an object containing the token's version, t_ord, signal, and a boolean hmacValid, or null if the plaintext is malformed.
    */
   async getPlaintextToken(result: any) {
-    const { plaintext, hmac_secret: hmacSecret } = result;
+    const { plaintext, hmacSecret } = result;
 
     if (plaintext.length < 26) {
       // eslint-disable-next-line no-console
@@ -328,10 +339,12 @@ class PRTStore extends DataStore {
         receivedHmac,
         hmacSecret
       );
+
       return {
         version,
         ordinal,
-        signal,
+        uint8Signal: signal,
+        humanReadableSignal: btoa(String.fromCharCode.apply(null, plaintext)),
         hmacValid,
       } as PlaintTextToken;
     } catch (e) {
@@ -376,6 +389,7 @@ class PRTStore extends DataStore {
       if (receivedHmac.length !== truncatedSignature.length) {
         return false;
       }
+
       for (let i = 0; i < receivedHmac.length; i++) {
         if (receivedHmac[i] !== truncatedSignature[i]) {
           return false;

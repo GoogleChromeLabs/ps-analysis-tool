@@ -21,6 +21,7 @@ import {
   type DecryptedToken,
   type PlaintTextToken,
   type ProbablisticRevealToken,
+  type PRTMetadata,
 } from '@google-psat/common';
 
 export interface ProbabilisticRevealTokensContextType {
@@ -28,6 +29,7 @@ export interface ProbabilisticRevealTokensContextType {
     plainTextTokens: PlaintTextToken[];
     decodedTokens: DecryptedToken[];
     prtTokens: ProbablisticRevealToken[];
+    perTokenMetadata: PRTMetadata[];
   };
 }
 
@@ -36,6 +38,7 @@ const initialState: ProbabilisticRevealTokensContextType = {
     plainTextTokens: [],
     decodedTokens: [],
     prtTokens: [],
+    perTokenMetadata: [],
   },
 };
 

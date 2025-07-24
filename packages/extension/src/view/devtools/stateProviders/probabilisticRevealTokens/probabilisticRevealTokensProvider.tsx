@@ -44,11 +44,15 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProbabilisticRevealTokensContextType['state']['plainTextTokens']
   >([]);
 
+  const [perTokenMetadata, setPerTokenMetadata] = useState<
+    ProbabilisticRevealTokensContextType['state']['perTokenMetadata']
+  >([]);
+
   const messagePassingListener = useCallback(
     (message: {
       type: string;
       payload: {
-        tabId: number;
+        tabId: string;
         tokens: ProbabilisticRevealTokensContextType['state'];
       };
     }) => {
@@ -57,6 +61,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (!message.type) {
+        return;
+      }
+
+      if (
+        message.payload.tabId !==
+        chrome.devtools.inspectedWindow.tabId.toString()
+      ) {
         return;
       }
 
@@ -80,6 +91,13 @@ const Provider = ({ children }: PropsWithChildren) => {
             return prev;
           }
           return message.payload.tokens.plainTextTokens;
+        });
+
+        setPerTokenMetadata((prev) => {
+          if (isEqual(prev, message.payload.tokens.perTokenMetadata)) {
+            return prev;
+          }
+          return message.payload.tokens.perTokenMetadata;
         });
       }
     },
@@ -105,6 +123,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       setPlainTextTokens([]);
       setDecodedTokens([]);
       setPrtTokens([]);
+      setPerTokenMetadata([]);
     },
     []
   );
@@ -129,9 +148,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         plainTextTokens,
         decodedTokens,
         prtTokens,
+        perTokenMetadata,
       },
     };
-  }, [plainTextTokens, decodedTokens, prtTokens]);
+  }, [plainTextTokens, decodedTokens, prtTokens, perTokenMetadata]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };

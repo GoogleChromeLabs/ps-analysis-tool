@@ -18,6 +18,8 @@
  */
 import { isValidURL } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
+import { isEqual } from 'lodash-es';
+
 /**
  * Internal dependencies.
  */
@@ -30,7 +32,6 @@ import ARAStore from '../store/ARAStore';
 import attachCDP from './attachCDP';
 import readHeaderAndRegister from './readHeaderAndRegister';
 import PRTStore from '../store/PRTStore';
-import { isEqual } from 'lodash-es';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -364,11 +365,34 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
         if (extractHeader('Sec-Probabilistic-Reveal-Token', headers)) {
-          const decodedToken = await PRTStore.decryptTokenHeader(
+          const prtHeader =
             headers['Sec-Probabilistic-Reveal-Token'] ??
-              headers['sec-probabilistic-reveal-token']
-          );
+            headers['sec-probabilistic-reveal-token'];
+          if (!prtHeader) {
+            return;
+          }
+
+          const prt = PRTStore.getTokenFromHeaderString(prtHeader);
+          const decodedToken = await PRTStore.decryptTokenHeader(prtHeader);
           const plainTextToken = await PRTStore.getPlaintextToken(decodedToken);
+
+          if (
+            prt &&
+            !PRTStore.tabTokens[tabId].prtToken.some((token) =>
+              isEqual(token, prt)
+            )
+          ) {
+            PRTStore.tabTokens[tabId].prtToken.push(prt);
+          }
+
+          if (
+            decodedToken &&
+            !PRTStore.tabTokens[tabId].decryptedToken.some((token) =>
+              isEqual(token, decodedToken)
+            )
+          ) {
+            PRTStore.tabTokens[tabId].decryptedToken.push(decodedToken);
+          }
 
           if (
             plainTextToken &&
@@ -379,13 +403,20 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             PRTStore.tabTokens[tabId].plainTextToken.push(plainTextToken);
           }
 
-          if (
-            decodedToken &&
-            !PRTStore.tabTokens[tabId].decryptedToken.some((token) =>
-              isEqual(token, decodedToken)
-            )
-          ) {
-            PRTStore.tabTokens[tabId].decryptedToken.push(decodedToken);
+          if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[prtHeader]) {
+            PRTStore.tabTokens[tabId].perTokenMetadata[prtHeader] = {
+              prtHeader,
+              humanReadableSignal: plainTextToken?.humanReadableSignal ?? '',
+              origin: isValidURL(
+                DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url
+              )
+                ? new URL(
+                    DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url
+                  ).origin
+                : '',
+              decryptionKeyAvailable: Boolean(decodedToken),
+            };
+            DataStore.tabs[tabId].newUpdatesPRT++;
           }
         }
 

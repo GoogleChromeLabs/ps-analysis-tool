@@ -28,8 +28,16 @@ export interface DecryptedToken {
 }
 
 export interface PlaintTextToken {
-  signal: Uint8Array<any>;
+  uint8Signal: Uint8Array<any>;
+  humanReadableSignal: string;
   ordinal: Uint8Array<any>;
   version: number;
   hmacValid: boolean;
+}
+
+export interface PRTMetadata {
+  origin: string;
+  humanReadableSignal: string;
+  decryptionKeyAvailable: boolean;
+  prtHeader: string;
 }
