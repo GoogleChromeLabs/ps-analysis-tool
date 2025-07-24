@@ -16,16 +16,46 @@
 /**
  * External dependencies.
  */
-import React, { type PropsWithChildren, useState } from 'react';
+import React, {
+  type PropsWithChildren,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 /**
  * Internal dependencies.
  */
 import Context from './context';
+import { EXTRA_DATA } from '../../../../constants';
 
 const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
   const [uniqueResponseDomains, setUniqueResponseDomains] = useState<string[]>(
     []
   );
+
+  const messagePassingListener = useCallback(
+    (message: {
+      type: string;
+      payload: {
+        uniqueResponseDomains?: string[];
+      };
+    }) => {
+      if (message.type !== EXTRA_DATA) {
+        return;
+      }
+
+      setUniqueResponseDomains(message.payload.uniqueResponseDomains || []);
+    },
+    []
+  );
+
+  useEffect(() => {
+    chrome.runtime?.onMessage?.addListener(messagePassingListener);
+
+    return () => {
+      chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+    };
+  }, [messagePassingListener]);
 
   return (
     <Context.Provider
