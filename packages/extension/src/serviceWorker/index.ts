@@ -378,29 +378,35 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           if (
             prt &&
-            !PRTStore.tabTokens[tabId].prtToken.some((token) =>
+            !PRTStore.tabTokens[tabId].prtTokens.some((token) =>
               isEqual(token, prt)
             )
           ) {
-            PRTStore.tabTokens[tabId].prtToken.push(prt);
+            PRTStore.tabTokens[tabId].prtTokens.push(prt);
           }
 
           if (
             decodedToken &&
-            !PRTStore.tabTokens[tabId].decryptedToken.some((token) =>
-              isEqual(token, decodedToken)
+            !PRTStore.tabTokens[tabId].decryptedTokens.some(
+              (token) => token.prtHeader === prtHeader
             )
           ) {
-            PRTStore.tabTokens[tabId].decryptedToken.push(decodedToken);
+            PRTStore.tabTokens[tabId].decryptedTokens.push({
+              ...decodedToken,
+              prtHeader,
+            });
           }
 
           if (
             plainTextToken &&
-            !PRTStore.tabTokens[tabId].plainTextToken.some((token) =>
-              isEqual(token, plainTextToken)
+            !PRTStore.tabTokens[tabId].plainTextTokens.some(
+              (token) => token.prtHeader === prtHeader
             )
           ) {
-            PRTStore.tabTokens[tabId].plainTextToken.push(plainTextToken);
+            PRTStore.tabTokens[tabId].plainTextTokens.push({
+              ...plainTextToken,
+              prtHeader,
+            });
           }
 
           if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[prtHeader]) {
@@ -415,6 +421,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                   ).origin
                 : '',
               decryptionKeyAvailable: Boolean(decodedToken),
+              decrypted: false,
             };
             DataStore.tabs[tabId].newUpdatesPRT++;
           }

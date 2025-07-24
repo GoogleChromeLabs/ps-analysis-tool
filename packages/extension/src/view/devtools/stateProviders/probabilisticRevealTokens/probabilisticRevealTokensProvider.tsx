@@ -32,8 +32,8 @@ import Context, { type ProbabilisticRevealTokensContextType } from './context';
 import { TAB_TOKEN_DATA } from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [decodedTokens, setDecodedTokens] = useState<
-    ProbabilisticRevealTokensContextType['state']['decodedTokens']
+  const [decryptedTokens, setDecryptedTokens] = useState<
+    ProbabilisticRevealTokensContextType['state']['decryptedTokens']
   >([]);
 
   const [prtTokens, setPrtTokens] = useState<
@@ -47,6 +47,16 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [perTokenMetadata, setPerTokenMetadata] = useState<
     ProbabilisticRevealTokensContextType['state']['perTokenMetadata']
   >([]);
+
+  const decryptToken = useCallback((prtHeader: string) => {
+    chrome.runtime.sendMessage({
+      type: 'DECRYPT_TOKEN',
+      payload: {
+        tabId: chrome.devtools.inspectedWindow.tabId,
+        prtHeader,
+      },
+    });
+  }, []);
 
   const messagePassingListener = useCallback(
     (message: {
@@ -79,11 +89,11 @@ const Provider = ({ children }: PropsWithChildren) => {
           return message.payload.tokens.prtTokens;
         });
 
-        setDecodedTokens((prev) => {
-          if (isEqual(prev, message.payload.tokens.decodedTokens)) {
+        setDecryptedTokens((prev) => {
+          if (isEqual(prev, message.payload.tokens.decryptedTokens)) {
             return prev;
           }
-          return message.payload.tokens.decodedTokens;
+          return message.payload.tokens.decryptedTokens;
         });
 
         setPlainTextTokens((prev) => {
@@ -121,7 +131,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       setPlainTextTokens([]);
-      setDecodedTokens([]);
+      setDecryptedTokens([]);
       setPrtTokens([]);
       setPerTokenMetadata([]);
     },
@@ -146,12 +156,21 @@ const Provider = ({ children }: PropsWithChildren) => {
     return {
       state: {
         plainTextTokens,
-        decodedTokens,
+        decryptedTokens,
         prtTokens,
         perTokenMetadata,
       },
+      actions: {
+        decryptToken,
+      },
     };
-  }, [plainTextTokens, decodedTokens, prtTokens, perTokenMetadata]);
+  }, [
+    plainTextTokens,
+    decryptToken,
+    prtTokens,
+    perTokenMetadata,
+    decryptedTokens,
+  ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };

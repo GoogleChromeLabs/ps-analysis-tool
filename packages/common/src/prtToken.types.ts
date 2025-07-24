@@ -22,12 +22,12 @@ export interface ProbablisticRevealToken {
   epochIdBase64: string;
 }
 
-export interface DecryptedToken {
+interface DecryptedToken {
   plainText: Uint8Array<any>;
   hmacSecret: Uint8Array<ArrayBuffer>;
 }
 
-export interface PlaintTextToken {
+interface PlaintTextToken {
   uint8Signal: Uint8Array<any>;
   humanReadableSignal: string;
   ordinal: Uint8Array<any>;
@@ -40,4 +40,13 @@ export interface PRTMetadata {
   humanReadableSignal: string;
   decryptionKeyAvailable: boolean;
   prtHeader: string;
+  decrypted: boolean;
 }
+
+export type UniquePlainTextToken = PlaintTextToken & {
+  prtHeader?: string;
+};
+
+export type UniqueDecryptedToken = DecryptedToken & {
+  prtHeader?: string;
+};

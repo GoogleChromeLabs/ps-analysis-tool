@@ -17,8 +17,8 @@
  * External dependencies.
  */
 import type {
-  DecryptedToken,
-  PlaintTextToken,
+  UniqueDecryptedToken,
+  UniquePlainTextToken,
   ProbablisticRevealToken,
   PRTMetadata,
 } from '@google-psat/common';
@@ -37,9 +37,9 @@ const BITS_PER_BYTE = 8;
 
 type TabToken = {
   [tabId: string]: {
-    plainTextToken: PlaintTextToken[];
-    decryptedToken: DecryptedToken[];
-    prtToken: ProbablisticRevealToken[];
+    plainTextTokens: UniquePlainTextToken[];
+    decryptedTokens: UniqueDecryptedToken[];
+    prtTokens: ProbablisticRevealToken[];
     perTokenMetadata: {
       [prtHeader: string]: PRTMetadata;
     };
@@ -47,9 +47,9 @@ type TabToken = {
 };
 
 type SingleTabTokens = {
-  plainTextToken: PlaintTextToken[];
-  decryptedToken: DecryptedToken[];
-  prtToken: ProbablisticRevealToken[];
+  plainTextTokens: UniquePlainTextToken[];
+  decryptedTokens: UniqueDecryptedToken[];
+  prtTokens: ProbablisticRevealToken[];
   perTokenMetadata: {
     [prtHeader: string]: PRTMetadata;
   };
@@ -84,9 +84,9 @@ class PRTStore extends DataStore {
   initialiseVariablesForNewTab(tabId: string): void {
     super.initialiseVariablesForNewTab(tabId);
     this.tabTokens[tabId] = {
-      plainTextToken: [],
-      decryptedToken: [],
-      prtToken: [],
+      plainTextTokens: [],
+      decryptedTokens: [],
+      prtTokens: [],
       perTokenMetadata: {},
     };
     //@ts-ignore
@@ -239,7 +239,7 @@ class PRTStore extends DataStore {
    * The core decryption function. It orchestrates the process of parsing the token header,
    * fetching the correct private key based on the token's epochId, and performing elliptic curve decryption.
    * @param {string} prtHeader The Base64-encoded PRT header string.
-   * @returns {Promise<DecryptedToken | null>} - A promise that resolves to an object containing the decrypted plaintext (as a Uint8Array) and the hmac_secret (as a Uint8Array), or null if any step in the decryption process fails.
+   * @returns {Promise<decryptedTokens | null>} - A promise that resolves to an object containing the decrypted plaintext (as a Uint8Array) and the hmac_secret (as a Uint8Array), or null if any step in the decryption process fails.
    */
   async decryptTokenHeader(prtHeader: string) {
     const prt = this.getTokenFromHeaderString(prtHeader);
@@ -302,7 +302,7 @@ class PRTStore extends DataStore {
       return {
         plaintext,
         hmacSecret,
-      } as unknown as DecryptedToken;
+      } as unknown as UniqueDecryptedToken;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log(`Error: ${e}`);
@@ -346,7 +346,7 @@ class PRTStore extends DataStore {
         uint8Signal: signal,
         humanReadableSignal: btoa(String.fromCharCode.apply(null, plaintext)),
         hmacValid,
-      } as PlaintTextToken;
+      } as UniquePlainTextToken;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log('Cannot parse plaintext.', e);

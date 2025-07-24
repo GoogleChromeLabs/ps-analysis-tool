@@ -18,27 +18,34 @@
  */
 import {
   createContext,
-  type DecryptedToken,
-  type PlaintTextToken,
+  type UniqueDecryptedToken,
+  type UniquePlainTextToken,
   type ProbablisticRevealToken,
   type PRTMetadata,
+  noop,
 } from '@google-psat/common';
 
 export interface ProbabilisticRevealTokensContextType {
   state: {
-    plainTextTokens: PlaintTextToken[];
-    decodedTokens: DecryptedToken[];
+    plainTextTokens: UniquePlainTextToken[];
+    decryptedTokens: UniqueDecryptedToken[];
     prtTokens: ProbablisticRevealToken[];
     perTokenMetadata: PRTMetadata[];
+  };
+  actions: {
+    decryptToken: (prtHeader: string) => void;
   };
 }
 
 const initialState: ProbabilisticRevealTokensContextType = {
   state: {
     plainTextTokens: [],
-    decodedTokens: [],
+    decryptedTokens: [],
     prtTokens: [],
     perTokenMetadata: [],
+  },
+  actions: {
+    decryptToken: noop,
   },
 };
 
