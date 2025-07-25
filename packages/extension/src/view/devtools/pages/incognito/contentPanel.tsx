@@ -30,7 +30,7 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
       <div className="w-[400px] min-w-[400px] h-[450px] lg:w-[800px] lg:min-w-[600px] lg:h-[400px] overflow-hidden flex justify-center items-center p-8">
         <FrameContent color={frameColor}>
           <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-            <div className="mb-3 lg:mb-5 scale-75 lg:scale-100">
+            <div className="mb-3 lg:mb-5 scale-125 lg:scale-150">
               <IncognitoIcon height={45} />
             </div>
 
