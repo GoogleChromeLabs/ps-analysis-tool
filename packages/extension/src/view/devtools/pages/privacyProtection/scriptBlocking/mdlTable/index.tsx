@@ -171,6 +171,20 @@ const MDLTable = () => {
       owner: {
         title: 'Owner',
       },
+      scriptBlocking: {
+        title: 'Impacted by Script Blocking',
+        hasStaticFilterValues: true,
+        filterValues: {
+          ['Some URLs are Blocked']: {
+            selected: false,
+            description: 'Some URLs are Blocked',
+          },
+          ['Entire Domain Blocked']: {
+            selected: false,
+            description: 'Entire Domain Blocked',
+          },
+        },
+      },
     }),
     []
   );
