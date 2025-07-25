@@ -40,6 +40,7 @@ import {
   Button,
   Tick,
   Plus,
+  ExternalLinkBlack,
 } from '@google-psat/design-system';
 import { Resizable } from 're-resizable';
 import { I18n } from '@google-psat/i18n';
@@ -59,6 +60,7 @@ import {
   CDP_WARNING_MESSAGE,
   RELOAD_WARNING_MESSAGE,
 } from '../../../constants';
+import { getCurrentTab } from '../../../utils/getCurrentTab';
 
 interface LayoutProps {
   setSidebarData: React.Dispatch<React.SetStateAction<SidebarItems>>;
@@ -79,6 +81,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     isUsingCDPForSettingsPageDisplay,
     setSettingsChanged,
     setIsUsingCDPForSettingsPageDisplay,
+    incognitoAccess,
+    openIncognitoTab,
   } = useSettings(({ state, actions }) => ({
     settingsChanged: state.settingsChanged,
     handleSettingsChange: actions.handleSettingsChange,
@@ -87,6 +91,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     setIsUsingCDPForSettingsPageDisplay:
       actions.setIsUsingCDPForSettingsPageDisplay,
     isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
+    incognitoAccess: state.incognitoAccess,
+    openIncognitoTab: actions.openIncognitoTab,
   }));
 
   const {
@@ -192,6 +198,50 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         }
       }
 
+      (async () => {
+        const currentTab = await getCurrentTab();
+        const isFirstVisit =
+          (await chrome.storage.sync.get('isFirstTime'))?.isFirstTime ?? false;
+
+        if (currentTab?.incognito) {
+          delete data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB];
+          data[SIDEBAR_ITEMS_KEYS.SETTINGS].addDivider = false;
+          return;
+        }
+        data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].containerClassName =
+          incognitoAccess ? '' : 'disabled opacity-50';
+        data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle = incognitoAccess
+          ? 'Open in Incognito'
+          : 'You will be redirected to the settings page, please enable incognito access for this extension.';
+
+        if (data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel) {
+          data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.props = {
+            onClick: openIncognitoTab,
+          };
+        }
+        if (!isFirstVisit) {
+          data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].extraInterfaceToTitle = {
+            Element: () => {
+              return (
+                <div
+                  className="hover:cursor-pointer"
+                  onClick={openIncognitoTab}
+                >
+                  <ExternalLinkBlack
+                    className={`${
+                      isSidebarFocused
+                        ? 'dark:fill-bright-gray fill-bright-gray'
+                        : 'dark:fill-bright-gray fill-granite-gray'
+                    }`}
+                    width="14"
+                  />
+                </div>
+              );
+            },
+          };
+        }
+      })();
+
       return data;
     });
   }, [
@@ -204,6 +254,8 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     setIsInspecting,
     setSidebarData,
     tabFrames,
+    incognitoAccess,
+    openIncognitoTab,
   ]);
 
   const buttonReloadActionCompnent = useMemo(() => {
