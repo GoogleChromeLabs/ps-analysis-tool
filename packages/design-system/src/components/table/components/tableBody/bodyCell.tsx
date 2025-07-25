@@ -37,6 +37,7 @@ interface BodyCellProps {
   accessorKey?: string;
   hasVerticalBar?: boolean;
   verticalBarColorHash?: string;
+  isHighlighted?: boolean;
 }
 
 const BodyCell = ({
@@ -49,6 +50,7 @@ const BodyCell = ({
   accessorKey,
   hasVerticalBar = false,
   verticalBarColorHash,
+  isHighlighted = false,
 }: BodyCellProps) => {
   const IconElement = icon?.Element;
   const cellValue = cell?.() ?? '';
@@ -68,9 +70,9 @@ const BodyCell = ({
           e.stopPropagation();
         }
       }}
-      className={`max-w-40 relative box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit dark:text-bright-gray ${
+      className={`max-w-40 relative box-border outline-0 px-1 py-px text-xs cursor-default flex-1 min-h-fit ${
         rowHeightClass ?? 'min-h-5'
-      }`}
+      } ${isHighlighted ? 'dark:text-black' : 'dark:text-bright-gray'}`}
     >
       {/* Vertical bar for some indication, styles can also be made dynamic.*/}
       {hasVerticalBar && (

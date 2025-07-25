@@ -78,6 +78,8 @@ export type TableData = (
   | UserEID
 ) & {
   highlighted?: boolean;
+  highlightedClass?: string; // Optional class for highlighting rows
+  scrollToHighlighted?: boolean; // Optional flag to scroll to highlighted row
 };
 
 export interface ClassificationResult {

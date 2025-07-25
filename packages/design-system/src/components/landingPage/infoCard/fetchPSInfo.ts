@@ -30,6 +30,7 @@ export enum PSInfoKey {
   'StorageAccess' = 'storage-access',
   'FedCM' = 'fedcm',
   'IPProtection' = 'ip-protection',
+  'ScriptBlocking' = 'script-blocking',
   'PrivateStateTokens' = 'private-state-tokens',
 }
 

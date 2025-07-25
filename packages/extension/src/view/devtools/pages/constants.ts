@@ -36,6 +36,10 @@ const LINKS = {
     doc: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
     story: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
   },
+  SCRIPT_BLOCKING: {
+    doc: 'https://privacysandbox.google.com/protections/script-blocking',
+    story: '',
+  },
   BOUNCE_TRACKING: {
     doc: 'https://privacysandbox.google.com/protections/bounce-tracking-mitigations',
     story:
@@ -281,6 +285,11 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
         name: 'IP Protection',
         sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
         url: LINKS.IP_PROTECTION.doc,
+      },
+      {
+        name: 'Script Blocking',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.SCRIPT_BLOCKING,
+        url: LINKS.SCRIPT_BLOCKING.doc,
       },
       {
         name: I18n.getMessage('bounceTracking'),

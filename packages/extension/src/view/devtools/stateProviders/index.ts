@@ -21,3 +21,4 @@ export * from './webStories';
 export * from './attributionReporting';
 export * from './prebid';
 export * from './topicsClassifier';
+export * from './scriptBlocking';

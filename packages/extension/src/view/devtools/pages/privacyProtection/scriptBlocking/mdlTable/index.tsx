@@ -34,36 +34,55 @@ import React, { useEffect, useMemo, useState } from 'react';
  * Internal dependencies
  */
 import Legend from './legend';
+import { useScriptBlocking } from '../../../../stateProviders';
+
+export const IMPACTED_BY_SCRIPT_BLOCKING = {
+  NONE: 'Not Impacted By Script Blocking',
+  PARTIAL: 'Some URLs are Blocked',
+  ENTIRE: 'Entire Domain Blocked',
+};
+
+const DATA_URL =
+  'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md';
+
+interface TableDataType {
+  domain: string;
+  owner: string;
+  scriptBlocking: string;
+  highlighted?: boolean;
+  highlightedClass?: string; // Optional class for highlighting rows
+}
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const { uniqueResponseDomains = [] } = useScriptBlocking(({ state }) => ({
+    uniqueResponseDomains: state.uniqueResponseDomains,
+  }));
 
-  const [tableData, setTableData] = useState<
-    { domain: string; owner: string }[]
+  const [initialTableData, setinitialTableData] = useState<
+    { domain: string; owner: string; scriptBlocking: string }[]
   >([]);
 
   useEffect(() => {
     (async () => {
-      const data = await fetch(
-        'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md'
-      );
+      const response = await fetch(DATA_URL);
 
-      if (!data.ok) {
-        throw new Error(`HTTP error! status: ${data.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const text = await data.text();
+      const text = await response.text();
 
       const lines = text
         .split('\n')
         .filter((line) => line.includes('|'))
         .slice(2);
 
-      const mdlData = lines.map((line) =>
-        line.split('|').map((item) => item.trim())
-      );
+      const mdlData = lines
+        .map((line) => line.split('|').map((item) => item.trim()))
+        .filter((item) => item[2] !== IMPACTED_BY_SCRIPT_BLOCKING.NONE);
 
-      setTableData(() =>
+      setinitialTableData(() =>
         mdlData.map((item: string[]) => {
           let owner = item[1];
 
@@ -83,13 +102,42 @@ const MDLTable = () => {
     })();
   }, []);
 
+  const tableData: TableDataType[] = useMemo(() => {
+    if (initialTableData.length === 0) {
+      return [];
+    }
+
+    const data: TableDataType[] = [];
+
+    initialTableData.forEach((item) => {
+      let available = false;
+
+      if (uniqueResponseDomains.includes(item.domain)) {
+        available = true;
+      }
+
+      data.push({
+        ...item,
+        highlighted: available,
+        highlightedClass:
+          available && item.scriptBlocking.startsWith('Some URLs are Blocked')
+            ? 'bg-amber-100'
+            : '',
+      } as TableDataType);
+    });
+
+    return data.sort((a, b) => {
+      return Number(b.highlighted) - Number(a.highlighted);
+    });
+  }, [uniqueResponseDomains, initialTableData]);
+
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
         header: 'Domain',
         accessorKey: 'domain',
         cell: (info) => info,
-        initialWidth: 150,
+        initialWidth: 100,
       },
       {
         header: 'Owner',
@@ -109,7 +157,12 @@ const MDLTable = () => {
 
           return info;
         },
-        initialWidth: 150,
+        initialWidth: 100,
+      },
+      {
+        header: 'Impacted by Script Blocking',
+        accessorKey: 'scriptBlocking',
+        cell: (info) => info,
       },
     ],
     []
@@ -119,6 +172,20 @@ const MDLTable = () => {
     () => ({
       owner: {
         title: 'Owner',
+      },
+      scriptBlocking: {
+        title: 'Impacted by Script Blocking',
+        hasStaticFilterValues: true,
+        filterValues: {
+          [IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL]: {
+            selected: false,
+            description: IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL,
+          },
+          [IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE]: {
+            selected: false,
+            description: IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE,
+          },
+        },
       },
     }),
     []
