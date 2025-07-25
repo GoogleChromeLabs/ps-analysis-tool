@@ -177,13 +177,13 @@ const MDLTable = () => {
         title: 'Impacted by Script Blocking',
         hasStaticFilterValues: true,
         filterValues: {
-          ['Some URLs are Blocked']: {
+          [IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL]: {
             selected: false,
-            description: 'Some URLs are Blocked',
+            description: IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL,
           },
-          ['Entire Domain Blocked']: {
+          [IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE]: {
             selected: false,
-            description: 'Entire Domain Blocked',
+            description: IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE,
           },
         },
       },
