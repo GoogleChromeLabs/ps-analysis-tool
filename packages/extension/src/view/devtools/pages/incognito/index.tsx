@@ -32,7 +32,7 @@ type IncognitoProps = {
 const Incognito = ({ onClick }: IncognitoProps) => {
   return (
     <LandingPage
-      title="Incognito"
+      title="Incognito Mode"
       contentPanel={
         <ContentPanel frameColor="privacy-blue" onClick={onClick} />
       }
