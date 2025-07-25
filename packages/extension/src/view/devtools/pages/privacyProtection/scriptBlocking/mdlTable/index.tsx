@@ -126,7 +126,9 @@ const MDLTable = () => {
       } as TableDataType);
     });
 
-    return data;
+    return data.sort((a, b) => {
+      return Number(b.highlighted) - Number(a.highlighted);
+    });
   }, [uniqueResponseDomains, initialTableData]);
 
   const tableColumns = useMemo<TableColumn[]>(
