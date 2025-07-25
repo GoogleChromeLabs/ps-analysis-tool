@@ -17,7 +17,7 @@
  * External dependencies.
  */
 import { FrameContent, IncognitoIcon } from '@google-psat/design-system';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type ContentPanelProps = {
   onClick?: () => void;
@@ -25,6 +25,10 @@ type ContentPanelProps = {
 };
 
 const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
+  useEffect(() => {
+    chrome.storage.sync.remove(['isFirstTime']);
+  }, []);
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-[400px] min-w-[400px] h-[450px] lg:w-[800px] lg:min-w-[600px] lg:h-[400px] overflow-hidden flex justify-center items-center p-8">
