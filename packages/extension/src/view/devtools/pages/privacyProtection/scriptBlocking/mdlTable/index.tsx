@@ -49,7 +49,8 @@ interface TableDataType {
   domain: string;
   owner: string;
   scriptBlocking: string;
-  available?: boolean;
+  highlighted?: boolean;
+  highlightedClass?: string; // Optional class for highlighting rows
 }
 
 const MDLTable = () => {
@@ -59,7 +60,7 @@ const MDLTable = () => {
   }));
 
   const [initialTableData, setinitialTableData] = useState<
-    { domain: string; owner: string }[]
+    { domain: string; owner: string; scriptBlocking: string }[]
   >([]);
 
   useEffect(() => {
@@ -117,7 +118,11 @@ const MDLTable = () => {
 
       data.push({
         ...item,
-        available,
+        highlighted: available,
+        highlightedClass:
+          available && item.scriptBlocking.startsWith('Some URLs are Blocked')
+            ? 'bg-amber-100'
+            : '',
       } as TableDataType);
     });
 

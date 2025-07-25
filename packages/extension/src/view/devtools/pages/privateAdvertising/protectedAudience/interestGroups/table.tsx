@@ -127,6 +127,7 @@ const IGTable = ({
       return {
         ...interestGroup,
         highlighted: isHighlighted,
+        scrollToHighlighted: isHighlighted,
       };
     });
   }, [interestGroupDetails, highlightedInterestGroup]);
