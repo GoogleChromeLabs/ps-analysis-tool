@@ -19,6 +19,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
   ExtensionReloadNotification,
+  ExternalLinkBlack,
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
 } from '@google-psat/design-system';
@@ -137,6 +138,7 @@ const App: React.FC = () => {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
           delete newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB];
+          newSidebarData[SIDEBAR_ITEMS_KEYS.SETTINGS].addDivider = false;
           return newSidebarData;
         });
         return;
@@ -152,9 +154,25 @@ const App: React.FC = () => {
             : 'You will be redirected to the settings page, please enable incognito access for this extension.';
 
         if (newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel) {
-          newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.cta =
-            openIncognitoTab;
+          newSidebarData[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.props = {
+            onClick: openIncognitoTab,
+          };
         }
+
+        newSidebarData[
+          SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB
+        ].extraInterfaceToTitle = {
+          Element: () => {
+            return (
+              <div className="hover:cursor-pointer" onClick={openIncognitoTab}>
+                <ExternalLinkBlack
+                  className="fill-current text-black dark:text-bright-gray group-hover:text-blue-500"
+                  width="14"
+                />
+              </div>
+            );
+          },
+        };
 
         return newSidebarData;
       });

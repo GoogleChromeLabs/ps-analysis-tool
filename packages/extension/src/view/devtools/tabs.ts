@@ -86,6 +86,7 @@ import {
 } from './pages';
 import HelpCenter from './pages/learning/helpCenter';
 import Demos from './pages/learning/demos';
+import Incognito from './pages/incognito';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -561,10 +562,9 @@ const TABS: SidebarItems = {
     addDivider: true,
   },
   [SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB]: {
-    title: 'Open in Incognito',
+    title: 'Incognito Mode',
     panel: {
-      skipPanelDisplay: true,
-      cta: () => null,
+      Element: Incognito,
     },
     icon: {
       Element: IncognitoIcon,
