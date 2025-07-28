@@ -49,6 +49,7 @@ import {
   ProtectionIcon,
   SiteBoundariesIconWhite,
   DemosIcon,
+  IncognitoIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { addUTMParams } from '@google-psat/common';
@@ -85,6 +86,7 @@ import {
 } from './pages';
 import HelpCenter from './pages/learning/helpCenter';
 import Demos from './pages/learning/demos';
+import Incognito from './pages/incognito';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
@@ -549,6 +551,29 @@ const TABS: SidebarItems = {
     },
     selectedIcon: {
       Element: SettingsIcon,
+      props: {
+        className: 'fill-bright-gray w-4 h-4',
+      },
+    },
+    dropdownOpen: false,
+    addSpacer: false,
+    children: {},
+    containerClassName: 'h-6',
+    addDivider: true,
+  },
+  [SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB]: {
+    title: 'Incognito Mode',
+    panel: {
+      Element: Incognito,
+    },
+    icon: {
+      Element: IncognitoIcon,
+      props: {
+        className: 'fill-granite-gray w-4 h-4',
+      },
+    },
+    selectedIcon: {
+      Element: IncognitoIcon,
       props: {
         className: 'fill-bright-gray w-4 h-4',
       },
