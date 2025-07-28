@@ -208,23 +208,31 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           data[SIDEBAR_ITEMS_KEYS.SETTINGS].addDivider = false;
           return;
         }
+
         data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].containerClassName =
-          incognitoAccess ? '' : 'disabled opacity-50';
+          incognitoAccess ? '' : 'disabled opacity-50 cursor-default';
         data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle = incognitoAccess
           ? 'Open in Incognito'
-          : 'You will be redirected to the settings page, please enable incognito access for this extension.';
+          : 'Please enable incognito access for this extension.';
 
         if (data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel) {
           data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].panel.props = {
             onClick: openIncognitoTab,
           };
         }
+
         if (!isFirstVisit) {
           data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].extraInterfaceToTitle = {
             Element: () => {
               return (
                 <div
-                  className="hover:cursor-pointer"
+                  role="button"
+                  className={classNames('', {
+                    'disabled opacity-50 pointer-events-none cursor-default':
+                      !incognitoAccess,
+                    'hover:cursor-pointer': incognitoAccess,
+                  })}
+                  aria-disabled={!incognitoAccess}
                   onClick={openIncognitoTab}
                 >
                   <ExternalLinkBlack

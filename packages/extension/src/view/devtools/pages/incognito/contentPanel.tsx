@@ -18,6 +18,7 @@
  */
 import { FrameContent, IncognitoIcon } from '@google-psat/design-system';
 import React, { useEffect } from 'react';
+import { useSettings } from '../../stateProviders';
 
 type ContentPanelProps = {
   onClick?: () => void;
@@ -29,13 +30,17 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
     chrome.storage.sync.remove(['isFirstTime']);
   }, []);
 
+  const { isIncognitoAccess } = useSettings(({ state }) => ({
+    isIncognitoAccess: state.incognitoAccess,
+  }));
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-[400px] min-w-[400px] h-[450px] lg:w-[800px] lg:min-w-[600px] lg:h-[400px] overflow-hidden flex justify-center items-center p-8">
         <FrameContent color={frameColor}>
           <div className="text-center flex flex-col items-center gap-2 text-raisin-black dark:text-bright-gray">
-            <div className="mb-3 lg:mb-5 scale-125 lg:scale-150">
-              <IncognitoIcon height={45} />
+            <div className="mb-2 lg:mb-3 scale-180 lg:scale-200">
+              <IncognitoIcon />
             </div>
 
             <h3 className="font-semibold text-xl lg:text-2xl">
@@ -49,6 +54,26 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
               the Privacy Sandbox initiative enhances privacy across the web by
               disabling third-party cookies and hiding users&apos; IP addresses
               from third-party sites to reduce tracking.
+              {!isIncognitoAccess ? (
+                <>
+                  To enable incognito access please{' '}
+                  <button
+                    className="underline text-blue-600 hover:text-blue-800"
+                    onClick={() =>
+                      chrome.tabs.create({
+                        url: 'chrome://extensions/?id=' + chrome.runtime.id,
+                        active: true,
+                        windowId: chrome.windows.WINDOW_ID_CURRENT,
+                      })
+                    }
+                  >
+                    click here
+                  </button>{' '}
+                  and enable the incognito access permission for PSAT.
+                </>
+              ) : (
+                ''
+              )}
             </p>
             <div className="flex justify-center mt-1">
               <button
