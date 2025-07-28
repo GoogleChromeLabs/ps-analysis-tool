@@ -209,8 +209,6 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           return;
         }
 
-        data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].containerClassName =
-          incognitoAccess ? '' : 'disabled opacity-50 cursor-default';
         data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle = incognitoAccess
           ? 'Open in Incognito'
           : 'Please enable incognito access for this extension.';

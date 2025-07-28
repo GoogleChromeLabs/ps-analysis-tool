@@ -18,6 +18,10 @@
  */
 import { FrameContent, IncognitoIcon } from '@google-psat/design-system';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
+/**
+ * Internal dependencies.
+ */
 import { useSettings } from '../../stateProviders';
 
 type ContentPanelProps = {
@@ -43,9 +47,7 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
               <IncognitoIcon />
             </div>
 
-            <h3 className="font-semibold text-xl lg:text-2xl">
-              Incognito Mode
-            </h3>
+            <h3 className="font-medium text-xl lg:text-2xl">Incognito Mode</h3>
 
             <p className=" pb-2 mb-1 text-sm lg:text-base text-justify">
               {' '}
@@ -56,6 +58,7 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
               from third-party sites to reduce tracking.
               {!isIncognitoAccess ? (
                 <>
+                  {' '}
                   To enable incognito access please{' '}
                   <button
                     className="underline text-blue-600 hover:text-blue-800"
@@ -77,7 +80,14 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
             </p>
             <div className="flex justify-center mt-1">
               <button
-                className="bg-cultured-grey text-raisin-black py-1 px-4 rounded border border-dark-grey text-xs hover:bg-light-gray hover:border-american-silver"
+                style={{ cursor: isIncognitoAccess ? 'pointer' : 'default' }}
+                disabled={!isIncognitoAccess}
+                className={classNames(
+                  'bg-cultured-grey text-raisin-black py-2 px-4 rounded border border-dark-grey hover:bg-light-gray hover:border-american-silver',
+                  {
+                    'disabled opacity-50': !isIncognitoAccess,
+                  }
+                )}
                 onClick={onClick}
               >
                 Open incognito tab
