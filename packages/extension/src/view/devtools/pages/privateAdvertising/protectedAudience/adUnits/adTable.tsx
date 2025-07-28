@@ -61,7 +61,6 @@ const AdTable = ({
   auctionEvents,
 }: AdTableProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
-
   const adUnitsWithOrtb2Imp = useMemo(() => {
     const auctionEndEvents = Object.values(auctionEvents || {})
       ?.flat()

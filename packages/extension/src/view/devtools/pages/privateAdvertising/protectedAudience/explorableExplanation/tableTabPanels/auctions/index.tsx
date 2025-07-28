@@ -58,7 +58,9 @@ const Auctions = ({
         Element: AdUnitsPanel,
         props: {
           adsAndBidders: customAdsAndBidders,
-          receivedBids: auctionEvents?.receivedBids || {},
+          receivedBids: selectedAdUnit
+            ? auctionEvents?.receivedBids[selectedAdUnit]
+            : [],
           noBids: auctionEvents?.noBids || {},
           showEvaluationPlaceholder: Boolean(customAdsAndBidders),
           isEE: true,
@@ -77,14 +79,21 @@ const Auctions = ({
 
       prevData.adunits.panel.props = {
         adsAndBidders: customAdsAndBidders,
-        receivedBids: auctionEvents.receivedBids,
+        receivedBids: selectedAdUnit
+          ? auctionEvents?.receivedBids[selectedAdUnit]
+          : [],
         noBids: auctionEvents.noBids,
         showEvaluationPlaceholder: Boolean(customAdsAndBidders),
         isEE: true,
       };
       return prevData;
     });
-  }, [auctionEvents.noBids, auctionEvents.receivedBids, customAdsAndBidders]);
+  }, [
+    auctionEvents.noBids,
+    auctionEvents?.receivedBids,
+    customAdsAndBidders,
+    selectedAdUnit,
+  ]);
 
   useEffect(() => {
     if (
