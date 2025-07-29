@@ -77,14 +77,21 @@ const ProbabilisticRevealTokens = () => {
         cell: (_, details) => {
           return (
             <button
+              style={{
+                cursor:
+                  !(details as PRTMetadata)?.decryptionKeyAvailable ||
+                  (details as PRTMetadata)?.decrypted
+                    ? 'default'
+                    : 'pointer',
+              }}
               disabled={
                 !(details as PRTMetadata)?.decryptionKeyAvailable ||
                 (details as PRTMetadata)?.decrypted
               }
               className={classNames(
-                'w-fit flex hover:opacity-70 active:opacity-50 disabled:opacity-50 h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1 cursor-pointer',
+                'w-fit flex bg-cultured-grey text-raisin-black py-1 px-2 rounded border border-dark-grey hover:bg-light-gray hover:border-american-silver',
                 {
-                  'cursor-default':
+                  'disabled opacity-50':
                     !(details as PRTMetadata)?.decryptionKeyAvailable ||
                     (details as PRTMetadata)?.decrypted,
                 }
