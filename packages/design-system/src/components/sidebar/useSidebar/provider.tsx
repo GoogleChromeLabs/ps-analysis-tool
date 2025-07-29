@@ -204,6 +204,12 @@ export const SidebarProvider = ({
       }
 
       const item = findItem(sidebarItems, key);
+
+      if (skipPanelDisplay && item?.panel?.cta) {
+        item.panel.cta();
+        return;
+      }
+
       if (item?.panel?.href || (skipPanelDisplay && item?.panel?.href)) {
         const tab = await chrome.tabs.get(
           chrome.devtools.inspectedWindow.tabId

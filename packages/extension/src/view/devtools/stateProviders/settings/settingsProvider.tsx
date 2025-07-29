@@ -44,6 +44,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
   const [exceedingLimitations, setExceedingLimitations] =
     useState<boolean>(false);
+  const [incognitoAccess, setIncognitoAccess] = useState<boolean>(false);
 
   const [isUsingCDP, setIsUsingCDP] = useState(false);
   const [
@@ -85,6 +86,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     chrome.tabs.query({}, (tabs) => {
       setCurrentTabs(tabs.length);
+    });
+
+    chrome.extension.isAllowedIncognitoAccess((isAllowed) => {
+      setIncognitoAccess(isAllowed);
     });
 
     chrome.management.getAll((extensions) => {
@@ -135,6 +140,32 @@ const Provider = ({ children }: PropsWithChildren) => {
     },
     []
   );
+
+  const openIncognitoTab = useCallback(async () => {
+    if (!incognitoAccess) {
+      return;
+    }
+
+    const tabs = await chrome.tabs.query({});
+
+    if (tabs.some((tab) => tab.incognito)) {
+      const incognitoTab = tabs.find((tab) => tab.incognito);
+      if (incognitoTab) {
+        chrome.tabs.create({
+          url: 'https://example.com',
+          windowId: incognitoTab.windowId,
+          active: true,
+        });
+        chrome.windows.update(incognitoTab.windowId, { focused: true });
+        return;
+      }
+    }
+
+    await chrome.windows.create({
+      incognito: true,
+      url: 'https://example.com',
+    });
+  }, [incognitoAccess]);
 
   useEffect(() => {
     if (navigator.userAgent) {
@@ -276,6 +307,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     <Context.Provider
       value={{
         state: {
+          incognitoAccess,
           currentTabs,
           currentExtensions,
           browserInformation,
@@ -292,6 +324,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           setSettingsChanged,
           setExceedingLimitations,
           setIsUsingCDPForSettingsPageDisplay,
+          openIncognitoTab,
         },
       }}
     >
