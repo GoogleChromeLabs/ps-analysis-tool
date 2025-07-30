@@ -54,7 +54,11 @@ type SingleTabTokens = {
     [prtHeader: string]: PRTMetadata;
   };
 };
-
+/**
+ * deserializePrt, getTokenFromHeaderString, recoverXFromPaddedPoint, decryptTokenHeader, getPlaintextToken, verifyHmac
+ * functions were converted from Javascript to Typescript.
+ * Credits to https://github.com/semyers/prtoken-js for Javascript implementation of the above listed functions.
+ */
 class PRTStore extends DataStore {
   tabTokens: TabToken = {};
 
