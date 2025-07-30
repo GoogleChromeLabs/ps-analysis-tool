@@ -18,15 +18,15 @@
  * External dependencies
  */
 import {
-  noop,
   Table,
   TableProvider,
   type TableColumn,
   type TableRow,
   ResizableTray,
   JsonView,
+  noop,
 } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import type { PRTMetadata } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 import classNames from 'classnames';
@@ -34,6 +34,7 @@ import classNames from 'classnames';
  * Internal dependencies
  */
 import { useProbabilisticRevealTokens } from '../../../../stateProviders';
+import RowContextMenuForPRT from './rowContextMenu';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
@@ -51,6 +52,10 @@ const ProbabilisticRevealTokens = () => {
     plainTextTokensData: state.plainTextTokens,
     decryptToken: actions.decryptToken,
   }));
+
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForPRT
+  > | null>(null);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -186,12 +191,14 @@ const ProbabilisticRevealTokens = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
-            onRowContextMenu={noop}
             data={perTokenMetadata}
             tableColumns={tableColumns}
             onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as PRTMetadata).prtHeader.toString()
+            }
+            onRowContextMenu={
+              rowContextMenuRef.current?.onRowContextMenu ?? noop
             }
           >
             <Table
@@ -199,6 +206,7 @@ const ProbabilisticRevealTokens = () => {
               hideSearch={true}
               minWidth="50rem"
             />
+            <RowContextMenuForPRT ref={rowContextMenuRef} />
           </TableProvider>
         </div>
       </ResizableTray>
