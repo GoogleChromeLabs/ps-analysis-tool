@@ -712,4 +712,4 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 
 ## Changelog
 
-- Fix: Extension breakage due to global variable conflictn https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1122
+- Fix: Extension breakage due to global variable conflictn https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1132
