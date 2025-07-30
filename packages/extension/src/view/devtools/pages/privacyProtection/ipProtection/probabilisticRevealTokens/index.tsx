@@ -63,13 +63,12 @@ const ProbabilisticRevealTokens = () => {
         header: 'PRT',
         accessorKey: 'prtHeader',
         cell: (info) => info,
-        initialWidth: 100,
+        minWidth: 500,
       },
       {
         header: 'Origin',
         accessorKey: 'origin',
         cell: (info) => info,
-        initialWidth: 100,
       },
       {
         header: 'Decryption key available',
@@ -77,7 +76,7 @@ const ProbabilisticRevealTokens = () => {
         cell: (info) => info.toString(),
       },
       {
-        header: 'actions',
+        header: 'Actions',
         accessorKey: 'actions',
         cell: (_, details) => {
           return (
@@ -94,7 +93,7 @@ const ProbabilisticRevealTokens = () => {
                 (details as PRTMetadata)?.decrypted
               }
               className={classNames(
-                'w-fit flex bg-cultured-grey text-raisin-black py-1 px-2 rounded border border-dark-grey hover:bg-light-gray hover:border-american-silver',
+                'w-fit flex bg-cultured-grey text-raisin-black my-1 py-0.5 px-2 rounded border border-dark-grey hover:bg-light-gray hover:border-american-silver',
                 {
                   'disabled opacity-50':
                     !(details as PRTMetadata)?.decryptionKeyAvailable ||
@@ -202,6 +201,7 @@ const ProbabilisticRevealTokens = () => {
             }
           >
             <Table
+              hideTableTopBar
               selectedKey={selectedJSON?.prtHeader.toString()}
               hideSearch={true}
               minWidth="50rem"
