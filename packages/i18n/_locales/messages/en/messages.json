@@ -9491,7 +9491,7 @@
   "OCD_FPGSID_description": {
     "message": "This cookie is an essential session and security cookie from Google. Its main purpose is to manage the session of a logged-in user, ensuring they remain logged in while navigating between Google services (like Gmail, Drive, YouTube) and to protect the account against unauthorized requests."
   },
-  "OCD_logglytrackings­ession_description": {
+  "OCD_logglytrackingsession_description": {
     "message": "Used by Loggly for performance and error tracking."
   },
   "RWS_rationale_https___oficialderma_com_br": {
