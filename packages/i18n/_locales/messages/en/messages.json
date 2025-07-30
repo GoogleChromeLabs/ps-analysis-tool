@@ -9487,5 +9487,23 @@
   },
   "OCD__gtmeec_description": {
     "message": "Used by Meta to store user data for reuse, enabling more efficient and accurate tracking and targeting."
+  },
+  "OCD_FPGSID_description": {
+    "message": "This cookie is an essential session and security cookie from Google. Its main purpose is to manage the session of a logged-in user, ensuring they remain logged in while navigating between Google services (like Gmail, Drive, YouTube) and to protect the account against unauthorized requests."
+  },
+  "OCD_logglytrackings­ession_description": {
+    "message": "Used by Loggly for performance and error tracking."
+  },
+  "RWS_rationale_https___oficialderma_com_br": {
+    "message": "Segmented store that shares same user and cart with the primary store. The branding is clearly visible on the site."
+  },
+  "RWS_rationale_https___oficialnutri_com": {
+    "message": "Segmented store that shares same user and cart with the primary store. The branding is clearly visible on the site."
+  },
+  "RWS_rationale_https___mercadooficial_com_br": {
+    "message": "Segmented store that shares same user and cart with the primary store. The branding is clearly visible on the site."
+  },
+  "RWS_rationale_https___deltarune_wiki": {
+    "message": "Sister wiki site that shares the same user database. Association clearly stated on the main page and Terms of Service."
   }
 }

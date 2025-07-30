@@ -707,3 +707,9 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 - Fix: Table column resize https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1105
 - Fix: UI issues https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1121
 - Fix: Update text and line position calculation in timeline https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1118
+
+#v1.1.1
+
+## Changelog
+
+- Fix: Extension breakage due to global variable conflictn https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1122

@@ -181,6 +181,19 @@
       "wildcard": "0"
     }
   ],
+  "FPGSID": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "FPGSID",
+      "domain": "",
+      "description": "OCD_FPGSID_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
   "_ga": [
     {
       "platform": "Google Analytics",
@@ -28633,6 +28646,19 @@
       "retention": "OCD_retention_3_months",
       "dataController": "Stape",
       "gdprUrl": "https://stape.io/privacy-notice",
+      "wildcard": "0"
+    }
+  ],
+  "logglytrackings­ession": [
+    {
+      "platform": "Loggly",
+      "category": "Functional",
+      "name": "logglytrackings­ession",
+      "domain": "",
+      "description": "OCD_logglytrackings­ession_description",
+      "retention": "OCD_retention_session",
+      "dataController": "Solarwinds",
+      "gdprUrl": "https://www.solarwinds.com/legal/privacy",
       "wildcard": "0"
     }
   ]
