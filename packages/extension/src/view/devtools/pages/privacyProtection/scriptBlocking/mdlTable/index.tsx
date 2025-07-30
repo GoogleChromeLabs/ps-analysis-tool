@@ -55,7 +55,7 @@ interface TableDataType {
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const { uniqueResponseDomains = [] } = useScriptBlocking(({ state }) => ({
+  const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
     uniqueResponseDomains: state.uniqueResponseDomains,
   }));
 

@@ -69,6 +69,7 @@ export class DataStore {
       isCookieAnalysisEnabled: boolean;
       isPAAnalysisEnabled: boolean;
       uniqueResponseDomains: string[];
+      newUpdatesScriptBlocking: number;
     };
   } = {};
 
@@ -96,6 +97,7 @@ export class DataStore {
       hostname !== 'null'
     ) {
       DataStore.tabs[tabId].uniqueResponseDomains.push(hostname);
+      DataStore.tabs[tabId].newUpdatesScriptBlocking++;
     }
   }
 
@@ -106,8 +108,9 @@ export class DataStore {
 
     try {
       if (
-        DataStore.tabs[tabId].devToolsOpenState ||
-        DataStore.tabs[tabId].popupOpenState
+        (DataStore.tabs[tabId].devToolsOpenState ||
+          DataStore.tabs[tabId].popupOpenState) &&
+        DataStore.tabs[tabId].newUpdatesScriptBlocking > 0
       ) {
         await chrome.runtime.sendMessage({
           type: EXTRA_DATA, // For sending extra data.
@@ -116,6 +119,7 @@ export class DataStore {
             tabId: Number(tabId),
           },
         });
+        DataStore.tabs[tabId].newUpdatesScriptBlocking = 0;
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -244,6 +248,7 @@ export class DataStore {
       isCookieAnalysisEnabled: true,
       isPAAnalysisEnabled: true,
       uniqueResponseDomains: [],
+      newUpdatesScriptBlocking: 0,
     };
   }
 

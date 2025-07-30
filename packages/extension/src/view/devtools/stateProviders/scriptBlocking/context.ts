@@ -20,7 +20,7 @@ import { noop, createContext } from '@google-psat/common';
 
 export interface ScriptBlockingStoreContext {
   state: {
-    uniqueResponseDomains?: string[];
+    uniqueResponseDomains: string[];
   };
   actions: {
     setUniqueResponseDomains: (newValue: string[]) => void;

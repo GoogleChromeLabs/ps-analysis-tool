@@ -38,9 +38,14 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
       type: string;
       payload: {
         uniqueResponseDomains?: string[];
+        tabId: string;
       };
     }) => {
-      if (message.type !== EXTRA_DATA) {
+      if (
+        message.type !== EXTRA_DATA ||
+        String(message.payload.tabId) !==
+          String(chrome.devtools.inspectedWindow.tabId)
+      ) {
         return;
       }
 
