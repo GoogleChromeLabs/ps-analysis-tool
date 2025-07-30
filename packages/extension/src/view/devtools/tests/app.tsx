@@ -45,6 +45,7 @@ jest.mock('../stateProviders', () => ({
   useSettings: jest.fn(),
   useProtectedAudience: jest.fn(),
   usePrebid: jest.fn(),
+  useProbabilisticRevealTokens: jest.fn(),
 }));
 
 jest.mock(
