@@ -22,6 +22,7 @@ import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
 import PAStore from '../../store/PAStore';
 import prebidStore from '../../store/prebidStore';
+import PRTStore from '../../store/PRTStore';
 import getQueryParams from '../../utils/getQueryParams';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
@@ -50,6 +51,8 @@ export const onCommittedNavigationListener = async ({
       dataStore.initialiseVariablesForNewTab(tabId.toString());
       DataStore.tabs[tabId.toString()].devToolsOpenState = true;
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
+      PRTStore.initialiseVariablesForNewTab(tabId.toString());
+
       prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
       PAStore.initialiseVariablesForNewTab(tabId.toString());
       ARAStore.initialiseVariablesForNewTab(tabId.toString());
@@ -77,6 +80,7 @@ export const onCommittedNavigationListener = async ({
       cookieStore?.removeCookieData(tabId.toString());
       cookieStore.deinitialiseVariablesForTab(tabId.toString());
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
+      PRTStore.initialiseVariablesForNewTab(tabId.toString());
 
       prebidStore.deinitialiseVariablesForTab(tabId.toString());
       prebidStore.initialiseVariablesForNewTabAndFrame(
