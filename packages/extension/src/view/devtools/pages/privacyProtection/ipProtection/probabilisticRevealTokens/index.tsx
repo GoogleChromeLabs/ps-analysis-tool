@@ -29,7 +29,6 @@ import {
 import React, { useMemo, useRef, useState } from 'react';
 import type { PRTMetadata } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import classNames from 'classnames';
 /**
  * Internal dependencies
  */
@@ -44,13 +43,11 @@ const ProbabilisticRevealTokens = () => {
     decryptedTokensData,
     prtTokensData,
     plainTextTokensData,
-    decryptToken,
-  } = useProbabilisticRevealTokens(({ state, actions }) => ({
+  } = useProbabilisticRevealTokens(({ state }) => ({
     perTokenMetadata: state.perTokenMetadata,
     decryptedTokensData: state.decryptedTokens,
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
-    decryptToken: actions.decryptToken,
   }));
 
   const rowContextMenuRef = useRef<React.ElementRef<
@@ -75,40 +72,8 @@ const ProbabilisticRevealTokens = () => {
         accessorKey: 'decryptionKeyAvailable',
         cell: (info) => info.toString(),
       },
-      {
-        header: 'Actions',
-        accessorKey: 'actions',
-        cell: (_, details) => {
-          return (
-            <button
-              style={{
-                cursor:
-                  !(details as PRTMetadata)?.decryptionKeyAvailable ||
-                  (details as PRTMetadata)?.decrypted
-                    ? 'default'
-                    : 'pointer',
-              }}
-              disabled={
-                !(details as PRTMetadata)?.decryptionKeyAvailable ||
-                (details as PRTMetadata)?.decrypted
-              }
-              className={classNames(
-                'w-fit flex bg-cultured-grey text-raisin-black my-1 py-0.5 px-2 rounded border border-dark-grey hover:bg-light-gray hover:border-american-silver',
-                {
-                  'disabled opacity-50':
-                    !(details as PRTMetadata)?.decryptionKeyAvailable ||
-                    (details as PRTMetadata)?.decrypted,
-                }
-              )}
-              onClick={() => decryptToken((details as PRTMetadata).prtHeader)}
-            >
-              Decrypt
-            </button>
-          );
-        },
-      },
     ],
-    [decryptToken]
+    []
   );
 
   const formedJson = useMemo(() => {
@@ -146,16 +111,17 @@ const ProbabilisticRevealTokens = () => {
       )
     );
 
-    if (!prtHeader || !_decryptedToken || !_prtToken || !_plainTextToken) {
+    if (!prtHeader || !_prtToken || !_plainTextToken) {
       return null;
     }
 
-    if (!prtHeader.decrypted) {
+    if (!_decryptedToken || !_plainTextToken) {
       return {
         prtHeader,
         prtToken: _prtToken,
       };
     }
+
     delete _decryptedToken.prtHeader;
     delete _plainTextToken.prtHeader;
 

@@ -243,7 +243,7 @@ class PRTStore extends DataStore {
    * The core decryption function. It orchestrates the process of parsing the token header,
    * fetching the correct private key based on the token's epochId, and performing elliptic curve decryption.
    * @param {string} prtHeader The Base64-encoded PRT header string.
-   * @returns {Promise<decryptedTokens | null>} - A promise that resolves to an object containing the decrypted plaintext (as a Uint8Array) and the hmac_secret (as a Uint8Array), or null if any step in the decryption process fails.
+   * @returns {Promise<UniqueDecryptedToken | null>} - A promise that resolves to an object containing the decrypted plaintext (as a Uint8Array) and the hmac_secret (as a Uint8Array), or null if any step in the decryption process fails.
    */
   async decryptTokenHeader(prtHeader: string) {
     const prt = this.getTokenFromHeaderString(prtHeader);
@@ -317,7 +317,7 @@ class PRTStore extends DataStore {
   /**
    * Parses the decrypted plaintext buffer to extract the final token data and verify its integrity.
    * @param {object} result - The result object from decryptTokenHeader, containing plaintext and hmac_secret.
-   * @returns {Promise<PlaintTextToken | null>} A promise that resolves to an object containing the token's version, t_ord, signal, and a boolean hmacValid, or null if the plaintext is malformed.
+   * @returns {Promise<UniquePlainTextToken | null>} A promise that resolves to an object containing the token's version, t_ord, signal, and a boolean hmacValid, or null if the plaintext is malformed.
    */
   async getPlaintextToken(result: any) {
     const { plaintext, hmacSecret } = result;

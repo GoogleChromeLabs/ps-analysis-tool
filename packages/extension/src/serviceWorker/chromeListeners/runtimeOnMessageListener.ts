@@ -36,7 +36,6 @@ import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 import sendUpdatedData from '../../store/utils/sendUpdatedData';
 import prebidStore from '../../store/prebidStore';
-import PRTStore from '../../store/PRTStore';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (
@@ -190,19 +189,5 @@ export const runtimeOnMessageListener = async (
       DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
       return;
     }
-  }
-
-  if (incomingMessageType === 'DECRYPT_TOKEN') {
-    const prtHeader = request?.payload?.prtHeader;
-    if (!prtHeader) {
-      return;
-    }
-    PRTStore.tabTokens[incomingMessageTabId.toString()].perTokenMetadata[
-      prtHeader
-    ].decrypted = true;
-    PRTStore.sendUpdatedDataToPopupAndDevTools(
-      incomingMessageTabId.toString(),
-      true
-    );
   }
 };

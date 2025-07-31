@@ -40,7 +40,6 @@ export interface PRTMetadata {
   humanReadableSignal: string;
   decryptionKeyAvailable: boolean;
   prtHeader: string;
-  decrypted: boolean;
 }
 
 export type UniquePlainTextToken = PlaintTextToken & {

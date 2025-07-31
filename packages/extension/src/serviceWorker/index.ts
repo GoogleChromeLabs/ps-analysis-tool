@@ -413,7 +413,6 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               humanReadableSignal: plainTextToken?.humanReadableSignal ?? '',
               origin: isValidURL(origin) ? origin : '',
               decryptionKeyAvailable: Boolean(decodedToken),
-              decrypted: false,
             };
             DataStore.tabs[tabId].newUpdatesPRT++;
           }

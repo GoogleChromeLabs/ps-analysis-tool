@@ -48,16 +48,6 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProbabilisticRevealTokensContextType['state']['perTokenMetadata']
   >([]);
 
-  const decryptToken = useCallback((prtHeader: string) => {
-    chrome.runtime.sendMessage({
-      type: 'DECRYPT_TOKEN',
-      payload: {
-        tabId: chrome.devtools.inspectedWindow.tabId,
-        prtHeader,
-      },
-    });
-  }, []);
-
   const messagePassingListener = useCallback(
     (message: {
       type: string;
@@ -160,17 +150,8 @@ const Provider = ({ children }: PropsWithChildren) => {
         prtTokens,
         perTokenMetadata,
       },
-      actions: {
-        decryptToken,
-      },
     };
-  }, [
-    plainTextTokens,
-    decryptToken,
-    prtTokens,
-    perTokenMetadata,
-    decryptedTokens,
-  ]);
+  }, [plainTextTokens, prtTokens, perTokenMetadata, decryptedTokens]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };
