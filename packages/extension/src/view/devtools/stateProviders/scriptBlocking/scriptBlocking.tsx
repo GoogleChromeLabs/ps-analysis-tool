@@ -27,6 +27,7 @@ import React, {
  */
 import Context from './context';
 import { EXTRA_DATA } from '../../../../constants';
+import { isEqual } from 'lodash-es';
 
 const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
   const [uniqueResponseDomains, setUniqueResponseDomains] = useState<string[]>(
@@ -49,7 +50,11 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
         return;
       }
 
-      setUniqueResponseDomains(message.payload.uniqueResponseDomains || []);
+      setUniqueResponseDomains((prev) => {
+        return isEqual(message.payload.uniqueResponseDomains, prev)
+          ? prev
+          : message.payload.uniqueResponseDomains || [];
+      });
     },
     []
   );

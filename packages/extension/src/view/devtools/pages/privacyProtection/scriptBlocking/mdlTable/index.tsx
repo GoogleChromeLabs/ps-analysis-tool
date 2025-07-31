@@ -28,13 +28,14 @@ import {
   Link,
   ResizableTray,
 } from '@google-psat/design-system';
-import React, { useEffect, useMemo, useState } from 'react';
-
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import type { MDLTableData } from '@google-psat/common';
 /**
  * Internal dependencies
  */
 import Legend from './legend';
 import { useScriptBlocking } from '../../../../stateProviders';
+import RowContextMenuForScriptBlocking from './rowContextMenu';
 
 export const IMPACTED_BY_SCRIPT_BLOCKING = {
   NONE: 'Not Impacted By Script Blocking',
@@ -45,19 +46,15 @@ export const IMPACTED_BY_SCRIPT_BLOCKING = {
 const DATA_URL =
   'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md';
 
-interface TableDataType {
-  domain: string;
-  owner: string;
-  scriptBlocking: string;
-  highlighted?: boolean;
-  highlightedClass?: string; // Optional class for highlighting rows
-}
-
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
     uniqueResponseDomains: state.uniqueResponseDomains,
   }));
+
+  const rowContextMenuRef = useRef<React.ElementRef<
+    typeof RowContextMenuForScriptBlocking
+  > | null>(null);
 
   const [initialTableData, setinitialTableData] = useState<
     { domain: string; owner: string; scriptBlocking: string }[]
@@ -102,16 +99,15 @@ const MDLTable = () => {
     })();
   }, []);
 
-  const tableData: TableDataType[] = useMemo(() => {
+  const tableData: MDLTableData[] = useMemo(() => {
     if (initialTableData.length === 0) {
       return [];
     }
 
-    const data: TableDataType[] = [];
+    const data: MDLTableData[] = [];
 
     initialTableData.forEach((item) => {
       let available = false;
-
       if (uniqueResponseDomains.includes(item.domain)) {
         available = true;
       }
@@ -123,7 +119,7 @@ const MDLTable = () => {
           available && item.scriptBlocking.startsWith('Some URLs are Blocked')
             ? 'bg-amber-100'
             : '',
-      } as TableDataType);
+      } as MDLTableData);
     });
 
     return data.sort((a, b) => {
@@ -207,10 +203,16 @@ const MDLTable = () => {
         tableSearchKeys={['domain', 'owner']}
         data={tableData}
         onRowClick={(rowData) => {
-          setSelectedKey(rowData?.domain || null);
+          setSelectedKey((rowData as MDLTableData)?.domain || null);
         }}
-        onRowContextMenu={noop}
-        getRowObjectKey={(row: TableRow) => row.originalData.domain || ''}
+        onRowContextMenu={
+          rowContextMenuRef.current
+            ? rowContextMenuRef.current?.onRowContextMenu
+            : noop
+        }
+        getRowObjectKey={(row: TableRow) =>
+          (row.originalData as MDLTableData).domain || ''
+        }
         tablePersistentSettingsKey="mdlTable"
       >
         <ResizableTray
@@ -233,6 +235,7 @@ const MDLTable = () => {
         </ResizableTray>
         <Legend />
       </TableProvider>
+      <RowContextMenuForScriptBlocking ref={rowContextMenuRef} />
     </div>
   );
 };

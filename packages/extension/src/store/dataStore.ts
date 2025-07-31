@@ -101,16 +101,20 @@ export class DataStore {
     }
   }
 
-  async sendUpdatedDataToPopupAndDevTools(tabId: string) {
+  async sendUpdatedDataToPopupAndDevTools(
+    tabId: string,
+    overrideForInitialSync = false
+  ) {
     if (!DataStore.tabs[tabId]) {
       return;
     }
 
     try {
       if (
-        (DataStore.tabs[tabId].devToolsOpenState ||
+        overrideForInitialSync ||
+        ((DataStore.tabs[tabId].devToolsOpenState ||
           DataStore.tabs[tabId].popupOpenState) &&
-        DataStore.tabs[tabId].newUpdatesScriptBlocking > 0
+          DataStore.tabs[tabId].newUpdatesScriptBlocking > 0)
       ) {
         await chrome.runtime.sendMessage({
           type: EXTRA_DATA, // For sending extra data.
