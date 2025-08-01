@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FedCM Interactive Explorer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="last-updated" content="2025-07-29 05:46:27" />
+    <meta name="author" content="mayan-000" />
+  </head>
+  <body>
+    <header>
+      <h1>FedCM Authentication Journey</h1>
+      <p>An explorable explanation of Federated Credential Management</p>
+    </header>
+
+    <div class="journey-timeline">
+      <div class="timeline-node active" id="registration-node">
+        1. Registration
+      </div>
+      <div class="timeline-connector"></div>
+      <div class="timeline-node" id="signin-node">2. Sign In</div>
+      <div class="timeline-connector"></div>
+      <div class="timeline-node" id="reauth-node">3. Silent ReAuth</div>
+      <div class="timeline-connector"></div>
+      <div class="timeline-node" id="reauth-interactive-node">
+        4. Interactive ReAuth
+      </div>
+      <div class="timeline-connector"></div>
+      <div class="timeline-node" id="permissions-node">5. Permissions</div>
+      <div class="timeline-connector"></div>
+      <div class="timeline-node" id="signout-node">6. Sign Out</div>
+    </div>
+
+    <main>
+      <!-- Scenario information panel -->
+      <div id="scenario-info-panel">
+        <h2 id="scenario-title">First-time Sign-In (Registration)</h2>
+        <p id="scenario-description">
+          The user visits a website for the first time and needs to create an
+          account. They'll use their identity provider (IdP) account to
+          register.
+        </p>
+        <div class="control-toolbar">
+          <button id="next-step" class="control-button">Start Flow</button>
+          <button id="reset-scenario" class="control-button">Reset</button>
+        </div>
+      </div>
+
+      <!-- Browser and sequence diagram side-by-side -->
+      <div id="visualization-container">
+        <div id="browser-ui">
+          <div class="browser-chrome">
+            <span>example-shop.com</span>
+          </div>
+          <div id="browser-content">
+            <!-- Content will be updated by JavaScript based on current scenario -->
+            <div class="rp-website">
+              <h2>Welcome to ExampleShop</h2>
+              <p>Please sign in to continue</p>
+              <button id="signin-button" class="fedcm-button">
+                Sign in with YourID
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="sequence-diagram">
+          <div class="entity" id="user-entity">
+            <div class="entity-label">User</div>
+            <div class="entity-lifeline"></div>
+          </div>
+          <div class="entity" id="browser-entity">
+            <div class="entity-label">Browser</div>
+            <div class="entity-lifeline"></div>
+          </div>
+          <div class="entity" id="rp-entity">
+            <div class="entity-label">RP</div>
+            <div class="entity-lifeline"></div>
+          </div>
+          <div class="entity" id="idp-entity">
+            <div class="entity-label">IdP</div>
+            <div class="entity-lifeline"></div>
+          </div>
+          <!-- Message arrows will be added by JavaScript -->
+          <div id="message-container"></div>
+        </div>
+      </div>
+
+      <!-- Step explanation below the visualizations -->
+      <div id="explanation-panel">
+        <div id="current-step-detail">
+          <h3>Current Step:</h3>
+          <p id="step-explanation">
+            Click "Start Flow" to begin the registration process.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
