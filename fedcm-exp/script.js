@@ -1202,8 +1202,6 @@ function addMessage(fromEntity, toEntity, text, selfMessage = false) {
   // For self-messages (entity to itself), create a loop
   let leftPosition, width;
   // Updated addMessage function for properly oriented self-messages
-  // Last updated: 2025-07-29 06:47:37
-  // Author: mayan-000
 
   // In your addMessage function, replace the self-message creation with this:
   if (selfMessage) {
@@ -1261,6 +1259,12 @@ function addMessage(fromEntity, toEntity, text, selfMessage = false) {
   }
 
   messageCount++;
+
+  // Auto-scroll message container to bottom when new arrows/messages are added
+  const messageContainer = document.getElementById('message-container');
+  if (messageContainer) {
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+  }
 }
 
 /**

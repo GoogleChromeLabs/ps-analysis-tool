@@ -1,3 +1,23 @@
+#browser-step-container {
+  min-width: 370px;
+  max-width: 420px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+#step-explanation {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-size: 1.08em;
+  min-height: 56px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  color: #222;
+  border: 1px solid #e0e0e0;
+  margin-top: 2px;
+}
 /* General styles */
 * {
   box-sizing: border-box;
@@ -304,8 +324,10 @@ main {
   top: 60px;
   left: 0;
   right: 0;
-  bottom: 0;
   height: calc(100% - 60px);
+  overflow-y: auto;
+  overflow-x: visible;
+  z-index: 2;
 }
 
 .message {
@@ -368,7 +390,7 @@ main {
   width: 80%;
   height: 30px;
   margin: 0 10%;
-	left: 35px;
+  left: 35px;
 }
 
 /* Create three segments for the rectangular loop */
@@ -910,7 +932,7 @@ main {
 #sequence-diagram {
   flex: 1; /* Equal width with browser */
   min-height: 450px;
-	padding: 10px;
+  padding: 10px;
 }
 
 /* Step explanation panel - now below visualizations */

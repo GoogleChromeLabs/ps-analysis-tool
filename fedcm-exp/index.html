@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FedCM Interactive Explorer</title>
     <link rel="stylesheet" href="styles.css" />
-    <meta name="last-updated" content="2025-07-29 05:46:27" />
-    <meta name="author" content="mayan-000" />
   </head>
   <body>
     <header>
@@ -47,24 +45,32 @@
         </div>
       </div>
 
-      <!-- Browser and sequence diagram side-by-side -->
+      <!-- Container A: visualization-container -->
       <div id="visualization-container">
-        <div id="browser-ui">
-          <div class="browser-chrome">
-            <span>example-shop.com</span>
-          </div>
-          <div id="browser-content">
-            <!-- Content will be updated by JavaScript based on current scenario -->
-            <div class="rp-website">
-              <h2>Welcome to ExampleShop</h2>
-              <p>Please sign in to continue</p>
-              <button id="signin-button" class="fedcm-button">
-                Sign in with YourID
-              </button>
+        <!-- Container B: browser-step-container (flex child) -->
+        <div id="browser-step-container">
+          <!-- D: dummy browser -->
+          <div id="browser-ui">
+            <div class="browser-chrome">
+              <span>example-shop.com</span>
+            </div>
+            <div id="browser-content">
+              <!-- Content will be updated by JavaScript based on current scenario -->
+              <div class="rp-website">
+                <h2>Welcome to ExampleShop</h2>
+                <p>Please sign in to continue</p>
+                <button id="signin-button" class="fedcm-button">
+                  Sign in with YourID
+                </button>
+              </div>
             </div>
           </div>
+          <!-- E: step description -->
+          <div id="step-explanation">
+            Click "Start Flow" to begin the registration process.
+          </div>
         </div>
-
+        <!-- C: sequence diagram (flex child) -->
         <div id="sequence-diagram">
           <div class="entity" id="user-entity">
             <div class="entity-label">User</div>
@@ -84,16 +90,6 @@
           </div>
           <!-- Message arrows will be added by JavaScript -->
           <div id="message-container"></div>
-        </div>
-      </div>
-
-      <!-- Step explanation below the visualizations -->
-      <div id="explanation-panel">
-        <div id="current-step-detail">
-          <h3>Current Step:</h3>
-          <p id="step-explanation">
-            Click "Start Flow" to begin the registration process.
-          </p>
         </div>
       </div>
     </main>
