@@ -28,19 +28,41 @@ import {
   Link,
   ResizableTray,
 } from '@google-psat/design-system';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies
  */
 import Legend from './legend';
+import { getCurrentTab } from '../../../../../../utils/getCurrentTab';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   const [tableData, setTableData] = useState<
-    { domain: string; owner: string }[]
+    {
+      domain: string;
+      owner: string;
+      highlighted: boolean;
+      highlightedClass: string;
+    }[]
   >([]);
+
+  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
+
+  const checkbox = useCallback(() => {
+    return (
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          className="hover:cursor-pointer"
+          type="checkbox"
+          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
+          defaultChecked
+        />
+        <span className="whitespace-nowrap">Show only highlighted domains</span>
+      </label>
+    );
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -63,25 +85,38 @@ const MDLTable = () => {
         line.split('|').map((item) => item.trim())
       );
 
+      const tab = await getCurrentTab();
+
       setTableData(() =>
-        mdlData.map((item: string[]) => {
-          let owner = item[1];
+        mdlData
+          .map((item: string[]) => {
+            let owner = item[1];
 
-          if (item[1].includes('PSL Domain')) {
-            owner = 'PSL Domain';
-          }
+            if (item[1].includes('PSL Domain')) {
+              owner = 'PSL Domain';
+            }
 
-          const scriptBlocking = item[2];
+            const scriptBlocking = item[2];
 
-          return {
-            domain: item[0],
-            owner,
-            scriptBlocking,
-          };
-        })
+            return {
+              domain: item[0],
+              owner,
+              scriptBlocking,
+              highlighted: new URL(tab?.url).hostname === item[0],
+              highlightedClass:
+                new URL(tab?.url).hostname === item[0] ? 'bg-amber-100' : '',
+            };
+          })
+          .filter((item) => {
+            if (showOnlyHighlighted) {
+              return item.highlighted;
+            }
+
+            return true;
+          })
       );
     })();
-  }, []);
+  }, [showOnlyHighlighted]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -162,7 +197,7 @@ const MDLTable = () => {
           className="h-full flex"
           trayId="mdl-table-bottom-tray"
         >
-          <Table selectedKey={selectedKey} />
+          <Table selectedKey={selectedKey} extraInterfaceToTopBar={checkbox} />
         </ResizableTray>
         <Legend />
       </TableProvider>
