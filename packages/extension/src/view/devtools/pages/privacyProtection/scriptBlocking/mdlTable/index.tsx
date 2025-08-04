@@ -55,6 +55,7 @@ const DATA_URL =
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
     uniqueResponseDomains: state.uniqueResponseDomains,
   }));
@@ -69,9 +70,11 @@ const MDLTable = () => {
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       const response = await fetch(DATA_URL);
 
       if (!response.ok) {
+        setIsLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -86,8 +89,8 @@ const MDLTable = () => {
         .map((line) => line.split('|').map((item) => item.trim()))
         .filter((item) => item[2] !== IMPACTED_BY_SCRIPT_BLOCKING.NONE);
 
-      setinitialTableData(() =>
-        mdlData.map((item: string[]) => {
+      setinitialTableData(() => {
+        const data = mdlData.map((item: string[]) => {
           let owner = item[1];
 
           if (item[1].includes('PSL Domain')) {
@@ -101,8 +104,12 @@ const MDLTable = () => {
             owner,
             scriptBlocking,
           };
-        })
-      );
+        });
+
+        setIsLoading(false);
+
+        return data;
+      });
     })();
   }, []);
 
@@ -212,7 +219,7 @@ const MDLTable = () => {
     []
   );
 
-  if (tableData.length === 0) {
+  if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <ProgressBar additionalStyles="w-80 h-80" />
