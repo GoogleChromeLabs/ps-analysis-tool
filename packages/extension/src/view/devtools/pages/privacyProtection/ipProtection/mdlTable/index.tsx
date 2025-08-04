@@ -51,6 +51,25 @@ const MDLTable = () => {
 
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
 
+  const [tab, setTab] = useState<chrome.tabs.Tab | null>(null);
+
+  useEffect(() => {
+    const fetchTab = async () => {
+      const currentTab = await getCurrentTab();
+      if (!currentTab) {
+        return;
+      }
+
+      setTab(currentTab);
+    };
+
+    chrome.webNavigation.onCompleted.addListener(fetchTab);
+
+    return () => {
+      chrome.webNavigation.onCompleted.removeListener(fetchTab);
+    };
+  }, []);
+
   const checkbox = useCallback(() => {
     return (
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
@@ -86,8 +105,6 @@ const MDLTable = () => {
         line.split('|').map((item) => item.trim())
       );
 
-      const tab = await getCurrentTab();
-
       setTableData(() => {
         const _data = mdlData
           .map((item: string[]) => {
@@ -99,13 +116,16 @@ const MDLTable = () => {
 
             const scriptBlocking = item[2];
 
+            const hostname = tab?.url ? new URL(tab.url).hostname : '';
+
             return {
               domain: item[0],
               owner,
               scriptBlocking,
-              highlighted: new URL(tab?.url).hostname === item[0],
-              highlightedClass:
-                new URL(tab?.url).hostname === item[0] ? 'bg-amber-100' : '',
+              highlighted: hostname.includes(item[0]),
+              highlightedClass: hostname.includes(item[0])
+                ? 'bg-amber-100'
+                : '',
             };
           })
           .filter((item) => {
@@ -124,7 +144,7 @@ const MDLTable = () => {
         return _data;
       });
     })();
-  }, [showOnlyHighlighted]);
+  }, [showOnlyHighlighted, tab?.url]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
