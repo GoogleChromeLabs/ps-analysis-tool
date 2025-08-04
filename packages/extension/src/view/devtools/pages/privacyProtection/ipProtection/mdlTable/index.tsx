@@ -114,6 +114,9 @@ const MDLTable = () => {
 
             return true;
           })
+          .sort((a, b) => {
+            return Number(b.highlighted) - Number(a.highlighted);
+          })
       );
     })();
   }, [showOnlyHighlighted]);
