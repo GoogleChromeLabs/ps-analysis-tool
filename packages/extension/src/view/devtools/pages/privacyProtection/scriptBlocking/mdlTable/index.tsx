@@ -119,13 +119,13 @@ const MDLTable = () => {
         <input
           className="hover:cursor-pointer"
           type="checkbox"
-          checked={showOnlyHighlighted}
-          onChange={() => setShowOnlyHighlighted(!showOnlyHighlighted)}
+          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
+          defaultChecked
         />
         <span className="whitespace-nowrap">Show only highlighted domains</span>
       </label>
     );
-  }, [showOnlyHighlighted]);
+  }, []);
 
   const tableData: MDLTableData[] = useMemo(() => {
     if (initialTableData.length === 0) {
