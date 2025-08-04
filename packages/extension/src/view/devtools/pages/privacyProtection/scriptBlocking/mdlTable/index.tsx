@@ -133,20 +133,24 @@ const MDLTable = () => {
         available = true;
       }
 
-      data.push({
-        ...item,
-        highlighted: available,
-        highlightedClass:
-          available && item.scriptBlocking.startsWith('Some URLs are Blocked')
-            ? 'bg-amber-100'
-            : '',
-      } as MDLTableData);
+      const canPush = showOnlyHighlighted ? available : true;
+
+      if (canPush) {
+        data.push({
+          ...item,
+          highlighted: available,
+          highlightedClass:
+            available && item.scriptBlocking.startsWith('Some URLs are Blocked')
+              ? 'bg-amber-100'
+              : '',
+        } as MDLTableData);
+      }
     });
 
     return data.sort((a, b) => {
       return Number(b.highlighted) - Number(a.highlighted);
     });
-  }, [uniqueResponseDomains, initialTableData]);
+  }, [uniqueResponseDomains, initialTableData, showOnlyHighlighted]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
