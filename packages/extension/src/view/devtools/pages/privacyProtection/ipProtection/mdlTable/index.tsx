@@ -54,7 +54,32 @@ const MDLTable = () => {
   const [tab, setTab] = useState<chrome.tabs.Tab | null>(null);
 
   useEffect(() => {
-    const fetchTab = async () => {
+    const currentTab = async () => {
+      const _tab = await getCurrentTab();
+      if (_tab) {
+        setTab(_tab);
+      }
+    };
+
+    currentTab();
+  }, []);
+
+  useEffect(() => {
+    const fetchTab = async ({
+      frameId,
+      frameType,
+      tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        !(
+          chrome.devtools.inspectedWindow.tabId === tabId &&
+          frameType === 'outermost_frame' &&
+          frameId === 0
+        )
+      ) {
+        return;
+      }
+
       const currentTab = await getCurrentTab();
       if (!currentTab) {
         return;
