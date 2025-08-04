@@ -28,7 +28,13 @@ import {
   Link,
   ResizableTray,
 } from '@google-psat/design-system';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import type { MDLTableData } from '@google-psat/common';
 /**
  * Internal dependencies
@@ -97,6 +103,15 @@ const MDLTable = () => {
         })
       );
     })();
+  }, []);
+
+  const checkbox = useCallback(() => {
+    return (
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input className="hover:cursor-pointer" type="checkbox" />
+        <span className="whitespace-nowrap">Show Only Highlighted Domains</span>
+      </label>
+    );
   }, []);
 
   const tableData: MDLTableData[] = useMemo(() => {
@@ -231,7 +246,7 @@ const MDLTable = () => {
           className="h-full flex"
           trayId="mdl-table-bottom-tray"
         >
-          <Table selectedKey={selectedKey} />
+          <Table selectedKey={selectedKey} extraInterfaceToTopBar={checkbox} />
         </ResizableTray>
         <Legend />
       </TableProvider>
