@@ -38,6 +38,7 @@ import { getCurrentTab } from '../../../../../../utils/getCurrentTab';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [tableData, setTableData] = useState<
     {
@@ -87,8 +88,8 @@ const MDLTable = () => {
 
       const tab = await getCurrentTab();
 
-      setTableData(() =>
-        mdlData
+      setTableData(() => {
+        const _data = mdlData
           .map((item: string[]) => {
             let owner = item[1];
 
@@ -116,8 +117,12 @@ const MDLTable = () => {
           })
           .sort((a, b) => {
             return Number(b.highlighted) - Number(a.highlighted);
-          })
-      );
+          });
+
+        setIsLoading(false);
+
+        return _data;
+      });
     })();
   }, [showOnlyHighlighted]);
 
@@ -162,7 +167,7 @@ const MDLTable = () => {
     []
   );
 
-  if (tableData.length === 0) {
+  if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <ProgressBar additionalStyles="w-80 h-80" />
