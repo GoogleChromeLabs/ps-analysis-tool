@@ -63,10 +63,10 @@ const MDLTable = () => {
       setTab(currentTab);
     };
 
-    chrome.webNavigation.onCompleted.addListener(fetchTab);
+    chrome.webNavigation.onCommitted.addListener(fetchTab);
 
     return () => {
-      chrome.webNavigation.onCompleted.removeListener(fetchTab);
+      chrome.webNavigation.onCommitted.removeListener(fetchTab);
     };
   }, []);
 
