@@ -54,6 +54,7 @@ const DATA_URL =
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
   const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
     uniqueResponseDomains: state.uniqueResponseDomains,
   }));
@@ -108,11 +109,16 @@ const MDLTable = () => {
   const checkbox = useCallback(() => {
     return (
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input className="hover:cursor-pointer" type="checkbox" />
-        <span className="whitespace-nowrap">Show Only Highlighted Domains</span>
+        <input
+          className="hover:cursor-pointer"
+          type="checkbox"
+          checked={showOnlyHighlighted}
+          onChange={() => setShowOnlyHighlighted(!showOnlyHighlighted)}
+        />
+        <span className="whitespace-nowrap">Show only highlighted domains</span>
       </label>
     );
-  }, []);
+  }, [showOnlyHighlighted]);
 
   const tableData: MDLTableData[] = useMemo(() => {
     if (initialTableData.length === 0) {
