@@ -108,20 +108,6 @@ const scenarios = {
         action: () => {
           hideBrowserLoading();
           showBrowserDialog('account-chooser');
-          setTimeout(() => {
-            const dialog = document.querySelector(
-              '.browser-dialog.account-chooser .browser-dialog-body'
-            );
-            if (dialog) {
-              const privacyNote = document.createElement('div');
-              privacyNote.className = 'privacy-policy-note';
-              privacyNote.innerHTML = `
-                <a href="#" target="_blank">Privacy Policy</a> • <a href="#" target="_blank">Terms of Service</a>
-                <div class="privacy-disclaimer">By continuing, you agree to the identity provider's privacy policy and terms.</div>
-              `;
-              dialog.appendChild(privacyNote);
-            }
-          }, 0);
           addMessage('browser-entity', 'user-entity', 'Shows account picker');
         },
       },
@@ -681,18 +667,7 @@ const scenarios = {
           'Browser shows consent dialog to user (requesting new permissions)',
         action: () => {
           hideBrowserLoading();
-          showBrowserDialog('consent-dialog', {
-            title: 'YourID would like to share',
-            content: `
-              <p>example-shop.com is requesting additional access:</p>
-              <ul class="permissions-list">
-                  <li>Your shopping preferences</li>
-                  <li>Your purchase history</li>
-              </ul>
-              <button id="consent-approve-button" class="fedcm-button">Allow</button>
-              <button class="cancel-button">Cancel</button>
-            `,
-          });
+          showBrowserDialog('consent-dialog');
         },
       },
       {
@@ -1024,22 +999,22 @@ function showBrowserDialog(dialogType, options = {}) {
                     <button id="choose-account-button" class="fedcm-button">Continue</button>
                     <button class="cancel-button">Cancel</button>
                 </div>
+								<div class="privacy-policy-note">
+									<a href="#" target="_blank">Privacy Policy</a> • <a href="#" target="_blank">Terms of Service</a>
+									<div class="privacy-disclaimer">By continuing, you agree to the identity provider's privacy policy and terms.</div>
+								</div>
             </div>
         `;
   } else if (dialogType === 'consent-dialog') {
-    const title = options.title || 'YourID would like to share';
-    const content =
-      options.content ||
-      `
-            <p>example-shop.com is requesting:</p>
-            <ul class="permissions-list">
-                <li>Your name</li>
-                <li>Your email address</li>
-                <li>Your profile picture</li>
-            </ul>
-            <button id="consent-approve-button" class="fedcm-button">Allow</button>
-            <button class="cancel-button">Cancel</button>
-        `;
+    const title = 'YourID would like to share';
+    const content = `
+			<p>example-shop.com is requesting additional access:</p>
+			<ul class="permissions-list">
+					<li>Your shopping preferences</li>
+					<li>Your purchase history</li>
+			</ul>
+			<button id="consent-approve-button" class="fedcm-button">Allow</button>
+			<button class="cancel-button">Cancel</button>`;
 
     dialogHTML = `
             <div class="browser-dialog consent-dialog">
