@@ -999,22 +999,22 @@ function showBrowserDialog(dialogType, options = {}) {
                     <button id="choose-account-button" class="fedcm-button">Continue</button>
                     <button class="cancel-button">Cancel</button>
                 </div>
-								<div class="privacy-policy-note">
-									<a href="#" target="_blank">Privacy Policy</a> • <a href="#" target="_blank">Terms of Service</a>
-									<div class="privacy-disclaimer">By continuing, you agree to the identity provider's privacy policy and terms.</div>
-								</div>
+                <div class="privacy-policy-note">
+                  <a href="#" target="_blank">Privacy Policy</a> • <a href="#" target="_blank">Terms of Service</a>
+                  <div class="privacy-disclaimer">By continuing, you agree to the identity provider's privacy policy and terms.</div>
+                </div>
             </div>
         `;
   } else if (dialogType === 'consent-dialog') {
     const title = 'YourID would like to share';
     const content = `
-			<p>example-shop.com is requesting additional access:</p>
-			<ul class="permissions-list">
-					<li>Your shopping preferences</li>
-					<li>Your purchase history</li>
-			</ul>
-			<button id="consent-approve-button" class="fedcm-button">Allow</button>
-			<button class="cancel-button">Cancel</button>`;
+      <p>example-shop.com is requesting additional access:</p>
+      <ul class="permissions-list">
+          <li>Your shopping preferences</li>
+          <li>Your purchase history</li>
+      </ul>
+      <button id="consent-approve-button" class="fedcm-button">Allow</button>
+      <button class="cancel-button">Cancel</button>`;
 
     dialogHTML = `
             <div class="browser-dialog consent-dialog">
@@ -1389,6 +1389,8 @@ function nextStep() {
  *
  */
 function resetScenario() {
+  window.autoAdvanceInterval && clearInterval(window.autoAdvanceInterval);
+  window.autoAdvanceInterval = null;
   document.getElementById('browser-content').style.minHeight = '250px';
 
   // Reset step counter
@@ -1465,6 +1467,32 @@ function resetScenario() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+  // Auto-advance logic
+  document.getElementById('auto-advance').addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'auto-advance') {
+      // If already running, stop
+      if (window.autoAdvanceInterval) {
+        clearInterval(window.autoAdvanceInterval);
+        window.autoAdvanceInterval = null;
+        e.target.innerHTML = 'Auto Advance <i class="fas fa-fast-forward"></i>';
+        return;
+      }
+      // Start auto-advancing
+      e.target.innerHTML = 'Stop Auto Advance <i class="fas fa-stop"></i>';
+      window.autoAdvanceInterval = setInterval(() => {
+        // Only advance if not at end
+        const scenario = scenarios[currentScenario];
+        if (currentStep < scenario.steps.length - 1) {
+          nextStep();
+        } else {
+          clearInterval(window.autoAdvanceInterval);
+          window.autoAdvanceInterval = null;
+          document.getElementById('auto-advance').innerHTML =
+            'Auto Advance <i class="fas fa-fast-forward"></i>';
+        }
+      }, 1200); // 1.2s per step
+    }
+  });
   // Setup click handlers
   document.getElementById('next-step').addEventListener('click', nextStep);
   document
