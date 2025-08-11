@@ -1547,17 +1547,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // Large screens
       sequenceDiagram.style.minHeight = '600px';
       browserUI.style.minHeight = '500px';
-      visualizationContainer.style.minHeight = '500px';
+      visualizationContainer.style.minHeight = '800px';
     } else if (viewportHeight > 700) {
       // Medium screens
       sequenceDiagram.style.minHeight = '450px';
       browserUI.style.minHeight = '450px';
-      visualizationContainer.style.minHeight = '450px';
+      visualizationContainer.style.minHeight = '650px';
     } else {
       // Small screens
       sequenceDiagram.style.minHeight = '400px';
       browserUI.style.minHeight = '400px';
-      visualizationContainer.style.minHeight = '400px';
+      visualizationContainer.style.minHeight = '600px';
     }
   }
 
