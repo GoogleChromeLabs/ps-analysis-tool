@@ -973,3 +973,7 @@ main {
     max-width: 300px;
   }
 }
+
+.privacy-policy-note {
+  padding: 10px 20px;
+}
