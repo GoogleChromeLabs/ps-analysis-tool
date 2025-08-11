@@ -1326,7 +1326,7 @@ function nextStep() {
   if (currentStep === -1) {
     clearMessages();
     document.getElementById('next-step').innerHTML =
-      '<i class="fas fa-arrow-right"></i> Next Step';
+      'Next Step <i class="fas fa-arrow-right"></i>';
   }
 
   // Move to next step
@@ -1351,7 +1351,7 @@ function nextStep() {
       updateScenarioInfo();
       updateTimeline();
       document.getElementById('next-step').innerHTML =
-        '<i class="fas fa-play"></i> Start Flow';
+        'Start Flow <i class="fas fa-play"></i>';
       document.getElementById(
         'step-explanation'
       ).textContent = `Click "Start Flow" to begin the ${scenarios[
@@ -1360,7 +1360,7 @@ function nextStep() {
     } else {
       // End of demo - FIXED: Added updateScenarioInfo and updateTimeline calls
       document.getElementById('next-step').innerHTML =
-        '<i class="fas fa-redo"></i> Restart Demo';
+        'Restart Demo <i class="fas fa-redo"></i>';
       document.getElementById('step-explanation').textContent =
         'You\'ve completed all FedCM scenarios! Click "Restart Demo" to begin again.';
       currentScenario = 'registration';
@@ -1455,7 +1455,7 @@ function resetScenario() {
 
   // Reset UI controls
   document.getElementById('next-step').innerHTML =
-    '<i class="fas fa-play"></i> Start Flow';
+    'Start Flow <i class="fas fa-play"></i>';
   document.getElementById(
     'step-explanation'
   ).textContent = `Click "Start Flow" to begin the ${scenarios[
