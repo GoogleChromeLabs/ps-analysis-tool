@@ -1422,7 +1422,7 @@ function resetScenario() {
                 <div class="rp-website">
                     <h2>Welcome to ExampleShop</h2>
                     <p>Please sign in to continue</p>
-                    <button id="signin-button" class="fedcm-button">Sign in with IdP1</button>
+                    <button id="signin-button" class="fedcm-button">Sign in</button>
                 </div>
             `);
       break;
