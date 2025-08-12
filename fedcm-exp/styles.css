@@ -890,7 +890,7 @@ main {
 /* Scenario info panel */
 #scenario-info-panel {
   background-color: white;
-  padding: 15px 20px;
+  padding: 12px 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }

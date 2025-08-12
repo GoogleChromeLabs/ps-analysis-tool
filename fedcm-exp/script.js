@@ -59,7 +59,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser requests well-known and config from IDP',
+        explanation: 'Browser requests well-known and config from IdP',
         action: () => {
           addMessage(
             'browser-entity',
@@ -69,7 +69,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns well-known and config file to browser',
+        explanation: 'IdP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
@@ -79,25 +79,25 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser requests available accounts from IDP',
+        explanation: 'Browser requests available accounts from IdP',
         action: () => {
           addMessage('browser-entity', 'idp-entity', 'GET /accounts');
         },
       },
       {
-        explanation: 'IDP returns user accounts to browser',
+        explanation: 'IdP returns user accounts to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns account(s)');
         },
       },
       {
-        explanation: 'Browser requests client metadata from IDP',
+        explanation: 'Browser requests client metadata from IdP',
         action: () => {
           addMessage('browser-entity', 'idp-entity', 'GET /client-metadata');
         },
       },
       {
-        explanation: 'IDP returns client metadata to browser',
+        explanation: 'IdP returns client metadata to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns client metadata');
         },
@@ -121,7 +121,7 @@ const scenarios = {
       // In FedCM, after user selects an account and consents, the browser proceeds to request a token from the IdP and delivers it to the RP. The RP only receives a callback after the whole flow is complete.
       {
         explanation:
-          'After the user picks an account, the browser sends a sign-in request to the identity provider (IDP)',
+          'After the user picks an account, the browser sends a sign-in request to the IdP',
         action: () => {
           hideBrowserDialog();
           showBrowserLoading('Authenticating...');
@@ -133,7 +133,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns authentication token to browser',
+        explanation: 'IdP returns authentication token to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns token');
         },
@@ -242,7 +242,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser requests well-known and config from IDP',
+        explanation: 'Browser requests well-known and config from IdP',
         action: () => {
           addMessage(
             'browser-entity',
@@ -252,7 +252,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns well-known and config to browser',
+        explanation: 'IdP returns well-known and config to browser',
         action: () => {
           addMessage(
             'idp-entity',
@@ -262,13 +262,13 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser requests available accounts from IDP',
+        explanation: 'Browser requests available accounts from IdP',
         action: () => {
           addMessage('browser-entity', 'idp-entity', 'GET /accounts');
         },
       },
       {
-        explanation: 'IDP returns user accounts to browser',
+        explanation: 'IdP returns user accounts to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns account(s)');
         },
@@ -290,7 +290,7 @@ const scenarios = {
       },
       {
         explanation:
-          'After the user picks an account, the browser sends a sign-in request to the identity provider (IDP)',
+          'After the user picks an account, the browser sends a sign-in request to the IdP',
         action: () => {
           hideBrowserDialog();
           showBrowserLoading('Authenticating...');
@@ -302,7 +302,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns authentication token to browser',
+        explanation: 'IdP returns authentication token to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns token');
         },
@@ -394,7 +394,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns well-known and config file to browser',
+        explanation: 'IdP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
@@ -404,13 +404,13 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser fetches available accounts from IDP',
+        explanation: 'Browser fetches available accounts from IdP',
         action: () => {
           addMessage('browser-entity', 'idp-entity', 'GET /accounts');
         },
       },
       {
-        explanation: 'IDP returns user accounts to browser',
+        explanation: 'IdP returns user accounts to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns account(s)');
         },
@@ -427,7 +427,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns fresh authentication token to browser',
+        explanation: 'IdP returns fresh authentication token to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns updated token');
         },
@@ -547,7 +547,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns well-known and config file to browser',
+        explanation: 'IdP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
@@ -557,13 +557,13 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser requests available accounts from IDP',
+        explanation: 'Browser requests available accounts from IdP',
         action: () => {
           addMessage('browser-entity', 'idp-entity', 'GET /accounts');
         },
       },
       {
-        explanation: 'IDP returns user accounts to browser',
+        explanation: 'IdP returns user accounts to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns account(s)');
         },
@@ -585,7 +585,7 @@ const scenarios = {
       },
       {
         explanation:
-          'After the user picks an account, the browser sends a sign-in request to the identity provider (IDP)',
+          'After the user picks an account, the browser sends a sign-in request to the IdP',
         action: () => {
           hideBrowserDialog();
           showBrowserLoading('Authenticating...');
@@ -597,7 +597,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns authentication token to browser',
+        explanation: 'IdP returns authentication token to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns token');
         },
@@ -671,7 +671,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns well-known and config file to browser',
+        explanation: 'IdP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
@@ -688,7 +688,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns user accounts to browser',
+        explanation: 'IdP returns user accounts to browser',
         action: () => {
           addMessage('idp-entity', 'browser-entity', 'Returns account(s)');
         },
@@ -720,7 +720,7 @@ const scenarios = {
       },
       {
         explanation:
-          'Browser sends request for token creation with new scopes to IDP',
+          'Browser sends request for token creation with new scopes to IdP',
         action: () => {
           addMessage(
             'browser-entity',
@@ -730,7 +730,7 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP updates permissions and returns token to browser',
+        explanation: 'IdP updates permissions and returns token to browser',
         action: () => {
           hideBrowserDialog();
           showBrowserLoading('Updating permissions...');
@@ -803,12 +803,12 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Optional: Browser notifies IdP to revoke RP-IDP relation',
+        explanation: 'Optional: Browser notifies IdP to revoke RP-IdP relation',
         action: () => {
           addMessage(
             'browser-entity',
             'idp-entity',
-            'Revoke RP-IDP relation (optional)'
+            'Revoke RP-IdP relation (optional)'
           );
         },
       },
