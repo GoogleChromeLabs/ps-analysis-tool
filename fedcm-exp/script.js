@@ -1553,9 +1553,9 @@ document.addEventListener('DOMContentLoaded', () => {
     browserUI.style.height = halfHeight + 'px';
     browserUI.style.minHeight = halfHeight + 'px';
     browserUI.style.maxHeight = halfHeight + 'px';
-    sequenceDiagram.style.height = halfHeight + 'px';
+    sequenceDiagram.style.height = halfHeight + 110 + 'px';
     sequenceDiagram.style.minHeight = halfHeight + 'px';
-    sequenceDiagram.style.maxHeight = halfHeight + 'px';
+    sequenceDiagram.style.maxHeight = halfHeight + 110 + 'px';
   }
 
   // Run on load and resize
