@@ -121,11 +121,15 @@ const scenarios = {
       // In FedCM, after user selects an account and consents, the browser proceeds to request a token from the IdP and delivers it to the RP. The RP only receives a callback after the whole flow is complete.
       {
         explanation:
-          'Browser (after user selection) sends assertion POST request to IDP',
+          'After the user picks an account, the browser sends a sign-in request to the identity provider (IDP)',
         action: () => {
           hideBrowserDialog();
           showBrowserLoading('Authenticating...');
-          addMessage('browser-entity', 'idp-entity', 'POST /token');
+          addMessage(
+            'browser-entity',
+            'idp-entity',
+            'POST request for token creation (/assertion)'
+          );
         },
       },
       {
@@ -285,11 +289,16 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser sends assertion POST request to IDP',
+        explanation:
+          'After the user picks an account, the browser sends a sign-in request to the identity provider (IDP)',
         action: () => {
           hideBrowserDialog();
           showBrowserLoading('Authenticating...');
-          addMessage('browser-entity', 'idp-entity', 'POST /token');
+          addMessage(
+            'browser-entity',
+            'idp-entity',
+            'POST request for token creation (/assertion)'
+          );
         },
       },
       {
@@ -407,9 +416,14 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser sends assertion POST request to IDP',
+        explanation:
+          'Browser selects signed-in account automatically and send token creation request',
         action: () => {
-          addMessage('browser-entity', 'idp-entity', 'POST /token');
+          addMessage(
+            'browser-entity',
+            'idp-entity',
+            'POST request for token creation (/assertion)'
+          );
         },
       },
       {
@@ -570,11 +584,16 @@ const scenarios = {
         },
       },
       {
-        explanation: 'Browser sends assertion POST request to IDP',
+        explanation:
+          'After the user picks an account, the browser sends a sign-in request to the identity provider (IDP)',
         action: () => {
           hideBrowserDialog();
           showBrowserLoading('Authenticating...');
-          addMessage('browser-entity', 'idp-entity', 'POST /token');
+          addMessage(
+            'browser-entity',
+            'idp-entity',
+            'POST request for token creation (/assertion)'
+          );
         },
       },
       {
@@ -701,12 +720,12 @@ const scenarios = {
       },
       {
         explanation:
-          'Browser sends assertion POST request to IdP (with new scopes)',
+          'Browser sends request for token creation with new scopes to IDP',
         action: () => {
           addMessage(
             'browser-entity',
             'idp-entity',
-            'POST /token (with new scopes)'
+            'POST request for token creation (/assertion) (with new scopes)'
           );
         },
       },
