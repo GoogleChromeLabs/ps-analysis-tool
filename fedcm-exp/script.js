@@ -19,7 +19,7 @@ const scenarios = {
   registration: {
     title: 'First-time Sign-In (Registration)',
     description:
-      "User visits a website for the first time and needs to create an account. They'll use their identity provider (IdP) account to register.",
+      'A new user visits ExampleShop and chooses to sign in using an identity provider (IdP). The flow guides them through picking an IdP, authenticating, and completing account registration with pre-filled details from their IdP account.',
     steps: [
       {
         explanation: "User clicks 'Sign in' button",
@@ -218,7 +218,7 @@ const scenarios = {
   signin: {
     title: 'Passive Mode Sign-In',
     description:
-      'User returns to the website and the FedCM dialog appears automatically without requiring a button click.',
+      'A returning user visits ExampleShop. The browser automatically detects available IdPs and prompts the user to sign in, streamlining the login process without requiring a signin button click.',
     steps: [
       {
         explanation: 'User navigates to the website',
@@ -340,7 +340,7 @@ const scenarios = {
   reauth: {
     title: 'Silent ReAuth',
     description:
-      "User's session expires and is seamlessly refreshed in the background without interrupting the user experience.",
+      "When a user's session is about to expire, the browser refreshes their authentication in the background using FedCM, keeping them signed in without any interruption or visible prompts.",
     steps: [
       {
         explanation: 'Browser detects session expiration approaching',
@@ -456,7 +456,7 @@ const scenarios = {
   reauthInteractive: {
     title: 'Interactive ReAuth',
     description:
-      'When silent reauthentication fails, user must complete an interactive sign-in to continue using the website.',
+      'If silent reauthentication fails, the user is prompted to sign in again interactively. The flow shows how the browser and RP handle session expiration and guide the user through restoring access.',
     steps: [
       {
         explanation: 'Browser detects session has expired',
@@ -627,7 +627,7 @@ const scenarios = {
   requestPermissions: {
     title: 'Request Permissions (Consent Dialog)',
     description:
-      'User needs to grant additional permissions for the website to access more information.',
+      'ExampleShop requests additional permissions from the user to enable new features, such as personalized recommendations. The user reviews and consents to sharing extra information via their IdP.',
     steps: [
       {
         explanation:
@@ -767,7 +767,8 @@ const scenarios = {
   },
   signout: {
     title: 'Sign Out',
-    description: 'User signs out from the website.',
+    description:
+      "The user signs out of ExampleShop, ending their session and optionally revoking the site's access with their IdP. The flow demonstrates how sign-out is handled across browser, RP, and IdP.",
     steps: [
       {
         explanation: "User clicks 'Sign out'",
