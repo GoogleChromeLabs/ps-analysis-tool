@@ -22,10 +22,10 @@ const scenarios = {
       "The user visits a website for the first time and needs to create an account. They'll use their identity provider (IdP) account to register.",
     steps: [
       {
-        explanation: "User clicks 'Sign in with IdP'",
+        explanation: "User clicks 'Sign in' button",
         action: () => {
           simulateButtonClick('#signin-button');
-          addMessage('user-entity', 'rp-entity', "Clicks 'Sign in with IdP'");
+          addMessage('user-entity', 'rp-entity', "Clicks 'Sign in'");
         },
       },
       {
@@ -54,7 +54,7 @@ const scenarios = {
       {
         explanation: 'User selects an IdP in browser dialog',
         action: () => {
-          simulateElementSelection('#yourid-option');
+          simulateElementSelection('#idp1-option');
           addMessage('user-entity', 'browser-entity', 'Selects IdP');
         },
       },
@@ -160,7 +160,7 @@ const scenarios = {
           updateBrowserContent(`
             <div class="rp-website">
                 <h2>Complete Registration</h2>
-                <p>We've pre-filled some information from your YourID account</p>
+                <p>We've pre-filled some information from your IdP1 account</p>
                 <form id="registration-form">
                     <div class="form-group">
                         <label>Name</label>
@@ -168,7 +168,7 @@ const scenarios = {
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" value="alex@yourid.com" disabled>
+                        <input type="email" value="alex@idp1.com" disabled>
                     </div>
                     <div class="form-group">
                         <label>Username (required)</label>
@@ -506,7 +506,7 @@ const scenarios = {
             <div class="rp-website">
               <h2>Session Expired</h2>
               <p>Please sign in again to continue</p>
-              <button id="signin-button" class="fedcm-button">Sign in with YourID</button>
+              <button id="signin-button" class="fedcm-button">Sign in with IdP1</button>
             </div>
           `);
           // Add arrow to sequence diagram for login screen shown
@@ -517,7 +517,7 @@ const scenarios = {
         explanation: 'User clicks sign-in button',
         action: () => {
           simulateButtonClick('#signin-button');
-          showBrowserLoading('Connecting to YourID...');
+          showBrowserLoading('Connecting to Idp1...');
           addMessage('user-entity', 'browser-entity', 'Clicks sign in button');
         },
       },
@@ -800,7 +800,7 @@ const scenarios = {
             <div class="rp-website">
                 <h2>ExampleShop</h2>
                 <p>You have been signed out.</p>
-                <button class="fedcm-button">Sign in with YourID</button>
+                <button class="fedcm-button">Sign in with IdP1</button>
             </div>
           `);
         },
@@ -970,62 +970,62 @@ function showBrowserDialog(dialogType, options = {}) {
   if (dialogType === 'idp-chooser') {
     // New dialog for IdP picker
     dialogHTML = `
-            <div class="browser-dialog idp-chooser">
-                <div class="browser-dialog-header">
-                    <h2>Choose an identity provider</h2>
-                </div>
-                <div class="browser-dialog-body">
-                    <div id="yourid-option" class="idp-option">
-                        <img src="yourid-logo.png" alt="YourID Logo" class="idp-logo">
-                        <div class="idp-details">
-                            <strong>YourID</strong>
-                            <span>Sign in with your YourID account</span>
-                        </div>
-                    </div>
-                    <div class="idp-option">
-                        <img src="other-idp-logo.png" alt="Other IdP Logo" class="idp-logo">
-                        <div class="idp-details">
-                            <strong>OtherID</strong>
-                            <span>Sign in with your OtherID account</span>
-                        </div>
-                    </div>
-                    <button id="choose-idp-button" class="fedcm-button">Continue</button>
-                    <button class="cancel-button">Cancel</button>
-                </div>
+        <div class="browser-dialog idp-chooser">
+            <div class="browser-dialog-header">
+                <h2>Choose an identity provider</h2>
             </div>
-        `;
+            <div class="browser-dialog-body">
+                <div id="idp1-option" class="idp-option">
+                    <img src="yourid-logo.png" alt="IdP1 Logo" class="idp-logo">
+                    <div class="idp-details">
+                        <strong>IdP1</strong>
+                        <span>Sign in with your IdP1 account</span>
+                    </div>
+                </div>
+                <div id="idp2-option" class="idp-option">
+                    <img src="other-idp-logo.png" alt="IdP2 Logo" class="idp-logo">
+                    <div class="idp-details">
+                        <strong>IdP2</strong>
+                        <span>Sign in with your IdP2 account</span>
+                    </div>
+                </div>
+                <button id="choose-idp-button" class="fedcm-button">Continue</button>
+                <button class="cancel-button">Cancel</button>
+            </div>
+        </div>
+    `;
   } else if (dialogType === 'account-chooser') {
     dialogHTML = `
-            <div class="browser-dialog account-chooser">
-                <div class="browser-dialog-header">
-                    <h2>Choose an account</h2>
-                </div>
-                <div class="browser-dialog-body">
-                    <div class="account-option">
-                        <img src="user-avatar.png" alt="User Avatar" class="account-avatar">
-                        <div class="account-details">
-                            <strong>alex@yourid.com</strong>
-                            <span>YourID Account</span>
-                        </div>
-                    </div>
-                    <div class="account-option">
-                        <img src="user-avatar2.png" alt="Second User Avatar" class="account-avatar">
-                        <div class="account-details">
-                            <strong>alex.work@yourid.com</strong>
-                            <span>YourID Account</span>
-                        </div>
-                    </div>
-                    <button id="choose-account-button" class="fedcm-button">Continue</button>
-                    <button class="cancel-button">Cancel</button>
-                </div>
-                <div class="privacy-policy-note">
-                  <a href="#" target="_blank">Privacy Policy</a> • <a href="#" target="_blank">Terms of Service</a>
-                  <div class="privacy-disclaimer">By continuing, you agree to the identity provider's privacy policy and terms.</div>
-                </div>
+        <div class="browser-dialog account-chooser">
+            <div class="browser-dialog-header">
+                <h2>Choose an account</h2>
             </div>
-        `;
+            <div class="browser-dialog-body">
+                <div class="account-option">
+                    <img src="user-avatar.png" alt="User Avatar" class="account-avatar">
+                    <div class="account-details">
+                        <strong>alex@idp1.com</strong>
+                        <span>IdP1 Account</span>
+                    </div>
+                </div>
+                <div class="account-option">
+                    <img src="user-avatar2.png" alt="Second User Avatar" class="account-avatar">
+                    <div class="account-details">
+                        <strong>alex.work@idp1.com</strong>
+                        <span>IdP1 Account</span>
+                    </div>
+                </div>
+                <button id="choose-account-button" class="fedcm-button">Continue</button>
+                <button class="cancel-button">Cancel</button>
+            </div>
+            <div class="privacy-policy-note">
+              <a href="#" target="_blank">Privacy Policy</a> • <a href="#" target="_blank">Terms of Service</a>
+              <div class="privacy-disclaimer">By continuing, you agree to the identity provider's privacy policy and terms.</div>
+            </div>
+        </div>
+    `;
   } else if (dialogType === 'consent-dialog') {
-    const title = 'YourID would like to share';
+    const title = 'IdP1 would like to share';
     const content = `
       <p>example-shop.com is requesting additional access:</p>
       <ul class="permissions-list">
@@ -1036,15 +1036,15 @@ function showBrowserDialog(dialogType, options = {}) {
       <button class="cancel-button">Cancel</button>`;
 
     dialogHTML = `
-            <div class="browser-dialog consent-dialog">
-                <div class="browser-dialog-header">
-                    <h2>${title}</h2>
-                </div>
-                <div class="browser-dialog-body">
-                    ${content}
-                </div>
+        <div class="browser-dialog consent-dialog">
+            <div class="browser-dialog-header">
+                <h2>${title}</h2>
             </div>
-        `;
+            <div class="browser-dialog-body">
+                ${content}
+            </div>
+        </div>
+    `;
   } else if (dialogType === 'scenario-choice') {
     // Add scenario choice dialog for reauth choice
     const title = options.title || 'Choose scenario path';
@@ -1115,14 +1115,14 @@ function showBrowserDialog(dialogType, options = {}) {
             </div>
             <div class="browser-dialog-body">
                 <div class="account-option">
-                    <img src="yourid-logo.png" alt="YourID Logo" class="idp-logo">
+                    <img src="yourid-logo.png" alt="IdP1 Logo" class="idp-logo">
                     <div class="account-details">
-                        <strong>alex@yourid.com</strong>
-                        <span>YourID Account</span>
+                        <strong>alex@idp1.com</strong>
+                        <span>IdP1 Account</span>
                     </div>
                 </div>
                 <div class="account-option">
-                    <img src="other-idp-logo.png" alt="Other IdP Logo" class="idp-logo">
+                    <img src="other-idp-logo.png" alt="IdP2 Logo" class="idp-logo">
                     <div class="account-details">
                         <strong>Use a different account</strong>
                     </div>
@@ -1403,7 +1403,7 @@ function resetScenario() {
                 <div class="rp-website">
                     <h2>Welcome to ExampleShop</h2>
                     <p>Please sign in to continue</p>
-                    <button id="signin-button" class="fedcm-button">Sign in with YourID</button>
+                    <button id="signin-button" class="fedcm-button">Sign in with IdP1</button>
                 </div>
             `);
       break;
