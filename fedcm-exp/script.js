@@ -1533,30 +1533,29 @@ document.addEventListener('DOMContentLoaded', () => {
    *
    */
   function adjustContainerHeights() {
-    const viewportHeight = window.innerHeight;
     const visualizationContainer = document.getElementById(
       'visualization-container'
     );
     const browserUI = document.getElementById('browser-ui');
     const sequenceDiagram = document.getElementById('sequence-diagram');
 
-    // Set container heights based on viewport
-    if (viewportHeight > 900) {
-      // Large screens
-      sequenceDiagram.style.minHeight = '600px';
-      browserUI.style.minHeight = '500px';
-      visualizationContainer.style.minHeight = '800px';
-    } else if (viewportHeight > 700) {
-      // Medium screens
-      sequenceDiagram.style.minHeight = '450px';
-      browserUI.style.minHeight = '450px';
-      visualizationContainer.style.minHeight = '650px';
-    } else {
-      // Small screens
-      sequenceDiagram.style.minHeight = '400px';
-      browserUI.style.minHeight = '400px';
-      visualizationContainer.style.minHeight = '600px';
-    }
+    // Calculate available height for main visualization area
+    const viewportHeight = window.innerHeight;
+    // Reserve space for header, timeline, explanation panel, etc.
+    const reservedHeight = 150; // Adjust as needed for your layout
+    const availableHeight = Math.max(viewportHeight - reservedHeight, 300);
+
+    visualizationContainer.style.height = availableHeight + 'px';
+    visualizationContainer.style.minHeight = availableHeight + 'px';
+
+    // Split available space between browser and diagram
+    const halfHeight = Math.floor(availableHeight / 2);
+    browserUI.style.height = halfHeight + 'px';
+    browserUI.style.minHeight = halfHeight + 'px';
+    browserUI.style.maxHeight = halfHeight + 'px';
+    sequenceDiagram.style.height = halfHeight + 'px';
+    sequenceDiagram.style.minHeight = halfHeight + 'px';
+    sequenceDiagram.style.maxHeight = halfHeight + 'px';
   }
 
   // Run on load and resize
