@@ -226,6 +226,8 @@ const scenarios = {
               <div class="passive-indicator">FedCM detecting accounts...</div>
             </div>
           `);
+          // Add arrow to sequence diagram for user navigation
+          addMessage('user-entity', 'rp-entity', 'User navigates to website');
         },
       },
       {
@@ -341,6 +343,12 @@ const scenarios = {
               <div class="silent-indicator">Session refreshing in background</div>
             </div>
           `);
+          // Add arrow to sequence diagram for session expiration
+          addMessage(
+            'browser-entity',
+            'rp-entity',
+            'Session expiration approaching'
+          );
         },
       },
       {
@@ -446,6 +454,8 @@ const scenarios = {
               <div class="silent-indicator">Checking session status...</div>
             </div>
           `);
+          // Add arrow to sequence diagram for session expiration
+          addMessage('browser-entity', 'rp-entity', 'Session expired');
         },
       },
       {
@@ -499,6 +509,8 @@ const scenarios = {
               <button id="signin-button" class="fedcm-button">Sign in with YourID</button>
             </div>
           `);
+          // Add arrow to sequence diagram for login screen shown
+          addMessage('rp-entity', 'user-entity', 'Shows login screen');
         },
       },
       {
@@ -668,6 +680,12 @@ const scenarios = {
         action: () => {
           hideBrowserLoading();
           showBrowserDialog('consent-dialog');
+          // Add arrow to sequence diagram for permissions dialog shown
+          addMessage(
+            'browser-entity',
+            'user-entity',
+            'Shows permissions dialog'
+          );
         },
       },
       {
@@ -795,6 +813,7 @@ const scenarios = {
 let currentScenario = 'registration';
 let currentStep = -1;
 let messageCount = 0;
+let interactiveMode = true;
 
 // UI manipulation functions
 /**
@@ -1334,40 +1353,11 @@ function nextStep() {
 
   // If we've reached the end of the scenario
   if (currentStep >= scenario.steps.length) {
-    // Move to next scenario or end
-    const scenarioOrder = [
-      'registration',
-      'signin',
-      'reauth',
-      'reauthInteractive',
-      'requestPermissions',
-      'signout',
-    ];
-    const currentIndex = scenarioOrder.indexOf(currentScenario);
-
-    if (currentIndex < scenarioOrder.length - 1) {
-      currentScenario = scenarioOrder[currentIndex + 1];
-      currentStep = -1;
-      updateScenarioInfo();
-      updateTimeline();
-      document.getElementById('next-step').innerHTML =
-        'Start Flow <i class="fas fa-play"></i>';
-      document.getElementById(
-        'step-explanation'
-      ).textContent = `Click "Start Flow" to begin the ${scenarios[
-        currentScenario
-      ].title.toLowerCase()} process.`;
-    } else {
-      // End of demo - FIXED: Added updateScenarioInfo and updateTimeline calls
-      document.getElementById('next-step').innerHTML =
-        'Restart Demo <i class="fas fa-redo"></i>';
-      document.getElementById('step-explanation').textContent =
-        'You\'ve completed all FedCM scenarios! Click "Restart Demo" to begin again.';
-      currentScenario = 'registration';
-      currentStep = -1;
-      updateScenarioInfo(); // Add this line to update the scenario title and description
-      updateTimeline(); // Add this line to update the active timeline node
-    }
+    const nextStepButton = document.getElementById('next-step');
+    nextStepButton.disabled = true;
+    nextStepButton.classList.add('disabled');
+    document.getElementById('step-explanation').textContent =
+      'You have completed this scenario! Select another scenario from the timeline above to continue.';
     return;
   }
 
@@ -1456,8 +1446,10 @@ function resetScenario() {
   }
 
   // Reset UI controls
-  document.getElementById('next-step').innerHTML =
-    'Start Flow <i class="fas fa-play"></i>';
+  const nextStepButton = document.getElementById('next-step');
+  nextStepButton.innerHTML = 'Start Flow <i class="fas fa-play"></i>';
+  nextStepButton.disabled = false;
+  nextStepButton.classList.remove('disabled');
   document.getElementById(
     'step-explanation'
   ).textContent = `Click "Start Flow" to begin the ${scenarios[
@@ -1467,37 +1459,109 @@ function resetScenario() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  // Auto-advance logic
-  document.getElementById('auto-advance').addEventListener('click', (e) => {
-    if (e.target && e.target.id === 'auto-advance') {
-      // If already running, stop
+  // Interactive mode logic
+  const interactiveCheckbox = document.getElementById('interactive-mode');
+  const nextStepButton = document.getElementById('next-step');
+
+  /**
+   *
+   * @param isInteractive
+   */
+  function setInteractiveMode(isInteractive) {
+    interactiveMode = isInteractive;
+
+    if (interactiveMode) {
+      // Stop auto-advancing if running
       if (window.autoAdvanceInterval) {
         clearInterval(window.autoAdvanceInterval);
         window.autoAdvanceInterval = null;
-        e.target.innerHTML = 'Auto Advance <i class="fas fa-fast-forward"></i>';
-        return;
       }
+      nextStepButton.disabled = false;
+      nextStepButton.classList.remove('disabled');
+    } else {
+      nextStepButton.disabled = true;
+      nextStepButton.classList.add('disabled');
       // Start auto-advancing
-      e.target.innerHTML = 'Stop Auto Advance <i class="fas fa-stop"></i>';
+      if (window.autoAdvanceInterval) {
+        clearInterval(window.autoAdvanceInterval);
+      }
       window.autoAdvanceInterval = setInterval(() => {
-        // Only advance if not at end
         const scenario = scenarios[currentScenario];
         if (currentStep < scenario.steps.length - 1) {
           nextStep();
         } else {
           clearInterval(window.autoAdvanceInterval);
           window.autoAdvanceInterval = null;
-          document.getElementById('auto-advance').innerHTML =
-            'Auto Advance <i class="fas fa-fast-forward"></i>';
+          setInteractiveMode(true); // Re-enable interactive mode at end
+          interactiveCheckbox.checked = true;
         }
-      }, 1200); // 1.2s per step
+      }, 1200);
+    }
+  }
+
+  interactiveCheckbox.addEventListener('change', (e) => {
+    setInteractiveMode(e.target.checked);
+    // If toggling to interactive, stop auto-advance immediately
+    if (e.target.checked && window.autoAdvanceInterval) {
+      clearInterval(window.autoAdvanceInterval);
+      window.autoAdvanceInterval = null;
     }
   });
-  // Setup click handlers
-  document.getElementById('next-step').addEventListener('click', nextStep);
-  document
-    .getElementById('reset-scenario')
-    .addEventListener('click', resetScenario);
+
+  nextStepButton.addEventListener('click', () => {
+    if (interactiveMode) {
+      nextStep();
+    }
+  });
+
+  document.getElementById('reset-scenario').addEventListener('click', () => {
+    resetScenario();
+    setInteractiveMode(interactiveCheckbox.checked);
+  });
+
+  // Initialize scenario
+  updateScenarioInfo();
+  updateTimeline();
+  document.getElementById(
+    'step-explanation'
+  ).textContent = `Click "Start Flow" to begin the ${scenarios[
+    currentScenario
+  ].title.toLowerCase()} process.`;
+
+  // Adjust container heights dynamically based on viewport
+  /**
+   *
+   */
+  function adjustContainerHeights() {
+    const viewportHeight = window.innerHeight;
+    const visualizationContainer = document.getElementById(
+      'visualization-container'
+    );
+    const browserUI = document.getElementById('browser-ui');
+    const sequenceDiagram = document.getElementById('sequence-diagram');
+
+    // Set container heights based on viewport
+    if (viewportHeight > 900) {
+      // Large screens
+      sequenceDiagram.style.minHeight = '600px';
+      browserUI.style.minHeight = '500px';
+      visualizationContainer.style.minHeight = '800px';
+    } else if (viewportHeight > 700) {
+      // Medium screens
+      sequenceDiagram.style.minHeight = '450px';
+      browserUI.style.minHeight = '450px';
+      visualizationContainer.style.minHeight = '650px';
+    } else {
+      // Small screens
+      sequenceDiagram.style.minHeight = '400px';
+      browserUI.style.minHeight = '400px';
+      visualizationContainer.style.minHeight = '600px';
+    }
+  }
+
+  // Run on load and resize
+  adjustContainerHeights();
+  window.addEventListener('resize', adjustContainerHeights);
 
   // Handle timeline node clicks
   document.querySelectorAll('.timeline-node').forEach((node) => {
@@ -1561,37 +1625,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ).textContent = `Click "Start Flow" to begin the ${scenarios[
     currentScenario
   ].title.toLowerCase()} process.`;
-
-  // Adjust container heights dynamically based on viewport
-  /**
-   *
-   */
-  function adjustContainerHeights() {
-    const viewportHeight = window.innerHeight;
-    const visualizationContainer = document.getElementById(
-      'visualization-container'
-    );
-    const browserUI = document.getElementById('browser-ui');
-    const sequenceDiagram = document.getElementById('sequence-diagram');
-
-    // Set container heights based on viewport
-    if (viewportHeight > 900) {
-      // Large screens
-      sequenceDiagram.style.minHeight = '600px';
-      browserUI.style.minHeight = '500px';
-      visualizationContainer.style.minHeight = '800px';
-    } else if (viewportHeight > 700) {
-      // Medium screens
-      sequenceDiagram.style.minHeight = '450px';
-      browserUI.style.minHeight = '450px';
-      visualizationContainer.style.minHeight = '650px';
-    } else {
-      // Small screens
-      sequenceDiagram.style.minHeight = '400px';
-      browserUI.style.minHeight = '400px';
-      visualizationContainer.style.minHeight = '600px';
-    }
-  }
 
   // Run on load and resize
   adjustContainerHeights();

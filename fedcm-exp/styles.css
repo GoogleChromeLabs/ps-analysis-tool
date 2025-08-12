@@ -1,3 +1,13 @@
+/* Custom disabled style for Next Step button */
+#next-step.disabled,
+#next-step:disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+}
 #browser-step-container {
   min-width: 370px;
   max-width: 420px;
