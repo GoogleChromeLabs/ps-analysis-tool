@@ -19,7 +19,7 @@ const scenarios = {
   registration: {
     title: 'First-time Sign-In (Registration)',
     description:
-      "The user visits a website for the first time and needs to create an account. They'll use their identity provider (IdP) account to register.",
+      "User visits a website for the first time and needs to create an account. They'll use their identity provider (IdP) account to register.",
     steps: [
       {
         explanation: "User clicks 'Sign in' button",
@@ -69,12 +69,12 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns config and well-known file to browser',
+        explanation: 'IDP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
             'browser-entity',
-            'Returns config and well-known file'
+            'Returns well-known and config file'
           );
         },
       },
@@ -218,7 +218,7 @@ const scenarios = {
   signin: {
     title: 'Passive Mode Sign-In',
     description:
-      'The user returns to the website and the FedCM dialog appears automatically without requiring a button click.',
+      'User returns to the website and the FedCM dialog appears automatically without requiring a button click.',
     steps: [
       {
         explanation: 'User navigates to the website',
@@ -257,7 +257,7 @@ const scenarios = {
           addMessage(
             'idp-entity',
             'browser-entity',
-            'Returns config and well-known file'
+            'Returns well-known and config file'
           );
         },
       },
@@ -340,7 +340,7 @@ const scenarios = {
   reauth: {
     title: 'Silent ReAuth',
     description:
-      "The user's session expires and is seamlessly refreshed in the background without interrupting the user experience.",
+      "User's session expires and is seamlessly refreshed in the background without interrupting the user experience.",
     steps: [
       {
         explanation: 'Browser detects session expiration approaching',
@@ -394,12 +394,12 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns config and well-known file to browser',
+        explanation: 'IDP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
             'browser-entity',
-            'Returns config and well-known file'
+            'Returns well-known and config file'
           );
         },
       },
@@ -456,7 +456,7 @@ const scenarios = {
   reauthInteractive: {
     title: 'Interactive ReAuth',
     description:
-      'When silent reauthentication fails, the user must complete an interactive sign-in to continue using the website.',
+      'When silent reauthentication fails, user must complete an interactive sign-in to continue using the website.',
     steps: [
       {
         explanation: 'Browser detects session has expired',
@@ -547,12 +547,12 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns config and well-known file to browser',
+        explanation: 'IDP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
             'browser-entity',
-            'Returns config and well-known file'
+            'Returns well-known and config file'
           );
         },
       },
@@ -627,7 +627,7 @@ const scenarios = {
   requestPermissions: {
     title: 'Request Permissions (Consent Dialog)',
     description:
-      'The user needs to grant additional permissions for the website to access more information.',
+      'User needs to grant additional permissions for the website to access more information.',
     steps: [
       {
         explanation:
@@ -671,12 +671,12 @@ const scenarios = {
         },
       },
       {
-        explanation: 'IDP returns config and well-known file to browser',
+        explanation: 'IDP returns well-known and config file to browser',
         action: () => {
           addMessage(
             'idp-entity',
             'browser-entity',
-            'Returns config and well-known file'
+            'Returns well-known and config file'
           );
         },
       },
@@ -767,7 +767,7 @@ const scenarios = {
   },
   signout: {
     title: 'Sign Out',
-    description: 'The user signs out from the website.',
+    description: 'User signs out from the website.',
     steps: [
       {
         explanation: "User clicks 'Sign out'",
