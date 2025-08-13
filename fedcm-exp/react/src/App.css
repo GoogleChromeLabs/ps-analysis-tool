@@ -1,0 +1,975 @@
+#browser-step-container {
+  min-width: 370px;
+  max-width: 420px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+#step-explanation {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-size: 1.08em;
+  min-height: 56px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  color: #222;
+  border: 1px solid #e0e0e0;
+  margin-top: 2px;
+}
+/* General styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+}
+
+h1 {
+  color: #1a73e8;
+  margin-bottom: 5px;
+}
+
+/* Timeline styles */
+.journey-timeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  min-height: 80px;
+}
+
+.timeline-node {
+  background-color: #e0e0e0;
+  color: #555;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  min-width: 120px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.timeline-node:hover {
+  background-color: #d0d0d0;
+}
+
+.timeline-node.active {
+  background-color: #1a73e8;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.timeline-node.completed {
+  background-color: #34a853;
+  color: white;
+}
+
+.timeline-connector {
+  flex-grow: 1;
+  height: 3px;
+  background-color: #e0e0e0;
+  margin: 0 10px;
+}
+
+/* Main content layout */
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 700px;
+}
+
+#visualization-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 600px;
+  flex-grow: 1;
+}
+
+/* Browser UI simulation */
+#browser-ui {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  min-height: 250px;
+  flex-grow: 0.4;
+  position: relative;
+}
+
+.browser-chrome {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+}
+
+.browser-chrome span {
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  flex: 1;
+  max-width: 80%;
+}
+
+#browser-content {
+  padding: 20px;
+  min-height: 200px;
+  position: relative;
+}
+
+/* Loading indicators */
+.browser-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 200px;
+  padding: 20px;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 15px;
+  border: 4px solid rgba(26, 115, 232, 0.2);
+  border-radius: 50%;
+  border-top-color: #1a73e8;
+  animation: spin 1s linear infinite;
+}
+
+.loading-message {
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Silent loading indicator for background operations */
+.silent-loading {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  color: #555;
+  max-width: 180px;
+  z-index: 10;
+}
+
+.mini-spinner {
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border: 2px solid rgba(26, 115, 232, 0.2);
+  border-radius: 50%;
+  border-top-color: #1a73e8;
+  animation: spin 1s linear infinite;
+}
+
+.rp-website {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Button styling and animations */
+.fedcm-button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: default;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Click animation */
+.fedcm-button.simulated-click {
+  transform: scale(0.95);
+  background-color: #1558b7;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.3);
+  animation: button-pulse 1s ease;
+}
+
+@keyframes button-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(26, 115, 232, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(26, 115, 232, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(26, 115, 232, 0);
+  }
+}
+
+/* Ripple effect */
+.click-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.cancel-button {
+  background-color: transparent;
+  border: none;
+  color: #5f6368;
+  padding: 10px;
+  margin-left: 10px;
+  cursor: default;
+}
+
+/* Sequence diagram */
+#sequence-diagram {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  min-height: 400px;
+  padding: 20px 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  flex-grow: 0.6;
+}
+
+.entity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+  height: 100%;
+}
+
+.entity-label {
+  padding: 10px;
+  background-color: #f0f8ff;
+  border: 1px solid #c7d9e8;
+  border-radius: 4px;
+  text-align: center;
+  width: 100%;
+}
+
+.entity-lifeline {
+  width: 2px;
+  background-color: #c7d9e8;
+  flex-grow: 1;
+  margin-top: 10px;
+}
+
+#message-container {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  overflow-x: visible;
+  z-index: 2;
+}
+
+.message {
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
+/* Updated arrow styling for bidirectional messages */
+.message-line {
+  height: 2px;
+  background-color: #333;
+  position: relative;
+  flex-grow: 1;
+}
+
+.message-arrow {
+  position: absolute;
+  right: -1px; /* Position at the end of the line */
+  top: -4px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid #333;
+}
+
+/* For messages going right-to-left */
+.message.reverse .message-arrow {
+  right: auto;
+  left: -1px;
+  border-left: 0;
+  border-right: 8px solid #333;
+}
+
+/* Make arrows more visible */
+.message-line::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid #333;
+}
+
+/* For messages going right-to-left */
+.message.reverse .message-line::after {
+  right: auto;
+  left: -1px;
+  border-left: 0;
+  border-right: 8px solid #333;
+}
+
+/* Replace the current self-message-loop styling with this improved version */
+.self-message-loop {
+  position: relative;
+  width: 80%;
+  height: 30px;
+  margin: 0 10%;
+  left: 35px;
+}
+
+/* Create three segments for the rectangular loop */
+.loop-segment {
+  position: absolute;
+  background-color: #333;
+}
+
+/* First segment - horizontal right from lifeline */
+.loop-segment-1 {
+  width: 35px;
+  height: 2px;
+  top: 15px;
+  left: 0;
+}
+
+/* Second segment - vertical down */
+.loop-segment-2 {
+  width: 2px;
+  height: 20px;
+  top: 15px;
+  left: 35px;
+}
+
+/* Third segment - horizontal left with arrow */
+.loop-segment-3 {
+  width: 35px;
+  height: 2px;
+  top: 35px;
+  left: 0;
+}
+
+/* Arrow head at the end of the third segment */
+.loop-arrow {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 8px solid #333; /* Arrow pointing left */
+}
+
+/* Adjust message label positioning */
+.self-message .message-label {
+  top: -10px;
+  width: 90%;
+  text-align: center;
+}
+
+.message-label {
+  padding: 3px 6px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  font-size: 12px;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* Explanation panel */
+#explanation-panel {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#interaction-controls {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+}
+
+.control-button {
+  padding: 10px 20px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-button:hover {
+  background-color: #3367d6;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.control-button:active {
+  transform: translateY(0);
+}
+
+#reset-scenario {
+  background-color: #757575;
+}
+
+#current-step-detail {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+/* Browser dialogs */
+.browser-dialog {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 350px;
+  margin: 20px auto;
+  animation: dialogSlideIn 0.3s ease;
+  border: 1px solid #ddd;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.browser-dialog-header {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  background-color: #f8f8f8;
+  border-radius: 8px 8px 0 0;
+}
+
+.browser-dialog-header h2 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.browser-dialog-body {
+  padding: 15px;
+}
+
+/* IdP option selection styles */
+.idp-option {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: default;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.idp-option.selected {
+  background-color: #e8f0fe;
+  border: 2px solid #1a73e8;
+}
+
+.idp-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+  object-fit: contain;
+}
+
+.idp-details {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Account option selection styles */
+.account-option {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: default;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.account-option.selected {
+  background-color: #e8f0fe;
+  border: 2px solid #1a73e8;
+}
+
+.account-option.simulated-select {
+  animation: select-pulse 0.8s ease;
+}
+
+@keyframes select-pulse {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.select-checkmark {
+  position: absolute;
+  right: 15px;
+  color: #1a73e8;
+  font-weight: bold;
+  opacity: 0;
+  transform: scale(0);
+  animation: checkmark-appear 0.5s forwards;
+}
+
+@keyframes checkmark-appear {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.account-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.account-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.permissions-list {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+/* Highlight effect for elements */
+.highlight {
+  transition: all 0.3s ease;
+}
+
+/* Form styling for registration flow */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Alert styling */
+.alert {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 15px auto;
+  max-width: 80%;
+}
+
+.alert.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert.error {
+  background-color: #fce8e6;
+  color: #c5221f;
+  border-left: 4px solid #c5221f;
+}
+
+/* Feature enabled box */
+.feature-enabled {
+  background-color: #f0f8ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px auto;
+  max-width: 80%;
+  border-left: 4px solid #1a73e8;
+}
+
+/* Scenario choice styling */
+.scenario-dialog {
+  max-width: 450px;
+}
+
+.scenario-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scenario-option:hover {
+  background-color: #f5f9ff;
+  border-color: #d0e3ff;
+}
+
+.scenario-option.selected {
+  background-color: #e8f0fe;
+  border: 2px solid #1a73e8;
+}
+
+.scenario-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.scenario-icon.success {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.scenario-icon.failure {
+  background-color: #fce8e6;
+  color: #c5221f;
+}
+
+.scenario-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.silent-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #555;
+}
+
+/* Dialog info styling */
+.dialog-info {
+  margin-top: 15px;
+  color: #555;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Error dialog styling */
+.error-dialog {
+  max-width: 400px;
+}
+
+.error-icon {
+  font-size: 40px;
+  color: #d93025;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (min-width: 992px) {
+  main {
+    flex-direction: row;
+    min-height: 800px;
+  }
+
+  #visualization-container {
+    flex: 3;
+  }
+
+  #explanation-panel {
+    flex: 2;
+  }
+
+  /* Increase sequence diagram height for desktop */
+  #sequence-diagram {
+    min-height: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  .journey-timeline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .timeline-node {
+    margin-bottom: 10px;
+  }
+
+  .timeline-connector {
+    width: 3px;
+    height: 20px;
+    margin: 5px 0;
+  }
+}
+
+/* Passive mode specific styles */
+.passive-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #555;
+}
+
+.passive-fedcm-dialog {
+  position: relative;
+  border: 2px solid #4285f4;
+}
+
+.passive-indicator-badge {
+  position: absolute;
+  top: -12px;
+  right: 10px;
+  background-color: #1a73e8;
+  color: white;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+/* Add these new styles and overrides to your existing CSS */
+
+/* Main content layout - updated for new organization */
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 700px;
+}
+
+/* Scenario info panel */
+#scenario-info-panel {
+  background-color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Control toolbar - new section */
+.control-toolbar {
+  display: flex;
+  justify-content: start;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.control-button {
+  padding: 10px 25px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.control-button:hover {
+  background-color: #3367d6;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.control-button:active {
+  transform: translateY(0);
+}
+
+#reset-scenario {
+  background-color: #757575;
+}
+
+/* Visualization container updated for side-by-side layout */
+#visualization-container {
+  display: flex;
+  flex-direction: row; /* Changed from column to row */
+  gap: 20px;
+  min-height: 600px;
+}
+
+/* Browser UI and sequence diagram adjusted for side-by-side */
+#browser-ui {
+  flex: 1; /* Equal width with diagram */
+  min-height: 450px;
+  max-height: 550px;
+  display: flex;
+  flex-direction: column;
+}
+
+#browser-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+#sequence-diagram {
+  flex: 1; /* Equal width with browser */
+  min-height: 450px;
+  padding: 10px;
+}
+
+/* Step explanation panel - now below visualizations */
+#explanation-panel {
+  background-color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#current-step-detail {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  border-left: 4px solid #4285f4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  #visualization-container {
+    flex-direction: column; /* Stack on smaller screens */
+  }
+
+  #browser-ui,
+  #sequence-diagram {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .control-toolbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .control-button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
