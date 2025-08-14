@@ -31,7 +31,7 @@ import Traveller from './components/traveller';
  * Main class responsible for managing the rendering and interaction of figures,
  * groups, and animators using p5.js.
  */
-class Main {
+export class Main {
   /**
    * p5 instance for rendering.
    */
@@ -179,7 +179,9 @@ class Main {
     if (performanceCheck) {
       this.stats = new Stats();
       this.stats.showPanel(0);
-      this.stats.dom.style = 'position: absolute; right: 0; top: 0;';
+      this.stats.dom.style.position = 'absolute';
+      this.stats.dom.style.right = '0';
+      this.stats.dom.style.top = '0';
       document.body.appendChild(this.stats.dom);
     }
   }

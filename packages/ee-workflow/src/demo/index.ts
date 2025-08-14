@@ -17,10 +17,10 @@
  * Internal dependencies.
  */
 import p5 from 'p5';
-import { Animator, FigureFactory, Group, NextCoordinates } from './components';
-import Figure from './components/figure';
-import Main from './main';
-import { downArrowData, nodes, upArrowData } from './implementation/data';
+import { Animator, FigureFactory, Group, NextCoordinates } from '../components';
+import Figure from '../components/figure';
+import Main from '../main';
+import { downArrowData, nodes, upArrowData } from './data';
 import {
   figureDraw,
   prevButtonClick,
@@ -34,12 +34,8 @@ import {
   resetButtonClick,
   speedSliderChange,
   interactiveCheckboxOnChange,
-} from './implementation/listeners';
-import {
-  circleTravelInit,
-  getRandomOffset,
-  rippleEffect,
-} from './implementation/utils';
+} from './listeners';
+import { circleTravelInit, getRandomOffset, rippleEffect } from './utils';
 
 // Flow init
 let downArrowImage: p5.Image | null = null;
