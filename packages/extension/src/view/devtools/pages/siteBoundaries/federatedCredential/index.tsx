@@ -16,20 +16,53 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { LandingPage, PSInfoKey } from '@google-psat/design-system';
-import { I18n } from '@google-psat/i18n';
+import React, { useMemo } from 'react';
+import {
+  InfoCard,
+  PSInfoKey,
+  TabsProvider,
+  type TabItems,
+} from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
+import Panel from './panel';
+import ExplorableExplanation from './explorableExplanation';
 
 const FederatedCredential = () => {
+  const tabItems = useMemo<TabItems>(
+    () => ({
+      Learning: [
+        {
+          title: 'Overview',
+          content: {
+            Element: InfoCard,
+            props: {
+              infoKey: PSInfoKey.FedCM,
+              showQuickLinks: true,
+              isLandingPageContainer: true,
+            },
+            className: 'p-4',
+          },
+        },
+        {
+          title: 'Explorable Explanation',
+          content: {
+            Element: ExplorableExplanation,
+            className: 'overflow-hidden h-full',
+            containerClassName: 'h-full',
+          },
+        },
+      ],
+    }),
+    []
+  );
+
   return (
-    <div data-testid="federated-credential-content" className="h-full w-full">
-      <LandingPage
-        isLandingPageContainer
-        title={I18n.getMessage('fedcm')}
-        psInfoKey={PSInfoKey.FedCM}
-        extraClasses="max-w-2xl h-fit p-4"
-      />
-    </div>
+    <TabsProvider items={tabItems} name="fedcm">
+      <Panel />
+    </TabsProvider>
   );
 };
 
