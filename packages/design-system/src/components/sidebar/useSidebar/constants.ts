@@ -43,4 +43,5 @@ export enum SIDEBAR_ITEMS_KEYS {
   FEDERATED_CREDENTIAL = 'federated-credential',
   IP_PROTECTION = 'ip-protection',
   PRIVATE_STATE_TOKENS = 'private-state-tokens',
+  OPEN_INCOGNITO_TAB = 'open-incognito-tab',
 }

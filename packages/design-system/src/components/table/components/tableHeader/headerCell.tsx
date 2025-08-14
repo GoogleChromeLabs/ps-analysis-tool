@@ -44,10 +44,6 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
     setSortKey(cell.accessorKey);
   }, [cell.accessorKey, setSortKey]);
 
-  const initialWidth = cell.initialWidth
-    ? Math.max(cell.initialWidth || 0, cell.minWidth || 0) || 'auto'
-    : 'auto';
-
   return (
     <>
       <th
@@ -55,7 +51,7 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
         onClick={isResizing ? undefined : handleOnClick}
         className={classNames(
           'select-none touch-none font-normal truncate sticky top-0 z-[100]',
-          'bg-anti-flash-white dark:bg-charleston-green border-b border-l border-american-silver dark:border-quartz divide-x divide-american-silver dark:divide-quartz',
+          'bg-anti-flash-white dark:bg-charleston-green border-b border-american-silver dark:border-quartz',
           {
             'hover:bg-gainsboro dark:hover:bg-outer-space': !isResizing,
           }
@@ -63,7 +59,7 @@ const HeaderCell = ({ cell, setIsRowFocused }: HeaderCellProps) => {
         data-testid="header-cell"
         data-min-width={cell.minWidth || minColumnWidth}
         data-max-width={cell.maxWidth}
-        style={{ maxWidth: initialWidth, minWidth: initialWidth }}
+        data-initial-width={cell.initialWidth}
       >
         <div
           className="w-full h-full relative flex items-center justify-between text-cool-grey dark:text-bright-gray max-w"

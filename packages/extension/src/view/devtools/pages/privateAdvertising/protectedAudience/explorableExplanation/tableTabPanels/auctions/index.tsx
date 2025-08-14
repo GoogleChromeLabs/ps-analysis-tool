@@ -23,13 +23,13 @@ import type {
   AdsAndBiddersType,
   NoBidsType,
   singleAuctionEvent,
+  AuctionEventsType,
 } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import AdUnitsPanel from '../../../adUnits/panel';
-import type { AuctionEventsType } from '../../../../../../stateProviders/protectedAudience/context';
 import AuctionsContainer from './container';
 
 interface AuctionsProps {
@@ -58,7 +58,9 @@ const Auctions = ({
         Element: AdUnitsPanel,
         props: {
           adsAndBidders: customAdsAndBidders,
-          receivedBids: auctionEvents?.receivedBids || {},
+          receivedBids: selectedAdUnit
+            ? auctionEvents?.receivedBids[selectedAdUnit]
+            : [],
           noBids: auctionEvents?.noBids || {},
           showEvaluationPlaceholder: Boolean(customAdsAndBidders),
           isEE: true,
@@ -77,14 +79,21 @@ const Auctions = ({
 
       prevData.adunits.panel.props = {
         adsAndBidders: customAdsAndBidders,
-        receivedBids: auctionEvents.receivedBids,
+        receivedBids: selectedAdUnit
+          ? auctionEvents?.receivedBids[selectedAdUnit]
+          : [],
         noBids: auctionEvents.noBids,
         showEvaluationPlaceholder: Boolean(customAdsAndBidders),
         isEE: true,
       };
       return prevData;
     });
-  }, [auctionEvents.noBids, auctionEvents.receivedBids, customAdsAndBidders]);
+  }, [
+    auctionEvents.noBids,
+    auctionEvents?.receivedBids,
+    customAdsAndBidders,
+    selectedAdUnit,
+  ]);
 
   useEffect(() => {
     if (

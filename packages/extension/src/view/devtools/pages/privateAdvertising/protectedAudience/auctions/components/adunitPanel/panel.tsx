@@ -26,7 +26,7 @@ import {
   SIDEBAR_ITEMS_KEYS,
   useSidebar,
 } from '@google-psat/design-system';
-
+import type { ReceivedBids } from '@google-psat/common';
 /**
  * Internal dependencies
  */
@@ -46,10 +46,11 @@ interface PanelProps {
   setSelectedAdUnit?: React.Dispatch<React.SetStateAction<string | null>>;
   winnerBid?: string | null;
   winningMediaContainer?: number[];
-  pillToggle: string;
-  setPillToggle: React.Dispatch<React.SetStateAction<string>>;
+  pillToggle: string | null;
+  setPillToggle: React.Dispatch<React.SetStateAction<string | null>>;
   highlightOption?: string;
   setHighlightOption?: React.Dispatch<React.SetStateAction<string>>;
+  receivedBids?: ReceivedBids[];
   isEE?: boolean;
 }
 
@@ -62,6 +63,7 @@ const Panel = ({
   noBidsCount,
   isInspecting,
   setIsInspecting,
+  receivedBids,
   setSelectedAdUnit,
   winnerBid = null,
   winningMediaContainer = [],
@@ -118,13 +120,21 @@ const Panel = ({
         name: 'Bidders',
         Icon: MoneyIcon,
         pills: [
-          ...(bidders || []).map((bidder) => ({
-            name: bidder,
-            className:
+          ...(bidders || []).map((bidder) => {
+            const receivedBidsClassname = receivedBids?.find(
+              (bid) => bid.ownerOrigin === bidder && adunit === bid.adUnitCode
+            )
+              ? '!border-[#438ED9] !text-[#438ED9] !bg-[#F5F5F5]'
+              : '';
+            const winningBidClassname =
               winnerBid === bidder
                 ? '!border-[#5AAD6A] !text-[#5AAD6A] !bg-[#F5F5F5]'
-                : '',
-          })),
+                : '';
+            return {
+              name: bidder,
+              className: winningBidClassname ?? receivedBidsClassname,
+            };
+          }),
         ],
       },
     ],
@@ -136,6 +146,7 @@ const Panel = ({
       setIsInspecting,
       setSelectedAdUnit,
       winningMediaContainer,
+      receivedBids,
       winnerBid,
     ]
   );
@@ -171,42 +182,47 @@ const Panel = ({
             eeAnimatedTab={false}
             highlightOption={highlightOption}
             setHighlightOption={setHighlightOption}
+            persistenceKey="auctionAdUnitPillToggle"
           />
         </div>
       )}
-      {biddersCount === 0 ? (
-        !isUsingCDP && pillToggle === 'PAAPI' ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <p className="text-sm text-raisin-black dark:text-bright-gray">
-              To view ad unit data, enable PSAT to use CDP via the{' '}
-              <button
-                className="text-bright-navy-blue dark:text-jordy-blue"
-                onClick={cdpNavigation}
-              >
-                Settings Page
-              </button>
-              .
-            </p>
-          </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <p className="text-sm text-raisin-black dark:text-bright-gray">
-              No data available for this ad unit.
-            </p>
-          </div>
-        )
-      ) : (
+      {(pillToggle || isEE) && (
         <>
-          <Matrix
-            biddersCount={biddersCount}
-            bidsCount={bidsCount}
-            noBidsCount={noBidsCount}
-          />
-          <div className="p-4 flex gap-4 flex-wrap">
-            {items.map((item) => (
-              <Tile key={item.name} item={item} />
-            ))}
-          </div>
+          {biddersCount === 0 ? (
+            !isUsingCDP && pillToggle === 'PAAPI' ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-sm text-raisin-black dark:text-bright-gray">
+                  To view ad unit data, enable PSAT to use CDP via the{' '}
+                  <button
+                    className="text-bright-navy-blue dark:text-jordy-blue"
+                    onClick={cdpNavigation}
+                  >
+                    Settings Page
+                  </button>
+                  .
+                </p>
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-sm text-raisin-black dark:text-bright-gray">
+                  No data available for this ad unit.
+                </p>
+              </div>
+            )
+          ) : (
+            <>
+              <Matrix
+                biddersCount={biddersCount}
+                bidsCount={bidsCount}
+                noBidsCount={noBidsCount}
+              />
+              <div className="p-4 flex gap-4 flex-wrap">
+                {items.map((item) => (
+                  <Tile key={item.name} item={item} />
+                ))}
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

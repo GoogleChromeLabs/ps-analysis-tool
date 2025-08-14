@@ -72,22 +72,55 @@ const Timeline = ({
 
   const lines = Array.from({ length: lineCount });
 
-  const isAuctionEndBlockOverlappingTimeout = useRef(false);
+  const [timeoutBlock, setTimeoutBlock] = useState(auctionTimeout * zoomLevel);
+  const [auctionEndBlock, setAuctionEndBlock] = useState(
+    auctionEndDuration * zoomLevel
+  );
 
   useEffect(() => {
     const _zoom = zoomLevel;
     setZoom(_zoom);
-    setTimeoutBlockWidth(scrollWidth - auctionTimeout * _zoom);
 
-    isAuctionEndBlockOverlappingTimeout.current =
-      Math.abs(auctionEndDuration * _zoom - auctionTimeout * _zoom) <= 20;
+    let _timeoutBlockWidth = auctionTimeout * _zoom;
+    let _auctionEndBlockWidth = auctionEndDuration * _zoom;
 
-    setAuctionEndBlockWidth(
-      scrollWidth -
-        auctionEndDuration * _zoom +
-        (isAuctionEndBlockOverlappingTimeout.current ? 20 : 0)
-    );
-  }, [scrollWidth, auctionTimeout, auctionEndDuration, zoomLevel]);
+    for (let i = 0; i < lines.length; i++) {
+      const lineWidth = TIME_DURATION * _zoom * (i + 1);
+
+      if (Math.abs(lineWidth - _timeoutBlockWidth) < 10 * _zoom) {
+        _timeoutBlockWidth += Math.abs(lineWidth - _timeoutBlockWidth);
+      }
+
+      if (Math.abs(lineWidth - _auctionEndBlockWidth) < 10 * _zoom) {
+        _auctionEndBlockWidth += Math.abs(lineWidth - _auctionEndBlockWidth);
+      }
+    }
+
+    const isAuctionEndBlockOverlappingTimeout =
+      Math.abs(_auctionEndBlockWidth - _timeoutBlockWidth) <= 20;
+
+    if (isAuctionEndBlockOverlappingTimeout) {
+      if (_auctionEndBlockWidth > _timeoutBlockWidth) {
+        _auctionEndBlockWidth +=
+          20 - Math.abs(_auctionEndBlockWidth - _timeoutBlockWidth);
+      } else {
+        _timeoutBlockWidth +=
+          20 - Math.abs(_auctionEndBlockWidth - _timeoutBlockWidth);
+      }
+    }
+
+    setTimeoutBlockWidth(scrollWidth - _timeoutBlockWidth);
+    setTimeoutBlock(_timeoutBlockWidth);
+
+    setAuctionEndBlockWidth(scrollWidth - _auctionEndBlockWidth);
+    setAuctionEndBlock(_auctionEndBlockWidth);
+  }, [
+    scrollWidth,
+    zoomLevel,
+    lines.length,
+    auctionTimeout,
+    auctionEndDuration,
+  ]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -172,8 +205,11 @@ const Timeline = ({
 
         {/*Timeout block*/}
         <div
-          className="absolute flex w-fit top-0"
-          style={{ height: childHeight }}
+          className="absolute flex top-0"
+          style={{
+            height: childHeight,
+            width: lines.length * TIME_DURATION * zoom,
+          }}
         >
           <div
             style={{
@@ -187,7 +223,10 @@ const Timeline = ({
             <div className="bg-[#E90303] opacity-[9%] w-full h-full"></div>
             <span
               className="absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center"
-              style={{ writingMode: 'vertical-rl' }}
+              style={{
+                writingMode: 'vertical-rl',
+                left: `${Math.abs(timeoutBlock - auctionTimeout * zoom)}px`,
+              }}
             >
               Timeout: {auctionTimeout}ms
             </span>
@@ -196,9 +235,10 @@ const Timeline = ({
 
         {/*Auction-End block*/}
         <div
-          className="absolute flex w-fit top-0"
+          className="absolute flex top-0"
           style={{
             height: childHeight,
+            width: lines.length * TIME_DURATION * zoom,
           }}
         >
           <div
@@ -211,13 +251,13 @@ const Timeline = ({
           >
             <div className="bg-[#E90303] opacity-[4%] w-full h-full"></div>
             <span
-              className={classNames(
-                'absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center',
-                {
-                  'left-5': isAuctionEndBlockOverlappingTimeout.current,
-                }
-              )}
-              style={{ writingMode: 'vertical-rl' }}
+              className="absolute top-1/2 -translate-y-1/2 rotate-180 text-xs text-[#828282] dark:text-gray h-full flex items-center justify-center"
+              style={{
+                writingMode: 'vertical-rl',
+                left: `${Math.abs(
+                  auctionEndBlock - auctionEndDuration * zoom
+                )}px`,
+              }}
             >
               Auction End: {formatDuration(String(auctionEndDuration))}ms
             </span>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,30 @@
  */
 
 /**
- * External dependencies.
+ * External dependencies
  */
+import { LandingPage } from '@google-psat/design-system';
 import React from 'react';
+
 /**
- * Internal dependencies.
+ * Internal dependencies
  */
-import HeaderCell from './headerCell';
-import { useTable } from '../../useTable';
+import ContentPanel from './contentPanel';
 
-interface HeaderRowProps {
-  setIsRowFocused: (state: boolean) => void;
-}
+type IncognitoProps = {
+  onClick: () => void;
+};
 
-const HeaderRow = ({ setIsRowFocused }: HeaderRowProps) => {
-  const { columns } = useTable(({ state }) => ({
-    columns: state.columns,
-  }));
-
+const Incognito = ({ onClick }: IncognitoProps) => {
   return (
-    <tr className="divide-x divide-american-silver dark:divide-quartz">
-      {columns?.map((cell, idx) => (
-        <HeaderCell key={idx} cell={cell} setIsRowFocused={setIsRowFocused} />
-      ))}
-    </tr>
+    <LandingPage
+      title="Incognito Mode"
+      contentPanel={
+        <ContentPanel frameColor="privacy-blue" onClick={onClick} />
+      }
+      showQuickLinks={false}
+    />
   );
 };
 
-export default HeaderRow;
+export default Incognito;

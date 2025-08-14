@@ -22,6 +22,7 @@ import {
   type AdsAndBiddersType,
   type AuctionEndEvent,
   type PrebidEvents,
+  type ReceivedBids,
 } from '@google-psat/common';
 import {
   FrameIcon,
@@ -47,9 +48,11 @@ interface AdTableProps {
   setIsInspecting?: React.Dispatch<React.SetStateAction<boolean>>;
   isEE?: boolean;
   auctionEvents?: PrebidEvents['auctionEvents'];
+  receivedBids: Record<string, ReceivedBids[]> | ReceivedBids[];
 }
 
 const AdTable = ({
+  receivedBids,
   adsAndBidders,
   setSelectedAdUnit,
   selectedAdUnit,
@@ -58,7 +61,6 @@ const AdTable = ({
   auctionEvents,
 }: AdTableProps) => {
   const [selectedRow, setSelectedRow] = useState<TableData | null>(null);
-
   const adUnitsWithOrtb2Imp = useMemo(() => {
     const auctionEndEvents = Object.values(auctionEvents || {})
       ?.flat()
@@ -217,6 +219,12 @@ const AdTable = ({
                   );
                 });
 
+                const receivedBid = (receivedBids as ReceivedBids[])?.find(
+                  (bid) =>
+                    bid.ownerOrigin === bidder &&
+                    bid.adUnitCode === details?.adUnitCode
+                );
+
                 return (
                   <div
                     key={idx}
@@ -224,7 +232,9 @@ const AdTable = ({
                       'h-fit px-2 py-0.5 border rounded-full flex justify-center items-center gap-1',
                       {
                         'border-gray-400 dark:border-dark-gray-x11':
-                          bidder !== winningBidder,
+                          bidder !== winningBidder && !receivedBid,
+                        'border-[#438ED9] text-[#438ED9]':
+                          receivedBid && bidder !== winningBidder,
                         'border-[#5AAD6A] text-[#5AAD6A] bg-[#F5F5F5]':
                           bidder === winningBidder,
                         'cursor-pointer hover:opacity-70 active:opacity-50':
@@ -241,6 +251,13 @@ const AdTable = ({
                   >
                     {bidder === winningBidder && <Hammer className="h-4 w-4" />}
                     {bidder}
+                    {receivedBid && bidder !== winningBidder && (
+                      <span className="text-xxxhs text-[#438ED9] font-bold">
+                        {' '}
+                        ({Number(receivedBid.bid).toFixed(2)}{' '}
+                        {receivedBid.bidCurrency})
+                      </span>
+                    )}
                     {bidder === winningBidder && (
                       <span className="text-xxxhs text-[#5AAD6A] font-bold">
                         {' '}
@@ -268,6 +285,7 @@ const AdTable = ({
       setSelectedAdUnit,
       setIsInspecting,
       auctionEvents,
+      receivedBids,
     ]
   );
 

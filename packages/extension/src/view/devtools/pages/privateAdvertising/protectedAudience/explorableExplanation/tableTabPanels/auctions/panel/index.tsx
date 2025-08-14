@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Resizable } from 're-resizable';
 import {
   Sidebar,
@@ -29,17 +29,14 @@ import type {
   NoBidsType,
   ReceivedBids,
   singleAuctionEvent,
+  AuctionEventsType,
 } from '@google-psat/common';
-import { isEqual } from 'lodash-es';
-
 /**
  * Internal dependencies.
  */
-import type { AuctionEventsType } from '../../../../../../../stateProviders/protectedAudience/context';
 import AuctionTable from '../../../../auctions/components/table';
 import AdunitPanel from '../../../../auctions/components/adunitPanel';
 import AdunitSubPanel from '../../../../auctions/components/adunitPanel/panel';
-import SortButton from '../../../../../../sortButton';
 
 interface AuctionPanelProps {
   auctionEvents: {
@@ -54,8 +51,6 @@ interface AuctionPanelProps {
   isMultiSeller?: boolean;
   selectedAdUnit?: string;
   selectedDateTime?: string;
-  sortOrder?: string;
-  setSortOrder?: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
 }
 
 const AuctionPanel = ({
@@ -66,21 +61,8 @@ const AuctionPanel = ({
   selectedAdUnit,
   selectedDateTime,
   isEE = true,
-  sortOrder,
-  setSortOrder,
   adsAndBidders,
 }: AuctionPanelProps) => {
-  const changedValue = useRef({ oldAuctionEvents: {}, oldSortOrder: '' });
-
-  useEffect(() => {
-    return () => {
-      changedValue.current = {
-        oldAuctionEvents: auctionEvents,
-        oldSortOrder: sortOrder ?? '',
-      };
-    };
-  }, [auctionEvents, sortOrder]);
-
   const { isSidebarFocused, isKeySelected } = useSidebar(
     ({ state, actions }) => ({
       isSidebarFocused: state.isSidebarFocused,
@@ -240,60 +222,9 @@ const AuctionPanel = ({
           children: adUnitChildren,
           dropdownOpen: true,
         };
-
-        if (!isEE) {
-          data[adUnit].extraInterfaceToTitle = {
-            Element: SortButton,
-            props: {
-              setSortOrder,
-              sortOrder,
-              isSidebarFocused: isSidebarFocused && isKeySelected(adUnit),
-            },
-          };
-        }
       });
 
       newData['adunits'].children = data;
-      if (!isEE) {
-        if (sortOrder === 'asc') {
-          Object.keys(newData['adunits'].children).forEach((adUnit) => {
-            const sortedKeys = Object.keys(
-              newData['adunits'].children[adUnit].children
-            ).sort((a, b) => {
-              return (
-                new Date(a.split('||')[0]).getTime() -
-                new Date(b.split('||')[0]).getTime()
-              );
-            });
-            newData['adunits'].children[adUnit].children = sortedKeys.reduce(
-              (acc, key) => {
-                acc[key] = newData['adunits'].children[adUnit].children[key];
-                return acc;
-              },
-              {} as SidebarItems
-            );
-          });
-        } else {
-          Object.keys(newData['adunits'].children).forEach((adUnit) => {
-            const sortedKeys = Object.keys(
-              newData['adunits'].children[adUnit].children
-            ).sort((a, b) => {
-              return (
-                new Date(b.split('||')[0]).getTime() -
-                new Date(a.split('||')[0]).getTime()
-              );
-            });
-
-            newData['adunits'].children[adUnit].children = sortedKeys.reduce(
-              (acc, key) => {
-                acc[key] = newData['adunits'].children[adUnit].children[key];
-                return acc;
-              },
-              {} as SidebarItems
-            );
-          });
-        }
-      }
 
       return newData;
     });
@@ -305,8 +236,6 @@ const AuctionPanel = ({
     isMultiSeller,
     selectedAdUnit,
     selectedDateTime,
-    setSortOrder,
-    sortOrder,
     isSidebarFocused,
     isKeySelected,
     adsAndBidders,
@@ -331,13 +260,7 @@ const AuctionPanel = ({
           right: true,
         }}
       >
-        <Sidebar
-          visibleWidth={160}
-          shouldScrollToLatestItem={
-            sortOrder === 'asc' &&
-            !isEqual(changedValue.current.oldAuctionEvents, auctionEvents)
-          }
-        />
+        <Sidebar visibleWidth={160} />
       </Resizable>
       <div className="flex-1 h-full flex flex-col overflow-auto">
         {Element && <Element {...props} />}
