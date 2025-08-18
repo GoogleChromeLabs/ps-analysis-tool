@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { TabsProvider, type TabItems } from '@google-psat/design-system';
 
 /**
@@ -25,18 +25,27 @@ import { TabsProvider, type TabItems } from '@google-psat/design-system';
  */
 import Panel from './panel';
 import Legend from './legend';
+import { Provider } from './store';
 
 const ExplorableExplanation = () => {
+  const [stepExplanation, setStepExplanation] = useState<string>('');
+  const [scenarioTitle, setScenarioTitle] = useState<string>('');
+  const [scenarioExplanation, setScenarioExplanation] = useState<string>('');
   const tabItems = useMemo<TabItems[keyof TabItems]>(
     () => [
       {
         title: 'Legend',
         content: {
           Element: Legend,
+          props: {
+            scenarioTitle,
+            scenarioExplanation,
+            stepExplanation,
+          },
         },
       },
     ],
-    []
+    [scenarioExplanation, scenarioTitle, stepExplanation]
   );
 
   return (
@@ -45,7 +54,13 @@ const ExplorableExplanation = () => {
       name="fedcm-explorable-explanation"
       isGroup={false}
     >
-      <Panel />
+      <Provider>
+        <Panel
+          setStepExplanation={setStepExplanation}
+          setScenarioTitle={setScenarioTitle}
+          setScenarioExplanation={setScenarioExplanation}
+        />
+      </Provider>
     </TabsProvider>
   );
 };

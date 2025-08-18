@@ -14,8 +14,26 @@
  * limitations under the License.
  */
 
-const Legend = () => {
-  return <div>Legend Content</div>;
+interface LegendProps {
+  scenarioTitle?: string;
+  scenarioExplanation?: string;
+  stepExplanation?: string;
+}
+
+const Legend = ({
+  scenarioTitle,
+  scenarioExplanation,
+  stepExplanation,
+}: LegendProps) => {
+  return (
+    <div className="p-3 text-[12.5px] dark:text-bright-gray h-full overflow-y-auto pb-5">
+      {scenarioTitle && <h3 className="font-bold">{scenarioTitle}</h3>}
+      {scenarioExplanation && <p>{scenarioExplanation}</p>}
+      <hr className="my-2 border-gray-300 dark:border-bright-gray" />
+      <p className="font-bold">Current Step:</p>
+      {stepExplanation && <p>{stepExplanation}</p>}
+    </div>
+  );
 };
 
 export default Legend;

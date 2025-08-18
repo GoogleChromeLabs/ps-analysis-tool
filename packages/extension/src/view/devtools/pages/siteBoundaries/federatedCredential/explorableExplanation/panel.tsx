@@ -17,35 +17,84 @@
 /**
  * External dependencies.
  */
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DraggableTray } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
  */
-import Header from '../../../explorableExplanation/header';
 
-const Panel = () => {
+import { BrowserStep, SequenceDiagram, Timeline } from './components';
+import { useStore } from './store';
+import Header from './header';
+import { scenarios } from './store/scenarios';
+
+interface PanelProps {
+  setStepExplanation: (explanation: string) => void;
+  setScenarioTitle: (title: string) => void;
+  setScenarioExplanation: (explanation: string) => void;
+}
+
+const Panel = ({
+  setStepExplanation,
+  setScenarioTitle,
+  setScenarioExplanation,
+}: PanelProps) => {
+  const {
+    play,
+    setPlay,
+    interactiveMode,
+    interactiveModeHandler,
+    nextStep,
+    reset,
+    currentScenario,
+  } = useStore(({ state, actions }) => ({
+    play: state.play,
+    setPlay: actions.setPlay,
+    interactiveMode: state.interactiveMode,
+    interactiveModeHandler: actions.interactiveModeHandler,
+    nextStep: actions.nextStep,
+    reset: actions.resetCurrentScenario,
+    currentScenario: state.currentScenario,
+  }));
   const [isCollapsed, setIsCollapsed] = useState(false);
   const draggableTrayRef = useRef({
     isCollapsed,
     setIsCollapsed,
   });
-  const [play, setPlay] = useState(false);
   const [sliderStep, setSliderStep] = useState(1);
   const [historyCount, setHistoryCount] = useState(0);
 
   const setPlaying = useCallback(() => {
-    setPlay((prevState) => {
-      return !prevState;
-    });
-  }, []);
+    setPlay(!play);
+  }, [play, setPlay]);
 
   const resetHandler = useCallback(() => {
     setPlay(false);
     setSliderStep(1);
     setHistoryCount(0);
-  }, []);
+    reset();
+  }, [reset, setPlay]);
+
+  useEffect(() => {
+    const scenario = scenarios[currentScenario];
+    setScenarioTitle(scenario.title);
+    setScenarioExplanation(scenario.description);
+  }, [currentScenario, setScenarioExplanation, setScenarioTitle]);
+
+  const interactiveModeInterface = (
+    <div>
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          type="checkbox"
+          checked={interactiveMode}
+          onChange={interactiveModeHandler}
+          className="hover:cursor-pointer"
+        />
+        <span className="whitespace-nowrap">Interactive Mode</span>
+      </label>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full">
@@ -57,9 +106,26 @@ const Panel = () => {
         historyCount={historyCount}
         reset={resetHandler}
         showNextPrevButtons={true}
+        nextStep={nextStep}
+        extraInterface={interactiveModeInterface}
       />
-      <div className="flex-1"></div>
-      <DraggableTray ref={draggableTrayRef} trayId="explorableExplanation" />
+      <div className="flex-1 overflow-auto px-4 min-w-fit">
+        <Timeline />
+        <main className="flex flex-col gap-5 h-fit">
+          <div
+            className="flex flex-row gap-5 min-h-[500px]"
+            id="visualization-container"
+          >
+            <BrowserStep setStepExplanation={setStepExplanation} />
+            <SequenceDiagram />
+          </div>
+        </main>
+      </div>
+      <DraggableTray
+        ref={draggableTrayRef}
+        trayId="explorableExplanationFedcm"
+        defaultHeight="170px"
+      />
     </div>
   );
 };

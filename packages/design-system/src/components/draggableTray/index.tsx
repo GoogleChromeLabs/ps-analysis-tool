@@ -35,6 +35,7 @@ import { usePersistentTray } from '../resizableTray';
 interface DraggableTrayProps {
   initialCollapsed?: boolean;
   trayId?: string;
+  defaultHeight?: string;
 }
 
 const DraggableTray = forwardRef<
@@ -44,7 +45,11 @@ const DraggableTray = forwardRef<
   },
   DraggableTrayProps
 >(function DraggableTray(
-  { initialCollapsed = false, trayId }: DraggableTrayProps,
+  {
+    initialCollapsed = false,
+    trayId,
+    defaultHeight = '30%',
+  }: DraggableTrayProps,
   ref
 ) {
   const { panel, activeTab } = useTabs(({ state }) => ({
@@ -57,7 +62,7 @@ const DraggableTray = forwardRef<
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
   const { height, setHeight, onResizeStop } = usePersistentTray(trayId, {
-    height: '30%',
+    height: defaultHeight,
   });
 
   useEffect(() => {
@@ -66,9 +71,9 @@ const DraggableTray = forwardRef<
 
   useEffect(() => {
     if (!isCollapsed) {
-      setHeight('30%');
+      setHeight(defaultHeight);
     }
-  }, [isCollapsed, setHeight]);
+  }, [defaultHeight, isCollapsed, setHeight]);
 
   useImperativeHandle(
     ref,
@@ -83,7 +88,7 @@ const DraggableTray = forwardRef<
     <Resizable
       defaultSize={{
         width: '100%',
-        height: '30%',
+        height: defaultHeight,
       }}
       onResizeStop={onResizeStop}
       size={{
