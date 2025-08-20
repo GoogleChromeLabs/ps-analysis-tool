@@ -24,6 +24,7 @@
     "@floating-ui/dom": "^1.5.3",
     "@google-psat/common": "*",
     "@google-psat/design-system": "*",
+    "@google-psat/ee-workflow": "*",
     "@google-psat/explorable-explanations": "*",
     "@google-psat/i18n": "*",
     "@google-psat/report": "*",

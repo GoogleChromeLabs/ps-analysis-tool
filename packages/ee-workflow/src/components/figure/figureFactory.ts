@@ -333,8 +333,8 @@ export default class FigureFactory {
         _figure.draw();
 
         if (
-          Math.ceil(currentX) === Math.ceil(endX) &&
-          Math.ceil(currentY) === Math.ceil(endY)
+          Math.floor(Math.abs(currentX - endX)) === 0 &&
+          Math.floor(Math.abs(currentY - endY)) === 0
         ) {
           return true;
         }

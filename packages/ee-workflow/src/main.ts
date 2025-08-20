@@ -191,31 +191,34 @@ export class Main {
    * @param p - The p5 instance.
    */
   private init(p: p5) {
-    p.preload = this.preload.bind(this);
-    p.setup = this.setUp.bind(this);
-    p.draw = this.draw.bind(this);
-    p.mouseMoved = this.mouseMoved.bind(this);
+    p.preload = this.preload.bind(this, p);
+    p.setup = this.setUp.bind(this, p);
+    p.draw = this.draw.bind(this, p);
+    p.mouseMoved = this.mouseMoved.bind(this, p);
     p.mouseClicked = this.mouseClicked.bind(this);
-    p.windowResized = this.windowResized.bind(this);
+    p.windowResized = this.windowResized.bind(this, p);
   }
 
   /**
    * Preloads assets before setup.
+   * @param p - The p5 instance.
    */
-  private preload() {
+  private preload(p: p5) {
     if (this.preloader) {
-      this.preloader(this.p5);
+      this.preloader(p);
     }
   }
 
   /**
    * Sets up the canvas.
+   * @param p - The p5 instance.
    */
-  private setUp() {
-    const containerWidth = 1600;
-    const containerHeight = 1600;
+  private setUp(p: p5) {
+    const containerWidth = this.container?.clientWidth || 1600;
+    const containerHeight = this.container?.clientHeight || 1600;
 
-    this.p5.createCanvas(containerWidth, containerHeight).position(0, 50);
+    p.createCanvas(containerWidth, containerHeight).position(0, 0);
+    p.pixelDensity(2);
   }
 
   /**
@@ -249,7 +252,7 @@ export class Main {
     if (object.shouldDispatch()) {
       this.dispatchedIds.add(object.getDispatchId() || '');
 
-      this.dispatchCustomEvent('dispatchId', {
+      this.dispatchCustomEvent('ee:dispatchId', {
         dispatchId: object.getDispatchId(),
       });
 
@@ -455,8 +458,9 @@ export class Main {
 
   /**
    * Draws the current frame, processing the queues.
+   * @param p - The p5 instance.
    */
-  private draw() {
+  private draw(p: p5) {
     this.stats?.begin();
 
     if (this.pause) {
@@ -471,20 +475,20 @@ export class Main {
       this.dispatchCustomEvent('noLoop', {
         message: 'Animation ended',
       });
-      this.p5.noLoop();
+      p.noLoop();
       this.noLoop = true;
     }
 
     if (this.isTravelling) {
       if (this.clearBeforeTravel) {
-        this.p5.clear();
+        p.clear();
       }
 
       if (this.runTraveller()) {
         this.traveller = null;
         this.runner();
       }
-    } else if (this.p5.frameCount % this.delay === 0) {
+    } else if (p.frameCount % this.delay === 0) {
       if (
         !this.usingHelperQueue ||
         (this.usingHelperQueue && this.helperQueue.length)
@@ -508,8 +512,12 @@ export class Main {
     this.stats?.end();
   }
 
-  private windowResized() {
-    this.p5.resizeCanvas(1600, 1600);
+  /**
+   * Handles window resize events.
+   * @param p - The p5 instance.
+   */
+  private windowResized(p: p5) {
+    p.resizeCanvas(1600, 1600);
     this.loadAnimatorPartAndDraw(undefined, true);
   }
 
@@ -530,8 +538,9 @@ export class Main {
 
   /**
    * Handles hover events for figures.
+   * @param p - The p5 instance.
    */
-  private mouseMoved() {
+  private mouseMoved(p: p5) {
     let didHover = false;
 
     if (this.snapshot.length === 0) {
@@ -590,9 +599,9 @@ export class Main {
     });
 
     if (didHover) {
-      this.p5.cursor(this.p5.HAND);
+      p.cursor(p.HAND);
     } else {
-      this.p5.cursor(this.p5.ARROW);
+      p.cursor(p.ARROW);
     }
   }
 
