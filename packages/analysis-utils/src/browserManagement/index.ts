@@ -693,7 +693,8 @@ export class BrowserManagement {
             return;
           }
 
-          const _JSCookies = await resolveWithTimeout(
+          // @ts-ignore -- build fails if this is not done.
+          const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
             frame.evaluate(() => {
               // @ts-ignore
               return cookieStore?.getAll();
@@ -706,7 +707,7 @@ export class BrowserManagement {
             [key: string]: CookieData;
           } = {};
 
-          _JSCookies.forEach((cookie: CookieStoreCookie) => {
+          _JSCookies.forEach((cookie) => {
             if (!cookie.domain) {
               cookie.domain = new URL(frame.url()).hostname;
             }
