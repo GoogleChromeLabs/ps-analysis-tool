@@ -30,7 +30,7 @@ const Legend = ({
       {scenarioTitle && <h3 className="font-bold">{scenarioTitle}</h3>}
       {scenarioExplanation && <p>{scenarioExplanation}</p>}
       <hr className="my-2 border-gray-300 dark:border-bright-gray" />
-      <p className="font-bold">Current Step:</p>
+      <p className="font-bold">Latest Step:</p>
       {stepExplanation && <p>{stepExplanation}</p>}
     </div>
   );

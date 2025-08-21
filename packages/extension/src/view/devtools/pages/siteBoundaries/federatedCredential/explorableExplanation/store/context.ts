@@ -18,45 +18,35 @@
  * External dependencies.
  */
 import { noop, createContext } from '@google-psat/common';
-
-/**
- * Internal dependencies.
- */
-import { ScenarioKeys } from './scenariosTypes';
+import type { Main } from '@google-psat/ee-workflow';
 
 export interface StoreContext {
   state: {
     play: boolean;
-    currentScenario: ScenarioKeys;
-    currentStep: number;
-    messageCount: number;
-    interactiveMode: boolean;
+    speed: number;
   };
   actions: {
-    setPlay: (play: boolean) => void;
-    resetCurrentScenario: () => void;
-    selectScenario: (scenario: ScenarioKeys) => void;
-    incrementMessageCount: () => void;
+    setCanvas: (canvas: Main) => void;
+    setIsPlaying: (isPlaying: boolean) => void;
+    reset: () => void;
     nextStep: () => void;
-    interactiveModeHandler: () => void;
+    prevStep: () => void;
+    setSpeed: (speed: number) => void;
   };
 }
 
 const initialState: StoreContext = {
   state: {
     play: false,
-    currentScenario: ScenarioKeys.REGISTRATION,
-    currentStep: -1,
-    messageCount: 0,
-    interactiveMode: false,
+    speed: 1,
   },
   actions: {
-    setPlay: noop,
-    resetCurrentScenario: noop,
-    selectScenario: noop,
-    incrementMessageCount: noop,
+    setCanvas: noop,
+    setIsPlaying: noop,
+    reset: noop,
     nextStep: noop,
-    interactiveModeHandler: noop,
+    prevStep: noop,
+    setSpeed: noop,
   },
 };
 

@@ -27,35 +27,30 @@ import {
 } from '@google-psat/design-system';
 import React from 'react';
 import classNames from 'classnames';
+import { useStore } from './store';
+
 interface HeaderProps {
-  play: boolean;
-  setPlay: () => void;
-  reset: () => void;
-  historyCount: number;
-  sliderStep: number;
-  setSliderStep:
-    | React.Dispatch<React.SetStateAction<number>>
-    | ((step: number) => void);
-  showNextPrevButtons: boolean;
-  nextStep?: () => void;
-  prevStep?: () => void;
+  historyCount?: number;
   extraInterface?: React.ReactNode;
   disablePlayButton?: boolean;
 }
 
 const Header = ({
-  play,
-  setPlay,
-  reset,
   historyCount,
-  sliderStep,
-  setSliderStep,
-  showNextPrevButtons,
-  nextStep,
-  prevStep,
   extraInterface,
   disablePlayButton = false,
 }: HeaderProps) => {
+  const { play, speed, setIsPlaying, nextStep, prevStep, reset, setSpeed } =
+    useStore(({ state, actions }) => ({
+      play: state.play,
+      speed: state.speed,
+      setIsPlaying: actions.setIsPlaying,
+      nextStep: actions.nextStep,
+      prevStep: actions.prevStep,
+      reset: actions.reset,
+      setSpeed: actions.setSpeed,
+    }));
+
   return (
     <div className="w-full px-2 flex items-center justify-between border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px] min-w-[900px]">
       <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray">
@@ -64,7 +59,7 @@ const Header = ({
             'hover:opacity-70 active:opacity-50': !disablePlayButton,
             'opacity-50 pointer-events-none': disablePlayButton,
           })}
-          onClick={setPlay}
+          onClick={() => setIsPlaying(!play)}
           title={play ? 'Pause' : 'Play'}
           disabled={disablePlayButton}
         >
@@ -74,37 +69,45 @@ const Header = ({
             <PlayIcon className="h-5 w-5" />
           )}
         </button>
-        {showNextPrevButtons && (
-          <div className="flex gap-1 px-2">
-            <button
-              id="prevButton"
-              title="Previous Node"
-              onClick={prevStep}
-              className="disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-            </button>
-            <button
-              onClick={nextStep}
-              id="nextButton"
-              title="Next Node"
-              className="disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
-            </button>
-          </div>
-        )}
+
+        <div className="flex gap-1 px-2">
+          <button
+            id="prevButton"
+            title="Previous Node"
+            onClick={prevStep}
+            className="disabled:opacity-50 disabled:pointer-events-none"
+          >
+            <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+          </button>
+          <button
+            onClick={nextStep}
+            id="nextButton"
+            title="Next Node"
+            className="disabled:opacity-50 disabled:pointer-events-none"
+          >
+            <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
+          </button>
+        </div>
+
         <button className="px-2" onClick={reset} title="Restart">
           <RestartIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
         </button>
         <div className="px-2">
-          <Slider sliderStep={sliderStep} setSliderStep={setSliderStep} />
+          <Slider
+            sliderStep={speed}
+            setSliderStep={setSpeed}
+            min={0.5}
+            max={4}
+            step={0.5}
+          />
         </div>
         {extraInterface && <div className="px-2">{extraInterface}</div>}
       </div>
-      <p className="text-raisin-black dark:text-bright-gray whitespace-nowrap">
-        History count: {historyCount}
-      </p>
+      {historyCount !== undefined && (
+        <p className="text-raisin-black dark:text-bright-gray whitespace-nowrap">
+          History count: {historyCount}
+        </p>
+      )}
     </div>
   );
 };

@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DraggableTray } from '@google-psat/design-system';
 
 /**
@@ -25,9 +25,9 @@ import { DraggableTray } from '@google-psat/design-system';
  */
 
 import { BrowserStep, SequenceDiagram, Timeline } from './components';
-import { useStore } from './store';
 import Header from './header';
 import { scenarios } from './store/scenarios';
+import { ScenarioKeys } from './store/scenariosTypes';
 
 interface PanelProps {
   setStepExplanation: (explanation: string) => void;
@@ -40,57 +40,46 @@ const Panel = ({
   setScenarioTitle,
   setScenarioExplanation,
 }: PanelProps) => {
-  const {
-    play,
-    setPlay,
-    interactiveMode,
-    interactiveModeHandler,
-    nextStep,
-    reset,
-    currentScenario,
-  } = useStore(({ state, actions }) => ({
-    play: state.play,
-    setPlay: actions.setPlay,
-    interactiveMode: state.interactiveMode,
-    interactiveModeHandler: actions.interactiveModeHandler,
-    nextStep: actions.nextStep,
-    reset: actions.resetCurrentScenario,
-    currentScenario: state.currentScenario,
-  }));
+  const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
+    ScenarioKeys.REGISTRATION
+  );
+  const [currentStep, setCurrentStep] = useState(-1);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const draggableTrayRef = useRef({
     isCollapsed,
     setIsCollapsed,
   });
-  const [sliderStep, setSliderStep] = useState(1);
-  const [historyCount, setHistoryCount] = useState(0);
-
-  const setPlaying = useCallback(() => {
-    setPlay(!play);
-  }, [play, setPlay]);
-
-  const resetHandler = useCallback(() => {
-    setPlay(false);
-    setSliderStep(1);
-    setHistoryCount(0);
-    reset();
-  }, [reset, setPlay]);
 
   useEffect(() => {
-    const scenario = scenarios[currentScenario];
+    const scenario = scenarios[currentScenarioKey];
     setScenarioTitle(scenario.title);
     setScenarioExplanation(scenario.description);
-  }, [currentScenario, setScenarioExplanation, setScenarioTitle]);
+  }, [currentScenarioKey, setScenarioExplanation, setScenarioTitle]);
+
+  useEffect(() => {
+    const listener = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { dispatchId } = customEvent.detail;
+
+      const [scenarioKey, stepIndex] = (dispatchId as string)
+        .split('-')
+        .slice(-2);
+
+      setCurrentScenarioKey(scenarioKey as ScenarioKeys);
+      setCurrentStep(Number(stepIndex));
+    };
+
+    document.addEventListener('ee:dispatchId', listener);
+
+    return () => {
+      document.removeEventListener('ee:dispatchId', listener);
+    };
+  }, []);
 
   const interactiveModeInterface = (
     <div>
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input
-          type="checkbox"
-          checked={interactiveMode}
-          onChange={interactiveModeHandler}
-          className="hover:cursor-pointer"
-        />
+        <input type="checkbox" className="hover:cursor-pointer" />
         <span className="whitespace-nowrap">Interactive Mode</span>
       </label>
     </div>
@@ -98,25 +87,19 @@ const Panel = ({
 
   return (
     <div className="flex flex-col h-full">
-      <Header
-        play={play}
-        setPlay={setPlaying}
-        sliderStep={sliderStep}
-        setSliderStep={setSliderStep}
-        historyCount={historyCount}
-        reset={resetHandler}
-        showNextPrevButtons={true}
-        nextStep={nextStep}
-        extraInterface={interactiveModeInterface}
-      />
-      <div className="flex-1 overflow-auto px-4 min-w-fit">
-        <Timeline />
+      <Header extraInterface={interactiveModeInterface} />
+      <div className="flex-1 overflow-auto px-4">
+        <Timeline currentScenarioKey={currentScenarioKey} />
         <main className="flex flex-col gap-5 h-fit">
           <div
             className="flex flex-row gap-5 min-h-[500px]"
             id="visualization-container"
           >
-            <BrowserStep setStepExplanation={setStepExplanation} />
+            <BrowserStep
+              setStepExplanation={setStepExplanation}
+              currentStep={currentStep}
+              currentScenarioKey={currentScenarioKey}
+            />
             <SequenceDiagram />
           </div>
         </main>

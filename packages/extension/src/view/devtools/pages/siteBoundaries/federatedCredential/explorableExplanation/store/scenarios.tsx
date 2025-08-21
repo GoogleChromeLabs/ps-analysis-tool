@@ -63,7 +63,7 @@ export const scenarios: Scenarios = {
         action: () => ({
           addMessage: ['user-entity', 'browser-entity', 'Selects IdP'],
           browserUpdates: {
-            simulateElementSelection: ['#idp1-option'],
+            simulateElementSelection: ['#yourid-option'],
           },
         }),
       },
@@ -545,6 +545,11 @@ export const scenarios: Scenarios = {
       {
         explanation: 'Session successfully refreshed',
         action: () => ({
+          addMessage: [
+            'browser-entity',
+            'rp-entity',
+            'Session refreshed successfully',
+          ],
           browserUpdates: {
             hideBrowserLoading: [],
             updateBrowserContent: [
@@ -919,6 +924,11 @@ export const scenarios: Scenarios = {
       {
         explanation: 'Personalized recommendations enabled',
         action: () => ({
+          addMessage: [
+            'browser-entity',
+            'rp-entity',
+            'Personalized recommendations enabled',
+          ],
           browserUpdates: {
             hideBrowserLoading: [],
             updateBrowserContent: [
@@ -1003,6 +1013,7 @@ export const scenarios: Scenarios = {
       {
         explanation: 'Sign-out complete',
         action: () => ({
+          addMessage: ['browser-entity', 'rp-entity', 'Sign-out complete'],
           browserUpdates: {
             hideBrowserLoading: [],
             updateBrowserContent: [

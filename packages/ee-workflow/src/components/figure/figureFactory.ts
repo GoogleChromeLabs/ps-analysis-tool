@@ -104,9 +104,14 @@ export default class FigureFactory {
     };
   }
 
-  private createDispatcherId(isDispatcher: boolean): string | undefined {
+  private createDispatcherId(
+    isDispatcher: boolean,
+    suffix?: string
+  ): string | undefined {
     return isDispatcher
-      ? `dispatcher-${this.dispatcherCounter++}-${this.id}`
+      ? `dispatcher-${this.dispatcherCounter++}-${this.id}${
+          suffix ? '-' + suffix : ''
+        }`
       : undefined;
   }
 
@@ -142,7 +147,7 @@ export default class FigureFactory {
       fill,
       stroke,
       tags,
-      this.createDispatcherId(isDispatcher),
+      this.createDispatcherId(isDispatcher, id),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -191,7 +196,7 @@ export default class FigureFactory {
       fill,
       stroke,
       tags,
-      this.createDispatcherId(isDispatcher),
+      this.createDispatcherId(isDispatcher, id),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -246,7 +251,7 @@ export default class FigureFactory {
       this.canvasContainer,
       id,
       tags,
-      this.createDispatcherId(isDispatcher),
+      this.createDispatcherId(isDispatcher, id),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -304,7 +309,7 @@ export default class FigureFactory {
       stroke,
       hasArrow,
       tags,
-      this.createDispatcherId(isDispatcher),
+      this.createDispatcherId(isDispatcher, id),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -410,7 +415,7 @@ export default class FigureFactory {
       size,
       fill,
       tags,
-      this.createDispatcherId(isDispatcher),
+      this.createDispatcherId(isDispatcher, id),
       mouseClicked,
       mouseMoved,
       onLeave
@@ -465,7 +470,7 @@ export default class FigureFactory {
       fill,
       stroke,
       tags,
-      this.createDispatcherId(isDispatcher),
+      this.createDispatcherId(isDispatcher, id),
       mouseClicked,
       mouseMoved,
       onLeave

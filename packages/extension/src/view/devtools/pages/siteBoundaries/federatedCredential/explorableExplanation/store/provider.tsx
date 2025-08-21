@@ -17,132 +17,62 @@
 /**
  * External dependencies.
  */
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type PropsWithChildren,
-} from 'react';
+import { useCallback, useState, type PropsWithChildren } from 'react';
+import type { Main } from '@google-psat/ee-workflow';
 
 /**
  * Internal dependencies.
  */
 import Context from './context';
-import { scenarios } from './scenarios';
-import { ScenarioKeys } from './scenariosTypes';
 
 const Provider = ({ children }: PropsWithChildren) => {
+  const [canvas, setCanvas] = useState<Main>();
   const [play, setPlay] = useState(false);
-  const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
-    ScenarioKeys.REGISTRATION
-  );
-  const [currentStep, setCurrentStep] = useState(-1);
-  const [messageCount, setMessageCount] = useState(0);
+  const [speed, _setSpeed] = useState(1.5);
 
-  const [interactiveMode, setInteractiveMode] = useState(false);
+  const setIsPlaying = useCallback(
+    (isPlaying: boolean) => {
+      setPlay(isPlaying);
 
-  const resetScenario = useCallback(() => {
-    setCurrentStep(-1);
-    setMessageCount(0);
-  }, []);
-
-  const incrementMessageCount = useCallback(() => {
-    setMessageCount((prev) => prev + 1);
-  }, []);
-
-  const selectScenario = useCallback(
-    (scenario: ScenarioKeys) => {
-      setCurrentScenarioKey(scenario);
-      resetScenario();
+      canvas?.togglePause(!isPlaying);
     },
-    [resetScenario]
+    [canvas]
+  );
+
+  const setSpeed = useCallback(
+    (_speed: number) => {
+      _setSpeed(_speed);
+      canvas?.updateSpeed(_speed);
+    },
+    [canvas]
   );
 
   const nextStep = useCallback(() => {
-    if (!play && !interactiveMode) {
-      return;
-    }
+    canvas?.loadNextCheckpoint();
+  }, [canvas]);
 
-    const scenario = scenarios[currentScenarioKey];
+  const prevStep = useCallback(() => {
+    canvas?.loadPreviousCheckpoint();
+  }, [canvas]);
 
-    setCurrentStep((prevStep) => prevStep + 1);
-
-    if (currentStep >= scenario.steps.length) {
-      const scenarioOrder = Object.values(ScenarioKeys);
-      const currentIndex = scenarioOrder.indexOf(currentScenarioKey);
-
-      if (currentIndex < scenarioOrder.length - 1) {
-        setCurrentScenarioKey(scenarioOrder[currentIndex + 1]);
-        setCurrentStep(-1);
-      } else {
-        setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
-        setCurrentStep(-1);
-      }
-
-      setMessageCount(0);
-      return;
-    }
-  }, [currentScenarioKey, currentStep, interactiveMode, play]);
-
-  const interactiveModeIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const currentStepRef = useRef(currentStep);
-  const currentScenarioKeyRef = useRef(currentScenarioKey);
-
-  useEffect(() => {
-    currentStepRef.current = currentStep;
-    currentScenarioKeyRef.current = currentScenarioKey;
-  }, [currentStep, currentScenarioKey]);
-
-  useEffect(() => {
-    return () => {
-      if (interactiveModeIntervalRef.current) {
-        clearInterval(interactiveModeIntervalRef.current);
-      }
-    };
-  }, []);
-
-  const interactiveModeHandler = useCallback(() => {
-    if (interactiveModeIntervalRef.current) {
-      clearInterval(interactiveModeIntervalRef.current);
-      interactiveModeIntervalRef.current = null;
-      setInteractiveMode(false);
-      return;
-    }
-
-    setInteractiveMode(true);
-
-    interactiveModeIntervalRef.current = setInterval(() => {
-      const scenario = scenarios[currentScenarioKeyRef.current];
-      if (currentStepRef.current < scenario.steps.length - 1) {
-        nextStep();
-      } else {
-        if (interactiveModeIntervalRef.current) {
-          clearInterval(interactiveModeIntervalRef.current);
-        }
-        interactiveModeIntervalRef.current = null;
-        setInteractiveMode(false);
-      }
-    }, 1200);
-  }, [nextStep]);
+  const reset = useCallback(() => {
+    canvas?.reset();
+  }, [canvas]);
 
   return (
     <Context.Provider
       value={{
         state: {
           play,
-          currentScenario: currentScenarioKey,
-          currentStep,
-          messageCount,
-          interactiveMode,
+          speed,
         },
         actions: {
-          setPlay,
-          resetCurrentScenario: resetScenario,
-          selectScenario,
-          incrementMessageCount,
+          setCanvas,
+          setIsPlaying,
+          reset,
           nextStep,
-          interactiveModeHandler,
+          prevStep,
+          setSpeed,
         },
       }}
     >

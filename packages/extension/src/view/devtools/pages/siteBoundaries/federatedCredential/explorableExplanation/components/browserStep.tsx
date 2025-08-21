@@ -21,24 +21,25 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Internal dependencies.
  */
-import { useStore } from '../store';
 import { scenarios } from '../store/scenarios';
 import { ScenarioKeys } from '../store/scenariosTypes';
 
 interface BrowserStepProps {
+  currentStep: number;
+  currentScenarioKey: ScenarioKeys;
   setStepExplanation: (explanation: string) => void;
 }
 
-const BrowserStep = ({ setStepExplanation }: BrowserStepProps) => {
+const BrowserStep = ({
+  currentScenarioKey,
+  currentStep,
+  setStepExplanation,
+}: BrowserStepProps) => {
   const [dialog, setDialog] = useState<{
     type: string;
     options?: unknown;
   } | null>(null);
   const [browserContent, setBrowserContent] = useState<React.ReactNode>(null);
-  const { currentScenario, currentStep } = useStore(({ state }) => ({
-    currentScenario: state.currentScenario,
-    currentStep: state.currentStep,
-  }));
 
   const [browserLoading, setBrowserLoading] = useState<{
     message: string;
@@ -112,7 +113,7 @@ const BrowserStep = ({ setStepExplanation }: BrowserStepProps) => {
     callbacks.current.hideBrowserDialog();
     callbacks.current.hideBrowserLoading();
 
-    switch (currentScenario) {
+    switch (currentScenarioKey) {
       case 'registration':
       case 'signin':
         callbacks.current.updateBrowserContent(
@@ -176,30 +177,30 @@ const BrowserStep = ({ setStepExplanation }: BrowserStepProps) => {
         break;
       default:
     }
-  }, [currentScenario]);
+  }, [currentScenarioKey]);
 
   useEffect(() => {
     if (currentStep === -1) {
       setStepExplanation(
         `Click "Start Flow" to begin the ${scenarios[
-          currentScenario
+          currentScenarioKey
         ].title.toLowerCase()} process.`
       );
       resetScenario();
     } else {
-      const stepData = scenarios[currentScenario].steps[currentStep];
+      const stepData = scenarios[currentScenarioKey].steps[currentStep];
       setStepExplanation(stepData?.explanation || '');
     }
 
     if (
-      Object.values(ScenarioKeys).indexOf(currentScenario) ===
+      Object.values(ScenarioKeys).indexOf(currentScenarioKey) ===
         Object.values(ScenarioKeys).length - 1 &&
-      currentStep >= scenarios[currentScenario].steps.length
+      currentStep >= scenarios[currentScenarioKey].steps.length
     ) {
       setStepExplanation('End of demo. Click "Restart Demo" to start over.');
     }
 
-    const actionFn = scenarios[currentScenario].steps[currentStep]?.action;
+    const actionFn = scenarios[currentScenarioKey].steps[currentStep]?.action;
     const action = typeof actionFn === 'function' ? actionFn() : undefined;
 
     if (action?.browserUpdates) {
@@ -219,7 +220,7 @@ const BrowserStep = ({ setStepExplanation }: BrowserStepProps) => {
     }
   }, [
     callbacks,
-    currentScenario,
+    currentScenarioKey,
     currentStep,
     resetScenario,
     setStepExplanation,

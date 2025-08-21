@@ -21,17 +21,13 @@ import { Fragment } from 'react/jsx-runtime';
 /**
  * Internal dependencies.
  */
-import { useStore } from '../store';
 import { ScenarioKeys } from '../store/scenariosTypes';
 
-const Timeline = () => {
-  const { currentScenario, selectScenario } = useStore(
-    ({ state, actions }) => ({
-      currentScenario: state.currentScenario,
-      selectScenario: actions.selectScenario,
-    })
-  );
+interface TimelineProps {
+  currentScenarioKey: ScenarioKeys;
+}
 
+const Timeline = ({ currentScenarioKey }: TimelineProps) => {
   const titles = [
     'Registration',
     'Sign In',
@@ -45,9 +41,9 @@ const Timeline = () => {
     <div className="journey-timeline flex items-center justify-between px-5 min-h-[80px]">
       {titles.map((title, index) => {
         const isActive =
-          index === Object.values(ScenarioKeys).indexOf(currentScenario);
+          index === Object.values(ScenarioKeys).indexOf(currentScenarioKey);
         const isCompleted =
-          index < Object.values(ScenarioKeys).indexOf(currentScenario);
+          index < Object.values(ScenarioKeys).indexOf(currentScenarioKey);
         return (
           <Fragment key={title}>
             <div
@@ -62,7 +58,7 @@ const Timeline = () => {
               id={`${Object.keys(ScenarioKeys)[index]}-node`}
               onClick={() => {
                 if (!isActive) {
-                  selectScenario(Object.values(ScenarioKeys)[index]);
+                  // selectScenario(Object.values(ScenarioKeys)[index]);
                 }
               }}
             >

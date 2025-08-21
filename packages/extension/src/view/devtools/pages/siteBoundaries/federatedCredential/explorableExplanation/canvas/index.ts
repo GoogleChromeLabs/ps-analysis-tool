@@ -161,7 +161,11 @@ export const initializeCanvas = (container: HTMLDivElement) => {
   mainCanvas.addGroup(userComponent, true);
   mainCanvas.addGroup(browserComponent, true);
   mainCanvas.addGroup(rpComponent, true);
-  mainCanvas.addGroup(idpComponent, true);
+
+  idpComponent.setSideEffectOnDraw(() => {
+    mainCanvas.togglePause(true);
+  });
+  mainCanvas.addGroup(idpComponent, true, undefined, true);
 
   let currentYToDraw = 130;
 
@@ -180,7 +184,8 @@ export const initializeCanvas = (container: HTMLDivElement) => {
           text: label,
           x: fromLineX + 25,
           y: currentYToDraw,
-          id: id,
+          id,
+          isDispatcher: true,
         }),
         figureFactory.line({
           x: fromLineX,
@@ -233,6 +238,8 @@ export const initializeCanvas = (container: HTMLDivElement) => {
         text: label,
         x: (fromLineX + toLineX) / 2,
         y: currentYToDraw,
+        id,
+        isDispatcher: true,
       }),
       arrow,
     ]);
@@ -288,8 +295,10 @@ export const initializeCanvas = (container: HTMLDivElement) => {
     });
 
     const animator = new Animator(animatorFigures, figureFactory);
-    mainCanvas.addAnimator(animator, false, true, true);
+    mainCanvas.addAnimator(animator, false, true);
 
     currentYToDraw = 130;
   });
+
+  return mainCanvas;
 };
