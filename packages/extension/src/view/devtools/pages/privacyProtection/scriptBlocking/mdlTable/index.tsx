@@ -113,8 +113,8 @@ const MDLTable = () => {
     })();
   }, []);
 
-  const checkbox = useCallback(() => {
-    return (
+  const checkbox = useCallback(
+    () => (
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
         <input
           className="hover:cursor-pointer"
@@ -124,8 +124,9 @@ const MDLTable = () => {
         />
         <span className="whitespace-nowrap">Show only highlighted domains</span>
       </label>
-    );
-  }, []);
+    ),
+    []
+  );
 
   const tableData: MDLTableData[] = useMemo(() => {
     if (initialTableData.length === 0) {
@@ -154,9 +155,7 @@ const MDLTable = () => {
       }
     });
 
-    return data.sort((a, b) => {
-      return Number(b.highlighted) - Number(a.highlighted);
-    });
+    return data.sort((a, b) => Number(b.highlighted) - Number(a.highlighted));
   }, [uniqueResponseDomains, initialTableData, showOnlyHighlighted]);
 
   const tableColumns = useMemo<TableColumn[]>(
