@@ -129,4 +129,5 @@ export { default as DoubleArrow } from './double-arrow.svg?react';
 export { default as Hammer } from './hammer.svg?react';
 export { default as BlockIcon } from './block.svg?react';
 export { default as BlockIconWhite } from './block-white.svg?react';
+export { default as IncognitoIcon } from './incognito.svg?react';
 export * from './ps-icons';

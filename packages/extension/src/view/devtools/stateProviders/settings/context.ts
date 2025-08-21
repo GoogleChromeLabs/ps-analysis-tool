@@ -34,6 +34,7 @@ export interface SettingsStoreContext {
     settingsChanged: boolean;
     isUsingCDPForSettingsPageDisplay: boolean;
     exceedingLimitations: boolean;
+    incognitoAccess: boolean;
   };
   actions: {
     setIsUsingCDP: (newValue: boolean) => void;
@@ -43,11 +44,13 @@ export interface SettingsStoreContext {
     setIsUsingCDPForSettingsPageDisplay: React.Dispatch<
       React.SetStateAction<boolean>
     >;
+    openIncognitoTab: () => Promise<void>;
   };
 }
 
 const initialState: SettingsStoreContext = {
   state: {
+    incognitoAccess: false,
     currentTabs: 0,
     currentExtensions: null,
     browserInformation: null,
@@ -64,6 +67,7 @@ const initialState: SettingsStoreContext = {
     setSettingsChanged: noop,
     setExceedingLimitations: noop,
     setIsUsingCDPForSettingsPageDisplay: noop,
+    openIncognitoTab: () => Promise.resolve(),
   },
 };
 

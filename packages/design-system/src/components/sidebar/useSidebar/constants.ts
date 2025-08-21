@@ -44,4 +44,5 @@ export enum SIDEBAR_ITEMS_KEYS {
   IP_PROTECTION = 'ip-protection',
   SCRIPT_BLOCKING = 'script-blocking',
   PRIVATE_STATE_TOKENS = 'private-state-tokens',
+  OPEN_INCOGNITO_TAB = 'open-incognito-tab',
 }
