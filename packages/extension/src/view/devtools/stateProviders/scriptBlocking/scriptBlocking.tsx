@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,13 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import { isEqual } from 'lodash-es';
+
 /**
  * Internal dependencies.
  */
 import Context from './context';
 import { EXTRA_DATA } from '../../../../constants';
-import { isEqual } from 'lodash-es';
 
 const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
   const [uniqueResponseDomains, setUniqueResponseDomains] = useState<string[]>(
