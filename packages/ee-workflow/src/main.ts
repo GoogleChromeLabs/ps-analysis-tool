@@ -872,7 +872,7 @@ export class Main {
    */
   // eslint-disable-next-line complexity
   loadPreviousCheckpoint() {
-    const checkpoint = this.popPreviousCheckpoint();
+    let checkpoint = this.popPreviousCheckpoint();
 
     if (!checkpoint) {
       return undefined;
@@ -906,7 +906,9 @@ export class Main {
       this.traveller = null;
     }
 
-    this.handleAnimatorOnPreviousCheckpointLoad(checkpoint);
+    if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
+      checkpoint = this.popPreviousCheckpoint();
+    }
 
     const toBeLoadedObjects = [];
     const toCheckGroups = new Set<string>();
