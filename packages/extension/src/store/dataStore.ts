@@ -93,8 +93,8 @@ export class DataStore {
     const hostname = new URL(request.url).hostname;
 
     if (
-      !DataStore.tabs[tabId].uniqueResponseDomains.includes(hostname) &&
-      hostname !== 'null'
+      hostname !== 'null' &&
+      !DataStore.tabs[tabId].uniqueResponseDomains.includes(hostname)
     ) {
       DataStore.tabs[tabId].uniqueResponseDomains.push(hostname);
       DataStore.tabs[tabId].newUpdatesScriptBlocking++;
