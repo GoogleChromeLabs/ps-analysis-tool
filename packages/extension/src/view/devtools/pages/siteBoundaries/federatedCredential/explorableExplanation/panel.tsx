@@ -1,0 +1,116 @@
+/*
+ * Copyright 2025 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * External dependencies.
+ */
+import { useEffect, useRef, useState } from 'react';
+import { DraggableTray } from '@google-psat/design-system';
+
+/**
+ * Internal dependencies.
+ */
+
+import { BrowserStep, SequenceDiagram, Timeline } from './components';
+import Header from './header';
+import { scenarios } from './store/scenarios';
+import { ScenarioKeys } from './store/scenariosTypes';
+
+interface PanelProps {
+  setStepExplanation: (explanation: string) => void;
+  setScenarioTitle: (title: string) => void;
+  setScenarioExplanation: (explanation: string) => void;
+}
+
+const Panel = ({
+  setStepExplanation,
+  setScenarioTitle,
+  setScenarioExplanation,
+}: PanelProps) => {
+  const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
+    ScenarioKeys.REGISTRATION
+  );
+  const [currentStep, setCurrentStep] = useState(-1);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
+
+  useEffect(() => {
+    const scenario = scenarios[currentScenarioKey];
+    setScenarioTitle(scenario.title);
+    setScenarioExplanation(scenario.description);
+  }, [currentScenarioKey, setScenarioExplanation, setScenarioTitle]);
+
+  useEffect(() => {
+    const listener = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { dispatchId } = customEvent.detail;
+
+      const [scenarioKey, stepIndex] = (dispatchId as string)
+        .split('-')
+        .slice(-2);
+
+      setCurrentScenarioKey(scenarioKey as ScenarioKeys);
+      setCurrentStep(Number(stepIndex));
+    };
+
+    document.addEventListener('ee:dispatchId', listener);
+
+    return () => {
+      document.removeEventListener('ee:dispatchId', listener);
+    };
+  }, []);
+
+  const interactiveModeInterface = (
+    <div>
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input type="checkbox" className="hover:cursor-pointer" />
+        <span className="whitespace-nowrap">Interactive Mode</span>
+      </label>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col h-full">
+      <Header extraInterface={interactiveModeInterface} />
+      <div className="flex-1 overflow-auto px-4">
+        <Timeline currentScenarioKey={currentScenarioKey} />
+        <main className="flex flex-col gap-5 h-fit">
+          <div
+            className="flex flex-row gap-5 min-h-[500px]"
+            id="visualization-container"
+          >
+            <BrowserStep
+              setStepExplanation={setStepExplanation}
+              currentStep={currentStep}
+              currentScenarioKey={currentScenarioKey}
+            />
+            <SequenceDiagram />
+          </div>
+        </main>
+      </div>
+      <DraggableTray
+        ref={draggableTrayRef}
+        trayId="explorableExplanationFedcm"
+        defaultHeight="170px"
+      />
+    </div>
+  );
+};
+
+export default Panel;
