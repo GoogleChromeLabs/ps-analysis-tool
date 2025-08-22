@@ -107,7 +107,8 @@ const LearnMoreDropdown = ({
                   value?.startsWith('https://developers.google.com') ||
                   value?.startsWith('https://developer.mozilla.org') ||
                   value?.startsWith('https://www.youtube.com') ||
-                  value?.startsWith('https://youtu.be/')
+                  value?.startsWith('https://youtu.be/') ||
+                  value?.startsWith('https://privacysandbox.google.com')
                     ? addUTMParams(value)
                     : value
                 }

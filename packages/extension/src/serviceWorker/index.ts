@@ -519,6 +519,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
+        dataStore.updateUniqueResponseDomains(tabId, requestId);
+
         if (cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]) {
           cookieStore.parseResponseHeadersForCA(
             cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId],

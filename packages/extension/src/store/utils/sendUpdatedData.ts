@@ -20,6 +20,7 @@ import ARAStore from '../ARAStore';
 import cookieStore from '../cookieStore';
 import PAStore from '../PAStore';
 import prebidStore from '../prebidStore';
+import dataStore from '../dataStore';
 import PRTStore from '../PRTStore';
 
 /**
@@ -33,6 +34,7 @@ function sendUpdatedData(tabId: string, overrideForInitialSync = false) {
   PAStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
   ARAStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
   prebidStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
+  dataStore.sendUpdatedDataToPopupAndDevTools(tabId);
   PRTStore.sendUpdatedDataToPopupAndDevTools(tabId, overrideForInitialSync);
 }
 

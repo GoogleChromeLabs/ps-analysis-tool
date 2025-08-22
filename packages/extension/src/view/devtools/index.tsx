@@ -37,6 +37,7 @@ import {
   AttributionReportingProvider,
   TopicsClassifierProvider,
   PrebidContextProvider,
+  ScriptBlockingProvider,
   ProbabilisticRevealTokensProvider,
 } from './stateProviders';
 
@@ -60,7 +61,9 @@ if (root) {
                     <AttributionReportingProvider>
                       <TopicsClassifierProvider>
                         <ProbabilisticRevealTokensProvider>
-                          <App />
+                          <ScriptBlockingProvider>
+                            <App />
+                          </ScriptBlockingProvider>
                         </ProbabilisticRevealTokensProvider>
                       </TopicsClassifierProvider>
                     </AttributionReportingProvider>
