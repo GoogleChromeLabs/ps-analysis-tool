@@ -180,8 +180,8 @@ export class Main {
       this.stats = new Stats();
       this.stats.showPanel(0);
       this.stats.dom.style.position = 'absolute';
-      this.stats.dom.style.right = '0';
-      this.stats.dom.style.top = '0';
+      this.stats.dom.style.top = '15px';
+      this.stats.dom.style.left = '95vw';
       document.body.appendChild(this.stats.dom);
     }
   }
