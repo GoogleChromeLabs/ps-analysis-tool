@@ -28,6 +28,7 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg?react';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
+import { RefreshButton } from '@google-psat/design-system';
 
 interface settingsToReturnObject {
   id: string;
@@ -35,13 +36,17 @@ interface settingsToReturnObject {
   switchState: boolean;
   description: string;
   changeSwitchState: (newState: boolean) => void;
+  customAction?: () => React.ReactNode;
   links: string[];
 }
 const SettingsContainer = () => {
-  const { isUsingCDP, setIsUsingCDP } = useSettings(({ state, actions }) => ({
-    isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
-    setIsUsingCDP: actions.setIsUsingCDP,
-  }));
+  const { isUsingCDP, setIsUsingCDP, reloadExtension } = useSettings(
+    ({ state, actions }) => ({
+      isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
+      setIsUsingCDP: actions.setIsUsingCDP,
+      reloadExtension: actions.reloadExtension,
+    })
+  );
 
   const memoisedSettings = useMemo(() => {
     const settingsToReturn: settingsToReturnObject[] = [];
@@ -60,6 +65,24 @@ const SettingsContainer = () => {
             ],
           });
           break;
+        case 'reloadExtension':
+          settingsToReturn.push({
+            ...setting,
+            customAction: () => (
+              <RefreshButton
+                onClick={reloadExtension}
+                title={setting.heading()}
+              />
+            ),
+            heading: setting.heading(),
+            description: setting.description(),
+            changeSwitchState: setIsUsingCDP,
+            switchState: isUsingCDP,
+            links: [
+              'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat',
+            ],
+          });
+          break;
         default:
           break;
       }
@@ -67,7 +90,7 @@ const SettingsContainer = () => {
     });
 
     return settingsToReturn;
-  }, [isUsingCDP, setIsUsingCDP]);
+  }, [isUsingCDP, reloadExtension, setIsUsingCDP]);
 
   return (
     <div data-testid="Settings">
@@ -87,6 +110,7 @@ const SettingsContainer = () => {
               changeSwitchState={setting.changeSwitchState}
               description={setting.description}
               links={setting.links}
+              customAction={setting.customAction}
             />
           );
         })}

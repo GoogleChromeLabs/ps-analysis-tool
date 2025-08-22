@@ -65,12 +65,24 @@ const scripts: Script[] = [
 ] as const;
 
 const createScriptConfig = (script: (typeof scripts)[number]) => {
+  let minifier: boolean | 'terser' = 'terser';
+  if (script.name === 'prebid-interface') {
+    minifier = false;
+  } else {
+    if (isDev) {
+      minifier = false;
+    } else {
+      minifier = 'terser';
+    }
+  }
+
   return defineConfig({
     build: {
       watch: isDev ? {} : null,
       emptyOutDir: false,
+      target: 'esnext',
       outDir: `../../dist/extension`,
-      minify: !isDev,
+      minify: minifier,
       rollupOptions: {
         input: {
           [script.name]: script.path,

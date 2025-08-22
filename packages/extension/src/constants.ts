@@ -24,6 +24,11 @@ export const SETTING_PAGE_CONTROLS = [
     heading: () => I18n.getMessage('enableCDP'),
     description: () => I18n.getMessage('enableCDPNote', [`<a>`, '</a>']),
   },
+  {
+    id: 'reloadExtension',
+    heading: () => 'Reload this extension.',
+    description: () => 'Use this to reset PSAT captured data.',
+  },
 ];
 
 export const CDP_WARNING_MESSAGE =
