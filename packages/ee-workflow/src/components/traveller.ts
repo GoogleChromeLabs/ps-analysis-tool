@@ -1,0 +1,121 @@
+/*
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Internal dependencies.
+ */
+import Figure from './figure';
+import Group from './group';
+
+export default class Traveller {
+  /**
+   * Object to be drawn. Can be a figure or a group.
+   */
+  private object: Figure | Group | null = null;
+
+  /**
+   * Array to store the ids of the group objects that have completed travelling.
+   */
+  private groupObjectsCompleted: string[] = [];
+
+  constructor(object: Figure | Group) {
+    this.object = object;
+  }
+
+  /**
+   * Function to manage the drawing of a group with travelling figures.
+   * @param speed - The speed at which the object should travel.
+   * @returns boolean indicating if the group has completed travelling.
+   */
+  private drawGroup(speed: number) {
+    const object = <Group>this.object;
+
+    const nonTravellingFigures = object
+      .getFigures()
+      .filter((figure) => figure.getShouldTravel() === false);
+
+    const travellingFigures = object
+      .getFigures()
+      .filter((figure) => figure.getShouldTravel() === true);
+
+    nonTravellingFigures.forEach((figure) => figure.draw());
+
+    travellingFigures.forEach((figure) => {
+      if (this.groupObjectsCompleted.includes(figure.getId())) {
+        return;
+      }
+
+      if (figure.runTraveller(speed)) {
+        this.groupObjectsCompleted.push(figure.getId());
+        figure.setShouldTravel(false);
+      }
+    });
+
+    if (travellingFigures.length) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Function to draw the object.
+   * @param speed - The speed at which the object should travel.
+   * @returns boolean indicating if the object has completed travelling.
+   */
+  draw(speed: number) {
+    if (!this.object) {
+      return true;
+    }
+
+    if (this.object instanceof Group) {
+      return this.drawGroup(speed);
+    } else if (this.object.runTraveller(speed)) {
+      this.object.setShouldTravel(false);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Function to get the object.
+   * @returns The object to be drawn.
+   */
+  getObject() {
+    return this.object;
+  }
+
+  /**
+   * Function to complete the travelling of the object.
+   * @param skipDraw - boolean indicating if the draw function should be skipped
+   */
+  completeTravelling(skipDraw = false) {
+    if (!this.object) {
+      return;
+    }
+
+    if (this.object instanceof Group) {
+      this.object.getFigures().forEach((figure) => {
+        figure.completeTraveller(skipDraw);
+        figure.setShouldTravel(false);
+      });
+    } else {
+      this.object?.completeTraveller(skipDraw);
+      this.object?.setShouldTravel(false);
+    }
+  }
+}
