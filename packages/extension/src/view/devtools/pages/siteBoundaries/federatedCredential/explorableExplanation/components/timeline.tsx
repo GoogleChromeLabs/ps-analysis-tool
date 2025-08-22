@@ -48,12 +48,12 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
           <Fragment key={title}>
             <div
               className={[
-                'timeline-node font-bold text-center relative min-w-[120px] transition-all duration-300 cursor-pointer text-[13px] px-[15px] py-[10px] rounded-[20px]',
+                'timeline-node font-medium text-center relative min-w-[120px] transition-all duration-300 cursor-pointer text-sm px-[15px] py-[10px] rounded text-raisin-black',
                 isActive
-                  ? 'active bg-[#1a73e8] text-white shadow-[0_2px_5px_rgba(0,0,0,0.2)]'
+                  ? 'active bg-bright-navy-blue text-white shadow-[0_2px_5px_rgba(0,0,0,0.2)]'
                   : isCompleted
-                  ? 'completed bg-[#34a853] text-white'
-                  : 'bg-[#e0e0e0] text-[#555] hover:bg-[#d0d0d0]',
+                  ? 'completed bg-[#38b559] text-white'
+                  : 'bg-[#f0f0f0]  hover:bg-[#d0d0d0]',
               ].join(' ')}
               id={`${Object.keys(ScenarioKeys)[index]}-node`}
               onClick={() => {
@@ -65,7 +65,7 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
               {index + 1}. {title}
             </div>
             {index < titles.length - 1 && (
-              <div className="timeline-connector flex-grow h-[3px] bg-[#e0e0e0] mx-[10px]"></div>
+              <div className="timeline-connector flex-grow h-[2px] bg-[#e0e0e0]"></div>
             )}
           </Fragment>
         );
