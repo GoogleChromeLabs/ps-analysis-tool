@@ -24,6 +24,7 @@ import type {
   singleAuctionEvent,
   ErroredOutUrlsData,
   SourcesData,
+  PRTMetadata,
 } from '@google-psat/common';
 
 export type PrebidConfigTableData = {
@@ -76,6 +77,7 @@ export type TableData = (
   | PrebidConsentManagementTableData
   | PrebidUserIdsTableData
   | UserEID
+  | PRTMetadata
 ) & {
   highlighted?: boolean;
 };

@@ -62,6 +62,7 @@ export class DataStore {
       popupOpenState: boolean;
       newUpdatesCA: number;
       newUpdatesPA: number;
+      newUpdatesPRT: number;
       newUpdatesPrebid: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
@@ -185,6 +186,7 @@ export class DataStore {
       newUpdatesCA: 0,
       newUpdatesPA: 0,
       newUpdatesPrebid: 0,
+      newUpdatesPRT: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
