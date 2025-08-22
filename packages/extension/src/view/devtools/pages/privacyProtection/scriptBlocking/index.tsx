@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,10 @@ import {
   TabsProvider,
   type TabItems,
 } from '@google-psat/design-system';
-/**
- * Internal dependencies.
- */
 import Panel from './panel';
 import MDLTable from './mdlTable';
-import ProbabilisticRevealTokens from './probabilisticRevealTokens';
 
-const IPProtection = () => {
+const ScriptBlocking = () => {
   const tabItems = useMemo<TabItems>(
     () => ({
       Learning: [
@@ -39,7 +35,7 @@ const IPProtection = () => {
           content: {
             Element: InfoCard,
             props: {
-              infoKey: PSInfoKey.IPProtection,
+              infoKey: PSInfoKey.ScriptBlocking,
               showQuickLinks: true,
               isLandingPageContainer: true,
             },
@@ -47,20 +43,10 @@ const IPProtection = () => {
           },
         },
         {
-          title: 'Masked Domain List',
+          title: 'Blocked Domain List',
           content: {
             Element: MDLTable,
             props: {},
-            className: 'overflow-auto h-full',
-            containerClassName: 'h-full',
-          },
-        },
-      ],
-      Observability: [
-        {
-          title: 'Probabilistic Reveal Tokens',
-          content: {
-            Element: ProbabilisticRevealTokens,
             className: 'overflow-auto h-full',
             containerClassName: 'h-full',
           },
@@ -71,10 +57,10 @@ const IPProtection = () => {
   );
 
   return (
-    <TabsProvider items={tabItems} name="ipProtection">
+    <TabsProvider items={tabItems} name="ScriptBlocking">
       <Panel />
     </TabsProvider>
   );
 };
 
-export default IPProtection;
+export default ScriptBlocking;

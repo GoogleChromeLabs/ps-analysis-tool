@@ -122,6 +122,10 @@ export const runtimeOnMessageListener = async (
     const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
+    await dataStore.sendUpdatedDataToPopupAndDevTools(
+      incomingMessageTabId,
+      true
+    );
 
     await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
       exceedingLimitations: qualifyingTabs.length > 5,
