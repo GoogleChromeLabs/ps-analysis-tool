@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './cookie';
-export * from './settings';
-export * from './allowedList';
-export * from './protectedAudience';
-export * from './webStories';
-export * from './attributionReporting';
-export * from './prebid';
-export * from './topicsClassifier';
-export * from './scriptBlocking';
-export * from './probabilisticRevealTokens';
+export { default as ProbabilisticRevealTokensProvider } from './probabilisticRevealTokensProvider';
+export {
+  default as ProbabilisticRevealTokensContext,
+  type ProbabilisticRevealTokensContextType,
+} from './context';
+export { default as useProbabilisticRevealTokens } from './useProbabilisticRevealTokens';

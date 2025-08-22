@@ -38,6 +38,7 @@ import {
   TopicsClassifierProvider,
   PrebidContextProvider,
   ScriptBlockingProvider,
+  ProbabilisticRevealTokensProvider,
 } from './stateProviders';
 
 const root = document.getElementById('root');
@@ -59,9 +60,11 @@ if (root) {
                   <WebStoriesProvider>
                     <AttributionReportingProvider>
                       <TopicsClassifierProvider>
-                        <ScriptBlockingProvider>
-                          <App />
-                        </ScriptBlockingProvider>
+                        <ProbabilisticRevealTokensProvider>
+                          <ScriptBlockingProvider>
+                            <App />
+                          </ScriptBlockingProvider>
+                        </ProbabilisticRevealTokensProvider>
                       </TopicsClassifierProvider>
                     </AttributionReportingProvider>
                   </WebStoriesProvider>

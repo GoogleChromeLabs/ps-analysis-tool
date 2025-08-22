@@ -24,6 +24,7 @@ import {
   parseRequestWillBeSentExtraInfo,
   deriveBlockingStatus,
   type CookieDatabase,
+  isValidURL,
 } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
 
@@ -35,6 +36,7 @@ import { DataStore } from './dataStore';
 import shouldUpdateCounter from '../utils/shouldUpdateCounter';
 import { NEW_COOKIE_DATA } from '../constants';
 import { fetchDictionary } from '../utils/fetchCookieDictionary';
+import { createURL } from '../utils/headerFunctions';
 
 class CookieStore extends DataStore {
   /**
@@ -236,12 +238,19 @@ class CookieStore extends DataStore {
     if (!request || !requestId || !tabId || !frameIds) {
       return;
     }
+
+    const constructedURL =
+      DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ??
+      isValidURL(createURL(request.headers))
+        ? createURL(request.headers)
+        : '';
+
     const { associatedCookies } = request;
 
     const cookies: CookieData[] = parseRequestWillBeSentExtraInfo(
       associatedCookies,
       this.cookieDB ?? {},
-      DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ?? '',
+      constructedURL,
       DataStore.tabs[tabId].url ?? '',
       frameIds,
       requestId

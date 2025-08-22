@@ -25,6 +25,7 @@ import type {
   ErroredOutUrlsData,
   SourcesData,
   MDLTableData,
+  PRTMetadata,
 } from '@google-psat/common';
 
 export type PrebidConfigTableData = {
@@ -78,6 +79,7 @@ export type TableData = (
   | PrebidUserIdsTableData
   | UserEID
   | MDLTableData
+  | PRTMetadata
 ) & {
   highlighted?: boolean;
   highlightedClass?: string; // Optional class for highlighting rows

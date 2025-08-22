@@ -42,6 +42,7 @@ export const CHANGE_CDP_SETTING = 'CHANGE_CDP_SETTING';
 export const INITIAL_SYNC = 'INITIAL_SYNC';
 export const NEW_COOKIE_DATA = 'NEW_COOKIE_DATA';
 export const EXTRA_DATA = 'EXTRA_DATA';
+export const TAB_TOKEN_DATA = 'TAB_TOKEN_DATA';
 export const SERVICE_WORKER_RELOAD_MESSAGE = 'ServiceWorker::TABS_RELOADED';
 export const SERVICE_WORKER_TABS_RELOAD_COMMAND =
   'ServiceWorker::REOLAD_ALL_TABS';

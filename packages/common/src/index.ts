@@ -56,5 +56,6 @@ export * from './protectedAudience.types';
 export * from './attributionReporting.types';
 export * from './prebid.types';
 export * from './prebidGlobal.types';
+export * from './prtToken.types';
 export * from './utils/auctions';
 export * from './mdl.types';
