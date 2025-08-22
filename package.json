@@ -29,6 +29,7 @@
 		"dev:report": "npm run dev -w @google-psat/report",
 		"dev:cli-dashboard": "npm run dev -w @google-psat/cli-dashboard",
 		"dev:ee-workflow": "npm run dev -w @google-psat/ee-workflow",
+		"dev:ee-workflow:demo": "npm run dev:exp -w @google-psat/ee-workflow",
 		"build:ee-workflow": "npm run build -w @google-psat/ee-workflow",
 		"dev:ee:pa": "npm run dev -w @google-psat/explorable-explanations",
 		"build:ee:pa": "npm run build -w @google-psat/explorable-explanations",
