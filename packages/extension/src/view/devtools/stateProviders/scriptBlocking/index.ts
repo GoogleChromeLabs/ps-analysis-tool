@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as BounceTracking } from './bounceTracking';
-export { default as UserAgentReduction } from './userAgentReduction';
-export { default as IPProtection } from './ipProtection';
-export { default as ScriptBlocking } from './scriptBlocking';
-export { default as PrivateStateTokens } from './privateStateTokens';
-export { default as PrivacyProtection } from './privacyProtection';
+export { default as ScriptBlockingProvider } from './scriptBlocking';
+export { default as ScriptBlockingContext } from './context';
+export { default as useScriptBlocking } from './useScriptBlocking';

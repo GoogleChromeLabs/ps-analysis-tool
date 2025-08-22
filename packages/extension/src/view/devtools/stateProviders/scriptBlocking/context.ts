@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2025 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as BounceTracking } from './bounceTracking';
-export { default as UserAgentReduction } from './userAgentReduction';
-export { default as IPProtection } from './ipProtection';
-export { default as ScriptBlocking } from './scriptBlocking';
-export { default as PrivateStateTokens } from './privateStateTokens';
-export { default as PrivacyProtection } from './privacyProtection';
+/**
+ * External dependencies.
+ */
+import { noop, createContext } from '@google-psat/common';
+
+export interface ScriptBlockingStoreContext {
+  state: {
+    uniqueResponseDomains: string[];
+  };
+  actions: {
+    setUniqueResponseDomains: (newValue: string[]) => void;
+  };
+}
+
+const initialState: ScriptBlockingStoreContext = {
+  state: {
+    uniqueResponseDomains: [],
+  },
+  actions: {
+    setUniqueResponseDomains: noop,
+  },
+};
+
+export default createContext<ScriptBlockingStoreContext>(initialState);

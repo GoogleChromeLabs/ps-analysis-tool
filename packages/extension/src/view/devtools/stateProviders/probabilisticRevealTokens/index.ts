@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as BounceTracking } from './bounceTracking';
-export { default as UserAgentReduction } from './userAgentReduction';
-export { default as IPProtection } from './ipProtection';
-export { default as ScriptBlocking } from './scriptBlocking';
-export { default as PrivateStateTokens } from './privateStateTokens';
-export { default as PrivacyProtection } from './privacyProtection';
+export { default as ProbabilisticRevealTokensProvider } from './probabilisticRevealTokensProvider';
+export {
+  default as ProbabilisticRevealTokensContext,
+  type ProbabilisticRevealTokensContextType,
+} from './context';
+export { default as useProbabilisticRevealTokens } from './useProbabilisticRevealTokens';

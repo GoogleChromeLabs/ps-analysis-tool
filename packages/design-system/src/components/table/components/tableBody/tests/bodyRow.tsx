@@ -136,6 +136,7 @@ describe('BodyRow', () => {
         isRowFocused={BodyRowProp.isRowFocused}
         onRowClick={BodyRowProp.onRowClick}
         onKeyDown={BodyRowProp.onKeyDown}
+        shouldScroll={true}
       />
     );
 
