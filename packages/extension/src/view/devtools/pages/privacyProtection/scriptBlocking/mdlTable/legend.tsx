@@ -17,28 +17,23 @@
 /**
  * External dependencies.
  */
-import React from 'react';
 import { Link } from '@google-psat/design-system';
+import React from 'react';
 
 const Legend = () => {
   return (
     <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] overflow-y-auto text-raisin-black dark:text-bright-gray">
       <p className="px-2 py-1">
-        The Masked Domain List (MDL) is part of Google&#39;s IP Protection
-        initiative, designed to enhance user privacy. It comprises domains that,
-        when embedded as third-party content (such as ads or analytics scripts),
-        are capable of collecting user data across multiple websites. To
-        mitigate potential privacy risks, traffic to these domains is routed
-        through a proxy, masking the user&#39;s original IP address. For more
-        details, please refer to the{' '}
+        The Blocked Domain List is a subset of the{' '}
         <Link href="https://github.com/GoogleChrome/ip-protection/blob/main/Masked-Domain-List.md">
-          Masked Domain List on GitHub
+          Masked Domain List (MDL)
         </Link>{' '}
-        and the{' '}
+        under Google’s{' '}
         <Link href="https://github.com/GoogleChrome/ip-protection/blob/main/README.md">
-          IP Protection README
-        </Link>
-        .
+          IP Protection
+        </Link>{' '}
+        initiative. Domains on this list are either entirely or patially
+        blocked.
       </p>
     </div>
   );

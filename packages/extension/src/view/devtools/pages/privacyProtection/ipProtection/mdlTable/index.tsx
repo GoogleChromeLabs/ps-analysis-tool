@@ -28,19 +28,86 @@ import {
   Link,
   ResizableTray,
 } from '@google-psat/design-system';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies
  */
 import Legend from './legend';
+import { getCurrentTab } from '../../../../../../utils/getCurrentTab';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [tableData, setTableData] = useState<
-    { domain: string; owner: string }[]
+    {
+      domain: string;
+      owner: string;
+      highlighted: boolean;
+      highlightedClass: string;
+    }[]
   >([]);
+
+  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
+
+  const [tab, setTab] = useState<chrome.tabs.Tab | null>(null);
+
+  useEffect(() => {
+    const currentTab = async () => {
+      const _tab = await getCurrentTab();
+      if (_tab) {
+        setTab(_tab);
+      }
+    };
+
+    currentTab();
+  }, []);
+
+  useEffect(() => {
+    const fetchTab = async ({
+      frameId,
+      frameType,
+      tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        !(
+          chrome.devtools.inspectedWindow.tabId === tabId &&
+          frameType === 'outermost_frame' &&
+          frameId === 0
+        )
+      ) {
+        return;
+      }
+
+      const currentTab = await getCurrentTab();
+      if (!currentTab) {
+        return;
+      }
+
+      setTab(currentTab);
+    };
+
+    chrome.webNavigation.onCommitted.addListener(fetchTab);
+
+    return () => {
+      chrome.webNavigation.onCommitted.removeListener(fetchTab);
+    };
+  }, []);
+
+  const checkbox = useCallback(() => {
+    return (
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          className="hover:cursor-pointer"
+          type="checkbox"
+          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
+          defaultChecked
+        />
+        <span className="whitespace-nowrap">Show only highlighted domains</span>
+      </label>
+    );
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -63,25 +130,46 @@ const MDLTable = () => {
         line.split('|').map((item) => item.trim())
       );
 
-      setTableData(() =>
-        mdlData.map((item: string[]) => {
-          let owner = item[1];
+      setTableData(() => {
+        const _data = mdlData
+          .map((item: string[]) => {
+            let owner = item[1];
 
-          if (item[1].includes('PSL Domain')) {
-            owner = 'PSL Domain';
-          }
+            if (item[1].includes('PSL Domain')) {
+              owner = 'PSL Domain';
+            }
 
-          const scriptBlocking = item[2];
+            const scriptBlocking = item[2];
 
-          return {
-            domain: item[0],
-            owner,
-            scriptBlocking,
-          };
-        })
-      );
+            const hostname = tab?.url ? new URL(tab.url).hostname : '';
+
+            return {
+              domain: item[0],
+              owner,
+              scriptBlocking,
+              highlighted: hostname.includes(item[0]),
+              highlightedClass: hostname.includes(item[0])
+                ? 'bg-amber-100'
+                : '',
+            };
+          })
+          .filter((item) => {
+            if (showOnlyHighlighted) {
+              return item.highlighted;
+            }
+
+            return true;
+          })
+          .sort((a, b) => {
+            return Number(b.highlighted) - Number(a.highlighted);
+          });
+
+        setIsLoading(false);
+
+        return _data;
+      });
     })();
-  }, []);
+  }, [showOnlyHighlighted, tab?.url]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -89,7 +177,7 @@ const MDLTable = () => {
         header: 'Domain',
         accessorKey: 'domain',
         cell: (info) => info,
-        initialWidth: 100,
+        initialWidth: 150,
       },
       {
         header: 'Owner',
@@ -109,12 +197,7 @@ const MDLTable = () => {
 
           return info;
         },
-        initialWidth: 100,
-      },
-      {
-        header: 'Impacted by Script Blocking',
-        accessorKey: 'scriptBlocking',
-        cell: (info) => info,
+        initialWidth: 150,
       },
     ],
     []
@@ -129,7 +212,7 @@ const MDLTable = () => {
     []
   );
 
-  if (tableData.length === 0) {
+  if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <ProgressBar additionalStyles="w-80 h-80" />
@@ -167,7 +250,7 @@ const MDLTable = () => {
           className="h-full flex"
           trayId="mdl-table-bottom-tray"
         >
-          <Table selectedKey={selectedKey} />
+          <Table selectedKey={selectedKey} extraInterfaceToTopBar={checkbox} />
         </ResizableTray>
         <Legend />
       </TableProvider>
