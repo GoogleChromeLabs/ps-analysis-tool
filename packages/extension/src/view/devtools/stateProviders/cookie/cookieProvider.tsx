@@ -47,6 +47,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [loading, setLoading] = useState<boolean>(true);
   const loadingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [contextInvalidated, setContextInvalidated] = useState<boolean>(false);
+  const [showBlockedCookies, setShowBlockedCookies] = useState<boolean>(false);
 
   const [canStartInspecting, setCanStartInspecting] = useState<boolean>(false);
 
@@ -128,9 +129,25 @@ const Provider = ({ children }: PropsWithChildren) => {
     >((acc, cookie) => {
       cookie.frameIdList?.forEach((frameId) => {
         const url = tabFramesIdsWithURL[frameId];
+        const isCookieBlocked =
+          cookie.isBlocked &&
+          cookie?.blockedReasons &&
+          cookie?.blockedReasons.length !== 0;
 
-        if (url) {
-          acc[url] = true;
+        if (!showBlockedCookies) {
+          if (
+            cookie.isFirstParty ||
+            (!cookie.isFirstParty && !isCookieBlocked)
+          ) {
+            if (url) {
+              acc[url] = true;
+            }
+          }
+          return;
+        } else {
+          if (url) {
+            acc[url] = true;
+          }
         }
       });
 
@@ -138,7 +155,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     }, {});
 
     return _frameHasCookies;
-  }, [tabCookies, tabFrames]);
+  }, [showBlockedCookies, tabCookies, tabFrames]);
 
   const getCookiesSetByJavascript = useCallback(async () => {
     if (chrome.devtools.inspectedWindow.tabId) {
@@ -381,8 +398,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         isInspecting,
         canStartInspecting,
         frameHasCookies: frameHasCookies(),
+        showBlockedCookies,
       },
       actions: {
+        setShowBlockedCookies,
         setSelectedFrame,
         getCookiesSetByJavascript,
         setIsInspecting,
@@ -391,6 +410,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       },
     };
   }, [
+    showBlockedCookies,
     canStartInspecting,
     contextInvalidated,
     frameHasCookies,

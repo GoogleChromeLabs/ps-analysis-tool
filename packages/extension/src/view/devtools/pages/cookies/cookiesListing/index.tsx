@@ -40,11 +40,14 @@ interface CookiesListingProps {
 }
 
 const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
-  const { selectedFrame, tabFrames, tabUrl } = useCookie(({ state }) => ({
-    selectedFrame: state.selectedFrame,
-    tabFrames: state.tabFrames,
-    tabUrl: state.tabUrl,
-  }));
+  const { selectedFrame, tabFrames, tabUrl, showBlockedCookies } = useCookie(
+    ({ state }) => ({
+      selectedFrame: state.selectedFrame,
+      tabFrames: state.tabFrames,
+      tabUrl: state.tabUrl,
+      showBlockedCookies: state.showBlockedCookies,
+    })
+  );
 
   const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
@@ -65,10 +68,23 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     isSidebarOpen,
   } = useCookieListing(domainsInAllowList);
 
-  const frameFilteredCookies = useMemo(
-    () => filterCookiesByFrame(tableData, tabFrames, selectedFrame),
-    [tableData, selectedFrame, tabFrames]
-  );
+  const frameFilteredCookies = useMemo(() => {
+    const filteredCookies = filterCookiesByFrame(
+      tableData,
+      tabFrames,
+      selectedFrame
+    );
+    return showBlockedCookies
+      ? filteredCookies
+      : filteredCookies.filter((cookie) => {
+          const isCookieBlocked =
+            cookie.isBlocked &&
+            cookie?.blockedReasons &&
+            cookie?.blockedReasons.length !== 0;
+
+          return isCookieBlocked;
+        });
+  }, [tableData, tabFrames, selectedFrame, showBlockedCookies]);
 
   const cookieTableRef = useRef<React.ElementRef<typeof CookieTable> | null>(
     null
@@ -104,6 +120,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         trayId="cookiesListing"
       >
         <CookieTable
+          shouldShowBlockedCookies={showBlockedCookies}
           queryIsBlockedToHighlight={!isUsingCDP}
           data={frameFilteredCookies}
           tableColumns={tableColumns}
@@ -123,6 +140,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
       <CookieDetails
         isUsingCDP={isUsingCDP}
         selectedFrameCookie={selectedFrameCookie}
+        showBlockedCookies={showBlockedCookies}
       />
       <RowContextMenuForCookies
         domainsInAllowList={domainsInAllowList}
