@@ -29,12 +29,16 @@ const SequenceDiagram = () => {
     setCanvas: actions.setCanvas,
   }));
   const messageContainerRef = useRef<HTMLDivElement>(null);
+  const parentContainerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
-      if (messageContainerRef.current) {
-        const canvas = initializeCanvas(messageContainerRef.current);
+      if (messageContainerRef.current && parentContainerRef.current) {
+        const canvas = initializeCanvas(
+          messageContainerRef.current,
+          parentContainerRef.current
+        );
         setCanvas(canvas);
       }
     }, 100);
@@ -49,12 +53,13 @@ const SequenceDiagram = () => {
   return (
     <div
       id="sequence-diagram"
-      className="relative w-[800px] min-w-[800px] min-h-[800px] p-5 bg-white border border-gray-200 rounded-lg shadow-md"
+      ref={parentContainerRef}
+      className="relative min-w-[860px] min-h-[600px] h-[600px] max-h-[600px] flex justify-center items-start overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-md"
     >
       <div
         id="message-container"
         ref={messageContainerRef}
-        className="w-full h-full"
+        className="w-[800px] h-[1200px]"
       />
     </div>
   );

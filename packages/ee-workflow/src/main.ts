@@ -163,6 +163,12 @@ export class Main {
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
+   * @param containerSize - The size of the container.
+   * @param containerSize.width - The width of the container.
+   * @param containerSize.height - The height of the container.
+   * @param position - The position to place the canvas.
+   * @param position.x - The x-coordinate of the canvas.
+   * @param position.y - The y-coordinate of the canvas.
    * @param figureToStart - The figure to start from.
    * @param preloader - The preloader function to run before setup.
    * @param performanceCheck - Whether to enable performance check.
@@ -170,11 +176,16 @@ export class Main {
   constructor(
     private clearBeforeTravel = false,
     private container?: HTMLElement,
+    private containerSize: { width: number; height: number } = {
+      width: 800,
+      height: 600,
+    },
+    position: { x: number; y: number } = { x: 0, y: 0 },
     private figureToStart?: string,
     private preloader?: (p: p5) => void,
     performanceCheck = false
   ) {
-    this.p5 = new p5(this.init.bind(this), this.container);
+    this.p5 = new p5((p: p5) => this.init(p, position), this.container);
 
     if (performanceCheck) {
       this.stats = new Stats();
@@ -189,10 +200,13 @@ export class Main {
   /**
    * Initialize.
    * @param p - The p5 instance.
+   * @param position - The position to place the canvas.
+   * @param position.x - The x-coordinate of the canvas.
+   * @param position.y - The y-coordinate of the canvas.
    */
-  private init(p: p5) {
+  private init(p: p5, position: { x: number; y: number }) {
     p.preload = this.preload.bind(this, p);
-    p.setup = this.setUp.bind(this, p);
+    p.setup = this.setUp.bind(this, p, position);
     p.draw = this.draw.bind(this, p);
     p.mouseMoved = this.mouseMoved.bind(this, p);
     p.mouseClicked = this.mouseClicked.bind(this);
@@ -212,12 +226,20 @@ export class Main {
   /**
    * Sets up the canvas.
    * @param p - The p5 instance.
+   * @param position - The position to place the canvas.
+   * @param position.x - The x-coordinate of the canvas.
+   * @param position.y - The y-coordinate of the canvas.
    */
-  private setUp(p: p5) {
-    const containerWidth = this.container?.clientWidth || 1600;
-    const containerHeight = this.container?.clientHeight || 1600;
+  private setUp(p: p5, position: { x: number; y: number }) {
+    const containerWidth =
+      this.container?.clientWidth || this.containerSize.width;
+    const containerHeight =
+      this.container?.clientHeight || this.containerSize.height;
 
-    p.createCanvas(containerWidth, containerHeight).position(0, 0);
+    p.createCanvas(containerWidth, containerHeight).position(
+      position.x,
+      position.y
+    );
     p.pixelDensity(2);
   }
 
@@ -517,7 +539,10 @@ export class Main {
    * @param p - The p5 instance.
    */
   private windowResized(p: p5) {
-    p.resizeCanvas(1600, 1600);
+    const width = this.container?.clientWidth || this.containerSize.width;
+    const height = this.container?.clientHeight || this.containerSize.height;
+
+    p.resizeCanvas(width, height);
     this.loadAnimatorPartAndDraw(undefined, true);
   }
 

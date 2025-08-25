@@ -58,26 +58,20 @@ const BrowserStep = ({
     simulateButtonClick: (selector: string) => {
       const element = document.querySelector(selector);
       if (element) {
-        element.classList.add('simulated-click');
+        element.classList.add(
+          'scale-95',
+          'bg-blue-800',
+          'shadow-[0_0_0_3px_rgba(26,115,232,0.3)]',
+          'animate-pulse'
+        );
 
-        // Add a ripple effect
-        const ripple = document.createElement('span');
-        ripple.classList.add('click-ripple');
-        element.appendChild(ripple);
-
-        // Set ripple position
-        const rect = element.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        ripple.style.width = ripple.style.height = `${size}px`;
-        ripple.style.left = `${rect.width / 2 - size / 2}px`;
-        ripple.style.top = `${rect.height / 2 - size / 2}px`;
-
-        // Remove ripple after animation completes
         setTimeout(() => {
-          element.classList.remove('simulated-click');
-          if (ripple.parentNode === element) {
-            element.removeChild(ripple);
-          }
+          element.classList.remove(
+            'scale-95',
+            'bg-blue-800',
+            'shadow-[0_0_0_3px_rgba(26,115,232,0.3)]',
+            'animate-pulse'
+          );
         }, 1000);
       }
     },
@@ -86,13 +80,12 @@ const BrowserStep = ({
       const _browserContent = browserContentRef.current!;
       const element = _browserContent.querySelector(selector);
       if (element) {
-        element.classList.add('simulated-select', 'selected');
-
-        // Add checkmark animation
-        const checkmark = document.createElement('span');
-        checkmark.classList.add('select-checkmark');
-        checkmark.innerHTML = '✓';
-        element.appendChild(checkmark);
+        element.classList.add(
+          'bg-[#e8f0fe]',
+          'border-2',
+          '!border-[#1a73e8]',
+          'animate-pulse'
+        );
       }
     },
 
@@ -299,7 +292,7 @@ const BrowserDialog = ({
             className="idp-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all"
           >
             <img
-              src="yourid-logo.png"
+              src=""
               alt="YourID Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -312,7 +305,7 @@ const BrowserDialog = ({
           </div>
           <div className="idp-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="other-idp-logo.png"
+              src="../../assets/other-idp-logo.png"
               alt="Other IdP Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -349,7 +342,7 @@ const BrowserDialog = ({
         <div className="browser-dialog-body p-4 flex flex-col gap-2">
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="user-avatar.png"
+              src="../../assets/user-avatar.png"
               alt="User Avatar"
               className="account-avatar w-10 h-10 rounded-full mr-4 object-cover"
             />
@@ -360,7 +353,7 @@ const BrowserDialog = ({
           </div>
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="user-avatar2.png"
+              src="../../assets/user-avatar2.png"
               alt="Second User Avatar"
               className="account-avatar w-10 h-10 rounded-full mr-4 object-cover"
             />
@@ -467,7 +460,7 @@ const BrowserDialog = ({
         <div className="browser-dialog-body p-4 flex flex-col gap-2">
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="yourid-logo.png"
+              src={yourId}
               alt="YourID Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -478,7 +471,7 @@ const BrowserDialog = ({
           </div>
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="other-idp-logo.png"
+              src="../../assets/other-idp-logo.png"
               alt="Other IdP Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />

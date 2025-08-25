@@ -17,21 +17,28 @@
 import { Animator, FigureFactory, Group, Main } from '@google-psat/ee-workflow';
 import { scenarios } from '../store/scenarios';
 
-export const initializeCanvas = (container: HTMLDivElement) => {
-  const mainCanvas = new Main(false, container);
-  const figureFactory = new FigureFactory(mainCanvas, container);
+export const initializeCanvas = (
+  container: HTMLDivElement,
+  parentContainer: HTMLDivElement
+) => {
+  const componentCanvas = new Main(false, container);
+  const flowCanvas = new Main(false, container);
+  flowCanvas.togglePause(true);
+
+  const componentFigureFactory = new FigureFactory(componentCanvas, container);
+  const flowFigureFactory = new FigureFactory(flowCanvas, container);
 
   // Create horizontal four components, User, Browser, RP and IDP
   const userComponent = new Group(
-    mainCanvas,
+    componentCanvas,
     [
-      figureFactory.line({
+      componentFigureFactory.line({
         x: 100,
         y: 50,
-        endYwith: 400,
+        endYwith: 1200,
         stroke: '#999',
       }),
-      figureFactory.box({
+      componentFigureFactory.box({
         width: 100,
         height: 50,
         fill: '#f0f0f0',
@@ -43,7 +50,7 @@ export const initializeCanvas = (container: HTMLDivElement) => {
           };
         },
       }),
-      figureFactory.text({
+      componentFigureFactory.text({
         text: 'User',
         nextTipHelper: (nextCoordinates) => {
           return {
@@ -57,15 +64,15 @@ export const initializeCanvas = (container: HTMLDivElement) => {
   );
 
   const browserComponent = new Group(
-    mainCanvas,
+    componentCanvas,
     [
-      figureFactory.line({
+      componentFigureFactory.line({
         x: 300,
         y: 50,
-        endYwith: 400,
+        endYwith: 1200,
         stroke: '#999',
       }),
-      figureFactory.box({
+      componentFigureFactory.box({
         width: 100,
         height: 50,
         fill: '#f0f0f0',
@@ -77,7 +84,7 @@ export const initializeCanvas = (container: HTMLDivElement) => {
           };
         },
       }),
-      figureFactory.text({
+      componentFigureFactory.text({
         text: 'Browser',
         nextTipHelper: (nextCoordinates) => {
           return {
@@ -91,15 +98,15 @@ export const initializeCanvas = (container: HTMLDivElement) => {
   );
 
   const rpComponent = new Group(
-    mainCanvas,
+    componentCanvas,
     [
-      figureFactory.line({
+      componentFigureFactory.line({
         x: 500,
         y: 50,
-        endYwith: 400,
+        endYwith: 1200,
         stroke: '#999',
       }),
-      figureFactory.box({
+      componentFigureFactory.box({
         width: 100,
         height: 50,
         fill: '#f0f0f0',
@@ -111,7 +118,7 @@ export const initializeCanvas = (container: HTMLDivElement) => {
           };
         },
       }),
-      figureFactory.text({
+      componentFigureFactory.text({
         text: 'RP',
         nextTipHelper: (nextCoordinates) => {
           return {
@@ -125,15 +132,15 @@ export const initializeCanvas = (container: HTMLDivElement) => {
   );
 
   const idpComponent = new Group(
-    mainCanvas,
+    componentCanvas,
     [
-      figureFactory.line({
+      componentFigureFactory.line({
         x: 700,
         y: 50,
-        endYwith: 400,
+        endYwith: 1200,
         stroke: '#999',
       }),
-      figureFactory.box({
+      componentFigureFactory.box({
         width: 100,
         height: 50,
         fill: '#f0f0f0',
@@ -145,7 +152,7 @@ export const initializeCanvas = (container: HTMLDivElement) => {
           };
         },
       }),
-      figureFactory.text({
+      componentFigureFactory.text({
         text: 'IDP',
         nextTipHelper: (nextCoordinates) => {
           return {
@@ -158,14 +165,10 @@ export const initializeCanvas = (container: HTMLDivElement) => {
     'idp-entity'
   );
 
-  mainCanvas.addGroup(userComponent, true);
-  mainCanvas.addGroup(browserComponent, true);
-  mainCanvas.addGroup(rpComponent, true);
-
-  idpComponent.setSideEffectOnDraw(() => {
-    mainCanvas.togglePause(true);
-  });
-  mainCanvas.addGroup(idpComponent, true, undefined, true);
+  componentCanvas.addGroup(userComponent, true);
+  componentCanvas.addGroup(browserComponent, true);
+  componentCanvas.addGroup(rpComponent, true);
+  componentCanvas.addGroup(idpComponent, true);
 
   let currentYToDraw = 130;
 
@@ -176,25 +179,35 @@ export const initializeCanvas = (container: HTMLDivElement) => {
     selfMessage: boolean,
     id: string
   ) => {
+    const _currentYToDraw = currentYToDraw;
+    const sideEffect = () => {
+      if (_currentYToDraw + 250 > parentContainer.clientHeight) {
+        parentContainer.scrollTo({
+          top: _currentYToDraw - parentContainer.clientHeight + 150,
+          behavior: 'smooth',
+        });
+      }
+    };
+
     if (selfMessage) {
       const fromLineX = from.getFigures()[2].getX();
 
-      const group = new Group(mainCanvas, [
-        figureFactory.text({
+      const group = new Group(flowCanvas, [
+        flowFigureFactory.text({
           text: label,
           x: fromLineX + 25,
           y: currentYToDraw,
           id,
           isDispatcher: true,
         }),
-        figureFactory.line({
+        flowFigureFactory.line({
           x: fromLineX,
           y: currentYToDraw + 15,
           endX: fromLineX + 50,
           endY: currentYToDraw + 15,
           shouldTravel: true,
         }),
-        figureFactory.line({
+        flowFigureFactory.line({
           endYwith: 50,
           nextTipHelper: (nextCoordinates) => {
             return {
@@ -204,7 +217,7 @@ export const initializeCanvas = (container: HTMLDivElement) => {
           },
           shouldTravel: true,
         }),
-        figureFactory.line({
+        flowFigureFactory.line({
           endXwith: -50,
           nextTipHelper: (nextCoordinates) => {
             return {
@@ -217,6 +230,8 @@ export const initializeCanvas = (container: HTMLDivElement) => {
         }),
       ]);
 
+      group.setSideEffectOnDraw(sideEffect);
+
       currentYToDraw += 100;
 
       return group;
@@ -225,7 +240,7 @@ export const initializeCanvas = (container: HTMLDivElement) => {
     const fromLineX = from.getFigures()[2].getX();
     const toLineX = to.getFigures()[2].getX();
 
-    const arrow = figureFactory.line({
+    const arrow = flowFigureFactory.line({
       x: fromLineX,
       y: currentYToDraw + 15,
       endX: toLineX,
@@ -233,8 +248,8 @@ export const initializeCanvas = (container: HTMLDivElement) => {
       shouldTravel: true,
     });
 
-    const group = new Group(mainCanvas, [
-      figureFactory.text({
+    const group = new Group(flowCanvas, [
+      flowFigureFactory.text({
         text: label,
         x: (fromLineX + toLineX) / 2,
         y: currentYToDraw,
@@ -243,6 +258,8 @@ export const initializeCanvas = (container: HTMLDivElement) => {
       }),
       arrow,
     ]);
+
+    group.setSideEffectOnDraw(sideEffect);
 
     currentYToDraw += 50;
 
@@ -294,11 +311,11 @@ export const initializeCanvas = (container: HTMLDivElement) => {
       }
     });
 
-    const animator = new Animator(animatorFigures, figureFactory);
-    mainCanvas.addAnimator(animator, false, true);
+    const animator = new Animator(animatorFigures, flowFigureFactory);
+    flowCanvas.addAnimator(animator, false, true);
 
     currentYToDraw = 130;
   });
 
-  return mainCanvas;
+  return flowCanvas;
 };
