@@ -41,25 +41,30 @@ const Panel = ({
   setScenarioTitle,
   setScenarioExplanation,
 }: PanelProps) => {
-  const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
-    ScenarioKeys.REGISTRATION
-  );
-  const [currentStep, setCurrentStep] = useState(-1);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const draggableTrayRef = useRef({
     isCollapsed,
     setIsCollapsed,
   });
 
-  const { interactiveMode, revisitScenarioForInteractiveMode } = useStore(
-    ({ state, actions }) => {
-      return {
-        interactiveMode: state.interactiveMode,
-        revisitScenarioForInteractiveMode:
-          actions.revisitScenarioForInteractiveMode,
-      };
-    }
-  );
+  const {
+    interactiveMode,
+    revisitScenarioForInteractiveMode,
+    currentStep,
+    currentScenarioKey,
+    setCurrentScenarioKey,
+    setCurrentStep,
+  } = useStore(({ state, actions }) => {
+    return {
+      interactiveMode: state.interactiveMode,
+      currentScenarioKey: state.currentScenarioKey,
+      currentStep: state.currentStep,
+      revisitScenarioForInteractiveMode:
+        actions.revisitScenarioForInteractiveMode,
+      setCurrentScenarioKey: actions.setCurrentScenarioKey,
+      setCurrentStep: actions.setCurrentStep,
+    };
+  });
 
   useEffect(() => {
     const scenario = scenarios[currentScenarioKey];
@@ -106,7 +111,12 @@ const Panel = ({
       document.removeEventListener('ee:dispatchId', listener);
       document.removeEventListener('ee:animatorDraw', animatorListener);
     };
-  }, [interactiveMode, revisitScenarioForInteractiveMode]);
+  }, [
+    interactiveMode,
+    revisitScenarioForInteractiveMode,
+    setCurrentScenarioKey,
+    setCurrentStep,
+  ]);
 
   return (
     <div className="flex flex-col h-full">

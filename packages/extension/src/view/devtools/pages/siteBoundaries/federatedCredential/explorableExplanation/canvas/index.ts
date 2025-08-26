@@ -240,14 +240,6 @@ export const initializeCanvas = (
     const fromLineX = from.getFigures()[2].getX();
     const toLineX = to.getFigures()[2].getX();
 
-    const arrow = flowFigureFactory.line({
-      x: fromLineX,
-      y: currentYToDraw + 15,
-      endX: toLineX,
-      hasArrow: true,
-      shouldTravel: true,
-    });
-
     const group = new Group(flowCanvas, [
       flowFigureFactory.text({
         text: label,
@@ -256,7 +248,13 @@ export const initializeCanvas = (
         id,
         isDispatcher: true,
       }),
-      arrow,
+      flowFigureFactory.line({
+        x: fromLineX,
+        y: currentYToDraw + 15,
+        endX: toLineX,
+        hasArrow: true,
+        shouldTravel: true,
+      }),
     ]);
 
     group.setSideEffectOnDraw(sideEffect);

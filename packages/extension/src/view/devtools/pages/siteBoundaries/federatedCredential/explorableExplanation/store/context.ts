@@ -20,11 +20,18 @@
 import { noop, createContext } from '@google-psat/common';
 import type { Main } from '@google-psat/ee-workflow';
 
+/**
+ * Internal dependencies.
+ */
+import { ScenarioKeys } from './scenariosTypes';
+
 export interface StoreContext {
   state: {
     play: boolean;
     speed: number;
     interactiveMode: boolean;
+    currentScenarioKey: ScenarioKeys;
+    currentStep: number;
   };
   actions: {
     setCanvas: (canvas: Main) => void;
@@ -36,6 +43,8 @@ export interface StoreContext {
     setInteractiveMode: (interactiveMode: boolean) => void;
     loadScenarioForInteractiveMode: (id: string, shouldRedraw: boolean) => void;
     revisitScenarioForInteractiveMode: (id: string) => void;
+    setCurrentScenarioKey: (key: ScenarioKeys) => void;
+    setCurrentStep: (step: number) => void;
   };
 }
 
@@ -44,6 +53,8 @@ const initialState: StoreContext = {
     play: false,
     speed: 1,
     interactiveMode: false,
+    currentScenarioKey: ScenarioKeys.REGISTRATION,
+    currentStep: -1,
   },
   actions: {
     setCanvas: noop,
@@ -55,6 +66,8 @@ const initialState: StoreContext = {
     setInteractiveMode: noop,
     loadScenarioForInteractiveMode: noop,
     revisitScenarioForInteractiveMode: noop,
+    setCurrentScenarioKey: noop,
+    setCurrentStep: noop,
   },
 };
 

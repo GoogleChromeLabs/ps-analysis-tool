@@ -63,7 +63,7 @@ const Header = ({ historyCount }: HeaderProps) => {
     <div className="w-full px-2 flex items-center justify-between border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px] min-w-[900px]">
       <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray">
         <button
-          className={'disabled:opacity-50 disabled:pointer-events-none'}
+          className="disabled:opacity-50 disabled:pointer-events-none pr-2"
           onClick={() => setIsPlaying(!play)}
           title={play ? 'Pause' : 'Play'}
           disabled={interactiveMode}

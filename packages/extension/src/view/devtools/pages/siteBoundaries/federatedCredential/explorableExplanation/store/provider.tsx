@@ -24,12 +24,17 @@ import type { Main } from '@google-psat/ee-workflow';
  * Internal dependencies.
  */
 import Context from './context';
+import { ScenarioKeys } from './scenariosTypes';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
   const [play, setPlay] = useState(false);
   const [speed, _setSpeed] = useState(1.5);
   const [interactiveMode, _setInteractiveMode] = useState(false);
+  const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
+    ScenarioKeys.REGISTRATION
+  );
+  const [currentStep, setCurrentStep] = useState(-1);
 
   const setIsPlaying = useCallback(
     (isPlaying: boolean) => {
@@ -64,8 +69,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     (_interactiveMode: boolean) => {
       _setInteractiveMode(_interactiveMode);
       canvas?.setUsingHelperQueue(_interactiveMode);
+
+      if (!_interactiveMode) {
+        setIsPlaying(false);
+        setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
+        setCurrentStep(-1);
+      }
     },
-    [canvas]
+    [canvas, setIsPlaying]
   );
 
   const loadScenarioForInteractiveMode = useCallback(
@@ -93,6 +104,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           play,
           speed,
           interactiveMode,
+          currentScenarioKey,
+          currentStep,
         },
         actions: {
           setCanvas,
@@ -104,6 +117,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           setInteractiveMode,
           loadScenarioForInteractiveMode,
           revisitScenarioForInteractiveMode,
+          setCurrentScenarioKey,
+          setCurrentStep,
         },
       }}
     >
