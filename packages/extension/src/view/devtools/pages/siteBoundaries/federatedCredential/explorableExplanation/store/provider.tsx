@@ -29,6 +29,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
   const [play, setPlay] = useState(false);
   const [speed, _setSpeed] = useState(1.5);
+  const [interactiveMode, _setInteractiveMode] = useState(false);
 
   const setIsPlaying = useCallback(
     (isPlaying: boolean) => {
@@ -59,12 +60,35 @@ const Provider = ({ children }: PropsWithChildren) => {
     canvas?.reset();
   }, [canvas]);
 
+  const setInteractiveMode = useCallback(
+    (_interactiveMode: boolean) => {
+      _setInteractiveMode(_interactiveMode);
+      canvas?.setUsingHelperQueue(_interactiveMode);
+    },
+    [canvas]
+  );
+
+  const loadScenarioForInteractiveMode = useCallback(
+    (id: string) => {
+      canvas?.loadCheckpointToHelper(id);
+    },
+    [canvas]
+  );
+
+  const revisitScenarioForInteractiveMode = useCallback(
+    (id: string) => {
+      canvas?.loadSnapshotAndReDraw(id);
+    },
+    [canvas]
+  );
+
   return (
     <Context.Provider
       value={{
         state: {
           play,
           speed,
+          interactiveMode,
         },
         actions: {
           setCanvas,
@@ -73,6 +97,9 @@ const Provider = ({ children }: PropsWithChildren) => {
           nextStep,
           prevStep,
           setSpeed,
+          setInteractiveMode,
+          loadScenarioForInteractiveMode,
+          revisitScenarioForInteractiveMode,
         },
       }}
     >

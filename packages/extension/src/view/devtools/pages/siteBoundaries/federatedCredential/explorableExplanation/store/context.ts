@@ -24,6 +24,7 @@ export interface StoreContext {
   state: {
     play: boolean;
     speed: number;
+    interactiveMode: boolean;
   };
   actions: {
     setCanvas: (canvas: Main) => void;
@@ -32,6 +33,9 @@ export interface StoreContext {
     nextStep: () => void;
     prevStep: () => void;
     setSpeed: (speed: number) => void;
+    setInteractiveMode: (interactiveMode: boolean) => void;
+    loadScenarioForInteractiveMode: (id: string) => void;
+    revisitScenarioForInteractiveMode: (id: string) => void;
   };
 }
 
@@ -39,6 +43,7 @@ const initialState: StoreContext = {
   state: {
     play: false,
     speed: 1,
+    interactiveMode: false,
   },
   actions: {
     setCanvas: noop,
@@ -47,6 +52,9 @@ const initialState: StoreContext = {
     nextStep: noop,
     prevStep: noop,
     setSpeed: noop,
+    setInteractiveMode: noop,
+    loadScenarioForInteractiveMode: noop,
+    revisitScenarioForInteractiveMode: noop,
   },
 };
 

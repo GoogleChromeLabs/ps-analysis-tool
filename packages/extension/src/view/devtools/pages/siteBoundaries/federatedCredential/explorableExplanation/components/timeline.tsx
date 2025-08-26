@@ -22,6 +22,7 @@ import { Fragment } from 'react/jsx-runtime';
  * Internal dependencies.
  */
 import { ScenarioKeys } from '../store/scenariosTypes';
+import { useStore } from '../store';
 
 interface TimelineProps {
   currentScenarioKey: ScenarioKeys;
@@ -36,6 +37,13 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
     'Permissions',
     'Sign Out',
   ];
+
+  const { interactiveMode, loadScenarioForInteractiveMode } = useStore(
+    ({ state, actions }) => ({
+      interactiveMode: state.interactiveMode,
+      loadScenarioForInteractiveMode: actions.loadScenarioForInteractiveMode,
+    })
+  );
 
   return (
     <div className="journey-timeline flex items-center justify-between px-5 min-h-[80px]">
@@ -57,8 +65,9 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
               ].join(' ')}
               id={`${Object.keys(ScenarioKeys)[index]}-node`}
               onClick={() => {
-                if (!isActive) {
-                  // selectScenario(Object.values(ScenarioKeys)[index]);
+                if (interactiveMode) {
+                  const id = `${currentScenarioKey}-0`;
+                  loadScenarioForInteractiveMode(id);
                 }
               }}
             >

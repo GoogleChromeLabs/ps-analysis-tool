@@ -363,7 +363,7 @@ export class Main {
         if (!animator.getThrow()) {
           this.animatorSnapshot.push(animator);
           animator.setThrow(true);
-          this.dispatchCustomEvent('animatorDraw', {
+          this.dispatchCustomEvent('ee:animatorDraw', {
             animatorId: animator.getId(),
           });
         }
@@ -382,6 +382,7 @@ export class Main {
    * @param skipDraw - Whether to skip drawing.
    * @param isSkippingQueue - Whether to skip through the queue.
    */
+  // eslint-disable-next-line complexity
   private runner(
     useInstantQueue = false,
     skipDraw = false,
@@ -434,7 +435,7 @@ export class Main {
           animatorQueue,
           !skipDraw,
           isSkippingQueue,
-          useInstantQueue
+          useInstantQueue || this.usingHelperQueue
         );
       } else if (firstObject.getGroupId()) {
         this.processGroup(queue, groupQueue, !skipDraw, isSkippingQueue);

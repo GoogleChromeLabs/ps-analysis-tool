@@ -311,7 +311,13 @@ export const initializeCanvas = (
       }
     });
 
-    const animator = new Animator(animatorFigures, flowFigureFactory);
+    const animator = new Animator(animatorFigures, flowFigureFactory, key);
+    animator.setSideEffectOnDraw(() => {
+      parentContainer.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    });
     flowCanvas.addAnimator(animator, false, true);
 
     currentYToDraw = 130;

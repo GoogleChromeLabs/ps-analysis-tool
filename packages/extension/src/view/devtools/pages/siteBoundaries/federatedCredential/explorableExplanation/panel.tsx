@@ -28,6 +28,7 @@ import { BrowserStep, SequenceDiagram, Timeline } from './components';
 import Header from './header';
 import { scenarios } from './store/scenarios';
 import { ScenarioKeys } from './store/scenariosTypes';
+import { useStore } from './store';
 
 interface PanelProps {
   setStepExplanation: (explanation: string) => void;
@@ -50,6 +51,19 @@ const Panel = ({
     setIsCollapsed,
   });
 
+  const {
+    interactiveMode,
+    setInteractiveMode,
+    revisitScenarioForInteractiveMode,
+  } = useStore(({ state, actions }) => {
+    return {
+      interactiveMode: state.interactiveMode,
+      setInteractiveMode: actions.setInteractiveMode,
+      revisitScenarioForInteractiveMode:
+        actions.revisitScenarioForInteractiveMode,
+    };
+  });
+
   useEffect(() => {
     const scenario = scenarios[currentScenarioKey];
     setScenarioTitle(scenario.title);
@@ -69,17 +83,43 @@ const Panel = ({
       setCurrentStep(Number(stepIndex));
     };
 
+    const animatorListener = (event: Event) => {
+      if (interactiveMode) {
+        return;
+      }
+
+      const customEvent = event as CustomEvent;
+      const { animatorId } = customEvent.detail;
+
+      const idx = Object.keys(scenarios).indexOf(animatorId);
+      if (idx === Object.keys(scenarios).length - 1) {
+        return;
+      }
+
+      const nextScenarioKey = Object.keys(scenarios)[idx + 1] as ScenarioKeys;
+
+      setCurrentScenarioKey(nextScenarioKey);
+      setCurrentStep(-1);
+    };
+
     document.addEventListener('ee:dispatchId', listener);
+    document.addEventListener('ee:animatorDraw', animatorListener);
 
     return () => {
       document.removeEventListener('ee:dispatchId', listener);
+      document.removeEventListener('ee:animatorDraw', animatorListener);
     };
-  }, []);
+  }, [interactiveMode, revisitScenarioForInteractiveMode]);
 
   const interactiveModeInterface = (
     <div>
       <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input type="checkbox" className="hover:cursor-pointer" />
+        <input
+          type="checkbox"
+          className="hover:cursor-pointer"
+          checked={interactiveMode}
+          onChange={(e) => setInteractiveMode(e.target.checked)}
+        />
         <span className="whitespace-nowrap">Interactive Mode</span>
       </label>
     </div>
