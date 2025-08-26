@@ -51,18 +51,15 @@ const Panel = ({
     setIsCollapsed,
   });
 
-  const {
-    interactiveMode,
-    setInteractiveMode,
-    revisitScenarioForInteractiveMode,
-  } = useStore(({ state, actions }) => {
-    return {
-      interactiveMode: state.interactiveMode,
-      setInteractiveMode: actions.setInteractiveMode,
-      revisitScenarioForInteractiveMode:
-        actions.revisitScenarioForInteractiveMode,
-    };
-  });
+  const { interactiveMode, revisitScenarioForInteractiveMode } = useStore(
+    ({ state, actions }) => {
+      return {
+        interactiveMode: state.interactiveMode,
+        revisitScenarioForInteractiveMode:
+          actions.revisitScenarioForInteractiveMode,
+      };
+    }
+  );
 
   useEffect(() => {
     const scenario = scenarios[currentScenarioKey];
@@ -111,23 +108,9 @@ const Panel = ({
     };
   }, [interactiveMode, revisitScenarioForInteractiveMode]);
 
-  const interactiveModeInterface = (
-    <div>
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input
-          type="checkbox"
-          className="hover:cursor-pointer"
-          checked={interactiveMode}
-          onChange={(e) => setInteractiveMode(e.target.checked)}
-        />
-        <span className="whitespace-nowrap">Interactive Mode</span>
-      </label>
-    </div>
-  );
-
   return (
     <div className="flex flex-col h-full">
-      <Header extraInterface={interactiveModeInterface} />
+      <Header />
       <div className="flex-1 overflow-auto px-4">
         <Timeline currentScenarioKey={currentScenarioKey} />
         <main className="flex flex-col gap-5 h-fit">

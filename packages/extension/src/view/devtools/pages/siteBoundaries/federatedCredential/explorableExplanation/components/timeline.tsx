@@ -38,6 +38,8 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
     'Sign Out',
   ];
 
+  const scenarioKeys = Object.values(ScenarioKeys);
+
   const { interactiveMode, loadScenarioForInteractiveMode } = useStore(
     ({ state, actions }) => ({
       interactiveMode: state.interactiveMode,
@@ -66,8 +68,11 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
               id={`${Object.keys(ScenarioKeys)[index]}-node`}
               onClick={() => {
                 if (interactiveMode) {
-                  const id = `${currentScenarioKey}-0`;
-                  loadScenarioForInteractiveMode(id);
+                  const checkpoint = scenarioKeys[index] + '-0';
+                  loadScenarioForInteractiveMode(
+                    checkpoint,
+                    Boolean(currentScenarioKey !== scenarioKeys[index])
+                  );
                 }
               }}
             >

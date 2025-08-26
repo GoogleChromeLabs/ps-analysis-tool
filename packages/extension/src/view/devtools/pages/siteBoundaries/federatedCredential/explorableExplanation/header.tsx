@@ -26,42 +26,47 @@ import {
   Slider,
 } from '@google-psat/design-system';
 import React from 'react';
-import classNames from 'classnames';
+
+/**
+ * Internal dependencies.
+ */
 import { useStore } from './store';
 
 interface HeaderProps {
   historyCount?: number;
-  extraInterface?: React.ReactNode;
-  disablePlayButton?: boolean;
 }
 
-const Header = ({
-  historyCount,
-  extraInterface,
-  disablePlayButton = false,
-}: HeaderProps) => {
-  const { play, speed, setIsPlaying, nextStep, prevStep, reset, setSpeed } =
-    useStore(({ state, actions }) => ({
-      play: state.play,
-      speed: state.speed,
-      setIsPlaying: actions.setIsPlaying,
-      nextStep: actions.nextStep,
-      prevStep: actions.prevStep,
-      reset: actions.reset,
-      setSpeed: actions.setSpeed,
-    }));
+const Header = ({ historyCount }: HeaderProps) => {
+  const {
+    play,
+    speed,
+    setIsPlaying,
+    nextStep,
+    prevStep,
+    reset,
+    setSpeed,
+    interactiveMode,
+    setInteractiveMode,
+  } = useStore(({ state, actions }) => ({
+    play: state.play,
+    speed: state.speed,
+    setIsPlaying: actions.setIsPlaying,
+    nextStep: actions.nextStep,
+    prevStep: actions.prevStep,
+    reset: actions.reset,
+    setSpeed: actions.setSpeed,
+    interactiveMode: state.interactiveMode,
+    setInteractiveMode: actions.setInteractiveMode,
+  }));
 
   return (
     <div className="w-full px-2 flex items-center justify-between border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px] min-w-[900px]">
       <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray">
         <button
-          className={classNames('pr-2', {
-            'hover:opacity-70 active:opacity-50': !disablePlayButton,
-            'opacity-50 pointer-events-none': disablePlayButton,
-          })}
+          className={'disabled:opacity-50 disabled:pointer-events-none'}
           onClick={() => setIsPlaying(!play)}
           title={play ? 'Pause' : 'Play'}
-          disabled={disablePlayButton}
+          disabled={interactiveMode}
         >
           {play ? (
             <PauseIcon className="h-5 w-5" />
@@ -76,6 +81,7 @@ const Header = ({
             title="Previous Node"
             onClick={prevStep}
             className="disabled:opacity-50 disabled:pointer-events-none"
+            disabled={interactiveMode}
           >
             <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
@@ -84,6 +90,7 @@ const Header = ({
             id="nextButton"
             title="Next Node"
             className="disabled:opacity-50 disabled:pointer-events-none"
+            disabled={interactiveMode}
           >
             <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
@@ -101,7 +108,17 @@ const Header = ({
             step={0.5}
           />
         </div>
-        {extraInterface && <div className="px-2">{extraInterface}</div>}
+        <div className="px-2">
+          <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+            <input
+              type="checkbox"
+              className="hover:cursor-pointer"
+              checked={interactiveMode}
+              onChange={(e) => setInteractiveMode(e.target.checked)}
+            />
+            <span className="whitespace-nowrap">Interactive Mode</span>
+          </label>
+        </div>
       </div>
       {historyCount !== undefined && (
         <p className="text-raisin-black dark:text-bright-gray whitespace-nowrap">

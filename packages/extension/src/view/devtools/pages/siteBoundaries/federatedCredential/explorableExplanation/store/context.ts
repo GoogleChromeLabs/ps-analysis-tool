@@ -34,7 +34,7 @@ export interface StoreContext {
     prevStep: () => void;
     setSpeed: (speed: number) => void;
     setInteractiveMode: (interactiveMode: boolean) => void;
-    loadScenarioForInteractiveMode: (id: string) => void;
+    loadScenarioForInteractiveMode: (id: string, shouldRedraw: boolean) => void;
     revisitScenarioForInteractiveMode: (id: string) => void;
   };
 }

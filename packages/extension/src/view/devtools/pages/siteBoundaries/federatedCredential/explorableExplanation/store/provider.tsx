@@ -69,7 +69,11 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   const loadScenarioForInteractiveMode = useCallback(
-    (id: string) => {
+    (id: string, shouldRedraw: boolean) => {
+      if (shouldRedraw) {
+        canvas?.reDrawAll();
+      }
+
       canvas?.loadCheckpointToHelper(id);
     },
     [canvas]
