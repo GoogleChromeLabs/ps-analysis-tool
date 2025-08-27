@@ -292,7 +292,7 @@ const BrowserDialog = ({
             className="idp-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all"
           >
             <img
-              src=""
+              src="../assets/images/fedcm/your-id-logo.png"
               alt="YourID Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -305,7 +305,7 @@ const BrowserDialog = ({
           </div>
           <div className="idp-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/other-idp-logo.png"
+              src="../assets/images/fedcm/other-idp-logo.png"
               alt="Other IdP Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -342,7 +342,7 @@ const BrowserDialog = ({
         <div className="browser-dialog-body p-4 flex flex-col gap-2">
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/user-avatar.png"
+              src="../assets/images/fedcm/user-avatar.png"
               alt="User Avatar"
               className="account-avatar w-10 h-10 rounded-full mr-4 object-cover"
             />
@@ -353,7 +353,7 @@ const BrowserDialog = ({
           </div>
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/user-avatar2.png"
+              src="../assets/images/fedcm/user-avatar2.png"
               alt="Second User Avatar"
               className="account-avatar w-10 h-10 rounded-full mr-4 object-cover"
             />
@@ -460,7 +460,7 @@ const BrowserDialog = ({
         <div className="browser-dialog-body p-4 flex flex-col gap-2">
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/your-id-logo.png"
+              src="../assets/images/fedcm/your-id-logo.png"
               alt="YourID Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -471,7 +471,7 @@ const BrowserDialog = ({
           </div>
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/other-idp-logo.png"
+              src="../assets/images/fedcm/other-idp-logo.png"
               alt="Other IdP Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
