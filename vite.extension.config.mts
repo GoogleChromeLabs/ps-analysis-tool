@@ -66,14 +66,10 @@ const scripts: Script[] = [
 
 const createScriptConfig = (script: (typeof scripts)[number]) => {
   let minifier: boolean | 'terser' = 'terser';
-  if (script.name === 'prebid-interface') {
+  if (isDev) {
     minifier = false;
   } else {
-    if (isDev) {
-      minifier = false;
-    } else {
-      minifier = 'terser';
-    }
+    minifier = 'terser';
   }
 
   return defineConfig({
