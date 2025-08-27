@@ -23,12 +23,14 @@ interface SettingOptionProps {
   title: string;
   switchState: boolean;
   changeSwitchState: (newState: boolean) => void;
+  customAction?: () => React.ReactNode;
 }
 
 const SettingOption = ({
   title,
   switchState,
   changeSwitchState,
+  customAction,
 }: SettingOptionProps) => {
   return (
     <div className="flex flex-row items-center justify-between">
@@ -36,7 +38,11 @@ const SettingOption = ({
         <div className="text-sm dark:text-bright-gray">{title}</div>
       </div>
       <div className="flex w-1/12">
-        <ToggleSwitch enabled={switchState} setEnabled={changeSwitchState} />
+        {customAction ? (
+          customAction()
+        ) : (
+          <ToggleSwitch enabled={switchState} setEnabled={changeSwitchState} />
+        )}
       </div>
     </div>
   );

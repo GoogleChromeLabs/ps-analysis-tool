@@ -28,12 +28,15 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg?react';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
+import { RefreshButton } from '@google-psat/design-system';
+import { noop } from '@google-psat/common';
 
 interface settingsToReturnObject {
   id: string;
   heading: string;
-  switchState: boolean;
-  changeSwitchState: (newState: boolean) => void;
+  switchState?: boolean;
+  changeSwitchState?: (newState: boolean) => void;
+  customAction?: () => React.ReactNode;
 }
 const SettingsContainer = () => {
   const {
@@ -41,12 +44,14 @@ const SettingsContainer = () => {
     setIsObservability,
     observabilityEnabledForDisplay,
     handleObservabilityEnabled,
+    reloadExtension,
   } = useSettings(({ state, actions }) => ({
     isObservabilityForSettingsPageDisplay:
       state.isObservabilityForSettingsPageDisplay,
     setIsObservability: actions.setIsObservability,
     observabilityEnabledForDisplay: state.observabilityEnabledForDisplay,
     handleObservabilityEnabled: actions.handleObservabilityEnabled,
+    reloadExtension: actions.reloadExtension,
   }));
 
   const memoisedSettings = useMemo(() => {
@@ -62,6 +67,18 @@ const SettingsContainer = () => {
             switchState: isObservabilityForSettingsPageDisplay,
           });
           break;
+        case 'reloadExtension':
+          settingsToReturn.push({
+            ...setting,
+            customAction: () => (
+              <RefreshButton
+                onClick={reloadExtension}
+                title={setting.heading()}
+              />
+            ),
+            heading: setting.heading(),
+          });
+          break;
         default:
           break;
       }
@@ -69,7 +86,11 @@ const SettingsContainer = () => {
     });
 
     return settingsToReturn;
-  }, [isObservabilityForSettingsPageDisplay, setIsObservability]);
+  }, [
+    isObservabilityForSettingsPageDisplay,
+    setIsObservability,
+    reloadExtension,
+  ]);
 
   return (
     <div data-testid="Settings">
@@ -85,8 +106,9 @@ const SettingsContainer = () => {
             <SettingOption
               key={setting.id}
               title={setting.heading}
-              switchState={setting.switchState}
-              changeSwitchState={setting.changeSwitchState}
+              switchState={setting?.switchState ?? false}
+              changeSwitchState={setting?.changeSwitchState ?? noop}
+              customAction={setting.customAction}
             />
           );
         })}

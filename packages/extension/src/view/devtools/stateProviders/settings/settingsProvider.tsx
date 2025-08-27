@@ -189,6 +189,14 @@ const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  const reloadExtension = useCallback(() => {
+    chrome.runtime.reload();
+    // using timeout since if frame is reloaded immidieatly it results in extension being blocked.
+    setTimeout(() => {
+      globalThis?.location?.reload();
+    }, 250);
+  }, []);
+
   const openIncognitoTab = useCallback(async () => {
     if (!incognitoAccess) {
       return;
@@ -474,6 +482,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           setIsObservabilityForSettingsPageDisplay,
           setObservabilityEnabledForDisplay,
           openIncognitoTab,
+          reloadExtension,
         },
       }}
     >

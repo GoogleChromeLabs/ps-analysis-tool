@@ -22,6 +22,11 @@ export const SETTING_PAGE_CONTROLS = [
     id: 'enableObservability',
     heading: () => 'Enable Observability',
   },
+  {
+    id: 'reloadExtension',
+    heading: () => 'Reload this extension.',
+    description: () => 'Use this to reset PSAT captured data.',
+  },
 ];
 
 export const CDP_WARNING_MESSAGE =

@@ -51,15 +51,16 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
 
             <p className=" pb-2 mb-1 text-sm lg:text-base text-justify">
               {' '}
-              Incognito mode allows you to use a web browser without saving
-              certain local data from your Browse session. Complementing this,
-              the Privacy Sandbox initiative enhances privacy across the web by
-              disabling third-party cookies and hiding users&apos; IP addresses
-              from third-party sites to reduce tracking.
+              When browsing in Incognito Mode none of your browsing history,
+              cookies and site data, or information entered in forms are saved
+              on your device. Since third-party cookies are blocked by default,
+              you can analyze the behavior of your site in Incognito mode to
+              ensure that it still works as expected, even when cookies are not
+              available.
               {!isIncognitoAccess ? (
                 <>
                   {' '}
-                  To enable incognito access please{' '}
+                  To enable using PSAT in Incognito mode{' '}
                   <button
                     className="underline text-blue-600 hover:text-blue-800"
                     onClick={() =>
@@ -72,7 +73,7 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
                   >
                     click here
                   </button>{' '}
-                  and enable the incognito access permission for PSAT.
+                  to provide permissions.
                 </>
               ) : (
                 ''

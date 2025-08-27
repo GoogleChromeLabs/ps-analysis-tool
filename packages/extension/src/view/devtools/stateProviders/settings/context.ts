@@ -51,6 +51,7 @@ export interface SettingsStoreContext {
     setObservabilityEnabledForDisplay: React.Dispatch<
       React.SetStateAction<Record<string, boolean>>
     >;
+    reloadExtension: () => void;
   };
 }
 
@@ -90,6 +91,7 @@ const initialState: SettingsStoreContext = {
     openIncognitoTab: () => Promise.resolve(),
     handleObservabilityEnabled: noop,
     setObservabilityEnabledForDisplay: noop,
+    reloadExtension: noop,
   },
 };
 
