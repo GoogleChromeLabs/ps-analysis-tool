@@ -68,6 +68,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
     setCurrentStep(-1);
     setIsPlaying(false);
+    setInteractiveModeLoadedScenarios(new Set());
   }, [canvas, setIsPlaying]);
 
   const setInteractiveMode = useCallback(
