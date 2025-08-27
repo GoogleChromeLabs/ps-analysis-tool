@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { I18n } from '@google-psat/i18n';
 
 export const WEBPAGE_PORT_NAME = 'psat-webpage';
 export const SERVICE_WORKER_PORT_NAME = 'psat-serviceworker';
 
 export const SETTING_PAGE_CONTROLS = [
   {
-    id: 'enableCDP',
-    heading: () => I18n.getMessage('enableCDP'),
-    description: () => I18n.getMessage('enableCDPNote', [`<a>`, '</a>']),
+    id: 'enableObservability',
+    heading: () => 'Enable Observability',
   },
 ];
 

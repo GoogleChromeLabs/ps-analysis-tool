@@ -33,14 +33,19 @@ interface settingsToReturnObject {
   id: string;
   heading: string;
   switchState: boolean;
-  description: string;
   changeSwitchState: (newState: boolean) => void;
-  links: string[];
 }
 const SettingsContainer = () => {
-  const { isUsingCDP, setIsUsingCDP } = useSettings(({ state, actions }) => ({
+  const {
+    isUsingCDP,
+    setIsUsingCDP,
+    observabilityEnabled,
+    handleObservabilityEnabled,
+  } = useSettings(({ state, actions }) => ({
     isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
     setIsUsingCDP: actions.setIsUsingCDP,
+    observabilityEnabled: state.observabilityEnabled,
+    handleObservabilityEnabled: actions.handleObservabilityEnabled,
   }));
 
   const memoisedSettings = useMemo(() => {
@@ -48,16 +53,12 @@ const SettingsContainer = () => {
 
     SETTING_PAGE_CONTROLS.map((setting) => {
       switch (setting.id) {
-        case 'enableCDP':
+        case 'enableObservability':
           settingsToReturn.push({
             ...setting,
             heading: setting.heading(),
-            description: setting.description(),
             changeSwitchState: setIsUsingCDP,
             switchState: isUsingCDP,
-            links: [
-              'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/PSAT-Settings-and-Permissions#enabling-chrome-devtools-protocol-in-psat',
-            ],
           });
           break;
         default:
@@ -85,11 +86,21 @@ const SettingsContainer = () => {
               title={setting.heading}
               switchState={setting.switchState}
               changeSwitchState={setting.changeSwitchState}
-              description={setting.description}
-              links={setting.links}
             />
           );
         })}
+        <div className="px-3">
+          {Object.keys(observabilityEnabled).map((key) => (
+            <SettingOption
+              key={key}
+              title={key}
+              switchState={observabilityEnabled[key]}
+              changeSwitchState={(newState) => {
+                handleObservabilityEnabled(key, newState);
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

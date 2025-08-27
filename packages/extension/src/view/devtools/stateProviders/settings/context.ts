@@ -35,6 +35,7 @@ export interface SettingsStoreContext {
     isUsingCDPForSettingsPageDisplay: boolean;
     exceedingLimitations: boolean;
     incognitoAccess: boolean;
+    observabilityEnabled: Record<string, boolean>;
   };
   actions: {
     setIsUsingCDP: (newValue: boolean) => void;
@@ -44,6 +45,7 @@ export interface SettingsStoreContext {
     setIsUsingCDPForSettingsPageDisplay: React.Dispatch<
       React.SetStateAction<boolean>
     >;
+    handleObservabilityEnabled: (key: string, value: boolean) => void;
     openIncognitoTab: () => Promise<void>;
   };
 }
@@ -60,6 +62,13 @@ const initialState: SettingsStoreContext = {
     settingsChanged: false,
     isUsingCDPForSettingsPageDisplay: false,
     exceedingLimitations: false,
+    observabilityEnabled: {
+      cookies: false,
+      protectedAudience: false,
+      attributionReporting: false,
+      ipProtection: false,
+      scriptBlocking: false,
+    },
   },
   actions: {
     setIsUsingCDP: noop,
@@ -68,6 +77,7 @@ const initialState: SettingsStoreContext = {
     setExceedingLimitations: noop,
     setIsUsingCDPForSettingsPageDisplay: noop,
     openIncognitoTab: () => Promise.resolve(),
+    handleObservabilityEnabled: noop,
   },
 };
 

@@ -64,6 +64,16 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [OSInformation, setOSInformation] =
     useState<SettingsStoreContext['state']['OSInformation']>(null);
 
+  const [observabilityEnabled, setObservabilityEnabled] = useState<
+    Record<string, boolean>
+  >({
+    cookies: false,
+    protectedAudience: false,
+    attributionReporting: false,
+    ipProtection: false,
+    scriptBlocking: false,
+  });
+
   const intitialSync = useCallback(async () => {
     const sessionStorage = await chrome.storage.session.get();
     const currentSettings = await chrome.storage.sync.get();
@@ -184,6 +194,13 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const _setUsingCDP = useCallback(async (newValue: boolean) => {
     setIsUsingCDPForSettingsPageDisplay(newValue);
+    setObservabilityEnabled({
+      cookies: true,
+      protectedAudience: true,
+      attributionReporting: true,
+      ipProtection: true,
+      scriptBlocking: true,
+    });
     setSettingsChanged(true);
     await chrome.storage.session.set({
       isUsingCDP: newValue,
@@ -229,6 +246,41 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
     },
     [isUsingCDP]
+  );
+
+  useEffect(() => {
+    const allSubSwitchesAreOn =
+      observabilityEnabled.cookies &&
+      observabilityEnabled.protectedAudience &&
+      observabilityEnabled.attributionReporting &&
+      observabilityEnabled.ipProtection &&
+      observabilityEnabled.scriptBlocking;
+    const anySubIsOn =
+      observabilityEnabled.cookies ||
+      observabilityEnabled.protectedAudience ||
+      observabilityEnabled.attributionReporting ||
+      observabilityEnabled.ipProtection ||
+      observabilityEnabled.scriptBlocking;
+
+    if (allSubSwitchesAreOn) {
+      setIsUsingCDPForSettingsPageDisplay(true);
+    } else if (!anySubIsOn) {
+      setIsUsingCDPForSettingsPageDisplay(true);
+    }
+  }, [
+    isUsingCDP,
+    observabilityEnabled.attributionReporting,
+    observabilityEnabled.cookies,
+    observabilityEnabled.ipProtection,
+    observabilityEnabled.protectedAudience,
+    observabilityEnabled.scriptBlocking,
+  ]);
+
+  const handleObservabilityEnabled = useCallback(
+    (key: keyof typeof observabilityEnabled, value: boolean) => {
+      setObservabilityEnabled((prev) => ({ ...prev, [key]: value }));
+    },
+    []
   );
 
   const handleSettingsChange = useCallback(async () => {
@@ -317,8 +369,10 @@ const Provider = ({ children }: PropsWithChildren) => {
           settingsChanged,
           isUsingCDPForSettingsPageDisplay,
           exceedingLimitations,
+          observabilityEnabled,
         },
         actions: {
+          handleObservabilityEnabled,
           setIsUsingCDP: _setUsingCDP,
           handleSettingsChange,
           setSettingsChanged,

@@ -16,31 +16,24 @@
 /**
  * External dependencies.
  */
-import { LinkProcessor, ToggleSwitch } from '@google-psat/design-system';
+import { ToggleSwitch } from '@google-psat/design-system';
 import React from 'react';
 
 interface SettingOptionProps {
   title: string;
-  description: string;
   switchState: boolean;
   changeSwitchState: (newState: boolean) => void;
-  links?: string[];
 }
 
 const SettingOption = ({
   title,
-  description,
   switchState,
   changeSwitchState,
-  links,
 }: SettingOptionProps) => {
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-col w-11/12 mx-2 gap-y-1 py-4">
         <div className="text-sm dark:text-bright-gray">{title}</div>
-        <div className="text-xs text-darkest-gray dark:text-bright-gray">
-          <LinkProcessor text={description} links={links} sameTab={true} />
-        </div>
       </div>
       <div className="flex w-1/12">
         <ToggleSwitch enabled={switchState} setEnabled={changeSwitchState} />
