@@ -52,19 +52,20 @@ export const runtimeOnMessageListener = async (
     const sessionStorage = await chrome.storage.session.get();
     const actionsPerformed: { [key: string]: boolean | number } = {};
 
-    if (Object.keys(sessionStorage).includes('isUsingCDP')) {
-      DataStore.globalIsUsingCDP = sessionStorage.isUsingCDP;
-      actionsPerformed.globalIsUsingCDP = true;
+    if (Object.keys(sessionStorage).includes('isObservabilityEnabled')) {
+      DataStore.isObservabilityEnabled = sessionStorage.isObservabilityEnabled;
+      actionsPerformed.globalIsObservabilityEnabled = true;
     }
 
-    await chrome.storage.session.remove(['isUsingCDP']);
+    await chrome.storage.session.remove(['isObservabilityEnabled']);
 
     await chrome.storage.session.set({
       pendingReload: false,
     });
 
     await chrome.storage.sync.set({
-      isUsingCDP: DataStore.globalIsUsingCDP,
+      isObservabilityEnabled: DataStore.isObservabilityEnabled,
+      observabilityPartsStatus: request.payload?.observabilityPartsStatus,
     });
 
     const tabs = await chrome.tabs.query({});
@@ -89,7 +90,7 @@ export const runtimeOnMessageListener = async (
         );
 
         try {
-          if (DataStore.globalIsUsingCDP) {
+          if (DataStore.isObservabilityEnabled) {
             await attachCDP({ tabId: id });
           }
         } catch (error) {

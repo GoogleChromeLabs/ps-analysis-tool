@@ -51,7 +51,15 @@ export class DataStore {
     };
   } = {};
 
-  static globalIsUsingCDP = false;
+  static isObservabilityEnabled = false;
+
+  static observabilityPartsStatus = {
+    cookies: false,
+    protectedAudience: false,
+    attributionReporting: false,
+    ipProtection: false,
+    scriptBlocking: false,
+  };
 
   /**
    * Required data of the tabs and PSAT panel of the tab.

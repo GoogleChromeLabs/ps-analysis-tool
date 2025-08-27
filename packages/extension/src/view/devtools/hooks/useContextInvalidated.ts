@@ -21,7 +21,7 @@ import { useCallback, useEffect, type MutableRefObject } from 'react';
 /**
  * Internal dependencies.
  */
-import { useCookie, useSettings } from '../stateProviders';
+import { useCookie } from '../stateProviders';
 
 const useContextInvalidated = (
   contextInvalidatedRef: MutableRefObject<boolean | null>
@@ -32,10 +32,6 @@ const useContextInvalidated = (
       setContextInvalidated: actions.setContextInvalidated,
     })
   );
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
 
   const listenToMouseChange = useCallback(() => {
     if (contextInvalidatedRef.current) {
@@ -63,29 +59,27 @@ const useContextInvalidated = (
 
         if (tabId) {
           chrome.tabs.reload(Number(tabId));
-          if (isUsingCDP) {
-            try {
-              await chrome.debugger.attach(
-                { tabId: chrome.devtools.inspectedWindow.tabId },
-                '1.3'
-              );
-              await chrome.debugger.sendCommand(
-                { tabId: chrome.devtools.inspectedWindow.tabId },
-                'Network.enable'
-              );
-              await chrome.debugger.sendCommand(
-                { tabId: chrome.devtools.inspectedWindow.tabId },
-                'Audits.enable'
-              );
-            } catch (error) {
-              //Fail silently
-            }
+          try {
+            await chrome.debugger.attach(
+              { tabId: chrome.devtools.inspectedWindow.tabId },
+              '1.3'
+            );
+            await chrome.debugger.sendCommand(
+              { tabId: chrome.devtools.inspectedWindow.tabId },
+              'Network.enable'
+            );
+            await chrome.debugger.sendCommand(
+              { tabId: chrome.devtools.inspectedWindow.tabId },
+              'Audits.enable'
+            );
+          } catch (error) {
+            //Fail silently
           }
         }
         localStorage.removeItem('contextInvalidated');
       }
     })();
-  }, [isUsingCDP]);
+  }, []);
 
   return contextInvalidated;
 };

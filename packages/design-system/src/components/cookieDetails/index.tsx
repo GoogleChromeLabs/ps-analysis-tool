@@ -27,16 +27,12 @@ import { I18n } from '@google-psat/i18n';
 import Details from './details';
 
 export interface CookieDetailsProps {
-  isUsingCDP: boolean;
   selectedFrameCookie: {
     [frame: string]: CookieTableData | null;
   } | null;
 }
 
-const CookieDetails = ({
-  selectedFrameCookie,
-  isUsingCDP,
-}: CookieDetailsProps) => {
+const CookieDetails = ({ selectedFrameCookie }: CookieDetailsProps) => {
   const selectedCookie = Object.values(selectedFrameCookie ?? {})[0];
 
   return (
@@ -45,7 +41,7 @@ const CookieDetails = ({
       className="flex-1 border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] overflow-y-auto"
     >
       {selectedCookie ? (
-        <Details isUsingCDP={isUsingCDP} selectedCookie={selectedCookie} />
+        <Details selectedCookie={selectedCookie} />
       ) : (
         <div className="h-full p-8 flex items-center">
           <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">

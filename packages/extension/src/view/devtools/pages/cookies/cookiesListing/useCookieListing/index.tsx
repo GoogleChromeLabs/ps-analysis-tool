@@ -41,7 +41,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import { useCookie, useSettings } from '../../../../stateProviders';
+import { useCookie } from '../../../../stateProviders';
 import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
 
@@ -66,8 +66,6 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
     [activePanelQuery]
   );
 
-  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
-
   const [tableData, setTableData] = useState<TabCookies>(cookies);
 
   useHighlighting(cookies, domainsInAllowList, setTableData);
@@ -79,7 +77,6 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        enableBodyCellPrefixIcon: isUsingCDP,
         bodyCellPrefixIcon: {
           Element: NamePrefixIconSelector,
         },
@@ -193,7 +190,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         minWidth: 120,
       },
     ],
-    [isUsingCDP]
+    []
   );
 
   const filters = useMemo<TableFilter>(

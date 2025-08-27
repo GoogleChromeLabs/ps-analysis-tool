@@ -24,7 +24,7 @@ import { type TabFrames } from '@google-psat/common';
  * @param currentTabFrames Current frames in the tab.
  * @param currentTargets Current debugger targets in the browser.
  * @param extraFrameData Extra frames data that has been provided by the serivce worker.
- * @param isUsingCDP Determines if cdp is being used.
+ * @param isObservabilityEnabled Determines if cdp is being used.
  * @returns {TabFrames|null} Tabframes and related details if available else null.
  */
 export default function getFramesForCurrentTab(
@@ -32,9 +32,11 @@ export default function getFramesForCurrentTab(
   currentTabFrames: chrome.webNavigation.GetAllFrameResultDetails[] | null,
   currentTargets: chrome.debugger.TargetInfo[],
   extraFrameData: Record<string, string[]>,
-  isUsingCDP: boolean
+  isObservabilityEnabled: boolean
 ) {
-  const modifiedTabFrames: TabFrames = isUsingCDP ? {} : prevState ?? {};
+  const modifiedTabFrames: TabFrames = isObservabilityEnabled
+    ? {}
+    : prevState ?? {};
 
   currentTabFrames?.forEach(({ url, frameType, frameId }) => {
     if (url && url.includes('http')) {
@@ -51,7 +53,7 @@ export default function getFramesForCurrentTab(
         }
       });
 
-      const currentFrameIds = isUsingCDP
+      const currentFrameIds = isObservabilityEnabled
         ? [...frameIdsFromCDP, frameId.toString()]
         : [frameId.toString()];
 
@@ -79,7 +81,7 @@ export default function getFramesForCurrentTab(
     }
   });
 
-  if (isUsingCDP) {
+  if (isObservabilityEnabled) {
     Object.keys(extraFrameData).forEach((key) => {
       if (key === 'null') {
         return;

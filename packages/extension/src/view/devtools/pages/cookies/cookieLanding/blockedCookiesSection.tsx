@@ -25,9 +25,6 @@ import {
   type MatrixComponentProps,
   LEGEND_DESCRIPTION,
   useFiltersMapping,
-  SIDEBAR_ITEMS_KEYS,
-  useSidebar,
-  LinkProcessor,
 } from '@google-psat/design-system';
 import {
   type DataMapping,
@@ -38,7 +35,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import { useCookie, useSettings } from '../../../stateProviders';
+import { useCookie } from '../../../stateProviders';
 
 interface BlockedCookiesSectionProps {
   tabCookies: TabCookies;
@@ -48,15 +45,6 @@ const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
   const { tabFrames } = useCookie(({ state }) => ({
     tabFrames: state.tabFrames,
   }));
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
-  // Callback selecting/updating the clicked item in the sidebar
-  const updateSelectedItemKey = useSidebar(
-    ({ actions }) => actions.updateSelectedItemKey
-  );
 
   // For opening Cookies table with pre-filtered data, uses updateSelectedItemKey from useSidebar internally
   const { selectedItemUpdater } = useFiltersMapping(tabFrames || {});
@@ -91,36 +79,10 @@ const BlockedCookiesSection = ({ tabCookies }: BlockedCookiesSectionProps) => {
       };
     });
 
-  const description = !isUsingCDP ? (
-    <>
-      {I18n.getMessage('notUsingCDP')}&nbsp;
-      <button
-        className="text-bright-navy-blue dark:text-jordy-blue"
-        onClick={() => {
-          document
-            .getElementById('cookies-landing-scroll-container')
-            ?.scrollTo(0, 0);
-          updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-        }}
-      >
-        {I18n.getMessage('settingsPage')}
-      </button>
-      . <br />
-      {I18n.getMessage('visitPSAT')}&nbsp;
-      <LinkProcessor
-        text={'<a>' + I18n.getMessage('wiki') + '</a>'}
-        links={[
-          'https://github.com/GoogleChromeLabs/ps-analysis-tool/wiki/Cookies-Table#blocked-cookies',
-        ]}
-        sameTab={true}
-      />
-      .
-    </>
-  ) : cookieStats.blockedCookies.total === 0 ? (
-    'No cookies were blocked by the browser.'
-  ) : (
-    ''
-  );
+  const description =
+    cookieStats.blockedCookies.total === 0
+      ? 'No cookies were blocked by the browser.'
+      : '';
 
   return (
     <CookiesLandingWrapper

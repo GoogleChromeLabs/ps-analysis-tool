@@ -23,19 +23,19 @@ export const onSyncStorageChangedListenerForCDP = async (changes: {
   [key: string]: chrome.storage.StorageChange;
 }) => {
   if (
-    !changes?.isUsingCDP ||
-    typeof changes?.isUsingCDP?.newValue === 'undefined' ||
-    typeof changes?.isUsingCDP?.oldValue === 'undefined'
+    !changes?.isObservabilityEnabled ||
+    typeof changes?.isObservabilityEnabled?.newValue === 'undefined' ||
+    typeof changes?.isObservabilityEnabled?.oldValue === 'undefined'
   ) {
     return;
   }
 
-  DataStore.globalIsUsingCDP = changes?.isUsingCDP?.newValue;
+  DataStore.isObservabilityEnabled = changes?.isObservabilityEnabled?.newValue;
 
   const tabs = await chrome.tabs.query({});
 
-  if (!changes?.isUsingCDP?.newValue) {
-    if (!DataStore.globalIsUsingCDP) {
+  if (!changes?.isObservabilityEnabled?.newValue) {
+    if (!DataStore.isObservabilityEnabled) {
       const targets = await chrome.debugger.getTargets();
       await Promise.all(
         targets.map(async ({ id }) => {

@@ -30,7 +30,7 @@ import {
 /**
  * Internal dependencies.
  */
-import { useCookie, useSettings } from '../../../stateProviders';
+import { useCookie } from '../../../stateProviders';
 import useCookieListing from './useCookieListing';
 import RowContextMenuForCookies from './rowContextMenu';
 import { useAllowedList } from '../../../stateProviders/allowedList';
@@ -45,8 +45,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
     tabFrames: state.tabFrames,
     tabUrl: state.tabUrl,
   }));
-
-  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
   const { domainsInAllowList, setDomainsInAllowListCallback, isIncognito } =
     useAllowedList(({ state, actions }) => ({
@@ -104,7 +102,6 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
         trayId="cookiesListing"
       >
         <CookieTable
-          queryIsBlockedToHighlight={!isUsingCDP}
           data={frameFilteredCookies}
           tableColumns={tableColumns}
           tableFilters={filters}
@@ -120,10 +117,7 @@ const CookiesListing = ({ setFilteredCookies }: CookiesListingProps) => {
           hostname={tabUrl ? new URL(tabUrl).hostname : ''}
         />
       </ResizableTray>
-      <CookieDetails
-        isUsingCDP={isUsingCDP}
-        selectedFrameCookie={selectedFrameCookie}
-      />
+      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
       <RowContextMenuForCookies
         domainsInAllowList={domainsInAllowList}
         isIncognito={isIncognito}

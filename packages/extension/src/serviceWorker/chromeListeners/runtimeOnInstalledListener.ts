@@ -29,7 +29,12 @@ export const runtimeOnInstalledListener = async (
   if (details.reason === 'install') {
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
-      isUsingCDP: false,
+      isObservabilityEnabled: false,
+      cookies: false,
+      protectedAudience: false,
+      attributionReporting: false,
+      ipProtection: false,
+      scriptBlocking: false,
       isFirstTime: true,
     });
     await updateGlobalVariableAndAttachCDP();
@@ -40,13 +45,18 @@ export const runtimeOnInstalledListener = async (
 
     await updateGlobalVariableAndAttachCDP();
 
-    if (Object.keys(preSetSettings).includes('isUsingCDP')) {
+    if (Object.keys(preSetSettings).includes('isObservabilityEnabled')) {
       return;
     }
 
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
-      isUsingCDP: false,
+      isObservabilityEnabled: false,
+      cookies: false,
+      protectedAudience: false,
+      attributionReporting: false,
+      ipProtection: false,
+      scriptBlocking: false,
     });
   }
 };

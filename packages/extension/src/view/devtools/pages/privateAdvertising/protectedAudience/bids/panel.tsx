@@ -23,8 +23,6 @@ import {
   useTabs,
   ResizableTray,
   type TimelineProps,
-  useSidebar,
-  SIDEBAR_ITEMS_KEYS,
 } from '@google-psat/design-system';
 import React, { useCallback, useMemo, useState } from 'react';
 import { I18n } from '@google-psat/i18n';
@@ -42,7 +40,6 @@ import ReceivedBidsTable from './receivedBidsTable';
 import NoBidsTable from './noBidsTable';
 import Placeholder from './placeholder';
 import { BidsPillOptions } from './enums';
-import { useSettings } from '../../../../stateProviders';
 
 interface PanelProps {
   receivedBids: ReceivedBids[];
@@ -96,91 +93,63 @@ const Panel = ({
     [setPAActiveTab, setPAStorage]
   );
 
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
-  const cdpNavigation = useCallback(() => {
-    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
-    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-  }, [updateSelectedItemKey]);
-
   return (
     <>
-      {!isUsingCDP && panelPillToggle === 'PAAPI' && !eeAnimatedTab ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <p className="text-sm text-raisin-black dark:text-bright-gray">
-            To view bids data, enable PSAT to use CDP via the{' '}
-            <button
-              className="text-bright-navy-blue dark:text-jordy-blue"
-              onClick={cdpNavigation}
-            >
-              Settings Page
-            </button>
-            .
-          </p>
-        </div>
-      ) : (
-        <div className="flex-1 overflow-auto text-outer-space-crayola">
-          {bidsPillToggle === BidsPillOptions.ReceivedBids && (
-            <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
-              <ReceivedBidsTable
-                setSelectedRow={setSelectedRow}
-                selectedRow={selectedRow}
-                receivedBids={receivedBids}
-                storage={storage}
-                setStorage={setStorage}
-                showEvaluationPlaceholder={
-                  !eeAnimatedTab && panelPillToggle !== 'Prebid'
-                }
-              />
-            </div>
-          )}
+      <div className="flex-1 overflow-auto text-outer-space-crayola">
+        {bidsPillToggle === BidsPillOptions.ReceivedBids && (
+          <div className="w-full h-full border-t border-american-silver dark:border-quartz overflow-auto">
+            <ReceivedBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+              receivedBids={receivedBids}
+              storage={storage}
+              setStorage={setStorage}
+              showEvaluationPlaceholder={
+                !eeAnimatedTab && panelPillToggle !== 'Prebid'
+              }
+            />
+          </div>
+        )}
 
-          {bidsPillToggle === BidsPillOptions.NoBids && (
-            <div
-              className={classNames(
-                'h-full border-r border-t border-american-silver dark:border-quartz',
-                Object.keys(noBids).length > 0 ? 'max-w-[43rem]' : 'w-full'
-              )}
-            >
-              <NoBidsTable
-                setSelectedRow={setSelectedRow}
-                selectedRow={selectedRow}
-                noBids={noBids}
-                showEvaluationPlaceholder={
-                  !eeAnimatedTab && panelPillToggle !== 'Prebid'
-                }
-              />
-            </div>
-          )}
+        {bidsPillToggle === BidsPillOptions.NoBids && (
+          <div
+            className={classNames(
+              'h-full border-r border-t border-american-silver dark:border-quartz',
+              Object.keys(noBids).length > 0 ? 'max-w-[43rem]' : 'w-full'
+            )}
+          >
+            <NoBidsTable
+              setSelectedRow={setSelectedRow}
+              selectedRow={selectedRow}
+              noBids={noBids}
+              showEvaluationPlaceholder={
+                !eeAnimatedTab && panelPillToggle !== 'Prebid'
+              }
+            />
+          </div>
+        )}
 
-          {bidsPillToggle === BidsPillOptions.Timeline && !eeAnimatedTab && (
-            <div className="w-full h-full px-4 border-t border-american-silver dark:border-quartz">
-              {timelines && Object.entries(timelines).length > 0 ? (
-                Object.entries(timelines).map(([auctionId, auction]) => (
-                  <div key={auctionId} className="my-4">
-                    <Timeline
-                      {...(auction as unknown as TimelineProps)}
-                      zoomLevel={zoomLevel}
-                      setSelectedRow={setSelectedRow}
-                      navigateToAuction={navigateToAuction}
-                    />
-                  </div>
-                ))
-              ) : (
-                <Placeholder
-                  showEvaluationPlaceholder={panelPillToggle !== 'Prebid'}
-                />
-              )}
-            </div>
-          )}
-        </div>
-      )}
+        {bidsPillToggle === BidsPillOptions.Timeline && !eeAnimatedTab && (
+          <div className="w-full h-full px-4 border-t border-american-silver dark:border-quartz">
+            {timelines && Object.entries(timelines).length > 0 ? (
+              Object.entries(timelines).map(([auctionId, auction]) => (
+                <div key={auctionId} className="my-4">
+                  <Timeline
+                    {...(auction as unknown as TimelineProps)}
+                    zoomLevel={zoomLevel}
+                    setSelectedRow={setSelectedRow}
+                    navigateToAuction={navigateToAuction}
+                  />
+                </div>
+              ))
+            ) : (
+              <Placeholder
+                showEvaluationPlaceholder={panelPillToggle !== 'Prebid'}
+              />
+            )}
+          </div>
+        )}
+      </div>
       {showBottomTray && (
         <ResizableTray
           defaultSize={{

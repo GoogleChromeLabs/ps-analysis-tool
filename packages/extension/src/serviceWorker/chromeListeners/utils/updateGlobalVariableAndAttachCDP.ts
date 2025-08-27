@@ -29,7 +29,8 @@ const updateGlobalVariableAndAttachCDP = async () => {
 
   const preSetSettings = await chrome.storage.sync.get();
 
-  DataStore.globalIsUsingCDP = preSetSettings?.isUsingCDP ?? false;
+  DataStore.isObservabilityEnabled =
+    preSetSettings?.isObservabilityEnabled ?? false;
 
   const allTabs = await chrome.tabs.query({});
   const targets = await chrome.debugger.getTargets();
@@ -50,7 +51,7 @@ const updateGlobalVariableAndAttachCDP = async () => {
     PAStore.initialiseVariablesForNewTab(tab.id.toString());
     ARAStore.initialiseVariablesForNewTab(tab.id.toString());
 
-    if (DataStore.globalIsUsingCDP) {
+    if (DataStore.isObservabilityEnabled) {
       attachCDP({ tabId: tab.id });
 
       const currentTab = targets.filter(

@@ -62,14 +62,30 @@ export const onCommittedNavigationListener = async ({
 
     if (queryParams.psat_cdp) {
       await chrome.storage.sync.set({
-        isUsingCDP: queryParams.psat_cdp === 'on',
+        isObservabilityEnabled: queryParams.psat_cdp === 'on',
+        observabilityPartsStatus: {
+          ...DataStore.observabilityPartsStatus,
+          cookies: queryParams.psat_cdp === 'on',
+          protectedAudience: queryParams.psat_cdp === 'on',
+          attributionReporting: queryParams.psat_cdp === 'on',
+          ipProtection: queryParams.psat_cdp === 'on',
+          scriptBlocking: queryParams.psat_cdp === 'on',
+        },
       });
 
-      DataStore.globalIsUsingCDP = queryParams.psat_cdp === 'on';
+      DataStore.isObservabilityEnabled = queryParams.psat_cdp === 'on';
+      DataStore.observabilityPartsStatus = {
+        ...DataStore.observabilityPartsStatus,
+        cookies: queryParams.psat_cdp === 'on',
+        protectedAudience: queryParams.psat_cdp === 'on',
+        attributionReporting: queryParams.psat_cdp === 'on',
+        ipProtection: queryParams.psat_cdp === 'on',
+        scriptBlocking: queryParams.psat_cdp === 'on',
+      };
     }
 
     const targets = await chrome.debugger.getTargets();
-    const mainFrameId = DataStore?.globalIsUsingCDP
+    const mainFrameId = DataStore?.isObservabilityEnabled
       ? targets.filter((target) => target.tabId && target.tabId === tabId)[0]
           ?.id
       : 0;
@@ -88,7 +104,7 @@ export const onCommittedNavigationListener = async ({
         frameId
       );
 
-      if (DataStore.globalIsUsingCDP) {
+      if (DataStore.isObservabilityEnabled) {
         PAStore.deinitialiseVariablesForTab(tabId.toString());
         PAStore.initialiseVariablesForNewTab(tabId.toString());
 

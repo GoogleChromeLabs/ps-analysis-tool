@@ -39,12 +39,11 @@ import {
 } from '../../icons';
 
 export interface DetailsProps {
-  isUsingCDP: boolean;
   selectedCookie: CookieTableData;
 }
 
 // eslint-disable-next-line complexity
-const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
+const Details = ({ selectedCookie }: DetailsProps) => {
   const [showUrlDecoded, setShowUrlDecoded] = useState(false);
 
   let blockedReasons = '';
@@ -140,7 +139,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
           </p>
         </div>
       )}
-      {hasValidBlockedReason && isUsingCDP && (
+      {hasValidBlockedReason && (
         <div className="mb-4">
           <p className="font-bold text-raising-black dark:text-bright-gray mb-1">
             {I18n.getMessage('blockedReason')}
@@ -155,8 +154,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       {selectedCookie?.blockingStatus?.inboundBlock ===
         BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         !outboundBlock &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -169,8 +167,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       {selectedCookie?.blockingStatus?.inboundBlock ===
         BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         !outboundBlock &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <InboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -183,8 +180,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       {selectedCookie?.blockingStatus?.outboundBlock ===
         BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         !inboundBlock &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -197,8 +193,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
       {selectedCookie?.blockingStatus?.outboundBlock ===
         BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         !inboundBlock &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -212,8 +207,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="[&_line]:stroke-[#D8302F] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -227,8 +221,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundIcon className="[&_line]:stroke-[#FE8455] scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -242,8 +235,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">
@@ -260,8 +252,7 @@ const Details = ({ selectedCookie, isUsingCDP }: DetailsProps) => {
         BLOCK_STATUS.BLOCKED_IN_SOME_EVENTS &&
         selectedCookie?.blockingStatus?.inboundBlock ===
           BLOCK_STATUS.BLOCKED_IN_ALL_EVENTS &&
-        hasValidBlockedReason &&
-        isUsingCDP && (
+        hasValidBlockedReason && (
           <div className="flex gap-1 items-center mb-4">
             <OutboundInboundColoredIcon className="rotate-180 scale-150" />
             <p className="text-outer-space-crayola dark:text-bright-gray">

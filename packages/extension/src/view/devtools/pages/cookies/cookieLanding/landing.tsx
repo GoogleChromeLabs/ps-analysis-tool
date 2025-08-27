@@ -33,7 +33,7 @@ import type { TabCookies } from '@google-psat/common';
 import CookiesSection from './cookiesSection';
 import FramesSection from './framesSection';
 import BlockedCookiesSection from './blockedCookiesSection';
-import { useCookie, useSettings } from '../../../stateProviders';
+import { useCookie } from '../../../stateProviders';
 import downloadReport from '../../../../../utils/downloadReport';
 import ExemptedCookiesSection from './exemptedCookiesSection';
 
@@ -48,8 +48,6 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
     tabFrames: state.tabFrames,
     url: state.tabUrl,
   }));
-
-  const isUsingCDP = useSettings(({ state }) => state.isUsingCDP);
 
   const sections: Array<CookiesLandingSection> = useMemo(() => {
     const defaultSections: CookiesLandingSection[] = [
@@ -83,10 +81,7 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
           },
         },
       },
-    ];
-
-    if (isUsingCDP) {
-      defaultSections.splice(2, 0, {
+      {
         name: I18n.getMessage('exemptionReasons'),
         link: 'exemption-reasons',
         panel: {
@@ -95,11 +90,11 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
             tabCookies,
           },
         },
-      });
-    }
+      },
+    ];
 
     return defaultSections;
-  }, [isUsingCDP, tabCookies]);
+  }, [tabCookies]);
 
   const menuData: MenuData = useMemo(
     () => sections.map(({ name, link }) => ({ name, link })),
@@ -111,10 +106,9 @@ const Landing = ({ tabCookies, appliedFilters }: LandingProps) => {
       url || '',
       unfilteredCookies || {},
       tabFrames || {},
-      appliedFilters,
-      isUsingCDP
+      appliedFilters
     );
-  }, [appliedFilters, isUsingCDP, tabFrames, unfilteredCookies, url]);
+  }, [appliedFilters, tabFrames, unfilteredCookies, url]);
 
   if (Object.keys(unfilteredCookies ?? {}).length === 0) {
     return (

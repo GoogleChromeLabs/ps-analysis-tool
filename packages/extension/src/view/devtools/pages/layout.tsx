@@ -288,7 +288,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           size="large"
           onClick={async () => {
             await chrome.storage.session.remove([
-              'isUsingCDP',
+              'isObservabilityEnabled',
               'pendingReload',
             ]);
             setSettingsChanged(false);
@@ -332,7 +332,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
           size="large"
           onClick={async () => {
             await chrome.storage.session.remove([
-              'isUsingCDP',
+              'isObservabilityEnabled',
               'pendingReload',
             ]);
             setSettingsChanged(false);

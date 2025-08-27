@@ -23,7 +23,19 @@ export const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
   setupIntervals();
 
-  if (Object.keys(storage).includes('isUsingCDP')) {
-    DataStore.globalIsUsingCDP = storage.isUsingCDP;
+  if (
+    Object.keys(storage).includes('isObservabilityEnabled') &&
+    Object.keys(storage).includes('observabilityPartsStatus')
+  ) {
+    DataStore.isObservabilityEnabled = storage.isObservabilityEnabled;
+    DataStore.observabilityPartsStatus = {
+      cookies: storage.observabilityPartsStatus.cookies || false,
+      protectedAudience:
+        storage.observabilityPartsStatus.protectedAudience || false,
+      attributionReporting:
+        storage.observabilityPartsStatus.attributionReporting || false,
+      ipProtection: storage.observabilityPartsStatus.ipProtection || false,
+      scriptBlocking: storage.observabilityPartsStatus.scriptBlocking || false,
+    };
   }
 };
