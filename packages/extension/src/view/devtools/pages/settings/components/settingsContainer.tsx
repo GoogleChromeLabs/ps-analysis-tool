@@ -39,13 +39,13 @@ const SettingsContainer = () => {
   const {
     isObservabilityForSettingsPageDisplay,
     setIsObservability,
-    observabilityEnabled,
+    observabilityEnabledForDisplay,
     handleObservabilityEnabled,
   } = useSettings(({ state, actions }) => ({
     isObservabilityForSettingsPageDisplay:
       state.isObservabilityForSettingsPageDisplay,
     setIsObservability: actions.setIsObservability,
-    observabilityEnabled: state.observabilityEnabled,
+    observabilityEnabledForDisplay: state.observabilityEnabledForDisplay,
     handleObservabilityEnabled: actions.handleObservabilityEnabled,
   }));
 
@@ -91,11 +91,11 @@ const SettingsContainer = () => {
           );
         })}
         <div className="px-3">
-          {Object.keys(observabilityEnabled).map((key) => (
+          {Object.keys(observabilityEnabledForDisplay).map((key) => (
             <SettingOption
               key={key}
               title={key}
-              switchState={observabilityEnabled[key]}
+              switchState={observabilityEnabledForDisplay[key]}
               changeSwitchState={(newState) => {
                 handleObservabilityEnabled(key, newState);
               }}

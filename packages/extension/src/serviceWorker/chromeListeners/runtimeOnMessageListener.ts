@@ -62,7 +62,6 @@ export const runtimeOnMessageListener = async (
     await chrome.storage.session.set({
       pendingReload: false,
     });
-
     await chrome.storage.sync.set({
       isObservabilityEnabled: DataStore.isObservabilityEnabled,
       observabilityPartsStatus: request.payload?.observabilityPartsStatus,

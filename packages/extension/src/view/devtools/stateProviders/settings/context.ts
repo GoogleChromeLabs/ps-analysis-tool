@@ -36,6 +36,7 @@ export interface SettingsStoreContext {
     exceedingLimitations: boolean;
     incognitoAccess: boolean;
     observabilityEnabled: Record<string, boolean>;
+    observabilityEnabledForDisplay: Record<string, boolean>;
   };
   actions: {
     setIsObservability: (newValue: boolean) => void;
@@ -47,6 +48,9 @@ export interface SettingsStoreContext {
     >;
     handleObservabilityEnabled: (key: string, value: boolean) => void;
     openIncognitoTab: () => Promise<void>;
+    setObservabilityEnabledForDisplay: React.Dispatch<
+      React.SetStateAction<Record<string, boolean>>
+    >;
   };
 }
 
@@ -62,6 +66,13 @@ const initialState: SettingsStoreContext = {
     settingsChanged: false,
     isObservabilityForSettingsPageDisplay: false,
     exceedingLimitations: false,
+    observabilityEnabledForDisplay: {
+      cookies: false,
+      protectedAudience: false,
+      attributionReporting: false,
+      ipProtection: false,
+      scriptBlocking: false,
+    },
     observabilityEnabled: {
       cookies: false,
       protectedAudience: false,
@@ -78,6 +89,7 @@ const initialState: SettingsStoreContext = {
     setIsObservabilityForSettingsPageDisplay: noop,
     openIncognitoTab: () => Promise.resolve(),
     handleObservabilityEnabled: noop,
+    setObservabilityEnabledForDisplay: noop,
   },
 };
 

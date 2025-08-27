@@ -16,8 +16,6 @@
 /**
  * Internal dependencies.
  */
-import { onBeforeSendHeadersListener } from './beforeSendHeadersListener';
-import { onResponseStartedListener } from './onResponseStartedListener';
 import { onStartUpListener } from './runtimeStartUpListener';
 import { runtimeOnInstalledListener } from './runtimeOnInstalledListener';
 import { runtimeOnMessageListener } from './runtimeOnMessageListener';
@@ -28,26 +26,6 @@ import { onCommittedNavigationListener } from './onCommittedNavigationListener';
 import { windowsOnRemovedListener } from './windowsOnRemovedListener';
 import { windowsOnCreatedListener } from './windowsOnCreatedListener';
 import { onEnabledListener } from './onEnabledListener';
-
-/**
- * Fires before sending an HTTP request, once the request headers are available.
- * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest#event-onBeforeSendHeaders
- */
-chrome.webRequest.onBeforeSendHeaders.addListener(
-  onBeforeSendHeadersListener,
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'requestHeaders']
-);
-
-/**
- * Fires when the browser receives a response from a web server.
- * @see https://developer.chrome.com/docs/extensions/reference/api/webRequest
- */
-chrome?.webRequest?.onResponseStarted?.addListener(
-  onResponseStartedListener,
-  { urls: ['*://*/*'] },
-  ['extraHeaders', 'responseHeaders']
-);
 
 /**
  * Fires when the etension is enabled.

@@ -30,11 +30,13 @@ export const runtimeOnInstalledListener = async (
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       isObservabilityEnabled: false,
-      cookies: false,
-      protectedAudience: false,
-      attributionReporting: false,
-      ipProtection: false,
-      scriptBlocking: false,
+      observabilityPartsStatus: {
+        cookies: false,
+        protectedAudience: false,
+        attributionReporting: false,
+        ipProtection: false,
+        scriptBlocking: false,
+      },
       isFirstTime: true,
     });
     await updateGlobalVariableAndAttachCDP();
@@ -52,11 +54,13 @@ export const runtimeOnInstalledListener = async (
     await chrome.storage.sync.clear();
     await chrome.storage.sync.set({
       isObservabilityEnabled: false,
-      cookies: false,
-      protectedAudience: false,
-      attributionReporting: false,
-      ipProtection: false,
-      scriptBlocking: false,
+      observabilityPartsStatus: {
+        cookies: false,
+        protectedAudience: false,
+        attributionReporting: false,
+        ipProtection: false,
+        scriptBlocking: false,
+      },
     });
   }
 };

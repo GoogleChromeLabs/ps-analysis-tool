@@ -21,6 +21,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useRef,
 } from 'react';
 import { I18n } from '@google-psat/i18n';
 import isEqual from 'lodash-es/isEqual';
@@ -74,6 +75,20 @@ const Provider = ({ children }: PropsWithChildren) => {
     scriptBlocking: false,
   });
 
+  const valuesRef = useRef({
+    observabilityEnabled,
+    isObservabilityEnabled,
+  });
+
+  const [observabilityEnabledForDisplay, setObservabilityEnabledForDisplay] =
+    useState<Record<string, boolean>>({
+      cookies: false,
+      protectedAudience: false,
+      attributionReporting: false,
+      ipProtection: false,
+      scriptBlocking: false,
+    });
+
   const intitialSync = useCallback(async () => {
     const sessionStorage = await chrome.storage.session.get();
     const currentSettings = await chrome.storage.sync.get();
@@ -90,14 +105,31 @@ const Provider = ({ children }: PropsWithChildren) => {
           currentSettings.isObservabilityEnabled
         );
       }
+
+      if (Object.keys(sessionStorage).includes('observabilityPartsStatus')) {
+        setObservabilityEnabledForDisplay(
+          sessionStorage.observabilityPartsStatus
+        );
+      } else {
+        setObservabilityEnabledForDisplay(
+          currentSettings.observabilityPartsStatus
+        );
+      }
     } else {
       setIsObservabilityForSettingsPageDisplay(
         currentSettings.isObservabilityEnabled
+      );
+      setObservabilityEnabledForDisplay(
+        currentSettings.observabilityPartsStatus
       );
     }
 
     if (Object.keys(currentSettings).includes('isObservabilityEnabled')) {
       setIsObservabilityEnabled(currentSettings.isObservabilityEnabled);
+    }
+
+    if (Object.keys(currentSettings).includes('observabilityPartsStatus')) {
+      setObservabilityEnabled(currentSettings.observabilityPartsStatus);
     }
 
     chrome.tabs.query({}, (tabs) => {
@@ -198,25 +230,28 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [OSInformation]);
 
-  const _setIsobservability = useCallback(
-    async (newValue: boolean) => {
-      setIsObservabilityForSettingsPageDisplay(newValue);
-      setObservabilityEnabled({
+  const _setIsobservability = useCallback(async (newValue: boolean) => {
+    setIsObservabilityForSettingsPageDisplay(newValue);
+    setObservabilityEnabledForDisplay({
+      cookies: newValue,
+      protectedAudience: newValue,
+      attributionReporting: newValue,
+      ipProtection: newValue,
+      scriptBlocking: newValue,
+    });
+    setSettingsChanged(true);
+    await chrome.storage.session.set({
+      isObservabilityEnabled: newValue,
+      observabilityPartsStatus: {
         cookies: newValue,
         protectedAudience: newValue,
         attributionReporting: newValue,
         ipProtection: newValue,
         scriptBlocking: newValue,
-      });
-      setSettingsChanged(true);
-      await chrome.storage.session.set({
-        isObservabilityEnabled: newValue,
-        observabilityPartsStatus: observabilityEnabled,
-        pendingReload: true,
-      });
-    },
-    [observabilityEnabled]
-  );
+      },
+      pendingReload: true,
+    });
+  }, []);
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
@@ -225,9 +260,12 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.isObservabilityEnabled).includes('newValue')
       ) {
         setIsObservabilityEnabled(changes?.isObservabilityEnabled?.newValue);
-        setIsObservabilityForSettingsPageDisplay(
-          changes?.isObservabilityEnabled?.newValue
-        );
+      }
+      if (
+        Object.keys(changes).includes('observabilityPartsStatus') &&
+        Object.keys(changes.observabilityPartsStatus).includes('newValue')
+      ) {
+        setObservabilityEnabled(changes?.observabilityPartsStatus?.newValue);
       }
     },
     []
@@ -245,6 +283,15 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (
+        Object.keys(changes).includes('observabilityPartsStatus') &&
+        Object.keys(changes.observabilityPartsStatus).includes('newValue')
+      ) {
+        setObservabilityEnabledForDisplay(
+          changes?.observabilityPartsStatus?.newValue
+        );
+      }
+
+      if (
         Object.keys(changes).includes('pendingReload') &&
         Object.keys(changes.pendingReload).includes('newValue')
       ) {
@@ -256,11 +303,20 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.pendingReload).includes('oldValue') &&
         !Object.keys(changes.pendingReload).includes('newValue')
       ) {
-        setIsObservabilityForSettingsPageDisplay(isObservabilityEnabled);
+        setIsObservabilityForSettingsPageDisplay(
+          valuesRef.current.isObservabilityEnabled
+        );
+        setObservabilityEnabledForDisplay(
+          valuesRef.current.observabilityEnabled
+        );
       }
     },
-    [isObservabilityEnabled]
+    []
   );
+
+  useEffect(() => {
+    valuesRef.current = { observabilityEnabled, isObservabilityEnabled };
+  }, [observabilityEnabled, isObservabilityEnabled]);
 
   useEffect(() => {
     const allSubSwitchesAreOn =
@@ -278,7 +334,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     if (allSubSwitchesAreOn) {
       setIsObservabilityForSettingsPageDisplay(true);
-    } else if (!anySubIsOn) {
+    } else if (anySubIsOn) {
       setIsObservabilityForSettingsPageDisplay(true);
     }
   }, [
@@ -292,7 +348,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const handleObservabilityEnabled = useCallback(
     (key: keyof typeof observabilityEnabled, value: boolean) => {
-      setObservabilityEnabled((prev) => ({ ...prev, [key]: value }));
+      setObservabilityEnabledForDisplay((prev) => ({ ...prev, [key]: value }));
     },
     []
   );
@@ -301,25 +357,43 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (settingsChanged) {
       await chrome.runtime.sendMessage({
         type: SERVICE_WORKER_TABS_RELOAD_COMMAND,
+        payload: {
+          observabilityPartsStatus: observabilityEnabledForDisplay,
+        },
       });
 
       setSettingsChanged(false);
     }
-  }, [settingsChanged]);
+  }, [observabilityEnabledForDisplay, settingsChanged]);
 
   useEffect(() => {
-    if (
-      !isEqual(isObservabilityEnabled, isObservabilityForSettingsPageDisplay)
-    ) {
-      setSettingsChanged(true);
-    } else {
-      setSettingsChanged(false);
-      chrome.storage.session.remove([
-        'pendingReload',
-        'isObservabilityEnabled',
-      ]);
-    }
-  }, [isObservabilityEnabled, isObservabilityForSettingsPageDisplay]);
+    (async () => {
+      const session = await chrome.storage.session.get();
+      if (!session.pendingReload) {
+        return;
+      }
+      if (
+        !isEqual(
+          isObservabilityEnabled,
+          isObservabilityForSettingsPageDisplay
+        ) &&
+        !isEqual(observabilityEnabled, observabilityEnabledForDisplay)
+      ) {
+        setSettingsChanged(true);
+      } else {
+        setSettingsChanged(false);
+        chrome.storage.session.remove([
+          'pendingReload',
+          'isObservabilityEnabled',
+        ]);
+      }
+    })();
+  }, [
+    isObservabilityEnabled,
+    isObservabilityForSettingsPageDisplay,
+    observabilityEnabled,
+    observabilityEnabledForDisplay,
+  ]);
 
   const onCommittedNavigationListener = useCallback(
     ({
@@ -389,6 +463,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           isObservabilityForSettingsPageDisplay,
           exceedingLimitations,
           observabilityEnabled,
+          observabilityEnabledForDisplay,
         },
         actions: {
           handleObservabilityEnabled,
@@ -397,6 +472,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           setSettingsChanged,
           setExceedingLimitations,
           setIsObservabilityForSettingsPageDisplay,
+          setObservabilityEnabledForDisplay,
           openIncognitoTab,
         },
       }}
