@@ -1042,6 +1042,30 @@
         "https://maviework.care": "RWS_rationale_https___maviework_care",
         "https://lucyhealth.io": "RWS_rationale_https___lucyhealth_io"
       }
+    },
+    {
+      "contact": "ecomm@oficialfarma.com.br",
+      "primary": "https://oficialfarma.com.br",
+      "associatedSites": [
+        "https://oficialderma.com.br",
+        "https://oficialnutri.com",
+        "https://mercadooficial.com.br"
+      ],
+      "rationaleBySite": {
+        "https://oficialderma.com.br": "RWS_rationale_https___oficialderma_com_br",
+        "https://oficialnutri.com": "RWS_rationale_https___oficialnutri_com",
+        "https://mercadooficial.com.br": "RWS_rationale_https___mercadooficial_com_br"
+      }
+    },
+    {
+      "contact": "admin@undertale.wiki",
+      "primary": "https://undertale.wiki",
+      "associatedSites": [
+        "https://deltarune.wiki"
+      ],
+      "rationaleBySite": {
+        "https://deltarune.wiki": "RWS_rationale_https___deltarune_wiki"
+      }
     }
   ]
 }
