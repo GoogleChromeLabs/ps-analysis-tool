@@ -30,19 +30,19 @@ export interface SettingsStoreContext {
     browserInformation: string | null;
     OSInformation: string | null;
     PSATVersion: string | null;
-    isUsingCDP: boolean;
+    isObservabilityEnabled: boolean;
     settingsChanged: boolean;
-    isUsingCDPForSettingsPageDisplay: boolean;
+    isObservabilityForSettingsPageDisplay: boolean;
     exceedingLimitations: boolean;
     incognitoAccess: boolean;
     observabilityEnabled: Record<string, boolean>;
   };
   actions: {
-    setIsUsingCDP: (newValue: boolean) => void;
+    setIsObservability: (newValue: boolean) => void;
     handleSettingsChange: () => void;
     setSettingsChanged: React.Dispatch<React.SetStateAction<boolean>>;
     setExceedingLimitations: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsUsingCDPForSettingsPageDisplay: React.Dispatch<
+    setIsObservabilityForSettingsPageDisplay: React.Dispatch<
       React.SetStateAction<boolean>
     >;
     handleObservabilityEnabled: (key: string, value: boolean) => void;
@@ -58,9 +58,9 @@ const initialState: SettingsStoreContext = {
     browserInformation: null,
     OSInformation: null,
     PSATVersion: null,
-    isUsingCDP: false,
+    isObservabilityEnabled: false,
     settingsChanged: false,
-    isUsingCDPForSettingsPageDisplay: false,
+    isObservabilityForSettingsPageDisplay: false,
     exceedingLimitations: false,
     observabilityEnabled: {
       cookies: false,
@@ -71,11 +71,11 @@ const initialState: SettingsStoreContext = {
     },
   },
   actions: {
-    setIsUsingCDP: noop,
+    setIsObservability: noop,
     handleSettingsChange: noop,
     setSettingsChanged: noop,
     setExceedingLimitations: noop,
-    setIsUsingCDPForSettingsPageDisplay: noop,
+    setIsObservabilityForSettingsPageDisplay: noop,
     openIncognitoTab: () => Promise.resolve(),
     handleObservabilityEnabled: noop,
   },

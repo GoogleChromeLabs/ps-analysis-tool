@@ -24,19 +24,15 @@ import { type TabFrames } from '@google-psat/common';
  * @param currentTabFrames Current frames in the tab.
  * @param currentTargets Current debugger targets in the browser.
  * @param extraFrameData Extra frames data that has been provided by the serivce worker.
- * @param isObservabilityEnabled Determines if cdp is being used.
  * @returns {TabFrames|null} Tabframes and related details if available else null.
  */
 export default function getFramesForCurrentTab(
   prevState: TabFrames | null,
   currentTabFrames: chrome.webNavigation.GetAllFrameResultDetails[] | null,
   currentTargets: chrome.debugger.TargetInfo[],
-  extraFrameData: Record<string, string[]>,
-  isObservabilityEnabled: boolean
+  extraFrameData: Record<string, string[]>
 ) {
-  const modifiedTabFrames: TabFrames = isObservabilityEnabled
-    ? {}
-    : prevState ?? {};
+  const modifiedTabFrames: TabFrames = prevState ?? {};
 
   currentTabFrames?.forEach(({ url, frameType, frameId }) => {
     if (url && url.includes('http')) {
@@ -53,9 +49,7 @@ export default function getFramesForCurrentTab(
         }
       });
 
-      const currentFrameIds = isObservabilityEnabled
-        ? [...frameIdsFromCDP, frameId.toString()]
-        : [frameId.toString()];
+      const currentFrameIds = [...frameIdsFromCDP, frameId.toString()];
 
       if (frameIdsFromCDP.length) {
         if (modifiedTabFrames[parsedUrl]) {
@@ -81,27 +75,25 @@ export default function getFramesForCurrentTab(
     }
   });
 
-  if (isObservabilityEnabled) {
-    Object.keys(extraFrameData).forEach((key) => {
-      if (key === 'null') {
-        return;
-      }
+  Object.keys(extraFrameData).forEach((key) => {
+    if (key === 'null') {
+      return;
+    }
 
-      if (modifiedTabFrames[key]) {
-        modifiedTabFrames[key].frameIds = Array.from(
-          new Set([
-            ...(modifiedTabFrames[key].frameIds ?? []),
-            ...(extraFrameData[key] ?? []),
-          ])
-        );
-      } else {
-        modifiedTabFrames[key] = {
-          frameIds: extraFrameData[key] ?? [],
-          frameType: 'sub_frame',
-        };
-      }
-    });
-  }
+    if (modifiedTabFrames[key]) {
+      modifiedTabFrames[key].frameIds = Array.from(
+        new Set([
+          ...(modifiedTabFrames[key].frameIds ?? []),
+          ...(extraFrameData[key] ?? []),
+        ])
+      );
+    } else {
+      modifiedTabFrames[key] = {
+        frameIds: extraFrameData[key] ?? [],
+        frameType: 'sub_frame',
+      };
+    }
+  });
 
   return modifiedTabFrames;
 }

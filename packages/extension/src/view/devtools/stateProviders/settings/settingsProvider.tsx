@@ -46,10 +46,10 @@ const Provider = ({ children }: PropsWithChildren) => {
     useState<boolean>(false);
   const [incognitoAccess, setIncognitoAccess] = useState<boolean>(false);
 
-  const [isUsingCDP, setIsUsingCDP] = useState(false);
+  const [isObservabilityEnabled, setIsObservabilityEnabled] = useState(false);
   const [
-    isUsingCDPForSettingsPageDisplay,
-    setIsUsingCDPForSettingsPageDisplay,
+    isObservabilityForSettingsPageDisplay,
+    setIsObservabilityForSettingsPageDisplay,
   ] = useState(false);
 
   const [currentTabs, setCurrentTabs] =
@@ -81,17 +81,23 @@ const Provider = ({ children }: PropsWithChildren) => {
     if (Object.keys(sessionStorage).includes('pendingReload')) {
       setSettingsChanged(sessionStorage?.pendingReload);
 
-      if (Object.keys(sessionStorage).includes('isUsingCDP')) {
-        setIsUsingCDPForSettingsPageDisplay(sessionStorage.isUsingCDP);
+      if (Object.keys(sessionStorage).includes('isObservabilityEnabled')) {
+        setIsObservabilityForSettingsPageDisplay(
+          sessionStorage.isObservabilityEnabled
+        );
       } else {
-        setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
+        setIsObservabilityForSettingsPageDisplay(
+          currentSettings.isObservabilityEnabled
+        );
       }
     } else {
-      setIsUsingCDPForSettingsPageDisplay(currentSettings.isUsingCDP);
+      setIsObservabilityForSettingsPageDisplay(
+        currentSettings.isObservabilityEnabled
+      );
     }
 
-    if (Object.keys(currentSettings).includes('isUsingCDP')) {
-      setIsUsingCDP(currentSettings.isUsingCDP);
+    if (Object.keys(currentSettings).includes('isObservabilityEnabled')) {
+      setIsObservabilityEnabled(currentSettings.isObservabilityEnabled);
     }
 
     chrome.tabs.query({}, (tabs) => {
@@ -192,30 +198,36 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
   }, [OSInformation]);
 
-  const _setUsingCDP = useCallback(async (newValue: boolean) => {
-    setIsUsingCDPForSettingsPageDisplay(newValue);
-    setObservabilityEnabled({
-      cookies: true,
-      protectedAudience: true,
-      attributionReporting: true,
-      ipProtection: true,
-      scriptBlocking: true,
-    });
-    setSettingsChanged(true);
-    await chrome.storage.session.set({
-      isUsingCDP: newValue,
-      pendingReload: true,
-    });
-  }, []);
+  const _setIsobservability = useCallback(
+    async (newValue: boolean) => {
+      setIsObservabilityForSettingsPageDisplay(newValue);
+      setObservabilityEnabled({
+        cookies: newValue,
+        protectedAudience: newValue,
+        attributionReporting: newValue,
+        ipProtection: newValue,
+        scriptBlocking: newValue,
+      });
+      setSettingsChanged(true);
+      await chrome.storage.session.set({
+        isObservabilityEnabled: newValue,
+        observabilityPartsStatus: observabilityEnabled,
+        pendingReload: true,
+      });
+    },
+    [observabilityEnabled]
+  );
 
   const storeChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
-        Object.keys(changes).includes('isUsingCDP') &&
-        Object.keys(changes.isUsingCDP).includes('newValue')
+        Object.keys(changes).includes('isObservabilityEnabled') &&
+        Object.keys(changes.isObservabilityEnabled).includes('newValue')
       ) {
-        setIsUsingCDP(changes?.isUsingCDP?.newValue);
-        setIsUsingCDPForSettingsPageDisplay(changes?.isUsingCDP?.newValue);
+        setIsObservabilityEnabled(changes?.isObservabilityEnabled?.newValue);
+        setIsObservabilityForSettingsPageDisplay(
+          changes?.isObservabilityEnabled?.newValue
+        );
       }
     },
     []
@@ -224,10 +236,12 @@ const Provider = ({ children }: PropsWithChildren) => {
   const sessionStoreChangeListener = useCallback(
     (changes: { [key: string]: chrome.storage.StorageChange }) => {
       if (
-        Object.keys(changes).includes('isUsingCDP') &&
-        Object.keys(changes.isUsingCDP).includes('newValue')
+        Object.keys(changes).includes('isObservabilityEnabled') &&
+        Object.keys(changes.isObservabilityEnabled).includes('newValue')
       ) {
-        setIsUsingCDPForSettingsPageDisplay(changes.isUsingCDP.newValue);
+        setIsObservabilityForSettingsPageDisplay(
+          changes.isObservabilityEnabled.newValue
+        );
       }
 
       if (
@@ -242,10 +256,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes.pendingReload).includes('oldValue') &&
         !Object.keys(changes.pendingReload).includes('newValue')
       ) {
-        setIsUsingCDPForSettingsPageDisplay(isUsingCDP);
+        setIsObservabilityForSettingsPageDisplay(isObservabilityEnabled);
       }
     },
-    [isUsingCDP]
+    [isObservabilityEnabled]
   );
 
   useEffect(() => {
@@ -263,12 +277,12 @@ const Provider = ({ children }: PropsWithChildren) => {
       observabilityEnabled.scriptBlocking;
 
     if (allSubSwitchesAreOn) {
-      setIsUsingCDPForSettingsPageDisplay(true);
+      setIsObservabilityForSettingsPageDisplay(true);
     } else if (!anySubIsOn) {
-      setIsUsingCDPForSettingsPageDisplay(true);
+      setIsObservabilityForSettingsPageDisplay(true);
     }
   }, [
-    isUsingCDP,
+    isObservabilityEnabled,
     observabilityEnabled.attributionReporting,
     observabilityEnabled.cookies,
     observabilityEnabled.ipProtection,
@@ -294,13 +308,18 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [settingsChanged]);
 
   useEffect(() => {
-    if (!isEqual(isUsingCDP, isUsingCDPForSettingsPageDisplay)) {
+    if (
+      !isEqual(isObservabilityEnabled, isObservabilityForSettingsPageDisplay)
+    ) {
       setSettingsChanged(true);
     } else {
       setSettingsChanged(false);
-      chrome.storage.session.remove(['pendingReload', 'isUsingCDP']);
+      chrome.storage.session.remove([
+        'pendingReload',
+        'isObservabilityEnabled',
+      ]);
     }
-  }, [isUsingCDP, isUsingCDPForSettingsPageDisplay]);
+  }, [isObservabilityEnabled, isObservabilityForSettingsPageDisplay]);
 
   const onCommittedNavigationListener = useCallback(
     ({
@@ -365,19 +384,19 @@ const Provider = ({ children }: PropsWithChildren) => {
           browserInformation,
           PSATVersion,
           OSInformation,
-          isUsingCDP,
+          isObservabilityEnabled,
           settingsChanged,
-          isUsingCDPForSettingsPageDisplay,
+          isObservabilityForSettingsPageDisplay,
           exceedingLimitations,
           observabilityEnabled,
         },
         actions: {
           handleObservabilityEnabled,
-          setIsUsingCDP: _setUsingCDP,
+          setIsObservability: _setIsobservability,
           handleSettingsChange,
           setSettingsChanged,
           setExceedingLimitations,
-          setIsUsingCDPForSettingsPageDisplay,
+          setIsObservabilityForSettingsPageDisplay,
           openIncognitoTab,
         },
       }}

@@ -38,7 +38,6 @@ import {
   SERVICE_WORKER_RELOAD_MESSAGE,
   TABID_STORAGE,
 } from '../../../../constants';
-import { useSettings } from '../settings';
 import { getTab } from '../../../../utils/getTab';
 import getFramesForCurrentTab from '../../../../utils/getFramesForCurrentTab';
 import Context, { type CookieStoreContext } from './context';
@@ -68,10 +67,6 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [tabFrames, setTabFrames] =
     useState<CookieStoreContext['state']['tabFrames']>(null);
 
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
   /**
    * Set tab frames state for frame ids and frame URLs from using chrome.webNavigation.getAllFrames
    */
@@ -88,8 +83,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           prevState,
           currentTabFrames,
           currentTargets,
-          extraFrameData ?? {},
-          isUsingCDP
+          extraFrameData ?? {}
         );
 
         if (isEqual(prevState ?? {}, updatedTabFrames)) {
@@ -99,7 +93,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         return updatedTabFrames;
       });
     },
-    [isUsingCDP]
+    []
   );
 
   /**

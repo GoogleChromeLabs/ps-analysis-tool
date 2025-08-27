@@ -37,13 +37,14 @@ interface settingsToReturnObject {
 }
 const SettingsContainer = () => {
   const {
-    isUsingCDP,
-    setIsUsingCDP,
+    isObservabilityForSettingsPageDisplay,
+    setIsObservability,
     observabilityEnabled,
     handleObservabilityEnabled,
   } = useSettings(({ state, actions }) => ({
-    isUsingCDP: state.isUsingCDPForSettingsPageDisplay,
-    setIsUsingCDP: actions.setIsUsingCDP,
+    isObservabilityForSettingsPageDisplay:
+      state.isObservabilityForSettingsPageDisplay,
+    setIsObservability: actions.setIsObservability,
     observabilityEnabled: state.observabilityEnabled,
     handleObservabilityEnabled: actions.handleObservabilityEnabled,
   }));
@@ -57,8 +58,8 @@ const SettingsContainer = () => {
           settingsToReturn.push({
             ...setting,
             heading: setting.heading(),
-            changeSwitchState: setIsUsingCDP,
-            switchState: isUsingCDP,
+            changeSwitchState: setIsObservability,
+            switchState: isObservabilityForSettingsPageDisplay,
           });
           break;
         default:
@@ -68,7 +69,7 @@ const SettingsContainer = () => {
     });
 
     return settingsToReturn;
-  }, [isUsingCDP, setIsUsingCDP]);
+  }, [isObservabilityForSettingsPageDisplay, setIsObservability]);
 
   return (
     <div data-testid="Settings">

@@ -17,13 +17,12 @@
 /**
  * External dependencies.
  */
-import React, { useCallback } from 'react';
-import { useSidebar, SIDEBAR_ITEMS_KEYS } from '@google-psat/design-system';
+import React from 'react';
 
 /**
  * Internal dependencies.
  */
-import { useProtectedAudience, useSettings } from '../../../../stateProviders';
+import { useProtectedAudience } from '../../../../stateProviders';
 import IGTable from './table';
 import EvaluationEnvironment from '../evaluationEnvironment';
 
@@ -31,37 +30,6 @@ const InterestGroups = () => {
   const { interestGroupDetails } = useProtectedAudience(({ state }) => ({
     interestGroupDetails: state.interestGroupDetails,
   }));
-
-  const { isUsingCDP } = useSettings(({ state }) => ({
-    isUsingCDP: state.isUsingCDP,
-  }));
-
-  const { updateSelectedItemKey } = useSidebar(({ actions }) => ({
-    updateSelectedItemKey: actions.updateSelectedItemKey,
-  }));
-
-  const cdpNavigation = useCallback(() => {
-    document.getElementById('cookies-landing-scroll-container')?.scrollTo(0, 0);
-    updateSelectedItemKey(SIDEBAR_ITEMS_KEYS.SETTINGS);
-  }, [updateSelectedItemKey]);
-
-  if (!isUsingCDP) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-sm text-raisin-black dark:text-bright-gray">
-          To view interest group events, enable PSAT to use CDP via the{' '}
-          <button
-            className="text-bright-navy-blue dark:text-jordy-blue"
-            onClick={cdpNavigation}
-          >
-            Settings Page
-          </button>
-          .
-        </p>
-      </div>
-    );
-  }
-
   if (!interestGroupDetails || interestGroupDetails.length === 0) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center">
