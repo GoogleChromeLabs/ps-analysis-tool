@@ -45,6 +45,7 @@ export interface SettingsStoreContext {
       React.SetStateAction<boolean>
     >;
     openIncognitoTab: () => Promise<void>;
+    reloadExtension: () => void;
   };
 }
 
@@ -68,6 +69,7 @@ const initialState: SettingsStoreContext = {
     setExceedingLimitations: noop,
     setIsUsingCDPForSettingsPageDisplay: noop,
     openIncognitoTab: () => Promise.resolve(),
+    reloadExtension: noop,
   },
 };
 
