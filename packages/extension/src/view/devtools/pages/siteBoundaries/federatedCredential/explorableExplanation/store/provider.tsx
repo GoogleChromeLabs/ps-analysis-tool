@@ -35,6 +35,8 @@ const Provider = ({ children }: PropsWithChildren) => {
     ScenarioKeys.REGISTRATION
   );
   const [currentStep, setCurrentStep] = useState(-1);
+  const [interactiveModeLoadedScenarios, setInteractiveModeLoadedScenarios] =
+    useState<Set<string>>(new Set());
 
   const setIsPlaying = useCallback(
     (isPlaying: boolean) => {
@@ -63,7 +65,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const reset = useCallback(() => {
     canvas?.reset();
-  }, [canvas]);
+    setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
+    setCurrentStep(-1);
+    setIsPlaying(false);
+  }, [canvas, setIsPlaying]);
 
   const setInteractiveMode = useCallback(
     (_interactiveMode: boolean) => {
@@ -80,21 +85,38 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   const loadScenarioForInteractiveMode = useCallback(
-    (id: string, shouldRedraw: boolean) => {
+    (id: string, scenarioKey: ScenarioKeys, shouldRedraw: boolean) => {
+      if (!canvas?.isPaused()) {
+        return;
+      }
+
       if (shouldRedraw) {
         canvas?.reDrawAll();
       }
 
       canvas?.loadCheckpointToHelper(id);
+
+      setInteractiveModeLoadedScenarios((prev) => {
+        const newSet = new Set(prev);
+        newSet.add(scenarioKey);
+        return newSet;
+      });
+
+      setCurrentScenarioKey(scenarioKey);
+      setCurrentStep(-1);
+
+      if (interactiveModeLoadedScenarios.has(scenarioKey)) {
+        canvas?.loadAnimatorPartAndDraw(scenarioKey);
+      }
     },
-    [canvas]
+    [canvas, interactiveModeLoadedScenarios]
   );
 
-  const revisitScenarioForInteractiveMode = useCallback(
-    (id: string) => {
-      canvas?.loadSnapshotAndReDraw(id);
+  const hasLoadedForInteractiveMode = useCallback(
+    (scenarioKey: ScenarioKeys) => {
+      return interactiveModeLoadedScenarios.has(scenarioKey);
     },
-    [canvas]
+    [interactiveModeLoadedScenarios]
   );
 
   return (
@@ -116,7 +138,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           setSpeed,
           setInteractiveMode,
           loadScenarioForInteractiveMode,
-          revisitScenarioForInteractiveMode,
+          hasLoadedForInteractiveMode,
           setCurrentScenarioKey,
           setCurrentStep,
         },

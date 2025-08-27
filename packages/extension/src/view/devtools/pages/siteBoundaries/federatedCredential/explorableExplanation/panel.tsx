@@ -49,7 +49,6 @@ const Panel = ({
 
   const {
     interactiveMode,
-    revisitScenarioForInteractiveMode,
     currentStep,
     currentScenarioKey,
     setCurrentScenarioKey,
@@ -59,8 +58,6 @@ const Panel = ({
       interactiveMode: state.interactiveMode,
       currentScenarioKey: state.currentScenarioKey,
       currentStep: state.currentStep,
-      revisitScenarioForInteractiveMode:
-        actions.revisitScenarioForInteractiveMode,
       setCurrentScenarioKey: actions.setCurrentScenarioKey,
       setCurrentStep: actions.setCurrentStep,
     };
@@ -111,12 +108,7 @@ const Panel = ({
       document.removeEventListener('ee:dispatchId', listener);
       document.removeEventListener('ee:animatorDraw', animatorListener);
     };
-  }, [
-    interactiveMode,
-    revisitScenarioForInteractiveMode,
-    setCurrentScenarioKey,
-    setCurrentStep,
-  ]);
+  }, [interactiveMode, setCurrentScenarioKey, setCurrentStep]);
 
   return (
     <div className="flex flex-col h-full">

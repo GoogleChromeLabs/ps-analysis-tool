@@ -41,8 +41,12 @@ export interface StoreContext {
     prevStep: () => void;
     setSpeed: (speed: number) => void;
     setInteractiveMode: (interactiveMode: boolean) => void;
-    loadScenarioForInteractiveMode: (id: string, shouldRedraw: boolean) => void;
-    revisitScenarioForInteractiveMode: (id: string) => void;
+    loadScenarioForInteractiveMode: (
+      id: string,
+      scenarioKey: ScenarioKeys,
+      shouldRedraw: boolean
+    ) => void;
+    hasLoadedForInteractiveMode: (scenarioKey: ScenarioKeys) => boolean;
     setCurrentScenarioKey: (key: ScenarioKeys) => void;
     setCurrentStep: (step: number) => void;
   };
@@ -65,7 +69,7 @@ const initialState: StoreContext = {
     setSpeed: noop,
     setInteractiveMode: noop,
     loadScenarioForInteractiveMode: noop,
-    revisitScenarioForInteractiveMode: noop,
+    hasLoadedForInteractiveMode: () => false,
     setCurrentScenarioKey: noop,
     setCurrentStep: noop,
   },

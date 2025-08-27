@@ -17,6 +17,7 @@
  * External dependencies.
  */
 import { Fragment } from 'react/jsx-runtime';
+import { Tick } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -40,12 +41,15 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
 
   const scenarioKeys = Object.values(ScenarioKeys);
 
-  const { interactiveMode, loadScenarioForInteractiveMode } = useStore(
-    ({ state, actions }) => ({
-      interactiveMode: state.interactiveMode,
-      loadScenarioForInteractiveMode: actions.loadScenarioForInteractiveMode,
-    })
-  );
+  const {
+    interactiveMode,
+    loadScenarioForInteractiveMode,
+    hasLoadedForInteractiveMode,
+  } = useStore(({ state, actions }) => ({
+    interactiveMode: state.interactiveMode,
+    loadScenarioForInteractiveMode: actions.loadScenarioForInteractiveMode,
+    hasLoadedForInteractiveMode: actions.hasLoadedForInteractiveMode,
+  }));
 
   return (
     <div className="journey-timeline flex items-center justify-between px-5 min-h-[80px]">
@@ -54,11 +58,12 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
           index === Object.values(ScenarioKeys).indexOf(currentScenarioKey);
         const isCompleted =
           index < Object.values(ScenarioKeys).indexOf(currentScenarioKey);
+
         return (
           <Fragment key={title}>
             <div
               className={[
-                'timeline-node font-medium text-center relative min-w-[120px] transition-all duration-300 cursor-pointer text-sm px-[15px] py-[10px] rounded text-raisin-black',
+                'timeline-node font-medium text-center relative min-w-[120px] transition-all duration-300 cursor-pointer text-sm px-[15px] py-[10px] rounded text-raisin-black flex items-center justify-center gap-2',
                 isActive
                   ? 'active bg-bright-navy-blue text-white shadow-[0_2px_5px_rgba(0,0,0,0.2)]'
                   : isCompleted
@@ -71,12 +76,17 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
                   const checkpoint = scenarioKeys[index] + '-0';
                   loadScenarioForInteractiveMode(
                     checkpoint,
+                    scenarioKeys[index],
                     Boolean(currentScenarioKey !== scenarioKeys[index])
                   );
                 }
               }}
             >
-              {index + 1}. {title}
+              {index + 1}. {title}{' '}
+              <span>
+                {interactiveMode &&
+                  hasLoadedForInteractiveMode(scenarioKeys[index]) && <Tick />}
+              </span>
             </div>
             {index < titles.length - 1 && (
               <div className="timeline-connector flex-grow h-[2px] bg-[#e0e0e0]"></div>
