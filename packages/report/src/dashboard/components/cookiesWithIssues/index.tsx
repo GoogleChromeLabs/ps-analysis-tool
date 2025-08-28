@@ -88,10 +88,7 @@ const CookiesWithIssues = ({
           hostname={hostName}
         />
       </ResizableTray>
-      <CookieDetails
-        selectedFrameCookie={selectedFrameCookie}
-        isUsingCDP={true}
-      />
+      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
     </div>
   );
 };

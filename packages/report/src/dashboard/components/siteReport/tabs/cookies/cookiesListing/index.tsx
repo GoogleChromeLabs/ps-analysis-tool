@@ -106,10 +106,7 @@ const CookiesListing = ({
           hostname={path}
         />
       </ResizableTray>
-      <CookieDetails
-        isUsingCDP={true}
-        selectedFrameCookie={selectedFrameCookie}
-      />
+      <CookieDetails selectedFrameCookie={selectedFrameCookie} />
     </div>
   );
 };
