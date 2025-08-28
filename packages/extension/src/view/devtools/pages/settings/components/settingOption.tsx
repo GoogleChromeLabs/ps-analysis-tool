@@ -24,6 +24,7 @@ interface SettingOptionProps {
   switchState: boolean;
   changeSwitchState: (newState: boolean) => void;
   customAction?: () => React.ReactNode;
+  extraOptions?: React.ReactNode;
 }
 
 const SettingOption = ({
@@ -31,19 +32,26 @@ const SettingOption = ({
   switchState,
   changeSwitchState,
   customAction,
+  extraOptions = <></>,
 }: SettingOptionProps) => {
   return (
-    <div className="flex flex-row items-center justify-between">
-      <div className="flex flex-col w-11/12 mx-2 gap-y-1 py-4">
-        <div className="text-sm dark:text-bright-gray">{title}</div>
+    <div className="flex flex-col">
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-col w-11/12 mx-2 gap-y-1 py-4">
+          <div className="text-sm dark:text-bright-gray">{title}</div>
+        </div>
+        <div className="flex w-1/12">
+          {customAction ? (
+            customAction()
+          ) : (
+            <ToggleSwitch
+              enabled={switchState}
+              setEnabled={changeSwitchState}
+            />
+          )}
+        </div>
       </div>
-      <div className="flex w-1/12">
-        {customAction ? (
-          customAction()
-        ) : (
-          <ToggleSwitch enabled={switchState} setEnabled={changeSwitchState} />
-        )}
-      </div>
+      <div className="w-11/12">{extraOptions}</div>
     </div>
   );
 };

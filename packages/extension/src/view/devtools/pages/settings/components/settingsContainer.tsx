@@ -18,6 +18,8 @@
  */
 import React, { useMemo } from 'react';
 import { I18n } from '@google-psat/i18n';
+import { RefreshButton } from '@google-psat/design-system';
+import { noop } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -28,8 +30,7 @@ import { useSettings } from '../../../stateProviders';
 // eslint-disable-next-line import/no-relative-packages
 import Gear from '../../../../../../../../assets/icons/gear.svg?react';
 import { SETTING_PAGE_CONTROLS } from '../../../../../constants';
-import { RefreshButton } from '@google-psat/design-system';
-import { noop } from '@google-psat/common';
+import ExtraOptions from './extraOptions';
 
 interface settingsToReturnObject {
   id: string;
@@ -109,23 +110,33 @@ const SettingsContainer = () => {
               switchState={setting?.switchState ?? false}
               changeSwitchState={setting?.changeSwitchState ?? noop}
               customAction={setting.customAction}
+              extraOptions={
+                setting.id === 'enableObservability' ? (
+                  <ExtraOptions
+                    node={() => (
+                      <>
+                        {Object.keys(observabilityEnabledForDisplay)
+                          .sort()
+                          .map((key) => (
+                            <SettingOption
+                              key={key}
+                              title={key}
+                              switchState={observabilityEnabledForDisplay[key]}
+                              changeSwitchState={(newState) => {
+                                handleObservabilityEnabled(key, newState);
+                              }}
+                            />
+                          ))}
+                      </>
+                    )}
+                  />
+                ) : (
+                  <></>
+                )
+              }
             />
           );
         })}
-        <div className="px-3">
-          {Object.keys(observabilityEnabledForDisplay)
-            .sort()
-            .map((key) => (
-              <SettingOption
-                key={key}
-                title={key}
-                switchState={observabilityEnabledForDisplay[key]}
-                changeSwitchState={(newState) => {
-                  handleObservabilityEnabled(key, newState);
-                }}
-              />
-            ))}
-        </div>
       </div>
     </div>
   );
