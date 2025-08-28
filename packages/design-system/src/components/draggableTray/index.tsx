@@ -36,6 +36,7 @@ interface DraggableTrayProps {
   initialCollapsed?: boolean;
   trayId?: string;
   defaultHeight?: string;
+  disableResize?: boolean;
 }
 
 const DraggableTray = forwardRef<
@@ -49,6 +50,7 @@ const DraggableTray = forwardRef<
     initialCollapsed = false,
     trayId,
     defaultHeight = '30%',
+    disableResize = false,
   }: DraggableTrayProps,
   ref
 ) {
@@ -98,7 +100,7 @@ const DraggableTray = forwardRef<
       minHeight="30px"
       maxHeight="95%"
       enable={{
-        top: !isCollapsed,
+        top: !disableResize && !isCollapsed,
       }}
     >
       <div className="w-full h-full flex flex-col">

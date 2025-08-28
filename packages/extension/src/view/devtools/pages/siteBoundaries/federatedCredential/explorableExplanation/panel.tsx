@@ -133,6 +133,7 @@ const Panel = ({
         ref={draggableTrayRef}
         trayId="explorableExplanationFedcm"
         defaultHeight="170px"
+        disableResize
       />
     </div>
   );

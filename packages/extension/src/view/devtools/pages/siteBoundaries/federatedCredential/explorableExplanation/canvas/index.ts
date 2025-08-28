@@ -35,7 +35,7 @@ export const initializeCanvas = (
       componentFigureFactory.line({
         x: 100,
         y: 50,
-        endYwith: 1200,
+        endYwith: 1400,
         stroke: '#999',
       }),
       componentFigureFactory.box({
@@ -69,7 +69,7 @@ export const initializeCanvas = (
       componentFigureFactory.line({
         x: 300,
         y: 50,
-        endYwith: 1200,
+        endYwith: 1400,
         stroke: '#999',
       }),
       componentFigureFactory.box({
@@ -103,7 +103,7 @@ export const initializeCanvas = (
       componentFigureFactory.line({
         x: 500,
         y: 50,
-        endYwith: 1200,
+        endYwith: 1400,
         stroke: '#999',
       }),
       componentFigureFactory.box({
@@ -137,7 +137,7 @@ export const initializeCanvas = (
       componentFigureFactory.line({
         x: 700,
         y: 50,
-        endYwith: 1200,
+        endYwith: 1400,
         stroke: '#999',
       }),
       componentFigureFactory.box({
@@ -183,7 +183,7 @@ export const initializeCanvas = (
     const sideEffect = () => {
       if (_currentYToDraw + 250 > parentContainer.clientHeight) {
         parentContainer.scrollTo({
-          top: _currentYToDraw - parentContainer.clientHeight + 150,
+          top: _currentYToDraw - parentContainer.clientHeight + 250,
           behavior: 'smooth',
         });
       }

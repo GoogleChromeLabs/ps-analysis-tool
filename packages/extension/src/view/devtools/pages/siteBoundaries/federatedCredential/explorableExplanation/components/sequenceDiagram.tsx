@@ -59,7 +59,7 @@ const SequenceDiagram = () => {
       <div
         id="message-container"
         ref={messageContainerRef}
-        className="w-[800px] h-[1200px]"
+        className="w-[800px] h-[1400px]"
       />
     </div>
   );
