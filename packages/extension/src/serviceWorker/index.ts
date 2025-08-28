@@ -166,7 +166,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
       }
 
-      if (method === 'Storage.interestGroupAuctionEventOccurred' && params) {
+      if (
+        method === 'Storage.interestGroupAuctionEventOccurred' &&
+        params &&
+        DataStore.observabilityPartsStatus.protectedAudience
+      ) {
         const interestGroupAuctionEventOccured =
           params as Protocol.Storage.InterestGroupAuctionEventOccurredEvent;
 
@@ -191,7 +195,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (
         method === 'Storage.interestGroupAccessed' &&
         params &&
-        source.tabId
+        source.tabId &&
+        DataStore.observabilityPartsStatus.protectedAudience
       ) {
         const interestGroupAccessedParams =
           params as Protocol.Storage.InterestGroupAccessedEvent;
@@ -201,7 +206,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
       if (
         method === 'Storage.interestGroupAuctionNetworkRequestCreated' &&
-        params
+        params &&
+        DataStore.observabilityPartsStatus.protectedAudience
       ) {
         const interestGroupAuctionNetworkRequestCreatedParams =
           params as Protocol.Storage.InterestGroupAuctionNetworkRequestCreatedEvent;
@@ -272,7 +278,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        if (PAStore.unParsedRequestHeadersForPA[tabId][requestId]) {
+        if (
+          PAStore.unParsedRequestHeadersForPA[tabId][requestId] &&
+          DataStore.observabilityPartsStatus.protectedAudience
+        ) {
           const { auctions, type } =
             PAStore.unParsedRequestHeadersForPA[tabId][requestId];
 
@@ -280,32 +289,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
         //@todo When cookie analysis is decoupled move this to a separate function.
         if (
-          DataStore.tabs[tabId]?.isCookieAnalysisEnabled &&
-          cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
+          cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId] &&
+          DataStore.observabilityPartsStatus.cookies
         ) {
-          if (
-            extractHeader(
-              'Attribution-Reporting-Eligible',
-              cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
-                .headers ?? {}
-            )
-          ) {
-            if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
-              readHeaderAndRegister(
-                ARAStore.headersForARA?.[tabId]?.[requestId].headers,
-                requestUrl,
-                tabId
-              );
-            } else {
-              ARAStore.headersForARA[tabId] = {
-                ...ARAStore.headersForARA[tabId],
-                [requestId]: {
-                  headers: {},
-                  url: requestUrl,
-                },
-              };
-            }
-          }
           cookieStore.parseRequestHeadersForCA(
             cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
             requestId,
@@ -313,10 +299,39 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             Array.from(new Set([finalFrameId, frameId]))
           );
         }
+
+        if (
+          DataStore.observabilityPartsStatus.attributionReporting &&
+          extractHeader(
+            'Attribution-Reporting-Eligible',
+            cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
+              .headers ?? {}
+          )
+        ) {
+          if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
+            readHeaderAndRegister(
+              ARAStore.headersForARA?.[tabId]?.[requestId].headers,
+              requestUrl,
+              tabId
+            );
+          } else {
+            ARAStore.headersForARA[tabId] = {
+              ...ARAStore.headersForARA[tabId],
+              [requestId]: {
+                headers: {},
+                url: requestUrl,
+              },
+            };
+          }
+        }
         return;
       }
 
-      if (method === 'Network.loadingFinished' && params) {
+      if (
+        method === 'Network.loadingFinished' &&
+        params &&
+        DataStore.observabilityPartsStatus.protectedAudience
+      ) {
         const loadingFinishedParams =
           params as Protocol.Network.LoadingFinishedEvent;
 
@@ -334,7 +349,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
       }
 
-      if (method === 'Network.loadingFailed' && params) {
+      if (
+        method === 'Network.loadingFailed' &&
+        params &&
+        DataStore.observabilityPartsStatus.protectedAudience
+      ) {
         const loadingFailedParams =
           params as Protocol.Network.LoadingFinishedEvent;
 
@@ -352,11 +371,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         );
       }
 
-      if (method === 'Network.requestWillBeSentExtraInfo') {
+      if (method === 'Network.requestWillBeSentExtraInfo' && params) {
         const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
 
-        if (extractHeader('Sec-Probabilistic-Reveal-Token', headers)) {
+        if (
+          DataStore.observabilityPartsStatus.ipProtection &&
+          extractHeader('Sec-Probabilistic-Reveal-Token', headers)
+        ) {
           const prtHeader = extractHeader(
             'Sec-Probabilistic-Reveal-Token',
             headers
@@ -418,8 +440,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
         }
 
-        if (DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
-          if (extractHeader('Attribution-Reporting-Eligible', headers)) {
+        if (
+          DataStore.observabilityPartsStatus.cookies &&
+          DataStore.observabilityPartsStatus.attributionReporting &&
+          DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
+        ) {
+          if (
+            DataStore.observabilityPartsStatus.attributionReporting &&
+            extractHeader('Attribution-Reporting-Eligible', headers)
+          ) {
             const constructedURL =
               DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url ??
               createURL(headers);
@@ -437,19 +466,25 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             }
           }
 
-          cookieStore.parseRequestHeadersForCA(
-            params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
-            requestId,
-            tabId,
-            Array.from(
-              new Set([
-                DataStore.requestIdToCDPURLMapping[tabId][requestId]
-                  ?.finalFrameId,
-                DataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
-              ])
-            )
-          );
-        } else {
+          if (DataStore.observabilityPartsStatus.cookies) {
+            cookieStore.parseRequestHeadersForCA(
+              params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
+              requestId,
+              tabId,
+              Array.from(
+                new Set([
+                  DataStore.requestIdToCDPURLMapping[tabId][requestId]
+                    ?.finalFrameId,
+                  DataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+                ])
+              )
+            );
+          }
+        } else if (
+          DataStore.observabilityPartsStatus.cookies &&
+          DataStore.observabilityPartsStatus.attributionReporting &&
+          !DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
+        ) {
           cookieStore.setUnParsedRequestHeadersForCA(
             tabId,
             requestId,
@@ -473,8 +508,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         let finalFrameId = frameId;
 
         if (
-          extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
-          extractHeader('Attribution-Reporting-Register-Source', headers)
+          DataStore.observabilityPartsStatus.attributionReporting &&
+          (extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
+            extractHeader('Attribution-Reporting-Register-Source', headers))
         ) {
           readHeaderAndRegister(headers, requestUrl, tabId);
         }
@@ -521,7 +557,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         dataStore.updateUniqueResponseDomains(tabId, requestId);
 
-        if (cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]) {
+        if (
+          DataStore.observabilityPartsStatus.cookies &&
+          cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]
+        ) {
           cookieStore.parseResponseHeadersForCA(
             cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId],
             requestId,
@@ -530,7 +569,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           );
         }
 
-        if (cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]) {
+        if (
+          DataStore.observabilityPartsStatus.cookies &&
+          cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
+        ) {
           cookieStore.parseRequestHeadersForCA(
             cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
             requestId,
@@ -547,8 +589,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           params as Protocol.Network.ResponseReceivedExtraInfoEvent;
 
         if (
-          extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
-          extractHeader('Attribution-Reporting-Register-Source', headers)
+          DataStore.observabilityPartsStatus.ipProtection &&
+          (extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
+            extractHeader('Attribution-Reporting-Register-Source', headers))
         ) {
           //sometimes this fires early and we still havent calculated tabId for this.
           tabId = calculateTabId(source);
@@ -571,11 +614,14 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
 
         // Sometimes CDP gives "set-cookie" and sometimes it gives "Set-Cookie".
-        if (!headers['set-cookie'] && !headers['Set-Cookie']) {
+        if (!extractHeader('Set-Cookie', headers)) {
           return;
         }
 
-        if (DataStore.requestIdToCDPURLMapping[tabId][requestId]) {
+        if (
+          DataStore.observabilityPartsStatus.cookies &&
+          DataStore.requestIdToCDPURLMapping[tabId][requestId]
+        ) {
           const frameIds = Array.from(
             new Set([
               DataStore.requestIdToCDPURLMapping[tabId][requestId]
@@ -599,7 +645,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               frameIds
             );
           }
-        } else {
+        } else if (
+          DataStore.observabilityPartsStatus.cookies &&
+          !DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
+        ) {
           cookieStore.setUnParsedResponseHeadersForCA(
             tabId,
             requestId,
@@ -609,7 +658,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
-      if (method === 'Audits.issueAdded' && params) {
+      if (
+        DataStore.observabilityPartsStatus.cookies &&
+        method === 'Audits.issueAdded' &&
+        params
+      ) {
         const auditParams = params as Protocol.Audits.IssueAddedEvent;
         const {
           code,
@@ -650,7 +703,11 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         return;
       }
 
-      if (method === 'Storage.attributionReportingSourceRegistered' && params) {
+      if (
+        DataStore.observabilityPartsStatus.attributionReporting &&
+        method === 'Storage.attributionReportingSourceRegistered' &&
+        params
+      ) {
         const { registration, result } =
           params as Protocol.Storage.AttributionReportingSourceRegisteredEvent;
         ARAStore.sources.sourceRegistration =
@@ -688,6 +745,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       }
 
       if (
+        DataStore.observabilityPartsStatus.attributionReporting &&
         method === 'Storage.attributionReportingTriggerRegistered' &&
         params
       ) {

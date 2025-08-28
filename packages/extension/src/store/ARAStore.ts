@@ -128,6 +128,10 @@ class ARAStore extends DataStore {
       return;
     }
 
+    if (!DataStore.observabilityPartsStatus.attributionReporting) {
+      return;
+    }
+
     try {
       if (
         DataStore.tabs[tabId].devToolsOpenState ||

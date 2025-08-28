@@ -356,6 +356,10 @@ class CookieStore extends DataStore {
       return;
     }
 
+    if (!DataStore.observabilityPartsStatus.cookies) {
+      return;
+    }
+
     try {
       if (
         DataStore.tabs[tabId].devToolsOpenState ||

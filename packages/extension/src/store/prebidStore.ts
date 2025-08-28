@@ -145,6 +145,10 @@ class PrebidStore extends DataStore {
       return;
     }
 
+    if (!DataStore.observabilityPartsStatus.protectedAudience) {
+      return;
+    }
+
     try {
       if (
         DataStore.tabs[tabId].devToolsOpenState ||

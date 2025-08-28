@@ -25,6 +25,9 @@ import PRTStore from '../../../store/PRTStore';
 import attachCDP from '../../attachCDP';
 
 const updateGlobalVariableAndAttachCDP = async () => {
+  if (DataStore.isObservabilityEnabled) {
+    return;
+  }
   await chrome.storage.local.clear();
 
   const preSetSettings = await chrome.storage.sync.get();

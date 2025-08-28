@@ -26,7 +26,7 @@ import cookieStore from '../store/cookieStore';
 import parseNetworkCookies from './parseNetworkCookies';
 
 export const getAndParseNetworkCookies = async (tabId: string) => {
-  if (!DataStore.globalIsUsingCDP) {
+  if (!DataStore.observabilityPartsStatus.cookies) {
     return;
   }
 

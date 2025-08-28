@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { DataStore } from '../store/dataStore';
+
 /**
  * This function will attach the debugger to the given target.
  * @param {{ [key: string]: number | string }} target The target where debugger needs to be attached.
@@ -28,53 +31,63 @@ export default async function attachCDP(target: {
   }
 
   try {
-    await chrome.debugger.sendCommand(
-      target,
-      'Storage.setInterestGroupAuctionTracking',
-      { enable: true }
-    );
+    if (DataStore.observabilityPartsStatus.protectedAudience) {
+      await chrome.debugger.sendCommand(
+        target,
+        'Storage.setInterestGroupAuctionTracking',
+        { enable: true }
+      );
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn('extensionSourceCodeError', error);
   }
   try {
-    await chrome.debugger.sendCommand(target, 'Audits.enable');
+    if (DataStore.observabilityPartsStatus.cookies) {
+      await chrome.debugger.sendCommand(target, 'Audits.enable');
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn('extensionSourceCodeError', error);
   }
   try {
-    await chrome.debugger.sendCommand(
-      target,
-      'Storage.setInterestGroupTracking',
-      {
-        enable: true,
-      }
-    );
+    if (DataStore.observabilityPartsStatus.protectedAudience) {
+      await chrome.debugger.sendCommand(
+        target,
+        'Storage.setInterestGroupTracking',
+        {
+          enable: true,
+        }
+      );
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn('extensionSourceCodeError', error);
   }
   try {
-    await chrome.debugger.sendCommand(
-      target,
-      'Storage.setAttributionReportingTracking',
-      {
-        enable: true,
-      }
-    );
+    if (DataStore.observabilityPartsStatus.attributionReporting) {
+      await chrome.debugger.sendCommand(
+        target,
+        'Storage.setAttributionReportingTracking',
+        {
+          enable: true,
+        }
+      );
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn('extensionSourceCodeError', error);
   }
   try {
-    await chrome.debugger.sendCommand(
-      target,
-      'Storage.setAttributionReportingLocalTestingMode',
-      {
-        enabled: true,
-      }
-    );
+    if (DataStore.observabilityPartsStatus.attributionReporting) {
+      await chrome.debugger.sendCommand(
+        target,
+        'Storage.setAttributionReportingLocalTestingMode',
+        {
+          enabled: true,
+        }
+      );
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn('extensionSourceCodeError', error);

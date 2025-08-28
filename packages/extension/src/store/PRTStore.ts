@@ -111,7 +111,15 @@ class PRTStore extends DataStore {
     overrideForInitialSync: boolean
   ) {
     try {
-      if (DataStore.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
+      if (!DataStore.tabs[tabId]) {
+        return;
+      }
+
+      if (!DataStore.observabilityPartsStatus.ipProtection) {
+        return;
+      }
+
+      if (DataStore.tabs[tabId].newUpdatesPRT <= 0 && !overrideForInitialSync) {
         return;
       }
 
