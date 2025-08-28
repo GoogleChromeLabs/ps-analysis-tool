@@ -29,10 +29,15 @@ import {
 import Panel from './panel';
 import MDLTable from './mdlTable';
 import ProbabilisticRevealTokens from './probabilisticRevealTokens';
+import { useSettings } from '../../../stateProviders';
 
 const IPProtection = () => {
-  const tabItems = useMemo<TabItems>(
-    () => ({
+  const { observabilityEnabled } = useSettings(({ state }) => ({
+    observabilityEnabled: state.observabilityEnabled,
+  }));
+
+  const tabItems = useMemo<TabItems>(() => {
+    const baseItems: TabItems = {
       Learning: [
         {
           title: 'Overview',
@@ -56,7 +61,10 @@ const IPProtection = () => {
           },
         },
       ],
-      Observability: [
+    };
+
+    if (observabilityEnabled.protectedAudience) {
+      baseItems['Observability'] = [
         {
           title: 'Probabilistic Reveal Tokens',
           content: {
@@ -65,10 +73,11 @@ const IPProtection = () => {
             containerClassName: 'h-full',
           },
         },
-      ],
-    }),
-    []
-  );
+      ];
+    }
+
+    return baseItems;
+  }, [observabilityEnabled.protectedAudience]);
 
   return (
     <TabsProvider items={tabItems} name="ipProtection">

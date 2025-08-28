@@ -31,10 +31,15 @@ import Panel from './panel';
 import ActiveSources from './activeSources';
 import SourceRegistrations from './sourceRegistrations';
 import TriggerRegistrations from './triggerRegistrations';
+import { useSettings } from '../../../stateProviders';
 
 const AttributionReporting = () => {
-  const tabItems = useMemo<TabItems>(
-    () => ({
+  const { observabilityEnabled } = useSettings(({ state }) => ({
+    observabilityEnabled: state.observabilityEnabled,
+  }));
+
+  const tabItems = useMemo<TabItems>(() => {
+    const baseItems: TabItems = {
       Learning: [
         {
           title: 'Overview',
@@ -49,12 +54,16 @@ const AttributionReporting = () => {
           },
         },
       ],
-      Observability: [
+    };
+
+    if (observabilityEnabled.attributionReporting) {
+      baseItems['Observability'] = [
         {
           title: 'Active Sources',
           content: {
             Element: ActiveSources,
-            className: 'overflow-hidden h-full',
+            props: {},
+            className: 'overflow-auto h-full',
             containerClassName: 'h-full',
           },
         },
@@ -62,7 +71,8 @@ const AttributionReporting = () => {
           title: 'Source Registrations',
           content: {
             Element: SourceRegistrations,
-            className: 'overflow-hidden h-full',
+            props: {},
+            className: 'overflow-auto h-full',
             containerClassName: 'h-full',
           },
         },
@@ -70,14 +80,16 @@ const AttributionReporting = () => {
           title: 'Trigger Registrations',
           content: {
             Element: TriggerRegistrations,
-            className: 'overflow-hidden h-full',
+            props: {},
+            className: 'overflow-auto h-full',
             containerClassName: 'h-full',
           },
         },
-      ],
-    }),
-    []
-  );
+      ];
+    }
+
+    return baseItems;
+  }, [observabilityEnabled.attributionReporting]);
 
   return (
     <TabsProvider items={tabItems} name="attribution-reporting">

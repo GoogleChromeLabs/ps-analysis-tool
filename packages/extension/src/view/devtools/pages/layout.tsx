@@ -78,9 +78,9 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     settingsChanged,
     handleSettingsChange,
     exceedingLimitations,
-    isUsingCDPForSettingsPageDisplay,
+    isObservabilityForSettingsPageDisplay,
     setSettingsChanged,
-    setIsUsingCDPForSettingsPageDisplay,
+    setIsObservabilityForSettingsPageDisplay,
     incognitoAccess,
     openIncognitoTab,
   } = useSettings(({ state, actions }) => ({
@@ -88,9 +88,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     handleSettingsChange: actions.handleSettingsChange,
     exceedingLimitations: state.exceedingLimitations,
     setSettingsChanged: actions.setSettingsChanged,
-    setIsUsingCDPForSettingsPageDisplay:
-      actions.setIsUsingCDPForSettingsPageDisplay,
-    isUsingCDPForSettingsPageDisplay: state.isUsingCDPForSettingsPageDisplay,
+    setIsObservabilityForSettingsPageDisplay:
+      actions.setIsObservabilityForSettingsPageDisplay,
+    isObservabilityForSettingsPageDisplay:
+      state.isObservabilityForSettingsPageDisplay,
     incognitoAccess: state.incognitoAccess,
     openIncognitoTab: actions.openIncognitoTab,
   }));
@@ -292,20 +293,20 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
               'pendingReload',
             ]);
             setSettingsChanged(false);
-            setIsUsingCDPForSettingsPageDisplay(true);
+            setIsObservabilityForSettingsPageDisplay(true);
           }}
         />
       </div>
     );
   }, [
     handleSettingsChange,
-    setIsUsingCDPForSettingsPageDisplay,
+    setIsObservabilityForSettingsPageDisplay,
     setSettingsChanged,
   ]);
 
-  const isUsingCDPCondition = useMemo(
-    () => isUsingCDPForSettingsPageDisplay,
-    [isUsingCDPForSettingsPageDisplay]
+  const isObservabilityCondition = useMemo(
+    () => isObservabilityForSettingsPageDisplay,
+    [isObservabilityForSettingsPageDisplay]
   );
 
   const settingsReadActionComponent = useMemo(() => {
@@ -336,7 +337,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
               'pendingReload',
             ]);
             setSettingsChanged(false);
-            setIsUsingCDPForSettingsPageDisplay(false);
+            setIsObservabilityForSettingsPageDisplay(false);
           }}
         />
       </div>
@@ -345,14 +346,14 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
     exceedingLimitations,
     handleSettingsChange,
     setSettingsChanged,
-    setIsUsingCDPForSettingsPageDisplay,
+    setIsObservabilityForSettingsPageDisplay,
   ]);
 
   const formedToastMessage = useMemo(() => {
     let message = '';
 
     if (settingsChanged) {
-      if (isUsingCDPCondition) {
+      if (isObservabilityCondition) {
         message = exceedingLimitations
           ? CDP_WARNING_MESSAGE
           : RELOAD_WARNING_MESSAGE;
@@ -380,7 +381,7 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
   }, [
     buttonReloadActionCompnent,
     exceedingLimitations,
-    isUsingCDPCondition,
+    isObservabilityCondition,
     settingsChanged,
     settingsReadActionComponent,
   ]);

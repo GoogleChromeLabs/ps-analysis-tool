@@ -113,16 +113,18 @@ const SettingsContainer = () => {
           );
         })}
         <div className="px-3">
-          {Object.keys(observabilityEnabledForDisplay).map((key) => (
-            <SettingOption
-              key={key}
-              title={key}
-              switchState={observabilityEnabledForDisplay[key]}
-              changeSwitchState={(newState) => {
-                handleObservabilityEnabled(key, newState);
-              }}
-            />
-          ))}
+          {Object.keys(observabilityEnabledForDisplay)
+            .sort()
+            .map((key) => (
+              <SettingOption
+                key={key}
+                title={key}
+                switchState={observabilityEnabledForDisplay[key]}
+                changeSwitchState={(newState) => {
+                  handleObservabilityEnabled(key, newState);
+                }}
+              />
+            ))}
         </div>
       </div>
     </div>

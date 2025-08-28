@@ -57,7 +57,10 @@ export const runtimeOnMessageListener = async (
       actionsPerformed.globalIsObservabilityEnabled = true;
     }
 
-    await chrome.storage.session.remove(['isObservabilityEnabled']);
+    await chrome.storage.session.remove([
+      'isObservabilityEnabled',
+      'observabilityPartsStatus',
+    ]);
 
     await chrome.storage.session.set({
       pendingReload: false,
@@ -143,6 +146,10 @@ export const runtimeOnMessageListener = async (
     const tabs = await chrome.tabs.query({});
     const qualifyingTabs = tabs.filter((tab) => tab.url?.startsWith('http'));
 
+    if (!DataStore.isObservabilityEnabled) {
+      return;
+    }
+
     await sendMessageWrapper(INITIAL_SYNC, dataToSend);
     await sendMessageWrapper('EXCEEDING_LIMITATION_UPDATE', {
       exceedingLimitations: qualifyingTabs.length > 5,
@@ -163,11 +170,17 @@ export const runtimeOnMessageListener = async (
     dataStore?.updatePopUpState(incomingMessageTabId, false);
   }
 
-  if (DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType) {
+  if (
+    DEVTOOLS_SET_JAVASCSCRIPT_COOKIE === incomingMessageType &&
+    DataStore.observabilityPartsStatus.protectedAudience
+  ) {
     cookieStore?.update(incomingMessageTabId, request?.payload?.cookieData);
   }
 
-  if (CS_GET_PREBID_DATA_RESPONSE === incomingMessageType) {
+  if (
+    CS_GET_PREBID_DATA_RESPONSE === incomingMessageType &&
+    DataStore.observabilityPartsStatus.protectedAudience
+  ) {
     if (request?.payload?.prebidExists === false) {
       return;
     }
@@ -183,7 +196,10 @@ export const runtimeOnMessageListener = async (
     }
   }
 
-  if (PREBID_SCANNING_STATUS === incomingMessageType) {
+  if (
+    PREBID_SCANNING_STATUS === incomingMessageType &&
+    DataStore.observabilityPartsStatus.protectedAudience
+  ) {
     if (request?.payload?.prebidExists === false) {
       //@ts-ignore -- We dont want to create a new object here, just add data whether or not prebid exists for this frame.
       prebidStore.prebidEvents[incomingMessageTabId.toString()][`${frameId}`] =

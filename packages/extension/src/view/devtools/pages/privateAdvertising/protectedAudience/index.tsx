@@ -35,10 +35,15 @@ import AdUnits from './adUnits';
 import ExplorableExplanation from './explorableExplanation';
 import WorkletBreakpoints from './workletBreakpoints';
 import Prebid from './prebid';
+import { useSettings } from '../../../stateProviders';
 
 const ProtectedAudience = () => {
-  const tabItems = useMemo<TabItems>(
-    () => ({
+  const { observabilityEnabled } = useSettings(({ state }) => ({
+    observabilityEnabled: state.observabilityEnabled,
+  }));
+
+  const tabItems = useMemo<TabItems>(() => {
+    const baseItems: TabItems = {
       Learning: [
         {
           title: 'Overview',
@@ -67,7 +72,10 @@ const ProtectedAudience = () => {
           },
         },
       ],
-      Observability: [
+    };
+
+    if (observabilityEnabled.protectedAudience) {
+      baseItems['Observability'] = [
         {
           title: 'Interest Groups',
           content: {
@@ -111,10 +119,11 @@ const ProtectedAudience = () => {
             containerClassName: 'h-full',
           },
         },
-      ],
-    }),
-    []
-  );
+      ];
+    }
+
+    return baseItems;
+  }, [observabilityEnabled.protectedAudience]);
 
   return (
     <TabsProvider items={tabItems} name="protectedAudience">

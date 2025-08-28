@@ -107,21 +107,24 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (Object.keys(sessionStorage).includes('observabilityPartsStatus')) {
-        setObservabilityEnabledForDisplay(
-          sessionStorage.observabilityPartsStatus
-        );
+        setObservabilityEnabledForDisplay((prev) => ({
+          ...prev,
+          ...sessionStorage.observabilityPartsStatus,
+        }));
       } else {
-        setObservabilityEnabledForDisplay(
-          currentSettings.observabilityPartsStatus
-        );
+        setObservabilityEnabledForDisplay((prev) => ({
+          ...prev,
+          ...currentSettings.observabilityPartsStatus,
+        }));
       }
     } else {
       setIsObservabilityForSettingsPageDisplay(
         currentSettings.isObservabilityEnabled
       );
-      setObservabilityEnabledForDisplay(
-        currentSettings.observabilityPartsStatus
-      );
+      setObservabilityEnabledForDisplay((prev) => ({
+        ...prev,
+        ...currentSettings.observabilityPartsStatus,
+      }));
     }
 
     if (Object.keys(currentSettings).includes('isObservabilityEnabled')) {
@@ -273,7 +276,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes('observabilityPartsStatus') &&
         Object.keys(changes.observabilityPartsStatus).includes('newValue')
       ) {
-        setObservabilityEnabled(changes?.observabilityPartsStatus?.newValue);
+        setObservabilityEnabled((prev) => ({
+          ...prev,
+          ...changes?.observabilityPartsStatus?.newValue,
+        }));
       }
     },
     []
@@ -294,9 +300,10 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes('observabilityPartsStatus') &&
         Object.keys(changes.observabilityPartsStatus).includes('newValue')
       ) {
-        setObservabilityEnabledForDisplay(
-          changes?.observabilityPartsStatus?.newValue
-        );
+        setObservabilityEnabled((prev) => ({
+          ...prev,
+          ...changes?.observabilityPartsStatus?.newValue,
+        }));
       }
 
       if (
@@ -328,35 +335,43 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     const allSubSwitchesAreOn =
-      observabilityEnabled.cookies &&
-      observabilityEnabled.protectedAudience &&
-      observabilityEnabled.attributionReporting &&
-      observabilityEnabled.ipProtection &&
-      observabilityEnabled.scriptBlocking;
+      observabilityEnabledForDisplay.cookies &&
+      observabilityEnabledForDisplay.protectedAudience &&
+      observabilityEnabledForDisplay.attributionReporting &&
+      observabilityEnabledForDisplay.ipProtection &&
+      observabilityEnabledForDisplay.scriptBlocking;
     const anySubIsOn =
-      observabilityEnabled.cookies ||
-      observabilityEnabled.protectedAudience ||
-      observabilityEnabled.attributionReporting ||
-      observabilityEnabled.ipProtection ||
-      observabilityEnabled.scriptBlocking;
+      observabilityEnabledForDisplay.cookies ||
+      observabilityEnabledForDisplay.protectedAudience ||
+      observabilityEnabledForDisplay.attributionReporting ||
+      observabilityEnabledForDisplay.ipProtection ||
+      observabilityEnabledForDisplay.scriptBlocking;
 
     if (allSubSwitchesAreOn) {
       setIsObservabilityForSettingsPageDisplay(true);
     } else if (anySubIsOn) {
       setIsObservabilityForSettingsPageDisplay(true);
+    } else {
+      setIsObservabilityForSettingsPageDisplay(false);
     }
   }, [
-    isObservabilityEnabled,
-    observabilityEnabled.attributionReporting,
-    observabilityEnabled.cookies,
-    observabilityEnabled.ipProtection,
-    observabilityEnabled.protectedAudience,
-    observabilityEnabled.scriptBlocking,
+    observabilityEnabledForDisplay.attributionReporting,
+    observabilityEnabledForDisplay.cookies,
+    observabilityEnabledForDisplay.ipProtection,
+    observabilityEnabledForDisplay.protectedAudience,
+    observabilityEnabledForDisplay.scriptBlocking,
   ]);
 
   const handleObservabilityEnabled = useCallback(
-    (key: keyof typeof observabilityEnabled, value: boolean) => {
+    async (key: keyof typeof observabilityEnabled, value: boolean) => {
       setObservabilityEnabledForDisplay((prev) => ({ ...prev, [key]: value }));
+      setSettingsChanged(true);
+      await chrome.storage.session.set({
+        observabilityPartsStatus: {
+          [key]: value,
+        },
+        pendingReload: true,
+      });
     },
     []
   );
@@ -380,11 +395,12 @@ const Provider = ({ children }: PropsWithChildren) => {
       if (!session.pendingReload) {
         return;
       }
+
       if (
         !isEqual(
           isObservabilityEnabled,
           isObservabilityForSettingsPageDisplay
-        ) &&
+        ) ||
         !isEqual(observabilityEnabled, observabilityEnabledForDisplay)
       ) {
         setSettingsChanged(true);

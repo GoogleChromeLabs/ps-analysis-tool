@@ -18,6 +18,7 @@
  */
 import React, { useRef, useEffect, useState } from 'react';
 import {
+  CookieIcon,
   ExtensionReloadNotification,
   SIDEBAR_ITEMS_KEYS,
   SidebarProvider,
@@ -33,6 +34,7 @@ import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
+import { useSettings } from './stateProviders';
 
 const setThemeMode = (isDarkMode: boolean) => {
   if (isDarkMode) {
@@ -61,6 +63,10 @@ const App: React.FC = () => {
   );
 
   const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
+
+  const { observabilityEnabledForDisplay } = useSettings(({ state }) => ({
+    observabilityEnabledForDisplay: state.observabilityEnabledForDisplay,
+  }));
 
   const isChromeRuntimeAvailable = Boolean(chrome.runtime?.onMessage);
 
@@ -107,18 +113,84 @@ const App: React.FC = () => {
         setCollapsedState(false);
       }
 
+      setSidebarData((prev) => {
+        const newSidebarData = { ...prev };
+
+        if (!observabilityEnabledForDisplay.cookies) {
+          delete newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
+            SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
+          ].children[SIDEBAR_ITEMS_KEYS.COOKIES];
+          return prev;
+        } else {
+          if (
+            !newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
+              SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
+            ].children[SIDEBAR_ITEMS_KEYS.COOKIES] &&
+            observabilityEnabledForDisplay.cookies
+          ) {
+            newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
+              SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
+            ].children[SIDEBAR_ITEMS_KEYS.COOKIES] = {
+              title: () => I18n.getMessage('cookies'),
+              icon: {
+                Element: CookieIcon,
+                props: {
+                  className: '[&_path]:fill-granite-gray',
+                },
+              },
+              selectedIcon: {
+                Element: CookieIcon,
+                props: {
+                  className: '[&_path]:fill-bright-gray',
+                },
+              },
+              children: {},
+            };
+          }
+        }
+
+        return newSidebarData;
+      });
+
       if (data?.cookieDropdownOpen) {
         setSidebarData((prev) => {
           const newSidebarData = { ...prev };
+          if (
+            !newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
+              SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
+            ].children[SIDEBAR_ITEMS_KEYS.COOKIES] &&
+            observabilityEnabledForDisplay.cookies
+          ) {
+            newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
+              SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
+            ].children[SIDEBAR_ITEMS_KEYS.COOKIES] = {
+              title: () => I18n.getMessage('cookies'),
+              icon: {
+                Element: CookieIcon,
+                props: {
+                  className: '[&_path]:fill-granite-gray',
+                },
+              },
+              selectedIcon: {
+                Element: CookieIcon,
+                props: {
+                  className: '[&_path]:fill-bright-gray',
+                },
+              },
+              children: {},
+            };
+          }
+
           newSidebarData[SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX].children[
             SIDEBAR_ITEMS_KEYS.SITE_BOUNDARIES
           ].children[SIDEBAR_ITEMS_KEYS.COOKIES].dropdownOpen =
             data?.cookieDropdownOpen;
+
           return newSidebarData;
         });
       }
     })();
-  }, []);
+  }, [observabilityEnabledForDisplay.cookies]);
 
   if (collapsedState === null) {
     return null;
