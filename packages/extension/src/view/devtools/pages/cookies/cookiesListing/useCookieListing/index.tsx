@@ -46,13 +46,19 @@ import useHighlighting from './useHighlighting';
 import NamePrefixIconSelector from './namePrefixIconSelector';
 
 const useCookieListing = (domainsInAllowList: Set<string>) => {
-  const { selectedFrame, cookies, getCookiesSetByJavascript } = useCookie(
-    ({ state, actions }) => ({
-      selectedFrame: state.selectedFrame,
-      cookies: state.tabCookies || {},
-      getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
-    })
-  );
+  const {
+    selectedFrame,
+    cookies,
+    getCookiesSetByJavascript,
+    setShowBlockedCookies,
+    showBlockedCookies,
+  } = useCookie(({ state, actions }) => ({
+    selectedFrame: state.selectedFrame,
+    cookies: state.tabCookies || {},
+    getCookiesSetByJavascript: actions.getCookiesSetByJavascript,
+    showBlockedCookies: state.showBlockedCookies,
+    setShowBlockedCookies: actions.setShowBlockedCookies,
+  }));
 
   const { activePanelQuery, clearActivePanelQuery } = useSidebar(
     ({ state }) => ({
@@ -79,7 +85,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         accessorKey: 'parsedCookie.name',
         cell: (info: InfoType) => info,
         enableHiding: false,
-        enableBodyCellPrefixIcon: isUsingCDP,
+        enableBodyCellPrefixIcon: showBlockedCookies && isUsingCDP,
         bodyCellPrefixIcon: {
           Element: NamePrefixIconSelector,
         },
@@ -94,7 +100,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
             (row.originalData as CookieTableData)?.isDomainInAllowList
           );
 
-          return isBlocked || isDomainInAllowList;
+          return (showBlockedCookies && isBlocked) || isDomainInAllowList;
         },
         minWidth: 45,
       },
@@ -193,7 +199,7 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
         minWidth: 120,
       },
     ],
-    [isUsingCDP]
+    [isUsingCDP, showBlockedCookies]
   );
 
   const filters = useMemo<TableFilter>(
@@ -500,12 +506,27 @@ const useCookieListing = (domainsInAllowList: Set<string>) => {
 
   const extraInterfaceToTopBar = useCallback(() => {
     return (
-      <RefreshButton
-        onClick={getCookiesSetByJavascript}
-        title={I18n.getMessage('refreshJSCookies')}
-      />
+      <>
+        <RefreshButton
+          onClick={getCookiesSetByJavascript}
+          title={I18n.getMessage('refreshJSCookies')}
+        />
+        <label className="text-raising-black dark:text-bright-gray text-xs font-normal flex items-center w-max">
+          <input
+            id="show-blocked-cookies"
+            role="checkbox"
+            type="checkbox"
+            className="ml-1 cursor-pointer"
+            defaultChecked={showBlockedCookies}
+            onChange={() => setShowBlockedCookies((prev) => !prev)}
+          />
+          <span className="ml-1 text-xs leading-none">
+            Show blocked cookies
+          </span>
+        </label>
+      </>
     );
-  }, [getCookiesSetByJavascript]);
+  }, [getCookiesSetByJavascript, setShowBlockedCookies, showBlockedCookies]);
 
   return {
     tableData,

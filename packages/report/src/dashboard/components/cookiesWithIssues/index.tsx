@@ -89,6 +89,7 @@ const CookiesWithIssues = ({
         />
       </ResizableTray>
       <CookieDetails
+        showBlockedCookies
         selectedFrameCookie={selectedFrameCookie}
         isUsingCDP={true}
       />
