@@ -48,6 +48,8 @@ const BrowserStep = ({
 
   const callbacks = useRef({
     showBrowserLoading: (message: string, silent = false) => {
+      callbacks.current.hideBrowserDialog();
+      callbacks.current.updateBrowserContent(null);
       setBrowserLoading({ message, silent });
     },
 
@@ -90,6 +92,8 @@ const BrowserStep = ({
     },
 
     showBrowserDialog: (dialogType: string, options = {}) => {
+      callbacks.current.hideBrowserLoading();
+      callbacks.current.updateBrowserContent(null);
       setDialog({ type: dialogType, options });
     },
 
@@ -98,6 +102,8 @@ const BrowserStep = ({
     },
 
     updateBrowserContent: (content: React.ReactNode) => {
+      callbacks.current.hideBrowserLoading();
+      callbacks.current.hideBrowserDialog();
       setBrowserContent(content);
     },
   });
@@ -172,6 +178,8 @@ const BrowserStep = ({
     }
   }, [currentScenarioKey]);
 
+  const prevStepRef = useRef(currentStep);
+
   useEffect(() => {
     if (currentStep === -1) {
       setStepExplanation(
@@ -180,21 +188,34 @@ const BrowserStep = ({
         ].title.toLowerCase()} process.`
       );
       resetScenario();
-    } else {
-      const stepData = scenarios[currentScenarioKey].steps[currentStep];
-      setStepExplanation(stepData?.explanation || '');
-    }
-
-    if (
+    } else if (
       Object.values(ScenarioKeys).indexOf(currentScenarioKey) ===
         Object.values(ScenarioKeys).length - 1 &&
       currentStep >= scenarios[currentScenarioKey].steps.length
     ) {
       setStepExplanation('End of demo. Click "Restart Demo" to start over.');
+    } else {
+      const stepData = scenarios[currentScenarioKey].steps[currentStep];
+      setStepExplanation(stepData?.explanation || '');
     }
 
-    const actionFn = scenarios[currentScenarioKey].steps[currentStep]?.action;
-    const action = typeof actionFn === 'function' ? actionFn() : undefined;
+    let actionFn = scenarios[currentScenarioKey].steps[currentStep]?.action;
+    let action = typeof actionFn === 'function' ? actionFn() : undefined;
+
+    if (prevStepRef.current > currentStep) {
+      let _currentStep = currentStep;
+
+      while (_currentStep >= 0) {
+        actionFn = scenarios[currentScenarioKey].steps[_currentStep]?.action;
+        action = typeof actionFn === 'function' ? actionFn() : undefined;
+
+        if (action?.browserUpdates) {
+          break;
+        }
+
+        _currentStep--;
+      }
+    }
 
     if (action?.browserUpdates) {
       Object.entries(action.browserUpdates).forEach(([key, args]) => {
@@ -211,6 +232,8 @@ const BrowserStep = ({
         }
       });
     }
+
+    prevStepRef.current = currentStep;
   }, [
     callbacks,
     currentScenarioKey,

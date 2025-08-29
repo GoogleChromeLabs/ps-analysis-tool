@@ -74,6 +74,10 @@ const Panel = ({
       const customEvent = event as CustomEvent;
       const { dispatchId } = customEvent.detail;
 
+      if (!dispatchId) {
+        return;
+      }
+
       const [scenarioKey, stepIndex] = (dispatchId as string)
         .split('-')
         .slice(-2);

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Internal dependencies.
@@ -31,13 +31,23 @@ const SequenceDiagram = () => {
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const parentContainerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [coordinates, _setCoordinates] = useState<{
+    [id: string]: { x: number; y: number };
+  } | null>(null);
+
+  const setCoordinates = useCallback((id: string, x: number, y: number) => {
+    _setCoordinates((prev) => ({
+      ...prev,
+      [id]: { x, y },
+    }));
+  }, []);
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
       if (messageContainerRef.current && parentContainerRef.current) {
         const canvas = initializeCanvas(
           messageContainerRef.current,
-          parentContainerRef.current
+          setCoordinates
         );
         setCanvas(canvas);
       }
@@ -48,7 +58,51 @@ const SequenceDiagram = () => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [setCanvas]);
+  }, [setCanvas, setCoordinates]);
+
+  useEffect(() => {
+    const listener = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { dispatchId } = customEvent.detail;
+
+      if (!dispatchId) {
+        return;
+      }
+
+      const [scenarioKey, stepIndex] = (dispatchId as string)
+        .split('-')
+        .slice(-2);
+
+      const { y } = coordinates?.[`${scenarioKey}-${stepIndex}`] || {
+        y: 0,
+      };
+
+      if (
+        parentContainerRef.current &&
+        y + 250 > parentContainerRef.current.clientHeight
+      ) {
+        parentContainerRef.current.scrollTo({
+          top: y - parentContainerRef.current.clientHeight + 250,
+          behavior: 'smooth',
+        });
+      }
+    };
+
+    const animatorListener = () => {
+      parentContainerRef.current?.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    };
+
+    document.addEventListener('ee:dispatchId', listener);
+    document.addEventListener('ee:animatorDraw', animatorListener);
+
+    return () => {
+      document.removeEventListener('ee:dispatchId', listener);
+      document.removeEventListener('ee:animatorDraw', animatorListener);
+    };
+  }, [coordinates]);
 
   return (
     <div

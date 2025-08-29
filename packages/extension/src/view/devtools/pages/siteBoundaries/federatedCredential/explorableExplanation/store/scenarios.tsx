@@ -29,6 +29,22 @@ export const scenarios: Scenarios = {
         action: () => ({
           addMessage: ['user-entity', 'rp-entity', "Clicks 'Sign in'"],
           browserUpdates: {
+            updateBrowserContent: [
+              () => (
+                <div className="rp-website text-center p-5">
+                  <h2 className="text-xl font-semibold mb-2">
+                    Welcome to ExampleShop
+                  </h2>
+                  <p className="mb-2">Please sign in to continue</p>
+                  <button
+                    id="signin-button"
+                    className="fedcm-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded transition mt-2"
+                  >
+                    Sign in with YourID
+                  </button>
+                </div>
+              ),
+            ],
             simulateButtonClick: ['#signin-button'],
           },
         }),

@@ -56,12 +56,14 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   const nextStep = useCallback(() => {
-    canvas?.loadNextCheckpoint();
-  }, [canvas]);
+    canvas?.stepNext();
+    setIsPlaying(false);
+  }, [canvas, setIsPlaying]);
 
   const prevStep = useCallback(() => {
-    canvas?.loadPreviousCheckpoint();
-  }, [canvas]);
+    canvas?.stepBack();
+    setIsPlaying(false);
+  }, [canvas, setIsPlaying]);
 
   const reset = useCallback(() => {
     canvas?.reset();

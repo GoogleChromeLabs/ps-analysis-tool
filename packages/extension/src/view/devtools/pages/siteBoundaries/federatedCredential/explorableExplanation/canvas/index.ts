@@ -19,7 +19,7 @@ import { scenarios } from '../store/scenarios';
 
 export const initializeCanvas = (
   container: HTMLDivElement,
-  parentContainer: HTMLDivElement
+  setCoordinates: (id: string, x: number, y: number) => void
 ) => {
   const componentCanvas = new Main(false, container);
   const flowCanvas = new Main(false, container);
@@ -179,18 +179,10 @@ export const initializeCanvas = (
     selfMessage: boolean,
     id: string
   ) => {
-    const _currentYToDraw = currentYToDraw;
-    const sideEffect = () => {
-      if (_currentYToDraw + 250 > parentContainer.clientHeight) {
-        parentContainer.scrollTo({
-          top: _currentYToDraw - parentContainer.clientHeight + 250,
-          behavior: 'smooth',
-        });
-      }
-    };
-
     if (selfMessage) {
       const fromLineX = from.getFigures()[2].getX();
+
+      setCoordinates(id, fromLineX + 25, currentYToDraw);
 
       const group = new Group(flowCanvas, [
         flowFigureFactory.text({
@@ -230,8 +222,6 @@ export const initializeCanvas = (
         }),
       ]);
 
-      group.setSideEffectOnDraw(sideEffect);
-
       currentYToDraw += 100;
 
       return group;
@@ -239,6 +229,8 @@ export const initializeCanvas = (
 
     const fromLineX = from.getFigures()[2].getX();
     const toLineX = to.getFigures()[2].getX();
+
+    setCoordinates(id, (fromLineX + toLineX) / 2, currentYToDraw);
 
     const group = new Group(flowCanvas, [
       flowFigureFactory.text({
@@ -256,8 +248,6 @@ export const initializeCanvas = (
         shouldTravel: true,
       }),
     ]);
-
-    group.setSideEffectOnDraw(sideEffect);
 
     currentYToDraw += 50;
 
@@ -310,12 +300,6 @@ export const initializeCanvas = (
     });
 
     const animator = new Animator(animatorFigures, flowFigureFactory, key);
-    animator.setSideEffectOnDraw(() => {
-      parentContainer.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    });
     flowCanvas.addAnimator(animator, false, true);
 
     currentYToDraw = 130;
