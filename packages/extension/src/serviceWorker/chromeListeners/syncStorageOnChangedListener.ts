@@ -22,15 +22,21 @@ import sendUpdatedData from '../../store/utils/sendUpdatedData';
 export const onSyncStorageChangedListenerForCDP = async (changes: {
   [key: string]: chrome.storage.StorageChange;
 }) => {
+  const keys = Object.keys(changes);
   if (
-    !changes?.isObservabilityEnabled ||
-    typeof changes?.isObservabilityEnabled?.newValue === 'undefined' ||
-    typeof changes?.isObservabilityEnabled?.oldValue === 'undefined'
+    (keys.includes('isObservabilityEnabled') &&
+      (Object.keys(changes.isObservabilityEnabled).includes('newValue') ||
+        Object.keys(changes.isObservabilityEnabled).includes('oldValue'))) ||
+    (keys.includes('observabilityPartsStatus') &&
+      (Object.keys(changes.observabilityPartsStatus).includes('newValue') ||
+        Object.keys(changes.observabilityPartsStatus).includes('oldValue')))
   ) {
     return;
   }
 
   DataStore.isObservabilityEnabled = changes?.isObservabilityEnabled?.newValue;
+  DataStore.observabilityPartsStatus =
+    changes?.observabilityPartsStatus?.newValue;
 
   const tabs = await chrome.tabs.query({});
 

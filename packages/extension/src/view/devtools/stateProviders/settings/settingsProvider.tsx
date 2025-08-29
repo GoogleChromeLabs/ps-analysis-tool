@@ -300,7 +300,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         Object.keys(changes).includes('observabilityPartsStatus') &&
         Object.keys(changes.observabilityPartsStatus).includes('newValue')
       ) {
-        setObservabilityEnabled((prev) => ({
+        setObservabilityEnabledForDisplay((prev) => ({
           ...prev,
           ...changes?.observabilityPartsStatus?.newValue,
         }));
@@ -364,12 +364,15 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const handleObservabilityEnabled = useCallback(
     async (key: keyof typeof observabilityEnabled, value: boolean) => {
-      setObservabilityEnabledForDisplay((prev) => ({ ...prev, [key]: value }));
+      setObservabilityEnabledForDisplay((prev) => {
+        const newSettings = { ...prev, [key]: value };
+        chrome.storage.session.set({
+          observabilityPartsStatus: { ...newSettings },
+        });
+        return newSettings;
+      });
       setSettingsChanged(true);
       await chrome.storage.session.set({
-        observabilityPartsStatus: {
-          [key]: value,
-        },
         pendingReload: true,
       });
     },

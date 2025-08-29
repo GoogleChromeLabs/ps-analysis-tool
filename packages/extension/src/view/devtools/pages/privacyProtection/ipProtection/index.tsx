@@ -63,7 +63,7 @@ const IPProtection = () => {
       ],
     };
 
-    if (observabilityEnabled.protectedAudience) {
+    if (observabilityEnabled.ipProtection) {
       baseItems['Observability'] = [
         {
           title: 'Probabilistic Reveal Tokens',
@@ -77,7 +77,7 @@ const IPProtection = () => {
     }
 
     return baseItems;
-  }, [observabilityEnabled.protectedAudience]);
+  }, [observabilityEnabled.ipProtection]);
 
   return (
     <TabsProvider items={tabItems} name="ipProtection">

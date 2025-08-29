@@ -64,6 +64,7 @@ const calculateTabId = (source: chrome.debugger.Debuggee) => {
     (key) =>
       source.targetId && dataStore?.getFrameIDSet(key)?.has(source.targetId)
   );
+
   tabId = tab[0];
   return tabId;
 };
@@ -133,6 +134,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       } else if (source.targetId) {
         tabId = calculateTabId(source);
       }
+
       // Using Page.frameAttached and Page.frameNavigated we will find the tabId using the frameId because in certain events source.tabId is missing and source.targetId is availale.
       if (method === 'Page.frameAttached' && params) {
         const { frameId, parentFrameId } =
@@ -289,8 +291,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
         }
         //@todo When cookie analysis is decoupled move this to a separate function.
         if (
-          cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId] &&
-          DataStore.observabilityPartsStatus.cookies
+          DataStore.observabilityPartsStatus.cookies &&
+          cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
         ) {
           cookieStore.parseRequestHeadersForCA(
             cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
@@ -305,7 +307,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           extractHeader(
             'Attribution-Reporting-Eligible',
             cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
-              .headers ?? {}
+              ?.headers ?? {}
           )
         ) {
           if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
@@ -440,15 +442,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
         }
 
-        if (
-          DataStore.observabilityPartsStatus.cookies &&
-          DataStore.observabilityPartsStatus.attributionReporting &&
-          DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
-        ) {
-          if (
-            DataStore.observabilityPartsStatus.attributionReporting &&
-            extractHeader('Attribution-Reporting-Eligible', headers)
-          ) {
+        if (DataStore.observabilityPartsStatus.attributionReporting) {
+          if (extractHeader('Attribution-Reporting-Eligible', headers)) {
             const constructedURL =
               DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url ??
               createURL(headers);
@@ -465,8 +460,10 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               };
             }
           }
+        }
 
-          if (DataStore.observabilityPartsStatus.cookies) {
+        if (DataStore.observabilityPartsStatus.cookies) {
+          if (DataStore.requestIdToCDPURLMapping[tabId][requestId]) {
             cookieStore.parseRequestHeadersForCA(
               params as Protocol.Network.RequestWillBeSentExtraInfoEvent,
               requestId,
@@ -479,17 +476,13 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 ])
               )
             );
+          } else {
+            cookieStore.setUnParsedRequestHeadersForCA(
+              tabId,
+              requestId,
+              params as Protocol.Network.RequestWillBeSentExtraInfoEvent
+            );
           }
-        } else if (
-          DataStore.observabilityPartsStatus.cookies &&
-          DataStore.observabilityPartsStatus.attributionReporting &&
-          !DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
-        ) {
-          cookieStore.setUnParsedRequestHeadersForCA(
-            tabId,
-            requestId,
-            params as Protocol.Network.RequestWillBeSentExtraInfoEvent
-          );
         }
 
         return;
@@ -557,28 +550,29 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
         dataStore.updateUniqueResponseDomains(tabId, requestId);
 
-        if (
-          DataStore.observabilityPartsStatus.cookies &&
-          cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]
-        ) {
-          cookieStore.parseResponseHeadersForCA(
-            cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId],
-            requestId,
-            tabId,
-            Array.from(new Set([finalFrameId, frameId]))
-          );
-        }
-
-        if (
-          DataStore.observabilityPartsStatus.cookies &&
-          cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
-        ) {
-          cookieStore.parseRequestHeadersForCA(
-            cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
-            requestId,
-            tabId,
-            Array.from(new Set([finalFrameId, frameId]))
-          );
+        if (DataStore.observabilityPartsStatus.cookies) {
+          if (cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]) {
+            cookieStore.parseResponseHeadersForCA(
+              cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId],
+              requestId,
+              tabId,
+              Array.from(new Set([finalFrameId, frameId]))
+            );
+          } else {
+            cookieStore.setUnParsedResponseHeadersForCA(
+              tabId,
+              requestId,
+              params as Protocol.Network.ResponseReceivedExtraInfoEvent
+            );
+          }
+          if (cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]) {
+            cookieStore.parseRequestHeadersForCA(
+              cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
+              requestId,
+              tabId,
+              Array.from(new Set([finalFrameId, frameId]))
+            );
+          }
         }
 
         return;
@@ -618,42 +612,40 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           return;
         }
 
-        if (
-          DataStore.observabilityPartsStatus.cookies &&
-          DataStore.requestIdToCDPURLMapping[tabId][requestId]
-        ) {
-          const frameIds = Array.from(
-            new Set([
-              DataStore.requestIdToCDPURLMapping[tabId][requestId]
-                ?.finalFrameId,
-              DataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
-            ])
-          );
+        if (DataStore.observabilityPartsStatus.cookies) {
+          if (DataStore.requestIdToCDPURLMapping[tabId][requestId]) {
+            const frameIds = Array.from(
+              new Set([
+                DataStore.requestIdToCDPURLMapping[tabId][requestId]
+                  ?.finalFrameId,
+                DataStore.requestIdToCDPURLMapping[tabId][requestId]?.frameId,
+              ])
+            );
 
-          cookieStore.parseResponseHeadersForCA(
-            params as Protocol.Network.ResponseReceivedExtraInfoEvent,
-            requestId,
-            tabId,
-            frameIds
-          );
-
-          if (cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]) {
-            cookieStore.parseRequestHeadersForCA(
-              cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
+            cookieStore.parseResponseHeadersForCA(
+              params as Protocol.Network.ResponseReceivedExtraInfoEvent,
               requestId,
               tabId,
               frameIds
             );
+
+            if (
+              cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId]
+            ) {
+              cookieStore.parseRequestHeadersForCA(
+                cookieStore.getUnParsedRequestHeadersForCA(tabId)?.[requestId],
+                requestId,
+                tabId,
+                frameIds
+              );
+            }
+          } else {
+            cookieStore.setUnParsedResponseHeadersForCA(
+              tabId,
+              requestId,
+              params as Protocol.Network.ResponseReceivedExtraInfoEvent
+            );
           }
-        } else if (
-          DataStore.observabilityPartsStatus.cookies &&
-          !DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
-        ) {
-          cookieStore.setUnParsedResponseHeadersForCA(
-            tabId,
-            requestId,
-            params as Protocol.Network.ResponseReceivedExtraInfoEvent
-          );
         }
         return;
       }

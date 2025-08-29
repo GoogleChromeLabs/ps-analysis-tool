@@ -342,6 +342,7 @@ export class DataStore {
         formedSet.add(DataStore.tabs[tabId].parentChildFrameAssociation[key]);
       }
     );
+
     return formedSet;
   }
 

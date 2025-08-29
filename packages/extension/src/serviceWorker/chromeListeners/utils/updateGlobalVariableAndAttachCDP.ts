@@ -25,15 +25,27 @@ import PRTStore from '../../../store/PRTStore';
 import attachCDP from '../../attachCDP';
 
 const updateGlobalVariableAndAttachCDP = async () => {
-  if (DataStore.isObservabilityEnabled) {
-    return;
-  }
   await chrome.storage.local.clear();
 
   const preSetSettings = await chrome.storage.sync.get();
 
   DataStore.isObservabilityEnabled =
     preSetSettings?.isObservabilityEnabled ?? false;
+
+  DataStore.observabilityPartsStatus = {
+    cookies: preSetSettings?.observabilityPartsStatus.cookies || false,
+    protectedAudience:
+      preSetSettings?.observabilityPartsStatus.protectedAudience || false,
+    attributionReporting:
+      preSetSettings.observabilityPartsStatus.attributionReporting || false,
+    ipProtection: preSetSettings.observabilityPartsStatus.ipProtection || false,
+    scriptBlocking:
+      preSetSettings.observabilityPartsStatus.scriptBlocking || false,
+  };
+
+  if (!DataStore.isObservabilityEnabled) {
+    return;
+  }
 
   const allTabs = await chrome.tabs.query({});
   const targets = await chrome.debugger.getTargets();

@@ -329,7 +329,6 @@ class CookieStore extends DataStore {
     this.tabsData[tabId] = {};
     DataStore.tabs[tabId].newUpdatesCA = 0;
     DataStore.tabs[tabId].frameIDURLSet = {};
-    DataStore.tabs[tabId].parentChildFrameAssociation = {};
     this.sendUpdatedDataToPopupAndDevTools(tabId, true);
   }
 

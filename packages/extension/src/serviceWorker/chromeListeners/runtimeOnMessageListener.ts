@@ -54,6 +54,8 @@ export const runtimeOnMessageListener = async (
 
     if (Object.keys(sessionStorage).includes('isObservabilityEnabled')) {
       DataStore.isObservabilityEnabled = sessionStorage.isObservabilityEnabled;
+      DataStore.observabilityPartsStatus =
+        sessionStorage.observabilityPartsStatus;
       actionsPerformed.globalIsObservabilityEnabled = true;
     }
 
