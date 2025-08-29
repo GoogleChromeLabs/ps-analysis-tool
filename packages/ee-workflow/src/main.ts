@@ -1012,7 +1012,7 @@ export class Main {
 
     const lastDispatchedId = Array.from(this.dispatchedIds).pop();
 
-    this.dispatchCustomEvent('dispatchId', {
+    this.dispatchCustomEvent('ee:dispatchId', {
       dispatchId: lastDispatchedId,
     });
 
@@ -1444,10 +1444,18 @@ export class Main {
       this.runTraveller();
     }
 
-    const lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
-    const toRender = this.stepsQueue[0];
+    let lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+    let toRender = this.stepsQueue[0];
 
-    if (toRender.getAnimatorId() !== lastSnapshotObject.getAnimatorId()) {
+    // If the current step is a placeholder, we need to draw it and grab next one.
+    if (toRender?.getId().startsWith('placeholder')) {
+      this.runner(false, false, true);
+
+      toRender = this.stepsQueue[0];
+      lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+    }
+
+    if (toRender?.getAnimatorId() !== lastSnapshotObject?.getAnimatorId()) {
       this.p5.clear();
 
       for (let i = 0; i < this.snapshot.length; i++) {
@@ -1550,6 +1558,8 @@ export class Main {
     }
 
     this.p5.clear();
+
+    let lastDispatchObject: Figure | null = null;
     for (let i = 0; i < this.snapshot.length; i++) {
       const figure = this.snapshot[i];
 
@@ -1567,6 +1577,10 @@ export class Main {
       } else {
         figure.draw();
       }
+
+      if (figure.canDispatch()) {
+        lastDispatchObject = figure;
+      }
     }
 
     this.checkpoints.delete(lastSnapshotObject.getId());
@@ -1575,9 +1589,9 @@ export class Main {
       figureId: [...this.snapshot].pop()?.getId() || '',
     });
 
-    if (lastSnapshotObject.canDispatch()) {
-      this.dispatchCustomEvent('dispatchId', {
-        dispatchId: Array.from(this.dispatchedIds).pop(),
+    if (lastDispatchObject?.canDispatch()) {
+      this.dispatchCustomEvent('ee:dispatchId', {
+        dispatchId: lastDispatchObject.getDispatchId(),
       });
     }
   }
@@ -1755,7 +1769,7 @@ export class Main {
     this.groupStepsQueue = [...groups];
     this.animatorStepsQueue = [...animators];
 
-    this.dispatchCustomEvent('dispatchId', {
+    this.dispatchCustomEvent('ee:dispatchId', {
       dispatchId: Array.from(this.dispatchedIds).pop(),
     });
 
