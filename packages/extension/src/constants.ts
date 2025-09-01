@@ -24,6 +24,11 @@ export const SETTING_PAGE_CONTROLS = [
     heading: () => I18n.getMessage('enableCDP'),
     description: () => I18n.getMessage('enableCDPNote', [`<a>`, '</a>']),
   },
+  {
+    id: 'reloadExtension',
+    heading: () => 'Reload this extension.',
+    description: () => 'Use this to reset PSAT captured data.',
+  },
 ];
 
 export const CDP_WARNING_MESSAGE =
@@ -41,6 +46,8 @@ export const DEVTOOLS_SET_JAVASCSCRIPT_COOKIE =
 export const CHANGE_CDP_SETTING = 'CHANGE_CDP_SETTING';
 export const INITIAL_SYNC = 'INITIAL_SYNC';
 export const NEW_COOKIE_DATA = 'NEW_COOKIE_DATA';
+export const EXTRA_DATA = 'EXTRA_DATA';
+export const TAB_TOKEN_DATA = 'TAB_TOKEN_DATA';
 export const SERVICE_WORKER_RELOAD_MESSAGE = 'ServiceWorker::TABS_RELOADED';
 export const SERVICE_WORKER_TABS_RELOAD_COMMAND =
   'ServiceWorker::REOLAD_ALL_TABS';

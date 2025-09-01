@@ -37,32 +37,36 @@ class PrebidContentScript {
    */
   listenToConnection() {
     // Message once on initialize, to let the devtool know that content script has loaded.
-    if (chrome.runtime?.id) {
-      chrome.runtime.sendMessage({
-        setInPagePrebidInterface: true,
-      });
+    try {
+      if (chrome.runtime?.id) {
+        chrome.runtime.sendMessage({
+          setInPagePrebidInterface: true,
+        });
+      }
+
+      window.onmessage = (event) => {
+        if (event.data?.type === SCRIPT_GET_PREBID_DATA_RESPONSE) {
+          chrome.runtime.sendMessage({
+            type: CS_GET_PREBID_DATA_RESPONSE,
+            payload: {
+              prebidExists: event.data.prebidData?.prebidExists,
+              prebidData: event.data.prebidData,
+            },
+          });
+        }
+
+        if (event.data?.type === PREBID_SCANNING_STATUS) {
+          chrome.runtime.sendMessage({
+            type: PREBID_SCANNING_STATUS,
+            payload: {
+              prebidExists: event.data.prebidExists,
+            },
+          });
+        }
+      };
+    } catch (error) {
+      //Fail silently
     }
-
-    window.onmessage = (event) => {
-      if (event.data?.type === SCRIPT_GET_PREBID_DATA_RESPONSE) {
-        chrome.runtime.sendMessage({
-          type: CS_GET_PREBID_DATA_RESPONSE,
-          payload: {
-            prebidExists: event.data.prebidData?.prebidExists,
-            prebidData: event.data.prebidData,
-          },
-        });
-      }
-
-      if (event.data?.type === PREBID_SCANNING_STATUS) {
-        chrome.runtime.sendMessage({
-          type: PREBID_SCANNING_STATUS,
-          payload: {
-            prebidExists: event.data.prebidExists,
-          },
-        });
-      }
-    };
 
     chrome.runtime.onMessage.addListener((message, _sender, response) => {
       if (message.status === 'set?') {

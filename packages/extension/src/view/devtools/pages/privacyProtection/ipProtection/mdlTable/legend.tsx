@@ -17,8 +17,8 @@
 /**
  * External dependencies.
  */
-import { Link } from '@google-psat/design-system';
 import React from 'react';
+import { Link } from '@google-psat/design-system';
 
 const Legend = () => {
   return (
