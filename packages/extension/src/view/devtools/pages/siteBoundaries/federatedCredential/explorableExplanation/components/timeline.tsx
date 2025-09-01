@@ -17,7 +17,6 @@
  * External dependencies.
  */
 import { Fragment } from 'react/jsx-runtime';
-import { Tick } from '@google-psat/design-system';
 
 /**
  * Internal dependencies.
@@ -41,14 +40,8 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
 
   const scenarioKeys = Object.values(ScenarioKeys);
 
-  const {
-    interactiveMode,
-    loadScenarioForInteractiveMode,
-    hasLoadedForInteractiveMode,
-  } = useStore(({ state, actions }) => ({
-    interactiveMode: state.interactiveMode,
+  const { loadScenarioForInteractiveMode } = useStore(({ actions }) => ({
     loadScenarioForInteractiveMode: actions.loadScenarioForInteractiveMode,
-    hasLoadedForInteractiveMode: actions.hasLoadedForInteractiveMode,
   }));
 
   return (
@@ -72,21 +65,10 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
               ].join(' ')}
               id={`${Object.keys(ScenarioKeys)[index]}-node`}
               onClick={() => {
-                if (interactiveMode) {
-                  const checkpoint = scenarioKeys[index] + '-0';
-                  loadScenarioForInteractiveMode(
-                    checkpoint,
-                    scenarioKeys[index],
-                    Boolean(currentScenarioKey !== scenarioKeys[index])
-                  );
-                }
+                loadScenarioForInteractiveMode(scenarioKeys[index]);
               }}
             >
-              {index + 1}. {title}{' '}
-              <span>
-                {interactiveMode &&
-                  hasLoadedForInteractiveMode(scenarioKeys[index]) && <Tick />}
-              </span>
+              {index + 1}. {title}
             </div>
             {index < titles.length - 1 && (
               <div className="timeline-connector flex-grow h-[2px] bg-[#e0e0e0]"></div>

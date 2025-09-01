@@ -37,27 +37,16 @@ interface HeaderProps {
 }
 
 const Header = ({ historyCount }: HeaderProps) => {
-  const {
-    play,
-    speed,
-    setIsPlaying,
-    nextStep,
-    prevStep,
-    reset,
-    setSpeed,
-    interactiveMode,
-    setInteractiveMode,
-  } = useStore(({ state, actions }) => ({
-    play: state.play,
-    speed: state.speed,
-    setIsPlaying: actions.setIsPlaying,
-    nextStep: actions.nextStep,
-    prevStep: actions.prevStep,
-    reset: actions.reset,
-    setSpeed: actions.setSpeed,
-    interactiveMode: state.interactiveMode,
-    setInteractiveMode: actions.setInteractiveMode,
-  }));
+  const { play, speed, setIsPlaying, nextStep, prevStep, reset, setSpeed } =
+    useStore(({ state, actions }) => ({
+      play: state.play,
+      speed: state.speed,
+      setIsPlaying: actions.setIsPlaying,
+      nextStep: actions.nextStep,
+      prevStep: actions.prevStep,
+      reset: actions.reset,
+      setSpeed: actions.setSpeed,
+    }));
 
   return (
     <div className="w-full px-2 flex items-center justify-between border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px] min-w-[900px]">
@@ -66,7 +55,6 @@ const Header = ({ historyCount }: HeaderProps) => {
           className="disabled:opacity-50 disabled:pointer-events-none pr-2"
           onClick={() => setIsPlaying(!play)}
           title={play ? 'Pause' : 'Play'}
-          disabled={interactiveMode}
         >
           {play ? (
             <PauseIcon className="h-5 w-5" />
@@ -81,7 +69,6 @@ const Header = ({ historyCount }: HeaderProps) => {
             title="Previous Node"
             onClick={prevStep}
             className="disabled:opacity-50 disabled:pointer-events-none"
-            disabled={interactiveMode}
           >
             <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
@@ -90,7 +77,6 @@ const Header = ({ historyCount }: HeaderProps) => {
             id="nextButton"
             title="Next Node"
             className="disabled:opacity-50 disabled:pointer-events-none"
-            disabled={interactiveMode}
           >
             <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
@@ -107,17 +93,6 @@ const Header = ({ historyCount }: HeaderProps) => {
             max={4}
             step={0.5}
           />
-        </div>
-        <div className="px-2">
-          <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-            <input
-              type="checkbox"
-              className="hover:cursor-pointer"
-              checked={interactiveMode}
-              onChange={(e) => setInteractiveMode(e.target.checked)}
-            />
-            <span className="whitespace-nowrap">Interactive Mode</span>
-          </label>
         </div>
       </div>
       {historyCount !== undefined && (

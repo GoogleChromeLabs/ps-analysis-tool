@@ -30,13 +30,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
   const [play, setPlay] = useState(false);
   const [speed, _setSpeed] = useState(1.5);
-  const [interactiveMode, _setInteractiveMode] = useState(false);
   const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
     ScenarioKeys.REGISTRATION
   );
   const [currentStep, setCurrentStep] = useState(-1);
-  const [interactiveModeLoadedScenarios, setInteractiveModeLoadedScenarios] =
-    useState<Set<string>>(new Set());
 
   const setIsPlaying = useCallback(
     (isPlaying: boolean) => {
@@ -70,56 +67,28 @@ const Provider = ({ children }: PropsWithChildren) => {
     setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
     setCurrentStep(-1);
     setIsPlaying(false);
-    setInteractiveModeLoadedScenarios(new Set());
   }, [canvas, setIsPlaying]);
 
-  const setInteractiveMode = useCallback(
-    (_interactiveMode: boolean) => {
-      _setInteractiveMode(_interactiveMode);
-      canvas?.setUsingHelperQueue(_interactiveMode);
-
-      if (!_interactiveMode) {
-        setIsPlaying(false);
-        setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
-        setCurrentStep(-1);
-      }
-    },
-    [canvas, setIsPlaying]
-  );
-
   const loadScenarioForInteractiveMode = useCallback(
-    (id: string, scenarioKey: ScenarioKeys, shouldRedraw: boolean) => {
-      if (!canvas?.isPaused()) {
-        return;
+    (scenarioKey: ScenarioKeys) => {
+      setIsPlaying(false);
+
+      const scenarioIndex = Object.values(ScenarioKeys).indexOf(scenarioKey);
+      const currentScenarioIndex =
+        Object.values(ScenarioKeys).indexOf(currentScenarioKey);
+
+      if (scenarioIndex > currentScenarioIndex) {
+        canvas?.loadNextCheckpoint(scenarioKey + '-0');
+      } else if (scenarioIndex < currentScenarioIndex) {
+        canvas?.loadPreviousCheckpoint(scenarioKey + '-0');
       }
-
-      if (shouldRedraw) {
-        canvas?.reDrawAll();
-      }
-
-      canvas?.loadCheckpointToHelper(id);
-
-      setInteractiveModeLoadedScenarios((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(scenarioKey);
-        return newSet;
-      });
 
       setCurrentScenarioKey(scenarioKey);
       setCurrentStep(-1);
 
-      if (interactiveModeLoadedScenarios.has(scenarioKey)) {
-        canvas?.loadAnimatorPartAndDraw(scenarioKey);
-      }
+      setIsPlaying(true);
     },
-    [canvas, interactiveModeLoadedScenarios]
-  );
-
-  const hasLoadedForInteractiveMode = useCallback(
-    (scenarioKey: ScenarioKeys) => {
-      return interactiveModeLoadedScenarios.has(scenarioKey);
-    },
-    [interactiveModeLoadedScenarios]
+    [canvas, currentScenarioKey, setIsPlaying]
   );
 
   return (
@@ -128,7 +97,6 @@ const Provider = ({ children }: PropsWithChildren) => {
         state: {
           play,
           speed,
-          interactiveMode,
           currentScenarioKey,
           currentStep,
         },
@@ -139,9 +107,7 @@ const Provider = ({ children }: PropsWithChildren) => {
           nextStep,
           prevStep,
           setSpeed,
-          setInteractiveMode,
           loadScenarioForInteractiveMode,
-          hasLoadedForInteractiveMode,
           setCurrentScenarioKey,
           setCurrentStep,
         },

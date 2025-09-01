@@ -63,7 +63,16 @@ const SequenceDiagram = () => {
   useEffect(() => {
     const listener = (event: Event) => {
       const customEvent = event as CustomEvent;
-      const { dispatchId } = customEvent.detail;
+      const { dispatchId, type } = customEvent.detail;
+
+      if (type === 'previousCheckpoint') {
+        parentContainerRef.current?.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+
+        return;
+      }
 
       if (!dispatchId) {
         return;

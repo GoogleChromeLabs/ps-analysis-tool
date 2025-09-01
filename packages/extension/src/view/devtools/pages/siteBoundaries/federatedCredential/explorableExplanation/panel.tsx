@@ -48,14 +48,12 @@ const Panel = ({
   });
 
   const {
-    interactiveMode,
     currentStep,
     currentScenarioKey,
     setCurrentScenarioKey,
     setCurrentStep,
   } = useStore(({ state, actions }) => {
     return {
-      interactiveMode: state.interactiveMode,
       currentScenarioKey: state.currentScenarioKey,
       currentStep: state.currentStep,
       setCurrentScenarioKey: actions.setCurrentScenarioKey,
@@ -87,10 +85,6 @@ const Panel = ({
     };
 
     const animatorListener = (event: Event) => {
-      if (interactiveMode) {
-        return;
-      }
-
       const customEvent = event as CustomEvent;
       const { animatorId } = customEvent.detail;
 
@@ -112,7 +106,7 @@ const Panel = ({
       document.removeEventListener('ee:dispatchId', listener);
       document.removeEventListener('ee:animatorDraw', animatorListener);
     };
-  }, [interactiveMode, setCurrentScenarioKey, setCurrentStep]);
+  }, [setCurrentScenarioKey, setCurrentStep]);
 
   return (
     <div className="flex flex-col h-full">

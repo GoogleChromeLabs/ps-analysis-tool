@@ -868,9 +868,10 @@ export class Main {
 
   /**
    * Pops the previous checkpoint from the stack.
+   * @param tillCheckpoint - The ID of the checkpoint to pop until.
    * @returns The previous checkpoint.
    */
-  private popPreviousCheckpoint(): string | undefined {
+  private popPreviousCheckpoint(tillCheckpoint?: string): string | undefined {
     let checkpoint = Array.from(this.checkpoints).pop();
 
     if (!checkpoint) {
@@ -879,7 +880,12 @@ export class Main {
 
     this.checkpoints.delete(checkpoint);
 
+    if (tillCheckpoint === checkpoint) {
+      return tillCheckpoint;
+    }
+
     if (
+      !tillCheckpoint &&
       !this.animatorStepsQueue?.[0]
         ?.getObjects()
         .find((object) => object.getId() === checkpoint)
@@ -887,18 +893,19 @@ export class Main {
       return checkpoint;
     }
 
-    checkpoint = this.popPreviousCheckpoint();
+    checkpoint = this.popPreviousCheckpoint(tillCheckpoint);
 
     return checkpoint;
   }
 
   /**
    * Loads the previous checkpoint. This will re-render instantly all figures up to the previous checkpoint and start the queue from there.
+   * @param prev - The ID of the previous checkpoint.
    * @returns - The previous checkpoint.
    */
   // eslint-disable-next-line complexity
-  loadPreviousCheckpoint() {
-    let checkpoint = this.popPreviousCheckpoint();
+  loadPreviousCheckpoint(prev?: string) {
+    let checkpoint = this.popPreviousCheckpoint(prev);
 
     if (!checkpoint) {
       return undefined;
@@ -933,7 +940,7 @@ export class Main {
     }
 
     if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
-      checkpoint = this.popPreviousCheckpoint();
+      checkpoint = this.popPreviousCheckpoint(prev);
     }
 
     const toBeLoadedObjects = [];
@@ -1013,6 +1020,7 @@ export class Main {
     const lastDispatchedId = Array.from(this.dispatchedIds).pop();
 
     this.dispatchCustomEvent('ee:dispatchId', {
+      type: 'previousCheckpoint',
       dispatchId: lastDispatchedId,
     });
 
@@ -1025,9 +1033,10 @@ export class Main {
 
   /**
    * Loads the next checkpoint. This will re-render instantly all figures up to the next checkpoint and start the queue from there.
+   * @param next - The ID of the next checkpoint.
    * @returns - The next checkpoint.
    */
-  loadNextCheckpoint() {
+  loadNextCheckpoint(next?: string) {
     this.togglePause(true);
 
     while (this.instantQueue.length) {
@@ -1043,7 +1052,12 @@ export class Main {
       this.runner(false, true);
     }
 
-    while (this.stepsQueue.length && !this.stepsQueue[0].getIsCheckpoint()) {
+    while (
+      this.stepsQueue.length &&
+      (next
+        ? this.stepsQueue[0].getId() !== next
+        : !this.stepsQueue[0].getIsCheckpoint())
+    ) {
       this.runner(false, true);
     }
 

@@ -29,7 +29,6 @@ export interface StoreContext {
   state: {
     play: boolean;
     speed: number;
-    interactiveMode: boolean;
     currentScenarioKey: ScenarioKeys;
     currentStep: number;
   };
@@ -40,13 +39,7 @@ export interface StoreContext {
     nextStep: () => void;
     prevStep: () => void;
     setSpeed: (speed: number) => void;
-    setInteractiveMode: (interactiveMode: boolean) => void;
-    loadScenarioForInteractiveMode: (
-      id: string,
-      scenarioKey: ScenarioKeys,
-      shouldRedraw: boolean
-    ) => void;
-    hasLoadedForInteractiveMode: (scenarioKey: ScenarioKeys) => boolean;
+    loadScenarioForInteractiveMode: (scenarioKey: ScenarioKeys) => void;
     setCurrentScenarioKey: (key: ScenarioKeys) => void;
     setCurrentStep: (step: number) => void;
   };
@@ -56,7 +49,6 @@ const initialState: StoreContext = {
   state: {
     play: false,
     speed: 1,
-    interactiveMode: false,
     currentScenarioKey: ScenarioKeys.REGISTRATION,
     currentStep: -1,
   },
@@ -67,9 +59,7 @@ const initialState: StoreContext = {
     nextStep: noop,
     prevStep: noop,
     setSpeed: noop,
-    setInteractiveMode: noop,
     loadScenarioForInteractiveMode: noop,
-    hasLoadedForInteractiveMode: () => false,
     setCurrentScenarioKey: noop,
     setCurrentStep: noop,
   },
