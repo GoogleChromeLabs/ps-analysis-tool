@@ -27,12 +27,15 @@ import {
   noop,
 } from '@google-psat/design-system';
 import React, { useMemo, useRef, useState } from 'react';
-import type { PRTMetadata } from '@google-psat/common';
+import { isValidURL, type PRTMetadata } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import { useProbabilisticRevealTokens } from '../../../../stateProviders';
+import {
+  useProbabilisticRevealTokens,
+  useScriptBlocking,
+} from '../../../../stateProviders';
 import RowContextMenuForPRT from './rowContextMenu';
 
 const ProbabilisticRevealTokens = () => {
@@ -48,6 +51,10 @@ const ProbabilisticRevealTokens = () => {
     decryptedTokensData: state.decryptedTokens,
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
+  }));
+
+  const { scriptBlockingData } = useScriptBlocking(({ state }) => ({
+    scriptBlockingData: state.scriptBlockingData,
   }));
 
   const rowContextMenuRef = useRef<React.ElementRef<
@@ -68,12 +75,41 @@ const ProbabilisticRevealTokens = () => {
         cell: (info) => info,
       },
       {
-        header: 'Decryption key available',
+        header: 'Decrypted',
         accessorKey: 'decryptionKeyAvailable',
-        cell: (info) => info.toString(),
+        cell: (info, _) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+      },
+      {
+        header: 'Owner',
+        accessorKey: '0',
+        cell: (_, details) => {
+          const origin: string = isValidURL(details?.origin)
+            ? new URL(details?.origin).host.slice(4)
+            : '';
+          return scriptBlockingData[origin]?.owner;
+        },
+      },
+      {
+        header: 'Signal',
+        accessorKey: 'nonZeroUintsignal',
+        cell: (info, _) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+      },
+      {
+        header: 'Blocking Scope',
+        accessorKey: '',
+        cell: (_, details) => {
+          const origin: string = isValidURL(details?.origin)
+            ? new URL(details?.origin).host.slice(4)
+            : '';
+          return scriptBlockingData[origin]?.scriptBlocking;
+        },
       },
     ],
-    []
+    [scriptBlockingData]
   );
 
   const formedJson = useMemo(() => {

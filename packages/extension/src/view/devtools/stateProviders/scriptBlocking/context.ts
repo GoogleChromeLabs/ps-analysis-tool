@@ -18,9 +18,18 @@
  */
 import { noop, createContext } from '@google-psat/common';
 
+export type ScriptBlockingData = {
+  [origin: string]: {
+    domain: string;
+    owner: string;
+    scriptBlocking: string;
+  };
+};
+
 export interface ScriptBlockingStoreContext {
   state: {
     uniqueResponseDomains: string[];
+    scriptBlockingData: ScriptBlockingData;
   };
   actions: {
     setUniqueResponseDomains: (newValue: string[]) => void;
@@ -30,6 +39,7 @@ export interface ScriptBlockingStoreContext {
 const initialState: ScriptBlockingStoreContext = {
   state: {
     uniqueResponseDomains: [],
+    scriptBlockingData: {},
   },
   actions: {
     setUniqueResponseDomains: noop,
