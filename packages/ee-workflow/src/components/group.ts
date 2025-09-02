@@ -188,12 +188,6 @@ export default class Group {
     }
   }
 
-  reDraw() {
-    this.figures.forEach((figure) => {
-      figure.reDraw();
-    });
-  }
-
   /**
    * Method to get detail if any figure in the group should travel.
    * @returns boolean indicating if any figure in the group should travel.
