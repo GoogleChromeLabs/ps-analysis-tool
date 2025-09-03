@@ -25,7 +25,7 @@ import {
   PreviousIcon,
   Slider,
 } from '@google-psat/design-system';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Internal dependencies.
@@ -47,6 +47,20 @@ const Header = ({ historyCount }: HeaderProps) => {
       reset: actions.reset,
       setSpeed: actions.setSpeed,
     }));
+
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      if (event.key === ' ') {
+        setIsPlaying(!play);
+      }
+    };
+
+    document.addEventListener('keydown', listener);
+
+    return () => {
+      document.removeEventListener('keydown', listener);
+    };
+  }, [play, setIsPlaying]);
 
   return (
     <div className="w-full px-2 flex items-center justify-between border-b border-american-silver dark:border-quartz bg-anti-flash-white dark:bg-charleston-green h-[26px] min-w-[900px]">
