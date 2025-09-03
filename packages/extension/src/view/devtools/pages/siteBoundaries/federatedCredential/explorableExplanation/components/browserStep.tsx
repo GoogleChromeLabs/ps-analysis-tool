@@ -251,7 +251,7 @@ const BrowserStep = ({
     >
       <div
         id="browser-ui"
-        className="border border-[#ccc] rounded-[8px] overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.1)] bg-white min-h-[250px] flex-grow-0.4 relative flex flex-col"
+        className="border border-[#ccc] rounded-[8px] overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.1)] bg-white min-h-[250px] h-full flex-grow-0.4 relative flex flex-col"
       >
         <div className="browser-chrome bg-[#f2f2f2] p-[10px] border-b border-[#ddd] flex items-center">
           <span className="bg-white px-[10px] py-[5px] rounded-[4px] text-[14px] text-[#333] flex-1 max-w-[80%]">
@@ -261,7 +261,7 @@ const BrowserStep = ({
         <div
           id="browser-content"
           ref={browserContentRef}
-          className="p-[20px] min-h-[200px] relative flex-1"
+          className="p-[20px] w-full min-h-[200px] relative flex-1 flex justify-center items-center"
         >
           {browserLoading ? (
             browserLoading.silent ? (
