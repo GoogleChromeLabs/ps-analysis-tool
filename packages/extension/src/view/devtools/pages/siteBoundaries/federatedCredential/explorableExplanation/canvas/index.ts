@@ -39,20 +39,21 @@ export const initializeCanvas = (
         stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
-        width: 100,
-        height: 50,
+        width: 80,
+        height: 40,
         fill: '#f0f0f0',
         stroke: '#999',
         nextTipHelper: (nextCoordinates) => {
           return {
-            x: nextCoordinates.up.x - 50,
-            y: nextCoordinates.up.y - 25,
+            x: nextCoordinates.up.x - 40,
+            y: nextCoordinates.up.y - 20,
           };
         },
       }),
       componentFigureFactory.text({
         text: 'User',
         fill: '#212121',
+        size: 14,
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -74,20 +75,21 @@ export const initializeCanvas = (
         stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
-        width: 100,
-        height: 50,
+        width: 80,
+        height: 40,
         fill: '#f0f0f0',
         stroke: '#999',
         nextTipHelper: (nextCoordinates) => {
           return {
-            x: nextCoordinates.up.x - 50,
-            y: nextCoordinates.up.y - 25,
+            x: nextCoordinates.up.x - 40,
+            y: nextCoordinates.up.y - 20,
           };
         },
       }),
       componentFigureFactory.text({
         text: 'Browser',
         fill: '#212121',
+        size: 14,
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -109,20 +111,21 @@ export const initializeCanvas = (
         stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
-        width: 100,
-        height: 50,
+        width: 80,
+        height: 40,
         fill: '#f0f0f0',
         stroke: '#999',
         nextTipHelper: (nextCoordinates) => {
           return {
-            x: nextCoordinates.up.x - 50,
-            y: nextCoordinates.up.y - 25,
+            x: nextCoordinates.up.x - 40,
+            y: nextCoordinates.up.y - 20,
           };
         },
       }),
       componentFigureFactory.text({
         text: 'RP',
         fill: '#212121',
+        size: 14,
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -144,20 +147,21 @@ export const initializeCanvas = (
         stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
-        width: 100,
-        height: 50,
+        width: 80,
+        height: 40,
         fill: '#f0f0f0',
         stroke: '#999',
         nextTipHelper: (nextCoordinates) => {
           return {
-            x: nextCoordinates.up.x - 50,
-            y: nextCoordinates.up.y - 25,
+            x: nextCoordinates.up.x - 40,
+            y: nextCoordinates.up.y - 20,
           };
         },
       }),
       componentFigureFactory.text({
         text: 'IDP',
         fill: '#212121',
+        size: 14,
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -192,6 +196,7 @@ export const initializeCanvas = (
         flowFigureFactory.text({
           text: label,
           fill: '#292929',
+          size: 14,
           x: fromLineX + 25,
           y: currentYToDraw,
           id,
@@ -241,6 +246,7 @@ export const initializeCanvas = (
       flowFigureFactory.text({
         text: label,
         fill: '#292929',
+        size: 14,
         x: (fromLineX + toLineX) / 2,
         y: currentYToDraw,
         id,

@@ -56,7 +56,7 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
           <Fragment key={title}>
             <div
               className={[
-                'timeline-node font-medium text-center relative min-w-[120px] transition-all duration-300 cursor-pointer text-sm px-[15px] py-[10px] rounded text-raisin-black flex items-center justify-center gap-2',
+                'timeline-node font-medium text-center min-w-[100px] relative transition-all duration-300 cursor-pointer text-xs px-3 py-2.5 rounded text-raisin-black',
                 isActive
                   ? 'active bg-bright-navy-blue text-white shadow-[0_2px_5px_rgba(0,0,0,0.2)]'
                   : isCompleted
