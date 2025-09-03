@@ -693,7 +693,7 @@ export class BrowserManagement {
             return;
           }
 
-          // @ts-ignore -- build fails if this is not done.
+          // @ts-ignore
           const _JSCookies: CookieStoreCookie[] = await resolveWithTimeout(
             frame.evaluate(() => {
               // @ts-ignore

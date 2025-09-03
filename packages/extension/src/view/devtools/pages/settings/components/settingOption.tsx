@@ -25,6 +25,7 @@ interface SettingOptionProps {
   switchState: boolean;
   changeSwitchState: (newState: boolean) => void;
   links?: string[];
+  customAction?: () => React.ReactNode;
 }
 
 const SettingOption = ({
@@ -32,6 +33,7 @@ const SettingOption = ({
   description,
   switchState,
   changeSwitchState,
+  customAction,
   links,
 }: SettingOptionProps) => {
   return (
@@ -43,7 +45,11 @@ const SettingOption = ({
         </div>
       </div>
       <div className="flex w-1/12">
-        <ToggleSwitch enabled={switchState} setEnabled={changeSwitchState} />
+        {customAction ? (
+          customAction()
+        ) : (
+          <ToggleSwitch enabled={switchState} setEnabled={changeSwitchState} />
+        )}
       </div>
     </div>
   );
