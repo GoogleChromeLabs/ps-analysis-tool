@@ -32,10 +32,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import {
-  useProbabilisticRevealTokens,
-  useScriptBlocking,
-} from '../../../../stateProviders';
+import { useIPProxy } from '../../../../stateProviders';
 import RowContextMenuForPRT from './rowContextMenu';
 
 const ProbabilisticRevealTokens = () => {
@@ -46,14 +43,12 @@ const ProbabilisticRevealTokens = () => {
     decryptedTokensData,
     prtTokensData,
     plainTextTokensData,
-  } = useProbabilisticRevealTokens(({ state }) => ({
+    scriptBlockingData,
+  } = useIPProxy(({ state }) => ({
     perTokenMetadata: state.perTokenMetadata,
     decryptedTokensData: state.decryptedTokens,
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
-  }));
-
-  const { scriptBlockingData } = useScriptBlocking(({ state }) => ({
     scriptBlockingData: state.scriptBlockingData,
   }));
 
@@ -64,49 +59,49 @@ const ProbabilisticRevealTokens = () => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
-        header: 'PRT',
-        accessorKey: 'prtHeader',
-        cell: (info) => info,
-        minWidth: 500,
-      },
-      {
-        header: 'Origin',
+        header: 'Domain',
         accessorKey: 'origin',
         cell: (info) => info,
-      },
-      {
-        header: 'Decrypted',
-        accessorKey: 'decryptionKeyAvailable',
-        cell: (info, _) => {
-          return info ? <span className="font-serif">✓</span> : '';
-        },
       },
       {
         header: 'Owner',
         accessorKey: '0',
         cell: (_, details) => {
-          const origin: string = isValidURL(details?.origin)
-            ? new URL(details?.origin).host.slice(4)
+          const origin: string = isValidURL((details as PRTMetadata)?.origin)
+            ? new URL((details as PRTMetadata)?.origin).host.slice(4)
             : '';
           return scriptBlockingData[origin]?.owner;
         },
       },
       {
+        header: 'Decrypted',
+        accessorKey: 'decryptionKeyAvailable',
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+      },
+      {
         header: 'Signal',
         accessorKey: 'nonZeroUintsignal',
-        cell: (info, _) => {
+        cell: (info) => {
           return info ? <span className="font-serif">✓</span> : '';
         },
       },
       {
         header: 'Blocking Scope',
-        accessorKey: '',
+        accessorKey: '1',
         cell: (_, details) => {
-          const origin: string = isValidURL(details?.origin)
-            ? new URL(details?.origin).host.slice(4)
+          const origin: string = isValidURL((details as PRTMetadata)?.origin)
+            ? new URL((details as PRTMetadata)?.origin).host.slice(4)
             : '';
           return scriptBlockingData[origin]?.scriptBlocking;
         },
+      },
+      {
+        header: 'PRT Prefix',
+        accessorKey: 'prtHeader',
+        cell: (info) => info,
+        minWidth: 50,
       },
     ],
     [scriptBlockingData]
