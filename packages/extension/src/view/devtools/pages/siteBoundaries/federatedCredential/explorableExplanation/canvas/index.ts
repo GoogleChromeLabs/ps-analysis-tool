@@ -36,7 +36,7 @@ export const initializeCanvas = (
         x: 100,
         y: 50,
         endYwith: 1400,
-        stroke: '#999',
+        stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
         width: 100,
@@ -52,6 +52,7 @@ export const initializeCanvas = (
       }),
       componentFigureFactory.text({
         text: 'User',
+        fill: '#212121',
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -70,7 +71,7 @@ export const initializeCanvas = (
         x: 300,
         y: 50,
         endYwith: 1400,
-        stroke: '#999',
+        stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
         width: 100,
@@ -86,6 +87,7 @@ export const initializeCanvas = (
       }),
       componentFigureFactory.text({
         text: 'Browser',
+        fill: '#212121',
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -104,7 +106,7 @@ export const initializeCanvas = (
         x: 500,
         y: 50,
         endYwith: 1400,
-        stroke: '#999',
+        stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
         width: 100,
@@ -120,6 +122,7 @@ export const initializeCanvas = (
       }),
       componentFigureFactory.text({
         text: 'RP',
+        fill: '#212121',
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -138,7 +141,7 @@ export const initializeCanvas = (
         x: 700,
         y: 50,
         endYwith: 1400,
-        stroke: '#999',
+        stroke: '#A9A9A9',
       }),
       componentFigureFactory.box({
         width: 100,
@@ -154,6 +157,7 @@ export const initializeCanvas = (
       }),
       componentFigureFactory.text({
         text: 'IDP',
+        fill: '#212121',
         nextTipHelper: (nextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
@@ -187,6 +191,7 @@ export const initializeCanvas = (
       const group = new Group(flowCanvas, [
         flowFigureFactory.text({
           text: label,
+          fill: '#292929',
           x: fromLineX + 25,
           y: currentYToDraw,
           id,
@@ -235,6 +240,7 @@ export const initializeCanvas = (
     const group = new Group(flowCanvas, [
       flowFigureFactory.text({
         text: label,
+        fill: '#292929',
         x: (fromLineX + toLineX) / 2,
         y: currentYToDraw,
         id,
