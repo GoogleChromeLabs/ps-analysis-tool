@@ -13,187 +13,93 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * External dependencies.
+ */
+import {
+  Animator,
+  FigureFactory,
+  Group,
+  Main,
+  type NextCoordinates,
+} from '@google-psat/ee-workflow';
 
-import { Animator, FigureFactory, Group, Main } from '@google-psat/ee-workflow';
+/**
+ * Internal dependencies.
+ */
 import { scenarios } from '../store/scenarios';
 
-export const initializeCanvas = (
-  container: HTMLDivElement,
-  setCoordinates: (id: string, x: number, y: number) => void
-) => {
-  const componentCanvas = new Main(false, container);
-  const flowCanvas = new Main(false, container);
-  flowCanvas.togglePause(true);
-
-  const componentFigureFactory = new FigureFactory(componentCanvas, container);
-  const flowFigureFactory = new FigureFactory(flowCanvas, container);
-
-  // Create horizontal four components, User, Browser, RP and IDP
-  const userComponent = new Group(
-    componentCanvas,
-    [
-      componentFigureFactory.line({
-        x: 100,
-        y: 50,
+const helpers = {
+  createEntity: (
+    id: string,
+    componentName: string,
+    x: number,
+    y: number,
+    canvas: Main,
+    figureFactory: FigureFactory
+  ) => {
+    const figureConfig = {
+      line: {
+        x,
+        y,
         endYwith: 1400,
         stroke: '#A9A9A9',
-      }),
-      componentFigureFactory.box({
+      },
+      box: {
         width: 80,
         height: 40,
         fill: '#f0f0f0',
         stroke: '#999',
-        nextTipHelper: (nextCoordinates) => {
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
           return {
             x: nextCoordinates.up.x - 40,
             y: nextCoordinates.up.y - 20,
           };
         },
-      }),
-      componentFigureFactory.text({
-        text: 'User',
+      },
+      text: {
+        text: componentName,
         fill: '#212121',
         size: 14,
-        nextTipHelper: (nextCoordinates) => {
+        nextTipHelper: (nextCoordinates: NextCoordinates) => {
           return {
             x: nextCoordinates.middle.x,
             y: nextCoordinates.middle.y,
           };
         },
-      }),
-    ],
-    'user-entity'
-  );
+      },
+    };
 
-  const browserComponent = new Group(
-    componentCanvas,
-    [
-      componentFigureFactory.line({
-        x: 300,
-        y: 50,
-        endYwith: 1400,
-        stroke: '#A9A9A9',
-      }),
-      componentFigureFactory.box({
-        width: 80,
-        height: 40,
-        fill: '#f0f0f0',
-        stroke: '#999',
-        nextTipHelper: (nextCoordinates) => {
-          return {
-            x: nextCoordinates.up.x - 40,
-            y: nextCoordinates.up.y - 20,
-          };
-        },
-      }),
-      componentFigureFactory.text({
-        text: 'Browser',
-        fill: '#212121',
-        size: 14,
-        nextTipHelper: (nextCoordinates) => {
-          return {
-            x: nextCoordinates.middle.x,
-            y: nextCoordinates.middle.y,
-          };
-        },
-      }),
-    ],
-    'browser-entity'
-  );
+    const figures = [
+      figureFactory.line(figureConfig.line),
+      figureFactory.box(figureConfig.box),
+      figureFactory.text(figureConfig.text),
+    ];
 
-  const rpComponent = new Group(
-    componentCanvas,
-    [
-      componentFigureFactory.line({
-        x: 500,
-        y: 50,
-        endYwith: 1400,
-        stroke: '#A9A9A9',
-      }),
-      componentFigureFactory.box({
-        width: 80,
-        height: 40,
-        fill: '#f0f0f0',
-        stroke: '#999',
-        nextTipHelper: (nextCoordinates) => {
-          return {
-            x: nextCoordinates.up.x - 40,
-            y: nextCoordinates.up.y - 20,
-          };
-        },
-      }),
-      componentFigureFactory.text({
-        text: 'RP',
-        fill: '#212121',
-        size: 14,
-        nextTipHelper: (nextCoordinates) => {
-          return {
-            x: nextCoordinates.middle.x,
-            y: nextCoordinates.middle.y,
-          };
-        },
-      }),
-    ],
-    'rp-entity'
-  );
+    const group = new Group(canvas, figures, id);
+    canvas.addGroup(group, true);
 
-  const idpComponent = new Group(
-    componentCanvas,
-    [
-      componentFigureFactory.line({
-        x: 700,
-        y: 50,
-        endYwith: 1400,
-        stroke: '#A9A9A9',
-      }),
-      componentFigureFactory.box({
-        width: 80,
-        height: 40,
-        fill: '#f0f0f0',
-        stroke: '#999',
-        nextTipHelper: (nextCoordinates) => {
-          return {
-            x: nextCoordinates.up.x - 40,
-            y: nextCoordinates.up.y - 20,
-          };
-        },
-      }),
-      componentFigureFactory.text({
-        text: 'IDP',
-        fill: '#212121',
-        size: 14,
-        nextTipHelper: (nextCoordinates) => {
-          return {
-            x: nextCoordinates.middle.x,
-            y: nextCoordinates.middle.y,
-          };
-        },
-      }),
-    ],
-    'idp-entity'
-  );
+    return group;
+  },
 
-  componentCanvas.addGroup(userComponent, true);
-  componentCanvas.addGroup(browserComponent, true);
-  componentCanvas.addGroup(rpComponent, true);
-  componentCanvas.addGroup(idpComponent, true);
-
-  let currentYToDraw = 130;
-
-  const createArrowWithLabel = (
+  createArrowWithLabel: (
     from: Group,
     to: Group,
     label: string,
     selfMessage: boolean,
-    id: string
+    id: string,
+    setCoordinates: (id: string, x: number, y: number) => void,
+    currentYToDraw: number,
+    canvas: Main,
+    figureFactory: FigureFactory
   ) => {
     if (selfMessage) {
       const fromLineX = from.getFigures()[2].getX();
 
       setCoordinates(id, fromLineX + 25, currentYToDraw);
 
-      const group = new Group(flowCanvas, [
-        flowFigureFactory.text({
+      const group = new Group(canvas, [
+        figureFactory.text({
           text: label,
           fill: '#292929',
           size: 14,
@@ -202,14 +108,14 @@ export const initializeCanvas = (
           id,
           isDispatcher: true,
         }),
-        flowFigureFactory.line({
+        figureFactory.line({
           x: fromLineX,
           y: currentYToDraw + 15,
           endX: fromLineX + 50,
           endY: currentYToDraw + 15,
           shouldTravel: true,
         }),
-        flowFigureFactory.line({
+        figureFactory.line({
           endYwith: 50,
           nextTipHelper: (nextCoordinates) => {
             return {
@@ -219,7 +125,7 @@ export const initializeCanvas = (
           },
           shouldTravel: true,
         }),
-        flowFigureFactory.line({
+        figureFactory.line({
           endXwith: -50,
           nextTipHelper: (nextCoordinates) => {
             return {
@@ -232,8 +138,6 @@ export const initializeCanvas = (
         }),
       ]);
 
-      currentYToDraw += 100;
-
       return group;
     }
 
@@ -242,8 +146,8 @@ export const initializeCanvas = (
 
     setCoordinates(id, (fromLineX + toLineX) / 2, currentYToDraw);
 
-    const group = new Group(flowCanvas, [
-      flowFigureFactory.text({
+    const group = new Group(canvas, [
+      figureFactory.text({
         text: label,
         fill: '#292929',
         size: 14,
@@ -252,7 +156,7 @@ export const initializeCanvas = (
         id,
         isDispatcher: true,
       }),
-      flowFigureFactory.line({
+      figureFactory.line({
         x: fromLineX,
         y: currentYToDraw + 15,
         endX: toLineX,
@@ -261,61 +165,132 @@ export const initializeCanvas = (
       }),
     ]);
 
-    currentYToDraw += 50;
-
     return group;
-  };
+  },
 
-  Object.entries(scenarios).forEach(([key, { steps }]) => {
-    const animatorFigures: Group[] = [];
+  processScenarios: (
+    canvas: Main,
+    figureFactory: FigureFactory,
+    userComponent: Group,
+    browserComponent: Group,
+    rpComponent: Group,
+    idpComponent: Group,
+    setCoordinates: (id: string, x: number, y: number) => void
+  ) => {
+    let currentYToDraw = 130;
 
-    steps.forEach((step, index) => {
-      const actionData = step.action?.();
+    Object.entries(scenarios).forEach(([key, { steps }]) => {
+      const animatorFigures: Group[] = [];
 
-      if (!actionData) {
-        return;
-      }
+      steps.forEach((step, index) => {
+        const actionData = step.action?.();
 
-      const { addMessage } = actionData;
+        if (!actionData) {
+          return;
+        }
 
-      if (addMessage) {
-        const [from, to, label, selfMessage] = addMessage;
+        const { addMessage } = actionData;
 
-        const groupFinder = (groupId: string) => {
-          switch (groupId) {
-            case 'user-entity':
-              return userComponent;
-            case 'browser-entity':
-              return browserComponent;
-            case 'rp-entity':
-              return rpComponent;
-            case 'idp-entity':
-              return idpComponent;
-            default:
-              return userComponent;
-          }
-        };
+        if (addMessage) {
+          const [from, to, label, selfMessage] = addMessage;
 
-        const fromGroup = groupFinder(from as string);
-        const toGroup = groupFinder(to as string);
+          const groupFinder = (groupId: string) => {
+            switch (groupId) {
+              case 'user-entity':
+                return userComponent;
+              case 'browser-entity':
+                return browserComponent;
+              case 'rp-entity':
+                return rpComponent;
+              case 'idp-entity':
+                return idpComponent;
+              default:
+                return userComponent;
+            }
+          };
 
-        animatorFigures.push(
-          createArrowWithLabel(
-            fromGroup,
-            toGroup,
-            label as string,
-            selfMessage as boolean,
-            key + '-' + index
-          )
-        );
-      }
+          const fromGroup = groupFinder(from as string);
+          const toGroup = groupFinder(to as string);
+
+          animatorFigures.push(
+            helpers.createArrowWithLabel(
+              fromGroup,
+              toGroup,
+              label as string,
+              selfMessage as boolean,
+              key + '-' + index,
+              setCoordinates,
+              currentYToDraw,
+              canvas,
+              figureFactory
+            )
+          );
+
+          currentYToDraw += selfMessage ? 100 : 50;
+        }
+      });
+
+      const animator = new Animator(animatorFigures, figureFactory, key);
+      canvas.addAnimator(animator, false, true);
+
+      currentYToDraw = 130;
     });
+  },
+};
 
-    const animator = new Animator(animatorFigures, flowFigureFactory, key);
-    flowCanvas.addAnimator(animator, false, true);
+export const initializeCanvas = (
+  container: HTMLDivElement,
+  setCoordinates: (id: string, x: number, y: number) => void
+) => {
+  const componentCanvas = new Main(false, container);
+  const flowCanvas = new Main(false, container);
+  flowCanvas.togglePause(true);
 
-    currentYToDraw = 130;
-  });
+  const componentFigureFactory = new FigureFactory(componentCanvas, container);
+  const flowFigureFactory = new FigureFactory(flowCanvas, container);
+
+  const userCompoent = helpers.createEntity(
+    'user-entity',
+    'User',
+    100,
+    50,
+    componentCanvas,
+    componentFigureFactory
+  );
+  const browserComponent = helpers.createEntity(
+    'browser-entity',
+    'Browser',
+    300,
+    50,
+    componentCanvas,
+    componentFigureFactory
+  );
+  const rpComponent = helpers.createEntity(
+    'rp-entity',
+    'RP',
+    500,
+    50,
+    componentCanvas,
+    componentFigureFactory
+  );
+  const idpComponent = helpers.createEntity(
+    'idp-entity',
+    'IDP',
+    700,
+    50,
+    componentCanvas,
+    componentFigureFactory
+  );
+
+  helpers.processScenarios(
+    flowCanvas,
+    flowFigureFactory,
+    userCompoent,
+    browserComponent,
+    rpComponent,
+    idpComponent,
+    setCoordinates
+  );
 
   return flowCanvas;
 };
