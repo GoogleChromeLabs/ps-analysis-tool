@@ -23,6 +23,12 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
+import type {
+  ProbablisticRevealToken,
+  PRTMetadata,
+  UniqueDecryptedToken,
+  UniquePlainTextToken,
+} from '@google-psat/common';
 import { isEqual } from 'lodash-es';
 
 /**
@@ -38,7 +44,7 @@ import { isValidURL } from '@google-psat/common';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [decryptedTokens, setDecryptedTokens] = useState<
-    ProbabilisticRevealTokensContextType['state']['decryptedTokens']
+    IPProxyContextType['state']['decryptedTokens']
   >([]);
 
   const [statistics, setStatistics] = useState<
@@ -46,15 +52,15 @@ const Provider = ({ children }: PropsWithChildren) => {
   >(initialState.state.statistics);
 
   const [prtTokens, setPrtTokens] = useState<
-    ProbabilisticRevealTokensContextType['state']['prtTokens']
+    IPProxyContextType['state']['prtTokens']
   >([]);
 
   const [plainTextTokens, setPlainTextTokens] = useState<
-    ProbabilisticRevealTokensContextType['state']['plainTextTokens']
+    IPProxyContextType['state']['plainTextTokens']
   >([]);
 
   const [perTokenMetadata, setPerTokenMetadata] = useState<
-    ProbabilisticRevealTokensContextType['state']['perTokenMetadata']
+    IPProxyContextType['state']['perTokenMetadata']
   >([]);
 
   const { scriptBlockingData } = useScriptBlocking(({ state }) => ({
@@ -70,7 +76,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         stats: ProbabilisticRevealTokensContextType['state']['statistics'];
       };
     }) => {
-      if (![TAB_TOKEN_DATA].includes(message.type)) {
+      if (![TAB_TOKEN_DATA, EXTRA_DATA].includes(message.type)) {
         return;
       }
 
@@ -85,7 +91,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
-      if (message.payload.tokens) {
+      if (message.payload.tokens && TAB_TOKEN_DATA) {
         setPrtTokens((prev) => {
           if (isEqual(prev, message.payload.tokens.prtTokens)) {
             return prev;
@@ -200,6 +206,66 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
+    (async () => {
+      const data = await fetch(
+        'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md'
+      );
+
+      if (!data.ok) {
+        throw new Error(`HTTP error! status: ${data.status}`);
+      }
+
+      const text = await data.text();
+
+      const lines = text
+        .split('\n')
+        .filter((line) => line.includes('|'))
+        .slice(2);
+
+      const mdlData = lines.map((line) =>
+        line.split('|').map((item) => item.trim())
+      );
+
+      setScriptBlockingData(() => {
+        const _data = mdlData.reduce((acc, item: string[]) => {
+          let owner = item[1];
+
+          if (item[1].includes('PSL Domain')) {
+            owner = 'PSL Domain';
+          }
+
+          let scriptBlocking;
+
+          switch (item[2] as string) {
+            case 'Not Impacted By Script Blocking':
+              scriptBlocking = 'None';
+              break;
+            case 'Some URLs are Blocked':
+              scriptBlocking = 'Partial';
+              break;
+            case 'Entire Domain Blocked':
+              scriptBlocking = 'Complete';
+              break;
+            default:
+              scriptBlocking = 'None';
+              break;
+          }
+
+          acc[item[0] as string] = {
+            domain: item[0],
+            owner,
+            scriptBlocking,
+          };
+
+          return acc;
+        }, {} as ScriptBlockingData);
+
+        return _data;
+      });
+    })();
+  }, []);
+
+  useEffect(() => {
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
     chrome.webNavigation?.onCommitted?.addListener(
       onCommittedNavigationListener
@@ -219,7 +285,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     sessionStorageListener,
   ]);
 
-  const memoisedValue: ProbabilisticRevealTokensContextType = useMemo(() => {
+  const memoisedValue: IPProxyContextType = useMemo(() => {
     return {
       state: {
         plainTextTokens,

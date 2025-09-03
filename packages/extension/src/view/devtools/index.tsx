@@ -37,8 +37,7 @@ import {
   AttributionReportingProvider,
   TopicsClassifierProvider,
   PrebidContextProvider,
-  ScriptBlockingProvider,
-  ProbabilisticRevealTokensProvider,
+  IPProxyProvider,
 } from './stateProviders';
 
 const root = document.getElementById('root');

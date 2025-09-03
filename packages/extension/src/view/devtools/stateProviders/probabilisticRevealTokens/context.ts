@@ -68,6 +68,4 @@ export const initialState: ProbabilisticRevealTokensContextType = {
   },
 };
 
-export default createContext<ProbabilisticRevealTokensContextType>(
-  initialState
-);
+export default createContext<IPProxyContextType>(initialState);

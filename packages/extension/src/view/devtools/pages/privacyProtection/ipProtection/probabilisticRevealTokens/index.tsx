@@ -123,6 +123,12 @@ const ProbabilisticRevealTokens = () => {
             },
           })),
       },
+      {
+        header: 'PRT Prefix',
+        accessorKey: 'prtHeader',
+        cell: (info) => info,
+        minWidth: 50,
+      },
     ],
     [perTokenMetadata, scriptBlockingData, statistics]
   );
