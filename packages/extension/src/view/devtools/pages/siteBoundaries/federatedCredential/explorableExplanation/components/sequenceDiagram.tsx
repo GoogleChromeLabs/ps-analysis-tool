@@ -28,6 +28,7 @@ const SequenceDiagram = () => {
   const { setCanvas } = useStore(({ actions }) => ({
     setCanvas: actions.setCanvas,
   }));
+  const componentContainerRef = useRef<HTMLDivElement>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const parentContainerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -44,8 +45,13 @@ const SequenceDiagram = () => {
 
   useEffect(() => {
     timeoutRef.current = setTimeout(() => {
-      if (messageContainerRef.current && parentContainerRef.current) {
+      if (
+        messageContainerRef.current &&
+        parentContainerRef.current &&
+        componentContainerRef.current
+      ) {
         const canvas = initializeCanvas(
+          componentContainerRef.current,
           messageContainerRef.current,
           setCoordinates
         );
@@ -88,10 +94,10 @@ const SequenceDiagram = () => {
 
       if (
         parentContainerRef.current &&
-        y + 150 > parentContainerRef.current.clientHeight
+        y + 180 > parentContainerRef.current.clientHeight
       ) {
         parentContainerRef.current.scrollTo({
-          top: y - parentContainerRef.current.clientHeight + 150,
+          top: y - parentContainerRef.current.clientHeight + 180,
           behavior: 'smooth',
         });
       }
@@ -116,14 +122,22 @@ const SequenceDiagram = () => {
   return (
     <div
       id="sequence-diagram"
-      ref={parentContainerRef}
-      className="relative min-w-[860px] h-[450px] max-h-[450px] flex justify-center items-start overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-md"
+      className="relative w-fit h-fit flex justify-center items-start bg-white border border-[#ccc] shadow-[0_2px_10px_rgba(0,0,0,0.1)] rounded-lg"
     >
       <div
-        id="message-container"
-        ref={messageContainerRef}
-        className="w-[800px] h-[1400px]"
-      />
+        className="overflow-y-auto min-w-[860px] max-h-[340px] mt-[110px]"
+        ref={parentContainerRef}
+      >
+        <div
+          className="absolute top-0 left-0 w-[800px] h-full"
+          ref={componentContainerRef}
+        />
+        <div
+          id="message-container"
+          ref={messageContainerRef}
+          className="relative w-[800px] h-[1400px]"
+        />
+      </div>
     </div>
   );
 };

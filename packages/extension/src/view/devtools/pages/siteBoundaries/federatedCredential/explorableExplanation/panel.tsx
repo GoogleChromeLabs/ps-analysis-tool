@@ -115,7 +115,7 @@ const Panel = ({
         <Timeline currentScenarioKey={currentScenarioKey} />
         <main className="flex flex-col gap-5 h-fit">
           <div
-            className="flex flex-row gap-5 min-h-[450px]"
+            className="flex flex-row gap-5 max-h-[450px]"
             id="visualization-container"
           >
             <BrowserStep
@@ -130,7 +130,7 @@ const Panel = ({
       <DraggableTray
         ref={draggableTrayRef}
         trayId="explorableExplanationFedcm"
-        defaultHeight="170px"
+        defaultHeight="140px"
       />
     </div>
   );

@@ -177,7 +177,7 @@ const helpers = {
     idpComponent: Group,
     setCoordinates: (id: string, x: number, y: number) => void
   ) => {
-    let currentYToDraw = 130;
+    let currentYToDraw = 20;
 
     Object.entries(scenarios).forEach(([key, { steps }]) => {
       const animatorFigures: Group[] = [];
@@ -233,21 +233,25 @@ const helpers = {
       const animator = new Animator(animatorFigures, figureFactory, key);
       canvas.addAnimator(animator, false, true);
 
-      currentYToDraw = 130;
+      currentYToDraw = 20;
     });
   },
 };
 
 export const initializeCanvas = (
-  container: HTMLDivElement,
+  componentContainer: HTMLDivElement,
+  flowContainer: HTMLDivElement,
   setCoordinates: (id: string, x: number, y: number) => void
 ) => {
-  const componentCanvas = new Main(false, container);
-  const flowCanvas = new Main(false, container);
+  const componentCanvas = new Main(false, componentContainer);
+  const flowCanvas = new Main(false, flowContainer);
   flowCanvas.togglePause(true);
 
-  const componentFigureFactory = new FigureFactory(componentCanvas, container);
-  const flowFigureFactory = new FigureFactory(flowCanvas, container);
+  const componentFigureFactory = new FigureFactory(
+    componentCanvas,
+    componentContainer
+  );
+  const flowFigureFactory = new FigureFactory(flowCanvas, flowContainer);
 
   const userCompoent = helpers.createEntity(
     'user-entity',
