@@ -291,9 +291,9 @@ const ProbabilisticRevealTokens = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="w-full">
-        <div className="w-2/6"></div>
-        <div className="flex flex-row items-center gap-2 w-2/6 justify-center">
+      <div className="flex flex-col flex-row w-full py-2">
+        <div className="w-2/5 h-full"></div>
+        <div className="flex flex-row items-center gap-2 w-1/5 justify-center">
           <CirclePieChart
             title="PRTs"
             centerCount={10}
@@ -325,7 +325,7 @@ const ProbabilisticRevealTokens = () => {
             infoIconClassName="absolute -right-3"
           />
         </div>
-        <div className="w-2/6"></div>
+        <div className="w-2/5 h-full"></div>
       </div>
       <ResizableTray
         defaultSize={{
