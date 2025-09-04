@@ -310,7 +310,7 @@ const ProbabilisticRevealTokens = () => {
             tableSearchKeys={['origin', 'owner']}
             onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
             getRowObjectKey={(row: TableRow) =>
-              (row.originalData as PRTMetadata).prtHeader.toString()
+              (row.originalData as PRTMetadata).origin.toString()
             }
             onRowContextMenu={
               rowContextMenuRef.current?.onRowContextMenu ?? noop
