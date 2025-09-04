@@ -165,17 +165,40 @@ const ProbabilisticRevealTokens = () => {
     }
 
     if (showOnlyHighlighted) {
-      unSortedData = unSortedData.map((item) => {
-        return {
-          ...item,
-          highlighted: uniqueResponseDomains.includes(item?.origin),
-          highlightedClass:
-            uniqueResponseDomains.includes(item?.origin) &&
-            item?.blockingScope.startsWith('Partial')
-              ? 'bg-amber-100'
-              : '',
-        };
-      });
+      if (shouldShowMDL) {
+        unSortedData = unSortedData.map((item) => {
+          return {
+            ...item,
+            highlighted: uniqueResponseDomains.includes(item?.origin),
+            highlightedClass:
+              uniqueResponseDomains.includes(item?.origin) &&
+              item?.blockingScope.startsWith('Partial')
+                ? 'bg-amber-100'
+                : '',
+          };
+        });
+      } else {
+        unSortedData.push(
+          ...uniqueResponseDomains
+            .filter((item) => scriptBlockingData[item])
+            .map((item) => {
+              return {
+                blockingScope: scriptBlockingData[item].scriptBlocking,
+                prtHeader: '',
+                origin: scriptBlockingData[item].domain,
+                owner: scriptBlockingData[item].owner,
+                decryptionKeyAvailable: false,
+                highlighted: true,
+                nonZeroUintsignal: false,
+                highlightedClass: scriptBlockingData[
+                  item
+                ].scriptBlocking.startsWith('Partial')
+                  ? 'bg-amber-100'
+                  : '',
+              };
+            })
+        );
+      }
     }
 
     return unSortedData.sort((a, b) => {
