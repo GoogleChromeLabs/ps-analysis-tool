@@ -219,4 +219,10 @@ export default class Group {
   getCreationOrder() {
     return this.creationOrder;
   }
+
+  reDraw() {
+    this.figures.forEach((figure) => {
+      figure.reDraw();
+    });
+  }
 }
