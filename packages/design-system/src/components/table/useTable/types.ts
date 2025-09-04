@@ -71,6 +71,8 @@ export type IPTableData = {
   decryptionKeyAvailable: boolean;
   nonZeroUintsignal: boolean;
   blockingScope: string;
+  highlighted?: boolean;
+  highlightedClass?: string;
 };
 
 export type TableData = (

@@ -27,13 +27,7 @@ import {
   noop,
   type IPTableData,
 } from '@google-psat/design-system';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { isValidURL, type PRTMetadata } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
@@ -51,28 +45,40 @@ const ProbabilisticRevealTokens = () => {
     prtTokensData,
     plainTextTokensData,
     scriptBlockingData,
+    uniqueResponseDomains,
   } = useIPProxy(({ state }) => ({
     perTokenMetadata: state.perTokenMetadata,
     decryptedTokensData: state.decryptedTokens,
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
     scriptBlockingData: state.scriptBlockingData,
+    uniqueResponseDomains: state.uniqueResponseDomains,
   }));
 
-  const [tableData, setTableData] = useState<IPTableData[]>([]);
-  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
+  const [shouldShowMDL, setShouldShowMDL] = useState<boolean>(false);
+  const [showOnlyHighlighted, setShowOnlyHighlighted] =
+    useState<boolean>(false);
 
   const checkbox = useCallback(() => {
     return (
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input
-          className="hover:cursor-pointer"
-          type="checkbox"
-          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
-          defaultChecked
-        />
-        <span className="whitespace-nowrap">Show complete MDL list</span>
-      </label>
+      <div className="flex flex-row items-center gap-2">
+        <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+          <input
+            className="hover:cursor-pointer"
+            type="checkbox"
+            onChange={() => setShouldShowMDL((prev) => !prev)}
+          />
+          <span className="whitespace-nowrap">Show complete MDL list</span>
+        </label>
+        <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+          <input
+            className="hover:cursor-pointer"
+            type="checkbox"
+            onChange={() => setShowOnlyHighlighted((prev) => !prev)}
+          />
+          <span className="whitespace-nowrap">Show script blocked domains</span>
+        </label>
+      </div>
     );
   }, []);
 
@@ -90,16 +96,7 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'Owner',
         accessorKey: 'owner',
-        cell: (info, details) => {
-          if (info) {
-            return info;
-          }
-
-          const origin: string = isValidURL((details as PRTMetadata)?.origin)
-            ? new URL((details as PRTMetadata)?.origin).host.slice(4)
-            : '';
-          return scriptBlockingData[origin]?.owner;
-        },
+        cell: (info) => info,
       },
       {
         header: 'Decrypted',
@@ -118,16 +115,7 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'Blocking Scope',
         accessorKey: 'blockingScope',
-        cell: (info, details) => {
-          if (info) {
-            return info;
-          }
-
-          const origin: string = isValidURL((details as PRTMetadata)?.origin)
-            ? new URL((details as PRTMetadata)?.origin).host.slice(4)
-            : '';
-          return scriptBlockingData[origin]?.scriptBlocking;
-        },
+        cell: (info) => info,
       },
       {
         header: 'PRT Prefix',
@@ -136,11 +124,11 @@ const ProbabilisticRevealTokens = () => {
         minWidth: 50,
       },
     ],
-    [scriptBlockingData]
+    []
   );
 
-  useEffect(() => {
-    const mappedData = Object.values(scriptBlockingData).map(
+  const tableData = useMemo(() => {
+    const mdl = Object.values(scriptBlockingData).map(
       ({ domain, owner, scriptBlocking }) => {
         return {
           origin: domain,
@@ -152,11 +140,67 @@ const ProbabilisticRevealTokens = () => {
         };
       }
     );
-    setTableData([
-      ...(perTokenMetadata as unknown as IPTableData[]),
-      ...mappedData,
-    ]);
-  }, [perTokenMetadata, scriptBlockingData]);
+
+    const token = perTokenMetadata.map((_token) => {
+      const origin = isValidURL((_token as PRTMetadata)?.origin)
+        ? new URL((_token as PRTMetadata)?.origin).host.slice(4)
+        : '';
+
+      return {
+        ..._token,
+        owner: scriptBlockingData[origin]?.owner,
+        blockingScope: scriptBlockingData[origin]?.scriptBlocking,
+      };
+    });
+    let unSortedData: IPTableData[] = [...(token as unknown as IPTableData[])];
+
+    if (shouldShowMDL) {
+      unSortedData.push(...(mdl as unknown as IPTableData[]));
+    }
+
+    if (showOnlyHighlighted) {
+      unSortedData = unSortedData.map((item) => {
+        return {
+          ...item,
+          highlighted: uniqueResponseDomains.includes(item?.origin),
+          highlightedClass:
+            uniqueResponseDomains.includes(item?.origin) &&
+            item?.blockingScope.startsWith('Partial')
+              ? 'bg-amber-100'
+              : '',
+        };
+      });
+    }
+
+    return unSortedData.sort((a, b) => {
+      const aHasHeader = Object.prototype.hasOwnProperty.call(a, 'prtHeader');
+      const bHasHeader = Object.prototype.hasOwnProperty.call(b, 'prtHeader');
+
+      if (aHasHeader && !bHasHeader) {
+        return -1;
+      }
+      if (!aHasHeader && bHasHeader) {
+        return 1;
+      }
+
+      if (showOnlyHighlighted) {
+        if (a.highlighted && !b.highlighted) {
+          return -1;
+        }
+        if (!a.highlighted && b.highlighted) {
+          return 1;
+        }
+      }
+
+      return 0;
+    });
+  }, [
+    perTokenMetadata,
+    scriptBlockingData,
+    shouldShowMDL,
+    showOnlyHighlighted,
+    uniqueResponseDomains,
+  ]);
 
   const formedJson = useMemo(() => {
     if (!selectedJSON) {
@@ -238,13 +282,9 @@ const ProbabilisticRevealTokens = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
-            data={
-              showOnlyHighlighted
-                ? tableData
-                : (perTokenMetadata as unknown as IPTableData[])
-            }
+            data={tableData}
             tableColumns={tableColumns}
-            tableSearchKeys={['domain', 'owner']}
+            tableSearchKeys={['origin', 'owner']}
             onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as PRTMetadata).prtHeader.toString()
@@ -254,8 +294,7 @@ const ProbabilisticRevealTokens = () => {
             }
           >
             <Table
-              selectedKey={selectedJSON?.prtHeader.toString()}
-              hideSearch={true}
+              selectedKey={selectedJSON?.origin.toString()}
               minWidth="50rem"
               extraInterfaceToTopBar={checkbox}
             />
