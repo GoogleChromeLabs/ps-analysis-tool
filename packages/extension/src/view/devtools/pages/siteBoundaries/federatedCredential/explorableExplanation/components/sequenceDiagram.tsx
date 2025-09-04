@@ -88,10 +88,10 @@ const SequenceDiagram = () => {
 
       if (
         parentContainerRef.current &&
-        y + 250 > parentContainerRef.current.clientHeight
+        y + 150 > parentContainerRef.current.clientHeight
       ) {
         parentContainerRef.current.scrollTo({
-          top: y - parentContainerRef.current.clientHeight + 250,
+          top: y - parentContainerRef.current.clientHeight + 150,
           behavior: 'smooth',
         });
       }
