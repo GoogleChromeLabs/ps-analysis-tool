@@ -91,7 +91,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         return;
       }
 
-      if (message.payload.tokens && TAB_TOKEN_DATA) {
+      if (message.payload.tokens && TAB_TOKEN_DATA === message.type) {
         setPrtTokens((prev) => {
           if (isEqual(prev, message.payload.tokens.prtTokens)) {
             return prev;
