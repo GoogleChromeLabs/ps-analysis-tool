@@ -133,6 +133,25 @@ const ProbabilisticRevealTokens = () => {
     [perTokenMetadata, scriptBlockingData, statistics]
   );
 
+  useEffect(() => {
+    const mappedData = Object.values(scriptBlockingData).map(
+      ({ domain, owner, scriptBlocking }) => {
+        return {
+          origin: domain,
+          owner,
+          blockingScope: scriptBlocking,
+          decryptionKeyAvailable: false,
+          nonZeroUintsignal: false,
+          prtHeader: '',
+        };
+      }
+    );
+    setTableData([
+      ...(perTokenMetadata as unknown as IPTableData[]),
+      ...mappedData,
+    ]);
+  }, [perTokenMetadata, scriptBlockingData]);
+
   const formedJson = useMemo(() => {
     if (!selectedJSON) {
       return null;
