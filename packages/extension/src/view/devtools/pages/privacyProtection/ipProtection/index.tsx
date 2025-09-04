@@ -27,7 +27,6 @@ import {
  * Internal dependencies.
  */
 import Panel from './panel';
-import MDLTable from './mdlTable';
 import ProbabilisticRevealTokens from './probabilisticRevealTokens';
 
 const IPProtection = () => {
@@ -46,19 +45,10 @@ const IPProtection = () => {
             className: 'p-4',
           },
         },
-        {
-          title: 'Masked Domain List',
-          content: {
-            Element: MDLTable,
-            props: {},
-            className: 'overflow-auto h-full',
-            containerClassName: 'h-full',
-          },
-        },
       ],
       Observability: [
         {
-          title: 'Probabilistic Reveal Tokens',
+          title: 'Masked Domain List',
           content: {
             Element: ProbabilisticRevealTokens,
             className: 'overflow-auto h-full',

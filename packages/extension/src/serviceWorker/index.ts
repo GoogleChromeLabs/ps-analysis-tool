@@ -361,6 +361,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             'Sec-Probabilistic-Reveal-Token',
             headers
           );
+
           const origin =
             extractHeader('origin', headers) ?? isValidURL(createURL(headers))
               ? new URL(createURL(headers)).origin
@@ -413,6 +414,9 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               humanReadableSignal: plainTextToken?.humanReadableSignal ?? '',
               origin: isValidURL(origin) ? origin : '',
               decryptionKeyAvailable: Boolean(decodedToken),
+              nonZeroUintsignal: !plainTextToken?.uint8Signal.every(
+                (bit) => bit === 0
+              ),
             };
             DataStore.tabs[tabId].newUpdatesPRT++;
           }

@@ -21,24 +21,21 @@ import { useContextSelector } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import Context, { type ProbabilisticRevealTokensContextType } from './context';
+import Context, { type IPProxyContextType } from './context';
 
-export function useAttributionReporting(): ProbabilisticRevealTokensContextType;
-export function useAttributionReporting<T>(
-  selector: (state: ProbabilisticRevealTokensContextType) => T
-): T;
+export function useIPProxy(): IPProxyContextType;
+export function useIPProxy<T>(selector: (state: IPProxyContextType) => T): T;
 
 /**
  * Cookie store hook.
  * @param selector Selector function to partially select state.
  * @returns selected part of the state
  */
-export function useAttributionReporting<T>(
-  selector: (
-    state: ProbabilisticRevealTokensContextType
-  ) => T | ProbabilisticRevealTokensContextType = (state) => state
+export function useIPProxy<T>(
+  selector: (state: IPProxyContextType) => T | IPProxyContextType = (state) =>
+    state
 ) {
   return useContextSelector(Context, selector);
 }
 
-export default useAttributionReporting;
+export default useIPProxy;

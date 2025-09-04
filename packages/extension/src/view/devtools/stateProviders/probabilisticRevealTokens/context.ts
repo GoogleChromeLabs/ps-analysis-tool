@@ -24,24 +24,34 @@ import {
   type PRTMetadata,
 } from '@google-psat/common';
 
-export interface ProbabilisticRevealTokensContextType {
+export type ScriptBlockingData = {
+  [origin: string]: {
+    domain: string;
+    owner: string;
+    scriptBlocking: string;
+  };
+};
+
+export interface IPProxyContextType {
   state: {
     plainTextTokens: UniquePlainTextToken[];
     decryptedTokens: UniqueDecryptedToken[];
     prtTokens: ProbablisticRevealToken[];
     perTokenMetadata: PRTMetadata[];
+    scriptBlockingData: ScriptBlockingData;
+    uniqueResponseDomains: string[];
   };
 }
 
-const initialState: ProbabilisticRevealTokensContextType = {
+const initialState: IPProxyContextType = {
   state: {
     plainTextTokens: [],
     decryptedTokens: [],
     prtTokens: [],
     perTokenMetadata: [],
+    scriptBlockingData: {},
+    uniqueResponseDomains: [],
   },
 };
 
-export default createContext<ProbabilisticRevealTokensContextType>(
-  initialState
-);
+export default createContext<IPProxyContextType>(initialState);

@@ -10,7 +10,7 @@
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-  "incognito": "spanning",
+  "incognito": "split",
   "permissions": [
     "storage",
     "tabs",

@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as ProbabilisticRevealTokensProvider } from './probabilisticRevealTokensProvider';
-export {
-  default as ProbabilisticRevealTokensContext,
-  type ProbabilisticRevealTokensContextType,
-} from './context';
-export { default as useProbabilisticRevealTokens } from './useProbabilisticRevealTokens';
+export { default as IPProxyProvider } from './ipProxyContextTypeProvider';
+export { default as IPProxyContext, type IPProxyContextType } from './context';
+export { default as useIPProxy } from './useIPProxy';

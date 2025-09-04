@@ -33,7 +33,7 @@ import {
   useProtectedAudience,
   useSettings,
   usePrebid,
-  useProbabilisticRevealTokens,
+  useIPProxy,
 } from '../stateProviders';
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
@@ -45,7 +45,7 @@ jest.mock('../stateProviders', () => ({
   useSettings: jest.fn(),
   useProtectedAudience: jest.fn(),
   usePrebid: jest.fn(),
-  useProbabilisticRevealTokens: jest.fn(),
+  useIPProxy: jest.fn(),
 }));
 
 jest.mock(
@@ -62,8 +62,7 @@ const mockUseTablePersistentSettingStore =
 const mockUseProtectedAudienceStore = useProtectedAudience as jest.Mock;
 const mockUseSettingsStore = useSettings as jest.Mock;
 const mockPrebidStore = usePrebid as jest.Mock;
-const mockProbabilisticRevealTokensStore =
-  useProbabilisticRevealTokens as jest.Mock;
+const mockProbabilisticRevealTokensStore = useIPProxy as jest.Mock;
 
 describe('App', () => {
   beforeAll(() => {

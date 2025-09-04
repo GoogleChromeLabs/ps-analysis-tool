@@ -198,15 +198,31 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
         }
       }
 
-      (async () => {
-        const currentTab = await getCurrentTab();
-        const isFirstVisit =
-          (await chrome.storage.sync.get('isFirstTime'))?.isFirstTime ?? false;
+      return data;
+    });
+  }, [
+    selectedAdUnit,
+    canStartInspecting,
+    frameHasCookies,
+    isInspecting,
+    isKeySelected,
+    isSidebarFocused,
+    setIsInspecting,
+    setSidebarData,
+    tabFrames,
+  ]);
 
+  useEffect(() => {
+    (async () => {
+      const currentTab = await getCurrentTab();
+      const isFirstVisit =
+        (await chrome.storage.sync.get('isFirstTime'))?.isFirstTime ?? false;
+      setSidebarData((prev) => {
+        const data = { ...prev };
         if (currentTab?.incognito) {
           delete data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB];
           data[SIDEBAR_ITEMS_KEYS.SETTINGS].addDivider = false;
-          return;
+          return data;
         }
 
         data[SIDEBAR_ITEMS_KEYS.OPEN_INCOGNITO_TAB].popupTitle = incognitoAccess
@@ -246,23 +262,10 @@ const Layout = ({ setSidebarData }: LayoutProps) => {
             },
           };
         }
-      })();
-
-      return data;
-    });
-  }, [
-    selectedAdUnit,
-    canStartInspecting,
-    frameHasCookies,
-    isInspecting,
-    isKeySelected,
-    isSidebarFocused,
-    setIsInspecting,
-    setSidebarData,
-    tabFrames,
-    incognitoAccess,
-    openIncognitoTab,
-  ]);
+        return data;
+      });
+    })();
+  }, [incognitoAccess, isSidebarFocused, openIncognitoTab, setSidebarData]);
 
   const buttonReloadActionCompnent = useMemo(() => {
     return (

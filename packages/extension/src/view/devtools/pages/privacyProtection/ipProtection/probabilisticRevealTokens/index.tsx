@@ -25,14 +25,16 @@ import {
   ResizableTray,
   JsonView,
   noop,
+  type IPTableData,
+  CirclePieChart,
 } from '@google-psat/design-system';
-import React, { useMemo, useRef, useState } from 'react';
-import type { PRTMetadata } from '@google-psat/common';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { isValidURL, type PRTMetadata } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import { useProbabilisticRevealTokens } from '../../../../stateProviders';
+import { useIPProxy } from '../../../../stateProviders';
 import RowContextMenuForPRT from './rowContextMenu';
 
 const ProbabilisticRevealTokens = () => {
@@ -43,12 +45,43 @@ const ProbabilisticRevealTokens = () => {
     decryptedTokensData,
     prtTokensData,
     plainTextTokensData,
-  } = useProbabilisticRevealTokens(({ state }) => ({
+    scriptBlockingData,
+    uniqueResponseDomains,
+  } = useIPProxy(({ state }) => ({
     perTokenMetadata: state.perTokenMetadata,
     decryptedTokensData: state.decryptedTokens,
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
+    scriptBlockingData: state.scriptBlockingData,
+    uniqueResponseDomains: state.uniqueResponseDomains,
   }));
+
+  const [shouldShowMDL, setShouldShowMDL] = useState<boolean>(false);
+  const [showOnlyHighlighted, setShowOnlyHighlighted] =
+    useState<boolean>(false);
+
+  const checkbox = useCallback(() => {
+    return (
+      <div className="flex flex-row items-center gap-2">
+        <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+          <input
+            className="hover:cursor-pointer"
+            type="checkbox"
+            onChange={() => setShouldShowMDL((prev) => !prev)}
+          />
+          <span className="whitespace-nowrap">Show complete MDL list</span>
+        </label>
+        <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+          <input
+            className="hover:cursor-pointer"
+            type="checkbox"
+            onChange={() => setShowOnlyHighlighted((prev) => !prev)}
+          />
+          <span className="whitespace-nowrap">Show script blocked domains</span>
+        </label>
+      </div>
+    );
+  }, []);
 
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForPRT
@@ -57,24 +90,141 @@ const ProbabilisticRevealTokens = () => {
   const tableColumns = useMemo<TableColumn[]>(
     () => [
       {
-        header: 'PRT',
-        accessorKey: 'prtHeader',
-        cell: (info) => info,
-        minWidth: 500,
-      },
-      {
-        header: 'Origin',
+        header: 'Domain',
         accessorKey: 'origin',
         cell: (info) => info,
       },
       {
-        header: 'Decryption key available',
+        header: 'Owner',
+        accessorKey: 'owner',
+        cell: (info) => info,
+      },
+      {
+        header: 'Decrypted',
         accessorKey: 'decryptionKeyAvailable',
-        cell: (info) => info.toString(),
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+      },
+      {
+        header: 'Signal',
+        accessorKey: 'nonZeroUintsignal',
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+      },
+      {
+        header: 'Blocking Scope',
+        accessorKey: 'blockingScope',
+        cell: (info) => info,
+      },
+      {
+        header: 'PRT Prefix',
+        accessorKey: 'prtHeader',
+        cell: (info) => info,
+        minWidth: 50,
       },
     ],
     []
   );
+
+  const tableData = useMemo(() => {
+    const mdl = Object.values(scriptBlockingData).map(
+      ({ domain, owner, scriptBlocking }) => {
+        return {
+          origin: domain,
+          owner,
+          blockingScope: scriptBlocking,
+          decryptionKeyAvailable: false,
+          nonZeroUintsignal: false,
+          prtHeader: '',
+        };
+      }
+    );
+
+    const token = perTokenMetadata.map((_token) => {
+      const origin = isValidURL((_token as PRTMetadata)?.origin)
+        ? new URL((_token as PRTMetadata)?.origin).host.slice(4)
+        : '';
+
+      return {
+        ..._token,
+        owner: scriptBlockingData[origin]?.owner,
+        blockingScope: scriptBlockingData[origin]?.scriptBlocking,
+      };
+    });
+    let unSortedData: IPTableData[] = [...(token as unknown as IPTableData[])];
+
+    if (shouldShowMDL) {
+      unSortedData.push(...(mdl as unknown as IPTableData[]));
+    }
+
+    if (showOnlyHighlighted) {
+      if (shouldShowMDL) {
+        unSortedData = unSortedData.map((item) => {
+          return {
+            ...item,
+            highlighted: uniqueResponseDomains.includes(item?.origin),
+            highlightedClass:
+              uniqueResponseDomains.includes(item?.origin) &&
+              item?.blockingScope.startsWith('Partial')
+                ? 'bg-amber-100'
+                : '',
+          };
+        });
+      } else {
+        unSortedData.push(
+          ...uniqueResponseDomains
+            .filter((item) => scriptBlockingData[item])
+            .map((item) => {
+              return {
+                blockingScope: scriptBlockingData[item].scriptBlocking,
+                prtHeader: '',
+                origin: scriptBlockingData[item].domain,
+                owner: scriptBlockingData[item].owner,
+                decryptionKeyAvailable: false,
+                highlighted: true,
+                nonZeroUintsignal: false,
+                highlightedClass: scriptBlockingData[
+                  item
+                ].scriptBlocking.startsWith('Partial')
+                  ? 'bg-amber-100'
+                  : '',
+              };
+            })
+        );
+      }
+    }
+
+    return unSortedData.sort((a, b) => {
+      const aHasHeader = Object.prototype.hasOwnProperty.call(a, 'prtHeader');
+      const bHasHeader = Object.prototype.hasOwnProperty.call(b, 'prtHeader');
+
+      if (aHasHeader && !bHasHeader) {
+        return -1;
+      }
+      if (!aHasHeader && bHasHeader) {
+        return 1;
+      }
+
+      if (showOnlyHighlighted) {
+        if (a.highlighted && !b.highlighted) {
+          return -1;
+        }
+        if (!a.highlighted && b.highlighted) {
+          return 1;
+        }
+      }
+
+      return 0;
+    });
+  }, [
+    perTokenMetadata,
+    scriptBlockingData,
+    shouldShowMDL,
+    showOnlyHighlighted,
+    uniqueResponseDomains,
+  ]);
 
   const formedJson = useMemo(() => {
     if (!selectedJSON) {
@@ -141,6 +291,42 @@ const ProbabilisticRevealTokens = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
+      <div className="flex flex-col flex-row w-full py-2">
+        <div className="w-2/5 h-full"></div>
+        <div className="flex flex-row items-center gap-2 w-1/5 justify-center">
+          <CirclePieChart
+            title="PRTs"
+            centerCount={10}
+            data={[
+              {
+                count: 1,
+                color: '#C5A06A',
+              },
+              {
+                count: 9,
+                color: '#AF7AA3',
+              },
+            ]}
+            infoIconClassName="absolute -right-3"
+          />
+          <CirclePieChart
+            title="Script Blocking"
+            centerCount={4}
+            data={[
+              {
+                count: 1,
+                color: '#F54021',
+              },
+              {
+                count: 3,
+                color: '#25ACAD',
+              },
+            ]}
+            infoIconClassName="absolute -right-3"
+          />
+        </div>
+        <div className="w-2/5 h-full"></div>
+      </div>
       <ResizableTray
         defaultSize={{
           width: '100%',
@@ -156,21 +342,21 @@ const ProbabilisticRevealTokens = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
-            data={perTokenMetadata}
+            data={tableData}
             tableColumns={tableColumns}
+            tableSearchKeys={['origin', 'owner']}
             onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
             getRowObjectKey={(row: TableRow) =>
-              (row.originalData as PRTMetadata).prtHeader.toString()
+              (row.originalData as PRTMetadata).origin.toString()
             }
             onRowContextMenu={
               rowContextMenuRef.current?.onRowContextMenu ?? noop
             }
           >
             <Table
-              hideTableTopBar
-              selectedKey={selectedJSON?.prtHeader.toString()}
-              hideSearch={true}
+              selectedKey={selectedJSON?.origin.toString()}
               minWidth="50rem"
+              extraInterfaceToTopBar={checkbox}
             />
             <RowContextMenuForPRT ref={rowContextMenuRef} />
           </TableProvider>

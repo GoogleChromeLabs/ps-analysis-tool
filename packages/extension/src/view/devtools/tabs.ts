@@ -49,8 +49,6 @@ import {
   ProtectionIcon,
   SiteBoundariesIconWhite,
   DemosIcon,
-  BlockIcon,
-  BlockIconWhite,
   IncognitoIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
@@ -85,7 +83,6 @@ import {
   FederatedCredential,
   IPProtection,
   PrivateStateTokens,
-  ScriptBlocking,
 } from './pages';
 import HelpCenter from './pages/learning/helpCenter';
 import Demos from './pages/learning/demos';
@@ -341,25 +338,6 @@ const TABS: SidebarItems = {
             },
             selectedIcon: {
               Element: ProtectionIcon,
-              props: {
-                className: 'fill-bright-gray relative right-[3px]',
-              },
-            },
-            children: {},
-          },
-          [SIDEBAR_ITEMS_KEYS.SCRIPT_BLOCKING]: {
-            title: () => 'Script Blocking',
-            panel: {
-              Element: ScriptBlocking,
-            },
-            icon: {
-              Element: BlockIcon,
-              props: {
-                className: 'fill-granite-gray relative right-[3px]',
-              },
-            },
-            selectedIcon: {
-              Element: BlockIconWhite,
               props: {
                 className: 'fill-bright-gray relative right-[3px]',
               },
