@@ -117,7 +117,7 @@ const SequenceDiagram = () => {
     <div
       id="sequence-diagram"
       ref={parentContainerRef}
-      className="relative min-w-[860px] min-h-[600px] h-[600px] max-h-[600px] flex justify-center items-start overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-md"
+      className="relative min-w-[860px] h-[450px] max-h-[450px] flex justify-center items-start overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-md"
     >
       <div
         id="message-container"
