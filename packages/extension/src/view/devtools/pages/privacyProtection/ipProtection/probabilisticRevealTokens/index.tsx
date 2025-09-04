@@ -25,8 +25,15 @@ import {
   ResizableTray,
   JsonView,
   noop,
+  type IPTableData,
 } from '@google-psat/design-system';
-import React, { useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { isValidURL, type PRTMetadata } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 /**
@@ -52,6 +59,23 @@ const ProbabilisticRevealTokens = () => {
     scriptBlockingData: state.scriptBlockingData,
   }));
 
+  const [tableData, setTableData] = useState<IPTableData[]>([]);
+  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
+
+  const checkbox = useCallback(() => {
+    return (
+      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
+        <input
+          className="hover:cursor-pointer"
+          type="checkbox"
+          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
+          defaultChecked
+        />
+        <span className="whitespace-nowrap">Show complete MDL list</span>
+      </label>
+    );
+  }, []);
+
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForPRT
   > | null>(null);
@@ -65,8 +89,12 @@ const ProbabilisticRevealTokens = () => {
       },
       {
         header: 'Owner',
-        accessorKey: '0',
-        cell: (_, details) => {
+        accessorKey: 'owner',
+        cell: (info, details) => {
+          if (info) {
+            return info;
+          }
+
           const origin: string = isValidURL((details as PRTMetadata)?.origin)
             ? new URL((details as PRTMetadata)?.origin).host.slice(4)
             : '';
@@ -89,8 +117,12 @@ const ProbabilisticRevealTokens = () => {
       },
       {
         header: 'Blocking Scope',
-        accessorKey: '1',
-        cell: (_, details) => {
+        accessorKey: 'blockingScope',
+        cell: (info, details) => {
+          if (info) {
+            return info;
+          }
+
           const origin: string = isValidURL((details as PRTMetadata)?.origin)
             ? new URL((details as PRTMetadata)?.origin).host.slice(4)
             : '';
@@ -106,6 +138,25 @@ const ProbabilisticRevealTokens = () => {
     ],
     [scriptBlockingData]
   );
+
+  useEffect(() => {
+    const mappedData = Object.values(scriptBlockingData).map(
+      ({ domain, owner, scriptBlocking }) => {
+        return {
+          origin: domain,
+          owner,
+          blockingScope: scriptBlocking,
+          decryptionKeyAvailable: false,
+          nonZeroUintsignal: false,
+          prtHeader: '',
+        };
+      }
+    );
+    setTableData([
+      ...(perTokenMetadata as unknown as IPTableData[]),
+      ...mappedData,
+    ]);
+  }, [perTokenMetadata, scriptBlockingData]);
 
   const formedJson = useMemo(() => {
     if (!selectedJSON) {
@@ -187,8 +238,13 @@ const ProbabilisticRevealTokens = () => {
       >
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
-            data={perTokenMetadata}
+            data={
+              showOnlyHighlighted
+                ? tableData
+                : (perTokenMetadata as unknown as IPTableData[])
+            }
             tableColumns={tableColumns}
+            tableSearchKeys={['domain', 'owner']}
             onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
             getRowObjectKey={(row: TableRow) =>
               (row.originalData as PRTMetadata).prtHeader.toString()
@@ -198,10 +254,10 @@ const ProbabilisticRevealTokens = () => {
             }
           >
             <Table
-              hideTableTopBar
               selectedKey={selectedJSON?.prtHeader.toString()}
               hideSearch={true}
               minWidth="50rem"
+              extraInterfaceToTopBar={checkbox}
             />
             <RowContextMenuForPRT ref={rowContextMenuRef} />
           </TableProvider>
