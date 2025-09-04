@@ -32,7 +32,7 @@ const Panel = () => {
       title="Federated Credential Management API"
       contentPanel={
         ActiveTabContent && (
-          <div className={className}>
+          <div className={className} data-testid="federated-credential-content">
             <ActiveTabContent {...props} />
           </div>
         )
