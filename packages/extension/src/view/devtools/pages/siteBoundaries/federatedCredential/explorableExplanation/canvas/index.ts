@@ -241,11 +241,17 @@ const helpers = {
 export const initializeCanvas = (
   componentContainer: HTMLDivElement,
   flowContainer: HTMLDivElement,
-  setCoordinates: (id: string, x: number, y: number) => void
+  setCoordinates: (id: string, x: number, y: number) => void,
+  idToStartWith?: string
 ) => {
   const componentCanvas = new Main(false, componentContainer);
-  const flowCanvas = new Main(false, flowContainer);
-  flowCanvas.togglePause(true);
+  const flowCanvas = new Main(
+    false,
+    flowContainer,
+    undefined,
+    undefined,
+    idToStartWith
+  );
 
   const componentFigureFactory = new FigureFactory(
     componentCanvas,

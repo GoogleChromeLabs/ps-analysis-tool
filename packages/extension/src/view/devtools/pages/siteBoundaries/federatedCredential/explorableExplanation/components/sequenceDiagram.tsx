@@ -23,6 +23,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  */
 import { initializeCanvas } from '../canvas';
 import { useStore } from '../store';
+import { getSessionStorage } from '@google-psat/common';
 
 const SequenceDiagram = () => {
   const { setCanvas } = useStore(({ actions }) => ({
@@ -44,7 +45,17 @@ const SequenceDiagram = () => {
   }, []);
 
   useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = setTimeout(async () => {
+      const data = await getSessionStorage(
+        'fedcm-explorable-explanation-state'
+      );
+
+      const { currentScenarioKey, currentStep } = data || {};
+      const idToLoad =
+        currentScenarioKey && currentStep && currentStep > -1
+          ? `${currentScenarioKey}-${currentStep}`
+          : undefined;
+
       if (
         messageContainerRef.current &&
         parentContainerRef.current &&
@@ -53,7 +64,8 @@ const SequenceDiagram = () => {
         const canvas = initializeCanvas(
           componentContainerRef.current,
           messageContainerRef.current,
-          setCoordinates
+          setCoordinates,
+          idToLoad
         );
         setCanvas(canvas);
       }

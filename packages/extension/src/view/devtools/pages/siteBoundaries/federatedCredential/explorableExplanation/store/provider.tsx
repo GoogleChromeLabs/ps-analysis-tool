@@ -17,8 +17,14 @@
 /**
  * External dependencies.
  */
-import { useCallback, useState, type PropsWithChildren } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from 'react';
 import type { Main } from '@google-psat/ee-workflow';
+import { updateSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
@@ -28,12 +34,30 @@ import { ScenarioKeys } from './scenariosTypes';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState(true);
   const [speed, _setSpeed] = useState(1.5);
   const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
     ScenarioKeys.REGISTRATION
   );
   const [currentStep, setCurrentStep] = useState(-1);
+
+  useEffect(() => {
+    return () => {
+      if (canvas) {
+        canvas?.getP5Instance().remove();
+        setCanvas(undefined);
+      }
+    };
+  }, [canvas]);
+
+  useEffect(() => {
+    if (canvas) {
+      updateSessionStorage(
+        { currentScenarioKey, currentStep },
+        'fedcm-explorable-explanation-state'
+      );
+    }
+  }, [canvas, currentScenarioKey, currentStep]);
 
   const setIsPlaying = useCallback(
     (isPlaying: boolean) => {
