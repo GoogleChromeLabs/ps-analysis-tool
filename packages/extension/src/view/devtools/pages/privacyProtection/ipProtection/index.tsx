@@ -58,7 +58,7 @@ const IPProtection = () => {
       ],
       Observability: [
         {
-          title: 'Probabilistic Reveal Tokens',
+          title: 'Masked Domain List',
           content: {
             Element: ProbabilisticRevealTokens,
             className: 'overflow-auto h-full',
