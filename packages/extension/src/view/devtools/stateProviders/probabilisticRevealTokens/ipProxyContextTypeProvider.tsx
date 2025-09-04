@@ -86,13 +86,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (
-        message.payload.tabId !==
+        message.payload.tabId.toString() !==
         chrome.devtools.inspectedWindow.tabId.toString()
       ) {
         return;
       }
 
-      if (message.payload.tokens && TAB_TOKEN_DATA) {
+      if (message.payload.tokens && TAB_TOKEN_DATA === message.type) {
         setPrtTokens((prev) => {
           if (isEqual(prev, message.payload.tokens.prtTokens)) {
             return prev;
