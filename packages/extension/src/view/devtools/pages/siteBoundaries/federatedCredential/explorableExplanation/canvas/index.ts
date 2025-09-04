@@ -96,7 +96,7 @@ const helpers = {
     if (selfMessage) {
       const fromLineX = from.getFigures()[2].getX();
 
-      setCoordinates(id, fromLineX + 25, currentYToDraw);
+      setCoordinates(id, fromLineX + 25, currentYToDraw + 50);
 
       const group = new Group(canvas, [
         figureFactory.text({

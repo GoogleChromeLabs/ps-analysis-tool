@@ -111,7 +111,7 @@ const Panel = ({
   return (
     <div className="flex flex-col h-full">
       <Header />
-      <div className="flex-1 overflow-auto px-4">
+      <div className="flex-1 overflow-auto px-4 flex flex-col gap-5">
         <Timeline currentScenarioKey={currentScenarioKey} />
         <main className="flex flex-col gap-5 h-fit">
           <div
@@ -130,7 +130,7 @@ const Panel = ({
       <DraggableTray
         ref={draggableTrayRef}
         trayId="explorableExplanationFedcm"
-        defaultHeight="140px"
+        defaultHeight="150px"
       />
     </div>
   );
