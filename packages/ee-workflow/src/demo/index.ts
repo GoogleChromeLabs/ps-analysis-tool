@@ -77,7 +77,15 @@ const expanded: {
 
 const container = document.getElementById('canvas-container')!;
 
-const mainCanvas = new Main(undefined, container, idToStart, preloader, true);
+const mainCanvas = new Main(
+  undefined,
+  container,
+  undefined,
+  undefined,
+  idToStart,
+  preloader,
+  true
+);
 const mainFF = new FigureFactory(mainCanvas, container);
 
 const IGCanvas = new Main(true);
