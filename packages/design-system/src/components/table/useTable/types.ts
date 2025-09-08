@@ -64,17 +64,6 @@ export type UserEID = {
   source: string;
 };
 
-export type IPTableData = {
-  origin: string;
-  owner: string;
-  prtHeader: string;
-  decryptionKeyAvailable: boolean;
-  nonZeroUintsignal: boolean;
-  blockingScope: string;
-  highlighted?: boolean;
-  highlightedClass?: string;
-};
-
 export type TableData = (
   | CookieTableData
   | InterestGroups
@@ -91,7 +80,6 @@ export type TableData = (
   | UserEID
   | MDLTableData
   | PRTMetadata
-  | IPTableData
 ) & {
   highlighted?: boolean;
   highlightedClass?: string; // Optional class for highlighting rows

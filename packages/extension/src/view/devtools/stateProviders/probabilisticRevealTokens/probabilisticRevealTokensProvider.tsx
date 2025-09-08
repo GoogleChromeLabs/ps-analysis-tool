@@ -23,61 +23,40 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import type {
-  ProbablisticRevealToken,
-  PRTMetadata,
-  UniqueDecryptedToken,
-  UniquePlainTextToken,
-} from '@google-psat/common';
 import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
  */
-import Context, {
-  type IPProxyContextType,
-  type ScriptBlockingData,
-} from './context';
-import { EXTRA_DATA, TAB_TOKEN_DATA } from '../../../../constants';
+import Context, { type ProbabilisticRevealTokensContextType } from './context';
+import { TAB_TOKEN_DATA } from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [decryptedTokens, setDecryptedTokens] = useState<
-    IPProxyContextType['state']['decryptedTokens']
+    ProbabilisticRevealTokensContextType['state']['decryptedTokens']
   >([]);
 
   const [prtTokens, setPrtTokens] = useState<
-    IPProxyContextType['state']['prtTokens']
+    ProbabilisticRevealTokensContextType['state']['prtTokens']
   >([]);
 
   const [plainTextTokens, setPlainTextTokens] = useState<
-    IPProxyContextType['state']['plainTextTokens']
+    ProbabilisticRevealTokensContextType['state']['plainTextTokens']
   >([]);
 
   const [perTokenMetadata, setPerTokenMetadata] = useState<
-    IPProxyContextType['state']['perTokenMetadata']
+    ProbabilisticRevealTokensContextType['state']['perTokenMetadata']
   >([]);
-
-  const [uniqueResponseDomains, setUniqueResponseDomains] = useState<string[]>(
-    []
-  );
-  const [scriptBlockingData, setScriptBlockingData] =
-    useState<ScriptBlockingData>({});
 
   const messagePassingListener = useCallback(
     (message: {
       type: string;
       payload: {
         tabId: string;
-        tokens: {
-          plainTextTokens: UniquePlainTextToken[];
-          decryptedTokens: UniqueDecryptedToken[];
-          prtTokens: ProbablisticRevealToken[];
-          perTokenMetadata: PRTMetadata[];
-        };
-        uniqueResponseDomains: string[];
+        tokens: ProbabilisticRevealTokensContextType['state'];
       };
     }) => {
-      if (![TAB_TOKEN_DATA, EXTRA_DATA].includes(message.type)) {
+      if (![TAB_TOKEN_DATA].includes(message.type)) {
         return;
       }
 
@@ -86,13 +65,13 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (
-        message.payload.tabId.toString() !==
+        message.payload.tabId !==
         chrome.devtools.inspectedWindow.tabId.toString()
       ) {
         return;
       }
 
-      if (message.payload.tokens && TAB_TOKEN_DATA === message.type) {
+      if (message.payload.tokens) {
         setPrtTokens((prev) => {
           if (isEqual(prev, message.payload.tokens.prtTokens)) {
             return prev;
@@ -119,14 +98,6 @@ const Provider = ({ children }: PropsWithChildren) => {
             return prev;
           }
           return message.payload.tokens.perTokenMetadata;
-        });
-      }
-
-      if (EXTRA_DATA === message.type) {
-        setUniqueResponseDomains((prev) => {
-          return isEqual(message.payload.uniqueResponseDomains, prev)
-            ? prev
-            : message.payload.uniqueResponseDomains || [];
         });
       }
     },
@@ -158,66 +129,6 @@ const Provider = ({ children }: PropsWithChildren) => {
   );
 
   useEffect(() => {
-    (async () => {
-      const data = await fetch(
-        'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md'
-      );
-
-      if (!data.ok) {
-        throw new Error(`HTTP error! status: ${data.status}`);
-      }
-
-      const text = await data.text();
-
-      const lines = text
-        .split('\n')
-        .filter((line) => line.includes('|'))
-        .slice(2);
-
-      const mdlData = lines.map((line) =>
-        line.split('|').map((item) => item.trim())
-      );
-
-      setScriptBlockingData(() => {
-        const _data = mdlData.reduce((acc, item: string[]) => {
-          let owner = item[1];
-
-          if (item[1].includes('PSL Domain')) {
-            owner = 'PSL Domain';
-          }
-
-          let scriptBlocking;
-
-          switch (item[2] as string) {
-            case 'Not Impacted By Script Blocking':
-              scriptBlocking = 'None';
-              break;
-            case 'Some URLs are Blocked':
-              scriptBlocking = 'Partial';
-              break;
-            case 'Entire Domain Blocked':
-              scriptBlocking = 'Complete';
-              break;
-            default:
-              scriptBlocking = 'None';
-              break;
-          }
-
-          acc[item[0] as string] = {
-            domain: item[0],
-            owner,
-            scriptBlocking,
-          };
-
-          return acc;
-        }, {} as ScriptBlockingData);
-
-        return _data;
-      });
-    })();
-  }, []);
-
-  useEffect(() => {
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
     chrome.webNavigation?.onCommitted?.addListener(
       onCommittedNavigationListener
@@ -231,25 +142,16 @@ const Provider = ({ children }: PropsWithChildren) => {
     };
   }, [messagePassingListener, onCommittedNavigationListener]);
 
-  const memoisedValue: IPProxyContextType = useMemo(() => {
+  const memoisedValue: ProbabilisticRevealTokensContextType = useMemo(() => {
     return {
       state: {
         plainTextTokens,
         decryptedTokens,
         prtTokens,
         perTokenMetadata,
-        scriptBlockingData,
-        uniqueResponseDomains,
       },
     };
-  }, [
-    uniqueResponseDomains,
-    scriptBlockingData,
-    plainTextTokens,
-    prtTokens,
-    perTokenMetadata,
-    decryptedTokens,
-  ]);
+  }, [plainTextTokens, prtTokens, perTokenMetadata, decryptedTokens]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };
