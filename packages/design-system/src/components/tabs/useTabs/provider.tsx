@@ -55,7 +55,9 @@ export const TabsProvider = ({
     }
   }, [isGroup, items]);
 
-  const [activeGroup, _setActiveGroup] = useState<string | null>(null);
+  const [activeGroup, _setActiveGroup] = useState<string | null>(
+    isGroup ? Object.keys(items)[0] ?? null : null
+  );
   const [activeTab, setActiveTab] = useState(0);
 
   const groupItemsRef = useRef(groupedItems);

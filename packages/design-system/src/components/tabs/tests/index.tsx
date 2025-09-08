@@ -35,6 +35,7 @@ const mockUseTabs = useTabs as jest.Mock;
 describe('Tabs', () => {
   it('should render', () => {
     const setActiveTab = jest.fn();
+    const setActiveGroup = jest.fn();
 
     mockUseTabs.mockReturnValue({
       activeTab: 0,
@@ -53,6 +54,7 @@ describe('Tabs', () => {
         ],
       },
       setActiveTab,
+      setActiveGroup,
       isTabHighlighted: jest.fn((tab: number) => (tab === 0 ? 1 : 99)),
       shouldAddSpacer: jest.fn(() => false),
       getTabGroup: jest.fn((tab: number) =>
@@ -83,6 +85,7 @@ describe('Tabs', () => {
 
   it('should handle grouped tabs', () => {
     const setActiveTab = jest.fn();
+    const setActiveGroup = jest.fn();
 
     mockUseTabs.mockReturnValue({
       activeTab: 0,
@@ -111,6 +114,7 @@ describe('Tabs', () => {
         ],
       },
       setActiveTab,
+      setActiveGroup,
       shouldAddSpacer: jest.fn(() => false),
       isTabHighlighted: jest.fn(() => false),
       isGroup: true,
@@ -157,6 +161,7 @@ describe('Tabs', () => {
         ],
       },
       setActiveTab,
+      setActiveGroup,
       shouldAddSpacer: jest.fn(() => false),
       isTabHighlighted: jest.fn(() => false),
     });
