@@ -28,6 +28,7 @@ import {
  */
 import Panel from './panel';
 import ProbabilisticRevealTokens from './probabilisticRevealTokens';
+import MDLTable from './mdlTable';
 
 const IPProtection = () => {
   const tabItems = useMemo<TabItems>(
@@ -45,10 +46,19 @@ const IPProtection = () => {
             className: 'p-4',
           },
         },
+        {
+          title: 'Masked Domain List',
+          content: {
+            Element: MDLTable,
+            props: {},
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
+        },
       ],
       Observability: [
         {
-          title: 'Masked Domain List',
+          title: 'IP Proxying',
           content: {
             Element: ProbabilisticRevealTokens,
             className: 'overflow-auto h-full',
