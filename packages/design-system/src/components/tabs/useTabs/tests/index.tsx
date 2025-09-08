@@ -134,15 +134,20 @@ describe('useTabs', () => {
   };
 
   const GroupedTestingComponent = () => {
-    const { activeGroup, activeTab, setActiveTab, groupedTitles } = useTabs(
-      ({ state, actions }) => ({
-        activeGroup: state.activeGroup,
-        activeTab: state.activeTab,
-        setActiveTab: actions.setActiveTab,
-        groupedTitles: state.groupedTitles,
-        shouldAddSpacer: actions.shouldAddSpacer,
-      })
-    );
+    const {
+      activeGroup,
+      activeTab,
+      setActiveTab,
+      setActiveGroup,
+      groupedTitles,
+    } = useTabs(({ state, actions }) => ({
+      activeGroup: state.activeGroup,
+      activeTab: state.activeTab,
+      setActiveTab: actions.setActiveTab,
+      setActiveGroup: actions.setActiveGroup,
+      groupedTitles: state.groupedTitles,
+      shouldAddSpacer: actions.shouldAddSpacer,
+    }));
 
     return (
       <div>
@@ -152,6 +157,7 @@ describe('useTabs', () => {
               className={`${
                 activeGroup === group ? 'active-group-button' : ''
               }`}
+              onClick={() => setActiveGroup(group)}
             >
               {group}
             </button>
@@ -213,6 +219,9 @@ describe('useTabs', () => {
 
     // Check that the active group is 'group-1'
     expect(screen.getByText('group-1')).toHaveClass('active-group-button');
+
+    fireEvent.click(screen.getByText('group-2'));
+    expect(title3).toHaveClass('active');
 
     fireEvent.click(screen.getByText('title4'));
     expect(title4).toHaveClass('active');

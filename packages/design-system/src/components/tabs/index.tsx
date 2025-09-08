@@ -35,17 +35,18 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     activeTab,
     activeGroup,
     setActiveTab,
+    setActiveGroup,
     groupedTitles,
     titles,
     isTabHighlighted,
     shouldAddSpacer,
     getTabGroup,
     isGroup,
-    loading,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     activeGroup: state.activeGroup,
     setActiveTab: actions.setActiveTab,
+    setActiveGroup: actions.setActiveGroup,
     groupedTitles: state.groupedTitles,
     titles: state.titles,
     isTabHighlighted: actions.isTabHighlighted,
@@ -56,18 +57,6 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
   }));
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (loading) {
-      return;
-    }
-
-    if (activeGroup && expandedGroup === null) {
-      setExpandedGroup(activeGroup);
-    }
-  }, [activeGroup, expandedGroup, loading]);
 
   useEffect(() => {
     return () => {
@@ -87,17 +76,15 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
 
       setIsAnimating(true);
 
-      if (expandedGroup === group) {
-        setExpandedGroup(null);
-      } else {
-        setExpandedGroup(group);
+      if (activeGroup !== group) {
+        setActiveGroup(group);
       }
 
       timeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
       }, 300);
     },
-    [expandedGroup, isAnimating]
+    [activeGroup, isAnimating, setActiveGroup]
   );
 
   const handleKeyDown = useCallback(
@@ -108,37 +95,36 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         if (event.shiftKey) {
           const previousIndex = activeTab - 1;
           if (previousIndex >= 0) {
-            setActiveTab(previousIndex);
-
             const group = getTabGroup(previousIndex);
-            if (expandedGroup !== group) {
-              console.log(group, expandedGroup);
+            if (activeGroup !== group) {
               handleGroupClick(group);
             }
-          } else {
-            setActiveTab(titles.length - 1);
 
+            setActiveTab(previousIndex);
+          } else {
             const group = getTabGroup(titles.length - 1);
-            if (expandedGroup !== group) {
+            if (activeGroup !== group) {
               handleGroupClick(group);
             }
+
+            setActiveTab(titles.length - 1);
           }
         } else {
           const nextIndex = activeTab + 1;
           if (nextIndex < titles.length) {
-            setActiveTab(nextIndex);
-
             const group = getTabGroup(nextIndex);
-            if (expandedGroup !== group) {
+            if (activeGroup !== group) {
               handleGroupClick(group);
             }
-          } else {
-            setActiveTab(0);
 
+            setActiveTab(nextIndex);
+          } else {
             const group = getTabGroup(0);
-            if (expandedGroup !== group) {
+            if (activeGroup !== group) {
               handleGroupClick(group);
             }
+
+            setActiveTab(0);
           }
         }
       }
@@ -148,7 +134,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
       titles.length,
       setActiveTab,
       getTabGroup,
-      expandedGroup,
+      activeGroup,
       handleGroupClick,
     ]
   );
@@ -171,7 +157,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         )}
       >
         {Object.entries(groupedTitles).map(([group, data]) => {
-          const isExpanded = expandedGroup === group;
+          const isExpanded = activeGroup === group;
 
           return (
             <div
