@@ -79,7 +79,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       }
 
       if (
-        message.payload.tabId !==
+        message.payload.tabId.toString() !==
         chrome.devtools.inspectedWindow.tabId.toString()
       ) {
         return;
