@@ -347,7 +347,6 @@ class PRTStore extends DataStore {
         version,
         ordinal,
         uint8Signal: signal,
-        humanReadableSignal: btoa(String.fromCharCode.apply(null, plaintext)),
         hmacValid,
       } as UniquePlainTextToken;
     } catch (e) {

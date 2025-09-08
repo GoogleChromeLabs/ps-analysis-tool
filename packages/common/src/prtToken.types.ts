@@ -29,7 +29,6 @@ interface DecryptedToken {
 
 interface PlaintTextToken {
   uint8Signal: Uint8Array<any>;
-  humanReadableSignal: string;
   ordinal: Uint8Array<any>;
   version: number;
   hmacValid: boolean;
@@ -37,10 +36,9 @@ interface PlaintTextToken {
 
 export interface PRTMetadata {
   origin: string;
-  humanReadableSignal: string;
   decryptionKeyAvailable: boolean;
   prtHeader: string;
-  nonZeroUintsignal: boolean;
+  nonZeroUint8Signal: boolean;
 }
 
 export type UniquePlainTextToken = PlaintTextToken & {

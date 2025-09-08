@@ -362,18 +362,36 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             headers
           );
 
-          const origin =
-            extractHeader('origin', headers) ?? isValidURL(createURL(headers))
-              ? new URL(createURL(headers)).origin
-              : '';
+          let origin = '';
 
-          if (!prtHeader) {
+          if (extractHeader('origin', headers)) {
+            origin = extractHeader('origin', headers);
+          } else if (
+            DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url &&
+            isValidURL(
+              DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
+            )
+          ) {
+            origin = new URL(
+              DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
+            ).origin;
+          } else if (
+            createURL(headers) &&
+            isValidURL(createURL(headers) ?? '')
+          ) {
+            origin = new URL(createURL(headers) ?? '').origin;
+          }
+
+          if (!prtHeader || !origin) {
             return;
           }
 
           const prt = PRTStore.getTokenFromHeaderString(prtHeader);
           const decodedToken = await PRTStore.decryptTokenHeader(prtHeader);
           const plainTextToken = await PRTStore.getPlaintextToken(decodedToken);
+          const nonZeroUint8Signal = plainTextToken?.uint8Signal
+            ? !plainTextToken.uint8Signal.every((bit) => bit === 0)
+            : false;
 
           if (
             prt &&
@@ -406,17 +424,31 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               ...plainTextToken,
               prtHeader,
             });
+
+            chrome.storage.sync.get('prtStatistics', (result) => {
+              const totaltTokens =
+                result.prtStatistics?.[origin]?.totalTokens ?? 0;
+              const nonZeroSignal =
+                result.prtStatistics?.[origin]?.nonZeroSignal ?? 0;
+
+              chrome.storage.sync.set({
+                prtStatistics: {
+                  ...(result.prtStatistics ?? {}),
+                  [origin]: {
+                    totaltTokens: totaltTokens + 1,
+                    nonZeroSignal: nonZeroSignal + (nonZeroUint8Signal ? 1 : 0),
+                  },
+                },
+              });
+            });
           }
 
           if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[prtHeader]) {
             PRTStore.tabTokens[tabId].perTokenMetadata[prtHeader] = {
               prtHeader,
-              humanReadableSignal: plainTextToken?.humanReadableSignal ?? '',
               origin: isValidURL(origin) ? origin : '',
               decryptionKeyAvailable: Boolean(decodedToken),
-              nonZeroUintsignal: !plainTextToken?.uint8Signal.every(
-                (bit) => bit === 0
-              ),
+              nonZeroUint8Signal,
             };
             DataStore.tabs[tabId].newUpdatesPRT++;
           }
