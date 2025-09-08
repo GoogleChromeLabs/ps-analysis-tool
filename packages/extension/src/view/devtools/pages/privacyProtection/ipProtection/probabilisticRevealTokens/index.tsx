@@ -126,110 +126,11 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'PRT Prefix',
         accessorKey: 'prtHeader',
-        cell: (info) => info,
-        minWidth: 50,
+        cell: (info) => (info as string).slice(0, 10),
       },
     ],
     [perTokenMetadata, scriptBlockingData, statistics]
   );
-
-  const tableData = useMemo(() => {
-    const mdl = Object.values(scriptBlockingData).map(
-      ({ domain, owner, scriptBlocking }) => {
-        return {
-          origin: domain,
-          owner,
-          blockingScope: scriptBlocking,
-          decryptionKeyAvailable: false,
-          nonZeroUintsignal: false,
-          prtHeader: '',
-        };
-      }
-    );
-
-    const token = perTokenMetadata.map((_token) => {
-      const origin = isValidURL((_token as PRTMetadata)?.origin)
-        ? new URL((_token as PRTMetadata)?.origin).host.slice(4)
-        : '';
-
-      return {
-        ..._token,
-        owner: scriptBlockingData[origin]?.owner,
-        blockingScope: scriptBlockingData[origin]?.scriptBlocking,
-      };
-    });
-    let unSortedData: IPTableData[] = [...(token as unknown as IPTableData[])];
-
-    if (shouldShowMDL) {
-      unSortedData.push(...(mdl as unknown as IPTableData[]));
-    }
-
-    if (showOnlyHighlighted) {
-      if (shouldShowMDL) {
-        unSortedData = unSortedData.map((item) => {
-          return {
-            ...item,
-            highlighted: uniqueResponseDomains.includes(item?.origin),
-            highlightedClass:
-              uniqueResponseDomains.includes(item?.origin) &&
-              item?.blockingScope.startsWith('Partial')
-                ? 'bg-amber-100'
-                : '',
-          };
-        });
-      } else {
-        unSortedData.push(
-          ...uniqueResponseDomains
-            .filter((item) => scriptBlockingData[item])
-            .map((item) => {
-              return {
-                blockingScope: scriptBlockingData[item].scriptBlocking,
-                prtHeader: '',
-                origin: scriptBlockingData[item].domain,
-                owner: scriptBlockingData[item].owner,
-                decryptionKeyAvailable: false,
-                highlighted: true,
-                nonZeroUintsignal: false,
-                highlightedClass: scriptBlockingData[
-                  item
-                ].scriptBlocking.startsWith('Partial')
-                  ? 'bg-amber-100'
-                  : '',
-              };
-            })
-        );
-      }
-    }
-
-    return unSortedData.sort((a, b) => {
-      const aHasHeader = Object.prototype.hasOwnProperty.call(a, 'prtHeader');
-      const bHasHeader = Object.prototype.hasOwnProperty.call(b, 'prtHeader');
-
-      if (aHasHeader && !bHasHeader) {
-        return -1;
-      }
-      if (!aHasHeader && bHasHeader) {
-        return 1;
-      }
-
-      if (showOnlyHighlighted) {
-        if (a.highlighted && !b.highlighted) {
-          return -1;
-        }
-        if (!a.highlighted && b.highlighted) {
-          return 1;
-        }
-      }
-
-      return 0;
-    });
-  }, [
-    perTokenMetadata,
-    scriptBlockingData,
-    shouldShowMDL,
-    showOnlyHighlighted,
-    uniqueResponseDomains,
-  ]);
 
   const formedJson = useMemo(() => {
     if (!selectedJSON) {

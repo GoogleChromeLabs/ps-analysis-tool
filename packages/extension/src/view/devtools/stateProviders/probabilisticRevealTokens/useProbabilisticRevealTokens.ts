@@ -21,7 +21,7 @@ import { useContextSelector } from '@google-psat/common';
 /**
  * Internal dependencies.
  */
-import Context, { type IPProxyContextType } from './context';
+import Context, { type ProbabilisticRevealTokensContextType } from './context';
 
 export function useProbabilisticRevealTokens(): ProbabilisticRevealTokensContextType;
 export function useProbabilisticRevealTokens<T>(

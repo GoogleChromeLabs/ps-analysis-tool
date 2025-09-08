@@ -347,6 +347,25 @@ const TABS: SidebarItems = {
             },
             children: {},
           },
+          [SIDEBAR_ITEMS_KEYS.SCRIPT_BLOCKING]: {
+            title: () => 'Script Blocking',
+            panel: {
+              Element: ScriptBlocking,
+            },
+            icon: {
+              Element: BlockIcon,
+              props: {
+                className: 'fill-granite-gray relative right-[3px]',
+              },
+            },
+            selectedIcon: {
+              Element: BlockIconWhite,
+              props: {
+                className: 'fill-bright-gray relative right-[3px]',
+              },
+            },
+            children: {},
+          },
           [SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING]: {
             title: () => I18n.getMessage('bounceTracking'),
             panel: {
