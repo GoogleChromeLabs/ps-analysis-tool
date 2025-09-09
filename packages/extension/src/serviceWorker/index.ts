@@ -33,6 +33,7 @@ import attachCDP from './attachCDP';
 import readHeaderAndRegister from './readHeaderAndRegister';
 import PRTStore from '../store/PRTStore';
 import { createURL, extractHeader } from '../utils/headerFunctions';
+import updateStatistics from '../store/utils/updateStatistics';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -426,16 +427,18 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             });
 
             chrome.storage.sync.get('prtStatistics', (result) => {
-              const totaltTokens =
+              const totalTokens =
                 result.prtStatistics?.[origin]?.totalTokens ?? 0;
               const nonZeroSignal =
                 result.prtStatistics?.[origin]?.nonZeroSignal ?? 0;
+
+              updateStatistics(origin, nonZeroUint8Signal);
 
               chrome.storage.sync.set({
                 prtStatistics: {
                   ...(result.prtStatistics ?? {}),
                   [origin]: {
-                    totaltTokens: totaltTokens + 1,
+                    totalTokens: totalTokens + 1,
                     nonZeroSignal: nonZeroSignal + (nonZeroUint8Signal ? 1 : 0),
                   },
                 },

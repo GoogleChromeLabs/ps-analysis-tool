@@ -17,6 +17,7 @@
  * Internal dependencies
  */
 import { DataStore } from '../../store/dataStore';
+import PRTStore from '../../store/PRTStore';
 import { setupIntervals } from './utils';
 
 export const onStartUpListener = async () => {
@@ -25,5 +26,17 @@ export const onStartUpListener = async () => {
 
   if (Object.keys(storage).includes('isUsingCDP')) {
     DataStore.globalIsUsingCDP = storage.isUsingCDP;
+  }
+
+  if (Object.keys(storage).includes('prtStatistics')) {
+    PRTStore.statistics.prtStatistics.globalView = {
+      ...storage?.prtStatistics,
+    };
+  }
+
+  if (Object.keys(storage).includes('prtStatistics')) {
+    PRTStore.statistics.scriptBlocking.globalView = {
+      ...storage?.scriptBlocking,
+    };
   }
 };
