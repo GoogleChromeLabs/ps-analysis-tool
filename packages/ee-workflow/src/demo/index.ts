@@ -50,8 +50,6 @@ const flow = {
       variables.setIsInteractive
     );
 
-    flow.initListeners(controls.playButton!);
-
     return {
       ...variables,
       ...controls,
@@ -322,33 +320,39 @@ const flow = {
       interactiveCheckbox,
     };
   },
-
-  initListeners: (playButton: HTMLElement) => {
-    document.addEventListener('loop', onLoopEvent.bind(null, playButton));
-
-    document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
-
-    document.addEventListener('figureDraw', figureDraw);
-
-    document.addEventListener('dispatchId', () => {
-      // const { dispatchId } = event.detail;
-      // console.log('Dispatch ID:', dispatchId);
-    });
-  },
 };
 
 const draw = {
   start: (variables: ReturnType<typeof flow.init>) => {
     draw.timeline(variables);
-    draw.interestGroupFlow(150, 187.5, 2, variables);
-    draw.interestGroupFlow(300, 187.5, 3, variables);
-    draw.publisherFlow(450, 187.5, variables);
-    draw.interestGroupFlow(600, 187.5, 3, variables);
-    draw.interestGroupFlow(750, 187.5, 3, variables);
-    draw.publisherFlow(900, 187.5, variables);
-    draw.interestGroupFlow(1050, 187.5, 3, variables);
-    draw.interestGroupFlow(1200, 187.5, 3, variables);
-    draw.publisherFlow(1350, 187.5, variables);
+
+    const interestGroupBubbles = [];
+    const publisherBubbles = [];
+
+    interestGroupBubbles.push(
+      draw.interestGroupFlow(150, 187.5, 'IG-1', variables),
+      draw.interestGroupFlow(300, 187.5, 'IG-2', variables)
+    );
+    publisherBubbles.push(draw.publisherFlow(450, 187.5, 'P-1', variables));
+
+    interestGroupBubbles.push(
+      draw.interestGroupFlow(600, 187.5, 'IG-3', variables),
+      draw.interestGroupFlow(750, 187.5, 'IG-4', variables)
+    );
+
+    publisherBubbles.push(draw.publisherFlow(900, 187.5, 'P-2', variables));
+
+    interestGroupBubbles.push(
+      draw.interestGroupFlow(1050, 187.5, 'IG-5', variables),
+      draw.interestGroupFlow(1200, 187.5, 'IG-6', variables)
+    );
+
+    publisherBubbles.push(draw.publisherFlow(1350, 187.5, 'P-3', variables));
+
+    return {
+      interestGroupBubbles,
+      publisherBubbles,
+    };
   },
 
   timeline: (variables: ReturnType<typeof flow.init>) => {
@@ -439,15 +443,13 @@ const draw = {
   interestGroupFlow: (
     x: number,
     y: number,
-    bubbleCount: number,
+    id: string,
     variables: ReturnType<typeof flow.init>
   ) => {
     const {
       mainCanvas,
       mainFigureFactory,
       setCheckpoint,
-      interestGroupCanvas,
-      interestGroupFigureFactory,
       getImage,
       getExpanded,
       playButton,
@@ -458,20 +460,20 @@ const draw = {
       y: 0,
     };
 
-    const checkpoint = mainFigureFactory.line({
-      x,
-      y,
-      endX: x,
-      endY: y + 50,
-      hasArrow: true,
-      shouldTravel: true,
-    });
-
-    setCheckpoint(checkpoint.getId());
+    const checkpointId = 'checkpoint-' + id;
+    setCheckpoint(checkpointId);
 
     const animator = new Animator(
       [
-        checkpoint,
+        mainFigureFactory.line({
+          x,
+          y,
+          endX: x,
+          endY: y + 50,
+          hasArrow: true,
+          shouldTravel: true,
+          id: checkpointId,
+        }),
         new Group(mainCanvas, [
           mainFigureFactory.box({
             width: 100,
@@ -555,39 +557,13 @@ const draw = {
               y: nextCoordinates.middle.y,
             };
           },
+          isDispatcher: true,
+          id: 'dispatcher-' + id,
         }),
       ],
-      mainFigureFactory
+      mainFigureFactory,
+      id
     );
-
-    const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
-      return interestGroupFigureFactory.circle({
-        x: lastFigureCoordinates.x + index * 20 + getRandomOffset(20),
-        y: lastFigureCoordinates.y + getRandomOffset(20),
-        diameter: 10,
-        fill: 'red',
-        stroke: 'black',
-        shouldTravel: true,
-        travelInit: circleTravelInit(),
-      });
-    });
-
-    const bubbleFlow = new Group(interestGroupCanvas, bubbles);
-    bubbleFlow.setThrow(true);
-    bubbleFlow.setSideEffectOnDraw(() => {
-      interestGroupCanvas.resetQueuesAndReDrawAll();
-      interestGroupCanvas.togglePause(true);
-      bubbles.forEach((bubble) => bubble.resetTraveller());
-
-      mainCanvas.togglePause(false);
-      mainCanvas.reDrawAll();
-    });
-
-    animator.setSideEffectOnDraw(() => {
-      interestGroupCanvas.addGroup(bubbleFlow);
-      mainCanvas.togglePause(true);
-      interestGroupCanvas.togglePause(false);
-    });
 
     mainCanvas.addAnimator(animator, false, true);
 
@@ -612,19 +588,56 @@ const draw = {
     });
 
     mainCanvas.addFigure(image);
+
+    return lastFigureCoordinates;
+  },
+
+  interestGroupBubbles: (
+    bubbleCount: number,
+    mainCanvas: Main,
+    interestGroupCanvas: Main,
+    interestGroupFigureFactory: FigureFactory,
+    x: number,
+    y: number
+  ) => {
+    const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
+      return interestGroupFigureFactory.circle({
+        x: x + index * 20 + getRandomOffset(20),
+        y: y + getRandomOffset(20),
+        diameter: 10,
+        fill: 'red',
+        stroke: 'black',
+        shouldTravel: true,
+        travelInit: circleTravelInit(),
+      });
+    });
+
+    const bubbleFlow = new Group(interestGroupCanvas, bubbles);
+    bubbleFlow.setThrow(true);
+    bubbleFlow.setSideEffectOnDraw(() => {
+      interestGroupCanvas.resetQueuesAndReDrawAll();
+      interestGroupCanvas.togglePause(true);
+      bubbles.forEach((bubble) => bubble.resetTraveller());
+
+      mainCanvas.togglePause(false);
+      mainCanvas.reDrawAll();
+    });
+
+    interestGroupCanvas.addGroup(bubbleFlow);
+    mainCanvas.togglePause(true);
+    interestGroupCanvas.togglePause(false);
   },
 
   publisherFlow: (
     x: number,
     y: number,
+    id: string,
     variables: ReturnType<typeof flow.init>
   ) => {
     const {
       mainCanvas,
       mainFigureFactory,
       setCheckpoint,
-      interestGroupCanvas,
-      interestGroupFigureFactory,
       getImage,
       getExpanded,
       playButton,
@@ -637,79 +650,19 @@ const draw = {
 
     const arcGroup = rippleEffect(mainCanvas, mainFigureFactory);
 
-    const renderBox6 = () => {
-      const box6 = new Group(mainCanvas, [
-        mainFigureFactory.box({
-          width: 100,
-          height: 50,
-          fill: '#d3d3d3',
-          nextTipHelper: (nextCoordinates: NextCoordinates) => {
-            return {
-              x: nextCoordinates.right.x,
-              y: nextCoordinates.right.y - 25,
-            };
-          },
-        }),
-        mainFigureFactory.text({
-          text: 'Box 6',
-          fill: '#000',
-          nextTipHelper: (nextCoordinates: NextCoordinates) => {
-            bubblesToCoordinates.x = nextCoordinates.middle.x;
-            bubblesToCoordinates.y = nextCoordinates.middle.y;
-
-            return nextCoordinates.middle;
-          },
-        }),
-      ]);
-
-      const bubbles = Array.from({ length: 3 }, (_, index) => {
-        return interestGroupFigureFactory.circle({
-          x: 0,
-          y: 0,
-          diameter: 10,
-          fill: 'orange',
-          stroke: 'black',
-          shouldTravel: true,
-          travelInit: circleTravelInit(
-            bubblesToCoordinates.x + index * 20 + getRandomOffset(20),
-            bubblesToCoordinates.y + getRandomOffset(20)
-          ),
-        });
-      });
-
-      const bubbleFlow = new Group(interestGroupCanvas, bubbles);
-      bubbleFlow.setThrow(true);
-      bubbleFlow.setSideEffectOnDraw(() => {
-        interestGroupCanvas.resetQueuesAndReDrawAll();
-        interestGroupCanvas.togglePause(true);
-        bubbles.forEach((bubble) => bubble.resetTraveller());
-
-        box6.reDraw();
-        mainCanvas.togglePause(false);
-      });
-
-      box6.setSideEffectOnDraw(() => {
-        interestGroupCanvas.addGroup(bubbleFlow);
-        mainCanvas.togglePause(true);
-        interestGroupCanvas.togglePause(false);
-      });
-
-      return box6;
-    };
-
-    const checkpoint = mainFigureFactory.line({
-      x,
-      y,
-      endX: x,
-      endY: y + 50,
-      shouldTravel: true,
-    });
-
-    setCheckpoint(checkpoint.getId());
+    const checkpointId = 'checkpoint-' + id;
+    setCheckpoint(checkpointId);
 
     const animator = new Animator(
       [
-        checkpoint,
+        mainFigureFactory.line({
+          x,
+          y,
+          endX: x,
+          endY: y + 50,
+          shouldTravel: true,
+          id: checkpointId,
+        }),
         mainFigureFactory.line({
           endXwith: 400,
           shouldTravel: true,
@@ -971,7 +924,31 @@ const draw = {
             };
           },
         }),
-        renderBox6(),
+        new Group(mainCanvas, [
+          mainFigureFactory.box({
+            width: 100,
+            height: 50,
+            fill: '#d3d3d3',
+            nextTipHelper: (nextCoordinates: NextCoordinates) => {
+              return {
+                x: nextCoordinates.right.x,
+                y: nextCoordinates.right.y - 25,
+              };
+            },
+          }),
+          mainFigureFactory.text({
+            text: 'Box 6',
+            fill: '#000',
+            nextTipHelper: (nextCoordinates: NextCoordinates) => {
+              bubblesToCoordinates.x = nextCoordinates.middle.x;
+              bubblesToCoordinates.y = nextCoordinates.middle.y;
+
+              return nextCoordinates.middle;
+            },
+            isDispatcher: true,
+            id: 'dispatcher-' + id,
+          }),
+        ]),
         mainFigureFactory.line({
           endYwith: 50,
           shouldTravel: true,
@@ -1003,7 +980,8 @@ const draw = {
           }),
         ]),
       ],
-      mainFigureFactory
+      mainFigureFactory,
+      id
     );
 
     mainCanvas.addAnimator(animator, false, true);
@@ -1029,8 +1007,97 @@ const draw = {
     });
 
     mainCanvas.addFigure(image);
+
+    return bubblesToCoordinates;
+  },
+
+  publisherBubbles: (
+    bubbleCount: number,
+    mainCanvas: Main,
+    interestGroupCanvas: Main,
+    interestGroupFigureFactory: FigureFactory,
+    x: number,
+    y: number
+  ) => {
+    const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
+      return interestGroupFigureFactory.circle({
+        x: 0,
+        y: 0,
+        diameter: 10,
+        fill: 'orange',
+        stroke: 'black',
+        shouldTravel: true,
+        travelInit: circleTravelInit(
+          x + index * 20 + getRandomOffset(20),
+          y + getRandomOffset(20)
+        ),
+      });
+    });
+
+    const bubbleFlow = new Group(interestGroupCanvas, bubbles);
+    bubbleFlow.setThrow(true);
+    bubbleFlow.setSideEffectOnDraw(() => {
+      interestGroupCanvas.resetQueuesAndReDrawAll();
+      interestGroupCanvas.togglePause(true);
+      bubbles.forEach((bubble) => bubble.resetTraveller());
+
+      // box6.reDraw();
+      mainCanvas.togglePause(false);
+    });
+
+    interestGroupCanvas.addGroup(bubbleFlow);
+    mainCanvas.togglePause(true);
+    interestGroupCanvas.togglePause(false);
   },
 };
 
+const handleListeners = (
+  playButton: HTMLElement,
+  interestGroupBubbles: { x: number; y: number }[],
+  publisherBubbles: { x: number; y: number }[]
+) => {
+  document.addEventListener('loop', onLoopEvent.bind(null, playButton));
+
+  document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
+
+  document.addEventListener('figureDraw', figureDraw);
+
+  document.addEventListener('ee:dispatchId', (event: Event) => {
+    const { dispatchId } = (event as CustomEvent).detail;
+
+    if (!dispatchId) {
+      return;
+    }
+
+    if (dispatchId.includes('IG')) {
+      const index = dispatchId.split('IG-')[1] - 1;
+
+      const coordinates = interestGroupBubbles[index];
+      draw.interestGroupBubbles(
+        5,
+        variables.mainCanvas,
+        variables.interestGroupCanvas,
+        variables.interestGroupFigureFactory,
+        coordinates.x,
+        coordinates.y
+      );
+    } else if (dispatchId.includes('P')) {
+      const index = dispatchId.split('P-')[1] - 1;
+
+      const coordinates = publisherBubbles[index];
+      draw.publisherBubbles(
+        5,
+        variables.mainCanvas,
+        variables.interestGroupCanvas,
+        variables.interestGroupFigureFactory,
+        coordinates.x,
+        coordinates.y
+      );
+    }
+  });
+};
+
 const variables = flow.init();
-draw.start(variables);
+const { interestGroupBubbles, publisherBubbles } = draw.start(variables);
+
+handleListeners(variables.playButton!, interestGroupBubbles, publisherBubbles);
