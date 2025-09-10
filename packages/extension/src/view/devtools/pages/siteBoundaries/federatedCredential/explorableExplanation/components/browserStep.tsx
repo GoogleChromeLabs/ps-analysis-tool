@@ -153,7 +153,7 @@ const BrowserStep = ({
             <p className="mb-2">Welcome back, Alex!</p>
             <button
               id="special-feature-button"
-              className="fedcm-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded transition mt-2"
+              className="fedcm-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-2 rounded transition mt-2"
             >
               Enable Personalized Recommendations
             </button>
@@ -254,7 +254,7 @@ const BrowserStep = ({
         className="border border-[#ccc] rounded-[8px] overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.1)] bg-white h-full flex-grow-0.4 relative flex flex-col"
       >
         <div className="browser-chrome bg-[#f2f2f2] p-[10px] border-b border-[#ddd] flex items-center">
-          <span className="bg-white px-[10px] py-[5px] rounded-[4px] text-[14px] text-[#333] flex-1 max-w-[80%]">
+          <span className="bg-white px-[10px] py-[5px] rounded-[4px] text-[14px] text-[#333] flex-1 max-w-[80%] border border-[#ccc]">
             example-shop.com
           </span>
         </div>
