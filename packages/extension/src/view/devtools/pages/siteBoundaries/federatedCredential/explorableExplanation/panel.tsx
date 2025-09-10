@@ -111,13 +111,10 @@ const Panel = ({
   return (
     <div className="flex flex-col h-full">
       <Header />
-      <div className="flex-1 overflow-auto px-4 flex flex-col gap-5">
+      <div className="flex-1 overflow-auto flex flex-col gap-2 pb-4">
         <Timeline currentScenarioKey={currentScenarioKey} />
         <main className="flex flex-col gap-5 h-fit">
-          <div
-            className="flex flex-row gap-5 max-h-[450px]"
-            id="visualization-container"
-          >
+          <div className="flex max-h-[450px]" id="visualization-container">
             <BrowserStep
               setStepExplanation={setStepExplanation}
               currentStep={currentStep}

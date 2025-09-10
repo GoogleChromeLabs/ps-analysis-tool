@@ -247,7 +247,7 @@ const BrowserStep = ({
   return (
     <div
       id="browser-step-container"
-      className="flex flex-col gap-[18px] flex-1 min-w-[370px] h-[450px] max-h-[450px]"
+      className="flex flex-col gap-[18px] flex-1 min-w-[370px] h-[450px] max-h-[450px] px-4"
     >
       <div
         id="browser-ui"
