@@ -31,6 +31,7 @@ import { updateSessionStorage } from '@google-psat/common';
  */
 import Context from './context';
 import { ScenarioKeys } from './scenariosTypes';
+import { scenarios } from './scenarios';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
@@ -61,11 +62,21 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const setIsPlaying = useCallback(
     (isPlaying: boolean) => {
+      if (
+        isPlaying &&
+        currentScenarioKey === ScenarioKeys.SIGNOUT &&
+        currentStep === scenarios.signout.steps.length - 1
+      ) {
+        canvas?.reset();
+        setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
+        setCurrentStep(-1);
+      }
+
       setPlay(isPlaying);
 
       canvas?.togglePause(!isPlaying);
     },
-    [canvas]
+    [canvas, currentScenarioKey, currentStep]
   );
 
   const setSpeed = useCallback(

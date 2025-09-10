@@ -369,7 +369,7 @@ export class Main {
         }
         animatorQueue.shift();
 
-        if (!skipRedrawAll) {
+        if (!skipRedrawAll && this.stepsQueue.length) {
           this.reDrawAll();
         }
       }

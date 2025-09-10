@@ -52,12 +52,14 @@ const Panel = ({
     currentScenarioKey,
     setCurrentScenarioKey,
     setCurrentStep,
+    setIsPlaying,
   } = useStore(({ state, actions }) => {
     return {
       currentScenarioKey: state.currentScenarioKey,
       currentStep: state.currentStep,
       setCurrentScenarioKey: actions.setCurrentScenarioKey,
       setCurrentStep: actions.setCurrentStep,
+      setIsPlaying: actions.setIsPlaying,
     };
   });
 
@@ -90,6 +92,7 @@ const Panel = ({
 
       const idx = Object.keys(scenarios).indexOf(animatorId);
       if (idx === Object.keys(scenarios).length - 1) {
+        setIsPlaying(false);
         return;
       }
 
