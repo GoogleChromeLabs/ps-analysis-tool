@@ -23,7 +23,6 @@ import { DraggableTray } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-
 import { BrowserStep, SequenceDiagram, Timeline } from './components';
 import Header from './header';
 import { scenarios } from './store/scenarios';

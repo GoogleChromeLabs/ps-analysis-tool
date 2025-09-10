@@ -35,12 +35,12 @@ import { scenarios } from './scenarios';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
-  const [play, setPlay] = useState(true);
-  const [speed, _setSpeed] = useState(1.5);
+  const [play, setPlay] = useState<boolean>(true);
+  const [speed, _setSpeed] = useState<number>(1.5);
   const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
     ScenarioKeys.REGISTRATION
   );
-  const [currentStep, setCurrentStep] = useState(-1);
+  const [currentStep, setCurrentStep] = useState<number>(-1);
 
   useEffect(() => {
     return () => {

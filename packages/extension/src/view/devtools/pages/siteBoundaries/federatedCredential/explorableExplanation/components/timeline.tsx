@@ -58,10 +58,10 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
               className={[
                 'timeline-node font-medium text-center min-w-[100px] relative transition-all duration-300 cursor-pointer text-xs px-3 py-2.5 rounded text-raisin-black',
                 isActive
-                  ? 'active bg-bright-navy-blue text-white shadow-[0_2px_5px_rgba(0,0,0,0.2)]'
+                  ? 'active bg-bright-navy-blue text-white shadow-lg'
                   : isCompleted
-                  ? 'completed bg-[#38b559] text-white'
-                  : 'bg-[#f0f0f0]  hover:bg-[#d0d0d0]',
+                  ? 'completed bg-green-500 text-white'
+                  : 'bg-gray-100  hover:bg-gray-200',
               ].join(' ')}
               id={`${Object.keys(ScenarioKeys)[index]}-node`}
               onClick={() => {
@@ -71,7 +71,7 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
               {index + 1}. {title}
             </div>
             {index < titles.length - 1 && (
-              <div className="timeline-connector flex-grow h-[2px] bg-[#e0e0e0]"></div>
+              <div className="timeline-connector flex-grow h-[2px] bg-gray-200"></div>
             )}
           </Fragment>
         );

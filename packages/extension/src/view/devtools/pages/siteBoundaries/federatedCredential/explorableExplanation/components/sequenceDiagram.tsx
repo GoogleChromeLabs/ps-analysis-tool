@@ -17,13 +17,13 @@
  * External dependencies.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { getSessionStorage } from '@google-psat/common';
 
 /**
  * Internal dependencies.
  */
 import { initializeCanvas } from '../canvas';
 import { useStore } from '../store';
-import { getSessionStorage } from '@google-psat/common';
 
 const SequenceDiagram = () => {
   const { setCanvas } = useStore(({ actions }) => ({
@@ -135,7 +135,7 @@ const SequenceDiagram = () => {
     <div className="px-4 h-fit w-fit">
       <div
         id="sequence-diagram"
-        className="relative w-fit h-fit flex justify-center items-start bg-white border border-[#ccc] shadow-[0_2px_10px_rgba(0,0,0,0.1)] rounded-lg"
+        className="relative w-fit h-fit flex justify-center items-start bg-white border border-gray-300 shadow-sm rounded-lg"
       >
         <div
           className="overflow-y-auto min-w-[860px] max-h-[340px] mt-[110px]"
