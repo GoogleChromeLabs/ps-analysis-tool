@@ -63,7 +63,7 @@ const BrowserStep = ({
         element.classList.add(
           'scale-95',
           'bg-blue-800',
-          'shadow-[0_0_0_3px_rgba(26,115,232,0.3)]',
+          'shadow-lg',
           'animate-pulse'
         );
 
@@ -71,7 +71,7 @@ const BrowserStep = ({
           element.classList.remove(
             'scale-95',
             'bg-blue-800',
-            'shadow-[0_0_0_3px_rgba(26,115,232,0.3)]',
+            'shadow-lg',
             'animate-pulse'
           );
         }, 1000);
@@ -83,9 +83,9 @@ const BrowserStep = ({
       const element = _browserContent.querySelector(selector);
       if (element) {
         element.classList.add(
-          'bg-[#e8f0fe]',
+          'bg-blue-50',
           'border-2',
-          '!border-[#1a73e8]',
+          '!border-blue-600',
           'animate-pulse'
         );
       }
@@ -153,7 +153,7 @@ const BrowserStep = ({
             <p className="mb-2">Welcome back, Alex!</p>
             <button
               id="special-feature-button"
-              className="fedcm-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded transition mt-2"
+              className="fedcm-button w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-2 rounded transition mt-2"
             >
               Enable Personalized Recommendations
             </button>
@@ -247,14 +247,14 @@ const BrowserStep = ({
   return (
     <div
       id="browser-step-container"
-      className="flex flex-col gap-[18px] flex-1 min-w-[370px] h-[450px] max-h-[450px]"
+      className="flex flex-col gap-[18px] flex-1 min-w-[370px] h-[450px] max-h-[450px] px-4"
     >
       <div
         id="browser-ui"
-        className="border border-[#ccc] rounded-[8px] overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.1)] bg-white h-full flex-grow-0.4 relative flex flex-col"
+        className="border border-gray-300 rounded-[8px] overflow-hidden shadow-sm bg-white h-full flex-grow-0.4 relative flex flex-col"
       >
-        <div className="browser-chrome bg-[#f2f2f2] p-[10px] border-b border-[#ddd] flex items-center">
-          <span className="bg-white px-[10px] py-[5px] rounded-[4px] text-[14px] text-[#333] flex-1 max-w-[80%]">
+        <div className="browser-chrome bg-gray-100 p-[10px] border-b border-gray-200 flex items-center">
+          <span className="bg-white px-[10px] py-[5px] rounded-[4px] text-[14px] text-gray-800 flex-1 max-w-[80%] border border-gray-300">
             example-shop.com
           </span>
         </div>
@@ -265,14 +265,14 @@ const BrowserStep = ({
         >
           {browserLoading ? (
             browserLoading.silent ? (
-              <div className="silent-loading flex items-center bg-white/90 rounded-[4px] p-[6px_10px] shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-[12px] text-[#555] max-w-[180px] z-10 absolute top-[10px] right-[10px]">
-                <div className="mini-spinner w-[12px] h-[12px] mr-[8px] border-2 border-[#1a73e8]/20 border-t-[#1a73e8] rounded-full animate-spin"></div>
+              <div className="silent-loading flex items-center bg-white/90 rounded-[4px] p-[6px_10px] shadow-sm text-[12px] text-gray-600 max-w-[180px] z-10 absolute top-[10px] right-[10px]">
+                <div className="mini-spinner w-[12px] h-[12px] mr-[8px] border-2 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
                 <span>{browserLoading.message}</span>
               </div>
             ) : (
               <div className="browser-loading flex flex-col justify-center items-center h-full min-h-[200px] p-[20px] text-center">
-                <div className="spinner w-[40px] h-[40px] mb-[15px] border-4 border-[#1a73e8]/20 border-t-[#1a73e8] rounded-full animate-spin"></div>
-                <p className="loading-message text-[16px] text-[#666] mt-[10px] animate-pulse">
+                <div className="spinner w-[40px] h-[40px] mb-[15px] border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
+                <p className="loading-message text-[16px] text-gray-700 mt-[10px] animate-pulse">
                   {browserLoading.message}
                 </p>
               </div>
@@ -315,7 +315,7 @@ const BrowserDialog = ({
             className="idp-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all"
           >
             <img
-              src="../assets/images/fedcm/your-id-logo.png"
+              src="../assets/images/fedcm/your-id-logo.svg"
               alt="YourID Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -328,7 +328,7 @@ const BrowserDialog = ({
           </div>
           <div className="idp-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/images/fedcm/other-idp-logo.png"
+              src="../assets/images/fedcm/other-idp-logo.svg"
               alt="Other IdP Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -365,7 +365,7 @@ const BrowserDialog = ({
         <div className="browser-dialog-body p-4 flex flex-col gap-2">
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/images/fedcm/user-avatar.png"
+              src="../assets/images/fedcm/user-avatar.svg"
               alt="User Avatar"
               className="account-avatar w-10 h-10 rounded-full mr-4 object-cover"
             />
@@ -376,7 +376,7 @@ const BrowserDialog = ({
           </div>
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/images/fedcm/user-avatar2.png"
+              src="../assets/images/fedcm/user-avatar2.svg"
               alt="Second User Avatar"
               className="account-avatar w-10 h-10 rounded-full mr-4 object-cover"
             />
@@ -483,7 +483,7 @@ const BrowserDialog = ({
         <div className="browser-dialog-body p-4 flex flex-col gap-2">
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/images/fedcm/your-id-logo.png"
+              src="../assets/images/fedcm/your-id-logo.svg"
               alt="YourID Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />
@@ -494,7 +494,7 @@ const BrowserDialog = ({
           </div>
           <div className="account-option flex items-center p-2 mb-2 border border-gray-100 rounded cursor-default relative transition-all">
             <img
-              src="../assets/images/fedcm/other-idp-logo.png"
+              src="../assets/images/fedcm/other-idp-logo.svg"
               alt="Other IdP Logo"
               className="idp-logo w-10 h-10 mr-4 object-contain"
             />

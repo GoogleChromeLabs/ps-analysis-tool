@@ -31,15 +31,16 @@ import { updateSessionStorage } from '@google-psat/common';
  */
 import Context from './context';
 import { ScenarioKeys } from './scenariosTypes';
+import { scenarios } from './scenarios';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
-  const [play, setPlay] = useState(true);
-  const [speed, _setSpeed] = useState(1.5);
+  const [play, setPlay] = useState<boolean>(true);
+  const [speed, _setSpeed] = useState<number>(1.5);
   const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
     ScenarioKeys.REGISTRATION
   );
-  const [currentStep, setCurrentStep] = useState(-1);
+  const [currentStep, setCurrentStep] = useState<number>(-1);
 
   useEffect(() => {
     return () => {
@@ -61,11 +62,21 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const setIsPlaying = useCallback(
     (isPlaying: boolean) => {
+      if (
+        isPlaying &&
+        currentScenarioKey === ScenarioKeys.SIGNOUT &&
+        currentStep === scenarios.signout.steps.length - 1
+      ) {
+        canvas?.reset();
+        setCurrentScenarioKey(ScenarioKeys.REGISTRATION);
+        setCurrentStep(-1);
+      }
+
       setPlay(isPlaying);
 
       canvas?.togglePause(!isPlaying);
     },
-    [canvas]
+    [canvas, currentScenarioKey, currentStep]
   );
 
   const setSpeed = useCallback(

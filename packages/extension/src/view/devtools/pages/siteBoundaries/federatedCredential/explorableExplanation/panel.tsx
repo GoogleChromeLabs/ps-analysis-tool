@@ -23,7 +23,6 @@ import { DraggableTray } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-
 import { BrowserStep, SequenceDiagram, Timeline } from './components';
 import Header from './header';
 import { scenarios } from './store/scenarios';
@@ -52,12 +51,14 @@ const Panel = ({
     currentScenarioKey,
     setCurrentScenarioKey,
     setCurrentStep,
+    setIsPlaying,
   } = useStore(({ state, actions }) => {
     return {
       currentScenarioKey: state.currentScenarioKey,
       currentStep: state.currentStep,
       setCurrentScenarioKey: actions.setCurrentScenarioKey,
       setCurrentStep: actions.setCurrentStep,
+      setIsPlaying: actions.setIsPlaying,
     };
   });
 
@@ -90,6 +91,7 @@ const Panel = ({
 
       const idx = Object.keys(scenarios).indexOf(animatorId);
       if (idx === Object.keys(scenarios).length - 1) {
+        setIsPlaying(false);
         return;
       }
 
@@ -111,13 +113,10 @@ const Panel = ({
   return (
     <div className="flex flex-col h-full">
       <Header />
-      <div className="flex-1 overflow-auto px-4 flex flex-col gap-5">
+      <div className="flex-1 overflow-auto flex flex-col gap-2 pb-4">
         <Timeline currentScenarioKey={currentScenarioKey} />
         <main className="flex flex-col gap-5 h-fit">
-          <div
-            className="flex flex-row gap-5 max-h-[450px]"
-            id="visualization-container"
-          >
+          <div className="flex max-h-[450px]" id="visualization-container">
             <BrowserStep
               setStepExplanation={setStepExplanation}
               currentStep={currentStep}
