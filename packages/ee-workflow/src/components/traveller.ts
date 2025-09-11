@@ -51,7 +51,14 @@ export default class Traveller {
       .getFigures()
       .filter((figure) => figure.getShouldTravel() === true);
 
-    nonTravellingFigures.forEach((figure) => figure.draw());
+    nonTravellingFigures.forEach((figure) => {
+      if (this.groupObjectsCompleted.includes(figure.getId())) {
+        return;
+      }
+
+      figure.draw();
+      this.groupObjectsCompleted.push(figure.getId());
+    });
 
     travellingFigures.forEach((figure) => {
       if (this.groupObjectsCompleted.includes(figure.getId())) {

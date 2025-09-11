@@ -163,6 +163,12 @@ export class Main {
    * Main constructor.
    * @param clearBeforeTravel - Whether to clear the canvas before travelling.
    * @param container - The container to append the canvas to.
+   * @param containerSize - The size of the container.
+   * @param containerSize.width - The width of the container.
+   * @param containerSize.height - The height of the container.
+   * @param position - The position to place the canvas.
+   * @param position.x - The x-coordinate of the canvas.
+   * @param position.y - The y-coordinate of the canvas.
    * @param figureToStart - The figure to start from.
    * @param preloader - The preloader function to run before setup.
    * @param performanceCheck - Whether to enable performance check.
@@ -170,18 +176,23 @@ export class Main {
   constructor(
     private clearBeforeTravel = false,
     private container?: HTMLElement,
+    private containerSize: { width: number; height: number } = {
+      width: 800,
+      height: 600,
+    },
+    position: { x: number; y: number } = { x: 0, y: 0 },
     private figureToStart?: string,
     private preloader?: (p: p5) => void,
     performanceCheck = false
   ) {
-    this.p5 = new p5(this.init.bind(this), this.container);
+    this.p5 = new p5((p: p5) => this.init(p, position), this.container);
 
     if (performanceCheck) {
       this.stats = new Stats();
       this.stats.showPanel(0);
       this.stats.dom.style.position = 'absolute';
-      this.stats.dom.style.top = '15px';
-      this.stats.dom.style.left = '95vw';
+      this.stats.dom.style.right = '0';
+      this.stats.dom.style.top = '0';
       document.body.appendChild(this.stats.dom);
     }
   }
@@ -189,33 +200,47 @@ export class Main {
   /**
    * Initialize.
    * @param p - The p5 instance.
+   * @param position - The position to place the canvas.
+   * @param position.x - The x-coordinate of the canvas.
+   * @param position.y - The y-coordinate of the canvas.
    */
-  private init(p: p5) {
-    p.preload = this.preload.bind(this);
-    p.setup = this.setUp.bind(this);
-    p.draw = this.draw.bind(this);
-    p.mouseMoved = this.mouseMoved.bind(this);
+  private init(p: p5, position: { x: number; y: number }) {
+    p.preload = this.preload.bind(this, p);
+    p.setup = this.setUp.bind(this, p, position);
+    p.draw = this.draw.bind(this, p);
+    p.mouseMoved = this.mouseMoved.bind(this, p);
     p.mouseClicked = this.mouseClicked.bind(this);
-    p.windowResized = this.windowResized.bind(this);
+    p.windowResized = this.windowResized.bind(this, p);
   }
 
   /**
    * Preloads assets before setup.
+   * @param p - The p5 instance.
    */
-  private preload() {
+  private preload(p: p5) {
     if (this.preloader) {
-      this.preloader(this.p5);
+      this.preloader(p);
     }
   }
 
   /**
    * Sets up the canvas.
+   * @param p - The p5 instance.
+   * @param position - The position to place the canvas.
+   * @param position.x - The x-coordinate of the canvas.
+   * @param position.y - The y-coordinate of the canvas.
    */
-  private setUp() {
-    const containerWidth = 1600;
-    const containerHeight = 1600;
+  private setUp(p: p5, position: { x: number; y: number }) {
+    const containerWidth =
+      this.container?.clientWidth || this.containerSize.width;
+    const containerHeight =
+      this.container?.clientHeight || this.containerSize.height;
 
-    this.p5.createCanvas(containerWidth, containerHeight).position(0, 50);
+    p.createCanvas(containerWidth, containerHeight).position(
+      position.x,
+      position.y
+    );
+    p.pixelDensity(2);
   }
 
   /**
@@ -249,7 +274,7 @@ export class Main {
     if (object.shouldDispatch()) {
       this.dispatchedIds.add(object.getDispatchId() || '');
 
-      this.dispatchCustomEvent('dispatchId', {
+      this.dispatchCustomEvent('ee:dispatchId', {
         dispatchId: object.getDispatchId(),
       });
 
@@ -338,13 +363,13 @@ export class Main {
         if (!animator.getThrow()) {
           this.animatorSnapshot.push(animator);
           animator.setThrow(true);
-          this.dispatchCustomEvent('animatorDraw', {
+          this.dispatchCustomEvent('ee:animatorDraw', {
             animatorId: animator.getId(),
           });
         }
         animatorQueue.shift();
 
-        if (!skipRedrawAll) {
+        if (!skipRedrawAll && this.stepsQueue.length) {
           this.reDrawAll();
         }
       }
@@ -357,6 +382,7 @@ export class Main {
    * @param skipDraw - Whether to skip drawing.
    * @param isSkippingQueue - Whether to skip through the queue.
    */
+  // eslint-disable-next-line complexity
   private runner(
     useInstantQueue = false,
     skipDraw = false,
@@ -409,7 +435,7 @@ export class Main {
           animatorQueue,
           !skipDraw,
           isSkippingQueue,
-          useInstantQueue
+          useInstantQueue || this.usingHelperQueue
         );
       } else if (firstObject.getGroupId()) {
         this.processGroup(queue, groupQueue, !skipDraw, isSkippingQueue);
@@ -455,8 +481,9 @@ export class Main {
 
   /**
    * Draws the current frame, processing the queues.
+   * @param p - The p5 instance.
    */
-  private draw() {
+  private draw(p: p5) {
     this.stats?.begin();
 
     if (this.pause) {
@@ -471,20 +498,20 @@ export class Main {
       this.dispatchCustomEvent('noLoop', {
         message: 'Animation ended',
       });
-      this.p5.noLoop();
+      p.noLoop();
       this.noLoop = true;
     }
 
     if (this.isTravelling) {
       if (this.clearBeforeTravel) {
-        this.p5.clear();
+        p.clear();
       }
 
       if (this.runTraveller()) {
         this.traveller = null;
         this.runner();
       }
-    } else if (this.p5.frameCount % this.delay === 0) {
+    } else if (p.frameCount % this.delay === 0) {
       if (
         !this.usingHelperQueue ||
         (this.usingHelperQueue && this.helperQueue.length)
@@ -508,8 +535,15 @@ export class Main {
     this.stats?.end();
   }
 
-  private windowResized() {
-    this.p5.resizeCanvas(1600, 1600);
+  /**
+   * Handles window resize events.
+   * @param p - The p5 instance.
+   */
+  private windowResized(p: p5) {
+    const width = this.container?.clientWidth || this.containerSize.width;
+    const height = this.container?.clientHeight || this.containerSize.height;
+
+    p.resizeCanvas(width, height);
     this.loadAnimatorPartAndDraw(undefined, true);
   }
 
@@ -530,8 +564,9 @@ export class Main {
 
   /**
    * Handles hover events for figures.
+   * @param p - The p5 instance.
    */
-  private mouseMoved() {
+  private mouseMoved(p: p5) {
     let didHover = false;
 
     if (this.snapshot.length === 0) {
@@ -590,9 +625,9 @@ export class Main {
     });
 
     if (didHover) {
-      this.p5.cursor(this.p5.HAND);
+      p.cursor(p.HAND);
     } else {
-      this.p5.cursor(this.p5.ARROW);
+      p.cursor(p.ARROW);
     }
   }
 
@@ -744,6 +779,35 @@ export class Main {
   }
 
   /**
+   * Redraws all figures on the canvas.
+   * @param animatorIdToDraw - The ID of the animator to draw.
+   */
+  reDrawAll(animatorIdToDraw?: string) {
+    if (this.pause) {
+      return;
+    }
+
+    this.loadSnapshot(animatorIdToDraw);
+  }
+
+  /**
+   * Resets the queues and redraws all figures on the canvas.
+   */
+  resetQueuesAndReDrawAll() {
+    if (this.pause) {
+      return;
+    }
+
+    this.stepsQueue = [];
+    this.instantQueue = [];
+    this.groupStepsQueue = [];
+    this.groupInstantQueue = [];
+    this.animatorStepsQueue = [];
+    this.animatorInstantQueue = [];
+    this.reDrawAll();
+  }
+
+  /**
    * If a animator is still rendering, it will be reset the half rendered animator and the already rendered figures/groups of that animator will be removed from the snapshot and readded to the queue.
    * @param checkpoint - The checkpoint to load.
    * @returns - Whether the checkpoint was part of the animator.
@@ -833,9 +897,10 @@ export class Main {
 
   /**
    * Pops the previous checkpoint from the stack.
+   * @param tillCheckpoint - The ID of the checkpoint to pop until.
    * @returns The previous checkpoint.
    */
-  private popPreviousCheckpoint(): string | undefined {
+  private popPreviousCheckpoint(tillCheckpoint?: string): string | undefined {
     let checkpoint = Array.from(this.checkpoints).pop();
 
     if (!checkpoint) {
@@ -844,7 +909,12 @@ export class Main {
 
     this.checkpoints.delete(checkpoint);
 
+    if (tillCheckpoint === checkpoint) {
+      return tillCheckpoint;
+    }
+
     if (
+      !tillCheckpoint &&
       !this.animatorStepsQueue?.[0]
         ?.getObjects()
         .find((object) => object.getId() === checkpoint)
@@ -852,18 +922,19 @@ export class Main {
       return checkpoint;
     }
 
-    checkpoint = this.popPreviousCheckpoint();
+    checkpoint = this.popPreviousCheckpoint(tillCheckpoint);
 
     return checkpoint;
   }
 
   /**
    * Loads the previous checkpoint. This will re-render instantly all figures up to the previous checkpoint and start the queue from there.
+   * @param prev - The ID of the previous checkpoint.
    * @returns - The previous checkpoint.
    */
   // eslint-disable-next-line complexity
-  loadPreviousCheckpoint() {
-    const checkpoint = this.popPreviousCheckpoint();
+  loadPreviousCheckpoint(prev?: string) {
+    let checkpoint = this.popPreviousCheckpoint(prev);
 
     if (!checkpoint) {
       return undefined;
@@ -897,7 +968,9 @@ export class Main {
       this.traveller = null;
     }
 
-    this.handleAnimatorOnPreviousCheckpointLoad(checkpoint);
+    if (this.handleAnimatorOnPreviousCheckpointLoad(checkpoint)) {
+      checkpoint = this.popPreviousCheckpoint(prev);
+    }
 
     const toBeLoadedObjects = [];
     const toCheckGroups = new Set<string>();
@@ -975,7 +1048,8 @@ export class Main {
 
     const lastDispatchedId = Array.from(this.dispatchedIds).pop();
 
-    this.dispatchCustomEvent('dispatchId', {
+    this.dispatchCustomEvent('ee:dispatchId', {
+      type: 'previousCheckpoint',
       dispatchId: lastDispatchedId,
     });
 
@@ -988,9 +1062,10 @@ export class Main {
 
   /**
    * Loads the next checkpoint. This will re-render instantly all figures up to the next checkpoint and start the queue from there.
+   * @param next - The ID of the next checkpoint.
    * @returns - The next checkpoint.
    */
-  loadNextCheckpoint() {
+  loadNextCheckpoint(next?: string) {
     this.togglePause(true);
 
     while (this.instantQueue.length) {
@@ -1006,7 +1081,12 @@ export class Main {
       this.runner(false, true);
     }
 
-    while (this.stepsQueue.length && !this.stepsQueue[0].getIsCheckpoint()) {
+    while (
+      this.stepsQueue.length &&
+      (next
+        ? this.stepsQueue[0].getId() !== next
+        : !this.stepsQueue[0].getIsCheckpoint())
+    ) {
       this.runner(false, true);
     }
 
@@ -1022,6 +1102,179 @@ export class Main {
     this.reDrawAll();
 
     return this.stepsQueue[0]?.getId();
+  }
+
+  /**
+   * Gets the current checkpoint index.
+   * @returns The current checkpoint index.
+   */
+  getCurrentCheckpointIndex() {
+    return this.checkpoints.size - 1;
+  }
+
+  /**
+   * Steps to the next figure in the queue.
+   */
+  stepNext() {
+    this.togglePause(true);
+    this.dispatchCustomEvent('noLoop', {
+      message: 'Animation end',
+    });
+
+    while (this.isTravelling) {
+      this.runTraveller();
+    }
+
+    let lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+    let toRender = this.stepsQueue[0];
+
+    // If the current step is a placeholder, we need to draw it and grab next one.
+    if (toRender?.getId().startsWith('placeholder')) {
+      this.runner(false, false, true);
+
+      toRender = this.stepsQueue[0];
+      lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+    }
+
+    if (toRender?.getAnimatorId() !== lastSnapshotObject?.getAnimatorId()) {
+      this.p5.clear();
+
+      for (let i = 0; i < this.snapshot.length; i++) {
+        const figure = this.snapshot[i];
+
+        if (
+          figure.getAnimatorId() &&
+          figure.getAnimatorId() !== toRender.getAnimatorId()
+        ) {
+          continue;
+        }
+
+        if (figure.getCanTravel()) {
+          figure.setShouldTravel(true);
+          figure.resetTraveller();
+          figure.completeTraveller();
+        } else {
+          figure.draw();
+        }
+      }
+    }
+
+    this.runner(false, false, true);
+  }
+
+  /**
+   * Steps back to the last rendered figure in the snapshot.
+   */
+  stepBack() {
+    this.togglePause(true);
+    this.dispatchCustomEvent('noLoop', {
+      message: 'Animation end',
+    });
+
+    const wasTravelling = this.isTravelling;
+    while (this.isTravelling) {
+      this.runTraveller();
+    }
+
+    const lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
+
+    if (lastSnapshotObject.getCanTravel()) {
+      lastSnapshotObject?.resetTraveller();
+      lastSnapshotObject?.setShouldTravel(true);
+    }
+
+    if (lastSnapshotObject.getDispatchId()) {
+      this.dispatchedIds.delete(lastSnapshotObject.getDispatchId() || '');
+      lastSnapshotObject.setToDispatch(true);
+    }
+
+    lastSnapshotObject.setThrow(false);
+
+    let animator: Animator | null = null;
+    if (lastSnapshotObject.getAnimatorId()) {
+      if (
+        this.animatorSnapshot[this.animatorSnapshot.length - 1]?.getId() ===
+        lastSnapshotObject.getAnimatorId()
+      ) {
+        animator = this.animatorSnapshot[this.animatorSnapshot.length - 1];
+        animator.setThrow(false);
+        this.animatorStepsQueue.unshift(animator);
+        this.animatorSnapshot.pop();
+      } else {
+        animator = this.animatorStepsQueue[0];
+      }
+
+      if (!wasTravelling) {
+        animator.decrementIndex();
+      }
+    }
+
+    if (lastSnapshotObject.getGroupId()) {
+      const group = this.groupSnapshot[this.groupSnapshot.length - 1];
+
+      group.setThrow(false);
+
+      group.getFigures().forEach((object) => {
+        object.setThrow(false);
+
+        if (object.getCanTravel()) {
+          object.setShouldTravel(true);
+          object.resetTraveller();
+        }
+
+        if (object.canDispatch()) {
+          this.dispatchedIds.delete(object.getDispatchId() || '');
+          object.setToDispatch(true);
+        }
+
+        this.snapshot.pop();
+      });
+
+      this.groupStepsQueue.unshift(group);
+      this.groupSnapshot.pop();
+      this.stepsQueue.unshift(...group.getFigures());
+    } else {
+      this.snapshot.pop();
+      this.stepsQueue.unshift(lastSnapshotObject);
+    }
+
+    this.p5.clear();
+
+    let lastDispatchObject: Figure | null = null;
+    for (let i = 0; i < this.snapshot.length; i++) {
+      const figure = this.snapshot[i];
+
+      if (
+        figure.getAnimatorId() &&
+        figure.getAnimatorId() !== lastSnapshotObject.getAnimatorId()
+      ) {
+        continue;
+      }
+
+      if (figure.getCanTravel()) {
+        figure.setShouldTravel(true);
+        figure.resetTraveller();
+        figure.completeTraveller();
+      } else {
+        figure.draw();
+      }
+
+      if (figure.canDispatch()) {
+        lastDispatchObject = figure;
+      }
+    }
+
+    this.checkpoints.delete(lastSnapshotObject.getId());
+
+    this.dispatchCustomEvent('figureDraw', {
+      figureId: [...this.snapshot].pop()?.getId() || '',
+    });
+
+    if (lastDispatchObject?.canDispatch()) {
+      this.dispatchCustomEvent('ee:dispatchId', {
+        dispatchId: lastDispatchObject.getDispatchId(),
+      });
+    }
   }
 
   /**
@@ -1054,23 +1307,6 @@ export class Main {
    */
   setBackgroundColor(color: number) {
     this.backgroundColor = color;
-  }
-
-  /**
-   * Resets the queues and redraws all figures on the canvas.
-   */
-  resetQueuesAndReDrawAll() {
-    if (this.pause) {
-      return;
-    }
-
-    this.stepsQueue = [];
-    this.instantQueue = [];
-    this.groupStepsQueue = [];
-    this.groupInstantQueue = [];
-    this.animatorStepsQueue = [];
-    this.animatorInstantQueue = [];
-    this.reDrawAll();
   }
 
   /**
@@ -1123,7 +1359,7 @@ export class Main {
   }
 
   /**
-   * Loads a snapshot of figures, groups, and animators from the snapshot arrays and draws them instantly.
+   * Loads a snapshot of figures, groups, and animators from the snapshot arrays and draws them instantly without loading figures to queue and waiting for the next animation frame to render.
    * Used to render figures instantly when expand functionality is required.
    * @param animatorIdToDraw - The ID of the animator to draw.
    * @param shift - The shift to apply to the figures.
@@ -1161,18 +1397,6 @@ export class Main {
         }
       }
     }
-  }
-
-  /**
-   * Redraws all figures on the canvas.
-   * @param animatorIdToDraw - The ID of the animator to draw.
-   */
-  reDrawAll(animatorIdToDraw?: string) {
-    if (this.pause) {
-      return;
-    }
-
-    this.loadSnapshot(animatorIdToDraw);
   }
 
   /**
@@ -1387,165 +1611,6 @@ export class Main {
   }
 
   /**
-   * Gets the current checkpoint index.
-   * @returns The current checkpoint index.
-   */
-  getCurrentCheckpointIndex() {
-    return this.checkpoints.size - 1;
-  }
-
-  /**
-   * Steps to the next figure in the queue.
-   */
-  stepNext() {
-    this.togglePause(true);
-    this.dispatchCustomEvent('noLoop', {
-      message: 'Animation end',
-    });
-
-    while (this.isTravelling) {
-      this.runTraveller();
-    }
-
-    const lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
-    const toRender = this.stepsQueue[0];
-
-    if (toRender.getAnimatorId() !== lastSnapshotObject.getAnimatorId()) {
-      this.p5.clear();
-
-      for (let i = 0; i < this.snapshot.length; i++) {
-        const figure = this.snapshot[i];
-
-        if (
-          figure.getAnimatorId() &&
-          figure.getAnimatorId() !== toRender.getAnimatorId()
-        ) {
-          continue;
-        }
-
-        if (figure.getCanTravel()) {
-          figure.setShouldTravel(true);
-          figure.resetTraveller();
-          figure.completeTraveller();
-        } else {
-          figure.draw();
-        }
-      }
-    }
-
-    this.runner(false, false, true);
-  }
-
-  /**
-   * Steps back to the last rendered figure in the snapshot.
-   */
-  stepBack() {
-    this.togglePause(true);
-    this.dispatchCustomEvent('noLoop', {
-      message: 'Animation end',
-    });
-
-    const wasTravelling = this.isTravelling;
-    while (this.isTravelling) {
-      this.runTraveller();
-    }
-
-    const lastSnapshotObject = this.snapshot[this.snapshot.length - 1];
-
-    if (lastSnapshotObject.getCanTravel()) {
-      lastSnapshotObject?.resetTraveller();
-      lastSnapshotObject?.setShouldTravel(true);
-    }
-
-    if (lastSnapshotObject.getDispatchId()) {
-      this.dispatchedIds.delete(lastSnapshotObject.getDispatchId() || '');
-      lastSnapshotObject.setToDispatch(true);
-    }
-
-    lastSnapshotObject.setThrow(false);
-
-    let animator: Animator | null = null;
-    if (lastSnapshotObject.getAnimatorId()) {
-      if (
-        this.animatorSnapshot[this.animatorSnapshot.length - 1]?.getId() ===
-        lastSnapshotObject.getAnimatorId()
-      ) {
-        animator = this.animatorSnapshot[this.animatorSnapshot.length - 1];
-        animator.setThrow(false);
-        this.animatorStepsQueue.unshift(animator);
-        this.animatorSnapshot.pop();
-      } else {
-        animator = this.animatorStepsQueue[0];
-      }
-
-      if (!wasTravelling) {
-        animator.decrementIndex();
-      }
-    }
-
-    if (lastSnapshotObject.getGroupId()) {
-      const group = this.groupSnapshot[this.groupSnapshot.length - 1];
-
-      group.setThrow(false);
-
-      group.getFigures().forEach((object) => {
-        object.setThrow(false);
-
-        if (object.getCanTravel()) {
-          object.setShouldTravel(true);
-          object.resetTraveller();
-        }
-
-        if (object.canDispatch()) {
-          this.dispatchedIds.delete(object.getDispatchId() || '');
-          object.setToDispatch(true);
-        }
-
-        this.snapshot.pop();
-      });
-
-      this.groupStepsQueue.unshift(group);
-      this.groupSnapshot.pop();
-      this.stepsQueue.unshift(...group.getFigures());
-    } else {
-      this.snapshot.pop();
-      this.stepsQueue.unshift(lastSnapshotObject);
-    }
-
-    this.p5.clear();
-    for (let i = 0; i < this.snapshot.length; i++) {
-      const figure = this.snapshot[i];
-
-      if (
-        figure.getAnimatorId() &&
-        figure.getAnimatorId() !== lastSnapshotObject.getAnimatorId()
-      ) {
-        continue;
-      }
-
-      if (figure.getCanTravel()) {
-        figure.setShouldTravel(true);
-        figure.resetTraveller();
-        figure.completeTraveller();
-      } else {
-        figure.draw();
-      }
-    }
-
-    this.checkpoints.delete(lastSnapshotObject.getId());
-
-    this.dispatchCustomEvent('figureDraw', {
-      figureId: [...this.snapshot].pop()?.getId() || '',
-    });
-
-    if (lastSnapshotObject.canDispatch()) {
-      this.dispatchCustomEvent('dispatchId', {
-        dispatchId: Array.from(this.dispatchedIds).pop(),
-      });
-    }
-  }
-
-  /**
    * Resets the helper queue, and reloads the queues with correct creation order.
    */
   resetAfterHelperQueue() {
@@ -1718,7 +1783,7 @@ export class Main {
     this.groupStepsQueue = [...groups];
     this.animatorStepsQueue = [...animators];
 
-    this.dispatchCustomEvent('dispatchId', {
+    this.dispatchCustomEvent('ee:dispatchId', {
       dispatchId: Array.from(this.dispatchedIds).pop(),
     });
 
