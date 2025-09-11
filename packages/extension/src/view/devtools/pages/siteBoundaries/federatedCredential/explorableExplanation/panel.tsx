@@ -108,7 +108,7 @@ const Panel = ({
       document.removeEventListener('ee:dispatchId', listener);
       document.removeEventListener('ee:animatorDraw', animatorListener);
     };
-  }, [setCurrentScenarioKey, setCurrentStep]);
+  }, [setCurrentScenarioKey, setCurrentStep, setIsPlaying]);
 
   return (
     <div className="flex flex-col h-full">

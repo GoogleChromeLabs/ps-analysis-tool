@@ -69,6 +69,7 @@ const Header = ({ historyCount }: HeaderProps) => {
       <div className="flex items-center divide-x divide-gray-300 dark:divide-bright-gray text-slate-700 dark:text-bright-gray">
         <button
           className="disabled:opacity-50 disabled:pointer-events-none pr-2 outline-none"
+          data-testid="play-pause-button"
           onClick={() => setIsPlaying(!play)}
           title={play ? 'Pause' : 'Play'}
         >
@@ -85,6 +86,7 @@ const Header = ({ historyCount }: HeaderProps) => {
             title="Previous Node"
             onClick={prevStep}
             className="disabled:opacity-50 disabled:pointer-events-none"
+            data-testid="previous-button"
           >
             <PreviousIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
@@ -93,12 +95,18 @@ const Header = ({ historyCount }: HeaderProps) => {
             id="nextButton"
             title="Next Node"
             className="disabled:opacity-50 disabled:pointer-events-none"
+            data-testid="next-button"
           >
             <NextIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
           </button>
         </div>
 
-        <button className="px-2" onClick={reset} title="Restart">
+        <button
+          className="px-2"
+          onClick={reset}
+          title="Restart"
+          data-testid="reset-button"
+        >
           <RestartIcon className="h-5 w-5 hover:opacity-70 active:opacity-50" />
         </button>
         <div className="px-2">

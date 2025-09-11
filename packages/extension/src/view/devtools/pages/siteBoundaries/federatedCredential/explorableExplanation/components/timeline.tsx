@@ -68,7 +68,7 @@ const Timeline = ({ currentScenarioKey }: TimelineProps) => {
                 loadScenarioForInteractiveMode(scenarioKeys[index]);
               }}
             >
-              {index + 1}. {title}
+              {`${index + 1}. ${title}`}
             </div>
             {index < titles.length - 1 && (
               <div className="timeline-connector flex-grow h-[2px] bg-gray-200"></div>
