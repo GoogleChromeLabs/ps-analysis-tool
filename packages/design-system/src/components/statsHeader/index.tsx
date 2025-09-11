@@ -18,15 +18,56 @@
  */
 import React from 'react';
 
+/**
+ * Internal dependencies.
+ */
+import CirclePieChart from '../circlePieChart';
+
 interface StatsHeaderProps {
   title: string;
 }
 
 const StatsHeader = ({ title }: StatsHeaderProps) => {
   return (
-    <header className="bg-gray-100 p-4">
-      <h1 className="text-xl font-bold">{title}</h1>
-    </header>
+    <div className="border border-gray-200">
+      {title}
+      <div className="flex flex-col flex-row w-full py-0">
+        <div className="w-2/5 h-full"></div>
+        <div className="flex flex-row items-center gap-2 w-1/5 justify-center">
+          <CirclePieChart
+            title="PRTs"
+            centerCount={10}
+            data={[
+              {
+                count: 1,
+                color: '#C5A06A',
+              },
+              {
+                count: 9,
+                color: '#AF7AA3',
+              },
+            ]}
+            infoIconClassName="absolute -right-3"
+          />
+          <CirclePieChart
+            title="Script Blocking"
+            centerCount={4}
+            data={[
+              {
+                count: 1,
+                color: '#F54021',
+              },
+              {
+                count: 3,
+                color: '#25ACAD',
+              },
+            ]}
+            infoIconClassName="absolute -right-3"
+          />
+        </div>
+        <div className="w-2/5 h-full"></div>
+      </div>
+    </div>
   );
 };
 
