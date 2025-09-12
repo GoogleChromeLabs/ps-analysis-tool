@@ -203,6 +203,33 @@ const MDLTable = () => {
     []
   );
 
+  const stats = {
+    site: [
+      {
+        title: 'Competely Blocked',
+        centerCount: 5,
+        color: '#F3AE4E',
+      },
+      {
+        title: 'Partially Blocked',
+        centerCount: 8,
+        color: '#4C79F4',
+      },
+    ],
+    global: [
+      {
+        title: 'Competely Blocked',
+        centerCount: 1,
+        color: '#F3AE4E',
+      },
+      {
+        title: 'Partially Blocked',
+        centerCount: 9,
+        color: '#4C79F4',
+      },
+    ],
+  };
+
   if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -222,6 +249,7 @@ const MDLTable = () => {
       }
       extraInterfaceToTopBar={checkbox}
       filters={filters}
+      stats={stats}
     />
   );
 };
