@@ -27,7 +27,10 @@ import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies.
  */
-import Context from './context';
+import Context, {
+  initialState,
+  type ScriptBlockingStoreContext,
+} from './context';
 import { EXTRA_DATA } from '../../../../constants';
 
 const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
@@ -35,11 +38,16 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  const [statistics, setStatistics] = useState<
+    ScriptBlockingStoreContext['state']['statistics']
+  >(initialState.state.statistics);
+
   const messagePassingListener = useCallback(
     (message: {
       type: string;
       payload: {
         uniqueResponseDomains?: string[];
+        stats: ScriptBlockingStoreContext['state']['statistics'];
         tabId: string;
       };
     }) => {
@@ -56,6 +64,15 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
           ? prev
           : message.payload.uniqueResponseDomains || [];
       });
+
+      if (message.payload.stats) {
+        setStatistics((prev) => {
+          if (isEqual(prev, message.payload.stats)) {
+            return prev;
+          }
+          return message.payload.stats;
+        });
+      }
     },
     []
   );
@@ -73,6 +90,7 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
       value={{
         state: {
           uniqueResponseDomains,
+          statistics,
         },
         actions: {
           setUniqueResponseDomains,

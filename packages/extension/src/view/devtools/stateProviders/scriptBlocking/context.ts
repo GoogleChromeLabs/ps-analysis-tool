@@ -18,18 +18,40 @@
  */
 import { noop, createContext } from '@google-psat/common';
 
+type ScriptBlockingStatistics = {
+  globalView: {
+    partiallyBlockedDomains: number;
+    completelyBlockedDomains: number;
+  };
+  localView: {
+    partiallyBlockedDomains: number;
+    completelyBlockedDomains: number;
+  };
+};
+
 export interface ScriptBlockingStoreContext {
   state: {
     uniqueResponseDomains: string[];
+    statistics: ScriptBlockingStatistics;
   };
   actions: {
     setUniqueResponseDomains: (newValue: string[]) => void;
   };
 }
 
-const initialState: ScriptBlockingStoreContext = {
+export const initialState: ScriptBlockingStoreContext = {
   state: {
     uniqueResponseDomains: [],
+    statistics: {
+      localView: {
+        partiallyBlockedDomains: 0,
+        completelyBlockedDomains: 0,
+      },
+      globalView: {
+        partiallyBlockedDomains: 0,
+        completelyBlockedDomains: 0,
+      },
+    },
   },
   actions: {
     setUniqueResponseDomains: noop,
