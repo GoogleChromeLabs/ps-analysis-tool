@@ -35,11 +35,13 @@ const ProbabilisticRevealTokens = () => {
     decryptedTokensData,
     prtTokensData,
     plainTextTokensData,
+    statistics,
   } = useProbabilisticRevealTokens(({ state }) => ({
     perTokenMetadata: state.perTokenMetadata,
     decryptedTokensData: state.decryptedTokens,
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
+    statistics: state.statistics,
   }));
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -144,24 +146,27 @@ const ProbabilisticRevealTokens = () => {
     site: [
       {
         title: 'PRTs with Signal',
-        centerCount: 4,
+        centerCount: statistics.localView.nonZeroTokens,
         color: '#AF7AA3',
       },
       {
         title: 'PRTs without Signal',
-        centerCount: 3,
+        centerCount:
+          statistics.localView.totalTokens - statistics.localView.nonZeroTokens,
         color: '#F54021',
       },
     ],
     global: [
       {
         title: 'PRTs with Signals',
-        centerCount: 2,
+        centerCount: statistics.globalView.nonZeroTokens,
         color: '#AF7AA3',
       },
       {
         title: 'PRTs without Signals',
-        centerCount: 1,
+        centerCount:
+          statistics.globalView.totalTokens -
+          statistics.globalView.nonZeroTokens,
         color: '#F54021',
       },
     ],
@@ -171,6 +176,7 @@ const ProbabilisticRevealTokens = () => {
     <MdlCommonPanel
       formedJson={formedJson}
       tableColumns={tableColumns}
+      tableSearchKeys={['origin', 'owner']}
       tableData={perTokenMetadata}
       selectedKey={selectedJSON?.origin.toString()}
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}

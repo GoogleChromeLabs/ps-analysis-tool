@@ -25,9 +25,17 @@ import {
   ResizableTray,
   JsonView,
   noop,
+  type TableData,
+  type TableColumn,
 } from '@google-psat/design-system';
 import React, { useRef } from 'react';
-import { type PRTMetadata } from '@google-psat/common';
+import {
+  type MDLTableData,
+  type ProbablisticRevealToken,
+  type PRTMetadata,
+  type UniqueDecryptedToken,
+  type UniquePlainTextToken,
+} from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
 
 /**
@@ -36,19 +44,22 @@ import { I18n } from '@google-psat/i18n';
 import RowContextMenuForPRT from './rowContextMenu';
 import StatsHeader, { type Stats } from './stasHeader';
 
+type FormedJson = {
+  prtHeader: PRTMetadata;
+  decryptedTokens?: UniqueDecryptedToken;
+  prtToken: ProbablisticRevealToken;
+  plainTextToken?: UniquePlainTextToken;
+};
 interface MdlCommonPanelProps {
-  formedJson: PRTMetadata | null;
-  tableColumns: Array<{
-    header: string;
-    accessorKey: keyof PRTMetadata;
-    cell: (info: any) => any;
-  }>;
-  tableData: PRTMetadata[];
-  selectedKey: string | null;
-  onRowClick: (row: PRTMetadata) => void;
-  extraInterfaceToTopBar?: React.ReactNode;
-  filters: TableFilter[];
+  formedJson: FormedJson | null;
+  tableColumns: TableColumn[];
+  tableData: PRTMetadata[] | MDLTableData[];
+  selectedKey?: string;
+  onRowClick: (row: TableData | null) => void;
+  extraInterfaceToTopBar?: () => React.JSX.Element;
+  filters?: TableFilter;
   stats: Stats;
+  tableSearchKeys: string[];
 }
 
 const MdlCommonPanel = ({
@@ -57,7 +68,8 @@ const MdlCommonPanel = ({
   tableData,
   selectedKey,
   onRowClick,
-  extraInterfaceToTopBar = undefined,
+  tableSearchKeys = [],
+  extraInterfaceToTopBar,
   filters,
   stats,
 }: MdlCommonPanelProps) => {
@@ -86,10 +98,11 @@ const MdlCommonPanel = ({
             data={tableData}
             tableFilterData={filters}
             tableColumns={tableColumns}
-            tableSearchKeys={['origin', 'owner']}
+            tableSearchKeys={tableSearchKeys}
             onRowClick={onRowClick}
             getRowObjectKey={(row: TableRow) =>
-              (row.originalData as PRTMetadata).origin.toString()
+              (row.originalData as PRTMetadata).origin?.toString() ??
+              (row.originalData as MDLTableData).domain?.toString()
             }
             onRowContextMenu={
               rowContextMenuRef.current?.onRowContextMenu ?? noop

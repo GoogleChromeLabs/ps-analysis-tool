@@ -45,9 +45,12 @@ const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
-    uniqueResponseDomains: state.uniqueResponseDomains,
-  }));
+  const { uniqueResponseDomains, statistics } = useScriptBlocking(
+    ({ state }) => ({
+      uniqueResponseDomains: state.uniqueResponseDomains,
+      statistics: state.statistics,
+    })
+  );
 
   const [initialTableData, setinitialTableData] = useState<
     { domain: string; owner: string; scriptBlocking: string }[]
@@ -207,24 +210,24 @@ const MDLTable = () => {
     site: [
       {
         title: 'Competely Blocked',
-        centerCount: 5,
+        centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
       },
       {
         title: 'Partially Blocked',
-        centerCount: 8,
+        centerCount: statistics.localView.partiallyBlockedDomains,
         color: '#4C79F4',
       },
     ],
     global: [
       {
         title: 'Competely Blocked',
-        centerCount: 1,
+        centerCount: statistics.globalView.completelyBlockedDomains,
         color: '#F3AE4E',
       },
       {
         title: 'Partially Blocked',
-        centerCount: 9,
+        centerCount: statistics.globalView.partiallyBlockedDomains,
         color: '#4C79F4',
       },
     ],
@@ -242,8 +245,9 @@ const MDLTable = () => {
     <MdlCommonPanel
       formedJson={null}
       tableColumns={tableColumns}
+      tableSearchKeys={['domain', 'owner']}
       tableData={tableData}
-      selectedKey={selectedKey}
+      selectedKey={selectedKey ?? ''}
       onRowClick={(row) =>
         setSelectedKey((row as MDLTableData)?.domain || null)
       }

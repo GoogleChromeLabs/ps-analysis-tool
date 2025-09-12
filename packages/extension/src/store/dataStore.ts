@@ -23,7 +23,6 @@ import { isValidURL } from '@google-psat/common';
  * Internal dependencies.
  */
 import { doesFrameExist } from '../utils/doesFrameExist';
-import { EXTRA_DATA } from '../constants';
 
 export class DataStore {
   /**
@@ -74,63 +73,13 @@ export class DataStore {
     };
   } = {};
 
-  updateUniqueResponseDomains(tabId: string, requestId: string) {
-    if (!DataStore.requestIdToCDPURLMapping[tabId]) {
-      return;
-    }
-
-    const request = DataStore.requestIdToCDPURLMapping[tabId][requestId];
-
-    if (
-      !request ||
-      !isValidURL(request.url) ||
-      request.url.startsWith('chrome://') ||
-      request.url.startsWith('chrome-extension://') ||
-      request.url.startsWith('file://')
-    ) {
-      return;
-    }
-
-    let hostname = new URL(request.url).hostname;
-    hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
-
-    if (
-      hostname !== 'null' &&
-      !DataStore.tabs[tabId].uniqueResponseDomains.includes(hostname)
-    ) {
-      DataStore.tabs[tabId].uniqueResponseDomains.push(hostname);
-      DataStore.tabs[tabId].newUpdatesScriptBlocking++;
-    }
-  }
-
-  async sendUpdatedDataToPopupAndDevTools(
+  sendUpdatedDataToPopupAndDevTools(
     tabId: string,
-    overrideForInitialSync = false
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _overrideForInitialSync = false
   ) {
     if (!DataStore.tabs[tabId]) {
       return;
-    }
-
-    try {
-      if (
-        overrideForInitialSync ||
-        ((DataStore.tabs[tabId].devToolsOpenState ||
-          DataStore.tabs[tabId].popupOpenState) &&
-          DataStore.tabs[tabId].newUpdatesScriptBlocking > 0)
-      ) {
-        await chrome.runtime.sendMessage({
-          type: EXTRA_DATA, // For sending extra data.
-          payload: {
-            uniqueResponseDomains: DataStore.tabs[tabId].uniqueResponseDomains,
-            tabId: Number(tabId),
-          },
-        });
-        DataStore.tabs[tabId].newUpdatesScriptBlocking = 0;
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(error);
-      //Fail silently. Ignoring the console.warn here because the only error this will throw is of "Error: Could not establish connection".
     }
   }
 
