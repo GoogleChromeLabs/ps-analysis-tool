@@ -524,6 +524,11 @@ export class Main {
       this.runner(true);
     }
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping till saved figure',
+    });
+
     while (
       this.figureToStart &&
       this.stepsQueue.length > 0 &&
@@ -531,6 +536,11 @@ export class Main {
     ) {
       this.runner(false, false, true);
     }
+
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
 
     this.stats?.end();
   }
@@ -940,6 +950,11 @@ export class Main {
       return undefined;
     }
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping to previous checkpoint',
+    });
+
     this.togglePause(true);
 
     while (this.instantQueue.length) {
@@ -1048,6 +1063,11 @@ export class Main {
 
     const lastDispatchedId = Array.from(this.dispatchedIds).pop();
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
+
     this.dispatchCustomEvent('ee:dispatchId', {
       type: 'previousCheckpoint',
       dispatchId: lastDispatchedId,
@@ -1066,6 +1086,11 @@ export class Main {
    * @returns - The next checkpoint.
    */
   loadNextCheckpoint(next?: string) {
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping to next checkpoint',
+    });
+
     this.togglePause(true);
 
     while (this.instantQueue.length) {
@@ -1101,6 +1126,11 @@ export class Main {
     this.togglePause(false);
     this.reDrawAll();
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
+
     return this.stepsQueue[0]?.getId();
   }
 
@@ -1116,6 +1146,11 @@ export class Main {
    * Steps to the next figure in the queue.
    */
   stepNext() {
+    this.dispatchCustomEvent('ee:stepNext', {
+      start: true,
+      message: 'Stepping to next figure',
+    });
+
     this.togglePause(true);
     this.dispatchCustomEvent('noLoop', {
       message: 'Animation end',
@@ -1160,12 +1195,22 @@ export class Main {
     }
 
     this.runner(false, false, true);
+
+    this.dispatchCustomEvent('ee:stepNext', {
+      start: false,
+      message: 'Stepped to next figure',
+    });
   }
 
   /**
    * Steps back to the last rendered figure in the snapshot.
    */
   stepBack() {
+    this.dispatchCustomEvent('ee:stepBack', {
+      start: true,
+      message: 'Stepping back to last rendered figure',
+    });
+
     this.togglePause(true);
     this.dispatchCustomEvent('noLoop', {
       message: 'Animation end',
@@ -1275,6 +1320,11 @@ export class Main {
         dispatchId: lastDispatchObject.getDispatchId(),
       });
     }
+
+    this.dispatchCustomEvent('ee:stepBack', {
+      start: false,
+      message: 'Stepped back to last rendered figure',
+    });
   }
 
   /**
@@ -1384,9 +1434,19 @@ export class Main {
       }
     }
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping to snapshot figures',
+    });
+
     while (this.instantQueue.length) {
       this.runner(true);
     }
+
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
 
     if (shift) {
       for (let i = 0; i < iQueue.length; i++) {

@@ -598,7 +598,8 @@ const draw = {
     interestGroupCanvas: Main,
     interestGroupFigureFactory: FigureFactory,
     x: number,
-    y: number
+    y: number,
+    stepping: boolean
   ) => {
     const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
       return interestGroupFigureFactory.circle({
@@ -619,12 +620,13 @@ const draw = {
       interestGroupCanvas.togglePause(true);
       bubbles.forEach((bubble) => bubble.resetTraveller());
 
-      mainCanvas.togglePause(false);
+      if (!stepping) {
+        mainCanvas.togglePause(false);
+      }
       mainCanvas.reDrawAll();
     });
 
     interestGroupCanvas.addGroup(bubbleFlow);
-    mainCanvas.togglePause(true);
     interestGroupCanvas.togglePause(false);
   },
 
@@ -1017,7 +1019,8 @@ const draw = {
     interestGroupCanvas: Main,
     interestGroupFigureFactory: FigureFactory,
     x: number,
-    y: number
+    y: number,
+    stepping: boolean
   ) => {
     const bubbles = Array.from({ length: bubbleCount }, (_, index) => {
       return interestGroupFigureFactory.circle({
@@ -1041,12 +1044,12 @@ const draw = {
       interestGroupCanvas.togglePause(true);
       bubbles.forEach((bubble) => bubble.resetTraveller());
 
-      // box6.reDraw();
-      mainCanvas.togglePause(false);
+      if (!stepping) {
+        mainCanvas.togglePause(false);
+      }
     });
 
     interestGroupCanvas.addGroup(bubbleFlow);
-    mainCanvas.togglePause(true);
     interestGroupCanvas.togglePause(false);
   },
 };
@@ -1054,23 +1057,48 @@ const draw = {
 const handleListeners = (
   playButton: HTMLElement,
   interestGroupBubbles: { x: number; y: number }[],
-  publisherBubbles: { x: number; y: number }[]
+  publisherBubbles: { x: number; y: number }[],
+  mainCanvas: Main
 ) => {
+  let isSkipping = false;
+  let isStepping = false;
+
   document.addEventListener('loop', onLoopEvent.bind(null, playButton));
 
   document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
 
   document.addEventListener('figureDraw', figureDraw);
 
+  document.addEventListener('ee:stepNext', (event: Event) => {
+    const { start } = (event as CustomEvent).detail;
+
+    isStepping = start;
+  });
+
+  document.addEventListener('ee:stepBack', (event: Event) => {
+    const { start } = (event as CustomEvent).detail;
+
+    isStepping = start;
+  });
+
+  document.addEventListener('ee:skipping', (event: Event) => {
+    const { isSkipping: skipping } = (event as CustomEvent).detail;
+
+    isSkipping = skipping;
+  });
+
   document.addEventListener('ee:dispatchId', (event: Event) => {
     const { dispatchId } = (event as CustomEvent).detail;
 
-    if (!dispatchId) {
+    if (!dispatchId || isSkipping) {
       return;
     }
 
+    const stepping = isStepping;
+
     if (dispatchId.includes('IG')) {
       const index = dispatchId.split('IG-')[1] - 1;
+      mainCanvas.togglePause(true);
 
       const coordinates = interestGroupBubbles[index];
       draw.interestGroupBubbles(
@@ -1079,10 +1107,12 @@ const handleListeners = (
         variables.interestGroupCanvas,
         variables.interestGroupFigureFactory,
         coordinates.x,
-        coordinates.y
+        coordinates.y,
+        stepping
       );
     } else if (dispatchId.includes('P')) {
       const index = dispatchId.split('P-')[1] - 1;
+      mainCanvas.togglePause(true);
 
       const coordinates = publisherBubbles[index];
       draw.publisherBubbles(
@@ -1091,7 +1121,8 @@ const handleListeners = (
         variables.interestGroupCanvas,
         variables.interestGroupFigureFactory,
         coordinates.x,
-        coordinates.y
+        coordinates.y,
+        stepping
       );
     }
   });
@@ -1100,4 +1131,9 @@ const handleListeners = (
 const variables = flow.init();
 const { interestGroupBubbles, publisherBubbles } = draw.start(variables);
 
-handleListeners(variables.playButton!, interestGroupBubbles, publisherBubbles);
+handleListeners(
+  variables.playButton!,
+  interestGroupBubbles,
+  publisherBubbles,
+  variables.mainCanvas
+);
