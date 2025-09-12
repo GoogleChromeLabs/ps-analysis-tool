@@ -17,25 +17,15 @@
 /**
  * External dependencies
  */
-import {
-  Table,
-  TableProvider,
-  type TableColumn,
-  type TableRow,
-  ResizableTray,
-  JsonView,
-  noop,
-} from '@google-psat/design-system';
-import React, { useMemo, useRef, useState } from 'react';
+import { type TableColumn } from '@google-psat/design-system';
+import React, { useMemo, useState } from 'react';
 import { type PRTMetadata } from '@google-psat/common';
-import { I18n } from '@google-psat/i18n';
 
 /**
  * Internal dependencies
  */
 import { useProbabilisticRevealTokens } from '../../../../stateProviders';
-import RowContextMenuForPRT from './rowContextMenu';
-import StatsHeader from '../stasHeader';
+import MdlCommonPanel from '../../mdlCommonPanel';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
@@ -51,10 +41,6 @@ const ProbabilisticRevealTokens = () => {
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
   }));
-
-  const rowContextMenuRef = useRef<React.ElementRef<
-    typeof RowContextMenuForPRT
-  > | null>(null);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -155,56 +141,13 @@ const ProbabilisticRevealTokens = () => {
   ]);
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <StatsHeader />
-      <ResizableTray
-        defaultSize={{
-          width: '100%',
-          height: selectedJSON ? '50%' : '90%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-        minHeight="20%"
-        maxHeight="90%"
-        className="w-full flex flex-col"
-        trayId="active-sources-table-bottom-tray"
-      >
-        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
-          <TableProvider
-            data={perTokenMetadata}
-            tableColumns={tableColumns}
-            tableSearchKeys={['origin', 'owner']}
-            onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
-            getRowObjectKey={(row: TableRow) =>
-              (row.originalData as PRTMetadata).origin.toString()
-            }
-            onRowContextMenu={
-              rowContextMenuRef.current?.onRowContextMenu ?? noop
-            }
-          >
-            <Table
-              selectedKey={selectedJSON?.origin.toString()}
-              minWidth="50rem"
-            />
-            <RowContextMenuForPRT ref={rowContextMenuRef} />
-          </TableProvider>
-        </div>
-      </ResizableTray>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-        {formedJson ? (
-          <div className="text-xs py-1 px-1.5 h-full">
-            <JsonView src={formedJson} />
-          </div>
-        ) : (
-          <div className="h-full p-8 flex items-center">
-            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-              {I18n.getMessage('selectRowToPreview')}
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
+    <MdlCommonPanel
+      formedJson={formedJson}
+      tableColumns={tableColumns}
+      tableData={perTokenMetadata}
+      selectedKey={selectedJSON?.origin.toString()}
+      onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
+    />
   );
 };
 
