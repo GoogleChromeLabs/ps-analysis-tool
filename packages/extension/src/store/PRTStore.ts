@@ -62,6 +62,70 @@ type SingleTabTokens = {
 class PRTStore extends DataStore {
   tabTokens: TabToken = {};
 
+  mdlData: {
+    [domain: string]: {
+      scriptBlockingScope: 'NONE' | 'PARTIAL' | 'COMPLETE';
+      domain: string;
+      owner: string;
+    };
+  } = {};
+
+  statistics: {
+    prtStatistics: {
+      globalView: {
+        [domain: string]: {
+          totalTokens: number;
+          nonZeroSignal: number;
+        };
+      };
+      localView: {
+        [domain: string]: {
+          totalTokens: number;
+          nonZeroSignal: number;
+        };
+      };
+    };
+    scriptBlocking: {
+      globalView: {
+        scriptsStats: {
+          [domain: string]: {
+            totalScripts: number;
+            blockedScripts: number;
+          };
+        };
+        totalDomains: number;
+        blockedDomains: number;
+      };
+      localView: {
+        scriptsStats: {
+          [domain: string]: {
+            totalScripts: number;
+            blockedScripts: number;
+          };
+        };
+        totalDomains: number;
+        blockedDomains: number;
+      };
+    };
+  } = {
+    prtStatistics: {
+      globalView: {},
+      localView: {},
+    },
+    scriptBlocking: {
+      globalView: {
+        scriptsStats: {},
+        totalDomains: 0,
+        blockedDomains: 0,
+      },
+      localView: {
+        scriptsStats: {},
+        totalDomains: 0,
+        blockedDomains: 0,
+      },
+    },
+  };
+
   constructor() {
     super();
   }
@@ -93,11 +157,18 @@ class PRTStore extends DataStore {
       prtTokens: [],
       perTokenMetadata: {},
     };
+    this.statistics.prtStatistics.localView = {};
+    this.statistics.scriptBlocking.localView = {
+      scriptsStats: {},
+      totalDomains: 0,
+      blockedDomains: 0,
+    };
     //@ts-ignore
     globalThis.PSAT = {
       //@ts-ignore
       ...globalThis.PSAT,
       tabTokens: this.tabTokens,
+      statistics: this.statistics,
     };
   }
 

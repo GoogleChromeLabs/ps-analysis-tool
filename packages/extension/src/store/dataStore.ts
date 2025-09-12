@@ -91,7 +91,8 @@ export class DataStore {
       return;
     }
 
-    const hostname = new URL(request.url).hostname;
+    let hostname = new URL(request.url).hostname;
+    hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
 
     if (
       hostname !== 'null' &&
