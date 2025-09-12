@@ -365,9 +365,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           let origin = '';
 
-          if (extractHeader('origin', headers)) {
-            origin = extractHeader('origin', headers);
-          } else if (
+          if (
             DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url &&
             isValidURL(
               DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
