@@ -28,13 +28,20 @@ import { isEqual } from 'lodash-es';
 /**
  * Internal dependencies.
  */
-import Context, { type ProbabilisticRevealTokensContextType } from './context';
+import Context, {
+  initialState,
+  type ProbabilisticRevealTokensContextType,
+} from './context';
 import { TAB_TOKEN_DATA } from '../../../../constants';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [decryptedTokens, setDecryptedTokens] = useState<
     ProbabilisticRevealTokensContextType['state']['decryptedTokens']
   >([]);
+
+  const [statistics, setStatistics] = useState<
+    ProbabilisticRevealTokensContextType['state']['statistics']
+  >(initialState.state.statistics);
 
   const [prtTokens, setPrtTokens] = useState<
     ProbabilisticRevealTokensContextType['state']['prtTokens']
@@ -54,6 +61,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       payload: {
         tabId: string;
         tokens: ProbabilisticRevealTokensContextType['state'];
+        stats: ProbabilisticRevealTokensContextType['state']['statistics'];
       };
     }) => {
       if (![TAB_TOKEN_DATA].includes(message.type)) {
@@ -98,6 +106,15 @@ const Provider = ({ children }: PropsWithChildren) => {
             return prev;
           }
           return message.payload.tokens.perTokenMetadata;
+        });
+      }
+
+      if (message.payload.stats) {
+        setStatistics((prev) => {
+          if (isEqual(prev, message.payload.stats)) {
+            return prev;
+          }
+          return message.payload.stats;
         });
       }
     },
@@ -149,9 +166,16 @@ const Provider = ({ children }: PropsWithChildren) => {
         decryptedTokens,
         prtTokens,
         perTokenMetadata,
+        statistics,
       },
     };
-  }, [plainTextTokens, prtTokens, perTokenMetadata, decryptedTokens]);
+  }, [
+    plainTextTokens,
+    decryptedTokens,
+    prtTokens,
+    perTokenMetadata,
+    statistics,
+  ]);
 
   return <Context.Provider value={memoisedValue}>{children}</Context.Provider>;
 };

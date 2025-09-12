@@ -190,11 +190,44 @@ class PRTStore extends DataStore {
         ...this.tabTokens[tabId],
         perTokenMetadata: Object.values(this.tabTokens[tabId].perTokenMetadata),
       };
+
+      //@ts-ignore
+      const { prtStatistics = {} } = chrome.storage.sync.get('prtStatistics');
+
+      const localStats = this.tabTokens[tabId].plainTextTokens.reduce(
+        (acc, token) => {
+          const isZeroSignal = token.uint8Signal.every((bit) => bit === 0);
+          acc.totalTokens += 1;
+
+          if (!isZeroSignal) {
+            acc.nonZeroTokens += 1;
+          }
+
+          return acc;
+        },
+        { totalTokens: 0, nonZeroTokens: 0 }
+      );
+
+      const globalStats = Object.keys(prtStatistics).reduce(
+        (acc, key) => {
+          if (prtStatistics[key]) {
+            acc.totalTokens = prtStatistics + acc.totalTokens;
+            acc.nonZeroTokens = prtStatistics + acc.nonZeroTokens;
+          }
+          return acc;
+        },
+        { totalTokens: 0, nonZeroTokens: 0 }
+      );
+
       await chrome.runtime.sendMessage({
         type: TAB_TOKEN_DATA,
         payload: {
           tabId,
           tokens: tokenData,
+          stats: {
+            globalView: globalStats,
+            localView: localStats,
+          },
         },
       });
 
