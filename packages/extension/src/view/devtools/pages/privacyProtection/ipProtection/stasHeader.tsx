@@ -16,44 +16,83 @@
 /**
  * External dependencies.
  */
-import React from 'react';
-import { CirclePieChart } from '@google-psat/design-system';
+import React, { useState } from 'react';
+import { CirclePieChart, PillToggle } from '@google-psat/design-system';
 
 const StatsHeader = () => {
+  const [pillToggle, setPillToggle] = useState<string | null>('Site');
+  const [highlightOption, setHighlightOption] = useState<string>('Site');
+
+  const sitePieCharts = (
+    <>
+      <CirclePieChart
+        title="PRTs with Signals"
+        centerCount={4}
+        data={[
+          {
+            count: 9,
+            color: '#AF7AA3',
+          },
+        ]}
+        infoIconClassName="absolute -right-3"
+      />
+      <CirclePieChart
+        title="PRTs without Signals"
+        centerCount={3}
+        data={[
+          {
+            count: 1,
+            color: '#F54021',
+          },
+        ]}
+        infoIconClassName="absolute -right-3"
+      />
+    </>
+  );
+
+  const globalPieCharts = (
+    <>
+      <CirclePieChart
+        title="PRTs with Signals"
+        centerCount={2}
+        data={[
+          {
+            count: 10,
+            color: '#AF7AA3',
+          },
+        ]}
+        infoIconClassName="absolute -right-3"
+      />
+      <CirclePieChart
+        title="PRTs without Signals"
+        centerCount={1}
+        data={[
+          {
+            count: 3,
+            color: '#F54021',
+          },
+        ]}
+        infoIconClassName="absolute -right-3"
+      />
+    </>
+  );
+
   return (
     <div className="flex flex-col flex-row w-full py-2">
+      <div className="px-2 py-1">
+        <PillToggle
+          options={['Site', 'Global']}
+          pillToggle={pillToggle}
+          setPillToggle={setPillToggle}
+          eeAnimatedTab={true}
+          highlightOption={highlightOption}
+          setHighlightOption={setHighlightOption}
+          persistenceKey="statsHeaderPillToggle"
+        />
+      </div>
       <div className="w-2/5 h-full"></div>
       <div className="flex flex-row items-center gap-2 w-1/5 justify-center">
-        <CirclePieChart
-          title="PRTs"
-          centerCount={10}
-          data={[
-            {
-              count: 1,
-              color: '#C5A06A',
-            },
-            {
-              count: 9,
-              color: '#AF7AA3',
-            },
-          ]}
-          infoIconClassName="absolute -right-3"
-        />
-        <CirclePieChart
-          title="Script Blocking"
-          centerCount={4}
-          data={[
-            {
-              count: 1,
-              color: '#F54021',
-            },
-            {
-              count: 3,
-              color: '#25ACAD',
-            },
-          ]}
-          infoIconClassName="absolute -right-3"
-        />
+        {pillToggle === 'Site' ? sitePieCharts : globalPieCharts}
       </div>
       <div className="w-2/5 h-full"></div>
     </div>
