@@ -34,7 +34,7 @@ import { I18n } from '@google-psat/i18n';
  * Internal dependencies
  */
 import RowContextMenuForPRT from './rowContextMenu';
-import StatsHeader from '../stasHeader';
+import StatsHeader, { type Stats } from './stasHeader';
 
 interface MdlCommonPanelProps {
   formedJson: PRTMetadata | null;
@@ -48,6 +48,7 @@ interface MdlCommonPanelProps {
   onRowClick: (row: PRTMetadata) => void;
   extraInterfaceToTopBar?: React.ReactNode;
   filters: TableFilter[];
+  stats: Stats;
 }
 
 const MdlCommonPanel = ({
@@ -58,6 +59,7 @@ const MdlCommonPanel = ({
   onRowClick,
   extraInterfaceToTopBar = undefined,
   filters,
+  stats,
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForPRT
@@ -65,7 +67,7 @@ const MdlCommonPanel = ({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <StatsHeader />
+      <StatsHeader stats={stats} />
       <ResizableTray
         defaultSize={{
           width: '100%',

@@ -19,63 +19,41 @@
 import React, { useState } from 'react';
 import { CirclePieChart, PillToggle } from '@google-psat/design-system';
 
-const StatsHeader = () => {
+type StatItem = {
+  title: string;
+  centerCount: number;
+  color: string;
+};
+
+export type Stats = {
+  site: StatItem[];
+  global: StatItem[];
+};
+
+interface StatsHeaderProps {
+  stats: Stats;
+}
+
+const StatsHeader = ({ stats }: StatsHeaderProps) => {
   const [pillToggle, setPillToggle] = useState<string | null>('Site');
   const [highlightOption, setHighlightOption] = useState<string>('Site');
 
-  const sitePieCharts = (
+  const renderPieCharts = (items: StatItem[]) => (
     <>
-      <CirclePieChart
-        title="PRTs with Signals"
-        centerCount={4}
-        data={[
-          {
-            count: 9,
-            color: '#AF7AA3',
-          },
-        ]}
-        infoIconClassName="absolute -right-3"
-      />
-      <CirclePieChart
-        title="PRTs without Signals"
-        centerCount={3}
-        data={[
-          {
-            count: 1,
-            color: '#F54021',
-          },
-        ]}
-        infoIconClassName="absolute -right-3"
-      />
+      {items.map(({ title, centerCount, color }) => (
+        <CirclePieChart
+          key={title}
+          title={title}
+          centerCount={centerCount}
+          data={[{ count: 10, color }]} // keep or derive from your data source
+          infoIconClassName="absolute -right-3"
+        />
+      ))}
     </>
   );
 
-  const globalPieCharts = (
-    <>
-      <CirclePieChart
-        title="PRTs with Signals"
-        centerCount={2}
-        data={[
-          {
-            count: 10,
-            color: '#AF7AA3',
-          },
-        ]}
-        infoIconClassName="absolute -right-3"
-      />
-      <CirclePieChart
-        title="PRTs without Signals"
-        centerCount={1}
-        data={[
-          {
-            count: 3,
-            color: '#F54021',
-          },
-        ]}
-        infoIconClassName="absolute -right-3"
-      />
-    </>
-  );
+  const sitePieCharts = renderPieCharts(stats.site);
+  const globalPieCharts = renderPieCharts(stats.global);
 
   return (
     <div className="flex flex-col flex-row w-full py-2">

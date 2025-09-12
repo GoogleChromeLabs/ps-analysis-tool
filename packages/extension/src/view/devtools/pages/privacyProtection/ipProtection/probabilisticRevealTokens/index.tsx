@@ -140,6 +140,33 @@ const ProbabilisticRevealTokens = () => {
     selectedJSON,
   ]);
 
+  const stats = {
+    site: [
+      {
+        title: 'PRTs with Signal',
+        centerCount: 4,
+        color: '#AF7AA3',
+      },
+      {
+        title: 'PRTs without Signal',
+        centerCount: 3,
+        color: '#F54021',
+      },
+    ],
+    global: [
+      {
+        title: 'PRTs with Signals',
+        centerCount: 2,
+        color: '#AF7AA3',
+      },
+      {
+        title: 'PRTs without Signals',
+        centerCount: 1,
+        color: '#F54021',
+      },
+    ],
+  };
+
   return (
     <MdlCommonPanel
       formedJson={formedJson}
@@ -147,6 +174,7 @@ const ProbabilisticRevealTokens = () => {
       tableData={perTokenMetadata}
       selectedKey={selectedJSON?.origin.toString()}
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
+      stats={stats}
     />
   );
 };
