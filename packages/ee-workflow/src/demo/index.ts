@@ -150,10 +150,18 @@ const flow = {
     );
     const mainFigureFactory = new FigureFactory(mainCanvas, container);
 
-    const interestGroupCanvas = new Main(true, undefined, undefined, {
-      x: 0,
-      y: 100,
-    });
+    const interestGroupCanvas = new Main(
+      true,
+      undefined,
+      {
+        width: 1600,
+        height: 2000,
+      },
+      {
+        x: 0,
+        y: 100,
+      }
+    );
     const interestGroupFigureFactory = new FigureFactory(
       interestGroupCanvas,
       container
