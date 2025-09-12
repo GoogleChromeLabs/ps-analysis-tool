@@ -18,30 +18,19 @@
  * External dependencies
  */
 import {
-  noop,
   ProgressBar,
-  Table,
-  TableProvider,
   type TableFilter,
   type TableColumn,
-  type TableRow,
   Link,
-  ResizableTray,
 } from '@google-psat/design-system';
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useCallback,
-} from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import type { MDLTableData } from '@google-psat/common';
+
 /**
  * Internal dependencies
  */
-import Legend from './legend';
 import { useScriptBlocking } from '../../../../stateProviders';
-import RowContextMenuForScriptBlocking from './rowContextMenu';
+import MdlCommonPanel from '../../mdlCommonPanel';
 
 export const IMPACTED_BY_SCRIPT_BLOCKING = {
   NONE: 'Not Impacted By Script Blocking',
@@ -59,10 +48,6 @@ const MDLTable = () => {
   const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
     uniqueResponseDomains: state.uniqueResponseDomains,
   }));
-
-  const rowContextMenuRef = useRef<React.ElementRef<
-    typeof RowContextMenuForScriptBlocking
-  > | null>(null);
 
   const [initialTableData, setinitialTableData] = useState<
     { domain: string; owner: string; scriptBlocking: string }[]
@@ -227,47 +212,17 @@ const MDLTable = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <TableProvider
-        tableColumns={tableColumns}
-        tableFilterData={filters}
-        tableSearchKeys={['domain', 'owner']}
-        data={tableData}
-        onRowClick={(rowData) => {
-          setSelectedKey((rowData as MDLTableData)?.domain || null);
-        }}
-        onRowContextMenu={
-          rowContextMenuRef.current
-            ? rowContextMenuRef.current?.onRowContextMenu
-            : noop
-        }
-        getRowObjectKey={(row: TableRow) =>
-          (row.originalData as MDLTableData).domain || ''
-        }
-        tablePersistentSettingsKey="mdlTable"
-      >
-        <ResizableTray
-          defaultSize={{
-            width: '100%',
-            height: '85%',
-          }}
-          minHeight="15%"
-          maxHeight="95%"
-          enable={{
-            top: false,
-            right: false,
-            bottom: true,
-            left: false,
-          }}
-          className="h-full flex"
-          trayId="mdl-table-bottom-tray"
-        >
-          <Table selectedKey={selectedKey} extraInterfaceToTopBar={checkbox} />
-        </ResizableTray>
-        <Legend />
-      </TableProvider>
-      <RowContextMenuForScriptBlocking ref={rowContextMenuRef} />
-    </div>
+    <MdlCommonPanel
+      formedJson={null}
+      tableColumns={tableColumns}
+      tableData={tableData}
+      selectedKey={selectedKey}
+      onRowClick={(row) =>
+        setSelectedKey((row as MDLTableData)?.domain || null)
+      }
+      extraInterfaceToTopBar={checkbox}
+      filters={filters}
+    />
   );
 };
 
