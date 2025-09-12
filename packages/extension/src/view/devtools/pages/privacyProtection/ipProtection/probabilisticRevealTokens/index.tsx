@@ -25,16 +25,17 @@ import {
   ResizableTray,
   JsonView,
   noop,
-  CirclePieChart,
 } from '@google-psat/design-system';
 import React, { useMemo, useRef, useState } from 'react';
 import { type PRTMetadata } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+
 /**
  * Internal dependencies
  */
 import { useProbabilisticRevealTokens } from '../../../../stateProviders';
 import RowContextMenuForPRT from './rowContextMenu';
+import StatsHeader from '../stasHeader';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
@@ -155,42 +156,7 @@ const ProbabilisticRevealTokens = () => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="flex flex-col flex-row w-full py-2">
-        <div className="w-2/5 h-full"></div>
-        <div className="flex flex-row items-center gap-2 w-1/5 justify-center">
-          <CirclePieChart
-            title="PRTs"
-            centerCount={10}
-            data={[
-              {
-                count: 1,
-                color: '#C5A06A',
-              },
-              {
-                count: 9,
-                color: '#AF7AA3',
-              },
-            ]}
-            infoIconClassName="absolute -right-3"
-          />
-          <CirclePieChart
-            title="Script Blocking"
-            centerCount={4}
-            data={[
-              {
-                count: 1,
-                color: '#F54021',
-              },
-              {
-                count: 3,
-                color: '#25ACAD',
-              },
-            ]}
-            infoIconClassName="absolute -right-3"
-          />
-        </div>
-        <div className="w-2/5 h-full"></div>
-      </div>
+      <StatsHeader />
       <ResizableTray
         defaultSize={{
           width: '100%',
