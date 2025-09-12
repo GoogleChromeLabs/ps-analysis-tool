@@ -320,8 +320,9 @@ class PRTStore extends DataStore {
       const globalStats = Object.keys(prtStatistics).reduce(
         (acc, key) => {
           if (prtStatistics[key]) {
-            acc.totalTokens = prtStatistics + acc.totalTokens;
-            acc.nonZeroTokens = prtStatistics + acc.nonZeroTokens;
+            acc.totalTokens = prtStatistics[key].totalTokens + acc.totalTokens;
+            acc.nonZeroTokens =
+              prtStatistics[key].nonZeroTokens + acc.nonZeroTokens;
           }
           return acc;
         },
