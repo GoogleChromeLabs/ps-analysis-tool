@@ -23,8 +23,6 @@ export const figureDraw = (e: Event) => {
   const detail = (e as CustomEvent).detail;
 
   if (detail?.figureId) {
-    // eslint-disable-next-line no-console
-    console.log('Figure ID:', detail.figureId);
     localStorage.setItem('ee-workflow', detail.figureId);
   }
 };
@@ -260,6 +258,7 @@ export const speedSliderChange = (
 };
 
 export const interactiveCheckboxOnChange = (
+  mainCanvas: Main,
   setIsInteractive: (isInteractive: boolean) => void,
   playButton: HTMLElement | null,
   e: Event
@@ -267,6 +266,7 @@ export const interactiveCheckboxOnChange = (
   const value = (e.target as HTMLInputElement).checked;
 
   setIsInteractive(value);
+  mainCanvas.setUsingHelperQueue(value);
 
   playButton?.click();
 };

@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 /**
- * Internal dependencies.
+ * External dependencies.
  */
 import p5 from 'p5';
+/**
+ * Internal dependencies.
+ */
 import { Animator, FigureFactory, Group, NextCoordinates } from '../components';
 import Figure from '../components/figure';
 import Main from '../main';
@@ -306,7 +309,12 @@ const flow = {
     const interactiveCheckbox = document.getElementById('interactive');
     interactiveCheckbox?.addEventListener(
       'click',
-      interactiveCheckboxOnChange.bind(null, setIsInteractive, playButton)
+      interactiveCheckboxOnChange.bind(
+        null,
+        mainCanvas,
+        setIsInteractive,
+        playButton
+      )
     );
 
     return {
