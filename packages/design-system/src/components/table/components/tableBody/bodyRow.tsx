@@ -82,10 +82,10 @@ const BodyRow = ({
     rowKey === selectedKey &&
       (isRowFocused
         ? isHighlighted
-          ? isHighlightedClass
+          ? `${isHighlightedClass} opacity-70`
           : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : isHighlighted
-        ? isHighlightedClass
+        ? `${isHighlightedClass} opacity-70`
         : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
