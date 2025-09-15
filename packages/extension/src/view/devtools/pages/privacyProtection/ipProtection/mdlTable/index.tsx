@@ -34,7 +34,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
  * Internal dependencies
  */
 import Legend from './legend';
-import { getCurrentTab } from '../../../../../../utils/getCurrentTab';
+import { useScriptBlocking } from '../../../../stateProviders';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -51,49 +51,9 @@ const MDLTable = () => {
 
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
 
-  const [tab, setTab] = useState<chrome.tabs.Tab | null>(null);
-
-  useEffect(() => {
-    const currentTab = async () => {
-      const _tab = await getCurrentTab();
-      if (_tab) {
-        setTab(_tab);
-      }
-    };
-
-    currentTab();
-  }, []);
-
-  useEffect(() => {
-    const fetchTab = async ({
-      frameId,
-      frameType,
-      tabId,
-    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (
-        !(
-          chrome.devtools.inspectedWindow.tabId === tabId &&
-          frameType === 'outermost_frame' &&
-          frameId === 0
-        )
-      ) {
-        return;
-      }
-
-      const currentTab = await getCurrentTab();
-      if (!currentTab) {
-        return;
-      }
-
-      setTab(currentTab);
-    };
-
-    chrome.webNavigation.onCommitted.addListener(fetchTab);
-
-    return () => {
-      chrome.webNavigation.onCommitted.removeListener(fetchTab);
-    };
-  }, []);
+  const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
+    uniqueResponseDomains: state.uniqueResponseDomains,
+  }));
 
   const checkbox = useCallback(() => {
     return (
@@ -133,6 +93,7 @@ const MDLTable = () => {
       setTableData(() => {
         const _data = mdlData
           .map((item: string[]) => {
+            let available = false;
             let owner = item[1];
 
             if (item[1].includes('PSL Domain')) {
@@ -141,16 +102,16 @@ const MDLTable = () => {
 
             const scriptBlocking = item[2];
 
-            const hostname = tab?.url ? new URL(tab.url).hostname : '';
+            if (uniqueResponseDomains.includes(item[0])) {
+              available = true;
+            }
 
             return {
               domain: item[0],
               owner,
               scriptBlocking,
-              highlighted: hostname.includes(item[0]),
-              highlightedClass: hostname.includes(item[0])
-                ? 'bg-amber-100'
-                : '',
+              highlighted: available,
+              highlightedClass: available ? 'bg-amber-100' : '',
             };
           })
           .filter((item) => {
@@ -169,7 +130,7 @@ const MDLTable = () => {
         return _data;
       });
     })();
-  }, [showOnlyHighlighted, tab?.url]);
+  }, [showOnlyHighlighted, uniqueResponseDomains]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
