@@ -60,6 +60,8 @@ interface MdlCommonPanelProps {
   filters?: TableFilter;
   stats: Stats;
   tableSearchKeys: string[];
+  bottomPanel?: () => React.JSX.Element;
+  showJson?: boolean;
 }
 
 const MdlCommonPanel = ({
@@ -72,6 +74,8 @@ const MdlCommonPanel = ({
   extraInterfaceToTopBar,
   filters,
   stats,
+  bottomPanel,
+  showJson = true,
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForPRT
@@ -118,16 +122,22 @@ const MdlCommonPanel = ({
         </div>
       </ResizableTray>
       <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-        {formedJson ? (
-          <div className="text-xs py-1 px-1.5 h-full">
-            <JsonView src={formedJson} />
-          </div>
+        {showJson ? (
+          formedJson ? (
+            <div className="text-xs py-1 px-1.5 h-full">
+              <JsonView src={formedJson} />
+            </div>
+          ) : (
+            <div className="h-full p-8 flex items-center">
+              <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
+                {I18n.getMessage('selectRowToPreview')}
+              </p>
+            </div>
+          )
+        ) : bottomPanel ? (
+          bottomPanel()
         ) : (
-          <div className="h-full p-8 flex items-center">
-            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-              {I18n.getMessage('selectRowToPreview')}
-            </p>
-          </div>
+          <></>
         )}
       </div>
     </div>
