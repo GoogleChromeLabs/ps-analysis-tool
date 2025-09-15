@@ -77,13 +77,34 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  const syncStorageListener = useCallback(
+    (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      const hasChangesForScriptBlockingData =
+        Object.keys(changes).includes('scriptBlocking') &&
+        Object.keys(changes.scriptBlocking).includes('newValue');
+      if (hasChangesForScriptBlockingData) {
+        setStatistics((prev) => {
+          return {
+            ...prev,
+            globalView: {
+              ...changes.scriptBlocking.newValue,
+            },
+          };
+        });
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
+    chrome.storage.sync.onChanged.addListener(syncStorageListener);
 
     return () => {
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
+      chrome.storage.sync.onChanged.removeListener(syncStorageListener);
     };
-  }, [messagePassingListener]);
+  }, [messagePassingListener, syncStorageListener]);
 
   return (
     <Context.Provider
