@@ -30,7 +30,6 @@ import { DataStore } from '../../../store/dataStore';
 describe('chrome.tabs.onCreated.addListener', () => {
   beforeAll(() => {
     globalThis.chrome = SinonChrome as unknown as typeof chrome;
-    SinonChrome.tabs.onCreated.addListener(onTabCreatedListener);
     globalThis.fetch = function () {
       return Promise.resolve({
         json: () =>
@@ -40,6 +39,7 @@ describe('chrome.tabs.onCreated.addListener', () => {
         text: () => Promise.resolve({}),
       });
     } as unknown as typeof fetch;
+    SinonChrome.tabs.onCreated.addListener(onTabCreatedListener);
   });
 
   test('Openeing new tab and if tabId is missing it should not create new tab.', async () => {
