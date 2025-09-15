@@ -226,7 +226,7 @@ class PRTStore extends DataStore {
               this.mdlData[hostname].scriptBlockingScope === 'COMPLETE'
                 ? 1
                 : 0),
-            partiallyBlockedDomais:
+            partiallyBlockedDomains:
               partiallyBlockedDomains +
               (this.mdlData[hostname] &&
               this.mdlData[hostname].scriptBlockingScope === 'PARTIAL'
@@ -309,24 +309,24 @@ class PRTStore extends DataStore {
           acc.totalTokens += 1;
 
           if (!isZeroSignal) {
-            acc.nonZeroTokens += 1;
+            acc.nonZeroSignal += 1;
           }
 
           return acc;
         },
-        { totalTokens: 0, nonZeroTokens: 0 }
+        { totalTokens: 0, nonZeroSignal: 0 }
       );
 
       const globalStats = Object.keys(prtStatistics).reduce(
         (acc, key) => {
           if (prtStatistics[key]) {
             acc.totalTokens = prtStatistics[key].totalTokens + acc.totalTokens;
-            acc.nonZeroTokens =
-              prtStatistics[key].nonZeroTokens + acc.nonZeroTokens;
+            acc.nonZeroSignal =
+              prtStatistics[key].nonZeroSignal + acc.nonZeroSignal;
           }
           return acc;
         },
-        { totalTokens: 0, nonZeroTokens: 0 }
+        { totalTokens: 0, nonZeroSignal: 0 }
       );
 
       await chrome.runtime.sendMessage({

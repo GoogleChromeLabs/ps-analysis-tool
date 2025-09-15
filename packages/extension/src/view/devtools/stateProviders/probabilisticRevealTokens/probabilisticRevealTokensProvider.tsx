@@ -145,19 +145,58 @@ const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  const syncStorageListener = useCallback(
+    async (changes: { [key: string]: chrome.storage.StorageChange }) => {
+      const hasChangesForPrtStatisticsData =
+        Object.keys(changes).includes('prtStatistics') &&
+        Object.keys(changes.prtStatistics).includes('newValue');
+      const { prtStatistics = {} } = await chrome.storage.sync.get(
+        'prtStatistics'
+      );
+
+      const globalStats = Object.keys(prtStatistics).reduce(
+        (acc, key) => {
+          if (prtStatistics[key]) {
+            acc.totalTokens = prtStatistics[key].totalTokens + acc.totalTokens;
+            acc.nonZeroSignal =
+              prtStatistics[key].nonZeroSignal + acc.nonZeroSignal;
+          }
+          return acc;
+        },
+        { totalTokens: 0, nonZeroSignal: 0 }
+      );
+
+      if (hasChangesForPrtStatisticsData) {
+        setStatistics((prev) => {
+          return {
+            ...prev,
+            globalView: globalStats,
+          };
+        });
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
     chrome.webNavigation?.onCommitted?.addListener(
       onCommittedNavigationListener
     );
+    chrome.storage.sync.onChanged.addListener(syncStorageListener);
 
     return () => {
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
       chrome.webNavigation?.onCommitted?.removeListener(
         onCommittedNavigationListener
       );
+      chrome.storage.sync.onChanged.removeListener(syncStorageListener);
     };
-  }, [messagePassingListener, onCommittedNavigationListener]);
+  }, [
+    messagePassingListener,
+    onCommittedNavigationListener,
+    syncStorageListener,
+  ]);
 
   const memoisedValue: ProbabilisticRevealTokensContextType = useMemo(() => {
     return {

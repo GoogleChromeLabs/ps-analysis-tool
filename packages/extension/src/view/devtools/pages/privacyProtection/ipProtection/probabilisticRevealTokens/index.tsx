@@ -146,27 +146,27 @@ const ProbabilisticRevealTokens = () => {
     site: [
       {
         title: 'PRTs with Signal',
-        centerCount: statistics.localView.nonZeroTokens,
+        centerCount: statistics.localView.nonZeroSignal,
         color: '#AF7AA3',
       },
       {
         title: 'PRTs without Signal',
         centerCount:
-          statistics.localView.totalTokens - statistics.localView.nonZeroTokens,
+          statistics.localView.totalTokens - statistics.localView.nonZeroSignal,
         color: '#F54021',
       },
     ],
     global: [
       {
         title: 'PRTs with Signals',
-        centerCount: statistics.globalView.nonZeroTokens,
+        centerCount: statistics.globalView.nonZeroSignal,
         color: '#AF7AA3',
       },
       {
         title: 'PRTs without Signals',
         centerCount:
           statistics.globalView.totalTokens -
-          statistics.globalView.nonZeroTokens,
+          statistics.globalView.nonZeroSignal,
         color: '#F54021',
       },
     ],

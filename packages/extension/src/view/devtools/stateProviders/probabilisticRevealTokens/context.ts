@@ -27,11 +27,11 @@ import {
 type PRTStatistics = {
   globalView: {
     totalTokens: number;
-    nonZeroTokens: number;
+    nonZeroSignal: number;
   };
   localView: {
     totalTokens: number;
-    nonZeroTokens: number;
+    nonZeroSignal: number;
   };
 };
 
@@ -54,11 +54,11 @@ export const initialState: ProbabilisticRevealTokensContextType = {
     statistics: {
       localView: {
         totalTokens: 0,
-        nonZeroTokens: 0,
+        nonZeroSignal: 0,
       },
       globalView: {
         totalTokens: 0,
-        nonZeroTokens: 0,
+        nonZeroSignal: 0,
       },
     },
   },
