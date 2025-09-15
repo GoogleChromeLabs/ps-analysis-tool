@@ -31,6 +31,7 @@ import type { MDLTableData } from '@google-psat/common';
  */
 import { useScriptBlocking } from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommonPanel';
+import Legend from './legend';
 
 export const IMPACTED_BY_SCRIPT_BLOCKING = {
   NONE: 'Not Impacted By Script Blocking',
@@ -254,6 +255,8 @@ const MDLTable = () => {
       extraInterfaceToTopBar={checkbox}
       filters={filters}
       stats={stats}
+      showJson={false}
+      bottomPanel={Legend}
     />
   );
 };
