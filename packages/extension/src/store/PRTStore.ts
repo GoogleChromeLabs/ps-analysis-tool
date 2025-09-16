@@ -214,9 +214,9 @@ class PRTStore extends DataStore {
 
       chrome.storage.sync.get('scriptBlocking', (result) => {
         const completelyBlockedDomains =
-          result.scriptBlocking?.[origin]?.completelyBlockedDomains ?? 0;
+          result.scriptBlocking?.completelyBlockedDomains ?? 0;
         const partiallyBlockedDomains =
-          result.prtStatistics?.[origin]?.partiallyBlockedDomains ?? 0;
+          result.prtStatistics?.partiallyBlockedDomains ?? 0;
 
         chrome.storage.sync.set({
           scriptBlocking: {
