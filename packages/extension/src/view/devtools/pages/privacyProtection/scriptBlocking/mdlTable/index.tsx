@@ -184,6 +184,26 @@ const MDLTable = () => {
     []
   );
 
+  const calculateFilters = useCallback((data: MDLTableData[]) => {
+    const _filters: {
+      [key: string]: {
+        selected: boolean;
+        description: string;
+      };
+    } = {};
+
+    data.forEach((singleData) => {
+      _filters[singleData.scriptBlocking] = {
+        selected: false,
+        description: IMPACTED_BY_SCRIPT_BLOCKING[
+          singleData.scriptBlocking as keyof typeof IMPACTED_BY_SCRIPT_BLOCKING
+        ] as string,
+      };
+    });
+
+    return _filters;
+  }, []);
+
   const filters = useMemo<TableFilter>(
     () => ({
       owner: {
@@ -192,19 +212,11 @@ const MDLTable = () => {
       scriptBlocking: {
         title: 'Impacted by Script Blocking',
         hasStaticFilterValues: true,
-        filterValues: {
-          [IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL]: {
-            selected: false,
-            description: IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL,
-          },
-          [IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE]: {
-            selected: false,
-            description: IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE,
-          },
-        },
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters(tableData),
       },
     }),
-    []
+    [calculateFilters, tableData]
   );
 
   const stats = {
