@@ -424,23 +424,12 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               prtHeader,
             });
 
-            chrome.storage.sync.get('prtStatistics', (result) => {
-              const totalTokens =
-                result.prtStatistics?.[origin]?.totalTokens ?? 0;
-              const nonZeroSignal =
-                result.prtStatistics?.[origin]?.nonZeroSignal ?? 0;
+            updateStatistics(origin, nonZeroUint8Signal);
 
-              updateStatistics(origin, nonZeroUint8Signal);
-
-              chrome.storage.sync.set({
-                prtStatistics: {
-                  ...(result.prtStatistics ?? {}),
-                  [origin]: {
-                    totalTokens: totalTokens + 1,
-                    nonZeroSignal: nonZeroSignal + (nonZeroUint8Signal ? 1 : 0),
-                  },
-                },
-              });
+            await chrome.storage.sync.set({
+              prtStatistics: {
+                ...PRTStore.statistics.prtStatistics.globalView,
+              },
             });
           }
 

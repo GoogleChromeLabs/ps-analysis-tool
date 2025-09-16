@@ -303,14 +303,14 @@ class PRTStore extends DataStore {
         'prtStatistics'
       );
 
-      const localStats = this.tabTokens[tabId].plainTextTokens.reduce(
-        (acc, token) => {
-          const isZeroSignal = token.uint8Signal.every((bit) => bit === 0);
-          acc.totalTokens += 1;
-
-          if (!isZeroSignal) {
-            acc.nonZeroSignal += 1;
-          }
+      const localStats = Object.keys(
+        this.statistics.prtStatistics.localView
+      ).reduce(
+        (acc, origin) => {
+          acc.totalTokens +=
+            this.statistics.prtStatistics.localView[origin].totalTokens;
+          acc.nonZeroSignal +=
+            this.statistics.prtStatistics.localView[origin].nonZeroSignal;
 
           return acc;
         },

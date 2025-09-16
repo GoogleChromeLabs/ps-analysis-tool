@@ -31,6 +31,7 @@ const updateStatistics = (origin: string, nonZeroUint8Signal: boolean) => {
     };
   } else {
     PRTStore.statistics.prtStatistics.localView = {
+      ...PRTStore.statistics.prtStatistics.localView,
       [origin]: {
         totalTokens: 1,
         nonZeroSignal: nonZeroUint8Signal ? 1 : 0,
@@ -49,6 +50,7 @@ const updateStatistics = (origin: string, nonZeroUint8Signal: boolean) => {
     };
   } else {
     PRTStore.statistics.prtStatistics.globalView = {
+      ...PRTStore.statistics.prtStatistics.globalView,
       [origin]: {
         totalTokens: 1,
         nonZeroSignal: nonZeroUint8Signal ? 1 : 0,
