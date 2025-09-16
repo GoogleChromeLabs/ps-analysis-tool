@@ -9,8 +9,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "prebuild": "rimraf ../../dist/extension",
-    "dev": "cross-env NODE_ENV=development npm run build",
-    "build": "cross-env VITE_CJS_IGNORE_WARNING=true NODE_NO_WARNINGS=1 node --loader ts-node/esm ../../vite.extension.config.mts"
+    "dev": "cross-env NODE_ENV=development npm run build -- --watch",
+    "build": "cross-env VITE_CJS_IGNORE_WARNING=true NODE_NO_WARNINGS=1 NODE_OPTIONS=--max-old-space-size=4096 node --loader ts-node/esm ../../vite.extension.config.mts"
   },
   "bugs": {
     "url": "https://github.com/GoogleChromeLabs/ps-analysis-tool/issues"

@@ -13,200 +13,154 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies:
- */
 import { build, defineConfig, mergeConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-/**
- * Internal dependencies:
- */
-import baseConfig, { __dirname } from './vite.shared.config.mjs';
+import baseConfig from './vite.shared.config.mjs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const isDev = process.env.NODE_ENV === 'development';
+const distDir = path.resolve(__dirname, 'dist/extension');
 
-type Script = {
-  name: string;
-  path: string;
-  // all content scripts must be in iife format
-  format: 'es' | 'iife';
-};
+const runBuilds = async () => {
+  const scripts = [
+    {
+      name: 'service-worker',
+      path: 'src/serviceWorker/index.ts',
+      format: 'es',
+    },
+    {
+      name: 'content-script',
+      path: 'src/contentScript/index.ts',
+      format: 'iife',
+    },
+    {
+      name: 'js-cookie-content-script',
+      path: 'src/contentScript/jsCookie.ts',
+      format: 'iife',
+    },
+    {
+      name: 'prebid-content-script',
+      path: 'src/contentScript/prebid/prebidContentScript.ts',
+      format: 'iife',
+    },
+    {
+      name: 'prebid-interface',
+      path: 'src/contentScript/prebid/prebidInterface.tsx',
+      format: 'iife',
+    },
+  ];
 
-// content scripts and worker defined in the manifest.json
-const scripts: Script[] = [
-  {
-    name: 'service-worker',
-    path: 'src/serviceWorker/index.ts',
-    format: 'es', // defined as module in manifest.json
-  },
-  {
-    name: 'content-script',
-    path: 'src/contentScript/index.ts',
-    format: 'iife',
-  },
-  {
-    name: 'js-cookie-content-script',
-    path: 'src/contentScript/jsCookie.ts',
-    format: 'iife',
-  },
-  {
-    name: 'prebid-content-script',
-    path: 'src/contentScript/prebid/prebidContentScript.ts',
-    format: 'iife',
-  },
-  {
-    name: 'prebid-interface',
-    path: 'src/contentScript/prebid/prebidInterface.tsx',
-    format: 'iife',
-  },
-] as const;
-
-const createScriptConfig = (script: (typeof scripts)[number]) => {
-  let minifier: boolean | 'terser' = 'terser';
-  if (isDev) {
-    minifier = false;
-  } else {
-    minifier = 'terser';
+  for (const script of scripts) {
+    // eslint-disable-next-line no-await-in-loop
+    await build(
+      mergeConfig(baseConfig, {
+        build: {
+          watch: isDev ? {} : null,
+          emptyOutDir: false,
+          target: 'esnext',
+          outDir: distDir,
+          minify: !isDev ? 'terser' : false,
+          rollupOptions: {
+            input: {
+              [script.name]: path.resolve(
+                __dirname,
+                'packages/extension',
+                script.path
+              ),
+            },
+            output: {
+              format: script.format,
+              entryFileNames: '[name].js',
+            },
+          },
+        },
+      })
+    );
   }
 
-  return defineConfig({
-    build: {
+  // 2. Build UI Components (Popup, DevTools, Report, etc.)
+  const uiTargets = [
+    // Popup Page
+    {
+      root: 'packages/extension/src/view/popup',
+      outDir: path.join(distDir, 'popup'),
+      input: { popup: 'src/view/popup/index.html' },
       watch: isDev ? {} : null,
-      emptyOutDir: false,
-      target: 'esnext',
-      outDir: `../../dist/extension`,
-      minify: minifier,
-      rollupOptions: {
-        input: {
-          [script.name]: script.path,
-        },
-        output: {
-          format: script.format || 'iife',
-          chunkFileNames: '[name].js',
-          entryFileNames: '[name].js',
-        },
-      },
     },
-  });
-};
-
-const createExtensionConfig = (target: string) => {
-  const commonConfig = mergeConfig(baseConfig, {
-    base: '', // important to make sure the paths are correct in output index.html
-    sourcemap: isDev ? 'inline' : false,
-    build: {
-      emptyOutDir: false, // don't empty the output directory, output folder is re-used
-      outDir: `../../../../../dist/extension/${target}`,
-      minify: !isDev,
+    // DevTools Panel UI
+    {
+      root: 'packages/extension/src/view/devtools',
+      outDir: path.join(distDir, 'devtools'),
+      input: { index: './src/view/devtools/index.html' },
+      watch: isDev ? {} : null,
     },
-  });
-
-  if (target === 'popup') {
-    return mergeConfig(commonConfig, {
-      root: path.resolve(__dirname, 'packages/extension/src/view/popup'),
-      build: {
-        rollupOptions: {
-          input: {
-            popup: 'src/view/popup/index.html',
-          },
-        },
-      },
-    });
-  }
-
-  if (target === 'report') {
-    return mergeConfig(commonConfig, {
-      root: path.resolve(__dirname, 'packages/extension/src/view/report'),
-      build: {
-        outDir: `../../../../../dist/extension/devtools`,
-        rollupOptions: {
-          input: {
-            dashboard: './src/view/report/dashboard.html',
-          },
-        },
-      },
+    // Report Page (inlined into a single file)
+    {
+      root: 'packages/extension/src/view/report',
+      outDir: path.join(distDir, 'devtools'),
+      input: { dashboard: './src/view/report/dashboard.html' },
       plugins: [viteSingleFile()],
-    });
-  }
-
-  if (target === 'assets') {
-    return mergeConfig(commonConfig, {
-      root: path.resolve(__dirname, 'packages/extension/src/view/devtools'),
-      build: {
-        outDir: `../../../../../dist/extension/devtools`,
-        rollupOptions: {
-          input: {
-            devtools: './src/view/devtools/devtools.html',
-          },
-        },
-      },
+    },
+    // DevTools setup page and static asset copying
+    {
+      root: 'packages/extension/src/view/devtools',
+      outDir: path.join(distDir, 'devtools'),
+      input: { devtools: './src/view/devtools/devtools.html' },
+      watch: isDev ? {} : null,
       plugins: [
         viteStaticCopy({
           targets: [
-            {
-              src: '../../manifest.json',
-              dest: '../',
-            },
-            {
-              src: '../../../icons',
-              dest: '../',
-            },
-            {
-              src: '../../../../../assets',
-              dest: '../',
-            },
-            {
-              src: '../../../../../data',
-              dest: '../',
-            },
+            { src: '../../manifest.json', dest: '../' },
+            { src: '../../../icons', dest: '../' },
+            { src: '../../../../../assets', dest: '../' },
+            { src: '../../../../../data', dest: '../' },
             {
               src: '../../../../i18n/_locales/messages/*',
               dest: '../_locales/',
             },
-            {
-              src: '../../../../../node_modules/p5/lib/p5.min.js',
-              dest: './',
-            },
+            { src: '../../../../../node_modules/p5/lib/p5.min.js', dest: './' },
           ],
         }),
       ],
-    });
-  }
+    },
+  ];
 
-  if (target === 'devtools') {
-    return mergeConfig(commonConfig, {
-      root: path.resolve(__dirname, 'packages/extension/src/view/devtools'),
-      build: {
-        watch: isDev ? {} : null,
-        rollupOptions: {
-          input: {
-            index: './src/view/devtools/index.html',
+  for (const target of uiTargets) {
+    // eslint-disable-next-line no-await-in-loop
+    await build(
+      mergeConfig(baseConfig, {
+        root: path.resolve(__dirname, target.root),
+        base: '', // Ensures correct asset paths in HTML
+        build: {
+          watch: target.watch || null,
+          emptyOutDir: false,
+          sourcemap: isDev ? true : false,
+          outDir: target.outDir,
+          minify: !isDev,
+          rollupOptions: {
+            input: target.input,
           },
         },
-      },
-    });
-  }
-
-  return commonConfig;
-};
-
-const start = async () => {
-  // vite/rollup does not support multiple input files when using inlineDynamicImports(forced with iife)
-  // so we need to create a config for each script
-  for (const script of scripts) {
-    // eslint-disable-next-line no-await-in-loop
-    await build(createScriptConfig(script)); // run each build in queue, when `watch: true` promise will be resolved anyway after first build
-  }
-
-  for (const target of ['popup', 'report', 'assets', 'devtools']) {
-    // eslint-disable-next-line no-await-in-loop
-    await build(createExtensionConfig(target));
+        plugins: target.plugins || [],
+      })
+    );
   }
 };
 
 (async () => {
-  await start();
+  try {
+    await runBuilds();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Build failed:', error);
+    process.exit(1);
+  }
 })();
+
+export default defineConfig({});

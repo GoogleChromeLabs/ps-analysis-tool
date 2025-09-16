@@ -23,6 +23,7 @@ import React, {
   useEffect,
   useRef,
   useMemo,
+  Suspense,
 } from 'react';
 import {
   app,
@@ -32,7 +33,6 @@ import {
   config,
   // @ts-ignore package does not have types
 } from '@google-psat/explorable-explanations';
-import { ReactP5Wrapper } from '@p5-wrapper/react';
 import { DraggableTray, useTabs } from '@google-psat/design-system';
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 import classNames from 'classnames';
@@ -43,6 +43,12 @@ import classNames from 'classnames';
 import Header from '../../../explorableExplanation/header';
 import type { CurrentSiteData, StepType } from './auctionEventTransformers';
 import { useSettings } from '../../../../stateProviders';
+
+const ReactP5Wrapper = React.lazy(() =>
+  import('@p5-wrapper/react').then((module) => ({
+    default: module.ReactP5Wrapper,
+  }))
+);
 
 const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
@@ -446,28 +452,34 @@ const Panel = ({
         </main>
       </div>
       {/* Main Canvas */}
-      <ReactP5Wrapper sketch={mainSketch} isMultiSeller={isMultiSeller} />
+      <Suspense>
+        <ReactP5Wrapper sketch={mainSketch} isMultiSeller={isMultiSeller} />
+      </Suspense>
       {/* Interest Group Canvas */}
-      <ReactP5Wrapper
-        autoExpand={autoExpand}
-        sketch={interestGroupSketch}
-        expandedBubbleX={expandedBubbleX}
-        expandedBubbleY={expandedBubbleY}
-        setIsBubbleExpanded={setIsBubbleExpanded}
-        expandedBubbleWidth={expandedBubbleWidth}
-        speedMultiplier={2 * sliderStep}
-        setCurrentSite={setCurrentSite}
-        setPlayState={setPlay}
-        setInfo={setInfo}
-        setCurrentStep={setCurrentStep}
-        autoScroll={autoScroll}
-        setHighlightedInterestGroup={_setHighLightedInterestGroup}
-        setSelectedAdUnit={setSelectedAdUnit}
-        setSelectedDateTime={setSelectedDateTime}
-        setHasLastNodeVisited={setHasLastNodeVisited}
-        platform={OSInformation ?? ''}
-      />
-      <ReactP5Wrapper sketch={userSketch} />
+      <Suspense>
+        <ReactP5Wrapper
+          autoExpand={autoExpand}
+          sketch={interestGroupSketch}
+          expandedBubbleX={expandedBubbleX}
+          expandedBubbleY={expandedBubbleY}
+          setIsBubbleExpanded={setIsBubbleExpanded}
+          expandedBubbleWidth={expandedBubbleWidth}
+          speedMultiplier={2 * sliderStep}
+          setCurrentSite={setCurrentSite}
+          setPlayState={setPlay}
+          setInfo={setInfo}
+          setCurrentStep={setCurrentStep}
+          autoScroll={autoScroll}
+          setHighlightedInterestGroup={_setHighLightedInterestGroup}
+          setSelectedAdUnit={setSelectedAdUnit}
+          setSelectedDateTime={setSelectedDateTime}
+          setHasLastNodeVisited={setHasLastNodeVisited}
+          platform={OSInformation ?? ''}
+        />
+      </Suspense>
+      <Suspense>
+        <ReactP5Wrapper sketch={userSketch} />
+      </Suspense>
       <DraggableTray ref={draggableTrayRef} trayId="explorableExplanation" />
     </div>
   );
