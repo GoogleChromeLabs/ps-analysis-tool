@@ -17,7 +17,11 @@
 /**
  * External dependencies
  */
-import { type TableColumn } from '@google-psat/design-system';
+import {
+  type InfoType,
+  type TableColumn,
+  type TableFilter,
+} from '@google-psat/design-system';
 import React, { useMemo, useState } from 'react';
 import { type PRTMetadata } from '@google-psat/common';
 
@@ -65,7 +69,7 @@ const ProbabilisticRevealTokens = () => {
       },
       {
         header: 'Signal',
-        accessorKey: 'nonZeroUintsignal',
+        accessorKey: 'nonZeroUint8Signal',
         cell: (info) => {
           return info ? <span className="font-serif">✓</span> : '';
         },
@@ -142,6 +146,65 @@ const ProbabilisticRevealTokens = () => {
     selectedJSON,
   ]);
 
+  const filters = useMemo<TableFilter>(
+    () => ({
+      owner: {
+        title: 'Owner',
+      },
+      nonZeroUint8Signal: {
+        title: 'PRT with Zero Signal',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: {
+          True: {
+            selected: false,
+            description: "PRT's that reveal IP address",
+          },
+          False: {
+            selected: false,
+            description: "PRT's that do not reveal IP address",
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          switch (filterValue) {
+            case 'True':
+              return !value as boolean;
+            case 'False':
+              return value as boolean;
+            default:
+              return true;
+          }
+        },
+      },
+      decryptionKeyAvailable: {
+        title: 'Decrypted',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: {
+          True: {
+            selected: false,
+            description: "PRT's that have been decrypted",
+          },
+          False: {
+            selected: false,
+            description: "PRT's that have not been decrypted",
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          switch (filterValue) {
+            case 'True':
+              return value as boolean;
+            case 'False':
+              return !value as boolean;
+            default:
+              return true;
+          }
+        },
+      },
+    }),
+    []
+  );
+
   const stats = {
     site: [
       {
@@ -176,6 +239,7 @@ const ProbabilisticRevealTokens = () => {
     <MdlCommonPanel
       formedJson={formedJson}
       tableColumns={tableColumns}
+      filters={filters}
       tableSearchKeys={['origin', 'owner']}
       tableData={perTokenMetadata}
       selectedKey={selectedJSON?.origin.toString()}

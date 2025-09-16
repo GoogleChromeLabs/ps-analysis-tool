@@ -39,6 +39,7 @@ export interface PRTMetadata {
   decryptionKeyAvailable: boolean;
   prtHeader: string;
   nonZeroUint8Signal: boolean;
+  owner: string;
 }
 
 export type UniquePlainTextToken = PlaintTextToken & {

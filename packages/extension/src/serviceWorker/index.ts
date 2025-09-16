@@ -445,11 +445,19 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           }
 
           if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[prtHeader]) {
+            const hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+            const formedOrigin = hostname.startsWith('www.')
+              ? hostname.slice(4)
+              : hostname;
+
             PRTStore.tabTokens[tabId].perTokenMetadata[prtHeader] = {
               prtHeader,
               origin: isValidURL(origin) ? origin : '',
               decryptionKeyAvailable: Boolean(decodedToken),
               nonZeroUint8Signal,
+              owner: PRTStore.mdlData[formedOrigin]?.owner
+                ? PRTStore.mdlData[formedOrigin]?.owner
+                : '',
             };
             DataStore.tabs[tabId].newUpdatesPRT++;
           }
