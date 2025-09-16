@@ -152,24 +152,24 @@ const ProbabilisticRevealTokens = () => {
         title: 'Owner',
       },
       nonZeroUint8Signal: {
-        title: 'PRT with Zero Signal',
+        title: 'Signal',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: {
-          True: {
+          'PRT with no Signal': {
             selected: false,
             description: "PRT's that reveal IP address",
           },
-          False: {
+          'PRT with signal': {
             selected: false,
             description: "PRT's that do not reveal IP address",
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
-            case 'True':
+            case 'PRT with no Signal':
               return !value as boolean;
-            case 'False':
+            case 'PRT with signal':
               return value as boolean;
             default:
               return true;
