@@ -266,7 +266,7 @@ export class Main {
 
     this.snapshot.push(object);
 
-    this.dispatchCustomEvent('figureDraw', {
+    this.dispatchCustomEvent('ee:figureDraw', {
       figureId: object.getId(),
     });
     object.setThrow(true);
@@ -316,7 +316,7 @@ export class Main {
         group.getFigures().forEach((object) => this.saveToSnapshot(object));
         this.groupSnapshot.push(group);
         group.setThrow(true);
-        this.dispatchCustomEvent('groupDraw', {
+        this.dispatchCustomEvent('ee:groupDraw', {
           groupId: group.getId(),
         });
       }
@@ -495,7 +495,7 @@ export class Main {
       (this.stepsQueue.length === 0 && this.instantQueue.length === 0) ||
       (this.usingHelperQueue && this.helperQueue.length === 0)
     ) {
-      this.dispatchCustomEvent('noLoop', {
+      this.dispatchCustomEvent('ee:noLoop', {
         message: 'Animation ended',
       });
       p.noLoop();
@@ -690,12 +690,12 @@ export class Main {
 
     if (this.pause) {
       this.p5.noLoop();
-      this.dispatchCustomEvent('noLoop', {
+      this.dispatchCustomEvent('ee:noLoop', {
         message: 'Animation paused',
       });
     } else {
       this.p5.loop();
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation resumed',
       });
     }
@@ -1051,7 +1051,7 @@ export class Main {
     this.animatorStepsQueue.unshift(...toBeLoadedAnimators.reverse());
 
     if (this.noLoop) {
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation start',
       });
       this.p5.loop();
@@ -1073,7 +1073,7 @@ export class Main {
       dispatchId: lastDispatchedId,
     });
 
-    this.dispatchCustomEvent('figureDraw', {
+    this.dispatchCustomEvent('ee:figureDraw', {
       figureId: [...this.snapshot].pop()?.getId(),
     });
 
@@ -1116,7 +1116,7 @@ export class Main {
     }
 
     if (this.noLoop) {
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation start',
       });
       this.p5.loop();
@@ -1152,7 +1152,7 @@ export class Main {
     });
 
     this.togglePause(true);
-    this.dispatchCustomEvent('noLoop', {
+    this.dispatchCustomEvent('ee:noLoop', {
       message: 'Animation end',
     });
 
@@ -1212,7 +1212,7 @@ export class Main {
     });
 
     this.togglePause(true);
-    this.dispatchCustomEvent('noLoop', {
+    this.dispatchCustomEvent('ee:noLoop', {
       message: 'Animation end',
     });
 
@@ -1311,7 +1311,7 @@ export class Main {
 
     this.checkpoints.delete(lastSnapshotObject.getId());
 
-    this.dispatchCustomEvent('figureDraw', {
+    this.dispatchCustomEvent('ee:figureDraw', {
       figureId: [...this.snapshot].pop()?.getId() || '',
     });
 
@@ -1509,7 +1509,7 @@ export class Main {
     }
 
     if (this.noLoop) {
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation start',
       });
       this.p5.loop();

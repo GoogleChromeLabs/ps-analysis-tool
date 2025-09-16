@@ -342,32 +342,38 @@ const draw = {
   start: (variables: ReturnType<typeof flow.init>) => {
     draw.timeline(variables);
 
-    const interestGroupBubbles = [];
-    const publisherBubbles = [];
+    const interestGroupBubblesCoordinates = [];
+    const publisherBubblesCoordinates = [];
 
-    interestGroupBubbles.push(
+    interestGroupBubblesCoordinates.push(
       draw.interestGroupFlow(150, 187.5, 'IG-1', variables),
       draw.interestGroupFlow(300, 187.5, 'IG-2', variables)
     );
-    publisherBubbles.push(draw.publisherFlow(450, 187.5, 'P-1', variables));
+    publisherBubblesCoordinates.push(
+      draw.publisherFlow(450, 187.5, 'P-1', variables)
+    );
 
-    interestGroupBubbles.push(
+    interestGroupBubblesCoordinates.push(
       draw.interestGroupFlow(600, 187.5, 'IG-3', variables),
       draw.interestGroupFlow(750, 187.5, 'IG-4', variables)
     );
 
-    publisherBubbles.push(draw.publisherFlow(900, 187.5, 'P-2', variables));
+    publisherBubblesCoordinates.push(
+      draw.publisherFlow(900, 187.5, 'P-2', variables)
+    );
 
-    interestGroupBubbles.push(
+    interestGroupBubblesCoordinates.push(
       draw.interestGroupFlow(1050, 187.5, 'IG-5', variables),
       draw.interestGroupFlow(1200, 187.5, 'IG-6', variables)
     );
 
-    publisherBubbles.push(draw.publisherFlow(1350, 187.5, 'P-3', variables));
+    publisherBubblesCoordinates.push(
+      draw.publisherFlow(1350, 187.5, 'P-3', variables)
+    );
 
     return {
-      interestGroupBubbles,
-      publisherBubbles,
+      interestGroupBubblesCoordinates,
+      publisherBubblesCoordinates,
     };
   },
 
@@ -1079,11 +1085,11 @@ const handleListeners = (
   let isSkipping = false;
   let isStepping = false;
 
-  document.addEventListener('loop', onLoopEvent.bind(null, playButton));
+  document.addEventListener('ee:loop', onLoopEvent.bind(null, playButton));
 
-  document.addEventListener('noLoop', onNoLoopEvent.bind(null, playButton));
+  document.addEventListener('ee:noLoop', onNoLoopEvent.bind(null, playButton));
 
-  document.addEventListener('figureDraw', figureDraw);
+  document.addEventListener('ee:figureDraw', figureDraw);
 
   document.addEventListener('ee:stepNext', (event: Event) => {
     const { start } = (event as CustomEvent).detail;
@@ -1145,11 +1151,12 @@ const handleListeners = (
 };
 
 const variables = flow.init();
-const { interestGroupBubbles, publisherBubbles } = draw.start(variables);
+const { interestGroupBubblesCoordinates, publisherBubblesCoordinates } =
+  draw.start(variables);
 
 handleListeners(
   variables.playButton!,
-  interestGroupBubbles,
-  publisherBubbles,
+  interestGroupBubblesCoordinates,
+  publisherBubblesCoordinates,
   variables.mainCanvas
 );
