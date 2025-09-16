@@ -108,7 +108,7 @@ const SequenceDiagram = () => {
         parentContainerRef.current &&
         y + 180 > parentContainerRef.current.clientHeight
       ) {
-        parentContainerRef.current.scrollTo({
+        parentContainerRef.current.scrollTo?.({
           top: y - parentContainerRef.current.clientHeight + 180,
           behavior: 'smooth',
         });
