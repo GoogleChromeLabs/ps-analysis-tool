@@ -156,13 +156,13 @@ const ProbabilisticRevealTokens = () => {
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: {
-          'PRT with no Signal': {
-            selected: false,
-            description: "PRT's that reveal IP address",
-          },
           'PRT with signal': {
             selected: false,
             description: "PRT's that do not reveal IP address",
+          },
+          'PRT without signal': {
+            selected: false,
+            description: "PRT's that reveal IP address",
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
@@ -221,12 +221,12 @@ const ProbabilisticRevealTokens = () => {
     ],
     global: [
       {
-        title: 'PRTs with Signals',
+        title: 'PRTs with Signal',
         centerCount: statistics.globalView.nonZeroSignal,
         color: '#AF7AA3',
       },
       {
-        title: 'PRTs without Signals',
+        title: 'PRTs without Signal',
         centerCount:
           statistics.globalView.totalTokens -
           statistics.globalView.nonZeroSignal,
