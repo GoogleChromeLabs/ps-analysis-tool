@@ -20,9 +20,14 @@ import p5 from 'p5';
 /**
  * Internal dependencies.
  */
-import { Animator, FigureFactory, Group, NextCoordinates } from '../components';
-import Figure from '../components/figure';
-import Main from '../main';
+import {
+  Animator,
+  FigureFactory,
+  Group,
+  NextCoordinates,
+} from '../src/components';
+import Figure from '../src/components/figure';
+import Main from '../src/main';
 import { downArrowData, nodes, upArrowData } from './data';
 import {
   figureDraw,

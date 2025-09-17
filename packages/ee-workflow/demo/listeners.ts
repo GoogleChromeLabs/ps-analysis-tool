@@ -15,9 +15,9 @@
  */
 
 import p5 from 'p5';
-import { Animator, FigureFactory } from '../components';
-import Figure from '../components/figure';
-import Main from '../main';
+import { Animator, FigureFactory } from '../src/components';
+import Figure from '../src/components/figure';
+import Main from '../src/main';
 
 export const figureDraw = (e: Event) => {
   const detail = (e as CustomEvent).detail;
