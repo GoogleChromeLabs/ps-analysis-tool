@@ -314,8 +314,10 @@ const ProbabilisticRevealTokens = () => {
             description: "PRT's that do not reveal IP address",
           },
           'PRTs without signal': {
-            selected: false,
-            description: "PRT's that reveal IP address",
+            selected: (
+              preSetFilters?.filter?.nonZeroUint8Signal ?? []
+            ).includes('PRTs without signal'),
+            description: "PRT's that do not reveal IP address",
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
