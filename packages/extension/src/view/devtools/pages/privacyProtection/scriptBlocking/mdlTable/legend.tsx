@@ -32,7 +32,7 @@ const Legend = () => {
         <Link href="https://github.com/GoogleChrome/ip-protection/blob/main/README.md">
           IP Protection
         </Link>{' '}
-        initiative. Domains on this list are either entirely or patially
+        initiative. Domains on this list are either entirely or partially
         blocked.
       </p>
     </div>
