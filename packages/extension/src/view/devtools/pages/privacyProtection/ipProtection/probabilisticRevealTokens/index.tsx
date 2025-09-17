@@ -33,6 +33,9 @@ import MdlCommonPanel from '../../mdlCommonPanel';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
+  const [preSetFilters, setPresetFilters] = useState<{
+    [key: string]: Record<string, string[]>;
+  }>({ filter: {} });
 
   const {
     perTokenMetadata,
@@ -157,19 +160,23 @@ const ProbabilisticRevealTokens = () => {
         hasPrecalculatedFilterValues: true,
         filterValues: {
           'PRTs with signal': {
-            selected: false,
-            description: "PRT's that do not reveal IP address",
+            selected: (
+              preSetFilters?.filter?.nonZeroUint8Signal ?? []
+            ).includes('PRTs with signal'),
+            description: "PRT's that reveal IP address",
           },
           'PRTs without signal': {
-            selected: false,
-            description: "PRT's that reveal IP address",
+            selected: (
+              preSetFilters?.filter?.nonZeroUint8Signal ?? []
+            ).includes('PRTs without signal'),
+            description: "PRT's that do not reveal IP address",
           },
         },
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
-            case 'PRT with no Signal':
+            case 'PRTs without signal':
               return !value as boolean;
-            case 'PRT with signal':
+            case 'PRTs with signal':
               return value as boolean;
             default:
               return true;
@@ -202,7 +209,7 @@ const ProbabilisticRevealTokens = () => {
         },
       },
     }),
-    []
+    [preSetFilters?.filter?.nonZeroUint8Signal]
   );
 
   const stats = {
@@ -211,12 +218,26 @@ const ProbabilisticRevealTokens = () => {
         title: 'PRTs with Signal',
         centerCount: statistics.localView.nonZeroSignal,
         color: '#AF7AA3',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              nonZeroUint8Signal: ['PRTs with signal'],
+            },
+          })),
       },
       {
         title: 'PRTs without Signal',
         centerCount:
           statistics.localView.totalTokens - statistics.localView.nonZeroSignal,
         color: '#F54021',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              nonZeroUint8Signal: ['PRTs without signal'],
+            },
+          })),
       },
     ],
     global: [
