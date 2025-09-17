@@ -313,7 +313,7 @@ const ProbabilisticRevealTokens = () => {
             ).includes('PRTs without signal'),
             description: "PRT's that do not reveal IP address",
           },
-          'PRT without signal': {
+          'PRTs without signal': {
             selected: false,
             description: "PRT's that reveal IP address",
           },

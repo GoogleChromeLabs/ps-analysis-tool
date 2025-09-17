@@ -22,6 +22,7 @@ import {
   type TableFilter,
   type TableColumn,
   Link,
+  type InfoType,
 } from '@google-psat/design-system';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import type { MDLTableData } from '@google-psat/common';
@@ -192,8 +193,13 @@ const MDLTable = () => {
       };
     } = {};
 
+    const titleMap = {
+      COMPLETE: 'Completely Blocked',
+      PARTIAL: 'Partially Blocked',
+    };
+
     data.forEach((singleData) => {
-      _filters[singleData.scriptBlocking] = {
+      _filters[titleMap[singleData.scriptBlocking as keyof typeof titleMap]] = {
         selected: false,
         description: IMPACTED_BY_SCRIPT_BLOCKING[
           singleData.scriptBlocking as keyof typeof IMPACTED_BY_SCRIPT_BLOCKING
@@ -214,6 +220,16 @@ const MDLTable = () => {
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: calculateFilters(tableData),
+        comparator: (value: InfoType, filterValue: string) => {
+          switch (filterValue) {
+            case 'COMPLETE':
+              return value === 'COMPLETE';
+            case 'PARTIAL':
+              return value === 'PARTIAL';
+            default:
+              return false;
+          }
+        },
       },
     }),
     [calculateFilters, tableData]
