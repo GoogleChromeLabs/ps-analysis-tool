@@ -8,8 +8,9 @@
 
 Before rendering, define the data representing your workflow—such as nodes, names, positions, and metadata.
 
+**Demo reference(s):** `packages/ee-workflow/demo/data.ts`
+
 ```ts
-// src/demo/data.ts
 export const nodes = [
   { website: 'Site A' /* ... */ },
   { website: 'Site B' /* ... */ },
@@ -35,6 +36,8 @@ This data will be used to create visual elements (figures) on the canvas.
 ## 2. Define HTML Structure for Canvas and Controls
 
 You need an HTML container for the canvas and, optionally, controls for interacting with the workflow.
+
+**Demo reference(s):** `packages/ee-workflow/index.html L31-146`
 
 **Example (HTML):**
 
@@ -69,6 +72,8 @@ const messageContainerRef = useRef<HTMLDivElement>(null);
 
 Maintain state variables to keep your UI and canvas in sync (animation state, checkpoints, interactive mode).
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L93-138`
+
 **Example (JS/TS):**
 
 ```ts
@@ -98,6 +103,8 @@ const [coordinates, _setCoordinates] = useState<{
 ## 4. Initialize the Canvas (Main Class)
 
 Create an instance of the `Main` class to set up the p5.js canvas.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L140-182`
 
 **Example (Vanilla JS/TS):**
 
@@ -138,6 +145,8 @@ What is the `Main` class?
 
 Use `FigureFactory` to create figures (shapes, text, images) for your workflow.
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L156, L170`
+
 ```ts
 const figureFactory = new FigureFactory(mainCanvas, container);
 ```
@@ -159,6 +168,8 @@ Use the `figureFactory` instance to create and position figures.
 - **Positioning:** Use `nextTipHelper` to position new figures relative to previous ones.
 - **Customization:** Each figure type (circle, box, line, text, image) has specific parameters.
 - **Animation:** Define a `traveller` callback for progressive rendering.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L400-405, L411-447, L495-503, etc.`
 
 **Example:**
 
@@ -194,6 +205,8 @@ const circle = figureFactory.circle({
 Background figures/groups remain visible throughout the workflow.
 Any figure/group added before defining a checkpoint is treated as background, also use the second argument of `addFigure`/`addGroup` to be as true for instant draw.
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L385-468`
+
 ```ts
 mainCanvas.addFigure(
   figureFactory.line({ x: 0, y: 150, endX: 1600, endY: 150 }),
@@ -223,6 +236,8 @@ mainCanvas.addGroup(group, true); // true for background
 ## 8. Define Animators and Checkpoints
 
 Create animators with figures/groups for each step. Assign checkpoint IDs for navigation.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L493-593, L685-1014`
 
 ```ts
 const checkpointFigure = figureFactory.line({
@@ -254,6 +269,8 @@ mainCanvas.addAnimator(animator, false, true); // true marks as checkpoint
 
 Connect your HTML controls to workflow methods.
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L226-344`
+
 ```ts
 playButton.addEventListener('click', () => mainCanvas.togglePause());
 nextButton.addEventListener('click', () => mainCanvas.nextCheckpoint());
@@ -281,6 +298,8 @@ nextButton.addEventListener('click', () => mainCanvas.nextCheckpoint());
 ## 10. Register Click Events on Figures
 
 Add event handlers for figures to enable interactivity.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L428-446`
 
 ```ts
 const circle = figureFactory.circle({
@@ -313,6 +332,8 @@ Interactive mode allows users to pause animation and interact directly with node
 
 You can preload images (such as icons or arrows) and use them as part of your figures.  
 This is useful for custom visuals or branding.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L67-91, L195-200`
 
 ```ts
 const preloader = (p: p5) => {
@@ -352,6 +373,8 @@ mainCanvas.addFigure(arrowFigure, true);
 You can create and synchronize multiple canvas instances (e.g., for components and flows).  
 This allows for layered or parallel visualizations that stay in sync.
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L140-182, L134-145, L622-658, L1043-1081
+
 ```ts
 const componentCanvas = new Main(false, componentContainer);
 const flowCanvas = new Main(false, flowContainer);
@@ -382,6 +405,8 @@ const flowFigureFactory = new FigureFactory(flowCanvas, flowContainer);
 Groups and figures can have side effects or custom logic that runs when they are drawn.  
 This is useful for triggering additional rendering, state changes, or analytics.
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L645-654`
+
 ```ts
 group.setSideEffectOnDraw(() => {
   // Custom logic here, e.g., highlight, log, or trigger UI updates
@@ -403,6 +428,8 @@ group.setSideEffectOnDraw(() => {
 
 EE Workflow is highly event-driven.  
 You can listen for and dispatch custom events (like `ee:dispatchId`) to trigger UI updates, animation steps, or other logic.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L1084-1156`
 
 ```ts
 document.addEventListener('ee:dispatchId', (event: Event) => {
@@ -427,6 +454,8 @@ When adding an animator, set the third argument to `true` to mark it as a checkp
 The **first figure** in the animator’s list will be used as the checkpoint.  
 You can assign a custom ID to this figure for custom checkpoint handling and navigation.
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L106-116, L444`
+
 ```ts
 const checkpointFigure = figureFactory.line({
   x: 100,
@@ -442,7 +471,7 @@ const animator = new Animator(
 mainCanvas.addAnimator(animator, false, true); // true marks as checkpoint
 ```
 
-- Use the custom ID to refer to this checkpoint in your workflow logic or UI.
+- Use the custom ID to Demo reference(s) this checkpoint in your workflow logic or UI.
 - The checkpoint can be used for navigation, state restoration, or triggering specific actions.
 
 - Why define checkpoints?
@@ -464,6 +493,8 @@ mainCanvas.addAnimator(animator, false, true); // true marks as checkpoint
   Enable progressive rendering (e.g., lines being drawn step-by-step, circles expanding).
 - **Custom callbacks:**  
   Attach mouse events or animation logic to figures.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L698-703, L709-714, L719-724, etc.`
 
 ```ts
 const line = figureFactory.line({
@@ -493,6 +524,8 @@ const line = figureFactory.line({
 
 Enable interactive mode to let users pause animation and interact directly with nodes or figures.  
 Stepping mode allows frame-by-frame navigation.
+
+**Demo reference(s):** `packages/ee-workflow/demo/listeners.ts L48-64, L172-188, L260-272, packages/ee-workflow/demo/index.ts L94-98, L322-331, L431`
 
 ```ts
 let isInteractive = false;
@@ -525,6 +558,8 @@ figure.mouseClicked = () => {
 
 Use browser storage (like `localStorage`) to persist workflow state, such as the last checkpoint, across reloads.
 
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L142-155, L1097, packages/ee-workflow/demo/listeners.ts L22-28`
+
 ```ts
 const idToStart = localStorage.getItem('ee-workflow') || '';
 const mainCanvas = new Main(
@@ -550,6 +585,8 @@ const mainCanvas = new Main(
 ## 9. Scenario-Driven Animation
 
 You can drive your workflow from scenario data (e.g., a list of steps or actions), dynamically creating animators and groups based on the scenario.
+
+**Demo reference(s):** `packages/ee-workflow/demo/index.ts L1084-1156`
 
 ```ts
 Object.entries(scenarios).forEach(([key, { steps }]) => {
