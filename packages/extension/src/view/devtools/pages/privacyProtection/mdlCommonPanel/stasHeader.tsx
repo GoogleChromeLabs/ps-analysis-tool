@@ -47,6 +47,7 @@ const StatsHeader = ({ stats }: StatsHeaderProps) => {
           centerCount={centerCount}
           data={[{ count: 10, color }]} // keep or derive from your data source
           infoIconClassName="absolute -right-3"
+          bottomTitleExtraClasses="min-w-[150px]"
         />
       ))}
     </>

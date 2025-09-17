@@ -32,6 +32,7 @@ interface CirclePieChartProps {
   fallbackText?: string;
   infoIconClassName?: string;
   centerTitleExtraClasses?: string;
+  bottomTitleExtraClasses?: string;
   pieChartExtraClasses?: string;
 }
 
@@ -42,6 +43,7 @@ const CirclePieChart = ({
   data,
   title,
   centerTitleExtraClasses = '',
+  bottomTitleExtraClasses = '',
   pieChartExtraClasses = '',
 }: CirclePieChartProps) => {
   const centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
@@ -73,7 +75,9 @@ const CirclePieChart = ({
         )}
       </div>
       {title && (
-        <div className="flex items-center justify-center gap-1 mt-2 relative">
+        <div
+          className={`flex items-center justify-center gap-1 mt-2 relative ${bottomTitleExtraClasses}`}
+        >
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>
