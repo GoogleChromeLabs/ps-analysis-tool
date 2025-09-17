@@ -156,11 +156,11 @@ const ProbabilisticRevealTokens = () => {
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: {
-          'PRT with signal': {
+          'PRTs with signal': {
             selected: false,
             description: "PRT's that do not reveal IP address",
           },
-          'PRT without signal': {
+          'PRTs without signal': {
             selected: false,
             description: "PRT's that reveal IP address",
           },
