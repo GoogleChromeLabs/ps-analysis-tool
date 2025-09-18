@@ -215,19 +215,19 @@ const ProbabilisticRevealTokens = () => {
   const stats = {
     site: [
       {
-        title: 'PRTs with Signal',
+        title: 'PRT',
         centerCount: statistics.localView.nonZeroSignal,
         color: '#AF7AA3',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              nonZeroUint8Signal: ['PRTs with signal'],
+              nonZeroUint8Signal: ['PRT'],
             },
           })),
       },
       {
-        title: 'PRTs without Signal',
+        title: 'Signals',
         centerCount:
           statistics.localView.totalTokens - statistics.localView.nonZeroSignal,
         color: '#F54021',
@@ -235,19 +235,19 @@ const ProbabilisticRevealTokens = () => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              nonZeroUint8Signal: ['PRTs without signal'],
+              nonZeroUint8Signal: ['Signals'],
             },
           })),
       },
     ],
     global: [
       {
-        title: 'PRTs with Signal',
+        title: 'PRT',
         centerCount: statistics.globalView.nonZeroSignal,
         color: '#AF7AA3',
       },
       {
-        title: 'PRTs without Signal',
+        title: 'Singnals',
         centerCount:
           statistics.globalView.totalTokens -
           statistics.globalView.nonZeroSignal,
