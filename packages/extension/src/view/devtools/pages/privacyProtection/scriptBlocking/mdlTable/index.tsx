@@ -238,24 +238,24 @@ const MDLTable = () => {
   const stats = {
     site: [
       {
-        title: 'Competely Blocked',
+        title: 'Scope Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
       },
       {
-        title: 'Partially Blocked',
+        title: 'Scope Partial',
         centerCount: statistics.localView.partiallyBlockedDomains,
         color: '#4C79F4',
       },
     ],
     global: [
       {
-        title: 'Competely Blocked',
+        title: 'Scope Complete',
         centerCount: statistics.globalView.completelyBlockedDomains,
         color: '#F3AE4E',
       },
       {
-        title: 'Partially Blocked',
+        title: 'Scope Partial',
         centerCount: statistics.globalView.partiallyBlockedDomains,
         color: '#4C79F4',
       },
