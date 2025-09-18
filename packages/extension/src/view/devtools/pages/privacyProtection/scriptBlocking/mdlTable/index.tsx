@@ -177,7 +177,7 @@ const MDLTable = () => {
         initialWidth: 100,
       },
       {
-        header: 'Impacted by Script Blocking',
+        header: 'Scope',
         accessorKey: 'scriptBlocking',
         cell: (info) => info,
       },
