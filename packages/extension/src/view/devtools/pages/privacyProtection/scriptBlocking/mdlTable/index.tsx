@@ -112,7 +112,7 @@ const MDLTable = () => {
           onChange={() => setShowOnlyHighlighted((prev) => !prev)}
           defaultChecked
         />
-        <span className="whitespace-nowrap">Show only highlighted domains</span>
+        <span className="whitespace-nowrap">Show Only blocked domains</span>
       </label>
     ),
     []
