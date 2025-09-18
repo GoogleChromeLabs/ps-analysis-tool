@@ -194,8 +194,8 @@ const MDLTable = () => {
     } = {};
 
     const titleMap = {
-      COMPLETE: 'Completely Blocked',
-      PARTIAL: 'Partially Blocked',
+      COMPLETE: 'Scope Complete',
+      PARTIAL: 'Scope Partial',
     };
 
     data.forEach((singleData) => {
