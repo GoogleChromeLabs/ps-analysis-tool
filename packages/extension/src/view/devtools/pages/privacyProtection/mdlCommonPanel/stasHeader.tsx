@@ -92,7 +92,7 @@ const StatsHeader = ({ stats }: StatsHeaderProps) => {
         />
       </div>
       <div className="w-2/5 h-full"></div>
-      <div className="flex flex-row items-center gap-2 w-1/5 justify-center">
+      <div className="flex flex-row items-center gap-10 w-1/5 justify-center">
         {pillToggle === 'Site' ? sitePieCharts : globalPieCharts}
       </div>
       <div className="w-2/5 h-full"></div>
