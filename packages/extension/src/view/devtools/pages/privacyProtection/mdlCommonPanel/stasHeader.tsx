@@ -82,7 +82,7 @@ const StatsHeader = ({ stats }: StatsHeaderProps) => {
     <div className="flex flex-col flex-row w-full py-2">
       <div className="px-2 py-1">
         <PillToggle
-          options={['Site', 'Global']}
+          options={['Site', 'Session']}
           pillToggle={pillToggle}
           setPillToggle={setPillToggle}
           eeAnimatedTab={true}
