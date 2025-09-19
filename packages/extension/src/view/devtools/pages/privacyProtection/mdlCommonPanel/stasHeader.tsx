@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CirclePieChart, PillToggle } from '@google-psat/design-system';
 import classnames from 'classnames';
 
@@ -34,11 +34,16 @@ export type Stats = {
 
 interface StatsHeaderProps {
   stats: Stats;
+  setPillState: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const StatsHeader = ({ stats }: StatsHeaderProps) => {
+const StatsHeader = ({ stats, setPillState }: StatsHeaderProps) => {
   const [pillToggle, setPillToggle] = useState<string | null>('Site');
   const [highlightOption, setHighlightOption] = useState<string>('Site');
+
+  useEffect(() => {
+    setPillState(pillToggle);
+  }, [pillToggle, setPillState]);
 
   const renderPieCharts = (items: StatItem[]) => (
     <>
