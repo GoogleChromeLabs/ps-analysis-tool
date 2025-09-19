@@ -63,6 +63,7 @@ interface MdlCommonPanelProps {
   tableSearchKeys: string[];
   bottomPanel?: () => React.JSX.Element;
   showJson?: boolean;
+  tab: string;
 }
 
 const MdlCommonPanel = ({
@@ -77,6 +78,7 @@ const MdlCommonPanel = ({
   stats,
   bottomPanel,
   showJson = true,
+  tab = '',
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForPRT
@@ -120,7 +122,7 @@ const MdlCommonPanel = ({
               minWidth="50rem"
               extraInterfaceToTopBar={extraInterfaceToTopBar}
             />
-            <RowContextMenuForPRT ref={rowContextMenuRef} />
+            <RowContextMenuForPRT ref={rowContextMenuRef} tab={tab} />
           </TableProvider>
         </div>
       </ResizableTray>

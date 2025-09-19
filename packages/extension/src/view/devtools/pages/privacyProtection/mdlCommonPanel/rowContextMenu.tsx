@@ -24,27 +24,49 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { isValidURL, type PRTMetadata } from '@google-psat/common';
+import {
+  isValidURL,
+  type MDLTableData,
+  type PRTMetadata,
+} from '@google-psat/common';
 import type { TableRow } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const RowContextMenuForPRT = forwardRef<{
-  onRowContextMenu: (e: React.MouseEvent<HTMLElement>, row: TableRow) => void;
-}>(function RowContextMenu(_, ref) {
+type ContextMenuProp = {
+  tab: string;
+};
+
+const RowContextMenuForPRT = forwardRef<
+  {
+    onRowContextMenu: (e: React.MouseEvent<HTMLElement>, row: TableRow) => void;
+  },
+  ContextMenuProp
+>(function RowContextMenu({ tab }: ContextMenuProp, ref) {
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
     x: 0,
     y: 0,
   });
-  const [prtMetaData, setMetadata] = useState<PRTMetadata>();
+  const [data, setMetadata] = useState<PRTMetadata | MDLTableData | null>(null);
 
-  const domain = useMemo(
-    () =>
-      prtMetaData?.origin && isValidURL(prtMetaData?.origin)
-        ? new URL(prtMetaData?.origin).hostname
-        : '',
-    [prtMetaData]
-  );
+  const domain = useMemo(() => {
+    if (!data) {
+      return null;
+    }
+
+    if ((data as PRTMetadata)?.origin) {
+      if (isValidURL((data as PRTMetadata)?.origin)) {
+        return new URL((data as PRTMetadata)?.origin).hostname;
+      } else {
+        return '';
+      }
+    } else {
+      if ((data as MDLTableData)?.domain) {
+        return (data as MDLTableData)?.domain;
+      }
+    }
+    return '';
+  }, [data]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
@@ -66,7 +88,9 @@ const RowContextMenuForPRT = forwardRef<{
   }));
 
   const handleFilterClick = useCallback(() => {
-    const filter = `has-request-header:sec-probabilistic-reveal-token domain:${domain}`;
+    const filter = `${
+      tab === 'PRT' ? 'has-request-header:sec-probabilistic-reveal-token ' : ''
+    }domain:${domain}`;
 
     // @ts-ignore
     if (chrome.devtools.panels?.network?.show) {
@@ -113,7 +137,9 @@ const RowContextMenuForPRT = forwardRef<{
                   {
                     // @ts-ignore
                     chrome.devtools.panels?.network?.show
-                      ? 'Show requests with this token.'
+                      ? tab === 'scriptBlocking'
+                        ? 'Show requests with this domain.'
+                        : 'Show requests with this token.'
                       : I18n.getMessage('copyNetworkFilter')
                   }
                 </span>

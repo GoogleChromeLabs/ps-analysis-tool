@@ -265,6 +265,7 @@ const ProbabilisticRevealTokens = () => {
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
       showJson
+      tab="PRT"
     />
   );
 };
