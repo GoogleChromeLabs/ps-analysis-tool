@@ -285,6 +285,7 @@ const MDLTable = () => {
       stats={stats}
       showJson={false}
       bottomPanel={Legend}
+      tab="scriptBlocking"
     />
   );
 };
