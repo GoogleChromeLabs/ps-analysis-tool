@@ -30,6 +30,7 @@ import { type PRTMetadata } from '@google-psat/common';
  */
 import { useProbabilisticRevealTokens } from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommonPanel';
+import getSignal from '../../../../../../utils/getSignal';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
@@ -127,19 +128,19 @@ const ProbabilisticRevealTokens = () => {
 
     if (!_decryptedToken || !_plainTextToken) {
       return {
-        prtHeader,
-        prtToken: _prtToken,
+        ...prtHeader,
+        ..._prtToken,
       };
     }
 
     delete _decryptedToken.prtHeader;
     delete _plainTextToken.prtHeader;
 
+    const { uint8Signal, ...rest } = _plainTextToken;
+
     return {
-      prtHeader,
-      decryptedTokens: _decryptedToken,
-      prtToken: _prtToken,
-      plainTextToken: _plainTextToken,
+      ...rest,
+      ip: getSignal((Object.values(uint8Signal) as unknown as number[]) ?? []),
     };
   }, [
     decryptedTokensData,
@@ -216,7 +217,7 @@ const ProbabilisticRevealTokens = () => {
     site: [
       {
         title: 'PRT',
-        centerCount: statistics.localView.nonZeroSignal,
+        centerCount: statistics.localView.totalTokens,
         color: '#AF7AA3',
         onClick: () =>
           setPresetFilters((prev) => ({
@@ -228,8 +229,7 @@ const ProbabilisticRevealTokens = () => {
       },
       {
         title: 'Signals',
-        centerCount:
-          statistics.localView.totalTokens - statistics.localView.nonZeroSignal,
+        centerCount: statistics.localView.nonZeroSignal,
         color: '#F54021',
         onClick: () =>
           setPresetFilters((prev) => ({
@@ -243,14 +243,12 @@ const ProbabilisticRevealTokens = () => {
     global: [
       {
         title: 'PRT',
-        centerCount: statistics.globalView.nonZeroSignal,
+        centerCount: statistics.globalView.totalTokens,
         color: '#AF7AA3',
       },
       {
-        title: 'Singnals',
-        centerCount:
-          statistics.globalView.totalTokens -
-          statistics.globalView.nonZeroSignal,
+        title: 'Signals',
+        centerCount: statistics.globalView.nonZeroSignal,
         color: '#F54021',
       },
     ],
@@ -266,6 +264,7 @@ const ProbabilisticRevealTokens = () => {
       selectedKey={selectedJSON?.origin.toString()}
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
+      showJson
     />
   );
 };
