@@ -151,12 +151,12 @@ const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
-  const syncStorageListener = useCallback(
+  const sessionStorageListener = useCallback(
     async (changes: { [key: string]: chrome.storage.StorageChange }) => {
       const hasChangesForPrtStatisticsData =
         Object.keys(changes).includes('prtStatistics') &&
         Object.keys(changes.prtStatistics).includes('newValue');
-      const { prtStatistics = {} } = await chrome.storage.sync.get(
+      const { prtStatistics = {} } = await chrome.storage.session.get(
         'prtStatistics'
       );
 
@@ -204,19 +204,19 @@ const Provider = ({ children }: PropsWithChildren) => {
     chrome.webNavigation?.onCommitted?.addListener(
       onCommittedNavigationListener
     );
-    chrome.storage.sync.onChanged.addListener(syncStorageListener);
+    chrome.storage.session.onChanged.addListener(sessionStorageListener);
 
     return () => {
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
       chrome.webNavigation?.onCommitted?.removeListener(
         onCommittedNavigationListener
       );
-      chrome.storage.sync.onChanged.removeListener(syncStorageListener);
+      chrome.storage.session.onChanged.removeListener(sessionStorageListener);
     };
   }, [
     messagePassingListener,
     onCommittedNavigationListener,
-    syncStorageListener,
+    sessionStorageListener,
   ]);
 
   const memoisedValue: ProbabilisticRevealTokensContextType = useMemo(() => {

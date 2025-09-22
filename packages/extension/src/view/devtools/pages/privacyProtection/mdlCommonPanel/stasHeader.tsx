@@ -23,8 +23,9 @@ import classnames from 'classnames';
 type StatItem = {
   title: string;
   centerCount: number;
-  color: string;
+  color?: string;
   onClick?: () => void;
+  data?: { count: number; color: string }[];
 };
 
 export type Stats = {
@@ -47,7 +48,7 @@ const StatsHeader = ({ stats, setPillState }: StatsHeaderProps) => {
 
   const renderPieCharts = (items: StatItem[]) => (
     <>
-      {items.map(({ title, centerCount, color, onClick }, index) => (
+      {items.map(({ title, centerCount, color, onClick, data }, index) => (
         <button
           key={index}
           className={classnames('group text-center w-20 p-2 h-full', {
@@ -63,7 +64,7 @@ const StatsHeader = ({ stats, setPillState }: StatsHeaderProps) => {
             key={title}
             title={title}
             centerCount={centerCount}
-            data={[{ count: 10, color }]} // keep or derive from your data source
+            data={data ?? [{ count: 10, color: color ?? '' }]}
             infoIconClassName="absolute -right-3"
             bottomTitleExtraClasses="min-w-[150px]"
             centerTitleExtraClasses={classnames({

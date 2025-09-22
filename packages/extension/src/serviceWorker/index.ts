@@ -426,7 +426,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
             updateStatistics(origin, nonZeroUint8Signal);
 
-            await chrome.storage.sync.set({
+            await chrome.storage.session.set({
               prtStatistics: {
                 ...PRTStore.statistics.prtStatistics.globalView,
               },

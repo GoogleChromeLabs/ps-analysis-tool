@@ -31,8 +31,6 @@ export const runtimeOnInstalledListener = async (
     await chrome.storage.sync.set({
       isUsingCDP: false,
       isFirstTime: true,
-      prtStatistics: {},
-      scriptBlocking: {},
     });
     await updateGlobalVariableAndAttachCDP();
   }
@@ -43,24 +41,12 @@ export const runtimeOnInstalledListener = async (
 
     await updateGlobalVariableAndAttachCDP();
 
-    if (
-      Object.keys(preSetSettings).includes('isUsingCDP') &&
-      Object.keys(preSetSettings).includes('prtStatistics') &&
-      Object.keys(preSetSettings).includes('scriptBlocking')
-    ) {
+    if (Object.keys(preSetSettings).includes('isUsingCDP')) {
       return;
     }
 
     if (!Object.keys(preSetSettings).includes('isUsingCDP')) {
       objectToInstantiate['isUsingCDP'] = false;
-    }
-
-    if (!Object.keys(preSetSettings).includes('prtStatistics')) {
-      objectToInstantiate['prtStatistics'] = {};
-    }
-
-    if (!Object.keys(preSetSettings).includes('scriptBlocking')) {
-      objectToInstantiate['scriptBlocking'] = {};
     }
 
     await chrome.storage.sync.clear();

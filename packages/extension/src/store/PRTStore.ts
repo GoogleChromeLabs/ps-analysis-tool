@@ -90,10 +90,12 @@ class PRTStore extends DataStore {
       globalView: {
         partiallyBlockedDomains: number;
         completelyBlockedDomains: number;
+        domains: number;
       };
       localView: {
         partiallyBlockedDomains: number;
         completelyBlockedDomains: number;
+        domains: number;
       };
     };
   } = {
@@ -105,10 +107,12 @@ class PRTStore extends DataStore {
       globalView: {
         partiallyBlockedDomains: 0,
         completelyBlockedDomains: 0,
+        domains: 0,
       },
       localView: {
         partiallyBlockedDomains: 0,
         completelyBlockedDomains: 0,
+        domains: 0,
       },
     },
   };
@@ -212,28 +216,24 @@ class PRTStore extends DataStore {
       this.uniqueResponseDomains[tabId].push(hostname);
       DataStore.tabs[tabId].newUpdatesScriptBlocking++;
 
-      chrome.storage.sync.get('scriptBlocking', (result) => {
-        const completelyBlockedDomains =
-          result.scriptBlocking?.completelyBlockedDomains ?? 0;
-        const partiallyBlockedDomains =
-          result.prtStatistics?.partiallyBlockedDomains ?? 0;
+      this.statistics.scriptBlocking.globalView.completelyBlockedDomains +=
+        this.mdlData[hostname].scriptBlockingScope === 'COMPLETE' ? 1 : 0;
+      this.statistics.scriptBlocking.globalView.partiallyBlockedDomains +=
+        this.mdlData[hostname].scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
-        chrome.storage.sync.set({
-          scriptBlocking: {
-            completelyBlockedDomains:
-              completelyBlockedDomains +
-              (this.mdlData[hostname] &&
-              this.mdlData[hostname].scriptBlockingScope === 'COMPLETE'
-                ? 1
-                : 0),
-            partiallyBlockedDomains:
-              partiallyBlockedDomains +
-              (this.mdlData[hostname] &&
-              this.mdlData[hostname].scriptBlockingScope === 'PARTIAL'
-                ? 1
-                : 0),
-          },
-        });
+      this.statistics.scriptBlocking.globalView.domains += 1;
+
+      this.statistics.scriptBlocking.localView.completelyBlockedDomains +=
+        this.mdlData[hostname].scriptBlockingScope === 'COMPLETE' ? 1 : 0;
+      this.statistics.scriptBlocking.localView.partiallyBlockedDomains +=
+        this.mdlData[hostname].scriptBlockingScope === 'PARTIAL' ? 1 : 0;
+
+      this.statistics.scriptBlocking.localView.domains += 1;
+
+      chrome.storage.session.set({
+        scriptBlocking: {
+          ...this.statistics.scriptBlocking.globalView,
+        },
       });
     }
   }
@@ -263,6 +263,7 @@ class PRTStore extends DataStore {
     this.statistics.scriptBlocking.localView = {
       partiallyBlockedDomains: 0,
       completelyBlockedDomains: 0,
+      domains: 0,
     };
     this.uniqueResponseDomains[parseInt(tabId)] = [];
     //@ts-ignore
@@ -299,7 +300,7 @@ class PRTStore extends DataStore {
       };
 
       //@ts-ignore
-      const { prtStatistics = {} } = await chrome.storage.sync.get(
+      const { prtStatistics = {} } = await chrome.storage.session.get(
         'prtStatistics'
       );
 
@@ -366,33 +367,11 @@ class PRTStore extends DataStore {
         DataStore.tabs[tabId].newUpdatesScriptBlocking > 0)
     ) {
       //@ts-ignore
-      const { scriptBlocking = {} } = await chrome.storage.sync.get(
+      const { scriptBlocking = {} } = await chrome.storage.session.get(
         'scriptBlocking'
       );
 
       const globalView = scriptBlocking;
-
-      const localView = this.uniqueResponseDomains[tabId].reduce(
-        (acc, domain) => {
-          if (!this.mdlData[domain]) {
-            return acc;
-          }
-
-          if (this.mdlData[domain].scriptBlockingScope === 'COMPLETE') {
-            acc.completelyBlockedDomains += 1;
-          }
-
-          if (this.mdlData[domain].scriptBlockingScope === 'PARTIAL') {
-            acc.partiallyBlockedDomains += 1;
-          }
-
-          return acc;
-        },
-        {
-          partiallyBlockedDomains: 0,
-          completelyBlockedDomains: 0,
-        }
-      );
 
       await chrome.runtime.sendMessage({
         type: EXTRA_DATA,
@@ -400,7 +379,7 @@ class PRTStore extends DataStore {
           uniqueResponseDomains: this.uniqueResponseDomains[tabId],
           stats: {
             globalView,
-            localView,
+            localView: this.statistics.scriptBlocking.localView,
           },
           tabId: Number(tabId),
         },
