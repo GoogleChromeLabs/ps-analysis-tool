@@ -60,11 +60,11 @@ if (root) {
                   <WebStoriesProvider>
                     <AttributionReportingProvider>
                       <TopicsClassifierProvider>
-                        <ProbabilisticRevealTokensProvider>
-                          <ScriptBlockingProvider>
+                        <ScriptBlockingProvider>
+                          <ProbabilisticRevealTokensProvider>
                             <App />
-                          </ScriptBlockingProvider>
-                        </ProbabilisticRevealTokensProvider>
+                          </ProbabilisticRevealTokensProvider>
+                        </ScriptBlockingProvider>
                       </TopicsClassifierProvider>
                     </AttributionReportingProvider>
                   </WebStoriesProvider>

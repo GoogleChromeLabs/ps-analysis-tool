@@ -33,6 +33,8 @@ import Context, {
   type ProbabilisticRevealTokensContextType,
 } from './context';
 import { TAB_TOKEN_DATA } from '../../../../constants';
+import { useScriptBlocking } from '../scriptBlocking';
+import { isValidURL } from '@google-psat/common';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [decryptedTokens, setDecryptedTokens] = useState<
@@ -54,6 +56,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [perTokenMetadata, setPerTokenMetadata] = useState<
     ProbabilisticRevealTokensContextType['state']['perTokenMetadata']
   >([]);
+
+  const { scriptBlockingData } = useScriptBlocking(({ state }) => ({
+    scriptBlockingData: state.scriptBlockingData,
+  }));
 
   const messagePassingListener = useCallback(
     (message: {
@@ -160,11 +166,26 @@ const Provider = ({ children }: PropsWithChildren) => {
             acc.totalTokens = prtStatistics[key].totalTokens + acc.totalTokens;
             acc.nonZeroSignal =
               prtStatistics[key].nonZeroSignal + acc.nonZeroSignal;
+
+            let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+
+            hostname = hostname.startsWith('www.')
+              ? hostname.slice(4)
+              : hostname;
+
+            acc.mdl +=
+              hostname &&
+              scriptBlockingData.filter((_data) => _data.domain === hostname)
+                .length > 0
+                ? 1
+                : 0;
           }
           return acc;
         },
-        { totalTokens: 0, nonZeroSignal: 0 }
+        { totalTokens: 0, nonZeroSignal: 0, domains: 0, mdl: 0 }
       );
+
+      globalStats.domains = Object.keys(prtStatistics).length;
 
       if (hasChangesForPrtStatisticsData) {
         setStatistics((prev) => {
@@ -175,7 +196,7 @@ const Provider = ({ children }: PropsWithChildren) => {
         });
       }
     },
-    []
+    [scriptBlockingData]
   );
 
   useEffect(() => {

@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as ScriptBlockingProvider } from './scriptBlockingProvider';
+export {
+  default as ScriptBlockingProvider,
+  IMPACTED_BY_SCRIPT_BLOCKING,
+} from './scriptBlockingProvider';
 export { default as ScriptBlockingContext } from './context';
 export { default as useScriptBlocking } from './useScriptBlocking';

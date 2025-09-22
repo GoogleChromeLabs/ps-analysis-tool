@@ -323,13 +323,21 @@ class PRTStore extends DataStore {
             acc.totalTokens = prtStatistics[key].totalTokens + acc.totalTokens;
             acc.nonZeroSignal =
               prtStatistics[key].nonZeroSignal + acc.nonZeroSignal;
+            let hostname = isValidURL(key) ? new URL(key).hostname : '';
+
+            hostname = hostname.startsWith('www.')
+              ? hostname.slice(4)
+              : hostname;
+            acc.mdl += hostname && this.mdlData[hostname] ? 1 : 0;
           }
           return acc;
         },
-        { totalTokens: 0, nonZeroSignal: 0 }
+        { totalTokens: 0, nonZeroSignal: 0, domains: 0, mdl: 0 }
       );
 
-      await chrome.runtime.sendMessage({
+      globalStats.domains = Object.keys(prtStatistics).length;
+
+      globalStats.mdl = await chrome.runtime.sendMessage({
         type: TAB_TOKEN_DATA,
         payload: {
           tabId,

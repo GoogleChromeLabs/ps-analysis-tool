@@ -33,14 +33,73 @@ import Context, {
 } from './context';
 import { EXTRA_DATA } from '../../../../constants';
 
+export const IMPACTED_BY_SCRIPT_BLOCKING = {
+  NONE: 'Not Impacted By Script Blocking',
+  PARTIAL: 'Some URLs are Blocked',
+  ENTIRE: 'Entire Domain Blocked',
+};
+
+const DATA_URL =
+  'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md';
+
 const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
   const [uniqueResponseDomains, setUniqueResponseDomains] = useState<string[]>(
     []
   );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [statistics, setStatistics] = useState<
     ScriptBlockingStoreContext['state']['statistics']
   >(initialState.state.statistics);
+
+  const [initialTableData, setinitialTableData] = useState<
+    { domain: string; owner: string; scriptBlocking: string }[]
+  >([]);
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      const response = await fetch(DATA_URL);
+
+      if (!response.ok) {
+        setIsLoading(false);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const text = await response.text();
+
+      const lines = text
+        .split('\n')
+        .filter((line) => line.includes('|'))
+        .slice(2);
+
+      const mdlData = lines.map((line) =>
+        line.split('|').map((item) => item.trim())
+      );
+
+      setinitialTableData(() => {
+        const data = mdlData.map((item: string[]) => {
+          let owner = item[1];
+
+          if (item[1].includes('PSL Domain')) {
+            owner = 'PSL Domain';
+          }
+
+          const scriptBlocking = item[2];
+
+          return {
+            domain: item[0],
+            owner,
+            scriptBlocking,
+          };
+        });
+
+        setIsLoading(false);
+
+        return data;
+      });
+    })();
+  }, []);
 
   const messagePassingListener = useCallback(
     (message: {
@@ -112,6 +171,8 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
         state: {
           uniqueResponseDomains,
           statistics,
+          scriptBlockingData: initialTableData,
+          isLoading,
         },
         actions: {
           setUniqueResponseDomains,

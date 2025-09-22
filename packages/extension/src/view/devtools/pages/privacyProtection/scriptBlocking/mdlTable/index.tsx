@@ -24,84 +24,29 @@ import {
   Link,
   type InfoType,
 } from '@google-psat/design-system';
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import type { MDLTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies
  */
-import { useScriptBlocking } from '../../../../stateProviders';
+import {
+  useScriptBlocking,
+  IMPACTED_BY_SCRIPT_BLOCKING,
+} from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommonPanel';
 import Legend from './legend';
-
-export const IMPACTED_BY_SCRIPT_BLOCKING = {
-  NONE: 'Not Impacted By Script Blocking',
-  PARTIAL: 'Some URLs are Blocked',
-  ENTIRE: 'Entire Domain Blocked',
-};
-
-const DATA_URL =
-  'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { uniqueResponseDomains, statistics } = useScriptBlocking(
-    ({ state }) => ({
+  const { uniqueResponseDomains, statistics, scriptBlockingData, isLoading } =
+    useScriptBlocking(({ state }) => ({
       uniqueResponseDomains: state.uniqueResponseDomains,
       statistics: state.statistics,
-    })
-  );
-
-  const [initialTableData, setinitialTableData] = useState<
-    { domain: string; owner: string; scriptBlocking: string }[]
-  >([]);
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const response = await fetch(DATA_URL);
-
-      if (!response.ok) {
-        setIsLoading(false);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const text = await response.text();
-
-      const lines = text
-        .split('\n')
-        .filter((line) => line.includes('|'))
-        .slice(2);
-
-      const mdlData = lines
-        .map((line) => line.split('|').map((item) => item.trim()))
-        .filter((item) => item[2] !== IMPACTED_BY_SCRIPT_BLOCKING.NONE);
-
-      setinitialTableData(() => {
-        const data = mdlData.map((item: string[]) => {
-          let owner = item[1];
-
-          if (item[1].includes('PSL Domain')) {
-            owner = 'PSL Domain';
-          }
-
-          const scriptBlocking = item[2];
-
-          return {
-            domain: item[0],
-            owner,
-            scriptBlocking,
-          };
-        });
-
-        setIsLoading(false);
-
-        return data;
-      });
-    })();
-  }, []);
+      scriptBlockingData: state.scriptBlockingData,
+      isLoading: state.isLoading,
+    }));
 
   const checkbox = useCallback(
     () => (
@@ -119,34 +64,39 @@ const MDLTable = () => {
   );
 
   const tableData: MDLTableData[] = useMemo(() => {
-    if (initialTableData.length === 0) {
+    if (scriptBlockingData.length === 0) {
       return [];
     }
 
     const data: MDLTableData[] = [];
 
-    initialTableData.forEach((item) => {
-      let available = false;
-      if (uniqueResponseDomains.includes(item.domain)) {
-        available = true;
-      }
+    scriptBlockingData
+      .filter(
+        (item) => item.scriptBlocking !== IMPACTED_BY_SCRIPT_BLOCKING.NONE
+      )
+      .forEach((item) => {
+        let available = false;
+        if (uniqueResponseDomains.includes(item.domain)) {
+          available = true;
+        }
 
-      const canPush = showOnlyHighlighted ? available : true;
+        const canPush = showOnlyHighlighted ? available : true;
 
-      if (canPush) {
-        data.push({
-          ...item,
-          highlighted: available,
-          highlightedClass:
-            available && item.scriptBlocking.startsWith('Some URLs are Blocked')
-              ? 'bg-amber-100'
-              : '',
-        } as MDLTableData);
-      }
-    });
+        if (canPush) {
+          data.push({
+            ...item,
+            highlighted: available,
+            highlightedClass:
+              available &&
+              item.scriptBlocking.startsWith('Some URLs are Blocked')
+                ? 'bg-amber-100'
+                : '',
+          } as MDLTableData);
+        }
+      });
 
     return data.sort((a, b) => Number(b.highlighted) - Number(a.highlighted));
-  }, [uniqueResponseDomains, initialTableData, showOnlyHighlighted]);
+  }, [uniqueResponseDomains, scriptBlockingData, showOnlyHighlighted]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [

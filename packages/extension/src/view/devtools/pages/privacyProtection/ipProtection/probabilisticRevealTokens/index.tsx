@@ -22,13 +22,16 @@ import {
   type TableColumn,
   type TableFilter,
 } from '@google-psat/design-system';
-import React, { useMemo, useState } from 'react';
-import { type PRTMetadata } from '@google-psat/common';
+import React, { useCallback, useMemo, useState } from 'react';
+import { isValidURL, type PRTMetadata } from '@google-psat/common';
 
 /**
  * Internal dependencies
  */
-import { useProbabilisticRevealTokens } from '../../../../stateProviders';
+import {
+  useProbabilisticRevealTokens,
+  useScriptBlocking,
+} from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommonPanel';
 import getSignal from '../../../../../../utils/getSignal';
 
@@ -50,6 +53,11 @@ const ProbabilisticRevealTokens = () => {
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
     statistics: state.statistics,
+  }));
+
+  const { scriptBlockingData, isLoading } = useScriptBlocking(({ state }) => ({
+    scriptBlockingData: state.scriptBlockingData,
+    isLoading: state.isLoading,
   }));
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -151,11 +159,40 @@ const ProbabilisticRevealTokens = () => {
     selectedJSON,
   ]);
 
+  const mdlComparator = useCallback(
+    (value: InfoType, filterValue: string) => {
+      let hostname = isValidURL(value as string)
+        ? new URL(value as string).hostname
+        : '';
+
+      hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+
+      if (!hostname || isLoading) {
+        return false;
+      }
+
+      switch (filterValue) {
+        case 'True':
+          return (
+            scriptBlockingData.filter(
+              (_data) => value && hostname === _data.domain
+            ).length > 0
+          );
+        case 'False':
+          return (
+            scriptBlockingData.filter(
+              (_data) => value && hostname === _data.domain
+            ).length === 0
+          );
+        default:
+          return true;
+      }
+    },
+    [isLoading, scriptBlockingData]
+  );
+
   const filters = useMemo<TableFilter>(
     () => ({
-      owner: {
-        title: 'Owner',
-      },
       nonZeroUint8Signal: {
         title: 'Signal',
         hasStaticFilterValues: true,
@@ -210,33 +247,67 @@ const ProbabilisticRevealTokens = () => {
           }
         },
       },
+      origin: {
+        title: 'MDL',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: {
+          True: {
+            selected: (preSetFilters?.filter?.mdl ?? []).includes('True'),
+            description: 'Domains that are in MDL',
+          },
+          False: {
+            selected: (preSetFilters?.filter?.mdl ?? []).includes('False'),
+            description: 'Domains that are not in MDL',
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) =>
+          mdlComparator(value, filterValue),
+      },
     }),
-    [preSetFilters?.filter?.nonZeroUint8Signal]
+    [
+      preSetFilters?.filter?.mdl,
+      preSetFilters?.filter?.nonZeroUint8Signal,
+      mdlComparator,
+    ]
   );
 
   const stats = {
     site: [
       {
         title: 'Domains',
-        centerCount: 2,
+        centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
       },
       {
         title: 'MDL',
-        centerCount: 5,
+        centerCount: perTokenMetadata.filter(({ origin }) => {
+          let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+
+          hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+
+          if (!hostname) {
+            return false;
+          }
+
+          return (
+            scriptBlockingData.filter((_data) => _data.domain === hostname)
+              .length > 0
+          );
+        }).length,
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              mdl: ['True'],
+            },
+          })),
         color: '#4C79F4',
       },
       {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        onClick: () =>
-          setPresetFilters((prev) => ({
-            ...prev,
-            filter: {
-              nonZeroUint8Signal: ['PRT'],
-            },
-          })),
       },
       {
         title: 'Signals',
@@ -246,7 +317,7 @@ const ProbabilisticRevealTokens = () => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              nonZeroUint8Signal: ['Signals'],
+              nonZeroUint8Signal: ['PRTs with signal'],
             },
           })),
       },
@@ -254,12 +325,12 @@ const ProbabilisticRevealTokens = () => {
     global: [
       {
         title: 'Domains',
-        centerCount: 12,
+        centerCount: statistics.globalView.domains,
         color: '#F3AE4E',
       },
       {
         title: 'MDL',
-        centerCount: 50,
+        centerCount: statistics.globalView.mdl,
         color: '#4C79F4',
       },
       {
