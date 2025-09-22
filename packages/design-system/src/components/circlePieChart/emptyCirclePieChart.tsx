@@ -28,11 +28,11 @@ const EmptyCirclePieChart = () => {
     <div className="w-full h-full relative">
       <VictoryPie
         padding={0}
-        innerRadius={0}
+        innerRadius={175}
         colorScale={[COLOR_MAP.brightGray.color]}
         data={[{ x: '', y: 100 }]}
       />
-      <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-40 text-2xl leading-4 dark:text-black">
+      <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center opacity-40 text-2xl leading-4 dark:text-bright-gray">
         0
       </p>
     </div>
