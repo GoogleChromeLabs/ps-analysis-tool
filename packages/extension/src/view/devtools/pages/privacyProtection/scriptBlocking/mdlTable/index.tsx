@@ -40,6 +40,9 @@ import Legend from './legend';
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
+  const [preSetFilters, setPresetFilters] = useState<{
+    [key: string]: Record<string, string[]>;
+  }>({ filter: {} });
   const { uniqueResponseDomains, statistics, scriptBlockingData, isLoading } =
     useScriptBlocking(({ state }) => ({
       uniqueResponseDomains: state.uniqueResponseDomains,
@@ -135,30 +138,36 @@ const MDLTable = () => {
     []
   );
 
-  const calculateFilters = useCallback((data: MDLTableData[]) => {
-    const _filters: {
-      [key: string]: {
-        selected: boolean;
-        description: string;
+  const calculateFilters = useCallback(
+    (data: MDLTableData[]) => {
+      const _filters: {
+        [key: string]: {
+          selected: boolean;
+          description: string;
+        };
+      } = {};
+
+      const titleMap = {
+        'Entire Domain Blocked': 'Scope Complete',
+        'Some URLs are Blocked': 'Scope Partial',
       };
-    } = {};
 
-    const titleMap = {
-      COMPLETE: 'Scope Complete',
-      PARTIAL: 'Scope Partial',
-    };
+      data.forEach((singleData) => {
+        _filters[titleMap[singleData.scriptBlocking as keyof typeof titleMap]] =
+          {
+            selected: preSetFilters?.filter?.scriptBlocking?.includes(
+              titleMap[singleData.scriptBlocking as keyof typeof titleMap]
+            ),
+            description: IMPACTED_BY_SCRIPT_BLOCKING[
+              singleData.scriptBlocking as keyof typeof IMPACTED_BY_SCRIPT_BLOCKING
+            ] as string,
+          };
+      });
 
-    data.forEach((singleData) => {
-      _filters[titleMap[singleData.scriptBlocking as keyof typeof titleMap]] = {
-        selected: false,
-        description: IMPACTED_BY_SCRIPT_BLOCKING[
-          singleData.scriptBlocking as keyof typeof IMPACTED_BY_SCRIPT_BLOCKING
-        ] as string,
-      };
-    });
-
-    return _filters;
-  }, []);
+      return _filters;
+    },
+    [preSetFilters?.filter?.scriptBlocking]
+  );
 
   const filters = useMemo<TableFilter>(
     () => ({
@@ -172,10 +181,10 @@ const MDLTable = () => {
         filterValues: calculateFilters(tableData),
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
-            case 'COMPLETE':
-              return value === 'COMPLETE';
-            case 'PARTIAL':
-              return value === 'PARTIAL';
+            case 'Scope Complete':
+              return value === 'Entire Domain Blocked';
+            case 'Scope Partial':
+              return value === 'Some URLs are Blocked';
             default:
               return false;
           }
@@ -191,11 +200,25 @@ const MDLTable = () => {
         title: 'Scope Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Scope Complete'],
+            },
+          })),
       },
       {
         title: 'Scope Partial',
         centerCount: statistics.localView.partiallyBlockedDomains,
         color: '#4C79F4',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Scope Partial'],
+            },
+          })),
       },
     ],
     global: [

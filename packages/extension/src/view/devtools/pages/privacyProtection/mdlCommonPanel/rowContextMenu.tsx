@@ -48,25 +48,28 @@ const RowContextMenuForPRT = forwardRef<
     y: 0,
   });
   const [data, setMetadata] = useState<PRTMetadata | MDLTableData | null>(null);
-
   const domain = useMemo(() => {
     if (!data) {
       return null;
     }
 
-    if ((data as PRTMetadata)?.origin) {
+    if (tab === 'PRT') {
       if (isValidURL((data as PRTMetadata)?.origin)) {
         return new URL((data as PRTMetadata)?.origin).hostname;
       } else {
         return '';
       }
-    } else {
+    }
+
+    if (tab === 'scriptBlocking') {
       if ((data as MDLTableData)?.domain) {
-        return (data as MDLTableData)?.domain;
+        return (data as MDLTableData)?.highlighted
+          ? (data as MDLTableData)?.domain
+          : '';
       }
     }
     return '';
-  }, [data]);
+  }, [data, tab]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
@@ -113,7 +116,7 @@ const RowContextMenuForPRT = forwardRef<
     } catch (error) {
       //Fail silently
     }
-  }, [domain]);
+  }, [domain, tab]);
 
   return (
     <>
