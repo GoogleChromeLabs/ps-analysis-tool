@@ -22,10 +22,12 @@ type ScriptBlockingStatistics = {
   globalView: {
     partiallyBlockedDomains: number;
     completelyBlockedDomains: number;
+    domains: number;
   };
   localView: {
     partiallyBlockedDomains: number;
     completelyBlockedDomains: number;
+    domains: number;
   };
 };
 
@@ -54,10 +56,12 @@ export const initialState: ScriptBlockingStoreContext = {
       localView: {
         partiallyBlockedDomains: 0,
         completelyBlockedDomains: 0,
+        domains: 0,
       },
       globalView: {
         partiallyBlockedDomains: 0,
         completelyBlockedDomains: 0,
+        domains: 0,
       },
     },
     scriptBlockingData: [],

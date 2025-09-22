@@ -35,7 +35,7 @@ import {
   type PRTMetadata,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-
+import classNames from 'classnames';
 /**
  * Internal dependencies
  */
@@ -102,7 +102,15 @@ const MdlCommonPanel = ({
         className="w-full flex flex-col"
         trayId="active-sources-table-bottom-tray"
       >
-        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
+        <div
+          className={classNames(
+            'flex-1 border border-american-silver dark:border-quartz overflow-auto',
+            {
+              'opacity-50 cursor-default pointer-events-none':
+                pillState === 'Session',
+            }
+          )}
+        >
           <TableProvider
             data={pillState === 'Site' ? tableData : []}
             tableFilterData={pillState === 'Site' ? filters : {}}

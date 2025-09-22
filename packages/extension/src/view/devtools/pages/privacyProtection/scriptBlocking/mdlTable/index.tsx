@@ -153,15 +153,16 @@ const MDLTable = () => {
       } = {};
 
       data.forEach((singleData) => {
-        _filters[titleMap[singleData.scriptBlocking as keyof typeof titleMap]] =
-          {
-            selected: preSetFilters?.filter?.scriptBlocking?.includes(
-              titleMap[singleData.scriptBlocking as keyof typeof titleMap]
-            ),
-            description: IMPACTED_BY_SCRIPT_BLOCKING[
-              singleData.scriptBlocking as keyof typeof IMPACTED_BY_SCRIPT_BLOCKING
-            ] as string,
-          };
+        _filters[
+          titleMap[singleData.scriptBlocking as keyof typeof titleMap].slice(6)
+        ] = {
+          selected: preSetFilters?.filter?.scriptBlocking?.includes(
+            titleMap[singleData.scriptBlocking as keyof typeof titleMap]
+          ),
+          description: IMPACTED_BY_SCRIPT_BLOCKING[
+            singleData.scriptBlocking as keyof typeof IMPACTED_BY_SCRIPT_BLOCKING
+          ] as string,
+        };
       });
 
       return _filters;
@@ -181,9 +182,9 @@ const MDLTable = () => {
         filterValues: calculateFilters(tableData),
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
-            case 'Scope Complete':
+            case 'Complete':
               return value === 'Entire Domain Blocked';
-            case 'Scope Partial':
+            case 'Partial':
               return value === 'Some URLs are Blocked';
             default:
               return false;
@@ -197,6 +198,11 @@ const MDLTable = () => {
   const stats = {
     site: [
       {
+        title: 'Total Domains',
+        centerCount: statistics.localView.domains,
+        color: '#25ACAD',
+      },
+      {
         title: 'Scope Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
@@ -204,7 +210,7 @@ const MDLTable = () => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              scriptBlocking: ['Scope Complete'],
+              scriptBlocking: ['Complete'],
             },
           })),
       },
@@ -216,12 +222,33 @@ const MDLTable = () => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              scriptBlocking: ['Scope Partial'],
+              scriptBlocking: ['Partial'],
             },
           })),
       },
     ],
     global: [
+      {
+        title: 'Total Domains',
+        centerCount: statistics.globalView.domains,
+        color: '#25ACAD',
+      },
+      {
+        title: 'Total Blockings',
+        centerCount:
+          statistics.globalView.partiallyBlockedDomains +
+          statistics.globalView.completelyBlockedDomains,
+        data: [
+          {
+            color: '#4C79F4',
+            count: statistics.globalView.partiallyBlockedDomains,
+          },
+          {
+            color: '#F3AE4E',
+            count: statistics.globalView.completelyBlockedDomains,
+          },
+        ],
+      },
       {
         title: 'Scope Complete',
         centerCount: statistics.globalView.completelyBlockedDomains,

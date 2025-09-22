@@ -141,6 +141,7 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
       const hasChangesForScriptBlockingData =
         Object.keys(changes).includes('scriptBlocking') &&
         Object.keys(changes.scriptBlocking).includes('newValue');
+
       if (hasChangesForScriptBlockingData) {
         setStatistics((prev) => {
           return {
@@ -157,11 +158,11 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
-    chrome.storage.sync.onChanged.addListener(syncStorageListener);
+    chrome.storage.session.onChanged.addListener(syncStorageListener);
 
     return () => {
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
-      chrome.storage.sync.onChanged.removeListener(syncStorageListener);
+      chrome.storage.session.onChanged.removeListener(syncStorageListener);
     };
   }, [messagePassingListener, syncStorageListener]);
 
