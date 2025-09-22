@@ -29,10 +29,18 @@ type ScriptBlockingStatistics = {
   };
 };
 
+type ScriptBlockingData = {
+  domain: string;
+  owner: string;
+  scriptBlocking: string;
+}[];
+
 export interface ScriptBlockingStoreContext {
   state: {
     uniqueResponseDomains: string[];
     statistics: ScriptBlockingStatistics;
+    scriptBlockingData: ScriptBlockingData;
+    isLoading: boolean;
   };
   actions: {
     setUniqueResponseDomains: (newValue: string[]) => void;
@@ -52,6 +60,8 @@ export const initialState: ScriptBlockingStoreContext = {
         completelyBlockedDomains: 0,
       },
     },
+    scriptBlockingData: [],
+    isLoading: false,
   },
   actions: {
     setUniqueResponseDomains: noop,

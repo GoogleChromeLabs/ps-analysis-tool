@@ -39,7 +39,7 @@ import { I18n } from '@google-psat/i18n';
 /**
  * Internal dependencies
  */
-import RowContextMenuForPRT from './rowContextMenu';
+import RowContextMenuForMDLTable from './rowContextMenu';
 import StatsHeader, { type Stats } from './stasHeader';
 
 type NonDecryptedJson = PRTMetadata & ProbablisticRevealToken;
@@ -81,7 +81,7 @@ const MdlCommonPanel = ({
   tab = '',
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
-    typeof RowContextMenuForPRT
+    typeof RowContextMenuForMDLTable
   > | null>(null);
 
   const [pillState, setPillState] = useState<string | null>('Site');
@@ -105,7 +105,7 @@ const MdlCommonPanel = ({
         <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
             data={pillState === 'Site' ? tableData : []}
-            tableFilterData={filters}
+            tableFilterData={pillState === 'Site' ? filters : {}}
             tableColumns={tableColumns}
             tableSearchKeys={tableSearchKeys}
             onRowClick={onRowClick}
@@ -122,7 +122,7 @@ const MdlCommonPanel = ({
               minWidth="50rem"
               extraInterfaceToTopBar={extraInterfaceToTopBar}
             />
-            <RowContextMenuForPRT ref={rowContextMenuRef} tab={tab} />
+            <RowContextMenuForMDLTable ref={rowContextMenuRef} tab={tab} />
           </TableProvider>
         </div>
       </ResizableTray>
