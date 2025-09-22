@@ -127,6 +127,7 @@ const ProbabilisticRevealTokens = () => {
         header: 'PRT Prefix',
         accessorKey: 'prtHeader',
         cell: (info) => (info as string).slice(0, 10),
+        isHiddenByDefault: true,
       },
     ],
     [perTokenMetadata, scriptBlockingData, statistics]
