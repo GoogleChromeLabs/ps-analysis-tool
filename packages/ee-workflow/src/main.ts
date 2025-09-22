@@ -443,7 +443,7 @@ export class Main {
           animatorQueue,
           !skipDraw,
           isSkippingQueue,
-          useInstantQueue || this.usingHelperQueue
+          useInstantQueue
         );
       } else if (firstObject.getGroupId()) {
         this.processGroup(queue, groupQueue, !skipDraw, isSkippingQueue);
@@ -506,6 +506,7 @@ export class Main {
       this.dispatchCustomEvent('ee:noLoop', {
         message: 'Animation ended',
       });
+
       p.noLoop();
       this.noLoop = true;
     }
