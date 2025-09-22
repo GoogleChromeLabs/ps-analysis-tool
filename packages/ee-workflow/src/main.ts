@@ -171,6 +171,7 @@ export class Main {
    * @param position.y - The y-coordinate of the canvas.
    * @param figureToStart - The figure to start from.
    * @param preloader - The preloader function to run before setup.
+   * @param paused - Whether to start the canvas in a paused state.
    * @param performanceCheck - Whether to enable performance check.
    */
   constructor(
@@ -183,6 +184,7 @@ export class Main {
     position: { x: number; y: number } = { x: 0, y: 0 },
     private figureToStart?: string,
     private preloader?: (p: p5) => void,
+    paused = false,
     performanceCheck = false
   ) {
     this.p5 = new p5((p: p5) => this.init(p, position), this.container);
@@ -194,6 +196,12 @@ export class Main {
       this.stats.dom.style.left = '95vw';
       this.stats.dom.style.top = '0';
       document.body.appendChild(this.stats.dom);
+    }
+
+    if (paused) {
+      if (!this.figureToStart) {
+        this.togglePause(true);
+      }
     }
   }
 
@@ -529,12 +537,18 @@ export class Main {
       message: 'Skipping till saved figure',
     });
 
-    while (
-      this.figureToStart &&
-      this.stepsQueue.length > 0 &&
-      !this.instantQueue.length
-    ) {
-      this.runner(false, false, true);
+    if (this.figureToStart) {
+      while (
+        this.figureToStart &&
+        this.stepsQueue.length > 0 &&
+        !this.instantQueue.length
+      ) {
+        this.runner(false, false, true);
+      }
+
+      if (!this.figureToStart) {
+        this.togglePause(true);
+      }
     }
 
     this.dispatchCustomEvent('ee:skipping', {

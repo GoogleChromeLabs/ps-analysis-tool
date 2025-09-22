@@ -35,7 +35,7 @@ import { scenarios } from './scenarios';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const [canvas, setCanvas] = useState<Main>();
-  const [play, setPlay] = useState<boolean>(true);
+  const [play, setPlay] = useState<boolean>(false);
   const [speed, _setSpeed] = useState<number>(1.5);
   const [currentScenarioKey, setCurrentScenarioKey] = useState<ScenarioKeys>(
     ScenarioKeys.REGISTRATION
