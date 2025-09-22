@@ -428,7 +428,7 @@ const draw = {
         mouseClicked: () => {
           // eslint-disable-next-line no-console
           console.log(node.website, node);
-          if (getIsInteractive()) {
+          if (getIsInteractive() && !mainCanvas.isPaused()) {
             if (mainCanvas.isPaused()) {
               playClick(
                 mainCanvas,
