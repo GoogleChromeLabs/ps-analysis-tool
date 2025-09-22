@@ -1,12 +1,13 @@
-# EE Workflow: Getting Started
+# Explorable Explaination Workflow
+
+## Getting Started
 
 **EE Workflow** is a modular toolkit for building interactive, animated diagrams and flows using [p5.js](https://p5js.org/). This guide walks you through the essential steps to set up and use EE Workflow in your project, with practical examples and code references.
 
----
 
 ## 1. Define Your Data
 
-Before rendering, define the data representing your workflow—such as nodes, names, positions, and metadata.
+Before rendering, define the data representing your workflow such as nodes, names, positions, and metadata.
 
 **Demo reference(s):** `packages/ee-workflow/demo/data.ts`
 
@@ -31,7 +32,7 @@ This data will be used to create visual elements (figures) on the canvas.
   - Create a separate file (e.g., `data.ts` or `data.js`) to keep your data organized.
   - Import this data into your main workflow script where you initialize the canvas and figures.
 
----
+
 
 ## 2. Define HTML Structure for Canvas and Controls
 
@@ -66,7 +67,6 @@ const messageContainerRef = useRef<HTMLDivElement>(null);
   - Next Button: To move to the next checkpoint or step in the workflow.
   - Additional Controls: Depending on your needs, you might add buttons for previous steps, reset, speed control, etc.
 
----
 
 ## 3. Define State for Syncing UI and Canvas
 
@@ -98,7 +98,6 @@ const [coordinates, _setCoordinates] = useState<{
 - How do these states interact with the canvas?
   - When a user clicks a control (e.g., Play button), the corresponding state variable is updated, triggering the canvas to start or stop the animation. Alongside, the canvas can update the state (e.g., current checkpoint) to inform the UI of its status.
 
----
 
 ## 4. Initialize the Canvas (Main Class)
 
@@ -139,7 +138,6 @@ What is the `Main` class?
 
 - The `Main` class is the core of the EE Workflow library, responsible for managing the p5.js canvas, queues, snapshots, overall animation state, rendering logic, etc.
 
----
 
 ## 5. Initialize the Figure Factory
 
@@ -159,7 +157,6 @@ const figureFactory = new FigureFactory(mainCanvas, container);
   - It simplifies the process of creating and managing figures on the canvas.
   - It ensures consistency in figure creation and provides built-in support for positioning and animation.
 
----
 
 ## 6. Use FigureFactory to Create Figures
 
@@ -198,7 +195,6 @@ const circle = figureFactory.circle({
 - How to position figures?
   - Use the `nextTipHelper` callback to define how new figures should be positioned relative to last drawn figure. This allows for dynamic and context-aware placement.
 
----
 
 ## 7. Define Background Figures and Groups
 
@@ -263,7 +259,7 @@ mainCanvas.addAnimator(animator, false, true); // true marks as checkpoint
   - To define a checkpoint, add an animator with the third argument of `addAnimator` set to `true`. The first figure in the animator's list will be used as the checkpoint.
   - You can assign a custom ID to the checkpoint figure for easier reference and navigation.
 
----
+
 
 ## 9. Hook Controls with Callbacks
 
@@ -293,7 +289,6 @@ nextButton.addEventListener('click', () => mainCanvas.nextCheckpoint());
   - Update state variables in your event handlers to reflect the current status of the canvas (e.g., whether it's playing or paused).
   - Use callbacks provided by the `Main` class (like `onCheckpointChange`) to update your UI when the canvas state changes.
 
----
 
 ## 10. Register Click Events on Figures
 
@@ -320,13 +315,11 @@ Interactive mode allows users to pause animation and interact directly with node
   - When creating a figure using `FigureFactory`, you can define event handlers (like `mouseClicked`, `mouseOver`, etc.) as part of the figure's properties.
   - These handlers will be called when the corresponding event occurs on the figure.
 
----
 
 # Advanced Usage & Practices
 
 > These features are for advanced users who want to build complex, interactive, and highly customized visual workflows with EE Workflow. The following patterns are demonstrated in the demo and production code.
 
----
 
 ## 1. Image Preloading and Usage
 
@@ -366,7 +359,6 @@ mainCanvas.addFigure(arrowFigure, true);
   - Use the `imageLoader` property in the `figureFactory.image` method to specify a function that returns the preloaded image.
   - Add the image figure to the canvas using `addFigure`.
 
----
 
 ## 2. Multiple Canvases and Synchronization
 
@@ -398,7 +390,6 @@ const flowFigureFactory = new FigureFactory(flowCanvas, flowContainer);
   - Use shared state variables or callbacks to coordinate actions between canvases (e.g., when one canvas updates, the other responds accordingly).
   - You can also use events or direct method calls to trigger updates across canvases.
 
----
 
 ## 3. Side Effects and Custom Draw Logic
 
@@ -422,7 +413,6 @@ group.setSideEffectOnDraw(() => {
   - Use side effects when you need to perform actions that are dependent on the drawing of specific figures or groups.
   - They are useful for creating dynamic and responsive visualizations that react to user interactions or animation states.
 
----
 
 ## 4. Event-Driven Architecture
 
@@ -446,7 +436,6 @@ document.addEventListener('ee:dispatchId', (event: Event) => {
   - Use `addEventListener` to listen for specific events on the `document`.
   - Handle the event in a callback function to perform actions based on the event data.
 
----
 
 ## 5. Checkpoint Management
 
@@ -483,7 +472,6 @@ mainCanvas.addAnimator(animator, false, true); // true marks as checkpoint
   - Use the `loadNextCheckpoint` and `loadPreviousCheckpoint` methods on the `Main` class to navigate between checkpoints.
   - You can also load a specific checkpoint using its ID with the `loadCheckpointToHelper` method to jump directly to that point in the workflow. But we need to ensure that it is in interactive mode.
 
----
 
 ## 6. Advanced FigureFactory Usage
 
@@ -518,7 +506,6 @@ const line = figureFactory.line({
 - What is `shouldTravel`?
   - `shouldTravel` is a boolean property that enables progressive rendering of a figure. When set to `true`, the figure will be drawn in a step-by-step manner, creating an animation effect. But you need to define `travelInit` callback to define how the figure should animate.
 
----
 
 ## 7. Interactive Mode and Stepping
 
@@ -552,7 +539,7 @@ figure.mouseClicked = () => {
   - Stepping allows users to navigate through the workflow one step at a time, either forward or backward.
   - It provides fine-grained control over the animation, making it easier to analyze specific parts of the workflow.
 
----
+
 
 ## 8. State Persistence
 
@@ -580,7 +567,7 @@ const mainCanvas = new Main(
   - Use browser storage mechanisms like `localStorage` or `sessionStorage` to save relevant state information (e.g., last checkpoint ID or eventListener `ee:figureDraw`).
   - On page load, retrieve the saved state and initialize the canvas with this information to restore the previous state.
 
----
+
 
 ## 9. Scenario-Driven Animation
 
