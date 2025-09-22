@@ -37,6 +37,11 @@ import {
 import MdlCommonPanel from '../../mdlCommonPanel';
 import Legend from './legend';
 
+const titleMap = {
+  'Entire Domain Blocked': 'Scope Complete',
+  'Some URLs are Blocked': 'Scope Partial',
+};
+
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
@@ -132,7 +137,7 @@ const MDLTable = () => {
       {
         header: 'Scope',
         accessorKey: 'scriptBlocking',
-        cell: (info) => info,
+        cell: (info) => titleMap[info as keyof typeof titleMap].slice(6),
       },
     ],
     []
@@ -146,11 +151,6 @@ const MDLTable = () => {
           description: string;
         };
       } = {};
-
-      const titleMap = {
-        'Entire Domain Blocked': 'Scope Complete',
-        'Some URLs are Blocked': 'Scope Partial',
-      };
 
       data.forEach((singleData) => {
         _filters[titleMap[singleData.scriptBlocking as keyof typeof titleMap]] =
@@ -175,7 +175,7 @@ const MDLTable = () => {
         title: 'Owner',
       },
       scriptBlocking: {
-        title: 'Impacted by Script Blocking',
+        title: 'Scope',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
         filterValues: calculateFilters(tableData),
