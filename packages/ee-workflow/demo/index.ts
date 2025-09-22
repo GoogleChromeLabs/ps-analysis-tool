@@ -428,7 +428,11 @@ const draw = {
         mouseClicked: () => {
           // eslint-disable-next-line no-console
           console.log(node.website, node);
-          if (getIsInteractive() && !mainCanvas.isPaused()) {
+          if (
+            getIsInteractive() &&
+            mainCanvas.isPaused() &&
+            interestGroupCanvas.isPaused()
+          ) {
             if (mainCanvas.isPaused()) {
               playClick(
                 mainCanvas,
