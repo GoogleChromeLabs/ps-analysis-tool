@@ -217,9 +217,19 @@ const ProbabilisticRevealTokens = () => {
   const stats = {
     site: [
       {
+        title: 'Domains',
+        centerCount: 2,
+        color: '#F3AE4E',
+      },
+      {
+        title: 'MDL',
+        centerCount: 5,
+        color: '#4C79F4',
+      },
+      {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
-        color: '#AF7AA3',
+        color: '#EC7159',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -231,7 +241,7 @@ const ProbabilisticRevealTokens = () => {
       {
         title: 'Signals',
         centerCount: statistics.localView.nonZeroSignal,
-        color: '#F54021',
+        color: '#5CC971',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -243,14 +253,24 @@ const ProbabilisticRevealTokens = () => {
     ],
     global: [
       {
+        title: 'Domains',
+        centerCount: 12,
+        color: '#F3AE4E',
+      },
+      {
+        title: 'MDL',
+        centerCount: 50,
+        color: '#4C79F4',
+      },
+      {
         title: 'PRT',
         centerCount: statistics.globalView.totalTokens,
-        color: '#AF7AA3',
+        color: '#EC7159',
       },
       {
         title: 'Signals',
         centerCount: statistics.globalView.nonZeroSignal,
-        color: '#F54021',
+        color: '#5CC971',
       },
     ],
   };
