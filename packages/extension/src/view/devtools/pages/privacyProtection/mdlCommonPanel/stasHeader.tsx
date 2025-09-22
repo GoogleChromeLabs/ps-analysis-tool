@@ -83,24 +83,30 @@ const StatsHeader = ({ stats, setPillState }: StatsHeaderProps) => {
   const sitePieCharts = renderPieCharts(stats.site);
   const globalPieCharts = renderPieCharts(stats.global);
 
+  const pillToggleButtons = (
+    <PillToggle
+      options={['Site', 'Session']}
+      pillToggle={pillToggle}
+      setPillToggle={setPillToggle}
+      eeAnimatedTab={true}
+      highlightOption={highlightOption}
+      setHighlightOption={setHighlightOption}
+      persistenceKey="statsHeaderPillToggle"
+    />
+  );
+
   return (
     <div className="flex flex-col flex-row w-full py-2">
-      <div className="px-2 py-1">
-        <PillToggle
-          options={['Site', 'Session']}
-          pillToggle={pillToggle}
-          setPillToggle={setPillToggle}
-          eeAnimatedTab={true}
-          highlightOption={highlightOption}
-          setHighlightOption={setHighlightOption}
-          persistenceKey="statsHeaderPillToggle"
-        />
+      <div className="flex-shrink-0 px-2 py-1">{pillToggleButtons}</div>
+      <div className="flex flex-1 justify-center">
+        <div className="flex flex-row items-center gap-8 w-full justify-center">
+          {pillToggle === 'Site' ? sitePieCharts : globalPieCharts}
+        </div>
       </div>
-      <div className="w-2/5 h-full"></div>
-      <div className="flex flex-row items-center gap-8 w-1/5 justify-center">
-        {pillToggle === 'Site' ? sitePieCharts : globalPieCharts}
-      </div>
-      <div className="w-2/5 h-full"></div>
+      <div className="flex-shrink-0 px-2 py-1 invisible">
+        {pillToggleButtons}
+      </div>{' '}
+      {/*Work around to center the circles div without using position absolute that would break the responsive design or hardcoding px values.*/}
     </div>
   );
 };
