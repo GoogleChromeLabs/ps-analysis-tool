@@ -55,6 +55,7 @@ export const Primary: StoryObj<typeof meta> = {
         color: COLOR_MAP.uncategorized.color,
       },
     ],
+    tooltipText: 'This chart shows the distribution of counts.',
   },
   render: (args) => (
     <div className="w-16">
