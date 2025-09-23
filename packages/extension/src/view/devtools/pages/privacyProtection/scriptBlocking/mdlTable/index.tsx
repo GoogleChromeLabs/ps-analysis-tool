@@ -203,6 +203,13 @@ const MDLTable = () => {
         color: '#25ACAD',
       },
       {
+        title: 'Block List Domains',
+        centerCount:
+          statistics.localView.partiallyBlockedDomains +
+          statistics.localView.completelyBlockedDomains,
+        color: '#7D8471',
+      },
+      {
         title: 'Scope Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
@@ -232,6 +239,13 @@ const MDLTable = () => {
         title: 'Total Domains',
         centerCount: statistics.globalView.domains,
         color: '#25ACAD',
+      },
+      {
+        title: 'Block List Domains',
+        centerCount:
+          statistics.globalView.partiallyBlockedDomains +
+          statistics.globalView.completelyBlockedDomains,
+        color: '#7D8471',
       },
       {
         title: 'Total Blockings',
