@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { VictoryPie } from 'victory-pie';
 import classNames from 'classnames';
 
@@ -34,6 +34,7 @@ interface CirclePieChartProps {
   centerTitleExtraClasses?: string;
   bottomTitleExtraClasses?: string;
   pieChartExtraClasses?: string;
+  tooltipText?: string;
 }
 
 export const MAX_COUNT = 999;
@@ -45,12 +46,18 @@ const CirclePieChart = ({
   centerTitleExtraClasses = '',
   bottomTitleExtraClasses = '',
   pieChartExtraClasses = '',
+  tooltipText = '',
 }: CirclePieChartProps) => {
+  const [showTooltip, setShowTooltip] = useState(false);
   const centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-start">
-      <div className="inline-block align-bottom w-16">
+    <div
+      className="w-full h-full flex flex-col items-center justify-start"
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      <div className="inline-block align-bottom w-16 relative">
         {centerCount <= 0 ? (
           <EmptyCirclePieChart />
         ) : (
@@ -71,6 +78,18 @@ const CirclePieChart = ({
             >
               {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
             </p>
+            {tooltipText && showTooltip && (
+              <div
+                className="
+                absolute left-1/2 bottom-0 translate-x-[-50%] translate-y-[110%]
+                bg-black/80 text-white text-xs rounded px-2 py-1 shadow-lg
+                animate-fadeIn z-10 pointer-events-none text-center
+                max-w-xs min-w-[80px] w-max whitespace-pre-line transition-opacity duration-300
+              "
+              >
+                {tooltipText}
+              </div>
+            )}
           </div>
         )}
       </div>
