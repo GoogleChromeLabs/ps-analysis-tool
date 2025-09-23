@@ -24,6 +24,7 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import EmptyCirclePieChart from './emptyCirclePieChart';
+import Tooltip from './tooltip';
 
 interface CirclePieChartProps {
   centerCount: number;
@@ -59,7 +60,10 @@ const CirclePieChart = ({
     >
       <div className="inline-block align-bottom w-16 relative">
         {centerCount <= 0 ? (
-          <EmptyCirclePieChart />
+          <EmptyCirclePieChart
+            tooltipText={tooltipText}
+            showTooltip={showTooltip}
+          />
         ) : (
           <div className={`w-full h-full relative ${pieChartExtraClasses}`}>
             <VictoryPie
@@ -79,16 +83,7 @@ const CirclePieChart = ({
               {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
             </p>
             {tooltipText && showTooltip && (
-              <div
-                className="
-                absolute left-1/2 bottom-0 translate-x-[-50%] translate-y-[110%]
-                bg-black/80 text-white text-xs rounded px-2 py-1 shadow-lg
-                animate-fadeIn z-10 pointer-events-none text-center
-                max-w-xs min-w-[80px] w-max whitespace-pre-line transition-opacity duration-300
-              "
-              >
-                {tooltipText}
-              </div>
+              <Tooltip tooltipText={tooltipText} />
             )}
           </div>
         )}
