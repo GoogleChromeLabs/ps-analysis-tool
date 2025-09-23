@@ -209,13 +209,13 @@ const MDLTable = () => {
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
-        tooltipText: 'Matches in block list',
+        tooltipText: 'Page domains in block list',
       },
       {
         title: 'Scope Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
-        tooltipText: 'Fully blocked domains',
+        tooltipText: 'Completely blocked domains',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -243,7 +243,7 @@ const MDLTable = () => {
         title: 'Total Domains',
         centerCount: statistics.globalView.domains,
         color: '#25ACAD',
-        tooltipText: 'All page domains',
+        tooltipText: 'Total browsing session domains',
       },
       {
         title: 'Block List Domains',
@@ -251,7 +251,7 @@ const MDLTable = () => {
           statistics.globalView.partiallyBlockedDomains +
           statistics.globalView.completelyBlockedDomains,
         color: '#7D8471',
-        tooltipText: 'Matches in block list',
+        tooltipText: 'Total domains in block list',
       },
       {
         title: 'Total Blockings',
@@ -274,7 +274,7 @@ const MDLTable = () => {
         title: 'Scope Complete',
         centerCount: statistics.globalView.completelyBlockedDomains,
         color: '#F3AE4E',
-        tooltipText: 'Fully blocked domains',
+        tooltipText: 'Completely blocked domains',
       },
       {
         title: 'Scope Partial',
