@@ -177,6 +177,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     //@ts-ignore -- this exists in the browserVersion above 90
+    //@see https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData/getHighEntropyValues
     if (navigator.userAgentData?.getHighEntropyValues) {
       //@ts-ignore -- this exists in the browserVersion above 90
       navigator.userAgentData
