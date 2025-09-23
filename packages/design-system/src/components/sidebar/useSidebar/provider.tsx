@@ -251,9 +251,6 @@ export const SidebarProvider = ({
    */
   const onKeyNavigation = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>, key: string | null) => {
-      event.preventDefault();
-      event.stopPropagation();
-
       if (!key) {
         return;
       }
@@ -269,8 +266,12 @@ export const SidebarProvider = ({
        * Open or close the dropdown based on the navigation action.
        */
       if (navigationAction === 'ArrowRight') {
+        event.preventDefault();
+        event.stopPropagation();
         toggleDropdown(true, key);
       } else if (navigationAction === 'ArrowLeft') {
+        event.preventDefault();
+        event.stopPropagation();
         toggleDropdown(false, key);
       }
 
@@ -283,7 +284,8 @@ export const SidebarProvider = ({
         if (!prevItem) {
           return;
         }
-
+        event.preventDefault();
+        event.stopPropagation();
         // delay navigation as user can hold up arrow key which make useEffect to run multiple times unnecessarily.
         setTimeout(() => updateSelectedItemKey(prevItem));
       } else if (navigationAction === 'ArrowDown') {
@@ -292,7 +294,8 @@ export const SidebarProvider = ({
         if (!nextItem) {
           return;
         }
-
+        event.preventDefault();
+        event.stopPropagation();
         // delay navigation as user can hold down arrow key which make useEffect to run multiple times unnecessarily.
         setTimeout(() => updateSelectedItemKey(nextItem));
       }
