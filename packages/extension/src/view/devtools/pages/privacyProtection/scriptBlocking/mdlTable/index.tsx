@@ -201,6 +201,7 @@ const MDLTable = () => {
         title: 'Total Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
+        tooltipText: 'All page domains',
       },
       {
         title: 'Block List Domains',
@@ -208,11 +209,13 @@ const MDLTable = () => {
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
+        tooltipText: 'Matches in block list',
       },
       {
         title: 'Scope Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
+        tooltipText: 'Fully blocked domains',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -225,6 +228,7 @@ const MDLTable = () => {
         title: 'Scope Partial',
         centerCount: statistics.localView.partiallyBlockedDomains,
         color: '#4C79F4',
+        tooltipText: 'Partially blocked domains',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -239,6 +243,7 @@ const MDLTable = () => {
         title: 'Total Domains',
         centerCount: statistics.globalView.domains,
         color: '#25ACAD',
+        tooltipText: 'All page domains',
       },
       {
         title: 'Block List Domains',
@@ -246,6 +251,7 @@ const MDLTable = () => {
           statistics.globalView.partiallyBlockedDomains +
           statistics.globalView.completelyBlockedDomains,
         color: '#7D8471',
+        tooltipText: 'Matches in block list',
       },
       {
         title: 'Total Blockings',
@@ -262,16 +268,19 @@ const MDLTable = () => {
             count: statistics.globalView.completelyBlockedDomains,
           },
         ],
+        tooltipText: 'Blocked domains',
       },
       {
         title: 'Scope Complete',
         centerCount: statistics.globalView.completelyBlockedDomains,
         color: '#F3AE4E',
+        tooltipText: 'Fully blocked domains',
       },
       {
         title: 'Scope Partial',
         centerCount: statistics.globalView.partiallyBlockedDomains,
         color: '#4C79F4',
+        tooltipText: 'Partially blocked domains',
       },
     ],
   };
