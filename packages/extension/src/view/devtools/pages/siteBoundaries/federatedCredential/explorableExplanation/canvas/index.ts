@@ -250,7 +250,9 @@ export const initializeCanvas = (
     flowContainer,
     undefined,
     undefined,
-    idToStartWith
+    idToStartWith,
+    undefined,
+    true
   );
 
   const componentFigureFactory = new FigureFactory(
