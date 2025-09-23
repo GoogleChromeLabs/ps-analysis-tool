@@ -26,6 +26,7 @@ type StatItem = {
   color?: string;
   onClick?: () => void;
   data?: { count: number; color: string }[];
+  tooltipText?: string;
 };
 
 export type Stats = {
@@ -48,36 +49,39 @@ const StatsHeader = ({ stats, setPillState }: StatsHeaderProps) => {
 
   const renderPieCharts = (items: StatItem[]) => (
     <>
-      {items.map(({ title, centerCount, color, onClick, data }, index) => (
-        <button
-          key={index}
-          className={classnames('group text-center w-20 p-2 h-full', {
-            'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out':
-              onClick,
-          })}
-          style={{ cursor: !onClick ? 'default' : 'pointer' }}
-          onClick={() => {
-            onClick?.();
-          }}
-        >
-          <CirclePieChart
-            key={title}
-            title={title}
-            centerCount={centerCount}
-            data={data ?? [{ count: 10, color: color ?? '' }]}
-            infoIconClassName="absolute -right-3"
-            bottomTitleExtraClasses="min-w-[150px]"
-            centerTitleExtraClasses={classnames({
-              'group-hover:scale-125 transition-all duration-300 ease-in-out':
+      {items.map(
+        ({ title, centerCount, color, onClick, data, tooltipText }, index) => (
+          <button
+            key={index}
+            className={classnames('group text-center w-20 p-2 h-full', {
+              'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out':
                 onClick,
             })}
-            pieChartExtraClasses={classnames({
-              'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] dark:group-hover:bg-[#191919] rounded-full':
-                onClick,
-            })}
-          />
-        </button>
-      ))}
+            style={{ cursor: !onClick ? 'default' : 'pointer' }}
+            onClick={() => {
+              onClick?.();
+            }}
+          >
+            <CirclePieChart
+              key={title}
+              title={title}
+              centerCount={centerCount}
+              data={data ?? [{ count: 10, color: color ?? '' }]}
+              infoIconClassName="absolute -right-3"
+              bottomTitleExtraClasses="min-w-[150px]"
+              tooltipText={tooltipText}
+              centerTitleExtraClasses={classnames({
+                'group-hover:scale-125 transition-all duration-300 ease-in-out':
+                  onClick,
+              })}
+              pieChartExtraClasses={classnames({
+                'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] dark:group-hover:bg-[#191919] rounded-full':
+                  onClick,
+              })}
+            />
+          </button>
+        )
+      )}
     </>
   );
 
