@@ -15,11 +15,11 @@
  */
 
 import p5 from 'p5';
-import Figure from '../components/figure';
-import Arc from '../components/figure/arc';
-import Circle from '../components/figure/circle';
-import { FigureFactory, Group, NextCoordinates } from '../components';
-import Main from '../main';
+import Figure from '../src/components/figure';
+import Arc from '../src/components/figure/arc';
+import Circle from '../src/components/figure/circle';
+import { FigureFactory, Group, NextCoordinates } from '../src/components';
+import Main from '../src/main';
 
 export const circleTravelInit = (endX?: number, endY?: number) => {
   return (object: Figure, ...args: any) => {
