@@ -43,10 +43,10 @@ describe('Index file', () => {
 
     const playPauseButton = screen.getByTestId('play-pause-button');
     expect(playPauseButton).toBeInTheDocument();
-    expect(playPauseButton).toHaveAccessibleDescription('Pause');
+    expect(playPauseButton).toHaveAccessibleDescription('Play');
 
     fireEvent.click(playPauseButton!);
-    expect(playPauseButton).toHaveAccessibleDescription('Play');
+    expect(playPauseButton).toHaveAccessibleDescription('Pause');
 
     const permissionsNode = screen.getByText('5. Permissions');
     expect(permissionsNode).toBeInTheDocument();

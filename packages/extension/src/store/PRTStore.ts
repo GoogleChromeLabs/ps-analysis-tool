@@ -217,16 +217,16 @@ class PRTStore extends DataStore {
       DataStore.tabs[tabId].newUpdatesScriptBlocking++;
 
       this.statistics.scriptBlocking.globalView.completelyBlockedDomains +=
-        this.mdlData[hostname].scriptBlockingScope === 'COMPLETE' ? 1 : 0;
+        this.mdlData[hostname]?.scriptBlockingScope === 'COMPLETE' ? 1 : 0;
       this.statistics.scriptBlocking.globalView.partiallyBlockedDomains +=
-        this.mdlData[hostname].scriptBlockingScope === 'PARTIAL' ? 1 : 0;
+        this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
       this.statistics.scriptBlocking.globalView.domains += 1;
 
       this.statistics.scriptBlocking.localView.completelyBlockedDomains +=
-        this.mdlData[hostname].scriptBlockingScope === 'COMPLETE' ? 1 : 0;
+        this.mdlData[hostname]?.scriptBlockingScope === 'COMPLETE' ? 1 : 0;
       this.statistics.scriptBlocking.localView.partiallyBlockedDomains +=
-        this.mdlData[hostname].scriptBlockingScope === 'PARTIAL' ? 1 : 0;
+        this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
       this.statistics.scriptBlocking.localView.domains += 1;
 

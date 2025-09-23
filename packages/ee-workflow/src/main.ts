@@ -38,42 +38,45 @@ export class Main {
   private p5: p5;
 
   /**
-   * Queue for steps to be processed.
+   * Queue for figures to be processed in steps(rendering at certain intervals).
    */
   private stepsQueue: Figure[] = [];
 
   /**
-   * Queue for group steps to be processed.
+   * Queue for groups to be processed in steps.
    */
   private groupStepsQueue: Group[] = [];
 
   /**
-   * Queue for animator steps to be processed.
+   * Queue for animators to be processed in steps.
    */
   private animatorStepsQueue: Animator[] = [];
 
   /**
-   * Queue for instant steps to be processed.
+   * Queue for figures to be processed instantly (rendering all immediately in next frame).
    */
   private instantQueue: Figure[] = [];
 
   /**
-   * Queue for instant group steps to be processed.
+   * Queue for groups to be processed instantly.
    */
   private groupInstantQueue: Group[] = [];
 
   /**
-   * Queue for instant animator steps to be processed.
+   * Queue for animators to be processed instantly.
    */
   private animatorInstantQueue: Animator[] = [];
 
   /**
    * Delay between each frame in milliseconds.
+   * Lower values result in faster rendering.
    */
   private delay = 50;
 
   /**
    * Speed multiplier for the drawing process.
+   * 1 is normal speed, 0.5 is half speed, 2 is double speed, etc.
+   * This affects the delay value.
    */
   private speedMultiplier = 1;
 
@@ -98,7 +101,7 @@ export class Main {
   private animatorSnapshot: Animator[] = [];
 
   /**
-   * Set of checkpoints to be used for save points that can be loaded.
+   * Set of checkpoints to be used for save points that will be used to navigate back and forth inbetween certain figures.
    */
   private checkpoints: Set<string> = new Set();
 
@@ -108,12 +111,12 @@ export class Main {
   private backgroundColor = 255;
 
   /**
-   * Flag to indicate if the canvas is drawing a figure as an animation.
+   * Flag to indicate if the canvas is drawing a figure as an animation (incrementally drawing the figure).
    */
   private isTravelling = false;
 
   /**
-   * Traveller object to manage the animation of a figure.
+   * Traveller object to manage the animation of a figure (handling incremental drawing process).
    */
   private traveller: Traveller | null = null;
 
@@ -127,35 +130,41 @@ export class Main {
    */
   private hoveredFigure: Figure | null = null;
 
+  /**
+   * Stats.js instance for performance monitoring.
+   */
   private stats: Stats | null = null;
 
   /**
-   * Flag to keep track of loop
+   * Flag to keep track of loop.
+   * Loop is the draw function being called continuously by p5.js.
+   * If noLoop is true, the draw function is not called continuously, otherwise it is.
    */
   private noLoop = false;
 
   /**
-   * Flag for use helper queue.
+   * Flag to use helper queue.
    */
   private usingHelperQueue = false;
 
   /**
-   * Queue used to render some figures from stepsQueue without disturbing it's order.
+   * Queue used to render some figures from stepsQueue without disturbing figures rendering order.
    */
   private helperQueue: Figure[] = [];
 
   /**
-   * Queue used to render some groups from stepsQueue without disturbing it's order.
+   * Queue used to render some groups from stepsQueue without disturbing groups rendering order.
    */
   private helperGroupQueue: Group[] = [];
 
   /**
-   * Queue used to render some animator from stepsQueue without disturbing it's order.
+   * Queue used to render some animator from stepsQueue without disturbing animators rendering order.
    */
   private helperAnimatorQueue: Animator[] = [];
 
   /**
-   * Set of dispatched IDs.
+   * Set of dispatched IDs, the IDs that have been dispatched via custom event.
+   * Used to keep track of which dispatch IDs have already been dispatched to avoid duplicates.
    */
   private dispatchedIds: Set<string> = new Set();
 
@@ -171,6 +180,7 @@ export class Main {
    * @param position.y - The y-coordinate of the canvas.
    * @param figureToStart - The figure to start from.
    * @param preloader - The preloader function to run before setup.
+   * @param paused - Whether to start the canvas in a paused state.
    * @param performanceCheck - Whether to enable performance check.
    */
   constructor(
@@ -183,6 +193,7 @@ export class Main {
     position: { x: number; y: number } = { x: 0, y: 0 },
     private figureToStart?: string,
     private preloader?: (p: p5) => void,
+    paused = false,
     performanceCheck = false
   ) {
     this.p5 = new p5((p: p5) => this.init(p, position), this.container);
@@ -191,14 +202,20 @@ export class Main {
       this.stats = new Stats();
       this.stats.showPanel(0);
       this.stats.dom.style.position = 'absolute';
-      this.stats.dom.style.right = '0';
+      this.stats.dom.style.left = '95vw';
       this.stats.dom.style.top = '0';
       document.body.appendChild(this.stats.dom);
+    }
+
+    if (paused) {
+      if (!this.figureToStart) {
+        this.togglePause(true);
+      }
     }
   }
 
   /**
-   * Initialize.
+   * Initialize, setting up p5 functions.
    * @param p - The p5 instance.
    * @param position - The position to place the canvas.
    * @param position.x - The x-coordinate of the canvas.
@@ -256,7 +273,7 @@ export class Main {
   }
 
   /**
-   * Saves a figure to the snapshot and marks it as thrown.
+   * Saves a figure to the snapshot and marks it as thrown(drawn).
    * @param object - The figure to save.
    */
   private saveToSnapshot(object: Figure) {
@@ -266,7 +283,7 @@ export class Main {
 
     this.snapshot.push(object);
 
-    this.dispatchCustomEvent('figureDraw', {
+    this.dispatchCustomEvent('ee:figureDraw', {
       figureId: object.getId(),
     });
     object.setThrow(true);
@@ -283,29 +300,31 @@ export class Main {
   }
 
   /**
-   * Processes a group of figures, drawing them and saving to snapshot if necessary.
+   * Processes a group of figures.
+   * Drawing group's figures, running sideEffects, saving to snapshot and manage figure from the queue.
    * @param queue - The queue of figures.
    * @param groupQueue - The queue of groups.
-   * @param shouldDraw - Whether to draw the group.
-   * @param isSkippingQueue - Whether the draw is skipping through the queue.
+   * @param shouldDraw - Whether to draw the group, or just process it without drawing.
+   * @param skipSideEffect - Whether to skip running side effects for the group.
    */
   private processGroup(
     queue: Figure[],
     groupQueue: Group[],
     shouldDraw = true,
-    isSkippingQueue = false
+    skipSideEffect = false
   ) {
     const group = groupQueue.shift();
 
     if (group) {
       if (shouldDraw) {
-        if (isSkippingQueue) {
+        if (skipSideEffect) {
           group.shouldRunSideEffect(false);
         }
 
         group.draw();
       }
 
+      // Remove all other figures of the group from the queue as they are drawn together.
       let toRemoveCount = group.getFigures().length - 1;
       while (toRemoveCount > 0) {
         queue.shift();
@@ -316,7 +335,7 @@ export class Main {
         group.getFigures().forEach((object) => this.saveToSnapshot(object));
         this.groupSnapshot.push(group);
         group.setThrow(true);
-        this.dispatchCustomEvent('groupDraw', {
+        this.dispatchCustomEvent('ee:groupDraw', {
           groupId: group.getId(),
         });
       }
@@ -324,13 +343,14 @@ export class Main {
   }
 
   /**
-   * Processes an animator, drawing it and saving to snapshot if necessary.
+   * Processes an animator.
+   * Drawing figures of the animator, running sideEffects, and saving to snapshot.
    * @param firstObject - The first object in the queue.
    * @param queue - The queue of figures.
    * @param groupQueue - The queue of groups.
    * @param animatorQueue - The queue of animators.
    * @param shouldDraw - Whether to draw the animator.
-   * @param isSkippingQueue - Whether the draw is skipping through the queue.
+   * @param skipSideEffect - Whether to skip running side effects for the animator.
    * @param skipRedrawAll - Whether to skip redrawing all figures after the animator.
    */
   private processAnimator(
@@ -339,20 +359,20 @@ export class Main {
     groupQueue: Group[],
     animatorQueue: Animator[],
     shouldDraw = true,
-    isSkippingQueue = false,
+    skipSideEffect = false,
     skipRedrawAll = false
   ) {
     const animator = animatorQueue[0];
 
     if (animator) {
-      if (isSkippingQueue) {
+      if (skipSideEffect) {
         animator.shouldRunSideEffect(false);
       }
 
       const isDone = animator.draw(!shouldDraw);
 
       if (firstObject.getGroupId()) {
-        this.processGroup(queue, groupQueue, false, isSkippingQueue);
+        this.processGroup(queue, groupQueue, false, skipSideEffect);
       } else {
         if (!firstObject.getThrow()) {
           this.saveToSnapshot(firstObject);
@@ -378,6 +398,12 @@ export class Main {
 
   /**
    * Runs the drawing process for the current queue.
+   * 1. Assigns the correct queue based on the parameters.
+   * 2. Processes the first object in the queue.
+   * - If the object needs to travel, it initializes the traveller and handles travelling.
+   * - If the object is part of an animator, it processes the animator.
+   * - If the object is part of a group, it processes the group.
+   * - Otherwise, it draws the object and saves it to the snapshot.
    * @param useInstantQueue - Whether to use the instant queue.
    * @param skipDraw - Whether to skip drawing.
    * @param isSkippingQueue - Whether to skip through the queue.
@@ -409,6 +435,7 @@ export class Main {
     if (queue.length > 0) {
       const firstObject = <Figure>queue.shift();
 
+      // If the figure needs to travel, initialize the traveller and early return.
       if (
         firstObject.getShouldTravel() ||
         (firstObject.getGroupId() && groupQueue?.[0]?.getShouldTravel())
@@ -435,7 +462,7 @@ export class Main {
           animatorQueue,
           !skipDraw,
           isSkippingQueue,
-          useInstantQueue || this.usingHelperQueue
+          useInstantQueue
         );
       } else if (firstObject.getGroupId()) {
         this.processGroup(queue, groupQueue, !skipDraw, isSkippingQueue);
@@ -459,16 +486,22 @@ export class Main {
     }
   }
 
+  /**
+   * Runs the traveller methods to draw the figure's state in this frame.
+   * @returns Whether the traveller has finished travelling.
+   */
   private runTraveller() {
     const done = this.traveller?.draw(this.speedMultiplier);
 
     if (done) {
       this.isTravelling = false;
       const object = this.traveller?.getObject();
+
       const queue = this.helperQueue.length
         ? this.helperQueue
         : this.stepsQueue;
 
+      // Readd the figure or the first figure of the group to the front of the queue to be processed for snapshotting and dispatching.
       if (object instanceof Figure) {
         queue.unshift(object);
       } else if (object?.getFigures().length) {
@@ -491,17 +524,20 @@ export class Main {
       return;
     }
 
+    // If there are no more figures to draw, stop the loop and dispatch an event.
     if (
       (this.stepsQueue.length === 0 && this.instantQueue.length === 0) ||
       (this.usingHelperQueue && this.helperQueue.length === 0)
     ) {
-      this.dispatchCustomEvent('noLoop', {
+      this.dispatchCustomEvent('ee:noLoop', {
         message: 'Animation ended',
       });
+
       p.noLoop();
       this.noLoop = true;
     }
 
+    // Handle travelling first if needed.
     if (this.isTravelling) {
       if (this.clearBeforeTravel) {
         p.clear();
@@ -511,7 +547,9 @@ export class Main {
         this.traveller = null;
         this.runner();
       }
-    } else if (p.frameCount % this.delay === 0) {
+    }
+    // If not travelling, handle drawing based on the delay and queues.
+    else if (p.frameCount % this.delay === 0) {
       if (
         !this.usingHelperQueue ||
         (this.usingHelperQueue && this.helperQueue.length)
@@ -520,17 +558,35 @@ export class Main {
       }
     }
 
+    // Always process the instant queue if it has figures.
     while (this.instantQueue.length > 0) {
       this.runner(true);
     }
 
-    while (
-      this.figureToStart &&
-      this.stepsQueue.length > 0 &&
-      !this.instantQueue.length
-    ) {
-      this.runner(false, false, true);
+    // Dispatch skipping event if skipping to a saved figure.
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping till saved figure',
+    });
+
+    if (this.figureToStart) {
+      while (
+        this.figureToStart &&
+        this.stepsQueue.length > 0 &&
+        !this.instantQueue.length
+      ) {
+        this.runner(false, false, true);
+      }
+
+      if (!this.figureToStart) {
+        this.togglePause(true);
+      }
     }
+
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
 
     this.stats?.end();
   }
@@ -655,6 +711,9 @@ export class Main {
 
   /**
    * Toggles the pause state.
+   * Handles both pause and loop states and keep them in sync.
+   * - pause is a state that pauses everything, including travelling, and is the main state to control pausing.
+   * - noLoop limits just the draw function being called continuously by p5.js, as a subset of pause.
    * @param pause - Whether to pause or unpause the drawing process.
    */
   togglePause(pause?: boolean) {
@@ -680,12 +739,12 @@ export class Main {
 
     if (this.pause) {
       this.p5.noLoop();
-      this.dispatchCustomEvent('noLoop', {
+      this.dispatchCustomEvent('ee:noLoop', {
         message: 'Animation paused',
       });
     } else {
       this.p5.loop();
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation resumed',
       });
     }
@@ -780,6 +839,7 @@ export class Main {
 
   /**
    * Redraws all figures on the canvas.
+   * Loads the snapshot to the instant queue to be drawn in the next frame.
    * @param animatorIdToDraw - The ID of the animator to draw.
    */
   reDrawAll(animatorIdToDraw?: string) {
@@ -940,6 +1000,11 @@ export class Main {
       return undefined;
     }
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping to previous checkpoint',
+    });
+
     this.togglePause(true);
 
     while (this.instantQueue.length) {
@@ -1036,7 +1101,7 @@ export class Main {
     this.animatorStepsQueue.unshift(...toBeLoadedAnimators.reverse());
 
     if (this.noLoop) {
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation start',
       });
       this.p5.loop();
@@ -1048,12 +1113,17 @@ export class Main {
 
     const lastDispatchedId = Array.from(this.dispatchedIds).pop();
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
+
     this.dispatchCustomEvent('ee:dispatchId', {
       type: 'previousCheckpoint',
       dispatchId: lastDispatchedId,
     });
 
-    this.dispatchCustomEvent('figureDraw', {
+    this.dispatchCustomEvent('ee:figureDraw', {
       figureId: [...this.snapshot].pop()?.getId(),
     });
 
@@ -1066,6 +1136,11 @@ export class Main {
    * @returns - The next checkpoint.
    */
   loadNextCheckpoint(next?: string) {
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping to next checkpoint',
+    });
+
     this.togglePause(true);
 
     while (this.instantQueue.length) {
@@ -1091,7 +1166,7 @@ export class Main {
     }
 
     if (this.noLoop) {
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation start',
       });
       this.p5.loop();
@@ -1100,6 +1175,11 @@ export class Main {
 
     this.togglePause(false);
     this.reDrawAll();
+
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
 
     return this.stepsQueue[0]?.getId();
   }
@@ -1116,8 +1196,13 @@ export class Main {
    * Steps to the next figure in the queue.
    */
   stepNext() {
+    this.dispatchCustomEvent('ee:stepNext', {
+      start: true,
+      message: 'Stepping to next figure',
+    });
+
     this.togglePause(true);
-    this.dispatchCustomEvent('noLoop', {
+    this.dispatchCustomEvent('ee:noLoop', {
       message: 'Animation end',
     });
 
@@ -1160,14 +1245,24 @@ export class Main {
     }
 
     this.runner(false, false, true);
+
+    this.dispatchCustomEvent('ee:stepNext', {
+      start: false,
+      message: 'Stepped to next figure',
+    });
   }
 
   /**
    * Steps back to the last rendered figure in the snapshot.
    */
   stepBack() {
+    this.dispatchCustomEvent('ee:stepBack', {
+      start: true,
+      message: 'Stepping back to last rendered figure',
+    });
+
     this.togglePause(true);
-    this.dispatchCustomEvent('noLoop', {
+    this.dispatchCustomEvent('ee:noLoop', {
       message: 'Animation end',
     });
 
@@ -1266,7 +1361,7 @@ export class Main {
 
     this.checkpoints.delete(lastSnapshotObject.getId());
 
-    this.dispatchCustomEvent('figureDraw', {
+    this.dispatchCustomEvent('ee:figureDraw', {
       figureId: [...this.snapshot].pop()?.getId() || '',
     });
 
@@ -1275,6 +1370,11 @@ export class Main {
         dispatchId: lastDispatchObject.getDispatchId(),
       });
     }
+
+    this.dispatchCustomEvent('ee:stepBack', {
+      start: false,
+      message: 'Stepped back to last rendered figure',
+    });
   }
 
   /**
@@ -1310,8 +1410,8 @@ export class Main {
   }
 
   /**
-   * Loads a snapshot of figures, groups, and animators from the snapshot arrays to the instant queues.
-   * After instant queues are filled, the draw loop will handle the instant rendering.
+   * Loads a snapshot of figures, groups, and animators from the snapshot arrays to the respective instant queues and then clears the canvas.
+   * After instant queues are filled, the draw loop will handle the instant rendering on the next frame.
    * @param animatorIdToDraw - The ID of the animator to draw.
    */
   loadSnapshot(animatorIdToDraw?: string) {
@@ -1360,7 +1460,7 @@ export class Main {
 
   /**
    * Loads a snapshot of figures, groups, and animators from the snapshot arrays and draws them instantly without loading figures to queue and waiting for the next animation frame to render.
-   * Used to render figures instantly when expand functionality is required.
+   * Used to render figures instantly when preview functionality is required.
    * @param animatorIdToDraw - The ID of the animator to draw.
    * @param shift - The shift to apply to the figures.
    * @param shift.x - The x-coordinate shift.
@@ -1384,9 +1484,19 @@ export class Main {
       }
     }
 
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: true,
+      message: 'Skipping to snapshot figures',
+    });
+
     while (this.instantQueue.length) {
       this.runner(true);
     }
+
+    this.dispatchCustomEvent('ee:skipping', {
+      isSkipping: false,
+      message: 'Skipping ended',
+    });
 
     if (shift) {
       for (let i = 0; i < iQueue.length; i++) {
@@ -1449,7 +1559,7 @@ export class Main {
     }
 
     if (this.noLoop) {
-      this.dispatchCustomEvent('loop', {
+      this.dispatchCustomEvent('ee:loop', {
         message: 'Animation start',
       });
       this.p5.loop();
@@ -1808,6 +1918,8 @@ export class Main {
 
   /**
    * Handles switching to the helper queue.
+   * Moves figures from the main steps queue to the helper queue until a checkpoint is reached.
+   * Also moves associated animators and groups to their respective helper queues.
    */
   private handleSwitchToHelperQueue() {
     while (this.stepsQueue.length && !this.stepsQueue?.[0].getIsCheckpoint()) {
