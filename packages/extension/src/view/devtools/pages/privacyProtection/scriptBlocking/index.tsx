@@ -46,6 +46,19 @@ const ScriptBlocking = () => {
           },
         },
         {
+          title: 'Blocked List',
+          content: {
+            Element: MDLTable,
+            props: {
+              type: 'Learning',
+            },
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
+        },
+      ],
+      Observability: [
+        {
           title: 'Blocked Domain List',
           content: {
             Element: MDLTable,

@@ -59,7 +59,7 @@ interface MdlCommonPanelProps {
   onRowClick: (row: TableData | null) => void;
   extraInterfaceToTopBar?: () => React.JSX.Element;
   filters?: TableFilter;
-  stats: Stats;
+  stats: Stats | null;
   tableSearchKeys: string[];
   bottomPanel?: () => React.JSX.Element;
   showJson?: boolean;
@@ -88,7 +88,7 @@ const MdlCommonPanel = ({
 
   return (
     <div className="w-full h-full flex flex-col">
-      <StatsHeader stats={stats} setPillState={setPillState} />
+      {stats && <StatsHeader stats={stats} setPillState={setPillState} />}
       <ResizableTray
         defaultSize={{
           width: '100%',
