@@ -28,7 +28,7 @@ import {
   Link,
   ResizableTray,
 } from '@google-psat/design-system';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies
@@ -49,25 +49,9 @@ const MDLTable = () => {
     }[]
   >([]);
 
-  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
-
   const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
     uniqueResponseDomains: state.uniqueResponseDomains,
   }));
-
-  const checkbox = useCallback(() => {
-    return (
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input
-          className="hover:cursor-pointer"
-          type="checkbox"
-          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
-          defaultChecked
-        />
-        <span className="whitespace-nowrap">Show only highlighted domains</span>
-      </label>
-    );
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -114,13 +98,6 @@ const MDLTable = () => {
               highlightedClass: available ? 'bg-amber-100' : '',
             };
           })
-          .filter((item) => {
-            if (showOnlyHighlighted) {
-              return item.highlighted;
-            }
-
-            return true;
-          })
           .sort((a, b) => {
             return Number(b.highlighted) - Number(a.highlighted);
           });
@@ -130,7 +107,7 @@ const MDLTable = () => {
         return _data;
       });
     })();
-  }, [showOnlyHighlighted, uniqueResponseDomains]);
+  }, [uniqueResponseDomains]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -211,7 +188,7 @@ const MDLTable = () => {
           className="h-full flex"
           trayId="mdl-table-bottom-tray"
         >
-          <Table selectedKey={selectedKey} extraInterfaceToTopBar={checkbox} />
+          <Table selectedKey={selectedKey} />
         </ResizableTray>
         <Legend />
       </TableProvider>

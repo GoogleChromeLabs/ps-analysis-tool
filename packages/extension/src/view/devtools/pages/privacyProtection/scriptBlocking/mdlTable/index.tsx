@@ -42,9 +42,12 @@ const titleMap = {
   'Some URLs are Blocked': 'Scope Partial',
 };
 
-const MDLTable = () => {
+type MDLTableProps = {
+  type?: 'Observability' | 'Learning';
+};
+
+const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
   }>({ filter: {} });
@@ -55,21 +58,6 @@ const MDLTable = () => {
       scriptBlockingData: state.scriptBlockingData,
       isLoading: state.isLoading,
     }));
-
-  const checkbox = useCallback(
-    () => (
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input
-          className="hover:cursor-pointer"
-          type="checkbox"
-          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
-          defaultChecked
-        />
-        <span className="whitespace-nowrap">Show Only blocked domains</span>
-      </label>
-    ),
-    []
-  );
 
   const tableData: MDLTableData[] = useMemo(() => {
     if (scriptBlockingData.length === 0) {
@@ -83,28 +71,27 @@ const MDLTable = () => {
         (item) => item.scriptBlocking !== IMPACTED_BY_SCRIPT_BLOCKING.NONE
       )
       .forEach((item) => {
+        if (type === 'Learning') {
+          data.push({
+            ...item,
+          } as MDLTableData);
+          return;
+        }
+
         let available = false;
         if (uniqueResponseDomains.includes(item.domain)) {
           available = true;
         }
 
-        const canPush = showOnlyHighlighted ? available : true;
-
-        if (canPush) {
+        if (available) {
           data.push({
             ...item,
-            highlighted: available,
-            highlightedClass:
-              available &&
-              item.scriptBlocking.startsWith('Some URLs are Blocked')
-                ? 'bg-amber-100'
-                : '',
           } as MDLTableData);
         }
       });
 
-    return data.sort((a, b) => Number(b.highlighted) - Number(a.highlighted));
-  }, [uniqueResponseDomains, scriptBlockingData, showOnlyHighlighted]);
+    return data;
+  }, [uniqueResponseDomains, scriptBlockingData, type]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -198,13 +185,13 @@ const MDLTable = () => {
   const stats = {
     site: [
       {
-        title: 'Total Domains',
+        title: 'Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
         tooltipText: 'All page domains',
       },
       {
-        title: 'Block List Domains',
+        title: 'BDL',
         centerCount:
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
@@ -212,7 +199,7 @@ const MDLTable = () => {
         tooltipText: 'Page domains in block list',
       },
       {
-        title: 'Scope Complete',
+        title: 'Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
         tooltipText: 'Completely blocked domains',
@@ -225,7 +212,7 @@ const MDLTable = () => {
           })),
       },
       {
-        title: 'Scope Partial',
+        title: 'Partial',
         centerCount: statistics.localView.partiallyBlockedDomains,
         color: '#4C79F4',
         tooltipText: 'Partially blocked domains',
@@ -240,13 +227,13 @@ const MDLTable = () => {
     ],
     global: [
       {
-        title: 'Total Domains',
+        title: 'Domains',
         centerCount: statistics.globalView.domains,
         color: '#25ACAD',
         tooltipText: 'Total browsing session domains',
       },
       {
-        title: 'Block List Domains',
+        title: 'BDL',
         centerCount:
           statistics.globalView.partiallyBlockedDomains +
           statistics.globalView.completelyBlockedDomains,
@@ -254,7 +241,7 @@ const MDLTable = () => {
         tooltipText: 'Total domains in block list',
       },
       {
-        title: 'Total Blockings',
+        title: 'Blockings',
         centerCount:
           statistics.globalView.partiallyBlockedDomains +
           statistics.globalView.completelyBlockedDomains,
@@ -271,13 +258,13 @@ const MDLTable = () => {
         tooltipText: 'Blocked domains',
       },
       {
-        title: 'Scope Complete',
+        title: 'Complete',
         centerCount: statistics.globalView.completelyBlockedDomains,
         color: '#F3AE4E',
         tooltipText: 'Completely blocked domains',
       },
       {
-        title: 'Scope Partial',
+        title: 'Partial',
         centerCount: statistics.globalView.partiallyBlockedDomains,
         color: '#4C79F4',
         tooltipText: 'Partially blocked domains',
@@ -303,9 +290,8 @@ const MDLTable = () => {
       onRowClick={(row) =>
         setSelectedKey((row as MDLTableData)?.domain || null)
       }
-      extraInterfaceToTopBar={checkbox}
       filters={filters}
-      stats={stats}
+      stats={type === 'Learning' ? null : stats}
       showJson={false}
       bottomPanel={Legend}
       tab="scriptBlocking"
