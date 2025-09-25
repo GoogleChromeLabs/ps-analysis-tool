@@ -16,8 +16,8 @@
 /**
  * External dependencies.
  */
-import React, { useEffect, useState } from 'react';
-import { CirclePieChart, PillToggle } from '@google-psat/design-system';
+import React from 'react';
+import { CirclePieChart } from '@google-psat/design-system';
 import classnames from 'classnames';
 
 type StatItem = {
@@ -29,89 +29,55 @@ type StatItem = {
   tooltipText?: string;
 };
 
-export type Stats = {
-  site: StatItem[];
-  global: StatItem[];
-};
+export type Stats = StatItem[];
 
 interface StatsHeaderProps {
-  stats: Stats;
-  setPillState: React.Dispatch<React.SetStateAction<string | null>>;
+  stats: StatItem[];
 }
 
-const StatsHeader = ({ stats, setPillState }: StatsHeaderProps) => {
-  const [pillToggle, setPillToggle] = useState<string | null>('Site');
-  const [highlightOption, setHighlightOption] = useState<string>('Site');
-
-  useEffect(() => {
-    setPillState(pillToggle);
-  }, [pillToggle, setPillState]);
-
-  const renderPieCharts = (items: StatItem[]) => (
-    <>
-      {items.map(
-        ({ title, centerCount, color, onClick, data, tooltipText }, index) => (
-          <button
-            key={index}
-            className={classnames('group text-center w-20 p-2 h-full', {
-              'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out':
-                onClick,
-            })}
-            style={{ cursor: !onClick ? 'default' : 'pointer' }}
-            onClick={() => {
-              onClick?.();
-            }}
-          >
-            <CirclePieChart
-              key={title}
-              title={title}
-              centerCount={centerCount}
-              data={data ?? [{ count: 10, color: color ?? '' }]}
-              infoIconClassName="absolute -right-3"
-              bottomTitleExtraClasses="min-w-[150px]"
-              tooltipText={tooltipText}
-              centerTitleExtraClasses={classnames({
-                'group-hover:scale-125 transition-all duration-300 ease-in-out':
-                  onClick,
-              })}
-              pieChartExtraClasses={classnames({
-                'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] dark:group-hover:bg-[#191919] rounded-full':
-                  onClick,
-              })}
-            />
-          </button>
-        )
-      )}
-    </>
-  );
-
-  const sitePieCharts = renderPieCharts(stats.site);
-  const globalPieCharts = renderPieCharts(stats.global);
-
-  const pillToggleButtons = (
-    <PillToggle
-      options={['Site', 'Session']}
-      pillToggle={pillToggle}
-      setPillToggle={setPillToggle}
-      eeAnimatedTab={true}
-      highlightOption={highlightOption}
-      setHighlightOption={setHighlightOption}
-      persistenceKey="statsHeaderPillToggle"
-    />
-  );
-
+const StatsHeader = ({ stats }: StatsHeaderProps) => {
   return (
     <div className="flex flex-col flex-row w-full py-2">
-      <div className="flex-shrink-0 px-2 py-1">{pillToggleButtons}</div>
       <div className="flex flex-1 justify-center">
         <div className="flex flex-row items-center gap-8 w-full justify-center">
-          {pillToggle === 'Site' ? sitePieCharts : globalPieCharts}
+          {stats.map(
+            (
+              { title, centerCount, color, onClick, data, tooltipText },
+              index
+            ) => (
+              <button
+                key={index}
+                className={classnames('group text-center w-20 p-2 h-full', {
+                  'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out':
+                    onClick,
+                })}
+                style={{ cursor: !onClick ? 'default' : 'pointer' }}
+                onClick={() => {
+                  onClick?.();
+                }}
+              >
+                <CirclePieChart
+                  key={title}
+                  title={title}
+                  centerCount={centerCount}
+                  data={data ?? [{ count: 10, color: color ?? '' }]}
+                  infoIconClassName="absolute -right-3"
+                  bottomTitleExtraClasses="min-w-[150px]"
+                  tooltipText={tooltipText}
+                  centerTitleExtraClasses={classnames({
+                    'group-hover:scale-125 transition-all duration-300 ease-in-out':
+                      onClick,
+                  })}
+                  pieChartExtraClasses={classnames({
+                    'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] dark:group-hover:bg-[#191919] rounded-full':
+                      onClick,
+                  })}
+                />
+              </button>
+            )
+          )}
         </div>
       </div>
-      <div className="flex-shrink-0 px-2 py-1 invisible">
-        {pillToggleButtons}
-      </div>{' '}
-      {/*Work around to center the circles div without using position absolute that would break the responsive design or hardcoding px values.*/}
     </div>
   );
 };

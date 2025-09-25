@@ -182,95 +182,48 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
     [calculateFilters, tableData]
   );
 
-  const stats = {
-    site: [
-      {
-        title: 'Domains',
-        centerCount: statistics.localView.domains,
-        color: '#25ACAD',
-        tooltipText: 'All page domains',
-      },
-      {
-        title: 'BDL',
-        centerCount:
-          statistics.localView.partiallyBlockedDomains +
-          statistics.localView.completelyBlockedDomains,
-        color: '#7D8471',
-        tooltipText: 'Page domains in block list',
-      },
-      {
-        title: 'Complete',
-        centerCount: statistics.localView.completelyBlockedDomains,
-        color: '#F3AE4E',
-        tooltipText: 'Completely blocked domains',
-        onClick: () =>
-          setPresetFilters((prev) => ({
-            ...prev,
-            filter: {
-              scriptBlocking: ['Complete'],
-            },
-          })),
-      },
-      {
-        title: 'Partial',
-        centerCount: statistics.localView.partiallyBlockedDomains,
-        color: '#4C79F4',
-        tooltipText: 'Partially blocked domains',
-        onClick: () =>
-          setPresetFilters((prev) => ({
-            ...prev,
-            filter: {
-              scriptBlocking: ['Partial'],
-            },
-          })),
-      },
-    ],
-    global: [
-      {
-        title: 'Domains',
-        centerCount: statistics.globalView.domains,
-        color: '#25ACAD',
-        tooltipText: 'Total browsing session domains',
-      },
-      {
-        title: 'BDL',
-        centerCount:
-          statistics.globalView.partiallyBlockedDomains +
-          statistics.globalView.completelyBlockedDomains,
-        color: '#7D8471',
-        tooltipText: 'Total domains in block list',
-      },
-      {
-        title: 'Blockings',
-        centerCount:
-          statistics.globalView.partiallyBlockedDomains +
-          statistics.globalView.completelyBlockedDomains,
-        data: [
-          {
-            color: '#4C79F4',
-            count: statistics.globalView.partiallyBlockedDomains,
+  const stats = [
+    {
+      title: 'Domains',
+      centerCount: statistics.localView.domains,
+      color: '#25ACAD',
+      tooltipText: 'All page domains',
+    },
+    {
+      title: 'BDL',
+      centerCount:
+        statistics.localView.partiallyBlockedDomains +
+        statistics.localView.completelyBlockedDomains,
+      color: '#7D8471',
+      tooltipText: 'Page domains in block list',
+    },
+    {
+      title: 'Complete',
+      centerCount: statistics.localView.completelyBlockedDomains,
+      color: '#F3AE4E',
+      tooltipText: 'Completely blocked domains',
+      onClick: () =>
+        setPresetFilters((prev) => ({
+          ...prev,
+          filter: {
+            scriptBlocking: ['Complete'],
           },
-          {
-            color: '#F3AE4E',
-            count: statistics.globalView.completelyBlockedDomains,
+        })),
+    },
+    {
+      title: 'Partial',
+      centerCount: statistics.localView.partiallyBlockedDomains,
+      color: '#4C79F4',
+      tooltipText: 'Partially blocked domains',
+      onClick: () =>
+        setPresetFilters((prev) => ({
+          ...prev,
+          filter: {
+            scriptBlocking: ['Partial'],
           },
-        ],
-        tooltipText: 'Blocked domains',
-      },
-      {
-        title: 'Complete',
-        centerCount: statistics.globalView.completelyBlockedDomains,
-        color: '#F3AE4E',
-        tooltipText: 'Completely blocked domains',
-      },
-      {
-        title: 'Partial',
-        centerCount: statistics.globalView.partiallyBlockedDomains,
-        color: '#4C79F4',
-        tooltipText: 'Partially blocked domains',
-      },
-    ],
-  };
+        })),
+    },
+  ];
 
   if (isLoading) {
     return (
