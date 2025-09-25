@@ -176,7 +176,34 @@ const Provider = ({ children }: PropsWithChildren) => {
   }, [incognitoAccess]);
 
   useEffect(() => {
-    if (navigator.userAgent) {
+    //@ts-ignore -- this exists in the browserVersion above 90
+    //@see https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData/getHighEntropyValues
+    if (navigator.userAgentData?.getHighEntropyValues) {
+      //@ts-ignore -- this exists in the browserVersion above 90
+      navigator.userAgentData
+        .getHighEntropyValues(['fullVersionList'])
+        .then(
+          (data: {
+            brands: { brand: string; version: string }[];
+            fullVersionList: { brand: string; version: string }[];
+            platform: string;
+            mobile: boolean;
+          }) => {
+            data.fullVersionList.forEach((versionData) => {
+              if (versionData.brand === 'Google Chrome') {
+                setBrowserInformation(versionData.version);
+                setBrowserInformation(
+                  I18n.getMessage('version') +
+                    ' ' +
+                    versionData.version[1] +
+                    ' ' +
+                    data.platform
+                );
+              }
+            });
+          }
+        );
+    } else {
       const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
       if (browserInfo) {
         setBrowserInformation(
