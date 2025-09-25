@@ -28,6 +28,7 @@ import {
  */
 import Panel from './panel';
 import ProbabilisticRevealTokens from './probabilisticRevealTokens';
+import SessionInsights from './probabilisticRevealTokens/sessionInsights';
 import MDLTable from './mdlTable';
 
 const IPProtection = () => {
@@ -61,6 +62,14 @@ const IPProtection = () => {
           title: 'IP Proxying',
           content: {
             Element: ProbabilisticRevealTokens,
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
+        },
+        {
+          title: 'Session Insights',
+          content: {
+            Element: SessionInsights,
             className: 'overflow-auto h-full',
             containerClassName: 'h-full',
           },
