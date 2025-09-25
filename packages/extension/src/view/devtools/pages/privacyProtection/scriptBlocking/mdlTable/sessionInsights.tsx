@@ -22,11 +22,11 @@ import { CirclePieChart } from '@google-psat/design-system';
 /**
  * Internal dependencies.
  */
-import { useProbabilisticRevealTokens } from '../../../../stateProviders';
+import { useScriptBlocking } from '../../../../stateProviders';
 import classnames from 'classnames';
 
 const SessionInsights = () => {
-  const { statistics } = useProbabilisticRevealTokens(({ state }) => ({
+  const { statistics } = useScriptBlocking(({ state }) => ({
     statistics: state.statistics,
   }));
 
@@ -34,26 +34,45 @@ const SessionInsights = () => {
     {
       title: 'Domains',
       centerCount: statistics.globalView.domains,
+      color: '#25ACAD',
+      tooltipText: 'Total browsing session domains',
+    },
+    {
+      title: 'BDL',
+      centerCount:
+        statistics.globalView.partiallyBlockedDomains +
+        statistics.globalView.completelyBlockedDomains,
+      color: '#7D8471',
+      tooltipText: 'Total domains in block list',
+    },
+    {
+      title: 'Blockings',
+      centerCount:
+        statistics.globalView.partiallyBlockedDomains +
+        statistics.globalView.completelyBlockedDomains,
+      data: [
+        {
+          color: '#4C79F4',
+          count: statistics.globalView.partiallyBlockedDomains,
+        },
+        {
+          color: '#F3AE4E',
+          count: statistics.globalView.completelyBlockedDomains,
+        },
+      ],
+      tooltipText: 'Blocked domains',
+    },
+    {
+      title: 'Complete',
+      centerCount: statistics.globalView.completelyBlockedDomains,
       color: '#F3AE4E',
-      tooltipText: 'Total unique domains in browsing session',
+      tooltipText: 'Completely blocked domains',
     },
     {
-      title: 'MDL',
-      centerCount: statistics.globalView.mdl,
+      title: 'Partial',
+      centerCount: statistics.globalView.partiallyBlockedDomains,
       color: '#4C79F4',
-      tooltipText: 'Browsing session domains in MDL',
-    },
-    {
-      title: 'PRT',
-      centerCount: statistics.globalView.totalTokens,
-      color: '#EC7159',
-      tooltipText: 'Total unique tokens sent in requests',
-    },
-    {
-      title: 'Signals',
-      centerCount: statistics.globalView.nonZeroSignal,
-      color: '#5CC971',
-      tooltipText: 'Total PRTs that decode to IP address',
+      tooltipText: 'Partially blocked domains',
     },
   ];
 

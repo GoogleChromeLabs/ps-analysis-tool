@@ -272,87 +272,59 @@ const ProbabilisticRevealTokens = () => {
     ]
   );
 
-  const stats = {
-    site: [
-      {
-        title: 'Domains',
-        centerCount: perTokenMetadata.length,
-        color: '#F3AE4E',
-        tooltipText: 'Unique domains on page',
-      },
-      {
-        title: 'MDL',
-        centerCount: perTokenMetadata.filter(({ origin }) => {
-          let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+  const stats = [
+    {
+      title: 'Domains',
+      centerCount: perTokenMetadata.length,
+      color: '#F3AE4E',
+      tooltipText: 'Unique domains on page',
+    },
+    {
+      title: 'MDL',
+      centerCount: perTokenMetadata.filter(({ origin }) => {
+        let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
 
-          hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+        hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
 
-          if (!hostname) {
-            return false;
-          }
+        if (!hostname) {
+          return false;
+        }
 
-          return (
-            scriptBlockingData.filter((_data) => _data.domain === hostname)
-              .length > 0
-          );
-        }).length,
-        onClick: () =>
-          setPresetFilters((prev) => ({
-            ...prev,
-            filter: {
-              mdl: ['True'],
-            },
-          })),
-        color: '#4C79F4',
-        tooltipText: 'Page domains in MDL',
-      },
-      {
-        title: 'PRT',
-        centerCount: statistics.localView.totalTokens,
-        color: '#EC7159',
-        tooltipText: 'Unique tokens sent in requests',
-      },
-      {
-        title: 'Signals',
-        centerCount: statistics.localView.nonZeroSignal,
-        color: '#5CC971',
-        tooltipText: 'PRTs that decode to IP address',
-        onClick: () =>
-          setPresetFilters((prev) => ({
-            ...prev,
-            filter: {
-              nonZeroUint8Signal: ['PRTs with signal'],
-            },
-          })),
-      },
-    ],
-    global: [
-      {
-        title: 'Domains',
-        centerCount: statistics.globalView.domains,
-        color: '#F3AE4E',
-        tooltipText: 'Total unique domains in browsing session',
-      },
-      {
-        title: 'MDL',
-        centerCount: statistics.globalView.mdl,
-        color: '#4C79F4',
-        tooltipText: 'Browsing session domains in MDL',
-      },
-      {
-        title: 'PRT',
-        centerCount: statistics.globalView.totalTokens,
-        color: '#EC7159',
-        tooltipText: 'Total unique tokens sent in requests',
-      },
-      {
-        title: 'Signals',
-        centerCount: statistics.globalView.nonZeroSignal,
-        color: '#5CC971',
-        tooltipText: 'Total PRTs that decode to IP address',
-      },
-    ],
-  };
+        return (
+          scriptBlockingData.filter((_data) => _data.domain === hostname)
+            .length > 0
+        );
+      }).length,
+      onClick: () =>
+        setPresetFilters((prev) => ({
+          ...prev,
+          filter: {
+            mdl: ['True'],
+          },
+        })),
+      color: '#4C79F4',
+      tooltipText: 'Page domains in MDL',
+    },
+    {
+      title: 'PRT',
+      centerCount: statistics.localView.totalTokens,
+      color: '#EC7159',
+      tooltipText: 'Unique tokens sent in requests',
+    },
+    {
+      title: 'Signals',
+      centerCount: statistics.localView.nonZeroSignal,
+      color: '#5CC971',
+      tooltipText: 'PRTs that decode to IP address',
+      onClick: () =>
+        setPresetFilters((prev) => ({
+          ...prev,
+          filter: {
+            nonZeroUint8Signal: ['PRTs with signal'],
+          },
+        })),
+    },
+  ];
 
   return (
     <MdlCommonPanel

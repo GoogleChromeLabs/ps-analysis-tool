@@ -23,11 +23,13 @@ import {
   TabsProvider,
   type TabItems,
 } from '@google-psat/design-system';
+
 /**
  * Internal dependencies.
  */
 import Panel from './panel';
 import MDLTable from './mdlTable';
+import SessionInsights from './mdlTable/sessionInsights';
 
 const ScriptBlocking = () => {
   const tabItems = useMemo<TabItems>(
@@ -62,6 +64,15 @@ const ScriptBlocking = () => {
           title: 'Blocked Domain List',
           content: {
             Element: MDLTable,
+            props: {},
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
+        },
+        {
+          title: 'Session Insights',
+          content: {
+            Element: SessionInsights,
             props: {},
             className: 'overflow-auto h-full',
             containerClassName: 'h-full',
