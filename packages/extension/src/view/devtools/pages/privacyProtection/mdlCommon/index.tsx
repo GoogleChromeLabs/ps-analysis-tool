@@ -40,7 +40,8 @@ import classNames from 'classnames';
  * Internal dependencies
  */
 import RowContextMenuForMDLTable from './rowContextMenu';
-import StatsHeader, { type Stats } from './stasHeader';
+import StatsHeader from './stasHeader';
+import { type StatItem } from './types';
 
 type NonDecryptedJson = PRTMetadata & ProbablisticRevealToken;
 type DecryptedJson = {
@@ -59,7 +60,7 @@ interface MdlCommonPanelProps {
   onRowClick: (row: TableData | null) => void;
   extraInterfaceToTopBar?: () => React.JSX.Element;
   filters?: TableFilter;
-  stats: Stats | null;
+  stats: StatItem[] | null;
   tableSearchKeys: string[];
   bottomPanel?: () => React.JSX.Element;
   showJson?: boolean;

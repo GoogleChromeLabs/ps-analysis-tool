@@ -32,7 +32,7 @@ import {
   useProbabilisticRevealTokens,
   useScriptBlocking,
 } from '../../../../stateProviders';
-import MdlCommonPanel from '../../mdlCommonPanel';
+import MdlCommonPanel from '../../mdlCommon';
 import getSignal from '../../../../../../utils/getSignal';
 
 const ProbabilisticRevealTokens = () => {
