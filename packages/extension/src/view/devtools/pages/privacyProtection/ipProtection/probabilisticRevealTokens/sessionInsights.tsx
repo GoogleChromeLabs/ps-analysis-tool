@@ -34,25 +34,29 @@ const SessionInsights = () => {
       title: 'Domains',
       centerCount: statistics.globalView.domains,
       color: '#F3AE4E',
-      tooltipText: 'Total unique domains in browsing session',
+      description: 'Total unique domains in browsing session',
+      countClassName: 'text-emerald',
     },
     {
       title: 'MDL',
       centerCount: statistics.globalView.mdl,
       color: '#4C79F4',
-      tooltipText: 'Browsing session domains in MDL',
+      description: 'Browsing session domains in MDL',
+      countClassName: 'text-emerald',
     },
     {
       title: 'PRT',
       centerCount: statistics.globalView.totalTokens,
       color: '#EC7159',
-      tooltipText: 'Total unique tokens sent in requests',
+      description: 'Total unique tokens sent in requests',
+      countClassName: 'text-emerald',
     },
     {
       title: 'Signals',
       centerCount: statistics.globalView.nonZeroSignal,
       color: '#5CC971',
-      tooltipText: 'Total PRTs that decode to IP address',
+      description: 'Total PRTs that decode to IP address',
+      countClassName: 'text-emerald',
     },
   ];
 

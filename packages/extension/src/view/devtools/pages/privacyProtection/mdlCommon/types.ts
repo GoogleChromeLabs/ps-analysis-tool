@@ -21,4 +21,6 @@ export type StatItem = {
   onClick?: () => void;
   data?: { count: number; color: string }[];
   tooltipText?: string;
+  countClassName: string;
+  description: string;
 };
