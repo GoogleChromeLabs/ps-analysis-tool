@@ -27,7 +27,7 @@ import type { StatItem } from './types';
 
 const InsightsStats = ({ stats }: { stats: StatItem[] }) => {
   return (
-    <div>
+    <div className="flex justify-center w-full gap-8 mt-4 mb-4">
       {stats.map(
         ({ title, centerCount, color, onClick, data, tooltipText }, index) => (
           <button
