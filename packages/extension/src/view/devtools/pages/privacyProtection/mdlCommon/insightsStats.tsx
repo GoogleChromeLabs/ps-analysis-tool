@@ -48,7 +48,7 @@ const InsightsStats = ({ stats }: InsightsStatsProps) => {
 
   return (
     <div>
-      <div className="flex justify-center w-full gap-8 mt-4 mb-4">
+      <div className="flex justify-center w-full gap-8 mt-4 mb-8 ">
         {stats.map(
           (
             { title, centerCount, color, onClick, data, tooltipText },
@@ -90,10 +90,9 @@ const InsightsStats = ({ stats }: InsightsStatsProps) => {
         <div className="max-w-2/3">
           <MatrixContainer
             title="Explainations"
-            description=""
-            allowExpand={true}
+            description="A session lasts until the browser or the extension closes."
             matrixData={matrixData}
-            horizontalMatrixData={[]}
+            allowExpand={false}
           />
         </div>
       </div>
