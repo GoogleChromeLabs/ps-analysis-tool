@@ -34,7 +34,7 @@ import {
   useScriptBlocking,
   IMPACTED_BY_SCRIPT_BLOCKING,
 } from '../../../../stateProviders';
-import MdlCommonPanel from '../../mdlCommonPanel';
+import MdlCommonPanel from '../../mdlCommon';
 import Legend from './legend';
 
 const titleMap = {

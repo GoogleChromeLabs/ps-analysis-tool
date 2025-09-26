@@ -20,16 +20,10 @@ import React from 'react';
 import { CirclePieChart } from '@google-psat/design-system';
 import classnames from 'classnames';
 
-type StatItem = {
-  title: string;
-  centerCount: number;
-  color?: string;
-  onClick?: () => void;
-  data?: { count: number; color: string }[];
-  tooltipText?: string;
-};
-
-export type Stats = StatItem[];
+/**
+ * Internal dependencies.
+ */
+import type { StatItem } from './types';
 
 interface StatsHeaderProps {
   stats: StatItem[];

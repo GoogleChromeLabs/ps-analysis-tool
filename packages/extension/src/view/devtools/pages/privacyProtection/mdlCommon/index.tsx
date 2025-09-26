@@ -35,7 +35,6 @@ import {
   type PRTMetadata,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-
 /**
  * Internal dependencies
  */
