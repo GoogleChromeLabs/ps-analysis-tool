@@ -17,7 +17,7 @@
 export type StatItem = {
   title: string;
   centerCount: number;
-  color?: string;
+  color: string;
   onClick?: () => void;
   data?: { count: number; color: string }[];
   tooltipText?: string;
