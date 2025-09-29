@@ -18,15 +18,15 @@
  * External dependencies
  */
 import {
+  DraggableTray,
   JsonView,
-  Tabs,
   TabsProvider,
   type InfoType,
   type TabItems,
   type TableColumn,
   type TableFilter,
 } from '@google-psat/design-system';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { isValidURL, type PRTMetadata } from '@google-psat/common';
 
 /**
@@ -38,7 +38,6 @@ import {
 } from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommon';
 import getSignal from '../../../../../../utils/getSignal';
-import Panel from '../../mdlCommon/panel';
 import Glossary from '../../mdlCommon/glossary';
 
 const ProbabilisticRevealTokens = () => {
@@ -46,6 +45,11 @@ const ProbabilisticRevealTokens = () => {
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
   }>({ filter: {} });
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
 
   const {
     perTokenMetadata,
@@ -365,10 +369,7 @@ const ProbabilisticRevealTokens = () => {
   const bottomPanel = useCallback(() => {
     return (
       <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
-        <div className="p-4">
-          <Tabs showBottomBorder={false} />
-          <Panel />
-        </div>
+        <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
       </TabsProvider>
     );
   }, [tabItems]);

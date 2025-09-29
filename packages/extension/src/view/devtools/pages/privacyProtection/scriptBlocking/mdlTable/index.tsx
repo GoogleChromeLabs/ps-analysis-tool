@@ -23,11 +23,11 @@ import {
   type TableColumn,
   Link,
   type InfoType,
-  Tabs,
   TabsProvider,
   type TabItems,
+  DraggableTray,
 } from '@google-psat/design-system';
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
 import type { MDLTableData } from '@google-psat/common';
 
 /**
@@ -40,7 +40,6 @@ import {
 import MdlCommonPanel from '../../mdlCommon';
 import Legend from './legend';
 import Glossary from '../../mdlCommon/glossary';
-import Panel from '../../mdlCommon/panel';
 
 const titleMap = {
   'Entire Domain Blocked': 'Scope Complete',
@@ -56,6 +55,11 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
   }>({ filter: {} });
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
   const { uniqueResponseDomains, statistics, scriptBlockingData, isLoading } =
     useScriptBlocking(({ state }) => ({
       uniqueResponseDomains: state.uniqueResponseDomains,
@@ -263,10 +267,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const bottomPanel = useCallback(() => {
     return (
       <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
-        <div className="p-4">
-          <Tabs showBottomBorder={false} />
-          <Panel />
-        </div>
+        <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
       </TabsProvider>
     );
   }, [tabItems]);
