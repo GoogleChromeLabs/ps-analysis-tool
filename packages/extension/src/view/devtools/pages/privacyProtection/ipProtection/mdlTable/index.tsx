@@ -45,7 +45,7 @@ const MDLTable = () => {
       domain: string;
       owner: string;
       highlighted: boolean;
-      highlightedClass: string;
+      highlightedClass?: () => string;
     }[]
   >([]);
 
@@ -95,7 +95,15 @@ const MDLTable = () => {
               owner,
               scriptBlocking,
               highlighted: available,
-              highlightedClass: available ? 'bg-amber-100' : '',
+              highlightedClass: available
+                ? (selected: boolean) => {
+                    if (selected) {
+                      return 'bg-amber-200/80 dark:bg-amber-200/70';
+                    }
+
+                    return 'bg-amber-100/60 dark:bg-amber-200/90';
+                  }
+                : undefined,
             };
           })
           .sort((a, b) => {
