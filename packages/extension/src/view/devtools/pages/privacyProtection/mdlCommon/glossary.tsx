@@ -33,6 +33,7 @@ const Glossary = ({ statItems }: GlossaryProps) => {
               className="w-2.5 shrink-0 h-2.5 rounded-full flex items-center justify-center"
               style={{ backgroundColor: item.color }}
             />
+            <span className="font-semibold">{item.title}:</span>
             <span>{item.tooltipText}</span>
           </div>
         ))}

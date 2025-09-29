@@ -23,6 +23,9 @@ import {
   type TableColumn,
   Link,
   type InfoType,
+  Tabs,
+  TabsProvider,
+  type TabItems,
 } from '@google-psat/design-system';
 import React, { useMemo, useState, useCallback } from 'react';
 import type { MDLTableData } from '@google-psat/common';
@@ -36,6 +39,8 @@ import {
 } from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommon';
 import Legend from './legend';
+import Glossary from '../../mdlCommon/glossary';
+import Panel from '../../mdlCommon/panel';
 
 const titleMap = {
   'Entire Domain Blocked': 'Scope Complete',
@@ -182,48 +187,89 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
     [calculateFilters, tableData]
   );
 
-  const stats = [
-    {
-      title: 'Domains',
-      centerCount: statistics.localView.domains,
-      color: '#25ACAD',
-      tooltipText: 'All page domains',
-    },
-    {
-      title: 'BDL',
-      centerCount:
-        statistics.localView.partiallyBlockedDomains +
-        statistics.localView.completelyBlockedDomains,
-      color: '#7D8471',
-      tooltipText: 'Page domains in block list',
-    },
-    {
-      title: 'Complete',
-      centerCount: statistics.localView.completelyBlockedDomains,
-      color: '#F3AE4E',
-      tooltipText: 'Completely blocked domains',
-      onClick: () =>
-        setPresetFilters((prev) => ({
-          ...prev,
-          filter: {
-            scriptBlocking: ['Complete'],
+  const stats = useMemo(
+    () => [
+      {
+        title: 'Domains',
+        centerCount: statistics.localView.domains,
+        color: '#25ACAD',
+        tooltipText: 'All page domains',
+      },
+      {
+        title: 'BDL',
+        centerCount:
+          statistics.localView.partiallyBlockedDomains +
+          statistics.localView.completelyBlockedDomains,
+        color: '#7D8471',
+        tooltipText: 'Page domains in block list',
+      },
+      {
+        title: 'Complete',
+        centerCount: statistics.localView.completelyBlockedDomains,
+        color: '#F3AE4E',
+        tooltipText: 'Completely blocked domains',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Complete'],
+            },
+          })),
+      },
+      {
+        title: 'Partial',
+        centerCount: statistics.localView.partiallyBlockedDomains,
+        color: '#4C79F4',
+        tooltipText: 'Partially blocked domains',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Partial'],
+            },
+          })),
+      },
+    ],
+    [
+      statistics.localView.completelyBlockedDomains,
+      statistics.localView.domains,
+      statistics.localView.partiallyBlockedDomains,
+    ]
+  );
+
+  const tabItems = useMemo<TabItems[keyof TabItems]>(
+    () => [
+      {
+        title: 'Glossary',
+        content: {
+          Element: Glossary,
+          className: 'p-4',
+          props: {
+            statItems: stats,
           },
-        })),
-    },
-    {
-      title: 'Partial',
-      centerCount: statistics.localView.partiallyBlockedDomains,
-      color: '#4C79F4',
-      tooltipText: 'Partially blocked domains',
-      onClick: () =>
-        setPresetFilters((prev) => ({
-          ...prev,
-          filter: {
-            scriptBlocking: ['Partial'],
-          },
-        })),
-    },
-  ];
+        },
+      },
+      {
+        title: 'Legend',
+        content: {
+          Element: Legend,
+          className: 'p-4',
+        },
+      },
+    ],
+    [stats]
+  );
+
+  const bottomPanel = useCallback(() => {
+    return (
+      <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
+        <div className="p-4">
+          <Tabs showBottomBorder={false} />
+          <Panel />
+        </div>
+      </TabsProvider>
+    );
+  }, [tabItems]);
 
   if (isLoading) {
     return (
@@ -246,7 +292,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
       filters={filters}
       stats={type === 'Learning' ? null : stats}
       showJson={false}
-      bottomPanel={Legend}
+      bottomPanel={bottomPanel}
       tab="scriptBlocking"
     />
   );

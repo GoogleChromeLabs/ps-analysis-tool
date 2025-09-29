@@ -22,7 +22,7 @@ import React from 'react';
 
 const Legend = () => {
   return (
-    <div className="flex-1 border border-gray-300 dark:border-quartz shadow h-full min-w-[10rem] overflow-y-auto text-raisin-black dark:text-bright-gray">
+    <div className="flex-1 h-full min-w-[10rem] overflow-y-auto text-raisin-black dark:text-bright-gray">
       <p className="px-2 py-1">
         The Blocked Domain List is a subset of the{' '}
         <Link href="https://github.com/GoogleChrome/ip-protection/blob/main/Masked-Domain-List.md">

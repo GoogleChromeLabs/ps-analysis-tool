@@ -375,6 +375,7 @@ const ProbabilisticRevealTokens = () => {
 
   return (
     <MdlCommonPanel
+      formedJson={null}
       bottomPanel={bottomPanel}
       tableColumns={tableColumns}
       filters={filters}
