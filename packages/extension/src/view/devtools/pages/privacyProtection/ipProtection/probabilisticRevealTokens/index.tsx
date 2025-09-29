@@ -18,7 +18,11 @@
  * External dependencies
  */
 import {
+  JsonView,
+  Tabs,
+  TabsProvider,
   type InfoType,
+  type TabItems,
   type TableColumn,
   type TableFilter,
 } from '@google-psat/design-system';
@@ -34,6 +38,8 @@ import {
 } from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommon';
 import getSignal from '../../../../../../utils/getSignal';
+import Panel from '../../mdlCommon/panel';
+import Glossary from '../../mdlCommon/glossary';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
@@ -60,40 +66,61 @@ const ProbabilisticRevealTokens = () => {
     isLoading: state.isLoading,
   }));
 
-  const tableColumns = useMemo<TableColumn[]>(
+  const stats = useMemo(
     () => [
       {
-        header: 'Domain',
-        accessorKey: 'origin',
-        cell: (info) => info,
+        title: 'Domains',
+        centerCount: perTokenMetadata.length,
+        color: '#F3AE4E',
+        tooltipText: 'Unique domains on page',
       },
       {
-        header: 'Owner',
-        accessorKey: 'owner',
-        cell: (info) => info,
+        title: 'MDL',
+        centerCount: perTokenMetadata.filter(({ origin }) => {
+          let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+
+          hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+
+          if (!hostname) {
+            return false;
+          }
+
+          return (
+            scriptBlockingData.filter((_data) => _data.domain === hostname)
+              .length > 0
+          );
+        }).length,
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              mdl: ['True'],
+            },
+          })),
+        color: '#4C79F4',
+        tooltipText: 'Page domains in MDL',
       },
       {
-        header: 'Decrypted',
-        accessorKey: 'decryptionKeyAvailable',
-        cell: (info) => {
-          return info ? <span className="font-serif">✓</span> : '';
-        },
+        title: 'PRT',
+        centerCount: statistics.localView.totalTokens,
+        color: '#EC7159',
+        tooltipText: 'Unique tokens sent in requests',
       },
       {
-        header: 'Signal',
-        accessorKey: 'nonZeroUint8Signal',
-        cell: (info) => {
-          return info ? <span className="font-serif">✓</span> : '';
-        },
-      },
-      {
-        header: 'PRT Prefix',
-        accessorKey: 'prtHeader',
-        cell: (info) => (info as string).slice(0, 10),
-        isHiddenByDefault: true,
+        title: 'Signals',
+        centerCount: statistics.localView.nonZeroSignal,
+        color: '#5CC971',
+        tooltipText: 'PRTs that decode to IP address',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              nonZeroUint8Signal: ['PRTs with signal'],
+            },
+          })),
       },
     ],
-    []
+    [perTokenMetadata, scriptBlockingData, statistics]
   );
 
   const formedJson = useMemo(() => {
@@ -158,6 +185,69 @@ const ProbabilisticRevealTokens = () => {
     prtTokensData,
     selectedJSON,
   ]);
+
+  const tabItems = useMemo<TabItems[keyof TabItems]>(
+    () => [
+      {
+        title: 'Glossary',
+        content: {
+          Element: Glossary,
+          className: 'p-4',
+          props: {
+            statItems: stats,
+          },
+        },
+      },
+      {
+        title: 'Json View',
+        content: {
+          //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
+          Element: JsonView,
+          className: 'p-4',
+          props: {
+            src: formedJson ?? {},
+          },
+        },
+      },
+    ],
+    [formedJson, stats]
+  );
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Domain',
+        accessorKey: 'origin',
+        cell: (info) => info,
+      },
+      {
+        header: 'Owner',
+        accessorKey: 'owner',
+        cell: (info) => info,
+      },
+      {
+        header: 'Decrypted',
+        accessorKey: 'decryptionKeyAvailable',
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+      },
+      {
+        header: 'Signal',
+        accessorKey: 'nonZeroUint8Signal',
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+      },
+      {
+        header: 'PRT Prefix',
+        accessorKey: 'prtHeader',
+        cell: (info) => (info as string).slice(0, 10),
+        isHiddenByDefault: true,
+      },
+    ],
+    []
+  );
 
   const mdlComparator = useCallback(
     (value: InfoType, filterValue: string) => {
@@ -272,63 +362,20 @@ const ProbabilisticRevealTokens = () => {
     ]
   );
 
-  const stats = [
-    {
-      title: 'Domains',
-      centerCount: perTokenMetadata.length,
-      color: '#F3AE4E',
-      tooltipText: 'Unique domains on page',
-    },
-    {
-      title: 'MDL',
-      centerCount: perTokenMetadata.filter(({ origin }) => {
-        let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
-
-        hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
-
-        if (!hostname) {
-          return false;
-        }
-
-        return (
-          scriptBlockingData.filter((_data) => _data.domain === hostname)
-            .length > 0
-        );
-      }).length,
-      onClick: () =>
-        setPresetFilters((prev) => ({
-          ...prev,
-          filter: {
-            mdl: ['True'],
-          },
-        })),
-      color: '#4C79F4',
-      tooltipText: 'Page domains in MDL',
-    },
-    {
-      title: 'PRT',
-      centerCount: statistics.localView.totalTokens,
-      color: '#EC7159',
-      tooltipText: 'Unique tokens sent in requests',
-    },
-    {
-      title: 'Signals',
-      centerCount: statistics.localView.nonZeroSignal,
-      color: '#5CC971',
-      tooltipText: 'PRTs that decode to IP address',
-      onClick: () =>
-        setPresetFilters((prev) => ({
-          ...prev,
-          filter: {
-            nonZeroUint8Signal: ['PRTs with signal'],
-          },
-        })),
-    },
-  ];
+  const bottomPanel = useCallback(() => {
+    return (
+      <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
+        <div className="p-4">
+          <Tabs showBottomBorder={false} />
+          <Panel />
+        </div>
+      </TabsProvider>
+    );
+  }, [tabItems]);
 
   return (
     <MdlCommonPanel
-      formedJson={formedJson}
+      bottomPanel={bottomPanel}
       tableColumns={tableColumns}
       filters={filters}
       tableSearchKeys={['origin', 'owner']}
@@ -336,7 +383,7 @@ const ProbabilisticRevealTokens = () => {
       selectedKey={selectedJSON?.origin.toString()}
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
-      showJson
+      showJson={false}
       tab="PRT"
     />
   );
