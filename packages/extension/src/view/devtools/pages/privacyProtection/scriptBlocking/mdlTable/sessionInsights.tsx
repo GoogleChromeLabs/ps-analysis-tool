@@ -81,48 +81,6 @@ const SessionInsights = () => {
     },
   ];
 
-  //   {
-  //     color: '#5CC971',
-  //     containerClasses: '',
-  //     count: 7,
-  //     countClassName: 'text-emerald',
-  //     description:
-  //       'These are essential cookies that are necessary for a website to function properly. They enable basic functionalities such as page navigation, access to secure areas, and remembering user preferences (e.g., language, font size), etc.',
-  //     isExpanded: true,
-  //     title: 'Functional',
-  //   },
-  //   {
-  //     color: '#F3AE4E',
-  //     containerClasses: '',
-  //     count: 9,
-  //     countClassName: 'text-max-yellow-red',
-  //     description:
-  //       "They are used to track visitors across websites to gather information about their browsing habits. The data collected is often used by advertisers to deliver targeted advertisements that are relevant to the user's interests.",
-  //     isExpanded: true,
-  //     title: 'Marketing',
-  //   },
-  //   {
-  //     color: '#4C79F4',
-  //     containerClasses: '',
-  //     count: 2,
-  //     countClassName: 'text-blue-berry',
-  //     description:
-  //       'Used to gather information about how users interact with a website. They provide website owners with insights into user behavior, such as the number of visitors, the most popular pages, and the average time spent on the site. This data helps website owners understand and improve the user experience, optimize content, and identify areas for enhancement.',
-  //     isExpanded: true,
-  //     title: 'Analytics',
-  //   },
-  //   {
-  //     color: '#EC7159',
-  //     containerClasses: '',
-  //     count: 23,
-  //     countClassName: 'text-blue-berry',
-  //     description:
-  //       'We are unable to categorize certain cookies since we do not possess any relevant information about them. Nonetheless, you may visit sites like cookiedatabase.org and cookiesearch.org to acquire additional details about these cookies.',
-  //     isExpanded: true,
-  //     title: 'Uncategorized',
-  //   },
-  // ];
-
   return <InsightsStats stats={stats} />;
 };
 

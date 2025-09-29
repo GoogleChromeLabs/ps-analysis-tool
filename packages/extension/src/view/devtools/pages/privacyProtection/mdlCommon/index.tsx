@@ -28,19 +28,18 @@ import {
   type TableData,
   type TableColumn,
 } from '@google-psat/design-system';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import {
   type MDLTableData,
   type ProbablisticRevealToken,
   type PRTMetadata,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
-import classNames from 'classnames';
 /**
  * Internal dependencies
  */
 import RowContextMenuForMDLTable from './rowContextMenu';
-import StatsHeader from './stasHeader';
+import StatsHeader from './statsHeader';
 import { type StatItem } from './types';
 
 type NonDecryptedJson = PRTMetadata & ProbablisticRevealToken;
@@ -85,11 +84,9 @@ const MdlCommonPanel = ({
     typeof RowContextMenuForMDLTable
   > | null>(null);
 
-  const [pillState, setPillState] = useState<string | null>('Site');
-
   return (
     <div className="w-full h-full flex flex-col">
-      {stats && <StatsHeader stats={stats} setPillState={setPillState} />}
+      {stats && <StatsHeader stats={stats} />}
       <ResizableTray
         defaultSize={{
           width: '100%',
@@ -103,18 +100,10 @@ const MdlCommonPanel = ({
         className="w-full flex flex-col"
         trayId="active-sources-table-bottom-tray"
       >
-        <div
-          className={classNames(
-            'flex-1 border border-american-silver dark:border-quartz overflow-auto',
-            {
-              'opacity-50 cursor-default pointer-events-none':
-                pillState === 'Session',
-            }
-          )}
-        >
+        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
           <TableProvider
-            data={pillState === 'Site' ? tableData : []}
-            tableFilterData={pillState === 'Site' ? filters : {}}
+            data={tableData}
+            tableFilterData={filters}
             tableColumns={tableColumns}
             tableSearchKeys={tableSearchKeys}
             onRowClick={onRowClick}
