@@ -51,17 +51,7 @@ const SessionInsights = () => {
       centerCount:
         statistics.globalView.partiallyBlockedDomains +
         statistics.globalView.completelyBlockedDomains,
-      color: '#4C79F4',
-      data: [
-        {
-          color: '#4C79F4',
-          count: statistics.globalView.partiallyBlockedDomains,
-        },
-        {
-          color: '#F3AE4E',
-          count: statistics.globalView.completelyBlockedDomains,
-        },
-      ],
+      color: '#EC7159',
       description: 'Blocked domains',
       countClassName: 'text-blue-berry',
     },
