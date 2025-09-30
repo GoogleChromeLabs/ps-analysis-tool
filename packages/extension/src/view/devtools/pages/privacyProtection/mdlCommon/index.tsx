@@ -61,7 +61,7 @@ interface MdlCommonPanelProps {
   filters?: TableFilter;
   stats: StatItem[] | null;
   tableSearchKeys: string[];
-  bottomPanel?: () => React.JSX.Element;
+  bottomPanel?: React.JSX.Element;
   showJson?: boolean;
   tab: string;
 }
@@ -138,7 +138,7 @@ const MdlCommonPanel = ({
             </div>
           )
         ) : bottomPanel ? (
-          bottomPanel()
+          bottomPanel
         ) : (
           <></>
         )}

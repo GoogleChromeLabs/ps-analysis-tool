@@ -264,13 +264,11 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
     [stats]
   );
 
-  const bottomPanel = useCallback(() => {
-    return (
-      <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
-        <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
-      </TabsProvider>
-    );
-  }, [tabItems]);
+  const bottomPanel = (
+    <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
+      <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
+    </TabsProvider>
+  );
 
   if (isLoading) {
     return (
