@@ -34,7 +34,7 @@ const SessionInsights = () => {
       stats: [
         {
           title: 'Domains',
-          centerCount: statistics.globalView.domains,
+          count: statistics.globalView.domains,
           color: '#F3AE4E',
           data: [
             {
@@ -50,7 +50,7 @@ const SessionInsights = () => {
         },
         {
           title: 'PRT',
-          centerCount: statistics.globalView.totalTokens,
+          count: statistics.globalView.totalTokens,
           color: '#EC7159',
           data: [
             {

@@ -18,74 +18,35 @@
  */
 import React from 'react';
 import {
-  CirclePieChart,
+  CookiesLandingWrapper,
   MatrixContainer,
   type MatrixComponentProps,
 } from '@google-psat/design-system';
-import classnames from 'classnames';
 
 /**
  * Internal dependencies.
  */
-import type { StatItem } from './types';
+import type { DataMapping } from '@google-psat/common';
 
 interface InsightsStatsProps {
-  stats: StatItem[];
+  stats: DataMapping[];
   matrixData: MatrixComponentProps[];
 }
 
 const InsightsStats = ({ stats, matrixData }: InsightsStatsProps) => {
   return (
-    <div>
-      <div className="flex justify-center w-full gap-8 mt-4 mb-8 ">
-        {stats.map(
-          (
-            { title, centerCount, color, onClick, data, tooltipText },
-            index
-          ) => (
-            <button
-              key={index}
-              className={classnames('group text-center w-20 p-2 h-full', {
-                'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out':
-                  onClick,
-              })}
-              style={{ cursor: !onClick ? 'default' : 'pointer' }}
-              onClick={() => {
-                onClick?.();
-              }}
-            >
-              <CirclePieChart
-                key={title}
-                title={title}
-                centerCount={centerCount}
-                data={data ?? [{ count: 10, color: color ?? '' }]}
-                infoIconClassName="absolute -right-3"
-                bottomTitleExtraClasses="min-w-[150px]"
-                tooltipText={tooltipText}
-                centerTitleExtraClasses={classnames({
-                  'group-hover:scale-125 transition-all duration-300 ease-in-out':
-                    onClick,
-                })}
-                pieChartExtraClasses={classnames({
-                  'group-hover:scale-[1.15] transition-all duration-200 ease-in-out group-hover:bg-[#f3f3f3] dark:group-hover:bg-[#191919] rounded-full':
-                    onClick,
-                })}
-              />
-            </button>
-          )
-        )}
-      </div>
-      <div className="flex justify-center my-4">
-        <div className="max-w-2/3">
-          <MatrixContainer
-            title="Explainations"
-            description="A session lasts until the browser or the extension closes."
-            matrixData={matrixData}
-            allowExpand={false}
-          />
-        </div>
-      </div>
-    </div>
+    <CookiesLandingWrapper
+      dataMapping={stats}
+      testId="blocked-cookies-insights"
+    >
+      {matrixData.length > 0 && (
+        <MatrixContainer
+          title="Explanations"
+          matrixData={matrixData}
+          description="A session lasts until the browser or the extension closes."
+        />
+      )}
+    </CookiesLandingWrapper>
   );
 };
 

@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -29,49 +29,96 @@ const SessionInsights = () => {
     statistics: state.statistics,
   }));
 
-  const stats = [
-    {
-      title: 'Domains',
-      centerCount: statistics.globalView.domains,
-      color: '#25ACAD',
-      description: 'Total browsing session domains',
-      countClassName: 'text-emerald',
-    },
-    {
-      title: 'BDL',
-      centerCount:
-        statistics.globalView.partiallyBlockedDomains +
-        statistics.globalView.completelyBlockedDomains,
-      color: '#7D8471',
-      description: 'Total domains in block list',
-      countClassName: 'text-max-yellow-red',
-    },
-    {
-      title: 'Blockings',
-      centerCount:
-        statistics.globalView.partiallyBlockedDomains +
-        statistics.globalView.completelyBlockedDomains,
-      color: '#EC7159',
-      description: 'Blocked domains',
-      countClassName: 'text-blue-berry',
-    },
-    {
-      title: 'Complete',
-      centerCount: statistics.globalView.completelyBlockedDomains,
-      color: '#F3AE4E',
-      description: 'Completely blocked domains',
-      countClassName: 'text-blue-berry',
-    },
-    {
-      title: 'Partial',
-      centerCount: statistics.globalView.partiallyBlockedDomains,
-      color: '#4C79F4',
-      description: 'Partially blocked domains',
-      countClassName: 'text-blue-berry',
-    },
-  ];
+  const { stats, matrixData } = useMemo(
+    () => ({
+      stats: [
+        {
+          title: 'Domains',
+          count: statistics.globalView.domains,
+          color: '#25ACAD',
+          data: [
+            {
+              count: statistics.globalView.domains,
+              color: '#25ACAD',
+            },
+            {
+              count:
+                statistics.globalView.partiallyBlockedDomains +
+                statistics.globalView.completelyBlockedDomains,
+              color: '#4C79F4',
+            },
+          ],
+          countClassName: 'text-emerald',
+        },
+        {
+          title: 'Blockings',
+          count:
+            statistics.globalView.partiallyBlockedDomains +
+            statistics.globalView.completelyBlockedDomains,
+          color: '#EC7159',
+          data: [
+            {
+              count: statistics.globalView.completelyBlockedDomains,
+              color: '#F3AE4E',
+            },
+            {
+              count: statistics.globalView.partiallyBlockedDomains,
+              color: '#4C79F4',
+            },
+          ],
+          countClassName: 'text-blue-berry',
+        },
+      ],
+      matrixData: [
+        {
+          title: 'Domains',
+          count: statistics.globalView.domains,
+          color: '#25ACAD',
+          description: 'Total browsing session domains',
+          countClassName: 'text-emerald',
+        },
+        {
+          title: 'BDL',
+          count:
+            statistics.globalView.partiallyBlockedDomains +
+            statistics.globalView.completelyBlockedDomains,
+          color: '#7D8471',
+          description: 'Total domains in block list',
+          countClassName: 'text-max-yellow-red',
+        },
+        {
+          title: 'Blockings',
+          count:
+            statistics.globalView.partiallyBlockedDomains +
+            statistics.globalView.completelyBlockedDomains,
+          color: '#EC7159',
+          description: 'Blocked domains',
+          countClassName: 'text-blue-berry',
+        },
+        {
+          title: 'Complete',
+          count: statistics.globalView.completelyBlockedDomains,
+          color: '#F3AE4E',
+          description: 'Completely blocked domains',
+          countClassName: 'text-blue-berry',
+        },
+        {
+          title: 'Partial',
+          count: statistics.globalView.partiallyBlockedDomains,
+          color: '#4C79F4',
+          description: 'Partially blocked domains',
+          countClassName: 'text-blue-berry',
+        },
+      ],
+    }),
+    [
+      statistics.globalView.completelyBlockedDomains,
+      statistics.globalView.domains,
+      statistics.globalView.partiallyBlockedDomains,
+    ]
+  );
 
-  return <InsightsStats stats={stats} />;
+  return <InsightsStats stats={stats} matrixData={matrixData} />;
 };
 
 export default SessionInsights;
