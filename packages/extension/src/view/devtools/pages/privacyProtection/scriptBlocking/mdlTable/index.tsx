@@ -197,7 +197,6 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
-        tooltipText: 'All page domains',
       },
       {
         title: 'BDL',
@@ -205,13 +204,11 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
-        tooltipText: 'Page domains in block list',
       },
       {
         title: 'Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
-        tooltipText: 'Completely blocked domains',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -224,7 +221,6 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Partial',
         centerCount: statistics.localView.partiallyBlockedDomains,
         color: '#4C79F4',
-        tooltipText: 'Partially blocked domains',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
