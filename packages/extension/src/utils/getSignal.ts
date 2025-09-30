@@ -35,7 +35,7 @@ function formatIPv6(buffer: number[]) {
  */
 function getSignal(signal: number[]) {
   if (signal.every((byte) => byte === 0)) {
-    return btoa(String.fromCharCode.apply(null, signal as number[]));
+    return 'No Signal';
   }
 
   const ipv4MappedPrefix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff];
