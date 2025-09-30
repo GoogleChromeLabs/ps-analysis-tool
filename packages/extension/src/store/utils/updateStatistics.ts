@@ -16,7 +16,6 @@
 /**
  * Internal dependencies
  */
-
 import PRTStore from '../PRTStore';
 
 const updateStatistics = (origin: string, nonZeroUint8Signal: boolean) => {

@@ -22,10 +22,6 @@ import {
   MatrixContainer,
   type MatrixComponentProps,
 } from '@google-psat/design-system';
-
-/**
- * Internal dependencies.
- */
 import type { DataMapping } from '@google-psat/common';
 
 interface InsightsStatsProps {

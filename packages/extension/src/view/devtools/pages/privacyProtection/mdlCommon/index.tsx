@@ -17,6 +17,7 @@
 /**
  * External dependencies
  */
+import React, { useRef } from 'react';
 import {
   Table,
   TableProvider,
@@ -28,13 +29,13 @@ import {
   type TableData,
   type TableColumn,
 } from '@google-psat/design-system';
-import React, { useRef } from 'react';
 import {
   type MDLTableData,
   type ProbablisticRevealToken,
   type PRTMetadata,
 } from '@google-psat/common';
 import { I18n } from '@google-psat/i18n';
+
 /**
  * Internal dependencies
  */
