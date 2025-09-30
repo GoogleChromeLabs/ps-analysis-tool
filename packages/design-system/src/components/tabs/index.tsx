@@ -231,7 +231,13 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                           )}
                         >
                           <button
-                            onClick={() => setActiveTab(index)}
+                            onClick={() => {
+                              if (group !== activeGroup) {
+                                handleGroupClick(group);
+                              }
+
+                              setActiveTab(index);
+                            }}
                             onKeyDown={handleKeyDown}
                             className="px-1.5 hover:opacity-80 outline-none text-nowrap"
                           >
