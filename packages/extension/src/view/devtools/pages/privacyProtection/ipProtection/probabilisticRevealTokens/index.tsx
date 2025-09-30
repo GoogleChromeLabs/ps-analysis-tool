@@ -223,11 +223,13 @@ const ProbabilisticRevealTokens = () => {
         header: 'Domain',
         accessorKey: 'origin',
         cell: (info) => info,
+        initialWidth: 120,
       },
       {
         header: 'Owner',
         accessorKey: 'owner',
         cell: (info) => info,
+        initialWidth: 100,
       },
       {
         header: 'Decrypted',
@@ -235,6 +237,7 @@ const ProbabilisticRevealTokens = () => {
         cell: (info) => {
           return info ? <span className="font-serif">✓</span> : '';
         },
+        initialWidth: 60,
       },
       {
         header: 'Signal',
@@ -242,6 +245,7 @@ const ProbabilisticRevealTokens = () => {
         cell: (info) => {
           return info ? <span className="font-serif">✓</span> : '';
         },
+        initialWidth: 60,
       },
       {
         header: 'PRT Prefix',
