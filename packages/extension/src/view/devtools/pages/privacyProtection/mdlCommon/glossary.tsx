@@ -22,11 +22,11 @@ import type { StatItem } from './types';
 type GlossaryProps = {
   statItems: StatItem[];
 };
+
 const Glossary = ({ statItems }: GlossaryProps) => {
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-2">Glossary</h2>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 p-2">
         {statItems.map((item) => (
           <div className="flex flex-row items-center gap-1" key={item.title}>
             <div
