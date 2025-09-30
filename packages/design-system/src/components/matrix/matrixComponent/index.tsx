@@ -43,7 +43,6 @@ const MatrixComponent = ({
   isExpanded = false,
   countClassName,
 }: MatrixComponentProps) => {
-  console.log(description);
   return (
     <div>
       <div className="flex gap-x-4">
