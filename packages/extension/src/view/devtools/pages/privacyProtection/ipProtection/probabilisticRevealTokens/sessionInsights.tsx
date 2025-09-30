@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -29,38 +29,77 @@ const SessionInsights = () => {
     statistics: state.statistics,
   }));
 
-  const stats = [
-    {
-      title: 'Domains',
-      centerCount: statistics.globalView.domains,
-      color: '#F3AE4E',
-      description: 'Total unique domains in browsing session',
-      countClassName: 'text-emerald',
-    },
-    {
-      title: 'MDL',
-      centerCount: statistics.globalView.mdl,
-      color: '#4C79F4',
-      description: 'Browsing session domains in MDL',
-      countClassName: 'text-emerald',
-    },
-    {
-      title: 'PRT',
-      centerCount: statistics.globalView.totalTokens,
-      color: '#EC7159',
-      description: 'Total unique tokens sent in requests',
-      countClassName: 'text-emerald',
-    },
-    {
-      title: 'Signals',
-      centerCount: statistics.globalView.nonZeroSignal,
-      color: '#5CC971',
-      description: 'Total PRTs that decode to IP address',
-      countClassName: 'text-emerald',
-    },
-  ];
+  const { stats, matrixData } = useMemo(
+    () => ({
+      stats: [
+        {
+          title: 'Domains',
+          centerCount: statistics.globalView.domains,
+          color: '#F3AE4E',
+          data: [
+            {
+              color: '#F3AE4E',
+              count: statistics.globalView.domains,
+            },
+            {
+              color: '#4C79F4',
+              count: statistics.globalView.mdl,
+            },
+          ],
+          countClassName: 'text-emerald',
+        },
+        {
+          title: 'PRT',
+          centerCount: statistics.globalView.totalTokens,
+          color: '#EC7159',
+          data: [
+            {
+              color: '#EC7159',
+              count: statistics.localView.totalTokens,
+            },
+            {
+              color: '#5CC971',
+              count: statistics.localView.nonZeroSignal,
+            },
+          ],
+          countClassName: 'text-emerald',
+        },
+      ],
+      matrixData: [
+        {
+          color: '#F3AE4E',
+          title: 'Domains',
+          count: statistics.globalView.domains,
+          description: 'Unique domains',
+          countClassName: 'text-emerald',
+        },
+        {
+          color: '#4C79F4',
+          title: 'MDL',
+          count: statistics.globalView.mdl,
+          description: 'Domains in the MDL',
+          countClassName: 'text-indigo',
+        },
+        {
+          color: '#EC7159',
+          title: 'PRT',
+          count: statistics.globalView.totalTokens,
+          description: 'Unique PRT tokens sent in requests',
+          countClassName: 'text-emerald',
+        },
+        {
+          color: '#5CC971',
+          title: 'Signals',
+          count: statistics.globalView.nonZeroSignal,
+          description: 'PRTs that decode to IP address',
+          countClassName: 'text-emerald',
+        },
+      ],
+    }),
+    [statistics]
+  );
 
-  return <InsightsStats stats={stats} />;
+  return <InsightsStats stats={stats} matrixData={matrixData} />;
 };
 
 export default SessionInsights;

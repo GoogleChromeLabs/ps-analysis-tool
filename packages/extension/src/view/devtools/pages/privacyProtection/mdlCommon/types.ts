@@ -22,5 +22,4 @@ export type StatItem = {
   data?: { count: number; color: string }[];
   tooltipText?: string;
   countClassName?: string;
-  description?: string;
 };

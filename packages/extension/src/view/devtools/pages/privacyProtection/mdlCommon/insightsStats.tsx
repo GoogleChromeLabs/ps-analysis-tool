@@ -31,21 +31,10 @@ import type { StatItem } from './types';
 
 interface InsightsStatsProps {
   stats: StatItem[];
+  matrixData: MatrixComponentProps[];
 }
 
-const InsightsStats = ({ stats }: InsightsStatsProps) => {
-  const matrixData: MatrixComponentProps[] = stats.map((item) => {
-    return {
-      title: item.title,
-      count: item.centerCount,
-      color: item.color,
-      countClassName: item.countClassName,
-      description: item.description,
-      isExpanded: true,
-      containerClasses: '',
-    };
-  });
-
+const InsightsStats = ({ stats, matrixData }: InsightsStatsProps) => {
   return (
     <div>
       <div className="flex justify-center w-full gap-8 mt-4 mb-8 ">

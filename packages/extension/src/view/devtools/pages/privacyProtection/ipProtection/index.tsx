@@ -59,7 +59,7 @@ const IPProtection = () => {
       ],
       Observability: [
         {
-          title: 'IP Proxying',
+          title: 'Site',
           content: {
             Element: ProbabilisticRevealTokens,
             className: 'overflow-auto h-full',
@@ -67,7 +67,7 @@ const IPProtection = () => {
           },
         },
         {
-          title: 'Session Insights',
+          title: 'Session',
           content: {
             Element: SessionInsights,
             className: 'overflow-auto h-full',
