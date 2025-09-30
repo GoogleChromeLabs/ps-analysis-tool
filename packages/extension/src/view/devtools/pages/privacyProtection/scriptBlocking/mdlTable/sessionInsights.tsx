@@ -83,7 +83,7 @@ const SessionInsights = () => {
             statistics.globalView.partiallyBlockedDomains +
             statistics.globalView.completelyBlockedDomains,
           color: '#7D8471',
-          description: 'Total domains in block list',
+          description: 'Total domains in the block list',
           countClassName: 'text-max-yellow-red',
         },
         {
@@ -92,7 +92,7 @@ const SessionInsights = () => {
             statistics.globalView.partiallyBlockedDomains +
             statistics.globalView.completelyBlockedDomains,
           color: '#EC7159',
-          description: 'Blocked domains',
+          description: 'Total blocked domains',
           countClassName: 'text-blue-berry',
         },
         {
