@@ -42,6 +42,8 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     shouldAddSpacer,
     getTabGroup,
     isGroup,
+    expandedGroups,
+    setExpandedGroup,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     activeGroup: state.activeGroup,
@@ -54,6 +56,8 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     getTabGroup: actions.getTabGroup,
     isGroup: state.isGroup,
     loading: state.loading,
+    expandedGroups: state.expandedGroups,
+    setExpandedGroup: actions.setExpandedGroup,
   }));
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -80,11 +84,13 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         setActiveGroup(group);
       }
 
+      setExpandedGroup(group);
+
       timeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
       }, 300);
     },
-    [activeGroup, isAnimating, setActiveGroup]
+    [activeGroup, isAnimating, setActiveGroup, setExpandedGroup]
   );
 
   const handleKeyDown = useCallback(
@@ -157,7 +163,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
         )}
       >
         {Object.entries(groupedTitles).map(([group, data]) => {
-          const isExpanded = activeGroup === group;
+          const isExpanded = expandedGroups[group];
 
           return (
             <div

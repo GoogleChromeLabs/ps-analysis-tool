@@ -80,7 +80,7 @@ const IPProtection = () => {
   );
 
   return (
-    <TabsProvider items={tabItems} name="ipProtection">
+    <TabsProvider items={tabItems} name="ipProtection" independentGroups>
       <Panel />
     </TabsProvider>
   );

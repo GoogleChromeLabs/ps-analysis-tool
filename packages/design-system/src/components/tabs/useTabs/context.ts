@@ -35,6 +35,7 @@ export interface TabsStoreContext {
       }[]
     >;
     titles: string[];
+    expandedGroups: { [group: string]: boolean };
     panel: {
       Element: ((props: any) => React.JSX.Element) | null;
       props?: Record<string, any>;
@@ -49,6 +50,7 @@ export interface TabsStoreContext {
     setStorage: (data: string, index?: number) => void;
     setActiveTab: (tab: number) => void;
     setActiveGroup: (group: string) => void;
+    setExpandedGroup: (group: string) => void;
     highlightTab: (
       tab: number,
       count?: boolean | number,
@@ -66,6 +68,7 @@ const initialState: TabsStoreContext = {
     activeGroup: null,
     groupedTitles: {},
     titles: [],
+    expandedGroups: {},
     panel: {
       Element: null,
       props: {},
@@ -78,6 +81,7 @@ const initialState: TabsStoreContext = {
     setStorage: noop,
     setActiveTab: noop,
     setActiveGroup: noop,
+    setExpandedGroup: noop,
     highlightTab: noop,
     isTabHighlighted: () => false,
     shouldAddSpacer: () => false,

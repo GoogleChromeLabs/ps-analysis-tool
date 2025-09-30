@@ -84,7 +84,7 @@ const ScriptBlocking = () => {
   );
 
   return (
-    <TabsProvider items={tabItems} name="ScriptBlocking">
+    <TabsProvider items={tabItems} name="ScriptBlocking" independentGroups>
       <Panel />
     </TabsProvider>
   );

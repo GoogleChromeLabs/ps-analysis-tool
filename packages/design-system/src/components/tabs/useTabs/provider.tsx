@@ -38,8 +38,12 @@ export const TabsProvider = ({
   items,
   isGroup = true,
   name,
+  independentGroups = false,
 }: PropsWithChildren<TabsProviderProps>) => {
   const [groupedItems, setGroupedItems] = useState<TabItems>({});
+  const [expandedGroups, setExpandedGroups] = useState<{
+    [group: string]: boolean;
+  }>({});
 
   useEffect(() => {
     if (!isGroup && Array.isArray(items)) {
@@ -54,6 +58,16 @@ export const TabsProvider = ({
       setGroupedItems(items as TabItems);
     }
   }, [isGroup, items]);
+
+  useEffect(() => {
+    const initialExpandedGroups: { [group: string]: boolean } = {};
+
+    Object.keys(groupedItems).forEach((group, index) => {
+      initialExpandedGroups[group] = independentGroups ? true : index === 0;
+    });
+
+    setExpandedGroups(initialExpandedGroups);
+  }, [groupedItems, independentGroups]);
 
   const [activeGroup, _setActiveGroup] = useState<string | null>(
     isGroup ? Object.keys(items)[0] ?? null : null
@@ -72,20 +86,51 @@ export const TabsProvider = ({
     );
   }, []);
 
-  const setActiveGroup = useCallback((group: string) => {
-    _setActiveGroup(group);
+  const setActiveGroup = useCallback(
+    (group: string) => {
+      if (independentGroups) {
+        return;
+      }
 
-    const keys = Object.keys(groupItemsRef.current);
-    let index = 0;
-    let tabIndex = 0;
+      _setActiveGroup(group);
 
-    while (index < keys.length && keys[index] !== group) {
-      tabIndex += groupItemsRef.current[keys[index]]?.length || 0;
-      index++;
-    }
+      const keys = Object.keys(groupItemsRef.current);
+      let index = 0;
+      let tabIndex = 0;
 
-    setActiveTab(tabIndex);
-  }, []);
+      while (index < keys.length && keys[index] !== group) {
+        tabIndex += groupItemsRef.current[keys[index]]?.length || 0;
+        index++;
+      }
+
+      setActiveTab(tabIndex);
+    },
+    [independentGroups]
+  );
+
+  const setExpandedGroup = useCallback(
+    (group: string) => {
+      if (independentGroups) {
+        setExpandedGroups((prev) => ({
+          ...prev,
+          [group]: !prev[group],
+        }));
+      } else {
+        setExpandedGroups((prev) => {
+          const next = Object.keys(prev).reduce<{ [group: string]: boolean }>(
+            (acc, key) => {
+              acc[key] = key === group ? !prev[key] : false;
+              return acc;
+            },
+            {}
+          );
+
+          return next;
+        });
+      }
+    },
+    [independentGroups]
+  );
 
   const tabItems = useMemo(() => {
     return Object.values(groupedItems).flat();
@@ -279,6 +324,7 @@ export const TabsProvider = ({
           activeTab,
           activeGroup,
           groupedTitles,
+          expandedGroups,
           titles,
           panel,
           storage,
@@ -289,6 +335,7 @@ export const TabsProvider = ({
           setStorage,
           setActiveTab,
           setActiveGroup,
+          setExpandedGroup,
           highlightTab,
           isTabHighlighted,
           shouldAddSpacer,

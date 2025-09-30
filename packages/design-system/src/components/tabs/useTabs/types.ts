@@ -18,6 +18,7 @@ export type TabsProviderProps = {
   items: TabItems | TabItem[];
   name: string;
   isGroup?: boolean;
+  independentGroups?: boolean;
 };
 
 export type TabItems = {
