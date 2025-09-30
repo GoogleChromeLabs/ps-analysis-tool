@@ -61,7 +61,7 @@ const ScriptBlocking = () => {
       ],
       Observability: [
         {
-          title: 'Blocked Domain List',
+          title: 'Site',
           content: {
             Element: MDLTable,
             props: {},
@@ -70,7 +70,7 @@ const ScriptBlocking = () => {
           },
         },
         {
-          title: 'Session Insights',
+          title: 'Session',
           content: {
             Element: SessionInsights,
             props: {},
