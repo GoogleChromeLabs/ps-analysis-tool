@@ -86,27 +86,20 @@ export const TabsProvider = ({
     );
   }, []);
 
-  const setActiveGroup = useCallback(
-    (group: string) => {
-      if (independentGroups) {
-        return;
-      }
+  const setActiveGroup = useCallback((group: string) => {
+    _setActiveGroup(group);
 
-      _setActiveGroup(group);
+    const keys = Object.keys(groupItemsRef.current);
+    let index = 0;
+    let tabIndex = 0;
 
-      const keys = Object.keys(groupItemsRef.current);
-      let index = 0;
-      let tabIndex = 0;
+    while (index < keys.length && keys[index] !== group) {
+      tabIndex += groupItemsRef.current[keys[index]]?.length || 0;
+      index++;
+    }
 
-      while (index < keys.length && keys[index] !== group) {
-        tabIndex += groupItemsRef.current[keys[index]]?.length || 0;
-        index++;
-      }
-
-      setActiveTab(tabIndex);
-    },
-    [independentGroups]
-  );
+    setActiveTab(tabIndex);
+  }, []);
 
   const setExpandedGroup = useCallback(
     (group: string) => {
@@ -325,6 +318,7 @@ export const TabsProvider = ({
           activeGroup,
           groupedTitles,
           expandedGroups,
+          independentGroups,
           titles,
           panel,
           storage,

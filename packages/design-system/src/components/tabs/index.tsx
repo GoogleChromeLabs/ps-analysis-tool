@@ -44,6 +44,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     isGroup,
     expandedGroups,
     setExpandedGroup,
+    independentGroups,
   } = useTabs(({ state, actions }) => ({
     activeTab: state.activeTab,
     activeGroup: state.activeGroup,
@@ -58,6 +59,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
     loading: state.loading,
     expandedGroups: state.expandedGroups,
     setExpandedGroup: actions.setExpandedGroup,
+    independentGroups: state.independentGroups,
   }));
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -73,24 +75,36 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleGroupClick = useCallback(
-    (group: string) => {
+    (group: string, disableExpansion?: boolean) => {
       if (isAnimating) {
         return;
       }
 
       setIsAnimating(true);
 
-      if (activeGroup !== group) {
+      if (
+        activeGroup !== group &&
+        !(independentGroups && expandedGroups[group])
+      ) {
         setActiveGroup(group);
       }
 
-      setExpandedGroup(group);
+      if (!disableExpansion) {
+        setExpandedGroup(group);
+      }
 
       timeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
       }, 300);
     },
-    [activeGroup, isAnimating, setActiveGroup, setExpandedGroup]
+    [
+      activeGroup,
+      expandedGroups,
+      independentGroups,
+      isAnimating,
+      setActiveGroup,
+      setExpandedGroup,
+    ]
   );
 
   const handleKeyDown = useCallback(
@@ -239,7 +253,7 @@ const Tabs = ({ showBottomBorder = true, fontSizeClass }: TabsProps) => {
                           <button
                             onClick={() => {
                               if (group !== activeGroup) {
-                                handleGroupClick(group);
+                                handleGroupClick(group, true);
                               }
 
                               setActiveTab(index);

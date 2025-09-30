@@ -34,6 +34,7 @@ export interface TabsStoreContext {
         index: number;
       }[]
     >;
+    independentGroups?: boolean;
     titles: string[];
     expandedGroups: { [group: string]: boolean };
     panel: {
@@ -67,6 +68,7 @@ const initialState: TabsStoreContext = {
     activeTab: 0,
     activeGroup: null,
     groupedTitles: {},
+    independentGroups: false,
     titles: [],
     expandedGroups: {},
     panel: {
