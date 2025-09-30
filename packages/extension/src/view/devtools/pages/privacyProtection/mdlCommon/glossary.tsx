@@ -34,7 +34,7 @@ const Glossary = ({ statItems }: GlossaryProps) => {
               style={{ backgroundColor: item.color }}
             />
             <span className="font-semibold">{item.title}:</span>
-            <span>{item.tooltipText}</span>
+            <span>{item.glossaryText}</span>
           </div>
         ))}
       </div>

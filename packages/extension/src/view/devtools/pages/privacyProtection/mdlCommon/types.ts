@@ -20,6 +20,6 @@ export type StatItem = {
   color: string;
   onClick?: () => void;
   data?: { count: number; color: string }[];
-  tooltipText?: string;
+  glossaryText?: string;
   countClassName?: string;
 };
