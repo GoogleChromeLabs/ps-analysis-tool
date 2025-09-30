@@ -199,7 +199,7 @@ const ProbabilisticRevealTokens = () => {
         },
       },
       {
-        title: 'Json View',
+        title: 'JSON View',
         content: {
           //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
           Element: JsonView,
