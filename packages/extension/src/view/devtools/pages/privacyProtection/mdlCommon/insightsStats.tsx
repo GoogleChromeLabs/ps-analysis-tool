@@ -35,10 +35,7 @@ interface InsightsStatsProps {
 
 const InsightsStats = ({ stats, matrixData }: InsightsStatsProps) => {
   return (
-    <CookiesLandingWrapper
-      dataMapping={stats}
-      testId="blocked-cookies-insights"
-    >
+    <CookiesLandingWrapper dataMapping={stats} testId="ip-insights">
       {matrixData.length > 0 && (
         <MatrixContainer
           title="Explanations"
