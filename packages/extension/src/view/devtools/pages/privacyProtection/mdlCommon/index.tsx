@@ -76,7 +76,7 @@ const MdlCommonPanel = ({
   });
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col overflow-hidden">
       {stats && <StatsHeader stats={stats} />}
       <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
         <TableProvider
