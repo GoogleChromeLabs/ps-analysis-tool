@@ -28666,7 +28666,7 @@
       "category": "Functional",
       "name": "logglytrackings­ession",
       "domain": "",
-      "description": "OCD_logglytrackings­ession_description",
+      "description": "OCD_logglytrackingsession_description",
       "retention": "OCD_retention_session",
       "dataController": "Solarwinds",
       "gdprUrl": "https://www.solarwinds.com/legal/privacy",
