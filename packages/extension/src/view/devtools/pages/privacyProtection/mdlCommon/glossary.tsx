@@ -25,7 +25,7 @@ type GlossaryProps = {
 
 const Glossary = ({ statItems }: GlossaryProps) => {
   return (
-    <div>
+    <div className="p-4 flex-1 text-raisin-black dark:text-bright-gray shadow-sm h-full bg-white dark:bg-raisin-black overflow-auto">
       <div className="flex flex-col gap-2 p-2">
         {statItems.map((item) => (
           <div className="flex flex-row items-center gap-1" key={item.title}>

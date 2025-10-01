@@ -23,11 +23,9 @@ import {
   type TableColumn,
   Link,
   type InfoType,
-  TabsProvider,
   type TabItems,
-  DraggableTray,
 } from '@google-psat/design-system';
-import React, { useMemo, useState, useCallback, useRef } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import type { MDLTableData } from '@google-psat/common';
 
 /**
@@ -55,11 +53,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
   }>({ filter: {} });
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const draggableTrayRef = useRef({
-    isCollapsed,
-    setIsCollapsed,
-  });
+
   const { uniqueResponseDomains, statistics, scriptBlockingData, isLoading } =
     useScriptBlocking(({ state }) => ({
       uniqueResponseDomains: state.uniqueResponseDomains,
@@ -197,7 +191,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
-        glossaryText: 'All page domains',
+        tooltipText: 'All page domains',
       },
       {
         title: 'BDL',
@@ -205,13 +199,13 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
-        glossaryText: 'Page domains in block list',
+        tooltipText: 'Page domains in block list',
       },
       {
         title: 'Complete',
         centerCount: statistics.localView.completelyBlockedDomains,
         color: '#F3AE4E',
-        glossaryText: 'Completely blocked domains',
+        tooltipText: 'Completely blocked domains',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -224,7 +218,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Partial',
         centerCount: statistics.localView.partiallyBlockedDomains,
         color: '#4C79F4',
-        glossaryText: 'Partially blocked domains',
+        tooltipText: 'Partially blocked domains',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -264,12 +258,6 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
     [stats]
   );
 
-  const bottomPanel = (
-    <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
-      <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
-    </TabsProvider>
-  );
-
   if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -280,7 +268,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
 
   return (
     <MdlCommonPanel
-      formedJson={null}
+      tabItems={tabItems}
       tableColumns={tableColumns}
       tableSearchKeys={['domain', 'owner']}
       tableData={tableData}
@@ -290,8 +278,6 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
       }
       filters={filters}
       stats={type === 'Learning' ? null : stats}
-      showJson={false}
-      bottomPanel={bottomPanel}
       tab="scriptBlocking"
     />
   );

@@ -18,15 +18,13 @@
  * External dependencies
  */
 import {
-  DraggableTray,
   JsonView,
-  TabsProvider,
   type InfoType,
-  type TabItems,
+  type TabItem,
   type TableColumn,
   type TableFilter,
 } from '@google-psat/design-system';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { isValidURL, type PRTMetadata } from '@google-psat/common';
 
 /**
@@ -45,11 +43,6 @@ const ProbabilisticRevealTokens = () => {
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
   }>({ filter: {} });
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const draggableTrayRef = useRef({
-    isCollapsed,
-    setIsCollapsed,
-  });
 
   const {
     perTokenMetadata,
@@ -76,7 +69,7 @@ const ProbabilisticRevealTokens = () => {
         title: 'Domains',
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
-        glossaryText: 'Unique domains on page',
+        tooltipText: 'Unique domains on page',
       },
       {
         title: 'MDL',
@@ -102,19 +95,19 @@ const ProbabilisticRevealTokens = () => {
             },
           })),
         color: '#4C79F4',
-        glossaryText: 'Page domains in MDL',
+        tooltipText: 'Page domains in MDL',
       },
       {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        glossaryText: 'Unique tokens sent in requests',
+        tooltipText: 'Unique tokens sent in requests',
       },
       {
         title: 'Signals',
         centerCount: statistics.localView.nonZeroSignal,
         color: '#5CC971',
-        glossaryText: 'PRTs that decode to IP address',
+        tooltipText: 'PRTs that decode to IP address',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -196,7 +189,7 @@ const ProbabilisticRevealTokens = () => {
     selectedJSON,
   ]);
 
-  const tabItems = useMemo<TabItems[keyof TabItems]>(
+  const tabItems = useMemo<TabItem[]>(
     () => [
       {
         title: 'Glossary',
@@ -209,7 +202,7 @@ const ProbabilisticRevealTokens = () => {
         },
       },
       {
-        title: 'JSON View',
+        title: 'Json View',
         content: {
           //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
           Element: JsonView,
@@ -382,16 +375,9 @@ const ProbabilisticRevealTokens = () => {
     ]
   );
 
-  const bottomPanel = (
-    <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
-      <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
-    </TabsProvider>
-  );
-
   return (
     <MdlCommonPanel
-      formedJson={null}
-      bottomPanel={bottomPanel}
+      tabItems={tabItems}
       tableColumns={tableColumns}
       filters={filters}
       tableSearchKeys={['origin', 'owner']}
@@ -399,7 +385,6 @@ const ProbabilisticRevealTokens = () => {
       selectedKey={selectedJSON?.origin.toString()}
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
-      showJson={false}
       tab="PRT"
     />
   );
