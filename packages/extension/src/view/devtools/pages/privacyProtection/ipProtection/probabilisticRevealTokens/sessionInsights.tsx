@@ -55,11 +55,11 @@ const SessionInsights = () => {
           data: [
             {
               color: '#EC7159',
-              count: statistics.localView.totalTokens,
+              count: statistics.globalView.totalTokens,
             },
             {
               color: '#5CC971',
-              count: statistics.localView.nonZeroSignal,
+              count: statistics.globalView.nonZeroSignal,
             },
           ],
           countClassName: 'text-emerald',
