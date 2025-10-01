@@ -23,8 +23,8 @@ import { useContextSelector } from '@google-psat/common';
  */
 import Context, { type ProbabilisticRevealTokensContextType } from './context';
 
-export function useAttributionReporting(): ProbabilisticRevealTokensContextType;
-export function useAttributionReporting<T>(
+export function useProbabilisticRevealTokens(): ProbabilisticRevealTokensContextType;
+export function useProbabilisticRevealTokens<T>(
   selector: (state: ProbabilisticRevealTokensContextType) => T
 ): T;
 
@@ -33,7 +33,7 @@ export function useAttributionReporting<T>(
  * @param selector Selector function to partially select state.
  * @returns selected part of the state
  */
-export function useAttributionReporting<T>(
+export function useProbabilisticRevealTokens<T>(
   selector: (
     state: ProbabilisticRevealTokensContextType
   ) => T | ProbabilisticRevealTokensContextType = (state) => state
@@ -41,4 +41,4 @@ export function useAttributionReporting<T>(
   return useContextSelector(Context, selector);
 }
 
-export default useAttributionReporting;
+export default useProbabilisticRevealTokens;

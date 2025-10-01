@@ -17,13 +17,27 @@
  * Internal dependencies
  */
 import { DataStore } from '../../store/dataStore';
+import PRTStore from '../../store/PRTStore';
 import { setupIntervals } from './utils';
 
 export const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
+  const sessionStorage = await chrome.storage.session.get();
   setupIntervals();
 
   if (Object.keys(storage).includes('isUsingCDP')) {
     DataStore.globalIsUsingCDP = storage.isUsingCDP;
+  }
+
+  if (Object.keys(sessionStorage).includes('prtStatistics')) {
+    PRTStore.statistics.prtStatistics.globalView = {
+      ...sessionStorage?.prtStatistics,
+    };
+  }
+
+  if (Object.keys(sessionStorage).includes('scriptBlocking')) {
+    PRTStore.statistics.scriptBlocking.globalView = {
+      ...sessionStorage?.scriptBlocking,
+    };
   }
 };

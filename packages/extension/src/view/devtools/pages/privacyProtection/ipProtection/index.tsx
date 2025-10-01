@@ -27,8 +27,9 @@ import {
  * Internal dependencies.
  */
 import Panel from './panel';
-import MDLTable from './mdlTable';
 import ProbabilisticRevealTokens from './probabilisticRevealTokens';
+import SessionInsights from './probabilisticRevealTokens/sessionInsights';
+import MDLTable from './mdlTable';
 
 const IPProtection = () => {
   const tabItems = useMemo<TabItems>(
@@ -58,9 +59,17 @@ const IPProtection = () => {
       ],
       Observability: [
         {
-          title: 'Probabilistic Reveal Tokens',
+          title: 'Site',
           content: {
             Element: ProbabilisticRevealTokens,
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
+        },
+        {
+          title: 'Session',
+          content: {
+            Element: SessionInsights,
             className: 'overflow-auto h-full',
             containerClassName: 'h-full',
           },

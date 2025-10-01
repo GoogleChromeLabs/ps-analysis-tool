@@ -18,145 +18,89 @@
  * External dependencies
  */
 import {
-  noop,
   ProgressBar,
-  Table,
-  TableProvider,
   type TableFilter,
   type TableColumn,
-  type TableRow,
   Link,
-  ResizableTray,
+  type InfoType,
+  TabsProvider,
+  type TabItems,
+  DraggableTray,
 } from '@google-psat/design-system';
-import React, {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useCallback,
-} from 'react';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
 import type { MDLTableData } from '@google-psat/common';
+
 /**
  * Internal dependencies
  */
+import {
+  useScriptBlocking,
+  IMPACTED_BY_SCRIPT_BLOCKING,
+} from '../../../../stateProviders';
+import MdlCommonPanel from '../../mdlCommon';
 import Legend from './legend';
-import { useScriptBlocking } from '../../../../stateProviders';
-import RowContextMenuForScriptBlocking from './rowContextMenu';
+import Glossary from '../../mdlCommon/glossary';
 
-export const IMPACTED_BY_SCRIPT_BLOCKING = {
-  NONE: 'Not Impacted By Script Blocking',
-  PARTIAL: 'Some URLs are Blocked',
-  ENTIRE: 'Entire Domain Blocked',
+const titleMap = {
+  'Entire Domain Blocked': 'Scope Complete',
+  'Some URLs are Blocked': 'Scope Partial',
 };
 
-const DATA_URL =
-  'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md';
+type MDLTableProps = {
+  type?: 'Observability' | 'Learning';
+};
 
-const MDLTable = () => {
+const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
-    uniqueResponseDomains: state.uniqueResponseDomains,
-  }));
-
-  const rowContextMenuRef = useRef<React.ElementRef<
-    typeof RowContextMenuForScriptBlocking
-  > | null>(null);
-
-  const [initialTableData, setinitialTableData] = useState<
-    { domain: string; owner: string; scriptBlocking: string }[]
-  >([]);
-
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const response = await fetch(DATA_URL);
-
-      if (!response.ok) {
-        setIsLoading(false);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const text = await response.text();
-
-      const lines = text
-        .split('\n')
-        .filter((line) => line.includes('|'))
-        .slice(2);
-
-      const mdlData = lines
-        .map((line) => line.split('|').map((item) => item.trim()))
-        .filter((item) => item[2] !== IMPACTED_BY_SCRIPT_BLOCKING.NONE);
-
-      setinitialTableData(() => {
-        const data = mdlData.map((item: string[]) => {
-          let owner = item[1];
-
-          if (item[1].includes('PSL Domain')) {
-            owner = 'PSL Domain';
-          }
-
-          const scriptBlocking = item[2];
-
-          return {
-            domain: item[0],
-            owner,
-            scriptBlocking,
-          };
-        });
-
-        setIsLoading(false);
-
-        return data;
-      });
-    })();
-  }, []);
-
-  const checkbox = useCallback(
-    () => (
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input
-          className="hover:cursor-pointer"
-          type="checkbox"
-          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
-          defaultChecked
-        />
-        <span className="whitespace-nowrap">Show only highlighted domains</span>
-      </label>
-    ),
-    []
-  );
+  const [preSetFilters, setPresetFilters] = useState<{
+    [key: string]: Record<string, string[]>;
+  }>({ filter: {} });
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
+  const { uniqueResponseDomains, statistics, scriptBlockingData, isLoading } =
+    useScriptBlocking(({ state }) => ({
+      uniqueResponseDomains: state.uniqueResponseDomains,
+      statistics: state.statistics,
+      scriptBlockingData: state.scriptBlockingData,
+      isLoading: state.isLoading,
+    }));
 
   const tableData: MDLTableData[] = useMemo(() => {
-    if (initialTableData.length === 0) {
+    if (scriptBlockingData.length === 0) {
       return [];
     }
 
     const data: MDLTableData[] = [];
 
-    initialTableData.forEach((item) => {
-      let available = false;
-      if (uniqueResponseDomains.includes(item.domain)) {
-        available = true;
-      }
+    scriptBlockingData
+      .filter(
+        (item) => item.scriptBlocking !== IMPACTED_BY_SCRIPT_BLOCKING.NONE
+      )
+      .forEach((item) => {
+        if (type === 'Learning') {
+          data.push({
+            ...item,
+          } as MDLTableData);
+          return;
+        }
 
-      const canPush = showOnlyHighlighted ? available : true;
+        let available = false;
+        if (uniqueResponseDomains.includes(item.domain)) {
+          available = true;
+        }
 
-      if (canPush) {
-        data.push({
-          ...item,
-          highlighted: available,
-          highlightedClass:
-            available && item.scriptBlocking.startsWith('Some URLs are Blocked')
-              ? 'bg-amber-100'
-              : '',
-        } as MDLTableData);
-      }
-    });
+        if (available) {
+          data.push({
+            ...item,
+          } as MDLTableData);
+        }
+      });
 
-    return data.sort((a, b) => Number(b.highlighted) - Number(a.highlighted));
-  }, [uniqueResponseDomains, initialTableData, showOnlyHighlighted]);
+    return data;
+  }, [uniqueResponseDomains, scriptBlockingData, type]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -187,12 +131,39 @@ const MDLTable = () => {
         initialWidth: 100,
       },
       {
-        header: 'Impacted by Script Blocking',
+        header: 'Scope',
         accessorKey: 'scriptBlocking',
-        cell: (info) => info,
+        cell: (info) => titleMap[info as keyof typeof titleMap].slice(6),
       },
     ],
     []
+  );
+
+  const calculateFilters = useCallback(
+    (data: MDLTableData[]) => {
+      const _filters: {
+        [key: string]: {
+          selected: boolean;
+          description: string;
+        };
+      } = {};
+
+      data.forEach((singleData) => {
+        _filters[
+          titleMap[singleData.scriptBlocking as keyof typeof titleMap].slice(6)
+        ] = {
+          selected: preSetFilters?.filter?.scriptBlocking?.includes(
+            titleMap[singleData.scriptBlocking as keyof typeof titleMap]
+          ),
+          description: IMPACTED_BY_SCRIPT_BLOCKING[
+            singleData.scriptBlocking as keyof typeof IMPACTED_BY_SCRIPT_BLOCKING
+          ] as string,
+        };
+      });
+
+      return _filters;
+    },
+    [preSetFilters?.filter?.scriptBlocking]
   );
 
   const filters = useMemo<TableFilter>(
@@ -201,21 +172,102 @@ const MDLTable = () => {
         title: 'Owner',
       },
       scriptBlocking: {
-        title: 'Impacted by Script Blocking',
+        title: 'Scope',
         hasStaticFilterValues: true,
-        filterValues: {
-          [IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL]: {
-            selected: false,
-            description: IMPACTED_BY_SCRIPT_BLOCKING.PARTIAL,
-          },
-          [IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE]: {
-            selected: false,
-            description: IMPACTED_BY_SCRIPT_BLOCKING.ENTIRE,
-          },
+        hasPrecalculatedFilterValues: true,
+        filterValues: calculateFilters(tableData),
+        comparator: (value: InfoType, filterValue: string) => {
+          switch (filterValue) {
+            case 'Complete':
+              return value === 'Entire Domain Blocked';
+            case 'Partial':
+              return value === 'Some URLs are Blocked';
+            default:
+              return false;
+          }
         },
       },
     }),
-    []
+    [calculateFilters, tableData]
+  );
+
+  const stats = useMemo(
+    () => [
+      {
+        title: 'Domains',
+        centerCount: statistics.localView.domains,
+        color: '#25ACAD',
+        glossaryText: 'All page domains',
+      },
+      {
+        title: 'BDL',
+        centerCount:
+          statistics.localView.partiallyBlockedDomains +
+          statistics.localView.completelyBlockedDomains,
+        color: '#7D8471',
+        glossaryText: 'Page domains in block list',
+      },
+      {
+        title: 'Complete',
+        centerCount: statistics.localView.completelyBlockedDomains,
+        color: '#F3AE4E',
+        glossaryText: 'Completely blocked domains',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Complete'],
+            },
+          })),
+      },
+      {
+        title: 'Partial',
+        centerCount: statistics.localView.partiallyBlockedDomains,
+        color: '#4C79F4',
+        glossaryText: 'Partially blocked domains',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Partial'],
+            },
+          })),
+      },
+    ],
+    [
+      statistics.localView.completelyBlockedDomains,
+      statistics.localView.domains,
+      statistics.localView.partiallyBlockedDomains,
+    ]
+  );
+
+  const tabItems = useMemo<TabItems[keyof TabItems]>(
+    () => [
+      {
+        title: 'Glossary',
+        content: {
+          Element: Glossary,
+          className: 'p-4',
+          props: {
+            statItems: stats,
+          },
+        },
+      },
+      {
+        title: 'Legend',
+        content: {
+          Element: Legend,
+          className: 'p-4',
+        },
+      },
+    ],
+    [stats]
+  );
+
+  const bottomPanel = (
+    <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
+      <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
+    </TabsProvider>
   );
 
   if (isLoading) {
@@ -227,47 +279,21 @@ const MDLTable = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <TableProvider
-        tableColumns={tableColumns}
-        tableFilterData={filters}
-        tableSearchKeys={['domain', 'owner']}
-        data={tableData}
-        onRowClick={(rowData) => {
-          setSelectedKey((rowData as MDLTableData)?.domain || null);
-        }}
-        onRowContextMenu={
-          rowContextMenuRef.current
-            ? rowContextMenuRef.current?.onRowContextMenu
-            : noop
-        }
-        getRowObjectKey={(row: TableRow) =>
-          (row.originalData as MDLTableData).domain || ''
-        }
-        tablePersistentSettingsKey="mdlTable"
-      >
-        <ResizableTray
-          defaultSize={{
-            width: '100%',
-            height: '85%',
-          }}
-          minHeight="15%"
-          maxHeight="95%"
-          enable={{
-            top: false,
-            right: false,
-            bottom: true,
-            left: false,
-          }}
-          className="h-full flex"
-          trayId="mdl-table-bottom-tray"
-        >
-          <Table selectedKey={selectedKey} extraInterfaceToTopBar={checkbox} />
-        </ResizableTray>
-        <Legend />
-      </TableProvider>
-      <RowContextMenuForScriptBlocking ref={rowContextMenuRef} />
-    </div>
+    <MdlCommonPanel
+      formedJson={null}
+      tableColumns={tableColumns}
+      tableSearchKeys={['domain', 'owner']}
+      tableData={tableData}
+      selectedKey={selectedKey ?? ''}
+      onRowClick={(row) =>
+        setSelectedKey((row as MDLTableData)?.domain || null)
+      }
+      filters={filters}
+      stats={type === 'Learning' ? null : stats}
+      showJson={false}
+      bottomPanel={bottomPanel}
+      tab="scriptBlocking"
+    />
   );
 };
 

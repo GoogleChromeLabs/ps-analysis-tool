@@ -28,13 +28,13 @@ import {
   Link,
   ResizableTray,
 } from '@google-psat/design-system';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Internal dependencies
  */
 import Legend from './legend';
-import { getCurrentTab } from '../../../../../../utils/getCurrentTab';
+import { useScriptBlocking } from '../../../../stateProviders';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -45,69 +45,13 @@ const MDLTable = () => {
       domain: string;
       owner: string;
       highlighted: boolean;
-      highlightedClass: string;
+      highlightedClass?: () => string;
     }[]
   >([]);
 
-  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState<boolean>(true);
-
-  const [tab, setTab] = useState<chrome.tabs.Tab | null>(null);
-
-  useEffect(() => {
-    const currentTab = async () => {
-      const _tab = await getCurrentTab();
-      if (_tab) {
-        setTab(_tab);
-      }
-    };
-
-    currentTab();
-  }, []);
-
-  useEffect(() => {
-    const fetchTab = async ({
-      frameId,
-      frameType,
-      tabId,
-    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
-      if (
-        !(
-          chrome.devtools.inspectedWindow.tabId === tabId &&
-          frameType === 'outermost_frame' &&
-          frameId === 0
-        )
-      ) {
-        return;
-      }
-
-      const currentTab = await getCurrentTab();
-      if (!currentTab) {
-        return;
-      }
-
-      setTab(currentTab);
-    };
-
-    chrome.webNavigation.onCommitted.addListener(fetchTab);
-
-    return () => {
-      chrome.webNavigation.onCommitted.removeListener(fetchTab);
-    };
-  }, []);
-
-  const checkbox = useCallback(() => {
-    return (
-      <label className="text-raisin-black dark:text-bright-gray flex items-center gap-2 hover:cursor-pointer">
-        <input
-          className="hover:cursor-pointer"
-          type="checkbox"
-          onChange={() => setShowOnlyHighlighted((prev) => !prev)}
-          defaultChecked
-        />
-        <span className="whitespace-nowrap">Show only highlighted domains</span>
-      </label>
-    );
-  }, []);
+  const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
+    uniqueResponseDomains: state.uniqueResponseDomains,
+  }));
 
   useEffect(() => {
     (async () => {
@@ -133,6 +77,7 @@ const MDLTable = () => {
       setTableData(() => {
         const _data = mdlData
           .map((item: string[]) => {
+            let available = false;
             let owner = item[1];
 
             if (item[1].includes('PSL Domain')) {
@@ -141,24 +86,25 @@ const MDLTable = () => {
 
             const scriptBlocking = item[2];
 
-            const hostname = tab?.url ? new URL(tab.url).hostname : '';
+            if (uniqueResponseDomains.includes(item[0])) {
+              available = true;
+            }
 
             return {
               domain: item[0],
               owner,
               scriptBlocking,
-              highlighted: hostname.includes(item[0]),
-              highlightedClass: hostname.includes(item[0])
-                ? 'bg-amber-100'
-                : '',
-            };
-          })
-          .filter((item) => {
-            if (showOnlyHighlighted) {
-              return item.highlighted;
-            }
+              highlighted: available,
+              highlightedClass: available
+                ? (selected: boolean) => {
+                    if (selected) {
+                      return 'bg-amber-200/80 dark:bg-amber-200/70';
+                    }
 
-            return true;
+                    return 'bg-amber-100/60 dark:bg-amber-200/90';
+                  }
+                : undefined,
+            };
           })
           .sort((a, b) => {
             return Number(b.highlighted) - Number(a.highlighted);
@@ -169,7 +115,7 @@ const MDLTable = () => {
         return _data;
       });
     })();
-  }, [showOnlyHighlighted, tab?.url]);
+  }, [uniqueResponseDomains]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -250,7 +196,7 @@ const MDLTable = () => {
           className="h-full flex"
           trayId="mdl-table-bottom-tray"
         >
-          <Table selectedKey={selectedKey} extraInterfaceToTopBar={checkbox} />
+          <Table selectedKey={selectedKey} />
         </ResizableTray>
         <Legend />
       </TableProvider>

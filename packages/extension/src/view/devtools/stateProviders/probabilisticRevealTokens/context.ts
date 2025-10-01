@@ -24,21 +24,47 @@ import {
   type PRTMetadata,
 } from '@google-psat/common';
 
+type PRTStatistics = {
+  globalView: {
+    totalTokens: number;
+    nonZeroSignal: number;
+    mdl: number;
+    domains: number;
+  };
+  localView: {
+    totalTokens: number;
+    nonZeroSignal: number;
+  };
+};
+
 export interface ProbabilisticRevealTokensContextType {
   state: {
     plainTextTokens: UniquePlainTextToken[];
     decryptedTokens: UniqueDecryptedToken[];
     prtTokens: ProbablisticRevealToken[];
     perTokenMetadata: PRTMetadata[];
+    statistics: PRTStatistics;
   };
 }
 
-const initialState: ProbabilisticRevealTokensContextType = {
+export const initialState: ProbabilisticRevealTokensContextType = {
   state: {
     plainTextTokens: [],
     decryptedTokens: [],
     prtTokens: [],
     perTokenMetadata: [],
+    statistics: {
+      localView: {
+        totalTokens: 0,
+        nonZeroSignal: 0,
+      },
+      globalView: {
+        totalTokens: 0,
+        nonZeroSignal: 0,
+        mdl: 0,
+        domains: 0,
+      },
+    },
   },
 };
 

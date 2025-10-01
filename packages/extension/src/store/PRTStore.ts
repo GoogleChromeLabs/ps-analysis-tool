@@ -16,11 +16,12 @@
 /**
  * External dependencies.
  */
-import type {
-  UniqueDecryptedToken,
-  UniquePlainTextToken,
-  ProbablisticRevealToken,
-  PRTMetadata,
+import {
+  type UniqueDecryptedToken,
+  type UniquePlainTextToken,
+  type ProbablisticRevealToken,
+  type PRTMetadata,
+  isValidURL,
 } from '@google-psat/common';
 import { ec as ellipticEc } from 'elliptic';
 
@@ -28,7 +29,7 @@ import { ec as ellipticEc } from 'elliptic';
  * Internal dependencies.
  */
 import { DataStore } from './dataStore';
-import { TAB_TOKEN_DATA } from '../constants';
+import { EXTRA_DATA, TAB_TOKEN_DATA } from '../constants';
 
 const PRT_SIZE = 79;
 const PRT_POINT_SIZE = 33;
@@ -62,8 +63,123 @@ type SingleTabTokens = {
 class PRTStore extends DataStore {
   tabTokens: TabToken = {};
 
+  mdlData: {
+    [domain: string]: {
+      scriptBlockingScope: 'NONE' | 'PARTIAL' | 'COMPLETE';
+      domain: string;
+      owner: string;
+    };
+  } = {};
+
+  statistics: {
+    prtStatistics: {
+      globalView: {
+        [domain: string]: {
+          totalTokens: number;
+          nonZeroSignal: number;
+        };
+      };
+      localView: {
+        [domain: string]: {
+          totalTokens: number;
+          nonZeroSignal: number;
+        };
+      };
+    };
+    scriptBlocking: {
+      globalView: {
+        partiallyBlockedDomains: number;
+        completelyBlockedDomains: number;
+        domains: number;
+      };
+      localView: {
+        partiallyBlockedDomains: number;
+        completelyBlockedDomains: number;
+        domains: number;
+      };
+    };
+  } = {
+    prtStatistics: {
+      globalView: {},
+      localView: {},
+    },
+    scriptBlocking: {
+      globalView: {
+        partiallyBlockedDomains: 0,
+        completelyBlockedDomains: 0,
+        domains: 0,
+      },
+      localView: {
+        partiallyBlockedDomains: 0,
+        completelyBlockedDomains: 0,
+        domains: 0,
+      },
+    },
+  };
+
+  uniqueResponseDomains: {
+    [tabId: string]: string[];
+  } = {};
+
   constructor() {
     super();
+
+    (async () => {
+      const data = await fetch(
+        'https://raw.githubusercontent.com/GoogleChrome/ip-protection/refs/heads/main/Masked-Domain-List.md'
+      );
+
+      if (!data.ok) {
+        throw new Error(`HTTP error! status: ${data.status}`);
+      }
+
+      const text = await data.text();
+
+      const lines = text
+        .split('\n')
+        .filter((line) => line.includes('|'))
+        .slice(2);
+
+      const mdlData = lines.map((line) =>
+        line.split('|').map((item) => item.trim())
+      );
+
+      const _data = mdlData.reduce((acc, item: string[]) => {
+        let owner = item[1];
+
+        if (item[1].includes('PSL Domain')) {
+          owner = 'PSL Domain';
+        }
+
+        let scriptBlocking = '';
+
+        switch (item[2]) {
+          case 'Not Impacted By Script Blocking':
+            scriptBlocking = 'NONE';
+            break;
+          case 'Some URLs are Blocked':
+            scriptBlocking = 'PARTIAL';
+            break;
+          case 'Entire Domain Blocked':
+            scriptBlocking = 'COMPLETE';
+            break;
+          default:
+            break;
+        }
+
+        if (!acc[item[0]]) {
+          acc[item[0]] = {
+            domain: item[0],
+            owner,
+            scriptBlockingScope: scriptBlocking,
+          };
+        }
+
+        return acc;
+      }, {} as { [key: string]: any });
+
+      this.mdlData = _data;
+    })();
   }
 
   clear(): void {
@@ -71,6 +187,55 @@ class PRTStore extends DataStore {
     Object.keys(this.tabTokens).forEach((key) => {
       delete this.tabTokens[Number(key)];
     });
+  }
+
+  updateUniqueResponseDomains(tabId: string, requestId: string) {
+    if (!DataStore.requestIdToCDPURLMapping[tabId]) {
+      return;
+    }
+
+    const request = DataStore.requestIdToCDPURLMapping[tabId][requestId];
+
+    if (
+      !request ||
+      !isValidURL(request.url) ||
+      request.url.startsWith('chrome://') ||
+      request.url.startsWith('chrome-extension://') ||
+      request.url.startsWith('file://')
+    ) {
+      return;
+    }
+
+    let hostname = new URL(request.url).hostname;
+    hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+
+    if (
+      hostname !== 'null' &&
+      !this.uniqueResponseDomains[tabId].includes(hostname)
+    ) {
+      this.uniqueResponseDomains[tabId].push(hostname);
+      DataStore.tabs[tabId].newUpdatesScriptBlocking++;
+
+      this.statistics.scriptBlocking.globalView.completelyBlockedDomains +=
+        this.mdlData[hostname]?.scriptBlockingScope === 'COMPLETE' ? 1 : 0;
+      this.statistics.scriptBlocking.globalView.partiallyBlockedDomains +=
+        this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
+
+      this.statistics.scriptBlocking.globalView.domains += 1;
+
+      this.statistics.scriptBlocking.localView.completelyBlockedDomains +=
+        this.mdlData[hostname]?.scriptBlockingScope === 'COMPLETE' ? 1 : 0;
+      this.statistics.scriptBlocking.localView.partiallyBlockedDomains +=
+        this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
+
+      this.statistics.scriptBlocking.localView.domains += 1;
+
+      chrome.storage.session.set({
+        scriptBlocking: {
+          ...this.statistics.scriptBlocking.globalView,
+        },
+      });
+    }
   }
 
   getTabsData(tabId = ''): SingleTabTokens | typeof this.tabTokens {
@@ -83,6 +248,7 @@ class PRTStore extends DataStore {
   deinitialiseVariablesForTab(tabId: string): void {
     super.deinitialiseVariablesForTab(tabId);
     delete this.tabTokens[tabId];
+    delete this.uniqueResponseDomains[parseInt(tabId)];
   }
 
   initialiseVariablesForNewTab(tabId: string): void {
@@ -93,11 +259,19 @@ class PRTStore extends DataStore {
       prtTokens: [],
       perTokenMetadata: {},
     };
+    this.statistics.prtStatistics.localView = {};
+    this.statistics.scriptBlocking.localView = {
+      partiallyBlockedDomains: 0,
+      completelyBlockedDomains: 0,
+      domains: 0,
+    };
+    this.uniqueResponseDomains[parseInt(tabId)] = [];
     //@ts-ignore
     globalThis.PSAT = {
       //@ts-ignore
       ...globalThis.PSAT,
       tabTokens: this.tabTokens,
+      statistics: this.statistics,
     };
   }
 
@@ -110,8 +284,13 @@ class PRTStore extends DataStore {
     tabId: string,
     overrideForInitialSync: boolean
   ) {
+    await this.processPRTData(tabId, overrideForInitialSync);
+    await this.processScriptBlockingData(tabId, overrideForInitialSync);
+  }
+
+  async processPRTData(tabId: string, overrideForInitialSync: boolean) {
     try {
-      if (DataStore.tabs[tabId].newUpdatesCA <= 0 && !overrideForInitialSync) {
+      if (DataStore.tabs[tabId].newUpdatesPRT <= 0 && !overrideForInitialSync) {
         return;
       }
 
@@ -120,17 +299,92 @@ class PRTStore extends DataStore {
         perTokenMetadata: Object.values(this.tabTokens[tabId].perTokenMetadata),
       };
 
-      await chrome.runtime.sendMessage({
+      //@ts-ignore
+      const { prtStatistics = {} } = await chrome.storage.session.get(
+        'prtStatistics'
+      );
+
+      const localStats = Object.keys(
+        this.statistics.prtStatistics.localView
+      ).reduce(
+        (acc, origin) => {
+          acc.totalTokens +=
+            this.statistics.prtStatistics.localView[origin].totalTokens;
+          acc.nonZeroSignal +=
+            this.statistics.prtStatistics.localView[origin].nonZeroSignal;
+
+          return acc;
+        },
+        { totalTokens: 0, nonZeroSignal: 0 }
+      );
+
+      const globalStats = Object.keys(prtStatistics).reduce(
+        (acc, key) => {
+          if (prtStatistics[key]) {
+            acc.totalTokens = prtStatistics[key].totalTokens + acc.totalTokens;
+            acc.nonZeroSignal =
+              prtStatistics[key].nonZeroSignal + acc.nonZeroSignal;
+            let hostname = isValidURL(key) ? new URL(key).hostname : '';
+
+            hostname = hostname.startsWith('www.')
+              ? hostname.slice(4)
+              : hostname;
+            acc.mdl += hostname && this.mdlData[hostname] ? 1 : 0;
+          }
+          return acc;
+        },
+        { totalTokens: 0, nonZeroSignal: 0, domains: 0, mdl: 0 }
+      );
+
+      globalStats.domains = Object.keys(prtStatistics).length;
+
+      globalStats.mdl = await chrome.runtime.sendMessage({
         type: TAB_TOKEN_DATA,
         payload: {
           tabId,
           tokens: tokenData,
+          stats: {
+            globalView: globalStats,
+            localView: localStats,
+          },
         },
       });
 
       DataStore.tabs[tabId].newUpdatesPRT = 0;
     } catch (error) {
       // Fail silently
+    }
+  }
+
+  async processScriptBlockingData(
+    tabId: string,
+    overrideForInitialSync: boolean
+  ) {
+    if (
+      overrideForInitialSync ||
+      ((DataStore.tabs[tabId].devToolsOpenState ||
+        DataStore.tabs[tabId].popupOpenState) &&
+        DataStore.tabs[tabId].newUpdatesScriptBlocking > 0)
+    ) {
+      //@ts-ignore
+      const { scriptBlocking = {} } = await chrome.storage.session.get(
+        'scriptBlocking'
+      );
+
+      const globalView = scriptBlocking;
+
+      await chrome.runtime.sendMessage({
+        type: EXTRA_DATA,
+        payload: {
+          uniqueResponseDomains: this.uniqueResponseDomains[tabId],
+          stats: {
+            globalView,
+            localView: this.statistics.scriptBlocking.localView,
+          },
+          tabId: Number(tabId),
+        },
+      });
+      DataStore.tabs[tabId].newUpdatesScriptBlocking = 0;
     }
   }
   /**
@@ -348,7 +602,6 @@ class PRTStore extends DataStore {
         version,
         ordinal,
         uint8Signal: signal,
-        humanReadableSignal: btoa(String.fromCharCode.apply(null, plaintext)),
         hmacValid,
       } as UniquePlainTextToken;
     } catch (e) {

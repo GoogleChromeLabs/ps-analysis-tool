@@ -15,7 +15,7 @@
  */
 export { default as ProbabilisticRevealTokensProvider } from './probabilisticRevealTokensProvider';
 export {
-  default as ProbabilisticRevealTokensContext,
+  default as ProbabilisticRevealTokens,
   type ProbabilisticRevealTokensContextType,
 } from './context';
 export { default as useProbabilisticRevealTokens } from './useProbabilisticRevealTokens';

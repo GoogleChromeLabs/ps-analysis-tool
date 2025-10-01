@@ -18,5 +18,5 @@ export interface MDLTableData {
   owner: string;
   scriptBlocking: string;
   highlighted?: boolean;
-  highlightedClass?: string;
+  highlightedClass?: (selected: boolean) => string;
 }

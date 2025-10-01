@@ -68,24 +68,26 @@ const BodyRow = ({
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
   const scrollToHighlighted = row.originalData?.scrollToHighlighted;
-  const isHighlightedClass =
-    row.originalData?.highlightedClass || 'bg-dirty-pink dark:text-black';
+  const highlightedClass = (selected: boolean) =>
+    row.originalData?.highlightedClass?.(selected) ||
+    'bg-dirty-pink dark:text-black';
+
   const classes = classnames(
     rowKey !== selectedKey &&
       (index % 2
         ? isHighlighted
-          ? isHighlightedClass
+          ? highlightedClass(false)
           : 'bg-anti-flash-white dark:bg-charleston-green'
         : isHighlighted
-        ? isHighlightedClass
+        ? highlightedClass(false)
         : 'bg-white dark:bg-raisin-black'),
     rowKey === selectedKey &&
       (isRowFocused
         ? isHighlighted
-          ? isHighlightedClass
+          ? `${highlightedClass(true)}`
           : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : isHighlighted
-        ? isHighlightedClass
+        ? `${highlightedClass(true)}`
         : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();

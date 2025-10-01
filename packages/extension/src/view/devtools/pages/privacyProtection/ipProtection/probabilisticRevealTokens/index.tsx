@@ -18,62 +18,113 @@
  * External dependencies
  */
 import {
-  Table,
-  TableProvider,
-  type TableColumn,
-  type TableRow,
-  ResizableTray,
+  DraggableTray,
   JsonView,
-  noop,
+  TabsProvider,
+  type InfoType,
+  type TabItems,
+  type TableColumn,
+  type TableFilter,
 } from '@google-psat/design-system';
-import React, { useMemo, useRef, useState } from 'react';
-import type { PRTMetadata } from '@google-psat/common';
-import { I18n } from '@google-psat/i18n';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { isValidURL, type PRTMetadata } from '@google-psat/common';
+
 /**
  * Internal dependencies
  */
-import { useProbabilisticRevealTokens } from '../../../../stateProviders';
-import RowContextMenuForPRT from './rowContextMenu';
+import {
+  useProbabilisticRevealTokens,
+  useScriptBlocking,
+} from '../../../../stateProviders';
+import MdlCommonPanel from '../../mdlCommon';
+import getSignal from '../../../../../../utils/getSignal';
+import Glossary from '../../mdlCommon/glossary';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
+  const [preSetFilters, setPresetFilters] = useState<{
+    [key: string]: Record<string, string[]>;
+  }>({ filter: {} });
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const draggableTrayRef = useRef({
+    isCollapsed,
+    setIsCollapsed,
+  });
 
   const {
     perTokenMetadata,
     decryptedTokensData,
     prtTokensData,
     plainTextTokensData,
+    statistics,
   } = useProbabilisticRevealTokens(({ state }) => ({
     perTokenMetadata: state.perTokenMetadata,
     decryptedTokensData: state.decryptedTokens,
     prtTokensData: state.prtTokens,
     plainTextTokensData: state.plainTextTokens,
+    statistics: state.statistics,
   }));
 
-  const rowContextMenuRef = useRef<React.ElementRef<
-    typeof RowContextMenuForPRT
-  > | null>(null);
+  const { scriptBlockingData, isLoading } = useScriptBlocking(({ state }) => ({
+    scriptBlockingData: state.scriptBlockingData,
+    isLoading: state.isLoading,
+  }));
 
-  const tableColumns = useMemo<TableColumn[]>(
+  const stats = useMemo(
     () => [
       {
-        header: 'PRT',
-        accessorKey: 'prtHeader',
-        cell: (info) => info,
-        minWidth: 500,
+        title: 'Domains',
+        centerCount: perTokenMetadata.length,
+        color: '#F3AE4E',
+        glossaryText: 'Unique domains on page',
       },
       {
-        header: 'Origin',
-        accessorKey: 'origin',
-        cell: (info) => info,
+        title: 'MDL',
+        centerCount: perTokenMetadata.filter(({ origin }) => {
+          let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+
+          hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+
+          if (!hostname) {
+            return false;
+          }
+
+          return (
+            scriptBlockingData.filter((_data) => _data.domain === hostname)
+              .length > 0
+          );
+        }).length,
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              mdl: ['True'],
+            },
+          })),
+        color: '#4C79F4',
+        glossaryText: 'Page domains in MDL',
       },
       {
-        header: 'Decryption key available',
-        accessorKey: 'decryptionKeyAvailable',
-        cell: (info) => info.toString(),
+        title: 'PRT',
+        centerCount: statistics.localView.totalTokens,
+        color: '#EC7159',
+        glossaryText: 'Unique tokens sent in requests',
+      },
+      {
+        title: 'Signals',
+        centerCount: statistics.localView.nonZeroSignal,
+        color: '#5CC971',
+        glossaryText: 'PRTs that decode to IP address',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              nonZeroUint8Signal: ['PRTs with signal'],
+            },
+          })),
       },
     ],
-    []
+    [perTokenMetadata, scriptBlockingData, statistics]
   );
 
   const formedJson = useMemo(() => {
@@ -117,19 +168,19 @@ const ProbabilisticRevealTokens = () => {
 
     if (!_decryptedToken || !_plainTextToken) {
       return {
-        prtHeader,
-        prtToken: _prtToken,
+        ...prtHeader,
+        ..._prtToken,
       };
     }
 
     delete _decryptedToken.prtHeader;
     delete _plainTextToken.prtHeader;
 
+    const { uint8Signal, ...rest } = _plainTextToken;
+
     return {
-      prtHeader,
-      decryptedTokens: _decryptedToken,
-      prtToken: _prtToken,
-      plainTextToken: _plainTextToken,
+      ...rest,
+      ip: getSignal((Object.values(uint8Signal) as unknown as number[]) ?? []),
     };
   }, [
     decryptedTokensData,
@@ -139,57 +190,206 @@ const ProbabilisticRevealTokens = () => {
     selectedJSON,
   ]);
 
+  const tabItems = useMemo<TabItems[keyof TabItems]>(
+    () => [
+      {
+        title: 'Glossary',
+        content: {
+          Element: Glossary,
+          className: 'p-4',
+          props: {
+            statItems: stats,
+          },
+        },
+      },
+      {
+        title: 'JSON View',
+        content: {
+          //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
+          Element: JsonView,
+          className: 'p-4',
+          props: {
+            src: formedJson ?? {},
+          },
+        },
+      },
+    ],
+    [formedJson, stats]
+  );
+
+  const tableColumns = useMemo<TableColumn[]>(
+    () => [
+      {
+        header: 'Domain',
+        accessorKey: 'origin',
+        cell: (info) => info,
+        initialWidth: 120,
+      },
+      {
+        header: 'Owner',
+        accessorKey: 'owner',
+        cell: (info) => info,
+        initialWidth: 100,
+      },
+      {
+        header: 'Decrypted',
+        accessorKey: 'decryptionKeyAvailable',
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+        initialWidth: 60,
+      },
+      {
+        header: 'Signal',
+        accessorKey: 'nonZeroUint8Signal',
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
+        },
+        initialWidth: 60,
+      },
+      {
+        header: 'PRT Prefix',
+        accessorKey: 'prtHeader',
+        cell: (info) => (info as string).slice(0, 10),
+        isHiddenByDefault: true,
+      },
+    ],
+    []
+  );
+
+  const mdlComparator = useCallback(
+    (value: InfoType, filterValue: string) => {
+      let hostname = isValidURL(value as string)
+        ? new URL(value as string).hostname
+        : '';
+
+      hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+
+      if (!hostname || isLoading) {
+        return false;
+      }
+
+      switch (filterValue) {
+        case 'True':
+          return (
+            scriptBlockingData.filter(
+              (_data) => value && hostname === _data.domain
+            ).length > 0
+          );
+        case 'False':
+          return (
+            scriptBlockingData.filter(
+              (_data) => value && hostname === _data.domain
+            ).length === 0
+          );
+        default:
+          return true;
+      }
+    },
+    [isLoading, scriptBlockingData]
+  );
+
+  const filters = useMemo<TableFilter>(
+    () => ({
+      nonZeroUint8Signal: {
+        title: 'Signal',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: {
+          'PRTs with signal': {
+            selected: (
+              preSetFilters?.filter?.nonZeroUint8Signal ?? []
+            ).includes('PRTs with signal'),
+            description: "PRT's that reveal IP address",
+          },
+          'PRTs without signal': {
+            selected: (
+              preSetFilters?.filter?.nonZeroUint8Signal ?? []
+            ).includes('PRTs without signal'),
+            description: "PRT's that do not reveal IP address",
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          switch (filterValue) {
+            case 'PRTs without signal':
+              return !value as boolean;
+            case 'PRTs with signal':
+              return value as boolean;
+            default:
+              return true;
+          }
+        },
+      },
+      decryptionKeyAvailable: {
+        title: 'Decrypted',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: {
+          True: {
+            selected: false,
+            description: "PRT's that have been decrypted",
+          },
+          False: {
+            selected: false,
+            description: "PRT's that have not been decrypted",
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) => {
+          switch (filterValue) {
+            case 'True':
+              return value as boolean;
+            case 'False':
+              return !value as boolean;
+            default:
+              return true;
+          }
+        },
+      },
+      origin: {
+        title: 'MDL',
+        hasStaticFilterValues: true,
+        hasPrecalculatedFilterValues: true,
+        filterValues: {
+          True: {
+            selected: (preSetFilters?.filter?.mdl ?? []).includes('True'),
+            description: 'Domains that are in MDL',
+          },
+          False: {
+            selected: (preSetFilters?.filter?.mdl ?? []).includes('False'),
+            description: 'Domains that are not in MDL',
+          },
+        },
+        comparator: (value: InfoType, filterValue: string) =>
+          mdlComparator(value, filterValue),
+      },
+    }),
+    [
+      preSetFilters?.filter?.mdl,
+      preSetFilters?.filter?.nonZeroUint8Signal,
+      mdlComparator,
+    ]
+  );
+
+  const bottomPanel = (
+    <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
+      <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
+    </TabsProvider>
+  );
+
   return (
-    <div className="w-full h-full flex flex-col">
-      <ResizableTray
-        defaultSize={{
-          width: '100%',
-          height: selectedJSON ? '50%' : '90%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-        minHeight="20%"
-        maxHeight="90%"
-        className="w-full flex flex-col"
-        trayId="active-sources-table-bottom-tray"
-      >
-        <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
-          <TableProvider
-            data={perTokenMetadata}
-            tableColumns={tableColumns}
-            onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
-            getRowObjectKey={(row: TableRow) =>
-              (row.originalData as PRTMetadata).prtHeader.toString()
-            }
-            onRowContextMenu={
-              rowContextMenuRef.current?.onRowContextMenu ?? noop
-            }
-          >
-            <Table
-              hideTableTopBar
-              selectedKey={selectedJSON?.prtHeader.toString()}
-              hideSearch={true}
-              minWidth="50rem"
-            />
-            <RowContextMenuForPRT ref={rowContextMenuRef} />
-          </TableProvider>
-        </div>
-      </ResizableTray>
-      <div className="flex-1 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm h-full min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
-        {formedJson ? (
-          <div className="text-xs py-1 px-1.5 h-full">
-            <JsonView src={formedJson} />
-          </div>
-        ) : (
-          <div className="h-full p-8 flex items-center">
-            <p className="text-lg w-full font-bold text-granite-gray dark:text-manatee text-center">
-              {I18n.getMessage('selectRowToPreview')}
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
+    <MdlCommonPanel
+      formedJson={null}
+      bottomPanel={bottomPanel}
+      tableColumns={tableColumns}
+      filters={filters}
+      tableSearchKeys={['origin', 'owner']}
+      tableData={perTokenMetadata}
+      selectedKey={selectedJSON?.origin.toString()}
+      onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
+      stats={stats}
+      showJson={false}
+      tab="PRT"
+    />
   );
 };
 

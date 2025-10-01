@@ -48,6 +48,7 @@ export interface TabsStoreContext {
   actions: {
     setStorage: (data: string, index?: number) => void;
     setActiveTab: (tab: number) => void;
+    setActiveGroup: (group: string) => void;
     highlightTab: (
       tab: number,
       count?: boolean | number,
@@ -76,6 +77,7 @@ const initialState: TabsStoreContext = {
   actions: {
     setStorage: noop,
     setActiveTab: noop,
+    setActiveGroup: noop,
     highlightTab: noop,
     isTabHighlighted: () => false,
     shouldAddSpacer: () => false,

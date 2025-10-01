@@ -33,6 +33,7 @@ import attachCDP from './attachCDP';
 import readHeaderAndRegister from './readHeaderAndRegister';
 import PRTStore from '../store/PRTStore';
 import { createURL, extractHeader } from '../utils/headerFunctions';
+import updateStatistics from '../store/utils/updateStatistics';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -361,18 +362,35 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
             'Sec-Probabilistic-Reveal-Token',
             headers
           );
-          const origin =
-            extractHeader('origin', headers) ?? isValidURL(createURL(headers))
-              ? new URL(createURL(headers)).origin
-              : '';
 
-          if (!prtHeader) {
+          let origin = '';
+
+          if (
+            DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url &&
+            isValidURL(
+              DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
+            )
+          ) {
+            origin = new URL(
+              DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
+            ).origin;
+          } else if (
+            createURL(headers) &&
+            isValidURL(createURL(headers) ?? '')
+          ) {
+            origin = new URL(createURL(headers) ?? '').origin;
+          }
+
+          if (!prtHeader || !origin) {
             return;
           }
 
           const prt = PRTStore.getTokenFromHeaderString(prtHeader);
           const decodedToken = await PRTStore.decryptTokenHeader(prtHeader);
           const plainTextToken = await PRTStore.getPlaintextToken(decodedToken);
+          const nonZeroUint8Signal = plainTextToken?.uint8Signal
+            ? !plainTextToken.uint8Signal.every((bit) => bit === 0)
+            : false;
 
           if (
             prt &&
@@ -405,14 +423,30 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               ...plainTextToken,
               prtHeader,
             });
+
+            updateStatistics(origin, nonZeroUint8Signal);
+
+            await chrome.storage.session.set({
+              prtStatistics: {
+                ...PRTStore.statistics.prtStatistics.globalView,
+              },
+            });
           }
 
           if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[prtHeader]) {
+            const hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+            const formedOrigin = hostname.startsWith('www.')
+              ? hostname.slice(4)
+              : hostname;
+
             PRTStore.tabTokens[tabId].perTokenMetadata[prtHeader] = {
               prtHeader,
-              humanReadableSignal: plainTextToken?.humanReadableSignal ?? '',
               origin: isValidURL(origin) ? origin : '',
               decryptionKeyAvailable: Boolean(decodedToken),
+              nonZeroUint8Signal,
+              owner: PRTStore.mdlData[formedOrigin]?.owner
+                ? PRTStore.mdlData[formedOrigin]?.owner
+                : '',
             };
             DataStore.tabs[tabId].newUpdatesPRT++;
           }
@@ -519,7 +553,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        dataStore.updateUniqueResponseDomains(tabId, requestId);
+        PRTStore.updateUniqueResponseDomains(tabId, requestId);
 
         if (cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]) {
           cookieStore.parseResponseHeadersForCA(

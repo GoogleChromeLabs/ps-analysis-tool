@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,56 @@ import React, {
   forwardRef,
   useCallback,
   useImperativeHandle,
+  useMemo,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { type MDLTableData } from '@google-psat/common';
+import {
+  isValidURL,
+  type MDLTableData,
+  type PRTMetadata,
+} from '@google-psat/common';
 import type { TableRow } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
-const RowContextMenuForScriptBlocking = forwardRef<{
-  onRowContextMenu: (e: React.MouseEvent<HTMLElement>, row: TableRow) => void;
-}>(function RowContextMenu(_, ref) {
+type ContextMenuProp = {
+  tab: string;
+};
+
+const RowContextMenuForPRT = forwardRef<
+  {
+    onRowContextMenu: (e: React.MouseEvent<HTMLElement>, row: TableRow) => void;
+  },
+  ContextMenuProp
+>(function RowContextMenu({ tab }: ContextMenuProp, ref) {
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [columnPosition, setColumnPosition] = useState({
     x: 0,
     y: 0,
   });
-  const [rowData, setRowData] = useState<MDLTableData | null>();
+  const [data, setMetadata] = useState<PRTMetadata | MDLTableData | null>(null);
+  const domain = useMemo(() => {
+    if (!data) {
+      return null;
+    }
+
+    if (tab === 'PRT') {
+      if (isValidURL((data as PRTMetadata)?.origin)) {
+        return new URL((data as PRTMetadata)?.origin).hostname;
+      } else {
+        return '';
+      }
+    }
+
+    if (tab === 'scriptBlocking') {
+      if ((data as MDLTableData)?.domain) {
+        return (data as MDLTableData)?.highlighted
+          ? (data as MDLTableData)?.domain
+          : '';
+      }
+    }
+    return '';
+  }, [data, tab]);
 
   const handleRightClick = useCallback(
     (e: React.MouseEvent<HTMLElement>, { originalData }: TableRow) => {
@@ -45,7 +79,7 @@ const RowContextMenuForScriptBlocking = forwardRef<{
       setColumnPosition({ x, y });
       document.body.style.overflow = contextMenuOpen ? 'auto' : 'hidden';
       setContextMenuOpen(!contextMenuOpen);
-      setRowData(originalData as MDLTableData);
+      setMetadata(originalData as PRTMetadata);
     },
     [contextMenuOpen]
   );
@@ -57,10 +91,12 @@ const RowContextMenuForScriptBlocking = forwardRef<{
   }));
 
   const handleFilterClick = useCallback(() => {
-    const filter = `domain:${rowData?.domain}`;
+    const filter = `${
+      tab === 'PRT' ? 'has-request-header:sec-probabilistic-reveal-token ' : ''
+    }domain:${domain}`;
 
     // @ts-ignore
-    if (chrome.devtools.panels?.network?.show && rowData?.domain) {
+    if (chrome.devtools.panels?.network?.show) {
       // @ts-ignore
       chrome.devtools.panels.network.show({ filter });
       setContextMenuOpen(false);
@@ -80,12 +116,11 @@ const RowContextMenuForScriptBlocking = forwardRef<{
     } catch (error) {
       //Fail silently
     }
-  }, [rowData]);
+  }, [domain, tab]);
 
   return (
     <>
-      {rowData?.domain &&
-        rowData?.highlighted &&
+      {domain &&
         contextMenuOpen &&
         createPortal(
           <div className="transition duration-100" data-testid="column-menu">
@@ -105,7 +140,9 @@ const RowContextMenuForScriptBlocking = forwardRef<{
                   {
                     // @ts-ignore
                     chrome.devtools.panels?.network?.show
-                      ? 'Show requests with this domain.'
+                      ? tab === 'scriptBlocking'
+                        ? 'Show requests with this domain.'
+                        : 'Show requests with this token.'
                       : I18n.getMessage('copyNetworkFilter')
                   }
                 </span>
@@ -123,4 +160,4 @@ const RowContextMenuForScriptBlocking = forwardRef<{
   );
 });
 
-export default RowContextMenuForScriptBlocking;
+export default RowContextMenuForPRT;

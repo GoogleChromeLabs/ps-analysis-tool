@@ -41,5 +41,9 @@ export const createURL = (headers: Protocol.Network.Headers) => {
   const path = extractHeader(':path', headers);
   const port = extractHeader(':port', headers);
 
+  if (!authority || !scheme || !path) {
+    return null;
+  }
+
   return `${scheme}://${authority}${port ? `:${port}` : ''}${path}`;
 };

@@ -49,9 +49,9 @@ import {
   ProtectionIcon,
   SiteBoundariesIconWhite,
   DemosIcon,
+  IncognitoIcon,
   BlockIcon,
   BlockIconWhite,
-  IncognitoIcon,
 } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 import { addUTMParams } from '@google-psat/common';
@@ -85,11 +85,11 @@ import {
   FederatedCredential,
   IPProtection,
   PrivateStateTokens,
-  ScriptBlocking,
 } from './pages';
 import HelpCenter from './pages/learning/helpCenter';
 import Demos from './pages/learning/demos';
 import Incognito from './pages/incognito';
+import ScriptBlocking from './pages/privacyProtection/scriptBlocking';
 
 const TABS: SidebarItems = {
   [SIDEBAR_ITEMS_KEYS.PRIVACY_SANDBOX]: {
