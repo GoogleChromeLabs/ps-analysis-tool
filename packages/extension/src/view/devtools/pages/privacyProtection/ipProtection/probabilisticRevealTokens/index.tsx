@@ -241,8 +241,22 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'Signal',
         accessorKey: 'nonZeroUint8Signal',
-        cell: (info) => {
-          return info ? <span className="font-serif">✓</span> : '';
+        cell: (_, details) => {
+          const _plainTextToken = structuredClone(
+            plainTextTokensData.find(
+              (token) => token.prtHeader === (details as PRTMetadata)?.prtHeader
+            )
+          );
+
+          if (!_plainTextToken?.uint8Signal) {
+            return '';
+          }
+
+          const ipAddress = getSignal(
+            Object.values(_plainTextToken?.uint8Signal as unknown as number[])
+          );
+
+          return ipAddress === 'No Signal' ? '' : ipAddress;
         },
         initialWidth: 60,
       },
@@ -253,7 +267,7 @@ const ProbabilisticRevealTokens = () => {
         isHiddenByDefault: true,
       },
     ],
-    []
+    [plainTextTokensData]
   );
 
   const mdlComparator = useCallback(
@@ -386,6 +400,7 @@ const ProbabilisticRevealTokens = () => {
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
       tab="PRT"
+      activeTabIndex={formedJson?.prtHeader ? 1 : 0}
     />
   );
 };
