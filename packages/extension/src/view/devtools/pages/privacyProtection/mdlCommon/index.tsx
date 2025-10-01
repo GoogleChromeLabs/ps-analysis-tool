@@ -63,7 +63,7 @@ const MdlCommonPanel = ({
   filters,
   stats,
   tab = '',
-  activeTabIndex = () => 0,
+  activeTabIndex,
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForMDLTable

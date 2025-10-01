@@ -52,7 +52,7 @@ const DraggableTray = forwardRef<
     trayId,
     defaultHeight = '30%',
     disableResize = false,
-    activeTabIndex = () => -1,
+    activeTabIndex,
   }: DraggableTrayProps,
   ref
 ) {
@@ -81,7 +81,7 @@ const DraggableTray = forwardRef<
   }, [defaultHeight, isCollapsed, setHeight]);
 
   useEffect(() => {
-    if (activeTabIndex() !== -1) {
+    if (activeTabIndex && activeTabIndex() !== -1) {
       setActiveTab(activeTabIndex());
     }
   }, [activeTabIndex, setActiveTab]);
