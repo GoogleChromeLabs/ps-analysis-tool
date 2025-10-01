@@ -56,11 +56,15 @@ const DraggableTray = forwardRef<
   }: DraggableTrayProps,
   ref
 ) {
-  const { panel, activeTab, setActiveTab } = useTabs(({ state, actions }) => ({
-    panel: state.panel,
-    activeTab: state.activeTab,
-    setActiveTab: actions.setActiveTab,
-  }));
+  const { panel, activeTab, setActiveTab, setActiveGroup, isGroup } = useTabs(
+    ({ state, actions }) => ({
+      panel: state.panel,
+      activeTab: state.activeTab,
+      setActiveTab: actions.setActiveTab,
+      setActiveGroup: actions.setActiveGroup,
+      isGroup: state.isGroup,
+    })
+  );
   const ActiveTabContent = panel.Element;
   const props = panel.props;
 
@@ -83,8 +87,11 @@ const DraggableTray = forwardRef<
   useEffect(() => {
     if (activeTabIndex && activeTabIndex() !== -1) {
       setActiveTab(activeTabIndex());
+      if (!isGroup) {
+        setActiveGroup('group-' + activeTabIndex());
+      }
     }
-  }, [activeTabIndex, setActiveTab]);
+  }, [activeTabIndex, setActiveGroup, setActiveTab, isGroup]);
 
   useImperativeHandle(
     ref,
