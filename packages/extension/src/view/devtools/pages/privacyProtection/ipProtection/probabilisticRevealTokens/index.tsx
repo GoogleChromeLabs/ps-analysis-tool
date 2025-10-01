@@ -302,20 +302,23 @@ const ProbabilisticRevealTokens = () => {
         title: 'Signal',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: {
-          'PRTs with signal': {
-            selected: (
-              preSetFilters?.filter?.nonZeroUint8Signal ?? []
-            ).includes('PRTs with signal'),
-            description: "PRT's that reveal IP address",
-          },
-          'PRTs without signal': {
-            selected: (
-              preSetFilters?.filter?.nonZeroUint8Signal ?? []
-            ).includes('PRTs without signal'),
-            description: "PRT's that do not reveal IP address",
-          },
-        },
+        filterValues:
+          perTokenMetadata.length === 0
+            ? undefined
+            : {
+                'PRTs with signal': {
+                  selected: (
+                    preSetFilters?.filter?.nonZeroUint8Signal ?? []
+                  ).includes('PRTs with signal'),
+                  description: "PRT's that reveal IP address",
+                },
+                'PRTs without signal': {
+                  selected: (
+                    preSetFilters?.filter?.nonZeroUint8Signal ?? []
+                  ).includes('PRTs without signal'),
+                  description: "PRT's that do not reveal IP address",
+                },
+              },
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
             case 'PRTs without signal':
@@ -331,16 +334,19 @@ const ProbabilisticRevealTokens = () => {
         title: 'Decrypted',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: {
-          True: {
-            selected: false,
-            description: "PRT's that have been decrypted",
-          },
-          False: {
-            selected: false,
-            description: "PRT's that have not been decrypted",
-          },
-        },
+        filterValues:
+          perTokenMetadata.length === 0
+            ? undefined
+            : {
+                True: {
+                  selected: false,
+                  description: "PRT's that have been decrypted",
+                },
+                False: {
+                  selected: false,
+                  description: "PRT's that have not been decrypted",
+                },
+              },
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
             case 'True':
@@ -356,16 +362,21 @@ const ProbabilisticRevealTokens = () => {
         title: 'MDL',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: {
-          True: {
-            selected: (preSetFilters?.filter?.mdl ?? []).includes('True'),
-            description: 'Domains that are in MDL',
-          },
-          False: {
-            selected: (preSetFilters?.filter?.mdl ?? []).includes('False'),
-            description: 'Domains that are not in MDL',
-          },
-        },
+        filterValues:
+          perTokenMetadata.length === 0
+            ? undefined
+            : {
+                True: {
+                  selected: (preSetFilters?.filter?.mdl ?? []).includes('True'),
+                  description: 'Domains that are in MDL',
+                },
+                False: {
+                  selected: (preSetFilters?.filter?.mdl ?? []).includes(
+                    'False'
+                  ),
+                  description: 'Domains that are not in MDL',
+                },
+              },
         comparator: (value: InfoType, filterValue: string) =>
           mdlComparator(value, filterValue),
       },
@@ -374,6 +385,7 @@ const ProbabilisticRevealTokens = () => {
       preSetFilters?.filter?.mdl,
       preSetFilters?.filter?.nonZeroUint8Signal,
       mdlComparator,
+      perTokenMetadata,
     ]
   );
 
