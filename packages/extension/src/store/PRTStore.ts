@@ -362,14 +362,16 @@ class PRTStore extends DataStore {
   ) {
     if (
       overrideForInitialSync ||
-      ((DataStore.tabs[tabId].devToolsOpenState ||
-        DataStore.tabs[tabId].popupOpenState) &&
-        DataStore.tabs[tabId].newUpdatesScriptBlocking > 0)
+      DataStore.tabs[tabId].newUpdatesScriptBlocking > 0
     ) {
       //@ts-ignore
-      const { scriptBlocking = {} } = await chrome.storage.session.get(
-        'scriptBlocking'
-      );
+      const {
+        scriptBlocking = {
+          partiallyBlockedDomains: 0,
+          completelyBlockedDomains: 0,
+          domains: 0,
+        },
+      } = await chrome.storage.session.get('scriptBlocking');
 
       const globalView = scriptBlocking;
 
