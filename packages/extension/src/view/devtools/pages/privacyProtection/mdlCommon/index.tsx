@@ -49,7 +49,7 @@ interface MdlCommonPanelProps {
   stats: StatItem[] | null;
   tableSearchKeys: string[];
   tab: string;
-  activeTabIndex?: () => 0 | 1;
+  activeTabIndex?: () => number;
 }
 
 const MdlCommonPanel = ({

@@ -186,23 +186,23 @@ const ProbabilisticRevealTokens = () => {
   const tabItems = useMemo<TabItem[]>(
     () => [
       {
-        title: 'Glossary',
-        content: {
-          Element: Glossary,
-          className: 'p-4',
-          props: {
-            statItems: stats,
-          },
-        },
-      },
-      {
-        title: 'Json View',
+        title: 'JSON View',
         content: {
           //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
           Element: JsonView,
           className: 'p-4',
           props: {
             src: formedJson ?? {},
+          },
+        },
+      },
+      {
+        title: 'Glossary',
+        content: {
+          Element: Glossary,
+          className: 'p-4',
+          props: {
+            statItems: stats,
           },
         },
       },
@@ -388,7 +388,7 @@ const ProbabilisticRevealTokens = () => {
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
       tab="PRT"
-      activeTabIndex={() => (formedJson?.version ? 1 : 0)}
+      activeTabIndex={() => (formedJson?.version ? 0 : -1)}
     />
   );
 };
