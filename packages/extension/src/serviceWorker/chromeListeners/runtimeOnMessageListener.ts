@@ -36,6 +36,9 @@ import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import cookieStore from '../../store/cookieStore';
 import sendUpdatedData from '../../store/utils/sendUpdatedData';
 import prebidStore from '../../store/prebidStore';
+import ARAStore from '../../store/ARAStore';
+import PAStore from '../../store/PAStore';
+import PRTStore from '../../store/PRTStore';
 
 // eslint-disable-next-line complexity
 export const runtimeOnMessageListener = async (
@@ -81,12 +84,23 @@ export const runtimeOnMessageListener = async (
         const currentTab = targets.filter(
           ({ tabId }) => tabId && id && tabId === id
         );
-        dataStore?.addTabData(id.toString());
+
+        dataStore.initialiseVariablesForNewTab(id.toString());
+        dataStore.addTabData(id.toString());
         dataStore?.updateParentChildFrameAssociation(
           id.toString(),
           currentTab[0].id,
           '0'
         );
+        DataStore.tabs[id.toString()].devToolsOpenState = true;
+        cookieStore.initialiseVariablesForNewTab(id.toString());
+        PRTStore.deinitialiseVariablesForTab(id.toString());
+        PRTStore.initialiseVariablesForNewTab(id.toString());
+
+        prebidStore.initialiseVariablesForNewTabAndFrame(id.toString(), 0);
+        PAStore.initialiseVariablesForNewTab(id.toString());
+        ARAStore.initialiseVariablesForNewTab(id.toString());
+        sendUpdatedData(id.toString(), true);
 
         try {
           if (DataStore.globalIsUsingCDP) {
