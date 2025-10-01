@@ -9505,5 +9505,17 @@
   },
   "RWS_rationale_https___deltarune_wiki": {
     "message": "Sister wiki site that shares the same user database. Association clearly stated on the main page and Terms of Service."
+  },
+  "OCD_logglytrackings­ession_description": {
+    "message": "Used by Loggly for performance and error tracking."
+  },
+  "OCD_privacypillar_google_consent_description": {
+    "message": "Information about the visitor's Google vendor choices is stored by this cookie."
+  },
+  "OCD_privacypillar_cookie_consent_description": {
+    "message": "Stores the user's current consent status."
+  },
+  "OCD_usprivacy_description": {
+    "message": "This cookie stores the US privacy string."
   }
 }

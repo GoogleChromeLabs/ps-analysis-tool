@@ -16619,6 +16619,17 @@
       "dataController": "Didomi",
       "gdprUrl": "https://privacy.console.didomi.io/",
       "wildcard": "0"
+    },
+    {
+      "platform": "PrivacyPillar",
+      "category": "Functional",
+      "name": "euconsent-v2",
+      "domain": "",
+      "description": "This cookie stores the TC string.",
+      "retention": "1 year",
+      "dataController": "PrivacyPillar",
+      "gdprUrl": "https://privacypillar.com/privacy-policy/",
+      "wildcard": "0"
     }
   ],
   "_global_lucky_opt_out": [
@@ -28655,10 +28666,49 @@
       "category": "Functional",
       "name": "logglytrackings­ession",
       "domain": "",
-      "description": "OCD_logglytrackingsession_description",
+      "description": "OCD_logglytrackings­ession_description",
       "retention": "OCD_retention_session",
       "dataController": "Solarwinds",
       "gdprUrl": "https://www.solarwinds.com/legal/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "privacypillar-google-consent": [
+    {
+      "platform": "PrivacyPillar",
+      "category": "Functional",
+      "name": "privacypillar-google-consent",
+      "domain": "",
+      "description": "OCD_privacypillar_google_consent_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "PrivacyPillar",
+      "gdprUrl": "https://privacypillar.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "privacypillar-cookie-consent": [
+    {
+      "platform": "PrivacyPillar",
+      "category": "Functional",
+      "name": "privacypillar-cookie-consent",
+      "domain": "",
+      "description": "OCD_privacypillar_cookie_consent_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "PrivacyPillar",
+      "gdprUrl": "https://privacypillar.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "usprivacy": [
+    {
+      "platform": "PrivacyPillar",
+      "category": "Functional",
+      "name": "usprivacy",
+      "domain": "",
+      "description": "OCD_usprivacy_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "PrivacyPillar",
+      "gdprUrl": "https://privacypillar.com/privacy-policy/",
       "wildcard": "0"
     }
   ]
