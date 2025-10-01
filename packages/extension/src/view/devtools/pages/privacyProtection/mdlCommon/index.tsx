@@ -49,7 +49,7 @@ interface MdlCommonPanelProps {
   stats: StatItem[] | null;
   tableSearchKeys: string[];
   tab: string;
-  activeTabIndex?: number;
+  activeTabIndex?: () => 0 | 1;
 }
 
 const MdlCommonPanel = ({
@@ -63,7 +63,7 @@ const MdlCommonPanel = ({
   filters,
   stats,
   tab = '',
-  activeTabIndex = -1,
+  activeTabIndex = () => 0,
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForMDLTable
@@ -98,18 +98,14 @@ const MdlCommonPanel = ({
           />
           <RowContextMenuForMDLTable ref={rowContextMenuRef} tab={tab} />
         </TableProvider>
-        <TabsProvider
-          isGroup={false}
-          items={tabItems}
-          name={tab + 'bottomPanel'}
-        >
-          <DraggableTray
-            ref={draggableTrayRef}
-            trayId={tab + 'bottomPanel'}
-            activeTabIndex={activeTabIndex}
-          />
-        </TabsProvider>
       </div>
+      <TabsProvider isGroup={false} items={tabItems} name={tab + 'bottomPanel'}>
+        <DraggableTray
+          ref={draggableTrayRef}
+          trayId={tab + 'bottomPanel'}
+          activeTabIndex={activeTabIndex}
+        />
+      </TabsProvider>
     </div>
   );
 };

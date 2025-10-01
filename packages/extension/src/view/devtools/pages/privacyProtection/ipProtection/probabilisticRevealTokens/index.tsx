@@ -388,7 +388,7 @@ const ProbabilisticRevealTokens = () => {
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
       tab="PRT"
-      activeTabIndex={formedJson?.prtHeader ? 1 : 0}
+      activeTabIndex={() => (formedJson?.version ? 1 : 0)}
     />
   );
 };
