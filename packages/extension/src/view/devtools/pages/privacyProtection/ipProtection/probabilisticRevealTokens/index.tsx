@@ -69,7 +69,7 @@ const ProbabilisticRevealTokens = () => {
         title: 'Domains',
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
-        tooltipText: 'Unique domains on page',
+        glossaryText: 'Unique domains on page',
       },
       {
         title: 'MDL',
@@ -95,19 +95,19 @@ const ProbabilisticRevealTokens = () => {
             },
           })),
         color: '#4C79F4',
-        tooltipText: 'Page domains in MDL',
+        glossaryText: 'Page domains in MDL',
       },
       {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        tooltipText: 'Unique tokens sent in requests',
+        glossaryText: 'Unique tokens sent in requests',
       },
       {
         title: 'Signals',
         centerCount: statistics.localView.nonZeroSignal,
         color: '#5CC971',
-        tooltipText: 'PRTs that decode to IP address',
+        glossaryText: 'PRTs that decode to IP address',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
@@ -115,12 +115,6 @@ const ProbabilisticRevealTokens = () => {
               nonZeroUint8Signal: ['PRTs with signal'],
             },
           })),
-      },
-      {
-        header: 'PRT Prefix',
-        accessorKey: 'prtHeader',
-        cell: (info) => (info as string).slice(0, 10),
-        isHiddenByDefault: true,
       },
     ],
     [perTokenMetadata, scriptBlockingData, statistics]
@@ -314,12 +308,6 @@ const ProbabilisticRevealTokens = () => {
               preSetFilters?.filter?.nonZeroUint8Signal ?? []
             ).includes('PRTs with signal'),
             description: "PRT's that reveal IP address",
-          },
-          'PRTs without signal': {
-            selected: (
-              preSetFilters?.filter?.nonZeroUint8Signal ?? []
-            ).includes('PRTs without signal'),
-            description: "PRT's that do not reveal IP address",
           },
           'PRTs without signal': {
             selected: (
