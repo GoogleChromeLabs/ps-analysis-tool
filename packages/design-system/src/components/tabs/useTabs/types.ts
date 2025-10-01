@@ -24,7 +24,7 @@ export type TabItems = {
   [group: string]: Array<TabItem>;
 };
 
-type TabItem = {
+export type TabItem = {
   title: string;
   content: {
     Element: (props: any) => React.JSX.Element;

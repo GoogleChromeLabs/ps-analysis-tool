@@ -18,15 +18,13 @@
  * External dependencies
  */
 import {
-  DraggableTray,
   JsonView,
-  TabsProvider,
   type InfoType,
-  type TabItems,
+  type TabItem,
   type TableColumn,
   type TableFilter,
 } from '@google-psat/design-system';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { isValidURL, type PRTMetadata } from '@google-psat/common';
 
 /**
@@ -45,11 +43,6 @@ const ProbabilisticRevealTokens = () => {
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
   }>({ filter: {} });
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const draggableTrayRef = useRef({
-    isCollapsed,
-    setIsCollapsed,
-  });
 
   const {
     perTokenMetadata,
@@ -190,18 +183,8 @@ const ProbabilisticRevealTokens = () => {
     selectedJSON,
   ]);
 
-  const tabItems = useMemo<TabItems[keyof TabItems]>(
+  const tabItems = useMemo<TabItem[]>(
     () => [
-      {
-        title: 'Glossary',
-        content: {
-          Element: Glossary,
-          className: 'p-4',
-          props: {
-            statItems: stats,
-          },
-        },
-      },
       {
         title: 'JSON View',
         content: {
@@ -210,6 +193,16 @@ const ProbabilisticRevealTokens = () => {
           className: 'p-4',
           props: {
             src: formedJson ?? {},
+          },
+        },
+      },
+      {
+        title: 'Glossary',
+        content: {
+          Element: Glossary,
+          className: 'p-4',
+          props: {
+            statItems: stats,
           },
         },
       },
@@ -242,8 +235,22 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'Signal',
         accessorKey: 'nonZeroUint8Signal',
-        cell: (info) => {
-          return info ? <span className="font-serif">✓</span> : '';
+        cell: (_, details) => {
+          const _plainTextToken = structuredClone(
+            plainTextTokensData.find(
+              (token) => token.prtHeader === (details as PRTMetadata)?.prtHeader
+            )
+          );
+
+          if (!_plainTextToken?.uint8Signal) {
+            return '';
+          }
+
+          const ipAddress = getSignal(
+            Object.values(_plainTextToken?.uint8Signal as unknown as number[])
+          );
+
+          return ipAddress === 'No Signal' ? '' : ipAddress;
         },
         initialWidth: 60,
       },
@@ -254,7 +261,7 @@ const ProbabilisticRevealTokens = () => {
         isHiddenByDefault: true,
       },
     ],
-    []
+    [plainTextTokensData]
   );
 
   const mdlComparator = useCallback(
@@ -295,20 +302,23 @@ const ProbabilisticRevealTokens = () => {
         title: 'Signal',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: {
-          'PRTs with signal': {
-            selected: (
-              preSetFilters?.filter?.nonZeroUint8Signal ?? []
-            ).includes('PRTs with signal'),
-            description: "PRT's that reveal IP address",
-          },
-          'PRTs without signal': {
-            selected: (
-              preSetFilters?.filter?.nonZeroUint8Signal ?? []
-            ).includes('PRTs without signal'),
-            description: "PRT's that do not reveal IP address",
-          },
-        },
+        filterValues:
+          perTokenMetadata.length === 0
+            ? undefined
+            : {
+                'PRTs with signal': {
+                  selected: (
+                    preSetFilters?.filter?.nonZeroUint8Signal ?? []
+                  ).includes('PRTs with signal'),
+                  description: "PRT's that reveal IP address",
+                },
+                'PRTs without signal': {
+                  selected: (
+                    preSetFilters?.filter?.nonZeroUint8Signal ?? []
+                  ).includes('PRTs without signal'),
+                  description: "PRT's that do not reveal IP address",
+                },
+              },
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
             case 'PRTs without signal':
@@ -324,16 +334,19 @@ const ProbabilisticRevealTokens = () => {
         title: 'Decrypted',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: {
-          True: {
-            selected: false,
-            description: "PRT's that have been decrypted",
-          },
-          False: {
-            selected: false,
-            description: "PRT's that have not been decrypted",
-          },
-        },
+        filterValues:
+          perTokenMetadata.length === 0
+            ? undefined
+            : {
+                True: {
+                  selected: false,
+                  description: "PRT's that have been decrypted",
+                },
+                False: {
+                  selected: false,
+                  description: "PRT's that have not been decrypted",
+                },
+              },
         comparator: (value: InfoType, filterValue: string) => {
           switch (filterValue) {
             case 'True':
@@ -349,16 +362,21 @@ const ProbabilisticRevealTokens = () => {
         title: 'MDL',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
-        filterValues: {
-          True: {
-            selected: (preSetFilters?.filter?.mdl ?? []).includes('True'),
-            description: 'Domains that are in MDL',
-          },
-          False: {
-            selected: (preSetFilters?.filter?.mdl ?? []).includes('False'),
-            description: 'Domains that are not in MDL',
-          },
-        },
+        filterValues:
+          perTokenMetadata.length === 0
+            ? undefined
+            : {
+                True: {
+                  selected: (preSetFilters?.filter?.mdl ?? []).includes('True'),
+                  description: 'Domains that are in MDL',
+                },
+                False: {
+                  selected: (preSetFilters?.filter?.mdl ?? []).includes(
+                    'False'
+                  ),
+                  description: 'Domains that are not in MDL',
+                },
+              },
         comparator: (value: InfoType, filterValue: string) =>
           mdlComparator(value, filterValue),
       },
@@ -367,19 +385,13 @@ const ProbabilisticRevealTokens = () => {
       preSetFilters?.filter?.mdl,
       preSetFilters?.filter?.nonZeroUint8Signal,
       mdlComparator,
+      perTokenMetadata,
     ]
-  );
-
-  const bottomPanel = (
-    <TabsProvider isGroup={false} items={tabItems} name="bottomPanel">
-      <DraggableTray ref={draggableTrayRef} trayId="bottomPanel" />
-    </TabsProvider>
   );
 
   return (
     <MdlCommonPanel
-      formedJson={null}
-      bottomPanel={bottomPanel}
+      tabItems={tabItems}
       tableColumns={tableColumns}
       filters={filters}
       tableSearchKeys={['origin', 'owner']}
@@ -387,8 +399,8 @@ const ProbabilisticRevealTokens = () => {
       selectedKey={selectedJSON?.origin.toString()}
       onRowClick={(row) => setSelectedJSON(row as PRTMetadata)}
       stats={stats}
-      showJson={false}
       tab="PRT"
+      activeTabIndex={() => (formedJson?.version ? 0 : -1)}
     />
   );
 };

@@ -155,12 +155,15 @@ const Provider = ({ children }: PropsWithChildren) => {
     }
 
     const tabs = await chrome.tabs.query({});
+    const currentTab = tabs.find(
+      (tab) => tab.id === chrome.devtools.inspectedWindow.tabId
+    );
 
     if (tabs.some((tab) => tab.incognito)) {
       const incognitoTab = tabs.find((tab) => tab.incognito);
       if (incognitoTab) {
         chrome.tabs.create({
-          url: 'https://example.com',
+          url: currentTab?.url,
           windowId: incognitoTab.windowId,
           active: true,
         });
@@ -171,7 +174,7 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     await chrome.windows.create({
       incognito: true,
-      url: 'https://example.com',
+      url: currentTab?.url,
     });
   }, [incognitoAccess]);
 

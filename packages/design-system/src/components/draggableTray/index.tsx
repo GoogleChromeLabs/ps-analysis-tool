@@ -37,6 +37,7 @@ interface DraggableTrayProps {
   trayId?: string;
   defaultHeight?: string;
   disableResize?: boolean;
+  activeTabIndex?: () => number;
 }
 
 const DraggableTray = forwardRef<
@@ -51,12 +52,14 @@ const DraggableTray = forwardRef<
     trayId,
     defaultHeight = '30%',
     disableResize = false,
+    activeTabIndex,
   }: DraggableTrayProps,
   ref
 ) {
-  const { panel, activeTab } = useTabs(({ state }) => ({
+  const { panel, activeTab, setActiveTab } = useTabs(({ state, actions }) => ({
     panel: state.panel,
     activeTab: state.activeTab,
+    setActiveTab: actions.setActiveTab,
   }));
   const ActiveTabContent = panel.Element;
   const props = panel.props;
@@ -76,6 +79,12 @@ const DraggableTray = forwardRef<
       setHeight(defaultHeight);
     }
   }, [defaultHeight, isCollapsed, setHeight]);
+
+  useEffect(() => {
+    if (activeTabIndex && activeTabIndex() !== -1) {
+      setActiveTab(activeTabIndex());
+    }
+  }, [activeTabIndex, setActiveTab]);
 
   useImperativeHandle(
     ref,

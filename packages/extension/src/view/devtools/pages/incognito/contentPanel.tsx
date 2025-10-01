@@ -53,10 +53,8 @@ const ContentPanel = ({ onClick, frameColor }: ContentPanelProps) => {
               {' '}
               When browsing in Incognito Mode none of your browsing history,
               cookies and site data, or information entered in forms are saved
-              on your device. Since third-party cookies are blocked by default,
-              you can analyze the behavior of your site in Incognito mode to
-              ensure that it still works as expected, even when cookies are not
-              available.
+              on your device. You can analyze the behavior of your site in
+              Incognito mode to ensure that it still works as expected.
               {!isIncognitoAccess ? (
                 <>
                   {' '}

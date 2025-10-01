@@ -104,11 +104,11 @@ const FiltersSidebar = ({
 
   return (
     <div
-      className="h-full overflow-clip p-3 pt-0"
+      className="h-full overflow-auto p-3 flex flex-col gap-1.5"
       data-testid="filters-sidebar"
     >
       <a
-        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px] mt-1.5 mb-[5px]"
+        className="w-full block text-link text-royal-blue dark:text-medium-persian-blue text-[11px]"
         href="#"
         onClick={handleExpandAllClick}
       >

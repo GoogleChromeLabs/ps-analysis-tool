@@ -49,10 +49,10 @@ const LandingHeader = ({
             <div key={index} className="text-center w-fit h-fit">
               <button
                 key={index}
+                style={{ cursor: !circleData.onClick ? 'default' : 'pointer' }}
                 className={classnames('group text-center w-20 p-2 h-full', {
-                  'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out cursor-pointer ':
+                  'active:opacity-50 hover:scale-95 transition-all duration-300 ease-in-out':
                     circleData.onClick,
-                  'cursor-default': !circleData.onClick,
                 })}
                 onClick={() => {
                   circleData.onClick?.();
