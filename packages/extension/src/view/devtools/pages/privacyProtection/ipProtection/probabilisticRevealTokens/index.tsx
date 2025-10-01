@@ -265,7 +265,7 @@ const ProbabilisticRevealTokens = () => {
   );
 
   const mdlComparator = useCallback(
-    (value: InfoType, filterValue: string) => {
+    (value: InfoType, filterValue: string, data: typeof scriptBlockingData) => {
       let hostname = isValidURL(value as string)
         ? new URL(value as string).hostname
         : '';
@@ -279,21 +279,19 @@ const ProbabilisticRevealTokens = () => {
       switch (filterValue) {
         case 'True':
           return (
-            scriptBlockingData.filter(
-              (_data) => value && hostname === _data.domain
-            ).length > 0
+            data.filter((_data) => value && hostname === _data.domain).length >
+            0
           );
         case 'False':
           return (
-            scriptBlockingData.filter(
-              (_data) => value && hostname === _data.domain
-            ).length === 0
+            data.filter((_data) => value && hostname === _data.domain)
+              .length === 0
           );
         default:
           return true;
       }
     },
-    [isLoading, scriptBlockingData]
+    [isLoading]
   );
 
   const filters = useMemo<TableFilter>(
@@ -378,10 +376,11 @@ const ProbabilisticRevealTokens = () => {
                 },
               },
         comparator: (value: InfoType, filterValue: string) =>
-          mdlComparator(value, filterValue),
+          mdlComparator(value, filterValue, scriptBlockingData),
       },
     }),
     [
+      scriptBlockingData,
       preSetFilters?.filter?.mdl,
       preSetFilters?.filter?.nonZeroUint8Signal,
       mdlComparator,

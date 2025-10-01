@@ -210,7 +210,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              scriptBlocking: ['Complete'],
+              scriptBlocking: ['Scope Complete'],
             },
           })),
       },
@@ -223,7 +223,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              scriptBlocking: ['Partial'],
+              scriptBlocking: ['Scope Partial'],
             },
           })),
       },

@@ -276,6 +276,7 @@ class PRTStore extends DataStore {
       //@ts-ignore
       ...globalThis.PSAT,
       tabTokens: this.tabTokens,
+      uniqueResponseDomains: this.uniqueResponseDomains,
       statistics: this.statistics,
     };
   }
