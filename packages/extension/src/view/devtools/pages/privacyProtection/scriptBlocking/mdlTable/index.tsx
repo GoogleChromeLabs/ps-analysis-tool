@@ -51,8 +51,8 @@ type MDLTableProps = {
 const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [preSetFilters, setPresetFilters] = useState<{
-    [key: string]: Record<string, string[]>;
-  }>({ filter: {} });
+    ['filter']: string[];
+  }>({ filter: [] });
   const filterClearFunction = useRef<{
     resetFilters: () => void;
     toggleFilterSelection: (
@@ -157,7 +157,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         _filters[
           titleMap[singleData.scriptBlocking as keyof typeof titleMap].slice(6)
         ] = {
-          selected: preSetFilters?.filter?.scriptBlocking?.includes(
+          selected: preSetFilters?.filter?.includes(
             titleMap[singleData.scriptBlocking as keyof typeof titleMap]
           ),
           description: IMPACTED_BY_SCRIPT_BLOCKING[
@@ -168,7 +168,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
 
       return _filters;
     },
-    [preSetFilters?.filter?.scriptBlocking]
+    [preSetFilters?.filter]
   );
 
   const filters = useMemo<TableFilter>(
@@ -214,9 +214,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
-            filter: {
-              scriptBlocking: ['Scope Complete', 'Scope Partial'],
-            },
+            filter: ['Scope Complete', 'Scope Partial'],
           })),
         glossaryText: 'Domains in block list',
       },
@@ -228,9 +226,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
-            filter: {
-              scriptBlocking: ['Scope Complete'],
-            },
+            filter: ['Scope Complete'],
           })),
       },
       {
@@ -241,9 +237,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
-            filter: {
-              scriptBlocking: ['Scope Partial'],
-            },
+            filter: ['Scope Partial'],
           })),
       },
     ],
@@ -299,12 +293,12 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
       filters={filters}
       stats={type === 'Learning' ? null : stats}
       tab="scriptBlocking"
-      customClearAllFunction={() => setPresetFilters({ filter: {} })}
+      customClearAllFunction={() => setPresetFilters({ filter: [] })}
       customClearFunction={(key: string, value: string) =>
         setPresetFilters((prev) => {
           const updatedFilters = structuredClone(prev);
-          updatedFilters.filter[key] = updatedFilters.filter[key]?.filter(
-            (filterValue) => filterValue !== value
+          updatedFilters.filter = updatedFilters.filter?.filter(
+            (filterValue) => !filterValue.includes(value)
           );
           return updatedFilters;
         })
