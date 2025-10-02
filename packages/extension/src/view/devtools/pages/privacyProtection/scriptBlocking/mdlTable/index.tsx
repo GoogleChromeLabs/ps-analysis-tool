@@ -201,6 +201,13 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
         glossaryText: 'Page domains in block list',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Scope Complete', 'Scope Partial'],
+            },
+          })),
       },
       {
         title: 'Complete',
