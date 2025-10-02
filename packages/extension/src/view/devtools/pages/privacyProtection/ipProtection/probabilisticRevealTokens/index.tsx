@@ -214,6 +214,7 @@ const ProbabilisticRevealTokens = () => {
           className: 'p-4',
           props: {
             selectedJSON: formedJson ?? {},
+            containerClassname: 'h-full',
           },
         },
       },

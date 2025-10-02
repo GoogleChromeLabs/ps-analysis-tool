@@ -23,11 +23,14 @@ import { JsonView } from '@google-psat/design-system';
 
 interface BottomTrayProps {
   selectedJSON?: object;
+  containerClassname?: string;
 }
 
-const BottomTray = ({ selectedJSON }: BottomTrayProps) => {
+const BottomTray = ({ selectedJSON, containerClassname }: BottomTrayProps) => {
   return (
-    <div className="flex-1 z-20 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto">
+    <div
+      className={`flex-1 z-20 text-raisin-black dark:text-bright-gray border border-gray-300 dark:border-quartz shadow-sm min-w-[10rem] bg-white dark:bg-raisin-black overflow-auto ${containerClassname}`}
+    >
       <div className="text-xs py-1 px-1.5 h-full">
         {selectedJSON ? (
           <JsonView src={selectedJSON} />

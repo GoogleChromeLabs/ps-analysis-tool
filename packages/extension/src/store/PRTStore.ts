@@ -386,33 +386,37 @@ class PRTStore extends DataStore {
     tabId: string,
     overrideForInitialSync: boolean
   ) {
-    if (
-      overrideForInitialSync ||
-      DataStore.tabs[tabId].newUpdatesScriptBlocking > 0
-    ) {
-      //@ts-ignore
-      const {
-        scriptBlocking = {
-          partiallyBlockedDomains: 0,
-          completelyBlockedDomains: 0,
-          domains: 0,
-        },
-      } = await chrome.storage.session.get('scriptBlocking');
-
-      const globalView = scriptBlocking;
-
-      await chrome.runtime.sendMessage({
-        type: EXTRA_DATA,
-        payload: {
-          uniqueResponseDomains: this.uniqueResponseDomains[tabId],
-          stats: {
-            globalView,
-            localView: this.statistics.scriptBlocking.localView,
+    try {
+      if (
+        overrideForInitialSync ||
+        DataStore.tabs[tabId].newUpdatesScriptBlocking > 0
+      ) {
+        //@ts-ignore
+        const {
+          scriptBlocking = {
+            partiallyBlockedDomains: 0,
+            completelyBlockedDomains: 0,
+            domains: 0,
           },
-          tabId: Number(tabId),
-        },
-      });
-      DataStore.tabs[tabId].newUpdatesScriptBlocking = 0;
+        } = await chrome.storage.session.get('scriptBlocking');
+
+        const globalView = scriptBlocking;
+
+        await chrome.runtime.sendMessage({
+          type: EXTRA_DATA,
+          payload: {
+            uniqueResponseDomains: this.uniqueResponseDomains[tabId],
+            stats: {
+              globalView,
+              localView: this.statistics.scriptBlocking.localView,
+            },
+            tabId: Number(tabId),
+          },
+        });
+        DataStore.tabs[tabId].newUpdatesScriptBlocking = 0;
+      }
+    } catch (error) {
+      // Fail silently
     }
   }
   /**
