@@ -192,6 +192,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
         glossaryText: 'All page domains',
+        onClick: () => setPresetFilters({ filter: {} }),
       },
       {
         title: 'BDL',

@@ -18,7 +18,6 @@
  * External dependencies
  */
 import {
-  JsonView,
   type InfoType,
   type TabItem,
   type TableColumn,
@@ -37,6 +36,7 @@ import {
 import MdlCommonPanel from '../../mdlCommon';
 import getSignal from '../../../../../../utils/getSignal';
 import Glossary from '../../mdlCommon/glossary';
+import BottomTray from '../../../privateAdvertising/protectedAudience/auctions/components/table/bottomTray';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
@@ -70,6 +70,7 @@ const ProbabilisticRevealTokens = () => {
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
         glossaryText: 'Unique domains on page',
+        onClick: () => setPresetFilters({ filter: {} }),
       },
       {
         title: 'MDL',
@@ -102,6 +103,7 @@ const ProbabilisticRevealTokens = () => {
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
         glossaryText: 'Unique tokens sent in requests',
+        onClick: () => setPresetFilters({ filter: {} }),
       },
       {
         title: 'Signals',
@@ -191,8 +193,7 @@ const ProbabilisticRevealTokens = () => {
       {
         title: 'JSON View',
         content: {
-          //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
-          Element: JsonView,
+          Element: BottomTray,
           className: 'p-4',
           props: {
             src: formedJson ?? {},
