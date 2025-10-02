@@ -42,7 +42,12 @@ const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
-  }>({ filter: {} });
+  }>({
+    filter: {
+      mdl: [],
+      nonZeroUint8Signal: [],
+    },
+  });
 
   const {
     perTokenMetadata,
@@ -69,7 +74,14 @@ const ProbabilisticRevealTokens = () => {
         title: 'Domains',
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
-        onClick: () => setPresetFilters({ filter: {} }),
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              mdl: [],
+              nonZeroUint8Signal: [],
+            },
+          })),
         glossaryText: 'Top-level domains on page',
       },
       {
@@ -102,7 +114,14 @@ const ProbabilisticRevealTokens = () => {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        onClick: () => setPresetFilters({ filter: {} }),
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              mdl: [],
+              nonZeroUint8Signal: [],
+            },
+          })),
         glossaryText: 'PRT tokens sent in requests',
       },
       {
@@ -196,7 +215,7 @@ const ProbabilisticRevealTokens = () => {
           Element: BottomTray,
           className: 'p-4',
           props: {
-            src: formedJson ?? {},
+            selectedJSON: formedJson ?? {},
           },
         },
       },
@@ -384,11 +403,11 @@ const ProbabilisticRevealTokens = () => {
       },
     }),
     [
-      scriptBlockingData,
-      preSetFilters?.filter?.mdl,
-      preSetFilters?.filter?.nonZeroUint8Signal,
-      mdlComparator,
       perTokenMetadata,
+      preSetFilters.filter.mdl,
+      preSetFilters.filter.nonZeroUint8Signal,
+      scriptBlockingData,
+      mdlComparator,
     ]
   );
 
