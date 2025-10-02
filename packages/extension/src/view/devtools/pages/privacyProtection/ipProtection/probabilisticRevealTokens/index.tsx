@@ -112,7 +112,10 @@ const ProbabilisticRevealTokens = () => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              nonZeroUint8Signal: ['PRTs with signal'],
+              nonZeroUint8Signal: [
+                ...(prev.filter?.nonZeroUint8Signal ?? []),
+                'PRTs with signal',
+              ],
             },
           })),
       },
@@ -356,7 +359,7 @@ const ProbabilisticRevealTokens = () => {
           }
         },
       },
-      origin: {
+      mdl: {
         title: 'MDL',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
@@ -400,6 +403,16 @@ const ProbabilisticRevealTokens = () => {
       stats={stats}
       tab="PRT"
       activeTabIndex={() => (formedJson?.version ? 0 : -1)}
+      customClearAllFunction={() => setPresetFilters({ filter: {} })}
+      customClearFunction={(key: string, value: string) =>
+        setPresetFilters((prev) => {
+          const updatedFilters = structuredClone(prev);
+          updatedFilters.filter[key] = updatedFilters.filter[key]?.filter(
+            (filterValue) => filterValue !== value
+          );
+          return updatedFilters;
+        })
+      }
     />
   );
 };

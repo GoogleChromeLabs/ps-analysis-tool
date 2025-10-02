@@ -279,6 +279,16 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
       filters={filters}
       stats={type === 'Learning' ? null : stats}
       tab="scriptBlocking"
+      customClearAllFunction={() => setPresetFilters({ filter: {} })}
+      customClearFunction={(key: string, value: string) =>
+        setPresetFilters((prev) => {
+          const updatedFilters = structuredClone(prev);
+          updatedFilters.filter[key] = updatedFilters.filter[key]?.filter(
+            (filterValue) => filterValue !== value
+          );
+          return updatedFilters;
+        })
+      }
     />
   );
 };
