@@ -423,23 +423,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
               ...plainTextToken,
               prtHeader,
             });
-
-            updateStatistics(origin, nonZeroUint8Signal);
-
-            await chrome.storage.session.set({
-              prtStatistics: {
-                ...PRTStore.statistics.prtStatistics.globalView,
-              },
-            });
           }
 
-          if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[prtHeader]) {
+          if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[origin]) {
             const hostname = isValidURL(origin) ? new URL(origin).hostname : '';
             const formedOrigin = hostname.startsWith('www.')
               ? hostname.slice(4)
               : hostname;
 
-            PRTStore.tabTokens[tabId].perTokenMetadata[prtHeader] = {
+            PRTStore.tabTokens[tabId].perTokenMetadata[origin] = {
               prtHeader,
               origin: isValidURL(origin) ? origin : '',
               decryptionKeyAvailable: Boolean(decodedToken),
@@ -448,6 +440,15 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 ? PRTStore.mdlData[formedOrigin]?.owner
                 : '',
             };
+
+            updateStatistics(origin, nonZeroUint8Signal);
+
+            await chrome.storage.session.set({
+              prtStatistics: {
+                ...PRTStore.statistics.prtStatistics.globalView,
+              },
+            });
+
             DataStore.tabs[tabId].newUpdatesPRT++;
           }
         }
@@ -553,7 +554,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
-        PRTStore.updateUniqueResponseDomains(tabId, requestId);
+        PRTStore.updateUniqueResponseDomains(tabId, requestUrl);
 
         if (cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]) {
           cookieStore.parseResponseHeadersForCA(

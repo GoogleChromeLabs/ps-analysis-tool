@@ -195,6 +195,8 @@ const ProbabilisticRevealTokens = () => {
 
     return {
       ...rest,
+      prtHeader: prtHeader,
+      epochIdBase64: _prtToken.epochIdBase64,
       ip: getSignal((Object.values(uint8Signal) as unknown as number[]) ?? []),
     };
   }, [
@@ -213,7 +215,7 @@ const ProbabilisticRevealTokens = () => {
           Element: BottomTray,
           className: 'p-4',
           props: {
-            selectedJSON: formedJson ?? {},
+            selectedJSON: formedJson,
             containerClassname: 'h-full',
           },
         },

@@ -50,6 +50,7 @@ export const onCommittedNavigationListener = async ({
       dataStore.addTabData(tabId.toString());
       dataStore.initialiseVariablesForNewTab(tabId.toString());
       DataStore.tabs[tabId.toString()].devToolsOpenState = true;
+      cookieStore?.removeCookieData(tabId.toString());
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
       PRTStore.initialiseVariablesForNewTab(tabId.toString());
 
@@ -76,40 +77,20 @@ export const onCommittedNavigationListener = async ({
 
     dataStore?.updateUrl(tabId.toString(), url);
 
-    if (url && !url.startsWith('chrome')) {
-      cookieStore?.removeCookieData(tabId.toString());
-      cookieStore.deinitialiseVariablesForTab(tabId.toString());
-      cookieStore.initialiseVariablesForNewTab(tabId.toString());
-      PRTStore.initialiseVariablesForNewTab(tabId.toString());
+    if (DataStore.globalIsUsingCDP) {
+      await attachCDP({ tabId });
 
-      prebidStore.deinitialiseVariablesForTab(tabId.toString());
-      prebidStore.initialiseVariablesForNewTabAndFrame(
+      const {
+        targetInfo: { targetId },
+      } = await chrome.debugger.sendCommand({ tabId }, 'Target.getTargetInfo', {
+        targetId: mainFrameId,
+      });
+
+      dataStore.updateParentChildFrameAssociation(
         tabId.toString(),
-        frameId
+        targetId,
+        '0'
       );
-
-      if (DataStore.globalIsUsingCDP) {
-        PAStore.deinitialiseVariablesForTab(tabId.toString());
-        PAStore.initialiseVariablesForNewTab(tabId.toString());
-
-        await attachCDP({ tabId });
-
-        const {
-          targetInfo: { targetId },
-        } = await chrome.debugger.sendCommand(
-          { tabId },
-          'Target.getTargetInfo',
-          {
-            targetId: mainFrameId,
-          }
-        );
-
-        dataStore.updateParentChildFrameAssociation(
-          tabId.toString(),
-          targetId,
-          '0'
-        );
-      }
     }
 
     const tabs = await chrome.tabs.query({});

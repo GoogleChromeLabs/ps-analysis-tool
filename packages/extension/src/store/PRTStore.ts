@@ -193,28 +193,26 @@ class PRTStore extends DataStore {
     });
   }
 
-  updateUniqueResponseDomains(tabId: string, requestId: string) {
-    if (!DataStore.requestIdToCDPURLMapping[tabId]) {
+  updateUniqueResponseDomains(tabId: string, requestUrl: string): void {
+    if (!requestUrl) {
       return;
     }
 
-    const request = DataStore.requestIdToCDPURLMapping[tabId][requestId];
-
     if (
-      !request ||
-      !isValidURL(request.url) ||
-      request.url.startsWith('chrome://') ||
-      request.url.startsWith('chrome-extension://') ||
-      request.url.startsWith('file://')
+      !requestUrl ||
+      !isValidURL(requestUrl) ||
+      requestUrl.startsWith('chrome://') ||
+      requestUrl.startsWith('chrome-extension://') ||
+      requestUrl.startsWith('file://')
     ) {
       return;
     }
 
-    let hostname = new URL(request.url).hostname;
+    let hostname = new URL(requestUrl).hostname;
     hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
-
     if (
       hostname !== 'null' &&
+      hostname &&
       !this.uniqueResponseDomains[tabId].includes(hostname)
     ) {
       this.uniqueResponseDomains[tabId].push(hostname);
@@ -230,7 +228,8 @@ class PRTStore extends DataStore {
           ...this.statistics.scriptBlocking.globalView.domainArray,
           hostname,
         ])
-      );
+      ).toSorted();
+
       this.statistics.scriptBlocking.globalView.domains =
         this.statistics.scriptBlocking.globalView.domainArray.length;
 
@@ -244,7 +243,8 @@ class PRTStore extends DataStore {
           ...this.statistics.scriptBlocking.localView.domainArray,
           hostname,
         ])
-      );
+      ).toSorted();
+
       this.statistics.scriptBlocking.localView.domains =
         this.statistics.scriptBlocking.localView.domainArray.length;
 
@@ -290,6 +290,7 @@ class PRTStore extends DataStore {
       domains: 0,
       domainArray: [],
     };
+
     this.uniqueResponseDomains[parseInt(tabId)] = [];
     //@ts-ignore
     globalThis.PSAT = {
