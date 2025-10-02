@@ -18,6 +18,7 @@
  * External dependencies
  */
 import {
+  JsonView,
   type InfoType,
   type TabItem,
   type TableColumn,
@@ -36,7 +37,6 @@ import {
 import MdlCommonPanel from '../../mdlCommon';
 import getSignal from '../../../../../../utils/getSignal';
 import Glossary from '../../mdlCommon/glossary';
-import BottomTray from '../../../privateAdvertising/protectedAudience/auctions/components/table/bottomTray';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
@@ -69,8 +69,7 @@ const ProbabilisticRevealTokens = () => {
         title: 'Domains',
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
-        onClick: () => setPresetFilters({ filter: {} }),
-        glossaryText: 'Top-level domains on page',
+        glossaryText: 'Unique domains on page',
       },
       {
         title: 'MDL',
@@ -96,28 +95,24 @@ const ProbabilisticRevealTokens = () => {
             },
           })),
         color: '#4C79F4',
-        glossaryText: 'Domains in MDL',
+        glossaryText: 'Page domains in MDL',
       },
       {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        onClick: () => setPresetFilters({ filter: {} }),
-        glossaryText: 'PRT tokens sent in requests',
+        glossaryText: 'Unique tokens sent in requests',
       },
       {
         title: 'Signals',
         centerCount: statistics.localView.nonZeroSignal,
         color: '#5CC971',
-        glossaryText: 'PRTs with IP Address',
+        glossaryText: 'PRTs that decode to IP address',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              nonZeroUint8Signal: [
-                ...(prev.filter?.nonZeroUint8Signal ?? []),
-                'PRTs with signal',
-              ],
+              nonZeroUint8Signal: ['PRTs with signal'],
             },
           })),
       },
@@ -193,7 +188,8 @@ const ProbabilisticRevealTokens = () => {
       {
         title: 'JSON View',
         content: {
-          Element: BottomTray,
+          //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
+          Element: JsonView,
           className: 'p-4',
           props: {
             src: formedJson ?? {},
@@ -269,7 +265,7 @@ const ProbabilisticRevealTokens = () => {
   );
 
   const mdlComparator = useCallback(
-    (value: InfoType, filterValue: string, data: typeof scriptBlockingData) => {
+    (value: InfoType, filterValue: string) => {
       let hostname = isValidURL(value as string)
         ? new URL(value as string).hostname
         : '';
@@ -283,19 +279,21 @@ const ProbabilisticRevealTokens = () => {
       switch (filterValue) {
         case 'True':
           return (
-            data.filter((_data) => value && hostname === _data.domain).length >
-            0
+            scriptBlockingData.filter(
+              (_data) => value && hostname === _data.domain
+            ).length > 0
           );
         case 'False':
           return (
-            data.filter((_data) => value && hostname === _data.domain)
-              .length === 0
+            scriptBlockingData.filter(
+              (_data) => value && hostname === _data.domain
+            ).length === 0
           );
         default:
           return true;
       }
     },
-    [isLoading]
+    [isLoading, scriptBlockingData]
   );
 
   const filters = useMemo<TableFilter>(
@@ -360,7 +358,7 @@ const ProbabilisticRevealTokens = () => {
           }
         },
       },
-      mdl: {
+      origin: {
         title: 'MDL',
         hasStaticFilterValues: true,
         hasPrecalculatedFilterValues: true,
@@ -380,11 +378,10 @@ const ProbabilisticRevealTokens = () => {
                 },
               },
         comparator: (value: InfoType, filterValue: string) =>
-          mdlComparator(value, filterValue, scriptBlockingData),
+          mdlComparator(value, filterValue),
       },
     }),
     [
-      scriptBlockingData,
       preSetFilters?.filter?.mdl,
       preSetFilters?.filter?.nonZeroUint8Signal,
       mdlComparator,
@@ -404,16 +401,6 @@ const ProbabilisticRevealTokens = () => {
       stats={stats}
       tab="PRT"
       activeTabIndex={() => (formedJson?.version ? 0 : -1)}
-      customClearAllFunction={() => setPresetFilters({ filter: {} })}
-      customClearFunction={(key: string, value: string) =>
-        setPresetFilters((prev) => {
-          const updatedFilters = structuredClone(prev);
-          updatedFilters.filter[key] = updatedFilters.filter[key]?.filter(
-            (filterValue) => filterValue !== value
-          );
-          return updatedFilters;
-        })
-      }
     />
   );
 };

@@ -31,7 +31,7 @@ interface StatsHeaderProps {
 
 const StatsHeader = ({ stats }: StatsHeaderProps) => {
   return (
-    <div className="flex flex-col flex-row w-full py-5">
+    <div className="flex flex-col flex-row w-full py-2">
       <div className="flex flex-1 justify-center">
         <div className="flex flex-row items-center gap-8 w-full justify-center">
           {stats.map(

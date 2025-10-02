@@ -91,13 +91,11 @@ class PRTStore extends DataStore {
         partiallyBlockedDomains: number;
         completelyBlockedDomains: number;
         domains: number;
-        domainArray: string[];
       };
       localView: {
         partiallyBlockedDomains: number;
         completelyBlockedDomains: number;
         domains: number;
-        domainArray: string[];
       };
     };
   } = {
@@ -110,13 +108,11 @@ class PRTStore extends DataStore {
         partiallyBlockedDomains: 0,
         completelyBlockedDomains: 0,
         domains: 0,
-        domainArray: [],
       },
       localView: {
         partiallyBlockedDomains: 0,
         completelyBlockedDomains: 0,
         domains: 0,
-        domainArray: [],
       },
     },
   };
@@ -225,28 +221,14 @@ class PRTStore extends DataStore {
       this.statistics.scriptBlocking.globalView.partiallyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
-      this.statistics.scriptBlocking.globalView.domainArray = Array.from(
-        new Set([
-          ...this.statistics.scriptBlocking.globalView.domainArray,
-          hostname,
-        ])
-      );
-      this.statistics.scriptBlocking.globalView.domains =
-        this.statistics.scriptBlocking.globalView.domainArray.length;
+      this.statistics.scriptBlocking.globalView.domains += 1;
 
       this.statistics.scriptBlocking.localView.completelyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'COMPLETE' ? 1 : 0;
       this.statistics.scriptBlocking.localView.partiallyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
-      this.statistics.scriptBlocking.localView.domainArray = Array.from(
-        new Set([
-          ...this.statistics.scriptBlocking.localView.domainArray,
-          hostname,
-        ])
-      );
-      this.statistics.scriptBlocking.localView.domains =
-        this.statistics.scriptBlocking.localView.domainArray.length;
+      this.statistics.scriptBlocking.localView.domains += 1;
 
       chrome.storage.session.set({
         scriptBlocking: {
@@ -271,7 +253,6 @@ class PRTStore extends DataStore {
       partiallyBlockedDomains: 0,
       completelyBlockedDomains: 0,
       domains: 0,
-      domainArray: [],
     };
   }
 
@@ -288,7 +269,6 @@ class PRTStore extends DataStore {
       partiallyBlockedDomains: 0,
       completelyBlockedDomains: 0,
       domains: 0,
-      domainArray: [],
     };
     this.uniqueResponseDomains[parseInt(tabId)] = [];
     //@ts-ignore
@@ -296,7 +276,6 @@ class PRTStore extends DataStore {
       //@ts-ignore
       ...globalThis.PSAT,
       tabTokens: this.tabTokens,
-      uniqueResponseDomains: this.uniqueResponseDomains,
       statistics: this.statistics,
     };
   }

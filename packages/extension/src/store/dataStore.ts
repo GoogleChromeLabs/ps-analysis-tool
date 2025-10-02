@@ -68,6 +68,7 @@ export class DataStore {
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
       isPAAnalysisEnabled: boolean;
+      uniqueResponseDomains: string[];
       newUpdatesScriptBlocking: number;
     };
   } = {};
@@ -202,6 +203,7 @@ export class DataStore {
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
       isPAAnalysisEnabled: true,
+      uniqueResponseDomains: [],
       newUpdatesScriptBlocking: 0,
     };
   }

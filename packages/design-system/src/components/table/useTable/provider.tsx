@@ -53,8 +53,6 @@ export const TableProvider = ({
   getVerticalBarColorHash,
   isRowSelected,
   minColumnWidth = MIN_COLUMN_WIDTH,
-  customClearAllFunction,
-  customClearFunction,
   children,
 }: PropsWithChildren<TableProviderProps>) => {
   const [allData, setAllData] = useState(data);
@@ -93,9 +91,7 @@ export const TableProvider = ({
     searchFilteredData,
     tableFilterData,
     tablePersistentSettingsKey,
-    commonKey,
-    customClearFunction,
-    customClearAllFunction
+    commonKey
   );
 
   const loadMoreData = useCallback(() => {
