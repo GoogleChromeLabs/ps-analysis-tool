@@ -50,8 +50,6 @@ interface MdlCommonPanelProps {
   tableSearchKeys: string[];
   tab: string;
   activeTabIndex?: () => number;
-  customClearFunction?: (key: string, value: string) => void;
-  customClearAllFunction?: () => void;
 }
 
 const MdlCommonPanel = ({
@@ -66,8 +64,6 @@ const MdlCommonPanel = ({
   stats,
   tab = '',
   activeTabIndex,
-  customClearFunction,
-  customClearAllFunction,
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForMDLTable
@@ -85,8 +81,6 @@ const MdlCommonPanel = ({
       <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
         <TableProvider
           data={tableData}
-          customClearAllFunction={customClearAllFunction}
-          customClearFunction={customClearFunction}
           tableFilterData={filters}
           tableColumns={tableColumns}
           tableSearchKeys={tableSearchKeys}
