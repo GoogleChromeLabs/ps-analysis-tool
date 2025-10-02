@@ -69,7 +69,7 @@ const ProbabilisticRevealTokens = () => {
         title: 'Domains',
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
-        glossaryText: 'Unique domains on page',
+        glossaryText: 'Top-level domains on page',
       },
       {
         title: 'MDL',
@@ -95,19 +95,19 @@ const ProbabilisticRevealTokens = () => {
             },
           })),
         color: '#4C79F4',
-        glossaryText: 'Page domains in MDL',
+        glossaryText: 'Domains in MDL',
       },
       {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        glossaryText: 'Unique tokens sent in requests',
+        glossaryText: 'PRT tokens sent in requests',
       },
       {
         title: 'Signals',
         centerCount: statistics.localView.nonZeroSignal,
         color: '#5CC971',
-        glossaryText: 'PRTs that decode to IP address',
+        glossaryText: 'PRTs with IP Address',
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,

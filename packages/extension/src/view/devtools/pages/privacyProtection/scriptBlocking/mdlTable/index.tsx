@@ -191,7 +191,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
-        glossaryText: 'All page domains',
+        glossaryText: 'Domains in MDL',
       },
       {
         title: 'BDL',
@@ -199,7 +199,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
-        glossaryText: 'Page domains in block list',
+        glossaryText: 'Domains in block list',
       },
       {
         title: 'Complete',
