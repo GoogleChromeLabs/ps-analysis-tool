@@ -394,7 +394,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           if (
             prt &&
-            !PRTStore.tabTokens[tabId].prtTokens.some((token) =>
+            !PRTStore.tabTokens[tabId]?.prtTokens.some((token) =>
               isEqual(token, prt)
             )
           ) {
@@ -403,7 +403,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           if (
             decodedToken &&
-            !PRTStore.tabTokens[tabId].decryptedTokens.some(
+            !PRTStore.tabTokens[tabId]?.decryptedTokens.some(
               (token) => token.prtHeader === prtHeader
             )
           ) {
@@ -415,7 +415,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
           if (
             plainTextToken &&
-            !PRTStore.tabTokens[tabId].plainTextTokens.some(
+            !PRTStore.tabTokens[tabId]?.plainTextTokens.some(
               (token) => token.prtHeader === prtHeader
             )
           ) {

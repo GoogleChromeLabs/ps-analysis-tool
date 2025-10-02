@@ -191,7 +191,8 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
-        glossaryText: 'All page domains',
+        onClick: () => setPresetFilters({ filter: {} }),
+        glossaryText: 'Domains in MDL',
       },
       {
         title: 'BDL',
@@ -199,7 +200,14 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
-        glossaryText: 'Page domains in block list',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: {
+              scriptBlocking: ['Scope Complete', 'Scope Partial'],
+            },
+          })),
+        glossaryText: 'Domains in block list',
       },
       {
         title: 'Complete',
@@ -210,7 +218,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              scriptBlocking: ['Complete'],
+              scriptBlocking: ['Scope Complete'],
             },
           })),
       },
@@ -223,7 +231,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           setPresetFilters((prev) => ({
             ...prev,
             filter: {
-              scriptBlocking: ['Partial'],
+              scriptBlocking: ['Scope Partial'],
             },
           })),
       },
@@ -279,6 +287,16 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
       filters={filters}
       stats={type === 'Learning' ? null : stats}
       tab="scriptBlocking"
+      customClearAllFunction={() => setPresetFilters({ filter: {} })}
+      customClearFunction={(key: string, value: string) =>
+        setPresetFilters((prev) => {
+          const updatedFilters = structuredClone(prev);
+          updatedFilters.filter[key] = updatedFilters.filter[key]?.filter(
+            (filterValue) => filterValue !== value
+          );
+          return updatedFilters;
+        })
+      }
     />
   );
 };
