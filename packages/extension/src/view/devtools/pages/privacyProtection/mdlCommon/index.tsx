@@ -52,6 +52,14 @@ interface MdlCommonPanelProps {
   activeTabIndex?: () => number;
   customClearFunction?: (key: string, value: string) => void;
   customClearAllFunction?: () => void;
+  filterRef?: React.RefObject<{
+    resetFilters: () => void;
+    toggleFilterSelection: (
+      filterKey: string,
+      filterValue: string,
+      isRemovalAction?: boolean
+    ) => void;
+  }>;
 }
 
 const MdlCommonPanel = ({
@@ -68,6 +76,7 @@ const MdlCommonPanel = ({
   activeTabIndex,
   customClearFunction,
   customClearAllFunction,
+  filterRef,
 }: MdlCommonPanelProps) => {
   const rowContextMenuRef = useRef<React.ElementRef<
     typeof RowContextMenuForMDLTable
@@ -84,6 +93,7 @@ const MdlCommonPanel = ({
       {stats && <StatsHeader stats={stats} />}
       <div className="flex-1 border border-american-silver dark:border-quartz overflow-auto">
         <TableProvider
+          filterRef={filterRef}
           data={tableData}
           customClearAllFunction={customClearAllFunction}
           customClearFunction={customClearFunction}

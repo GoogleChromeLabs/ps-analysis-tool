@@ -23,8 +23,8 @@ import {
   type TableColumn,
   type TableFilter,
 } from '@google-psat/design-system';
-import React, { useCallback, useMemo, useState } from 'react';
-import { isValidURL, type PRTMetadata } from '@google-psat/common';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { isValidURL, noop, type PRTMetadata } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -63,6 +63,18 @@ const ProbabilisticRevealTokens = () => {
     statistics: state.statistics,
   }));
 
+  const filterClearFunction = useRef<{
+    resetFilters: () => void;
+    toggleFilterSelection: (
+      filterKey: string,
+      filterValue: string,
+      isRemovalAction?: boolean
+    ) => void;
+  }>({
+    resetFilters: noop,
+    toggleFilterSelection: noop,
+  });
+
   const { scriptBlockingData, isLoading } = useScriptBlocking(({ state }) => ({
     scriptBlockingData: state.scriptBlockingData,
     isLoading: state.isLoading,
@@ -74,14 +86,7 @@ const ProbabilisticRevealTokens = () => {
         title: 'Domains',
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
-        onClick: () =>
-          setPresetFilters((prev) => ({
-            ...prev,
-            filter: {
-              mdl: [],
-              nonZeroUint8Signal: [],
-            },
-          })),
+        onClick: () => filterClearFunction.current.resetFilters(),
         glossaryText: 'Top-level domains on page',
       },
       {
@@ -114,14 +119,7 @@ const ProbabilisticRevealTokens = () => {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        onClick: () =>
-          setPresetFilters((prev) => ({
-            ...prev,
-            filter: {
-              mdl: [],
-              nonZeroUint8Signal: [],
-            },
-          })),
+        onClick: () => filterClearFunction.current.resetFilters(),
         glossaryText: 'PRT tokens sent in requests',
       },
       {
@@ -413,6 +411,7 @@ const ProbabilisticRevealTokens = () => {
 
   return (
     <MdlCommonPanel
+      filterRef={filterClearFunction}
       tabItems={tabItems}
       tableColumns={tableColumns}
       filters={filters}
@@ -423,7 +422,9 @@ const ProbabilisticRevealTokens = () => {
       stats={stats}
       tab="PRT"
       activeTabIndex={() => (formedJson?.version ? 0 : -1)}
-      customClearAllFunction={() => setPresetFilters({ filter: {} })}
+      customClearAllFunction={() =>
+        setPresetFilters({ filter: { mdl: [], nonZeroUint8Signal: [] } })
+      }
       customClearFunction={(key: string, value: string) =>
         setPresetFilters((prev) => {
           const updatedFilters = structuredClone(prev);

@@ -177,4 +177,12 @@ export interface TableProviderProps {
   minColumnWidth?: number;
   customClearFunction?: (key: string, value: string) => void;
   customClearAllFunction?: () => void;
+  filterRef?: React.RefObject<{
+    resetFilters: () => void;
+    toggleFilterSelection: (
+      filterKey: string,
+      filterValue: string,
+      isRemovalAction?: boolean
+    ) => void;
+  }>;
 }

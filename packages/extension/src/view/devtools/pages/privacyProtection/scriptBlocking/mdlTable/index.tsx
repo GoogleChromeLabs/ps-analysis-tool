@@ -25,8 +25,8 @@ import {
   type InfoType,
   type TabItems,
 } from '@google-psat/design-system';
-import React, { useMemo, useState, useCallback } from 'react';
-import type { MDLTableData } from '@google-psat/common';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
+import { noop, type MDLTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -53,6 +53,17 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const [preSetFilters, setPresetFilters] = useState<{
     [key: string]: Record<string, string[]>;
   }>({ filter: {} });
+  const filterClearFunction = useRef<{
+    resetFilters: () => void;
+    toggleFilterSelection: (
+      filterKey: string,
+      filterValue: string,
+      isRemovalAction?: boolean
+    ) => void;
+  }>({
+    resetFilters: noop,
+    toggleFilterSelection: noop,
+  });
 
   const { uniqueResponseDomains, statistics, scriptBlockingData, isLoading } =
     useScriptBlocking(({ state }) => ({
@@ -191,7 +202,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
-        onClick: () => setPresetFilters({ filter: {} }),
+        onClick: () => filterClearFunction.current.resetFilters(),
         glossaryText: 'Domains in MDL',
       },
       {
@@ -276,6 +287,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
 
   return (
     <MdlCommonPanel
+      filterRef={filterClearFunction}
       tabItems={tabItems}
       tableColumns={tableColumns}
       tableSearchKeys={['domain', 'owner']}
