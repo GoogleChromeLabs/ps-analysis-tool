@@ -63,9 +63,7 @@ const RowContextMenuForPRT = forwardRef<
 
     if (tab === 'scriptBlocking') {
       if ((data as MDLTableData)?.domain) {
-        return (data as MDLTableData)?.highlighted
-          ? (data as MDLTableData)?.domain
-          : '';
+        return (data as MDLTableData)?.domain;
       }
     }
     return '';
