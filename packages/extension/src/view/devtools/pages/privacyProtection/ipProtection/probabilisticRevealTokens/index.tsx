@@ -215,7 +215,7 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'Domain',
         accessorKey: 'origin',
-        cell: (info) => info,
+        cell: (info) => String(info).split('https://')?.[1] || String(info),
         initialWidth: 120,
       },
       {
