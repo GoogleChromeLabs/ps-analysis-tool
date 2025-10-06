@@ -21,6 +21,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from 'react';
 import { isEqual } from 'lodash-es';
 
@@ -166,23 +167,22 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
     };
   }, [messagePassingListener, syncStorageListener]);
 
-  return (
-    <Context.Provider
-      value={{
-        state: {
-          uniqueResponseDomains,
-          statistics,
-          scriptBlockingData: initialTableData,
-          isLoading,
-        },
-        actions: {
-          setUniqueResponseDomains,
-        },
-      }}
-    >
-      {children}
-    </Context.Provider>
+  const value = useMemo(
+    () => ({
+      state: {
+        uniqueResponseDomains,
+        statistics,
+        scriptBlockingData: initialTableData,
+        isLoading,
+      },
+      actions: {
+        setUniqueResponseDomains,
+      },
+    }),
+    [initialTableData, isLoading, statistics, uniqueResponseDomains]
   );
+
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 };
 
 export default ScriptBlockingProvider;

@@ -80,9 +80,11 @@ class PRTStore extends DataStore {
         };
       };
       localView: {
-        [domain: string]: {
-          totalTokens: number;
-          nonZeroSignal: number;
+        [tabId: string]: {
+          [domain: string]: {
+            totalTokens: number;
+            nonZeroSignal: number;
+          };
         };
       };
     };
@@ -91,11 +93,15 @@ class PRTStore extends DataStore {
         partiallyBlockedDomains: number;
         completelyBlockedDomains: number;
         domains: number;
+        domainArray: string[];
       };
       localView: {
-        partiallyBlockedDomains: number;
-        completelyBlockedDomains: number;
-        domains: number;
+        [tabId: string]: {
+          partiallyBlockedDomains: number;
+          completelyBlockedDomains: number;
+          domains: number;
+          domainArray: string[];
+        };
       };
     };
   } = {
@@ -108,12 +114,9 @@ class PRTStore extends DataStore {
         partiallyBlockedDomains: 0,
         completelyBlockedDomains: 0,
         domains: 0,
+        domainArray: [],
       },
-      localView: {
-        partiallyBlockedDomains: 0,
-        completelyBlockedDomains: 0,
-        domains: 0,
-      },
+      localView: {},
     },
   };
 
@@ -189,28 +192,26 @@ class PRTStore extends DataStore {
     });
   }
 
-  updateUniqueResponseDomains(tabId: string, requestId: string) {
-    if (!DataStore.requestIdToCDPURLMapping[tabId]) {
+  updateUniqueResponseDomains(tabId: string, requestUrl: string): void {
+    if (!requestUrl) {
       return;
     }
 
-    const request = DataStore.requestIdToCDPURLMapping[tabId][requestId];
-
     if (
-      !request ||
-      !isValidURL(request.url) ||
-      request.url.startsWith('chrome://') ||
-      request.url.startsWith('chrome-extension://') ||
-      request.url.startsWith('file://')
+      !requestUrl ||
+      !isValidURL(requestUrl) ||
+      requestUrl.startsWith('chrome://') ||
+      requestUrl.startsWith('chrome-extension://') ||
+      requestUrl.startsWith('file://')
     ) {
       return;
     }
 
-    let hostname = new URL(request.url).hostname;
+    let hostname = new URL(requestUrl).hostname;
     hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
-
     if (
       hostname !== 'null' &&
+      hostname &&
       !this.uniqueResponseDomains[tabId].includes(hostname)
     ) {
       this.uniqueResponseDomains[tabId].push(hostname);
@@ -221,14 +222,39 @@ class PRTStore extends DataStore {
       this.statistics.scriptBlocking.globalView.partiallyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
-      this.statistics.scriptBlocking.globalView.domains += 1;
+      this.statistics.scriptBlocking.globalView.domainArray = Array.from(
+        new Set([
+          ...this.statistics.scriptBlocking.globalView.domainArray,
+          hostname,
+        ])
+      ).toSorted();
 
-      this.statistics.scriptBlocking.localView.completelyBlockedDomains +=
+      this.statistics.scriptBlocking.globalView.domains =
+        this.statistics.scriptBlocking.globalView.domainArray.length;
+      if (!this.statistics.scriptBlocking.localView[tabId]) {
+        this.statistics.scriptBlocking.localView[tabId] = {
+          partiallyBlockedDomains: 0,
+          completelyBlockedDomains: 0,
+          domainArray: [],
+          domains: 0,
+        };
+      }
+      this.statistics.scriptBlocking.localView[
+        tabId
+      ].completelyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'COMPLETE' ? 1 : 0;
-      this.statistics.scriptBlocking.localView.partiallyBlockedDomains +=
+      this.statistics.scriptBlocking.localView[tabId].partiallyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
-      this.statistics.scriptBlocking.localView.domains += 1;
+      this.statistics.scriptBlocking.localView[tabId].domainArray = Array.from(
+        new Set([
+          ...this.statistics.scriptBlocking.localView[tabId].domainArray,
+          hostname,
+        ])
+      ).toSorted();
+
+      this.statistics.scriptBlocking.localView[tabId].domains =
+        this.statistics.scriptBlocking.localView[tabId].domainArray.length;
 
       chrome.storage.session.set({
         scriptBlocking: {
@@ -249,10 +275,11 @@ class PRTStore extends DataStore {
     super.deinitialiseVariablesForTab(tabId);
     delete this.tabTokens[tabId];
     delete this.uniqueResponseDomains[parseInt(tabId)];
-    this.statistics.scriptBlocking.localView = {
+    this.statistics.scriptBlocking.localView[tabId] = {
       partiallyBlockedDomains: 0,
       completelyBlockedDomains: 0,
       domains: 0,
+      domainArray: [],
     };
   }
 
@@ -265,17 +292,20 @@ class PRTStore extends DataStore {
       perTokenMetadata: {},
     };
     this.statistics.prtStatistics.localView = {};
-    this.statistics.scriptBlocking.localView = {
+    this.statistics.scriptBlocking.localView[tabId] = {
       partiallyBlockedDomains: 0,
       completelyBlockedDomains: 0,
       domains: 0,
+      domainArray: [],
     };
+
     this.uniqueResponseDomains[parseInt(tabId)] = [];
     //@ts-ignore
     globalThis.PSAT = {
       //@ts-ignore
       ...globalThis.PSAT,
       tabTokens: this.tabTokens,
+      uniqueResponseDomains: this.uniqueResponseDomains,
       statistics: this.statistics,
     };
   }
@@ -310,13 +340,15 @@ class PRTStore extends DataStore {
       );
 
       const localStats = Object.keys(
-        this.statistics.prtStatistics.localView
+        this.statistics.prtStatistics.localView[tabId]
       ).reduce(
         (acc, origin) => {
           acc.totalTokens +=
-            this.statistics.prtStatistics.localView[origin].totalTokens;
+            this.statistics.prtStatistics.localView[tabId][origin].totalTokens;
           acc.nonZeroSignal +=
-            this.statistics.prtStatistics.localView[origin].nonZeroSignal;
+            this.statistics.prtStatistics.localView[tabId][
+              origin
+            ].nonZeroSignal;
 
           return acc;
         },
@@ -365,33 +397,37 @@ class PRTStore extends DataStore {
     tabId: string,
     overrideForInitialSync: boolean
   ) {
-    if (
-      overrideForInitialSync ||
-      DataStore.tabs[tabId].newUpdatesScriptBlocking > 0
-    ) {
-      //@ts-ignore
-      const {
-        scriptBlocking = {
-          partiallyBlockedDomains: 0,
-          completelyBlockedDomains: 0,
-          domains: 0,
-        },
-      } = await chrome.storage.session.get('scriptBlocking');
-
-      const globalView = scriptBlocking;
-
-      await chrome.runtime.sendMessage({
-        type: EXTRA_DATA,
-        payload: {
-          uniqueResponseDomains: this.uniqueResponseDomains[tabId],
-          stats: {
-            globalView,
-            localView: this.statistics.scriptBlocking.localView,
+    try {
+      if (
+        overrideForInitialSync ||
+        DataStore.tabs[tabId].newUpdatesScriptBlocking > 0
+      ) {
+        //@ts-ignore
+        const {
+          scriptBlocking = {
+            partiallyBlockedDomains: 0,
+            completelyBlockedDomains: 0,
+            domains: 0,
           },
-          tabId: Number(tabId),
-        },
-      });
-      DataStore.tabs[tabId].newUpdatesScriptBlocking = 0;
+        } = await chrome.storage.session.get('scriptBlocking');
+
+        const globalView = scriptBlocking;
+
+        await chrome.runtime.sendMessage({
+          type: EXTRA_DATA,
+          payload: {
+            uniqueResponseDomains: this.uniqueResponseDomains[tabId],
+            stats: {
+              globalView,
+              localView: this.statistics.scriptBlocking.localView[tabId],
+            },
+            tabId: Number(tabId),
+          },
+        });
+        DataStore.tabs[tabId].newUpdatesScriptBlocking = 0;
+      }
+    } catch (error) {
+      // Fail silently
     }
   }
   /**

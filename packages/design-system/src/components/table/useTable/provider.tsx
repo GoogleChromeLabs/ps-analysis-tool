@@ -53,7 +53,10 @@ export const TableProvider = ({
   getVerticalBarColorHash,
   isRowSelected,
   minColumnWidth = MIN_COLUMN_WIDTH,
+  customClearAllFunction,
+  customClearFunction,
   children,
+  filterRef,
 }: PropsWithChildren<TableProviderProps>) => {
   const [allData, setAllData] = useState(data);
   const [paginatedData, setPaginatedData] = useState<TableData[]>([]);
@@ -91,8 +94,17 @@ export const TableProvider = ({
     searchFilteredData,
     tableFilterData,
     tablePersistentSettingsKey,
-    commonKey
+    commonKey,
+    customClearFunction,
+    customClearAllFunction
   );
+
+  useEffect(() => {
+    if (filterRef && filterRef.current) {
+      filterRef.current.resetFilters = resetFilters;
+      filterRef.current.toggleFilterSelection = toggleFilterSelection;
+    }
+  }, [filterRef, resetFilters, toggleFilterSelection]);
 
   const loadMoreData = useCallback(() => {
     setPaginatedData((prevData) => {

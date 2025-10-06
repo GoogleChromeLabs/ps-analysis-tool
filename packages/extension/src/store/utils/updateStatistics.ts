@@ -18,19 +18,23 @@
  */
 import PRTStore from '../PRTStore';
 
-const updateStatistics = (origin: string, nonZeroUint8Signal: boolean) => {
-  if (PRTStore.statistics.prtStatistics.localView[origin]) {
-    PRTStore.statistics.prtStatistics.localView[origin] = {
+const updateStatistics = (
+  tabId: string,
+  origin: string,
+  nonZeroUint8Signal: boolean
+) => {
+  if (PRTStore.statistics.prtStatistics.localView[tabId]?.[origin]) {
+    PRTStore.statistics.prtStatistics.localView[tabId][origin] = {
       totalTokens:
-        (PRTStore.statistics.prtStatistics.localView[origin]?.totalTokens ??
-          0) + 1,
+        (PRTStore.statistics.prtStatistics.localView[tabId][origin]
+          ?.totalTokens ?? 0) + 1,
       nonZeroSignal:
-        (PRTStore.statistics.prtStatistics.localView[origin]?.nonZeroSignal ??
-          0) + (nonZeroUint8Signal ? 1 : 0),
+        (PRTStore.statistics.prtStatistics.localView[tabId][origin]
+          ?.nonZeroSignal ?? 0) + (nonZeroUint8Signal ? 1 : 0),
     };
   } else {
-    PRTStore.statistics.prtStatistics.localView = {
-      ...PRTStore.statistics.prtStatistics.localView,
+    PRTStore.statistics.prtStatistics.localView[tabId] = {
+      ...PRTStore.statistics.prtStatistics.localView[tabId],
       [origin]: {
         totalTokens: 1,
         nonZeroSignal: nonZeroUint8Signal ? 1 : 0,

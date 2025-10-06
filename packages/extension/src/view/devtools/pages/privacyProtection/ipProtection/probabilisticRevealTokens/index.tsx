@@ -18,14 +18,13 @@
  * External dependencies
  */
 import {
-  JsonView,
   type InfoType,
   type TabItem,
   type TableColumn,
   type TableFilter,
 } from '@google-psat/design-system';
-import React, { useCallback, useMemo, useState } from 'react';
-import { isValidURL, type PRTMetadata } from '@google-psat/common';
+import React, { useMemo, useRef, useState } from 'react';
+import { noop, type PRTMetadata } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -37,12 +36,15 @@ import {
 import MdlCommonPanel from '../../mdlCommon';
 import getSignal from '../../../../../../utils/getSignal';
 import Glossary from '../../mdlCommon/glossary';
+import BottomTray from '../../../privateAdvertising/protectedAudience/auctions/components/table/bottomTray';
 
 const ProbabilisticRevealTokens = () => {
   const [selectedJSON, setSelectedJSON] = useState<PRTMetadata | null>(null);
   const [preSetFilters, setPresetFilters] = useState<{
-    [key: string]: Record<string, string[]>;
-  }>({ filter: {} });
+    ['filter']: string[];
+  }>({
+    filter: [],
+  });
 
   const {
     perTokenMetadata,
@@ -58,9 +60,20 @@ const ProbabilisticRevealTokens = () => {
     statistics: state.statistics,
   }));
 
-  const { scriptBlockingData, isLoading } = useScriptBlocking(({ state }) => ({
+  const filterClearFunction = useRef<{
+    resetFilters: () => void;
+    toggleFilterSelection: (
+      filterKey: string,
+      filterValue: string,
+      isRemovalAction?: boolean
+    ) => void;
+  }>({
+    resetFilters: noop,
+    toggleFilterSelection: noop,
+  });
+
+  const { scriptBlockingData } = useScriptBlocking(({ state }) => ({
     scriptBlockingData: state.scriptBlockingData,
-    isLoading: state.isLoading,
   }));
 
   const stats = useMemo(
@@ -69,52 +82,50 @@ const ProbabilisticRevealTokens = () => {
         title: 'Domains',
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
-        glossaryText: 'Unique domains on page',
+        onClick: () => filterClearFunction.current.resetFilters(),
+        glossaryText: 'Top-level domains on page',
       },
       {
         title: 'MDL',
         centerCount: perTokenMetadata.filter(({ origin }) => {
-          let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
-
-          hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
-
-          if (!hostname) {
+          if (!origin) {
             return false;
           }
 
           return (
-            scriptBlockingData.filter((_data) => _data.domain === hostname)
+            scriptBlockingData.filter((_data) => _data.domain === origin)
               .length > 0
           );
         }).length,
-        onClick: () =>
+        onClick: () => {
+          filterClearFunction.current.resetFilters();
           setPresetFilters((prev) => ({
             ...prev,
-            filter: {
-              mdl: ['True'],
-            },
-          })),
+            filter: ['mdl:True'],
+          }));
+        },
         color: '#4C79F4',
-        glossaryText: 'Page domains in MDL',
+        glossaryText: 'Domains in MDL',
       },
       {
         title: 'PRT',
         centerCount: statistics.localView.totalTokens,
         color: '#EC7159',
-        glossaryText: 'Unique tokens sent in requests',
+        onClick: () => filterClearFunction.current.resetFilters(),
+        glossaryText: 'PRT tokens sent in requests',
       },
       {
         title: 'Signals',
         centerCount: statistics.localView.nonZeroSignal,
         color: '#5CC971',
-        glossaryText: 'PRTs that decode to IP address',
-        onClick: () =>
+        glossaryText: 'PRTs with IP Address',
+        onClick: () => {
+          filterClearFunction.current.resetFilters();
           setPresetFilters((prev) => ({
             ...prev,
-            filter: {
-              nonZeroUint8Signal: ['PRTs with signal'],
-            },
-          })),
+            filter: ['nonZeroUint8Signal:PRTs with signal'],
+          }));
+        },
       },
     ],
     [perTokenMetadata, scriptBlockingData, statistics]
@@ -173,6 +184,8 @@ const ProbabilisticRevealTokens = () => {
 
     return {
       ...rest,
+      prtHeader: prtHeader.prtHeader,
+      epochIdBase64: _prtToken.epochIdBase64,
       ip: getSignal((Object.values(uint8Signal) as unknown as number[]) ?? []),
     };
   }, [
@@ -188,11 +201,11 @@ const ProbabilisticRevealTokens = () => {
       {
         title: 'JSON View',
         content: {
-          //@ts-expect-error -- the component is lazy loaded and memoised thats why the error is being shown.
-          Element: JsonView,
+          Element: BottomTray,
           className: 'p-4',
           props: {
-            src: formedJson ?? {},
+            selectedJSON: formedJson,
+            containerClassname: 'h-full',
           },
         },
       },
@@ -215,7 +228,7 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'Domain',
         accessorKey: 'origin',
-        cell: (info) => info,
+        cell: (info) => String(info).split('https://')?.[1] || String(info),
         initialWidth: 120,
       },
       {
@@ -235,22 +248,8 @@ const ProbabilisticRevealTokens = () => {
       {
         header: 'Signal',
         accessorKey: 'nonZeroUint8Signal',
-        cell: (_, details) => {
-          const _plainTextToken = structuredClone(
-            plainTextTokensData.find(
-              (token) => token.prtHeader === (details as PRTMetadata)?.prtHeader
-            )
-          );
-
-          if (!_plainTextToken?.uint8Signal) {
-            return '';
-          }
-
-          const ipAddress = getSignal(
-            Object.values(_plainTextToken?.uint8Signal as unknown as number[])
-          );
-
-          return ipAddress === 'No Signal' ? '' : ipAddress;
+        cell: (info) => {
+          return info ? <span className="font-serif">✓</span> : '';
         },
         initialWidth: 60,
       },
@@ -261,136 +260,115 @@ const ProbabilisticRevealTokens = () => {
         isHiddenByDefault: true,
       },
     ],
-    [plainTextTokensData]
+    []
   );
 
-  const mdlComparator = useCallback(
-    (value: InfoType, filterValue: string) => {
-      let hostname = isValidURL(value as string)
-        ? new URL(value as string).hostname
-        : '';
-
-      hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
-
-      if (!hostname || isLoading) {
-        return false;
-      }
-
-      switch (filterValue) {
-        case 'True':
-          return (
-            scriptBlockingData.filter(
-              (_data) => value && hostname === _data.domain
-            ).length > 0
-          );
-        case 'False':
-          return (
-            scriptBlockingData.filter(
-              (_data) => value && hostname === _data.domain
-            ).length === 0
-          );
-        default:
-          return true;
-      }
+  const filters = {
+    nonZeroUint8Signal: {
+      title: 'Signal',
+      hasStaticFilterValues: true,
+      hasPrecalculatedFilterValues: true,
+      filterValues:
+        perTokenMetadata.length === 0
+          ? undefined
+          : {
+              'PRTs with signal': {
+                selected: (
+                  preSetFilters?.filter
+                    .find((filter) => filter.startsWith('nonZeroUint8Signal'))
+                    ?.split(':')[1] ?? ''
+                ).includes('PRTs with signal'),
+                description: "PRT's that reveal IP address",
+              },
+              'PRTs without signal': {
+                selected: (
+                  preSetFilters?.filter
+                    .find((filter) => filter.startsWith('nonZeroUint8Signal'))
+                    ?.split(':')[1] ?? ''
+                ).includes('PRTs without signal'),
+                description: "PRT's that do not reveal IP address",
+              },
+            },
+      comparator: (value: InfoType, filterValue: string) => {
+        switch (filterValue) {
+          case 'PRTs without signal':
+            return !value as boolean;
+          case 'PRTs with signal':
+            return value as boolean;
+          default:
+            return true;
+        }
+      },
     },
-    [isLoading, scriptBlockingData]
-  );
-
-  const filters = useMemo<TableFilter>(
-    () => ({
-      nonZeroUint8Signal: {
-        title: 'Signal',
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues:
-          perTokenMetadata.length === 0
-            ? undefined
-            : {
-                'PRTs with signal': {
-                  selected: (
-                    preSetFilters?.filter?.nonZeroUint8Signal ?? []
-                  ).includes('PRTs with signal'),
-                  description: "PRT's that reveal IP address",
-                },
-                'PRTs without signal': {
-                  selected: (
-                    preSetFilters?.filter?.nonZeroUint8Signal ?? []
-                  ).includes('PRTs without signal'),
-                  description: "PRT's that do not reveal IP address",
-                },
+    decryptionKeyAvailable: {
+      title: 'Decrypted',
+      hasStaticFilterValues: true,
+      hasPrecalculatedFilterValues: true,
+      filterValues:
+        perTokenMetadata.length === 0
+          ? undefined
+          : {
+              True: {
+                selected: false,
+                description: "PRT's that have been decrypted",
               },
-        comparator: (value: InfoType, filterValue: string) => {
-          switch (filterValue) {
-            case 'PRTs without signal':
-              return !value as boolean;
-            case 'PRTs with signal':
-              return value as boolean;
-            default:
-              return true;
-          }
-        },
-      },
-      decryptionKeyAvailable: {
-        title: 'Decrypted',
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues:
-          perTokenMetadata.length === 0
-            ? undefined
-            : {
-                True: {
-                  selected: false,
-                  description: "PRT's that have been decrypted",
-                },
-                False: {
-                  selected: false,
-                  description: "PRT's that have not been decrypted",
-                },
+              False: {
+                selected: false,
+                description: "PRT's that have not been decrypted",
               },
-        comparator: (value: InfoType, filterValue: string) => {
-          switch (filterValue) {
-            case 'True':
-              return value as boolean;
-            case 'False':
-              return !value as boolean;
-            default:
-              return true;
-          }
-        },
+            },
+      comparator: (value: InfoType, filterValue: string) => {
+        switch (filterValue) {
+          case 'True':
+            return value as boolean;
+          case 'False':
+            return !value as boolean;
+          default:
+            return true;
+        }
       },
-      origin: {
-        title: 'MDL',
-        hasStaticFilterValues: true,
-        hasPrecalculatedFilterValues: true,
-        filterValues:
-          perTokenMetadata.length === 0
-            ? undefined
-            : {
-                True: {
-                  selected: (preSetFilters?.filter?.mdl ?? []).includes('True'),
-                  description: 'Domains that are in MDL',
-                },
-                False: {
-                  selected: (preSetFilters?.filter?.mdl ?? []).includes(
-                    'False'
-                  ),
-                  description: 'Domains that are not in MDL',
-                },
+    },
+    owner: {
+      title: 'MDL',
+      hasStaticFilterValues: true,
+      hasPrecalculatedFilterValues: true,
+      filterValues:
+        perTokenMetadata.length === 0
+          ? undefined
+          : {
+              True: {
+                selected: (
+                  preSetFilters?.filter
+                    .find((filter) => filter.startsWith('mdl'))
+                    ?.split(':')[1] ?? ''
+                ).includes('True'),
+                description: 'Domains that are in MDL',
               },
-        comparator: (value: InfoType, filterValue: string) =>
-          mdlComparator(value, filterValue),
+              False: {
+                selected: (
+                  preSetFilters?.filter
+                    .find((filter) => filter.startsWith('mdl'))
+                    ?.split(':')[1] ?? ''
+                ).includes('False'),
+                description: 'Domains that are not in MDL',
+              },
+            },
+      comparator: (value: InfoType, filterValue: string) => {
+        switch (filterValue) {
+          case 'True':
+            return Boolean(value);
+          case 'False':
+            return !value;
+          default:
+            return true;
+        }
       },
-    }),
-    [
-      preSetFilters?.filter?.mdl,
-      preSetFilters?.filter?.nonZeroUint8Signal,
-      mdlComparator,
-      perTokenMetadata,
-    ]
-  );
+    },
+  } as TableFilter;
 
   return (
     <MdlCommonPanel
+      filterRef={filterClearFunction}
       tabItems={tabItems}
       tableColumns={tableColumns}
       filters={filters}
@@ -401,6 +379,19 @@ const ProbabilisticRevealTokens = () => {
       stats={stats}
       tab="PRT"
       activeTabIndex={() => (formedJson?.version ? 0 : -1)}
+      customClearAllFunction={() => setPresetFilters({ filter: [] })}
+      customClearFunction={(key: string, value: string) =>
+        setPresetFilters((prev) => {
+          const updatedFilters = structuredClone(prev);
+          updatedFilters.filter = updatedFilters.filter?.filter(
+            (filterValue) => {
+              const filter = filterValue.split(':')[1];
+              return filter !== value;
+            }
+          );
+          return updatedFilters;
+        })
+      }
     />
   );
 };

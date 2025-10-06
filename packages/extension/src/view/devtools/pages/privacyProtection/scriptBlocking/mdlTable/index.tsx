@@ -25,8 +25,8 @@ import {
   type InfoType,
   type TabItems,
 } from '@google-psat/design-system';
-import React, { useMemo, useState, useCallback } from 'react';
-import type { MDLTableData } from '@google-psat/common';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
+import { noop, type MDLTableData } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -51,8 +51,19 @@ type MDLTableProps = {
 const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [preSetFilters, setPresetFilters] = useState<{
-    [key: string]: Record<string, string[]>;
-  }>({ filter: {} });
+    ['filter']: string[];
+  }>({ filter: [] });
+  const filterClearFunction = useRef<{
+    resetFilters: () => void;
+    toggleFilterSelection: (
+      filterKey: string,
+      filterValue: string,
+      isRemovalAction?: boolean
+    ) => void;
+  }>({
+    resetFilters: noop,
+    toggleFilterSelection: noop,
+  });
 
   const { uniqueResponseDomains, statistics, scriptBlockingData, isLoading } =
     useScriptBlocking(({ state }) => ({
@@ -77,6 +88,16 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         if (type === 'Learning') {
           data.push({
             ...item,
+            highlighted: uniqueResponseDomains.includes(item.domain),
+            highlightedClass: uniqueResponseDomains.includes(item.domain)
+              ? (selected: boolean) => {
+                  if (selected) {
+                    return 'bg-amber-200/80 dark:bg-amber-200/70';
+                  }
+
+                  return 'bg-amber-100/60 dark:bg-amber-200/90';
+                }
+              : undefined,
           } as MDLTableData);
           return;
         }
@@ -93,7 +114,9 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         }
       });
 
-    return data;
+    return data.sort((a, b) => {
+      return Number(b.highlighted) - Number(a.highlighted);
+    });
   }, [uniqueResponseDomains, scriptBlockingData, type]);
 
   const tableColumns = useMemo<TableColumn[]>(
@@ -146,7 +169,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         _filters[
           titleMap[singleData.scriptBlocking as keyof typeof titleMap].slice(6)
         ] = {
-          selected: preSetFilters?.filter?.scriptBlocking?.includes(
+          selected: preSetFilters?.filter?.includes(
             titleMap[singleData.scriptBlocking as keyof typeof titleMap]
           ),
           description: IMPACTED_BY_SCRIPT_BLOCKING[
@@ -157,7 +180,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
 
       return _filters;
     },
-    [preSetFilters?.filter?.scriptBlocking]
+    [preSetFilters?.filter]
   );
 
   const filters = useMemo<TableFilter>(
@@ -191,7 +214,8 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         title: 'Domains',
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
-        glossaryText: 'All page domains',
+        onClick: () => filterClearFunction.current.resetFilters(),
+        glossaryText: 'Domains in MDL',
       },
       {
         title: 'BDL',
@@ -199,7 +223,12 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
           statistics.localView.partiallyBlockedDomains +
           statistics.localView.completelyBlockedDomains,
         color: '#7D8471',
-        glossaryText: 'Page domains in block list',
+        onClick: () =>
+          setPresetFilters((prev) => ({
+            ...prev,
+            filter: ['Scope Complete', 'Scope Partial'],
+          })),
+        glossaryText: 'Domains in block list',
       },
       {
         title: 'Complete',
@@ -209,9 +238,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
-            filter: {
-              scriptBlocking: ['Complete'],
-            },
+            filter: ['Scope Complete'],
           })),
       },
       {
@@ -222,9 +249,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         onClick: () =>
           setPresetFilters((prev) => ({
             ...prev,
-            filter: {
-              scriptBlocking: ['Partial'],
-            },
+            filter: ['Scope Partial'],
           })),
       },
     ],
@@ -268,6 +293,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
 
   return (
     <MdlCommonPanel
+      filterRef={filterClearFunction}
       tabItems={tabItems}
       tableColumns={tableColumns}
       tableSearchKeys={['domain', 'owner']}
@@ -279,6 +305,16 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
       filters={filters}
       stats={type === 'Learning' ? null : stats}
       tab="scriptBlocking"
+      customClearAllFunction={() => setPresetFilters({ filter: [] })}
+      customClearFunction={(key: string, value: string) =>
+        setPresetFilters((prev) => {
+          const updatedFilters = structuredClone(prev);
+          updatedFilters.filter = updatedFilters.filter?.filter(
+            (filterValue) => !filterValue.includes(value)
+          );
+          return updatedFilters;
+        })
+      }
     />
   );
 };

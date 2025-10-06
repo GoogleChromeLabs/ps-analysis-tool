@@ -24,11 +24,7 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import {
-  isValidURL,
-  type MDLTableData,
-  type PRTMetadata,
-} from '@google-psat/common';
+import { type MDLTableData, type PRTMetadata } from '@google-psat/common';
 import type { TableRow } from '@google-psat/design-system';
 import { I18n } from '@google-psat/i18n';
 
@@ -54,18 +50,12 @@ const RowContextMenuForPRT = forwardRef<
     }
 
     if (tab === 'PRT') {
-      if (isValidURL((data as PRTMetadata)?.origin)) {
-        return new URL((data as PRTMetadata)?.origin).hostname;
-      } else {
-        return '';
-      }
+      return (data as PRTMetadata)?.origin ?? '';
     }
 
     if (tab === 'scriptBlocking') {
       if ((data as MDLTableData)?.domain) {
-        return (data as MDLTableData)?.highlighted
-          ? (data as MDLTableData)?.domain
-          : '';
+        return (data as MDLTableData)?.domain;
       }
     }
     return '';

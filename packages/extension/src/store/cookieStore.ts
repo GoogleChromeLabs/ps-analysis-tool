@@ -241,8 +241,8 @@ class CookieStore extends DataStore {
 
     const constructedURL =
       DataStore.requestIdToCDPURLMapping[tabId][requestId]?.url ??
-      isValidURL(createURL(request.headers))
-        ? createURL(request.headers)
+      isValidURL(createURL(request.headers) ?? '')
+        ? createURL(request.headers) ?? ''
         : '';
 
     const { associatedCookies } = request;
