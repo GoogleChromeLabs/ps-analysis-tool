@@ -50,7 +50,7 @@ const RowContextMenuForPRT = forwardRef<
     }
 
     if (tab === 'PRT') {
-      return origin ?? '';
+      return (data as PRTMetadata)?.origin ?? '';
     }
 
     if (tab === 'scriptBlocking') {

@@ -441,7 +441,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
                 : '',
             };
 
-            updateStatistics(origin, nonZeroUint8Signal);
+            updateStatistics(tabId, origin, nonZeroUint8Signal);
 
             await chrome.storage.session.set({
               prtStatistics: {

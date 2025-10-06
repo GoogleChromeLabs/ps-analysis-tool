@@ -80,9 +80,11 @@ class PRTStore extends DataStore {
         };
       };
       localView: {
-        [domain: string]: {
-          totalTokens: number;
-          nonZeroSignal: number;
+        [tabId: string]: {
+          [domain: string]: {
+            totalTokens: number;
+            nonZeroSignal: number;
+          };
         };
       };
     };
@@ -94,10 +96,12 @@ class PRTStore extends DataStore {
         domainArray: string[];
       };
       localView: {
-        partiallyBlockedDomains: number;
-        completelyBlockedDomains: number;
-        domains: number;
-        domainArray: string[];
+        [tabId: string]: {
+          partiallyBlockedDomains: number;
+          completelyBlockedDomains: number;
+          domains: number;
+          domainArray: string[];
+        };
       };
     };
   } = {
@@ -112,12 +116,7 @@ class PRTStore extends DataStore {
         domains: 0,
         domainArray: [],
       },
-      localView: {
-        partiallyBlockedDomains: 0,
-        completelyBlockedDomains: 0,
-        domains: 0,
-        domainArray: [],
-      },
+      localView: {},
     },
   };
 
@@ -232,21 +231,30 @@ class PRTStore extends DataStore {
 
       this.statistics.scriptBlocking.globalView.domains =
         this.statistics.scriptBlocking.globalView.domainArray.length;
-
-      this.statistics.scriptBlocking.localView.completelyBlockedDomains +=
+      if (!this.statistics.scriptBlocking.localView[tabId]) {
+        this.statistics.scriptBlocking.localView[tabId] = {
+          partiallyBlockedDomains: 0,
+          completelyBlockedDomains: 0,
+          domainArray: [],
+          domains: 0,
+        };
+      }
+      this.statistics.scriptBlocking.localView[
+        tabId
+      ].completelyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'COMPLETE' ? 1 : 0;
-      this.statistics.scriptBlocking.localView.partiallyBlockedDomains +=
+      this.statistics.scriptBlocking.localView[tabId].partiallyBlockedDomains +=
         this.mdlData[hostname]?.scriptBlockingScope === 'PARTIAL' ? 1 : 0;
 
-      this.statistics.scriptBlocking.localView.domainArray = Array.from(
+      this.statistics.scriptBlocking.localView[tabId].domainArray = Array.from(
         new Set([
-          ...this.statistics.scriptBlocking.localView.domainArray,
+          ...this.statistics.scriptBlocking.localView[tabId].domainArray,
           hostname,
         ])
       ).toSorted();
 
-      this.statistics.scriptBlocking.localView.domains =
-        this.statistics.scriptBlocking.localView.domainArray.length;
+      this.statistics.scriptBlocking.localView[tabId].domains =
+        this.statistics.scriptBlocking.localView[tabId].domainArray.length;
 
       chrome.storage.session.set({
         scriptBlocking: {
@@ -267,7 +275,7 @@ class PRTStore extends DataStore {
     super.deinitialiseVariablesForTab(tabId);
     delete this.tabTokens[tabId];
     delete this.uniqueResponseDomains[parseInt(tabId)];
-    this.statistics.scriptBlocking.localView = {
+    this.statistics.scriptBlocking.localView[tabId] = {
       partiallyBlockedDomains: 0,
       completelyBlockedDomains: 0,
       domains: 0,
@@ -284,7 +292,7 @@ class PRTStore extends DataStore {
       perTokenMetadata: {},
     };
     this.statistics.prtStatistics.localView = {};
-    this.statistics.scriptBlocking.localView = {
+    this.statistics.scriptBlocking.localView[tabId] = {
       partiallyBlockedDomains: 0,
       completelyBlockedDomains: 0,
       domains: 0,
@@ -332,13 +340,15 @@ class PRTStore extends DataStore {
       );
 
       const localStats = Object.keys(
-        this.statistics.prtStatistics.localView
+        this.statistics.prtStatistics.localView[tabId]
       ).reduce(
         (acc, origin) => {
           acc.totalTokens +=
-            this.statistics.prtStatistics.localView[origin].totalTokens;
+            this.statistics.prtStatistics.localView[tabId][origin].totalTokens;
           acc.nonZeroSignal +=
-            this.statistics.prtStatistics.localView[origin].nonZeroSignal;
+            this.statistics.prtStatistics.localView[tabId][
+              origin
+            ].nonZeroSignal;
 
           return acc;
         },
@@ -409,7 +419,7 @@ class PRTStore extends DataStore {
             uniqueResponseDomains: this.uniqueResponseDomains[tabId],
             stats: {
               globalView,
-              localView: this.statistics.scriptBlocking.localView,
+              localView: this.statistics.scriptBlocking.localView[tabId],
             },
             tabId: Number(tabId),
           },
