@@ -88,6 +88,16 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         if (type === 'Learning') {
           data.push({
             ...item,
+            highlighted: uniqueResponseDomains.includes(item.domain),
+            highlightedClass: uniqueResponseDomains.includes(item.domain)
+              ? (selected: boolean) => {
+                  if (selected) {
+                    return 'bg-amber-200/80 dark:bg-amber-200/70';
+                  }
+
+                  return 'bg-amber-100/60 dark:bg-amber-200/90';
+                }
+              : undefined,
           } as MDLTableData);
           return;
         }
@@ -104,7 +114,9 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         }
       });
 
-    return data;
+    return data.sort((a, b) => {
+      return Number(b.highlighted) - Number(a.highlighted);
+    });
   }, [uniqueResponseDomains, scriptBlockingData, type]);
 
   const tableColumns = useMemo<TableColumn[]>(
