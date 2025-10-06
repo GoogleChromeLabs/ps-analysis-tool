@@ -433,7 +433,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
 
             PRTStore.tabTokens[tabId].perTokenMetadata[origin] = {
               prtHeader,
-              origin: isValidURL(origin) ? origin : '',
+              origin: formedOrigin,
               decryptionKeyAvailable: Boolean(decodedToken),
               nonZeroUint8Signal,
               owner: PRTStore.mdlData[formedOrigin]?.owner
