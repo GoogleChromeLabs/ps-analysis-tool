@@ -184,7 +184,7 @@ const ProbabilisticRevealTokens = () => {
 
     return {
       ...rest,
-      prtHeader: prtHeader,
+      prtHeader: prtHeader.prtHeader,
       epochIdBase64: _prtToken.epochIdBase64,
       ip: getSignal((Object.values(uint8Signal) as unknown as number[]) ?? []),
     };
