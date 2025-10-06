@@ -24,7 +24,7 @@ import {
   type TableFilter,
 } from '@google-psat/design-system';
 import React, { useMemo, useRef, useState } from 'react';
-import { isValidURL, noop, type PRTMetadata } from '@google-psat/common';
+import { noop, type PRTMetadata } from '@google-psat/common';
 
 /**
  * Internal dependencies
@@ -88,16 +88,12 @@ const ProbabilisticRevealTokens = () => {
       {
         title: 'MDL',
         centerCount: perTokenMetadata.filter(({ origin }) => {
-          let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
-
-          hostname = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
-
-          if (!hostname) {
+          if (!origin) {
             return false;
           }
 
           return (
-            scriptBlockingData.filter((_data) => _data.domain === hostname)
+            scriptBlockingData.filter((_data) => _data.domain === origin)
               .length > 0
           );
         }).length,
