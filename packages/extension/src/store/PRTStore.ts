@@ -453,6 +453,15 @@ class PRTStore extends DataStore {
       origin = new URL(createURL(headers) ?? '').origin;
     }
 
+    const isTokenPresent =
+      this.tabTokens[tabId].prtTokens.filter(
+        (_token) => prtHeader === `:${_token.prtHeader}:`
+      ).length > 0;
+
+    if (isTokenPresent) {
+      return;
+    }
+
     await this.decryptAndUpdatePRT(prtHeader, origin, tabId);
   }
 

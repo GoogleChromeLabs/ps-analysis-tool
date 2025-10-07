@@ -221,7 +221,7 @@ export const runtimeOnMessageListener = async (
       );
       const isTokenPresent =
         PRTStore.tabTokens[request.payload.tabId.toString()].prtTokens.filter(
-          (_token) => token?.value === _token.prtHeader
+          (_token) => token?.value === `:${_token.prtHeader}:`
         ).length > 0;
 
       if (token?.value && !isTokenPresent) {
