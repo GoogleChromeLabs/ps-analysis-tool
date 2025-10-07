@@ -24,12 +24,15 @@ import {
   isValidURL,
 } from '@google-psat/common';
 import { ec as ellipticEc } from 'elliptic';
-
+import { isEqual } from 'lodash-es';
+import type { Protocol } from 'devtools-protocol';
 /**
  * Internal dependencies.
  */
 import { DataStore } from './dataStore';
 import { EXTRA_DATA, TAB_TOKEN_DATA } from '../constants';
+import { extractHeader, createURL } from '../utils/headerFunctions';
+import updateStatistics from './utils/updateStatistics';
 
 const PRT_SIZE = 79;
 const PRT_POINT_SIZE = 33;
@@ -428,6 +431,92 @@ class PRTStore extends DataStore {
       }
     } catch (error) {
       // Fail silently
+    }
+  }
+
+  async updatePRT(
+    headers: Protocol.Network.Headers,
+    tabId: string,
+    requestId: string
+  ) {
+    let origin = '';
+    const prtHeader = extractHeader('Sec-Probabilistic-Reveal-Token', headers);
+    if (
+      DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url &&
+      isValidURL(DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url)
+    ) {
+      origin = new URL(
+        DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
+      ).origin;
+    } else if (createURL(headers) && isValidURL(createURL(headers) ?? '')) {
+      origin = new URL(createURL(headers) ?? '').origin;
+    }
+
+    if (prtHeader && origin) {
+      const prt = this.getTokenFromHeaderString(prtHeader);
+      const decodedToken = await this.decryptTokenHeader(prtHeader);
+      const plainTextToken = await this.getPlaintextToken(decodedToken);
+      const nonZeroUint8Signal = plainTextToken?.uint8Signal
+        ? !plainTextToken.uint8Signal.every((bit) => bit === 0)
+        : false;
+
+      if (
+        prt &&
+        !this.tabTokens[tabId]?.prtTokens.some((token) => isEqual(token, prt))
+      ) {
+        this.tabTokens[tabId].prtTokens.push(prt);
+      }
+
+      if (
+        decodedToken &&
+        !this.tabTokens[tabId]?.decryptedTokens.some(
+          (token) => token.prtHeader === prtHeader
+        )
+      ) {
+        this.tabTokens[tabId].decryptedTokens.push({
+          ...decodedToken,
+          prtHeader,
+        });
+      }
+
+      if (
+        plainTextToken &&
+        !this.tabTokens[tabId]?.plainTextTokens.some(
+          (token) => token.prtHeader === prtHeader
+        )
+      ) {
+        this.tabTokens[tabId].plainTextTokens.push({
+          ...plainTextToken,
+          prtHeader,
+        });
+      }
+
+      if (!this.tabTokens[tabId]?.perTokenMetadata?.[origin]) {
+        const hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+        const formedOrigin = hostname.startsWith('www.')
+          ? hostname.slice(4)
+          : hostname;
+
+        this.tabTokens[tabId].perTokenMetadata[origin] = {
+          prtHeader,
+          origin: formedOrigin,
+          decryptionKeyAvailable: Boolean(decodedToken),
+          nonZeroUint8Signal,
+          owner: this.mdlData[formedOrigin]?.owner
+            ? this.mdlData[formedOrigin]?.owner
+            : '',
+        };
+
+        updateStatistics(tabId, origin, nonZeroUint8Signal);
+
+        await chrome.storage.session.set({
+          prtStatistics: {
+            ...this.statistics.prtStatistics.globalView,
+          },
+        });
+
+        DataStore.tabs[tabId].newUpdatesPRT++;
+      }
     }
   }
   /**

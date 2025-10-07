@@ -88,9 +88,7 @@ chrome.tabs.onRemoved.addListener(onTabRemovedListener);
  * Fires when a tab is updated.
  * @see https://developer.chrome.com/docs/extensions/reference/api/webNavigation#event-onBeforeNavigate
  */
-chrome.webNavigation.onBeforeNavigate.addListener(
-  onCommittedNavigationListener
-);
+chrome.webNavigation.onCommitted.addListener(onCommittedNavigationListener);
 
 /**
  * Fires when a window is removed (closed).
