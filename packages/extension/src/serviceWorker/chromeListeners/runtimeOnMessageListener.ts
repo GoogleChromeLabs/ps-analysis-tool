@@ -29,6 +29,7 @@ import {
   PREBID_SCANNING_STATUS,
   SERVICE_WORKER_RELOAD_MESSAGE,
   SERVICE_WORKER_TABS_RELOAD_COMMAND,
+  UPDATE_PRT,
 } from '../../constants';
 import attachCDP from '../attachCDP';
 import reloadCurrentTab from '../../utils/reloadCurrentTab';
@@ -207,5 +208,29 @@ export const runtimeOnMessageListener = async (
       DataStore.tabs[incomingMessageTabId.toString()].newUpdatesPrebid++;
       return;
     }
+  }
+
+  if (UPDATE_PRT === incomingMessageType) {
+    const harLog: chrome.devtools.network.HARLog = request.payload.harlog;
+
+    harLog.entries.forEach((entry) => {
+      const token = entry.request.headers.find(
+        (header) =>
+          header.name === 'Sec-Probabilistic-Reveal-Token' ||
+          header.name === 'sec-probabilistic-reveal-token'
+      );
+      const isTokenPresent =
+        PRTStore.tabTokens[request.payload.tabId.toString()].prtTokens.filter(
+          (_token) => token?.value === _token.prtHeader
+        ).length > 0;
+
+      if (token?.value && !isTokenPresent) {
+        PRTStore.decryptAndUpdatePRT(
+          token?.value,
+          entry.request.url,
+          request.payload.tabId.toString()
+        );
+      }
+    });
   }
 };

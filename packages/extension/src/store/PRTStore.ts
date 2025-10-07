@@ -453,6 +453,10 @@ class PRTStore extends DataStore {
       origin = new URL(createURL(headers) ?? '').origin;
     }
 
+    await this.decryptAndUpdatePRT(prtHeader, origin, tabId);
+  }
+
+  async decryptAndUpdatePRT(prtHeader: string, origin: string, tabId: string) {
     if (prtHeader && origin && tabId) {
       const prt = this.getTokenFromHeaderString(prtHeader);
       const decodedToken = await this.decryptTokenHeader(prtHeader);

@@ -33,6 +33,11 @@ import TABS, { collapsedSidebarData } from './tabs';
 import './app.css';
 import { Layout } from './pages';
 import useContextInvalidated from './hooks/useContextInvalidated';
+import {
+  useProbabilisticRevealTokens,
+  useScriptBlocking,
+} from './stateProviders';
+import { UPDATE_PRT } from '../../constants';
 
 const setThemeMode = (isDarkMode: boolean) => {
   if (isDarkMode) {
@@ -61,6 +66,14 @@ const App: React.FC = () => {
   );
 
   const [collapsedState, setCollapsedState] = useState<boolean | null>(null);
+
+  const { perTokenMetadata } = useProbabilisticRevealTokens(({ state }) => ({
+    perTokenMetadata: state.perTokenMetadata,
+  }));
+
+  const { scriptBlockingStatistics } = useScriptBlocking(({ state }) => ({
+    scriptBlockingStatistics: state.statistics,
+  }));
 
   const isChromeRuntimeAvailable = Boolean(chrome.runtime?.onMessage);
 
@@ -119,6 +132,25 @@ const App: React.FC = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (
+      scriptBlockingStatistics.localView.domains !== perTokenMetadata.length
+    ) {
+      chrome.devtools.network.getHAR((harLog) => {
+        if (!harLog) {
+          return;
+        }
+        chrome.runtime.sendMessage({
+          type: UPDATE_PRT,
+          payload: {
+            tabId: chrome.devtools.inspectedWindow.tabId,
+            harlog: harLog.entries.map((entry) => entry.request),
+          },
+        });
+      });
+    }
+  }, [scriptBlockingStatistics, perTokenMetadata]);
 
   if (collapsedState === null) {
     return null;
