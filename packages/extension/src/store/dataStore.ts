@@ -25,6 +25,7 @@ import { isValidURL } from '@google-psat/common';
 import { doesFrameExist } from '../utils/doesFrameExist';
 
 export class DataStore {
+  static haveIntervalsBeenSet = false;
   /**
    * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
    */
