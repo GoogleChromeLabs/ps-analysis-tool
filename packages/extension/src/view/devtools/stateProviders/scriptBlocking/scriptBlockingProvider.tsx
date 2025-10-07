@@ -172,7 +172,7 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
       ) {
         return;
       }
-
+      setUniqueResponseDomains(initialState.state.uniqueResponseDomains);
       setStatistics(initialState.state.statistics);
     },
     []
