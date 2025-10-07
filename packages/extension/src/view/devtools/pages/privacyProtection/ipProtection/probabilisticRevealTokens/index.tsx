@@ -29,10 +29,7 @@ import { noop, type PRTMetadata } from '@google-psat/common';
 /**
  * Internal dependencies
  */
-import {
-  useProbabilisticRevealTokens,
-  useScriptBlocking,
-} from '../../../../stateProviders';
+import { useProbabilisticRevealTokens } from '../../../../stateProviders';
 import MdlCommonPanel from '../../mdlCommon';
 import getSignal from '../../../../../../utils/getSignal';
 import Glossary from '../../mdlCommon/glossary';
@@ -72,10 +69,6 @@ const ProbabilisticRevealTokens = () => {
     toggleFilterSelection: noop,
   });
 
-  const { scriptBlockingData } = useScriptBlocking(({ state }) => ({
-    scriptBlockingData: state.scriptBlockingData,
-  }));
-
   const stats = useMemo(
     () => [
       {
@@ -87,16 +80,7 @@ const ProbabilisticRevealTokens = () => {
       },
       {
         title: 'MDL',
-        centerCount: perTokenMetadata.filter(({ origin }) => {
-          if (!origin) {
-            return false;
-          }
-
-          return (
-            scriptBlockingData.filter((_data) => _data.domain === origin)
-              .length > 0
-          );
-        }).length,
+        centerCount: perTokenMetadata.filter(({ isInMDL }) => isInMDL).length,
         onClick: () => {
           filterClearFunction.current.resetFilters();
           setPresetFilters((prev) => ({
@@ -128,7 +112,7 @@ const ProbabilisticRevealTokens = () => {
         },
       },
     ],
-    [perTokenMetadata, scriptBlockingData, statistics]
+    [perTokenMetadata, statistics]
   );
 
   const formedJson = useMemo(() => {
@@ -328,7 +312,7 @@ const ProbabilisticRevealTokens = () => {
         }
       },
     },
-    owner: {
+    isInMDL: {
       title: 'MDL',
       hasStaticFilterValues: true,
       hasPrecalculatedFilterValues: true,

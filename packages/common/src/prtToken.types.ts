@@ -40,6 +40,7 @@ export interface PRTMetadata {
   prtHeader: string;
   nonZeroUint8Signal: boolean;
   owner: string;
+  isInMDL: boolean;
 }
 
 export type UniquePlainTextToken = PlaintTextToken & {

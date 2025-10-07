@@ -440,6 +440,9 @@ class PRTStore extends DataStore {
     tabId: string,
     requestId: string
   ) {
+    if (!tabId) {
+      return;
+    }
     let origin = '';
     const prtHeader = extractHeader('Sec-Probabilistic-Reveal-Token', headers);
     if (
@@ -453,10 +456,7 @@ class PRTStore extends DataStore {
       origin = new URL(createURL(headers) ?? '').origin;
     }
 
-    const isTokenPresent =
-      this.tabTokens[tabId].prtTokens.filter(
-        (_token) => prtHeader === `:${_token.prtHeader}:`
-      ).length > 0;
+    const isTokenPresent = this.tabTokens[tabId]?.perTokenMetadata[origin];
 
     if (isTokenPresent) {
       return;
@@ -516,6 +516,9 @@ class PRTStore extends DataStore {
           origin: formedOrigin,
           decryptionKeyAvailable: Boolean(decodedToken),
           nonZeroUint8Signal,
+          isInMDL:
+            this.mdlData[formedOrigin]?.scriptBlockingScope === 'COMPLETE' ||
+            this.mdlData[formedOrigin]?.scriptBlockingScope === 'PARTIAL',
           owner: this.mdlData[formedOrigin]?.owner
             ? this.mdlData[formedOrigin]?.owner
             : '',

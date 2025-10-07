@@ -220,14 +220,14 @@ export const runtimeOnMessageListener = async (
           header.name === 'sec-probabilistic-reveal-token'
       );
       const isTokenPresent =
-        PRTStore.tabTokens[request.payload.tabId.toString()].prtTokens.filter(
-          (_token) => token?.value === `:${_token.prtHeader}:`
-        ).length > 0;
+        PRTStore.tabTokens[request.payload.tabId.toString()].perTokenMetadata[
+          new URL(entry.request.url).origin
+        ];
 
       if (token?.value && !isTokenPresent) {
         PRTStore.decryptAndUpdatePRT(
           token?.value,
-          entry.request.url,
+          new URL(entry.request.url).origin,
           request.payload.tabId.toString()
         );
       }
