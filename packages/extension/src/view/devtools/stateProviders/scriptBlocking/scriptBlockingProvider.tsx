@@ -157,15 +157,46 @@ const ScriptBlockingProvider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  const onCommittedNavigationListener = useCallback(
+    ({
+      frameId,
+      frameType,
+      tabId,
+    }: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+      if (
+        !(
+          chrome.devtools.inspectedWindow.tabId === tabId &&
+          frameType === 'outermost_frame' &&
+          frameId === 0
+        )
+      ) {
+        return;
+      }
+      setUniqueResponseDomains(initialState.state.uniqueResponseDomains);
+      setStatistics(initialState.state.statistics);
+    },
+    []
+  );
+
   useEffect(() => {
     chrome.runtime?.onMessage?.addListener(messagePassingListener);
     chrome.storage.session.onChanged.addListener(syncStorageListener);
+    chrome.webNavigation?.onCommitted?.addListener(
+      onCommittedNavigationListener
+    );
 
     return () => {
+      chrome.webNavigation?.onCommitted?.removeListener(
+        onCommittedNavigationListener
+      );
       chrome.runtime?.onMessage?.removeListener(messagePassingListener);
       chrome.storage.session.onChanged.removeListener(syncStorageListener);
     };
-  }, [messagePassingListener, syncStorageListener]);
+  }, [
+    messagePassingListener,
+    onCommittedNavigationListener,
+    syncStorageListener,
+  ]);
 
   const value = useMemo(
     () => ({

@@ -147,6 +147,7 @@ const Provider = ({ children }: PropsWithChildren) => {
       setDecryptedTokens([]);
       setPrtTokens([]);
       setPerTokenMetadata([]);
+      setStatistics(initialState.state.statistics);
     },
     []
   );

@@ -131,8 +131,8 @@ const RowContextMenuForPRT = forwardRef<
                     // @ts-ignore
                     chrome.devtools.panels?.network?.show
                       ? tab === 'scriptBlocking'
-                        ? 'Show requests with this domain.'
-                        : 'Show requests with this token.'
+                        ? 'Show requests with this domain'
+                        : 'Show requests with this token'
                       : I18n.getMessage('copyNetworkFilter')
                   }
                 </span>

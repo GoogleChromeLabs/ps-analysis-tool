@@ -18,7 +18,6 @@
  */
 import { isValidURL } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
-import { isEqual } from 'lodash-es';
 
 /**
  * Internal dependencies.
@@ -33,7 +32,6 @@ import attachCDP from './attachCDP';
 import readHeaderAndRegister from './readHeaderAndRegister';
 import PRTStore from '../store/PRTStore';
 import { createURL, extractHeader } from '../utils/headerFunctions';
-import updateStatistics from '../store/utils/updateStatistics';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -356,103 +354,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.requestWillBeSentExtraInfo') {
         const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
-
-        if (extractHeader('Sec-Probabilistic-Reveal-Token', headers)) {
-          const prtHeader = extractHeader(
-            'Sec-Probabilistic-Reveal-Token',
-            headers
-          );
-
-          let origin = '';
-
-          if (
-            DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url &&
-            isValidURL(
-              DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
-            )
-          ) {
-            origin = new URL(
-              DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url
-            ).origin;
-          } else if (
-            createURL(headers) &&
-            isValidURL(createURL(headers) ?? '')
-          ) {
-            origin = new URL(createURL(headers) ?? '').origin;
-          }
-
-          if (!prtHeader || !origin) {
-            return;
-          }
-
-          const prt = PRTStore.getTokenFromHeaderString(prtHeader);
-          const decodedToken = await PRTStore.decryptTokenHeader(prtHeader);
-          const plainTextToken = await PRTStore.getPlaintextToken(decodedToken);
-          const nonZeroUint8Signal = plainTextToken?.uint8Signal
-            ? !plainTextToken.uint8Signal.every((bit) => bit === 0)
-            : false;
-
-          if (
-            prt &&
-            !PRTStore.tabTokens[tabId]?.prtTokens.some((token) =>
-              isEqual(token, prt)
-            )
-          ) {
-            PRTStore.tabTokens[tabId].prtTokens.push(prt);
-          }
-
-          if (
-            decodedToken &&
-            !PRTStore.tabTokens[tabId]?.decryptedTokens.some(
-              (token) => token.prtHeader === prtHeader
-            )
-          ) {
-            PRTStore.tabTokens[tabId].decryptedTokens.push({
-              ...decodedToken,
-              prtHeader,
-            });
-          }
-
-          if (
-            plainTextToken &&
-            !PRTStore.tabTokens[tabId]?.plainTextTokens.some(
-              (token) => token.prtHeader === prtHeader
-            )
-          ) {
-            PRTStore.tabTokens[tabId].plainTextTokens.push({
-              ...plainTextToken,
-              prtHeader,
-            });
-          }
-
-          if (!PRTStore.tabTokens[tabId]?.perTokenMetadata?.[origin]) {
-            const hostname = isValidURL(origin) ? new URL(origin).hostname : '';
-            const formedOrigin = hostname.startsWith('www.')
-              ? hostname.slice(4)
-              : hostname;
-
-            PRTStore.tabTokens[tabId].perTokenMetadata[origin] = {
-              prtHeader,
-              origin: formedOrigin,
-              decryptionKeyAvailable: Boolean(decodedToken),
-              nonZeroUint8Signal,
-              owner: PRTStore.mdlData[formedOrigin]?.owner
-                ? PRTStore.mdlData[formedOrigin]?.owner
-                : '',
-            };
-
-            updateStatistics(tabId, origin, nonZeroUint8Signal);
-
-            await chrome.storage.session.set({
-              prtStatistics: {
-                ...PRTStore.statistics.prtStatistics.globalView,
-              },
-            });
-
-            DataStore.tabs[tabId].newUpdatesPRT++;
-          }
-        }
-
+        PRTStore.updatePRT(headers, tabId, requestId);
         if (DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           if (extractHeader('Attribution-Reporting-Eligible', headers)) {
             const constructedURL =

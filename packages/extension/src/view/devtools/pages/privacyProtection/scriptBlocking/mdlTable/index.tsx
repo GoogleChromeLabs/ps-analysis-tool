@@ -215,7 +215,7 @@ const MDLTable = ({ type = 'Observability' }: MDLTableProps) => {
         centerCount: statistics.localView.domains,
         color: '#25ACAD',
         onClick: () => filterClearFunction.current.resetFilters(),
-        glossaryText: 'Domains in MDL',
+        glossaryText: 'Unique domains',
       },
       {
         title: 'BDL',

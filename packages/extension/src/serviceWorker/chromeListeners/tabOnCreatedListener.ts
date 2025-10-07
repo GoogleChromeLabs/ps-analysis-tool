@@ -21,9 +21,11 @@ import dataStore, { DataStore } from '../../store/dataStore';
 import PAStore from '../../store/PAStore';
 import prebidStore from '../../store/prebidStore';
 import PRTStore from '../../store/PRTStore';
+import { setupIntervals } from './utils';
 
 export const onTabCreatedListener = async (tab: chrome.tabs.Tab) => {
   try {
+    setupIntervals();
     if (!tab?.id) {
       return;
     }
