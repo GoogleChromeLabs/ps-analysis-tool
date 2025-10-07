@@ -434,6 +434,7 @@ class PRTStore extends DataStore {
     }
   }
 
+  // eslint-disable-next-line complexity
   async updatePRT(
     headers: Protocol.Network.Headers,
     tabId: string,
@@ -452,7 +453,7 @@ class PRTStore extends DataStore {
       origin = new URL(createURL(headers) ?? '').origin;
     }
 
-    if (prtHeader && origin) {
+    if (prtHeader && origin && tabId) {
       const prt = this.getTokenFromHeaderString(prtHeader);
       const decodedToken = await this.decryptTokenHeader(prtHeader);
       const plainTextToken = await this.getPlaintextToken(decodedToken);
