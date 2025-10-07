@@ -51,6 +51,12 @@ export const onCommittedNavigationListener = async ({
       dataStore.initialiseVariablesForNewTab(tabId.toString());
       DataStore.tabs[tabId.toString()].devToolsOpenState = true;
 
+      cookieStore?.removeCookieData(tabId.toString());
+      cookieStore.initialiseVariablesForNewTab(tabId.toString());
+      PRTStore.initialiseVariablesForNewTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
+      PAStore.initialiseVariablesForNewTab(tabId.toString());
+
       prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
       ARAStore.initialiseVariablesForNewTab(tabId.toString());
     } else {
