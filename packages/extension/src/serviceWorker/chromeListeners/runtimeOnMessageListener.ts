@@ -211,7 +211,7 @@ export const runtimeOnMessageListener = async (
   }
 
   if (UPDATE_PRT === incomingMessageType) {
-    const harLog: chrome.devtools.network.HARLog = request.payload.harlog;
+    const harLog: chrome.devtools.network.HARLog = request.payload.harLog;
 
     harLog.entries.forEach((entry) => {
       const token = entry.request.headers.find(

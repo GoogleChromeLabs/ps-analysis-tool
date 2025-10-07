@@ -145,7 +145,7 @@ const App: React.FC = () => {
           type: UPDATE_PRT,
           payload: {
             tabId: chrome.devtools.inspectedWindow.tabId,
-            harlog: harLog.entries.map((entry) => entry.request),
+            harLog,
           },
         });
       });
