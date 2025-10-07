@@ -50,13 +50,15 @@ export const onCommittedNavigationListener = async ({
       dataStore.addTabData(tabId.toString());
       dataStore.initialiseVariablesForNewTab(tabId.toString());
       DataStore.tabs[tabId.toString()].devToolsOpenState = true;
+
+      prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
+      ARAStore.initialiseVariablesForNewTab(tabId.toString());
+    } else {
       cookieStore?.removeCookieData(tabId.toString());
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
       PRTStore.initialiseVariablesForNewTab(tabId.toString());
-
       prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
       PAStore.initialiseVariablesForNewTab(tabId.toString());
-      ARAStore.initialiseVariablesForNewTab(tabId.toString());
     }
 
     const queryParams = getQueryParams(url);

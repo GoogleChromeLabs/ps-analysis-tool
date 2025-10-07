@@ -194,11 +194,10 @@ const Provider = ({ children }: PropsWithChildren) => {
           }) => {
             data.fullVersionList.forEach((versionData) => {
               if (versionData.brand === 'Google Chrome') {
-                setBrowserInformation(versionData.version);
                 setBrowserInformation(
                   I18n.getMessage('version') +
                     ' ' +
-                    versionData.version[1] +
+                    versionData.version +
                     ' ' +
                     data.platform
                 );
