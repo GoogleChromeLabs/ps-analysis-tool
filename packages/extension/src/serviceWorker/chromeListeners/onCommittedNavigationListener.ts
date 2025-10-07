@@ -27,7 +27,7 @@ import getQueryParams from '../../utils/getQueryParams';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
 
-export const onCommittedNavigationListener = async ({
+export const onBeforeNavigateListener = ({
   frameId,
   frameType,
   url,
@@ -65,6 +65,30 @@ export const onCommittedNavigationListener = async ({
       PRTStore.initialiseVariablesForNewTab(tabId.toString());
       prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
       PAStore.initialiseVariablesForNewTab(tabId.toString());
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(error);
+  }
+};
+
+export const onCommittedNavigationListener = async ({
+  frameId,
+  frameType,
+  url,
+  tabId,
+}: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+  try {
+    if (frameType !== 'outermost_frame' && frameId !== 0) {
+      return;
+    }
+
+    if (url.startsWith('chrome') || url.startsWith('devtools')) {
+      return;
+    }
+
+    if (!url) {
+      return;
     }
 
     const queryParams = getQueryParams(url);
