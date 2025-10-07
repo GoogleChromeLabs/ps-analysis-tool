@@ -74,7 +74,7 @@ const SessionInsights = () => {
           title: 'Domains',
           count: statistics.globalView.domains,
           color: '#25ACAD',
-          description: 'Browsing domains',
+          description: 'Unique domains',
           countClassName: 'text-emerald',
         },
         {

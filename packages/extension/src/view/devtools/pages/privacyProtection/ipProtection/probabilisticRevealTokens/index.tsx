@@ -83,7 +83,7 @@ const ProbabilisticRevealTokens = () => {
         centerCount: perTokenMetadata.length,
         color: '#F3AE4E',
         onClick: () => filterClearFunction.current.resetFilters(),
-        glossaryText: 'Top-level domains on page',
+        glossaryText: 'Unique domains on page',
       },
       {
         title: 'MDL',

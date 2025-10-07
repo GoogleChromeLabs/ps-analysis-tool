@@ -70,7 +70,7 @@ const SessionInsights = () => {
           color: '#F3AE4E',
           title: 'Domains',
           count: statistics.globalView.domains,
-          description: 'Top-level domains',
+          description: 'Unique domains',
           countClassName: 'text-emerald',
         },
         {
