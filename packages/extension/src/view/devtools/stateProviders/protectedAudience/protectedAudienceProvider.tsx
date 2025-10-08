@@ -67,8 +67,9 @@ const Provider = ({ children }: PropsWithChildren) => {
     ProtectedAudienceContextType['state']['noBids']
   >({});
 
-  const [sortOrder, setSortOrder] =
-    useState<ProtectedAudienceContextType['state']['sortOrder']>('asc');
+  const [sortOrder, setSortOrder] = useState<
+    ProtectedAudienceContextType['state']['sortOrder']
+  >({});
 
   const [adsAndBidders, setAdsAndBidders] = useState<
     ProtectedAudienceContextType['state']['adsAndBidders']
@@ -113,7 +114,6 @@ const Provider = ({ children }: PropsWithChildren) => {
             }
 
             const time = new Date(events?.[0]?.time * 1000).toISOString();
-
             reshapedAuctionEvents[adUnitCode] = {
               ...reshapedAuctionEvents[adUnitCode],
               [time + '||' + events?.[0]?.uniqueAuctionId]: {
@@ -183,7 +183,6 @@ const Provider = ({ children }: PropsWithChildren) => {
 
               return acc;
             }, {} as Record<string, singleAuctionEvent[]>);
-
             reshapedAuctionEvents[adUnit] = {
               ...reshapedAuctionEvents[adUnit],
               // @ts-ignore

@@ -50,7 +50,7 @@ const useSidebarProcessing = () => {
     _prebidAuctionEvents: state.prebidData?.auctionEvents || {},
   }));
 
-  const changedValue = useRef({ oldAuctionEvents: {}, oldSortOrder: '' });
+  const changedValue = useRef({ oldAuctionEvents: {}, oldSortOrder: {} });
 
   const { updateSelectedItemKey, isSidebarFocused, isKeySelected } = useSidebar(
     ({ state, actions }) => ({
@@ -98,7 +98,7 @@ const useSidebarProcessing = () => {
           _prebidAuctionEvents,
           _paAuctionEvents,
         },
-        oldSortOrder: sortOrder ?? '',
+        oldSortOrder: sortOrder,
       };
     };
   }, [_paAuctionEvents, _prebidAuctionEvents, sortOrder]);
@@ -245,8 +245,9 @@ const useSidebarProcessing = () => {
         adUnitContainerChildren[adUnit].extraInterfaceToTitle = {
           Element: SortButton,
           props: {
+            adUnit,
             setSortOrder,
-            sortOrder,
+            sortOrder: sortOrder[adUnit],
             isSidebarFocused: isSidebarFocused && isKeySelected(adUnit),
           },
         };
@@ -258,8 +259,8 @@ const useSidebarProcessing = () => {
         newSidebarData.adunits.children = {
           ...adUnitContainerChildren,
         };
-        if (sortOrder === 'asc') {
-          Object.keys(newSidebarData['adunits'].children).forEach((adUnit) => {
+        Object.keys(newSidebarData['adunits'].children).forEach((adUnit) => {
+          if (sortOrder[adUnit] === 'asc') {
             const sortedKeys = Object.keys(
               newSidebarData['adunits'].children[adUnit].children
             ).sort((a, b) => {
@@ -274,9 +275,7 @@ const useSidebarProcessing = () => {
                   newSidebarData['adunits'].children[adUnit].children[key];
                 return acc;
               }, {} as SidebarItems);
-          });
-        } else {
-          Object.keys(newSidebarData['adunits'].children).forEach((adUnit) => {
+          } else {
             const sortedKeys = Object.keys(
               newSidebarData['adunits'].children[adUnit].children
             ).sort((a, b) => {
@@ -292,8 +291,8 @@ const useSidebarProcessing = () => {
                   newSidebarData['adunits'].children[adUnit].children[key];
                 return acc;
               }, {} as SidebarItems);
-          });
-        }
+          }
+        });
       }
 
       return newSidebarData;
