@@ -168,12 +168,11 @@ const Provider = ({ children }: PropsWithChildren) => {
             acc.nonZeroSignal =
               prtStatistics[key].nonZeroSignal + acc.nonZeroSignal;
 
-            let hostname = isValidURL(origin) ? new URL(origin).hostname : '';
+            let hostname = isValidURL(key) ? new URL(key).hostname : '';
 
             hostname = hostname.startsWith('www.')
               ? hostname.slice(4)
               : hostname;
-
             acc.mdl +=
               hostname &&
               scriptBlockingData.filter((_data) => _data.domain === hostname)
@@ -190,10 +189,15 @@ const Provider = ({ children }: PropsWithChildren) => {
 
       if (hasChangesForPrtStatisticsData) {
         setStatistics((prev) => {
-          return {
+          const newData = {
             ...prev,
             globalView: globalStats,
           };
+
+          if (isEqual(prev, newData)) {
+            return prev;
+          }
+          return newData;
         });
       }
     },
