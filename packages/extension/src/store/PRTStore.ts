@@ -378,7 +378,7 @@ class PRTStore extends DataStore {
 
       globalStats.domains = Object.keys(prtStatistics).length;
 
-      await chrome.runtime.sendMessage({
+      globalStats.mdl = await chrome.runtime.sendMessage({
         type: TAB_TOKEN_DATA,
         payload: {
           tabId,
@@ -501,6 +501,7 @@ class PRTStore extends DataStore {
         this.tabTokens[tabId].perTokenMetadata[origin] = {
           prtHeader,
           origin: formedOrigin,
+          isInMDL: Boolean(this.mdlData[formedOrigin]),
           decryptionKeyAvailable: Boolean(decodedToken),
           nonZeroUint8Signal,
           owner: this.mdlData[formedOrigin]?.owner

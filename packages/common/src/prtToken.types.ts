@@ -36,6 +36,7 @@ interface PlaintTextToken {
 
 export interface PRTMetadata {
   origin: string;
+  isInMDL: boolean;
   decryptionKeyAvailable: boolean;
   prtHeader: string;
   nonZeroUint8Signal: boolean;
