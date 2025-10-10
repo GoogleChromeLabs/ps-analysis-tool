@@ -143,10 +143,13 @@ const Provider = ({ children }: PropsWithChildren) => {
 
   const reloadExtension = useCallback(() => {
     chrome.runtime.reload();
-    // using timeout since if frame is reloaded immidieatly it results in extension being blocked.
-    setTimeout(() => {
-      globalThis?.location?.reload();
-    }, 250);
+
+    const interval = setInterval(() => {
+      if (chrome?.runtime?.id) {
+        clearInterval(interval);
+        globalThis?.location?.reload();
+      }
+    }, 100);
   }, []);
 
   const openIncognitoTab = useCallback(async () => {

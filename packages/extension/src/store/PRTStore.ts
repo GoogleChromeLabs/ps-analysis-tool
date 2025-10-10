@@ -378,7 +378,7 @@ class PRTStore extends DataStore {
 
       globalStats.domains = Object.keys(prtStatistics).length;
 
-      globalStats.mdl = await chrome.runtime.sendMessage({
+      await chrome.runtime.sendMessage({
         type: TAB_TOKEN_DATA,
         payload: {
           tabId,

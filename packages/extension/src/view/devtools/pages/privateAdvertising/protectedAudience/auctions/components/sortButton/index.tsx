@@ -21,20 +21,29 @@ import { DescendingOrder } from '@google-psat/design-system';
 
 interface SortButtonProps {
   sortOrder: 'asc' | 'desc';
-  setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
+  setSortOrder: React.Dispatch<
+    React.SetStateAction<Record<string, 'asc' | 'desc'>>
+  >;
   isSidebarFocused: boolean;
+  adUnit: string;
 }
 
 const SortButton = ({
   setSortOrder,
   sortOrder,
   isSidebarFocused,
+  adUnit,
 }: SortButtonProps) => {
   return (
     <span
       className="h-full"
       onClick={() => {
-        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        setSortOrder((prev) => {
+          return {
+            ...prev,
+            [adUnit]: prev[adUnit] === 'asc' ? 'desc' : 'asc',
+          };
+        });
       }}
       title={`Sort in ${
         sortOrder === 'asc' ? 'descending' : 'ascending'

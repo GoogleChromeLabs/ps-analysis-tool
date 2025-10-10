@@ -17,7 +17,7 @@
 /**
  * External dependencies.
  */
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 /**
  * Internal dependencies.
@@ -25,16 +25,19 @@ import { useCallback, useMemo } from 'react';
 import { usePrebid, useProtectedAudience } from '../../../../../stateProviders';
 
 const useDataProcessing = () => {
-  const { paapi, isMultiSeller } = useProtectedAudience(({ state }) => ({
-    paapi: {
-      auctionEvents: state.auctionEvents,
-      adsAndBidders: state.adsAndBidders,
+  const { paapi, isMultiSeller, setSortOrder } = useProtectedAudience(
+    ({ state, actions }) => ({
+      paapi: {
+        auctionEvents: state.auctionEvents,
+        adsAndBidders: state.adsAndBidders,
+        isMultiSeller: state.isMultiSellerAuction,
+        receivedBids: state.receivedBids,
+        noBids: state.noBids,
+      },
       isMultiSeller: state.isMultiSellerAuction,
-      receivedBids: state.receivedBids,
-      noBids: state.noBids,
-    },
-    isMultiSeller: state.isMultiSellerAuction,
-  }));
+      setSortOrder: actions.setSortOrder,
+    })
+  );
 
   const {
     prebidAdunits,
@@ -56,9 +59,34 @@ const useDataProcessing = () => {
     return Object.keys(paapi?.adsAndBidders || {});
   }, [paapi.adsAndBidders, prebidAdunits]);
 
+  useEffect(() => {
+    const _sortOrder: Record<string, 'asc' | 'desc'> = {};
+    if (Object.keys(prebidAdunits || {}).length > 0) {
+      Object.values(prebidAuctionEvents || {}).forEach((events) => {
+        if (!events?.length || !events[0]?.adUnitCodes?.length) {
+          return;
+        }
+
+        const _adUnits = events[0].adUnitCodes as string[];
+
+        _adUnits.forEach((adUnit) => {
+          _sortOrder[adUnit] = 'asc';
+        });
+      });
+    }
+
+    if (Object.keys(paapi?.adsAndBidders || {}).length > 0) {
+      const _adUnits = Object.keys(paapi.adsAndBidders || {});
+
+      _adUnits.forEach((adUnit) => {
+        _sortOrder[adUnit] = 'asc';
+      });
+    }
+    setSortOrder(_sortOrder);
+  }, [paapi.adsAndBidders, prebidAdunits, prebidAuctionEvents, setSortOrder]);
+
   const adUnitsTimestamp = useMemo(() => {
     const _adUnitsTimestamp: Record<string, string[]> = {};
-
     if (Object.keys(prebidAdunits || {}).length > 0) {
       Object.values(prebidAuctionEvents || {}).forEach((events) => {
         if (!events?.length || !events[0]?.adUnitCodes?.length) {
