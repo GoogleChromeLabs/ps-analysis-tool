@@ -16,7 +16,7 @@
 /**
  * External dependencies.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { VictoryPie } from 'victory-pie';
 import classNames from 'classnames';
 
@@ -24,6 +24,7 @@ import classNames from 'classnames';
  * Internal dependencies.
  */
 import EmptyCirclePieChart from './emptyCirclePieChart';
+import Tooltip from './tooltip';
 
 interface CirclePieChartProps {
   centerCount: number;
@@ -32,7 +33,9 @@ interface CirclePieChartProps {
   fallbackText?: string;
   infoIconClassName?: string;
   centerTitleExtraClasses?: string;
+  bottomTitleExtraClasses?: string;
   pieChartExtraClasses?: string;
+  tooltipText?: string;
 }
 
 export const MAX_COUNT = 999;
@@ -42,15 +45,25 @@ const CirclePieChart = ({
   data,
   title,
   centerTitleExtraClasses = '',
+  bottomTitleExtraClasses = '',
   pieChartExtraClasses = '',
+  tooltipText = '',
 }: CirclePieChartProps) => {
+  const [showTooltip, setShowTooltip] = useState(false);
   const centerTitleClasses = centerCount <= MAX_COUNT ? 'text-2xl' : 'text-l';
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-start">
-      <div className="inline-block align-bottom w-16">
+    <div
+      className="w-full h-full flex flex-col items-center justify-start"
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      <div className="inline-block align-bottom w-16 relative">
         {centerCount <= 0 ? (
-          <EmptyCirclePieChart />
+          <EmptyCirclePieChart
+            tooltipText={tooltipText}
+            showTooltip={showTooltip}
+          />
         ) : (
           <div className={`w-full h-full relative ${pieChartExtraClasses}`}>
             <VictoryPie
@@ -69,11 +82,16 @@ const CirclePieChart = ({
             >
               {centerCount <= MAX_COUNT ? centerCount : MAX_COUNT + '+'}
             </p>
+            {tooltipText && showTooltip && (
+              <Tooltip tooltipText={tooltipText} />
+            )}
           </div>
         )}
       </div>
       {title && (
-        <div className="flex items-center justify-center gap-1 mt-2 relative">
+        <div
+          className={`flex items-center justify-center gap-1 mt-2 relative ${bottomTitleExtraClasses}`}
+        >
           <p className="text-xs text-center font-semibold leading-relaxed dark:text-bright-gray">
             {title}
           </p>

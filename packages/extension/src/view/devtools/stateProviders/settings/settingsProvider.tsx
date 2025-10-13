@@ -44,6 +44,7 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [settingsChanged, setSettingsChanged] = useState<boolean>(false);
   const [exceedingLimitations, setExceedingLimitations] =
     useState<boolean>(false);
+  const [incognitoAccess, setIncognitoAccess] = useState<boolean>(false);
 
   const [isUsingCDP, setIsUsingCDP] = useState(false);
   const [
@@ -85,6 +86,10 @@ const Provider = ({ children }: PropsWithChildren) => {
 
     chrome.tabs.query({}, (tabs) => {
       setCurrentTabs(tabs.length);
+    });
+
+    chrome.extension.isAllowedIncognitoAccess((isAllowed) => {
+      setIncognitoAccess(isAllowed);
     });
 
     chrome.management.getAll((extensions) => {
@@ -136,8 +141,74 @@ const Provider = ({ children }: PropsWithChildren) => {
     []
   );
 
+  const reloadExtension = useCallback(() => {
+    chrome.runtime.reload();
+
+    const interval = setInterval(() => {
+      if (chrome?.runtime?.id) {
+        clearInterval(interval);
+        globalThis?.location?.reload();
+      }
+    }, 100);
+  }, []);
+
+  const openIncognitoTab = useCallback(async () => {
+    if (!incognitoAccess) {
+      return;
+    }
+
+    const tabs = await chrome.tabs.query({});
+    const currentTab = tabs.find(
+      (tab) => tab.id === chrome.devtools.inspectedWindow.tabId
+    );
+
+    if (tabs.some((tab) => tab.incognito)) {
+      const incognitoTab = tabs.find((tab) => tab.incognito);
+      if (incognitoTab) {
+        chrome.tabs.create({
+          url: currentTab?.url,
+          windowId: incognitoTab.windowId,
+          active: true,
+        });
+        chrome.windows.update(incognitoTab.windowId, { focused: true });
+        return;
+      }
+    }
+
+    await chrome.windows.create({
+      incognito: true,
+      url: currentTab?.url,
+    });
+  }, [incognitoAccess]);
+
   useEffect(() => {
-    if (navigator.userAgent) {
+    //@ts-ignore -- this exists in the browserVersion above 90
+    //@see https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData/getHighEntropyValues
+    if (navigator.userAgentData?.getHighEntropyValues) {
+      //@ts-ignore -- this exists in the browserVersion above 90
+      navigator.userAgentData
+        .getHighEntropyValues(['fullVersionList'])
+        .then(
+          (data: {
+            brands: { brand: string; version: string }[];
+            fullVersionList: { brand: string; version: string }[];
+            platform: string;
+            mobile: boolean;
+          }) => {
+            data.fullVersionList.forEach((versionData) => {
+              if (versionData.brand === 'Google Chrome') {
+                setBrowserInformation(
+                  I18n.getMessage('version') +
+                    ' ' +
+                    versionData.version +
+                    ' ' +
+                    data.platform
+                );
+              }
+            });
+          }
+        );
+    } else {
       const browserInfo = /Chrome\/([0-9.]+)/.exec(navigator.userAgent);
       if (browserInfo) {
         setBrowserInformation(
@@ -276,6 +347,7 @@ const Provider = ({ children }: PropsWithChildren) => {
     <Context.Provider
       value={{
         state: {
+          incognitoAccess,
           currentTabs,
           currentExtensions,
           browserInformation,
@@ -292,6 +364,8 @@ const Provider = ({ children }: PropsWithChildren) => {
           setSettingsChanged,
           setExceedingLimitations,
           setIsUsingCDPForSettingsPageDisplay,
+          openIncognitoTab,
+          reloadExtension,
         },
       }}
     >

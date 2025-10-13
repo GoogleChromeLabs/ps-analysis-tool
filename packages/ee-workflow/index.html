@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        margin: 0;
+      }
+
+      button {
+        background: none;
+        cursor: pointer;
+        border: none;
+        display: flex;
+        align-items: center;
+      }
+
+      button:hover {
+        opacity: 0.6;
+      }
+
+      button:active {
+        opacity: 0.4;
+      }
+    </style>
+    <title>EE Workflow</title>
+  </head>
+  <body style="overflow: hidden">
+    <main style="overflow: auto">
+      <div
+        style="
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          border-bottom: 1px solid #ccc;
+          padding: 10px;
+        "
+      >
+        <button id="prev" title="Go to previous node">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#5f6368"
+          >
+            <path
+              d="M453-241 213-481l240-240 42 42-198 198 198 198-42 42Zm253 0L466-481l240-240 42 42-198 198 198 198-42 42Z"
+            />
+          </svg>
+        </button>
+        <button id="step-prev" title="Step Backward">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="16px"
+            viewBox="0 -960 960 960"
+            width="16px"
+            fill="#5f6368"
+          >
+            <path d="M400-80 0-480l400-400 56 57-343 343 343 343-56 57Z" />
+          </svg>
+        </button>
+        <button id="play" title="Play/Pause Animation">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#5f6368"
+          >
+            <path
+              d="M525-200v-560h235v560H525Zm-325 0v-560h235v560H200Zm385-60h115v-440H585v440Zm-325 0h115v-440H260v440Zm0-440v440-440Zm325 0v440-440Z"
+            />
+          </svg>
+        </button>
+        <button id="step-next" title="Step Forward">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="16px"
+            viewBox="0 -960 960 960"
+            width="16px"
+            fill="#5f6368"
+          >
+            <path d="m304-82-56-57 343-343-343-343 56-57 400 400L304-82Z" />
+          </svg>
+        </button>
+        <button id="next" title="Go to next node">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#5f6368"
+          >
+            <path
+              d="M411-481 213-679l42-42 240 240-240 240-42-42 198-198Zm253 0L466-679l42-42 240 240-240 240-42-42 198-198Z"
+            />
+          </svg>
+        </button>
+        <button id="reset" title="Reset Animation">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="16px"
+            viewBox="0 -960 960 960"
+            width="16px"
+            fill="#5f6368"
+          >
+            <path
+              d="M480-80q-75 0-140.5-28T225-185q-49-49-77-114.5T120-440h60q0 125 87.5 212.5T480-140q125 0 212.5-87.5T780-440q0-125-85-212.5T485-740h-23l73 73-41 42-147-147 147-147 41 41-78 78h23q75 0 140.5 28T735-695q49 49 77 114.5T840-440q0 75-28 140.5T735-185q-49 49-114.5 77T480-80Z"
+            />
+          </svg>
+        </button>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ccc;
+            padding: 5px;
+          "
+        >
+          <label for="speed">Speed:</label>
+          <input
+            type="range"
+            id="speed"
+            min="0.5"
+            max="3"
+            value="1"
+            step="0.5"
+            style="cursor: pointer"
+          />
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ccc;
+            padding: 5px;
+          "
+        >
+          <label for="interactive">Interactive Mode</label>
+          <input type="checkbox" id="interactive" style="cursor: pointer" />
+        </div>
+      </div>
+      <div id="canvas-container" style="height: 1600px; width: 2000px"></div>
+    </main>
+    <script type="module" src="./demo/index.ts"></script>
+  </body>
+</html>

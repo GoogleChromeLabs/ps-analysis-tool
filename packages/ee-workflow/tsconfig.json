@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "outDir": "dist",
+    "declarationDir": "dist-types",
+    "composite": true,
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "exclude": ["**/tests/**/*.ts", "dist/**", "dist-types/**"]
+}

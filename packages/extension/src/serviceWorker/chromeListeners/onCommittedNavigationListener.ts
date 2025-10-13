@@ -22,11 +22,12 @@ import cookieStore from '../../store/cookieStore';
 import dataStore, { DataStore } from '../../store/dataStore';
 import PAStore from '../../store/PAStore';
 import prebidStore from '../../store/prebidStore';
+import PRTStore from '../../store/PRTStore';
 import getQueryParams from '../../utils/getQueryParams';
 import sendMessageWrapper from '../../utils/sendMessageWrapper';
 import attachCDP from '../attachCDP';
 
-export const onCommittedNavigationListener = async ({
+export const onBeforeNavigateListener = ({
   frameId,
   frameType,
   url,
@@ -49,10 +50,45 @@ export const onCommittedNavigationListener = async ({
       dataStore.addTabData(tabId.toString());
       dataStore.initialiseVariablesForNewTab(tabId.toString());
       DataStore.tabs[tabId.toString()].devToolsOpenState = true;
+
+      cookieStore?.removeCookieData(tabId.toString());
       cookieStore.initialiseVariablesForNewTab(tabId.toString());
+      PRTStore.initialiseVariablesForNewTab(tabId.toString());
       prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
       PAStore.initialiseVariablesForNewTab(tabId.toString());
+
+      prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
       ARAStore.initialiseVariablesForNewTab(tabId.toString());
+    } else {
+      cookieStore?.removeCookieData(tabId.toString());
+      cookieStore.initialiseVariablesForNewTab(tabId.toString());
+      PRTStore.initialiseVariablesForNewTab(tabId.toString());
+      prebidStore.initialiseVariablesForNewTabAndFrame(tabId.toString(), 0);
+      PAStore.initialiseVariablesForNewTab(tabId.toString());
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(error);
+  }
+};
+
+export const onCommittedNavigationListener = async ({
+  frameId,
+  frameType,
+  url,
+  tabId,
+}: chrome.webNavigation.WebNavigationFramedCallbackDetails) => {
+  try {
+    if (frameType !== 'outermost_frame' && frameId !== 0) {
+      return;
+    }
+
+    if (url.startsWith('chrome') || url.startsWith('devtools')) {
+      return;
+    }
+
+    if (!url) {
+      return;
     }
 
     const queryParams = getQueryParams(url);
@@ -73,39 +109,20 @@ export const onCommittedNavigationListener = async ({
 
     dataStore?.updateUrl(tabId.toString(), url);
 
-    if (url && !url.startsWith('chrome')) {
-      cookieStore?.removeCookieData(tabId.toString());
-      cookieStore.deinitialiseVariablesForTab(tabId.toString());
-      cookieStore.initialiseVariablesForNewTab(tabId.toString());
+    if (DataStore.globalIsUsingCDP) {
+      await attachCDP({ tabId });
 
-      prebidStore.deinitialiseVariablesForTab(tabId.toString());
-      prebidStore.initialiseVariablesForNewTabAndFrame(
+      const {
+        targetInfo: { targetId },
+      } = await chrome.debugger.sendCommand({ tabId }, 'Target.getTargetInfo', {
+        targetId: mainFrameId,
+      });
+
+      dataStore.updateParentChildFrameAssociation(
         tabId.toString(),
-        frameId
+        targetId,
+        '0'
       );
-
-      if (DataStore.globalIsUsingCDP) {
-        PAStore.deinitialiseVariablesForTab(tabId.toString());
-        PAStore.initialiseVariablesForNewTab(tabId.toString());
-
-        await attachCDP({ tabId });
-
-        const {
-          targetInfo: { targetId },
-        } = await chrome.debugger.sendCommand(
-          { tabId },
-          'Target.getTargetInfo',
-          {
-            targetId: mainFrameId,
-          }
-        );
-
-        dataStore.updateParentChildFrameAssociation(
-          tabId.toString(),
-          targetId,
-          '0'
-        );
-      }
     }
 
     const tabs = await chrome.tabs.query({});

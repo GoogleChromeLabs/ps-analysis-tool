@@ -44,6 +44,10 @@ const setDomainsInAllowList = async (
     return;
   }
 
+  if (isIncognito) {
+    return;
+  }
+
   // @ts-ignore - The chrome-type definition is outdated, and the return type is a promise.
   const details = (await chrome.contentSettings.cookies.get({
     primaryUrl: primaryUrl,

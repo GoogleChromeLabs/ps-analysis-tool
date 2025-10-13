@@ -36,6 +36,10 @@ const LINKS = {
     doc: 'https://developers.google.com/privacy-sandbox/protections/ip-protection',
     story: 'https://privacysandbox-stories.com/web-stories/ip-protection/',
   },
+  SCRIPT_BLOCKING: {
+    doc: 'https://privacysandbox.google.com/protections/script-blocking',
+    story: '',
+  },
   BOUNCE_TRACKING: {
     doc: 'https://privacysandbox.google.com/protections/bounce-tracking-mitigations',
     story:
@@ -224,22 +228,18 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
       {
         name: I18n.getMessage('chips'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.CHIPS,
-        url: LINKS.CHIPS.doc,
       },
       {
         name: 'Storage Access API',
         sidebarKey: SIDEBAR_ITEMS_KEYS.STORAGE_ACCESS,
-        url: LINKS.STORAGE_ACCESS.doc,
       },
       {
         name: I18n.getMessage('rws'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.RELATED_WEBSITE_SETS,
-        url: LINKS.RELATED_WEBSITE_SETS.doc,
       },
       {
         name: 'FedCM',
         sidebarKey: SIDEBAR_ITEMS_KEYS.FEDERATED_CREDENTIAL,
-        url: LINKS.FEDERATED_CREDENTIAL.doc,
       },
     ],
   },
@@ -253,7 +253,6 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
       {
         name: I18n.getMessage('topics'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.TOPICS,
-        url: LINKS.TOPICS.doc,
       },
       {
         name: I18n.getMessage('protectedAudience'),
@@ -266,7 +265,6 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
       {
         name: I18n.getMessage('privateAggregation'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_AGGREGATION,
-        url: LINKS.PRIVATE_AGGREGATION.doc,
       },
     ],
   },
@@ -280,22 +278,22 @@ export const PRIVACY_SANDBOX_LANDINGE_PAGE_BOXES = [
       {
         name: 'IP Protection',
         sidebarKey: SIDEBAR_ITEMS_KEYS.IP_PROTECTION,
-        url: LINKS.IP_PROTECTION.doc,
+      },
+      {
+        name: 'Script Blocking',
+        sidebarKey: SIDEBAR_ITEMS_KEYS.SCRIPT_BLOCKING,
       },
       {
         name: I18n.getMessage('bounceTracking'),
         sidebarKey: SIDEBAR_ITEMS_KEYS.BOUNCE_TRACKING,
-        url: LINKS.BOUNCE_TRACKING.doc,
       },
       {
         name: 'User Agent Reduction',
         sidebarKey: SIDEBAR_ITEMS_KEYS.FINGERPRINTING,
-        url: LINKS.USER_AGENT_REDUCTION.doc,
       },
       {
         name: 'Private State Tokens',
         sidebarKey: SIDEBAR_ITEMS_KEYS.PRIVATE_STATE_TOKENS,
-        url: LINKS.PRIVATE_STATE_TOKENS.doc,
       },
     ],
   },

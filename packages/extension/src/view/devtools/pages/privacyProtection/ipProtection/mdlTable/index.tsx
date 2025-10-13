@@ -34,13 +34,24 @@ import React, { useEffect, useMemo, useState } from 'react';
  * Internal dependencies
  */
 import Legend from './legend';
+import { useScriptBlocking } from '../../../../stateProviders';
 
 const MDLTable = () => {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [tableData, setTableData] = useState<
-    { domain: string; owner: string }[]
+    {
+      domain: string;
+      owner: string;
+      highlighted: boolean;
+      highlightedClass?: () => string;
+    }[]
   >([]);
+
+  const { uniqueResponseDomains } = useScriptBlocking(({ state }) => ({
+    uniqueResponseDomains: state.uniqueResponseDomains,
+  }));
 
   useEffect(() => {
     (async () => {
@@ -63,25 +74,48 @@ const MDLTable = () => {
         line.split('|').map((item) => item.trim())
       );
 
-      setTableData(() =>
-        mdlData.map((item: string[]) => {
-          let owner = item[1];
+      setTableData(() => {
+        const _data = mdlData
+          .map((item: string[]) => {
+            let available = false;
+            let owner = item[1];
 
-          if (item[1].includes('PSL Domain')) {
-            owner = 'PSL Domain';
-          }
+            if (item[1].includes('PSL Domain')) {
+              owner = 'PSL Domain';
+            }
 
-          const scriptBlocking = item[2];
+            const scriptBlocking = item[2];
 
-          return {
-            domain: item[0],
-            owner,
-            scriptBlocking,
-          };
-        })
-      );
+            if (uniqueResponseDomains.includes(item[0])) {
+              available = true;
+            }
+
+            return {
+              domain: item[0],
+              owner,
+              scriptBlocking,
+              highlighted: available,
+              highlightedClass: available
+                ? (selected: boolean) => {
+                    if (selected) {
+                      return 'bg-amber-200/80 dark:bg-amber-200/70';
+                    }
+
+                    return 'bg-amber-100/60 dark:bg-amber-200/90';
+                  }
+                : undefined,
+            };
+          })
+          .sort((a, b) => {
+            return Number(b.highlighted) - Number(a.highlighted);
+          });
+
+        setIsLoading(false);
+
+        return _data;
+      });
     })();
-  }, []);
+  }, [uniqueResponseDomains]);
 
   const tableColumns = useMemo<TableColumn[]>(
     () => [
@@ -89,7 +123,7 @@ const MDLTable = () => {
         header: 'Domain',
         accessorKey: 'domain',
         cell: (info) => info,
-        initialWidth: 100,
+        initialWidth: 150,
       },
       {
         header: 'Owner',
@@ -109,12 +143,7 @@ const MDLTable = () => {
 
           return info;
         },
-        initialWidth: 100,
-      },
-      {
-        header: 'Impacted by Script Blocking',
-        accessorKey: 'scriptBlocking',
-        cell: (info) => info,
+        initialWidth: 150,
       },
     ],
     []
@@ -129,7 +158,7 @@ const MDLTable = () => {
     []
   );
 
-  if (tableData.length === 0) {
+  if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <ProgressBar additionalStyles="w-80 h-80" />

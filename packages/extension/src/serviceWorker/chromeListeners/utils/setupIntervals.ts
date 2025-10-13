@@ -22,10 +22,18 @@ import sendUpdatedData from '../../../store/utils/sendUpdatedData';
 import { getAndParseNetworkCookies } from '../../../utils/getAndParseNetworkCookies';
 
 const setupIntervals = () => {
+  if (DataStore.haveIntervalsBeenSet) {
+    return;
+  }
+
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
   // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
   setInterval(async () => {
-    await chrome.storage.session.get();
+    try {
+      await chrome.storage.session.get();
+    } catch (error) {
+      //fail silently
+    }
   }, 20000);
 
   // @todo Send tab data of the active tab only, also if sending only the difference would make it any faster.
@@ -49,6 +57,7 @@ const setupIntervals = () => {
       getAndParseNetworkCookies(key);
     });
   }, 5000);
+  DataStore.haveIntervalsBeenSet = true;
 };
 
 export default setupIntervals;

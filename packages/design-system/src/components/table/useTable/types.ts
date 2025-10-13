@@ -24,6 +24,8 @@ import type {
   singleAuctionEvent,
   ErroredOutUrlsData,
   SourcesData,
+  MDLTableData,
+  PRTMetadata,
 } from '@google-psat/common';
 
 export type PrebidConfigTableData = {
@@ -76,8 +78,12 @@ export type TableData = (
   | PrebidConsentManagementTableData
   | PrebidUserIdsTableData
   | UserEID
+  | MDLTableData
+  | PRTMetadata
 ) & {
   highlighted?: boolean;
+  highlightedClass?: () => string; // Optional class for highlighting rows
+  scrollToHighlighted?: boolean; // Optional flag to scroll to highlighted row
 };
 
 export interface ClassificationResult {
@@ -169,4 +175,14 @@ export interface TableProviderProps {
   tableContainerRef?: React.RefObject<HTMLDivElement>;
   tableRef?: React.RefObject<HTMLTableElement>;
   minColumnWidth?: number;
+  customClearFunction?: (key: string, value: string) => void;
+  customClearAllFunction?: () => void;
+  filterRef?: React.RefObject<{
+    resetFilters: () => void;
+    toggleFilterSelection: (
+      filterKey: string,
+      filterValue: string,
+      isRemovalAction?: boolean
+    ) => void;
+  }>;
 }

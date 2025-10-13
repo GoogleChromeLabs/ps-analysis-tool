@@ -713,3 +713,21 @@ Remove facilitated testing page Remove facilitated testing page https://github.c
 ## Changelog
 
 - Fix: Extension breakage due to global variable conflictn https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1132
+
+#v1.2.0
+
+## Chagelog
+
+- Feature: Add FedCM EE https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1135
+- Feature: Add historical statistics for PRT and Script Blocking https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1146
+- Feature: Create EE workflow logic and structure https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/907
+- Feature: Highlight blocked script domains in MDL https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1130
+- Feature: Probabilistic Reveal Tokens decryption https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1131
+- Feature: Reload extension from PSAT https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1138
+- Fix: Chrome version number and fix focus after sidebar use https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1152
+- Fix: QA issues PRT https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1154
+- Fix: Standardize navigation for dashboard callout buttons https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1153
+- Chore: Add FedCM EE tests https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1148
+- Chore: Update Node.js version  to 20 https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1145
+- Enhancement: Keep FedCM EE state paused by default https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1149
+- Refactor: EE Workflow demo https://github.com/GoogleChromeLabs/ps-analysis-tool/pull/1150

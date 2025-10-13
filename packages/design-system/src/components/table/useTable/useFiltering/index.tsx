@@ -52,7 +52,9 @@ const useFiltering = (
   data: TableData[],
   tableFilterData: TableFilter | undefined,
   specificTablePersistentSettingsKey?: string,
-  genericTablePersistentSettingsKey?: string
+  genericTablePersistentSettingsKey?: string,
+  customClearFunction?: (key: string, value: string) => void,
+  customClearAllFunction?: () => void
 ): TableFilteringOutput => {
   const [filters, setFilters] = useState<TableFilter>({
     ...(tableFilterData || {}),
@@ -137,6 +139,10 @@ const useFiltering = (
         toggleSelectAllFilter(filterKey, isRemovalAction);
       }
 
+      if (customClearFunction && isRemovalAction) {
+        customClearFunction(filterKey, filterValue);
+      }
+
       setFilters((prevFilters) => {
         const newFilters = { ...prevFilters };
         const filterValues = newFilters[filterKey].filterValues || {};
@@ -150,10 +156,14 @@ const useFiltering = (
         return newFilters;
       });
     },
-    [selectAllFilterSelection, toggleSelectAllFilter]
+    [customClearFunction, selectAllFilterSelection, toggleSelectAllFilter]
   );
 
   const resetFilters = useCallback(() => {
+    if (customClearAllFunction) {
+      customClearAllFunction();
+    }
+
     setSelectAllFilterSelection((prev) => {
       const newSelectAllFilterSelection = { ...prev };
 
@@ -182,7 +192,7 @@ const useFiltering = (
 
       return newFilters;
     });
-  }, []);
+  }, [customClearAllFunction]);
 
   const selectedFilters = useMemo(
     () =>

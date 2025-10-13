@@ -21,9 +21,23 @@ import { setupIntervals } from './utils';
 
 export const onStartUpListener = async () => {
   const storage = await chrome.storage.sync.get();
+
   setupIntervals();
 
   if (Object.keys(storage).includes('isUsingCDP')) {
     DataStore.globalIsUsingCDP = storage.isUsingCDP;
   }
+
+  chrome.storage.session.set({
+    prtStatistics: {
+      globalView: {},
+    },
+    scriptBlocking: {
+      globalView: {
+        partiallyBlockedDomains: 0,
+        completelyBlockedDomains: 0,
+        domains: 0,
+      },
+    },
+  });
 };

@@ -23,7 +23,12 @@ import {
   TabsProvider,
   type TabItems,
 } from '@google-psat/design-system';
+/**
+ * Internal dependencies.
+ */
 import Panel from './panel';
+import ProbabilisticRevealTokens from './probabilisticRevealTokens';
+import SessionInsights from './probabilisticRevealTokens/sessionInsights';
 import MDLTable from './mdlTable';
 
 const IPProtection = () => {
@@ -47,6 +52,24 @@ const IPProtection = () => {
           content: {
             Element: MDLTable,
             props: {},
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
+        },
+      ],
+      Observability: [
+        {
+          title: 'Site',
+          content: {
+            Element: ProbabilisticRevealTokens,
+            className: 'overflow-auto h-full',
+            containerClassName: 'h-full',
+          },
+        },
+        {
+          title: 'Session',
+          content: {
+            Element: SessionInsights,
             className: 'overflow-auto h-full',
             containerClassName: 'h-full',
           },

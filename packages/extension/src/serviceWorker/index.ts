@@ -18,6 +18,7 @@
  */
 import { isValidURL } from '@google-psat/common';
 import type { Protocol } from 'devtools-protocol';
+
 /**
  * Internal dependencies.
  */
@@ -29,6 +30,8 @@ import PAStore from '../store/PAStore';
 import ARAStore from '../store/ARAStore';
 import attachCDP from './attachCDP';
 import readHeaderAndRegister from './readHeaderAndRegister';
+import PRTStore from '../store/PRTStore';
+import { createURL, extractHeader } from '../utils/headerFunctions';
 
 const ALLOWED_EVENTS = [
   'Network.responseReceived',
@@ -49,15 +52,6 @@ const ALLOWED_EVENTS = [
 ];
 const attachedSet = new Set<string>();
 let targets: chrome.debugger.TargetInfo[] = [];
-
-/**
- * Extracts the value of a specific HTTP header from the request or response.
- * @param header The name of the header to extract.
- * @param headers The request or response information.
- * @returns The value of the specified header.
- */
-const extractHeader = (header: string, headers: Protocol.Network.Headers) =>
-  headers?.[header.toLowerCase()] ?? headers?.[header];
 
 const calculateTabId = (source: chrome.debugger.Debuggee) => {
   if (source.tabId) {
@@ -360,22 +354,21 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.requestWillBeSentExtraInfo') {
         const { requestId, headers } =
           params as Protocol.Network.RequestWillBeSentExtraInfoEvent;
-
+        PRTStore.updatePRT(headers, tabId, requestId);
         if (DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]) {
           if (extractHeader('Attribution-Reporting-Eligible', headers)) {
+            const constructedURL =
+              DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url ??
+              createURL(headers);
+
             if (ARAStore.headersForARA?.[tabId]?.[requestId]) {
-              readHeaderAndRegister(
-                headers,
-                DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]?.url,
-                tabId
-              );
+              readHeaderAndRegister(headers, constructedURL, tabId);
             } else {
               ARAStore.headersForARA[tabId] = {
                 ...ARAStore.headersForARA[tabId],
                 [requestId]: {
                   headers: {},
-                  url: DataStore.requestIdToCDPURLMapping[tabId]?.[requestId]
-                    ?.url,
+                  url: constructedURL,
                 },
               };
             }
@@ -463,6 +456,8 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
           };
         }
 
+        PRTStore.updateUniqueResponseDomains(tabId, requestUrl);
+
         if (cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId]) {
           cookieStore.parseResponseHeadersForCA(
             cookieStore.getUnParsedResponseHeadersForCA(tabId)?.[requestId],
@@ -487,6 +482,7 @@ chrome.debugger.onEvent.addListener((source, method, params) => {
       if (method === 'Network.responseReceivedExtraInfo') {
         const { headers, requestId } =
           params as Protocol.Network.ResponseReceivedExtraInfoEvent;
+
         if (
           extractHeader('Attribution-Reporting-Register-Trigger', headers) ||
           extractHeader('Attribution-Reporting-Register-Source', headers)

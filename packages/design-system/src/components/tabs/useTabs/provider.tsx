@@ -55,43 +55,36 @@ export const TabsProvider = ({
     }
   }, [isGroup, items]);
 
-  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+  const [activeGroup, _setActiveGroup] = useState<string | null>(
+    isGroup ? Object.keys(items)[0] ?? null : null
+  );
+  const [activeTab, setActiveTab] = useState(0);
 
-  useEffect(() => {
-    setActiveGroup((prev) =>
-      prev === null ? Object.keys(groupedItems)[0] ?? null : prev
-    );
-  }, [groupedItems]);
-
-  const [activeTab, _setActiveTab] = useState(0);
-  const activeTabRef = useRef(activeTab);
   const groupItemsRef = useRef(groupedItems);
 
   useEffect(() => {
     groupItemsRef.current = groupedItems;
   }, [groupedItems]);
 
-  const setActiveTab = useCallback((tab: number) => {
-    activeTabRef.current = tab;
-    _setActiveTab(tab);
+  useEffect(() => {
+    _setActiveGroup((prev) =>
+      prev === null ? Object.keys(groupItemsRef.current)[0] ?? null : prev
+    );
+  }, []);
 
-    let trackedIndex = 0;
-    const group = Object.entries(groupItemsRef.current).find(([, _items]) => {
-      const groupTitles = _items.map((item) => {
-        return {
-          title: item.title,
-          index: trackedIndex++,
-        };
-      });
+  const setActiveGroup = useCallback((group: string) => {
+    _setActiveGroup(group);
 
-      return groupTitles.some(({ index }) => index === tab);
-    });
+    const keys = Object.keys(groupItemsRef.current);
+    let index = 0;
+    let tabIndex = 0;
 
-    if (group) {
-      setActiveGroup(group[0]);
-    } else {
-      setActiveGroup(null);
+    while (index < keys.length && keys[index] !== group) {
+      tabIndex += groupItemsRef.current[keys[index]]?.length || 0;
+      index++;
     }
+
+    setActiveTab(tabIndex);
   }, []);
 
   const tabItems = useMemo(() => {
@@ -104,10 +97,6 @@ export const TabsProvider = ({
   const [highlightedTabs, setHighlightedTabs] = useState<
     Record<number, number | boolean>
   >({});
-
-  useEffect(() => {
-    activeTabRef.current = activeTab;
-  }, [activeTab]);
 
   useEffect(() => {
     _setStorage(Array(tabItems.length).fill(''));
@@ -174,7 +163,7 @@ export const TabsProvider = ({
 
   const highlightTab = useCallback(
     (tab: number, update: number | boolean = true, increment = false) => {
-      if (tab === activeTabRef.current) {
+      if (tab === activeTab) {
         return;
       }
 
@@ -186,7 +175,7 @@ export const TabsProvider = ({
         return next;
       });
     },
-    []
+    [activeTab]
   );
 
   const isTabHighlighted = useCallback(
@@ -197,10 +186,10 @@ export const TabsProvider = ({
   );
 
   useEffect(() => {
-    if (highlightedTabs[activeTabRef.current]) {
+    if (highlightedTabs[activeTab]) {
       setHighlightedTabs((prev) => {
         const next = { ...prev };
-        next[activeTabRef.current] = false;
+        next[activeTab] = false;
         return next;
       });
     }
@@ -250,14 +239,20 @@ export const TabsProvider = ({
       if (!sessionStorage[name]) {
         sessionStorage[name] = {
           activeTab: 0,
+          activeGroup: 0,
         };
       }
 
       const _activeTab = sessionStorage[name].activeTab || 0;
+      const _activeGroup =
+        sessionStorage[name].activeGroup ||
+        Object.keys(groupItemsRef.current)[0];
+
+      setActiveGroup(_activeGroup);
       setActiveTab(_activeTab);
       setLoading(false);
     })();
-  }, [name, setActiveTab]);
+  }, [name, setActiveGroup]);
 
   useEffect(() => {
     if (!name) {
@@ -269,12 +264,13 @@ export const TabsProvider = ({
         {
           [name]: {
             activeTab,
+            activeGroup,
           },
         },
         'tabs'
       );
     })();
-  }, [name, activeTab]);
+  }, [name, activeTab, activeGroup]);
 
   return (
     <TabsContext.Provider
@@ -292,6 +288,7 @@ export const TabsProvider = ({
         actions: {
           setStorage,
           setActiveTab,
+          setActiveGroup,
           highlightTab,
           isTabHighlighted,
           shouldAddSpacer,

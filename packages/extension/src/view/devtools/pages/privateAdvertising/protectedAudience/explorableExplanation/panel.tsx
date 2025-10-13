@@ -23,6 +23,7 @@ import React, {
   useEffect,
   useRef,
   useMemo,
+  Suspense,
 } from 'react';
 import {
   app,
@@ -32,8 +33,11 @@ import {
   config,
   // @ts-ignore package does not have types
 } from '@google-psat/explorable-explanations';
-import { ReactP5Wrapper } from '@p5-wrapper/react';
-import { DraggableTray, useTabs } from '@google-psat/design-system';
+import {
+  DraggableTray,
+  ProgressBar,
+  useTabs,
+} from '@google-psat/design-system';
 import { getSessionStorage, updateSessionStorage } from '@google-psat/common';
 import classNames from 'classnames';
 
@@ -43,6 +47,13 @@ import classNames from 'classnames';
 import Header from '../../../explorableExplanation/header';
 import type { CurrentSiteData, StepType } from './auctionEventTransformers';
 import { useSettings } from '../../../../stateProviders';
+
+const ReactP5Wrapper = React.lazy(() =>
+  //@ts-expect-error -- this is because the component is being exported as a different type than what lazy expects
+  import('@p5-wrapper/react').then((module) => ({
+    default: module.ReactP5Wrapper,
+  }))
+);
 
 const STORAGE_KEY = 'paExplorableExplanation';
 const DEFAULT_SETTINGS = {
@@ -446,28 +457,52 @@ const Panel = ({
         </main>
       </div>
       {/* Main Canvas */}
-      <ReactP5Wrapper sketch={mainSketch} isMultiSeller={isMultiSeller} />
+      <Suspense
+        fallback={
+          <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-raisin-black">
+            <ProgressBar additionalStyles="w-full" />
+          </div>
+        }
+      >
+        <ReactP5Wrapper sketch={mainSketch} isMultiSeller={isMultiSeller} />
+      </Suspense>
       {/* Interest Group Canvas */}
-      <ReactP5Wrapper
-        autoExpand={autoExpand}
-        sketch={interestGroupSketch}
-        expandedBubbleX={expandedBubbleX}
-        expandedBubbleY={expandedBubbleY}
-        setIsBubbleExpanded={setIsBubbleExpanded}
-        expandedBubbleWidth={expandedBubbleWidth}
-        speedMultiplier={2 * sliderStep}
-        setCurrentSite={setCurrentSite}
-        setPlayState={setPlay}
-        setInfo={setInfo}
-        setCurrentStep={setCurrentStep}
-        autoScroll={autoScroll}
-        setHighlightedInterestGroup={_setHighLightedInterestGroup}
-        setSelectedAdUnit={setSelectedAdUnit}
-        setSelectedDateTime={setSelectedDateTime}
-        setHasLastNodeVisited={setHasLastNodeVisited}
-        platform={OSInformation ?? ''}
-      />
-      <ReactP5Wrapper sketch={userSketch} />
+      <Suspense
+        fallback={
+          <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-raisin-black">
+            <ProgressBar additionalStyles="w-full" />
+          </div>
+        }
+      >
+        <ReactP5Wrapper
+          autoExpand={autoExpand}
+          sketch={interestGroupSketch}
+          expandedBubbleX={expandedBubbleX}
+          expandedBubbleY={expandedBubbleY}
+          setIsBubbleExpanded={setIsBubbleExpanded}
+          expandedBubbleWidth={expandedBubbleWidth}
+          speedMultiplier={2 * sliderStep}
+          setCurrentSite={setCurrentSite}
+          setPlayState={setPlay}
+          setInfo={setInfo}
+          setCurrentStep={setCurrentStep}
+          autoScroll={autoScroll}
+          setHighlightedInterestGroup={_setHighLightedInterestGroup}
+          setSelectedAdUnit={setSelectedAdUnit}
+          setSelectedDateTime={setSelectedDateTime}
+          setHasLastNodeVisited={setHasLastNodeVisited}
+          platform={OSInformation ?? ''}
+        />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-raisin-black">
+            <ProgressBar additionalStyles="w-full" />
+          </div>
+        }
+      >
+        <ReactP5Wrapper sketch={userSketch} />
+      </Suspense>
       <DraggableTray ref={draggableTrayRef} trayId="explorableExplanation" />
     </div>
   );

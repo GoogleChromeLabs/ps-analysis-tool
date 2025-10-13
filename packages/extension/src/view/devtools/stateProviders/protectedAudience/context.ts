@@ -36,11 +36,13 @@ export interface ProtectedAudienceContextType {
     noBids: NoBidsType;
     adsAndBidders: AdsAndBiddersType;
     selectedAdUnit: string | null;
-    sortOrder: 'asc' | 'desc';
+    sortOrder: Record<string, 'asc' | 'desc'>;
   };
   actions: {
     setSelectedAdUnit: React.Dispatch<React.SetStateAction<string | null>>;
-    setSortOrder: React.Dispatch<React.SetStateAction<'asc' | 'desc'>>;
+    setSortOrder: React.Dispatch<
+      React.SetStateAction<Record<string, 'asc' | 'desc'>>
+    >;
   };
 }
 
@@ -53,7 +55,7 @@ export const initialState: ProtectedAudienceContextType = {
     noBids: {},
     adsAndBidders: {},
     selectedAdUnit: null,
-    sortOrder: 'asc',
+    sortOrder: {},
   },
   actions: {
     setSelectedAdUnit: noop,

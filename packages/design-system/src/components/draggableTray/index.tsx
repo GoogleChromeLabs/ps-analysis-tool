@@ -35,6 +35,9 @@ import { usePersistentTray } from '../resizableTray';
 interface DraggableTrayProps {
   initialCollapsed?: boolean;
   trayId?: string;
+  defaultHeight?: string;
+  disableResize?: boolean;
+  activeTabIndex?: () => number;
 }
 
 const DraggableTray = forwardRef<
@@ -44,20 +47,31 @@ const DraggableTray = forwardRef<
   },
   DraggableTrayProps
 >(function DraggableTray(
-  { initialCollapsed = false, trayId }: DraggableTrayProps,
+  {
+    initialCollapsed = false,
+    trayId,
+    defaultHeight = '30%',
+    disableResize = false,
+    activeTabIndex,
+  }: DraggableTrayProps,
   ref
 ) {
-  const { panel, activeTab } = useTabs(({ state }) => ({
-    panel: state.panel,
-    activeTab: state.activeTab,
-  }));
+  const { panel, activeTab, setActiveTab, setActiveGroup, isGroup } = useTabs(
+    ({ state, actions }) => ({
+      panel: state.panel,
+      activeTab: state.activeTab,
+      setActiveTab: actions.setActiveTab,
+      setActiveGroup: actions.setActiveGroup,
+      isGroup: state.isGroup,
+    })
+  );
   const ActiveTabContent = panel.Element;
   const props = panel.props;
 
   const [isCollapsed, setIsCollapsed] = useState(initialCollapsed);
 
   const { height, setHeight, onResizeStop } = usePersistentTray(trayId, {
-    height: '30%',
+    height: defaultHeight,
   });
 
   useEffect(() => {
@@ -66,9 +80,18 @@ const DraggableTray = forwardRef<
 
   useEffect(() => {
     if (!isCollapsed) {
-      setHeight('30%');
+      setHeight(defaultHeight);
     }
-  }, [isCollapsed, setHeight]);
+  }, [defaultHeight, isCollapsed, setHeight]);
+
+  useEffect(() => {
+    if (activeTabIndex && activeTabIndex() !== -1) {
+      setActiveTab(activeTabIndex());
+      if (!isGroup) {
+        setActiveGroup('group-' + activeTabIndex());
+      }
+    }
+  }, [activeTabIndex, setActiveGroup, setActiveTab, isGroup]);
 
   useImperativeHandle(
     ref,
@@ -83,7 +106,7 @@ const DraggableTray = forwardRef<
     <Resizable
       defaultSize={{
         width: '100%',
-        height: '30%',
+        height: defaultHeight,
       }}
       onResizeStop={onResizeStop}
       size={{
@@ -93,7 +116,7 @@ const DraggableTray = forwardRef<
       minHeight="30px"
       maxHeight="95%"
       enable={{
-        top: !isCollapsed,
+        top: !disableResize && !isCollapsed,
       }}
     >
       <div className="w-full h-full flex flex-col">

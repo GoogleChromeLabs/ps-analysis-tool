@@ -67,28 +67,33 @@ const BodyRow = ({
 }: BodyRowProps) => {
   const rowKey = getRowObjectKey(row);
   const isHighlighted = row.originalData?.highlighted;
+  const scrollToHighlighted = row.originalData?.scrollToHighlighted;
+  const highlightedClass = (selected: boolean) =>
+    row.originalData?.highlightedClass?.(selected) ||
+    'bg-dirty-pink dark:text-black';
+
   const classes = classnames(
     rowKey !== selectedKey &&
       (index % 2
         ? isHighlighted
-          ? 'bg-dirty-pink'
+          ? highlightedClass(false)
           : 'bg-anti-flash-white dark:bg-charleston-green'
         : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red dark:text-dirty-red text-dirty-red'
+        ? highlightedClass(false)
         : 'bg-white dark:bg-raisin-black'),
     rowKey === selectedKey &&
       (isRowFocused
         ? isHighlighted
-          ? 'bg-dirty-red'
+          ? `${highlightedClass(true)}`
           : 'bg-lavender-sky text-black dark:bg-midnight-slate dark:text-chinese-silver'
         : isHighlighted
-        ? 'bg-dirty-pink text-dirty-red'
+        ? `${highlightedClass(true)}`
         : 'bg-silver-mist text-black dark:bg-dark-graphite dark:text-chinese-silver')
   );
   const extraClasses = getExtraClasses();
 
   useEffect(() => {
-    if (isHighlighted) {
+    if (isHighlighted && scrollToHighlighted) {
       const element = document.getElementById(index.toString());
       element?.scrollIntoView?.({
         behavior: 'smooth',
@@ -96,7 +101,7 @@ const BodyRow = ({
         inline: 'start',
       });
     }
-  }, [index, isHighlighted]);
+  }, [index, isHighlighted, scrollToHighlighted]);
 
   useEffect(() => {
     if (shouldScroll) {
@@ -150,6 +155,7 @@ const BodyRow = ({
             accessorKey={accessorKey}
             hasVerticalBar={idx === 0 && hasVerticalBar}
             verticalBarColorHash={verticalBarColorHash}
+            isHighlighted={isHighlighted}
           />
         )
       )}

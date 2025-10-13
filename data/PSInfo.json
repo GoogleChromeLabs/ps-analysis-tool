@@ -112,6 +112,16 @@
     "devDocumentation": "https://developers.google.com/privacy-sandbox/protections/ip-protection",
 		"useI18n": false
   },
+  "script-blocking": {
+    "name": "Script Blocking",
+    "description": "Script Blocking enhances Incognito mode's tracking protections by blocking the execution of known, prevalent techniques for browser re-identification used in third-party (embedded) contexts for domains marked as \"Entire Domain Blocked\" or \"Some URLs are Blocked\" in the Masked Domain List (MDL). This subset of the MDL is known as the Blocked Domain List.",
+		"links": ["https://github.com/explainers-by-googlers/script-blocking/blob/main/README.md"],
+    "proposal": "",
+    "publicDiscussion": "https://github.com/explainers-by-googlers/script-blocking/issues",
+    "videoOverview": "",
+    "devDocumentation": "https://privacysandbox.google.com/protections/script-blocking",
+		"useI18n": false
+  },
   "private-state-tokens": {
     "name": "Private State Tokens",
     "description": "PrivateStateTokensDescription",

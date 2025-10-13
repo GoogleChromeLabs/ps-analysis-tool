@@ -25,6 +25,7 @@ import { isValidURL } from '@google-psat/common';
 import { doesFrameExist } from '../utils/doesFrameExist';
 
 export class DataStore {
+  static haveIntervalsBeenSet = false;
   /**
    * This variable stores the requestId and required information like frameId, URL and ancestorFrameId for a request associated to that tab.
    */
@@ -62,13 +63,25 @@ export class DataStore {
       popupOpenState: boolean;
       newUpdatesCA: number;
       newUpdatesPA: number;
+      newUpdatesPRT: number;
       newUpdatesPrebid: number;
       frameIDURLSet: Record<string, string[]>;
       parentChildFrameAssociation: Record<string, string>;
       isCookieAnalysisEnabled: boolean;
       isPAAnalysisEnabled: boolean;
+      newUpdatesScriptBlocking: number;
     };
   } = {};
+
+  sendUpdatedDataToPopupAndDevTools(
+    tabId: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _overrideForInitialSync = false
+  ) {
+    if (!DataStore.tabs[tabId]) {
+      return;
+    }
+  }
 
   /**
    * This function adds frame to the appropriate tab.
@@ -185,10 +198,12 @@ export class DataStore {
       newUpdatesCA: 0,
       newUpdatesPA: 0,
       newUpdatesPrebid: 0,
+      newUpdatesPRT: 0,
       frameIDURLSet: {},
       parentChildFrameAssociation: {},
       isCookieAnalysisEnabled: true,
       isPAAnalysisEnabled: true,
+      newUpdatesScriptBlocking: 0,
     };
   }
 

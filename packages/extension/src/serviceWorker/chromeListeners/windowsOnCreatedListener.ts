@@ -13,8 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Internal dependencies
+ */
+import { DataStore } from '../../store/dataStore';
+import { setupIntervals } from './utils';
+
 export const windowsOnCreatedListener = async () => {
   const totalWindows = await chrome.windows.getAll();
+  setupIntervals();
+  const storage = await chrome.storage.sync.get();
+  if (Object.keys(storage).includes('isUsingCDP')) {
+    DataStore.globalIsUsingCDP = storage.isUsingCDP;
+  }
 
   // @see https://developer.chrome.com/blog/longer-esw-lifetimes#whats_changed
   // Doing this to keep the service worker alive so that we dont loose any data and introduce any bug.
