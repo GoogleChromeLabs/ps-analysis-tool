@@ -61,6 +61,6 @@
     "puppeteer-extra-plugin-user-preferences": "^2.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "vite": "^6.3.6"
+    "vite": "^6.4.1"
   }
 }
