@@ -132,7 +132,7 @@
 		"react-dom": "^19.1.0",
 		"rimraf": "^5.0.5",
 		"sinon-chrome": "^2.2.4",
-		"storybook": "^8.6.12",
+		"storybook": "^8.6.15",
 		"style-loader": "^3.3.3",
 		"tailwindcss": "^4.1.5",
 		"typescript": "^5.0.4",
