@@ -39,7 +39,7 @@
   "dependencies": {
     "@google-psat/i18n": "*",
     "@types/lodash-es": "^4.17.12",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "tldts": "^6.0.14",
     "use-context-selector": "^1.4.1"
   },
