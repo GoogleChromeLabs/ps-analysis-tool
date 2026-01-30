@@ -45,7 +45,7 @@
     "@microlink/react-json-view": "^1.26.1",
     "@types/lodash-es": "^4.17.12",
     "classnames": "^2.3.2",
-    "fast-xml-parser": "^4.4.1",
+    "fast-xml-parser": "^5.3.4",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "lodash-es": "^4.17.21",
