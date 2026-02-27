@@ -39,7 +39,6 @@
     "lodash-es": "^4.17.23",
     "marked": "^14.0.0",
     "marked-alert": "^2.0.2",
-    "mermaid": "^11.10.0",
     "p-queue": "^7.3.4",
     "p5": "^2.0.4",
     "re-resizable": "^6.11.2",
