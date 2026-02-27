@@ -42,10 +42,10 @@ module.exports = {
       require.resolve('chalk').split('chalk')[0],
       'chalk/source/vendor/supports-color/index.js'
     ),
-    mermaid: join(__dirname, '/mermaidMock.js'),
     '^lodash-es$': 'lodash',
     'lodash-es/isEqual': 'lodash/isEqual',
     p5: join(__dirname, '/p5Mock.js'),
+    sitemapper: join(__dirname, '/sitemapperMock.js'),
   },
   testMatch: [
     '**/tests/**/*.{js,jsx,ts,tsx}',

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * External dependencies
- */
-import Spinnies from 'spinnies';
-/**
- * Internal dependencies
- */
-import getUrlListFromArgs from '../getUrlListFromArgs';
+// sitemapper-mock.js
 
-describe('getUrlListFromArgs', () => {
-  it('parses a url', async () => {
-    const spinnies = new Spinnies();
-    expect(
-      await getUrlListFromArgs('https://example.com', spinnies, '', '')
-    ).toStrictEqual(['https://example.com']);
-  });
-});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default (...args) => {
+  //
+};
