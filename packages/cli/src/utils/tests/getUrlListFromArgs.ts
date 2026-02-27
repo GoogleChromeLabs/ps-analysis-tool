@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * External dependencies
+ */
+import Spinnies from 'spinnies';
+/**
+ * Internal dependencies
+ */
 import getUrlListFromArgs from '../getUrlListFromArgs';
 
 describe('getUrlListFromArgs', () => {
   it('parses a url', async () => {
+    const spinnies = new Spinnies();
     expect(
-      await getUrlListFromArgs('https://example.com', '', '', '')
+      await getUrlListFromArgs('https://example.com', spinnies, '', '')
     ).toStrictEqual(['https://example.com']);
   });
 });
