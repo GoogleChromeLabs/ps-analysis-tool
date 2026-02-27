@@ -36,7 +36,7 @@
     "elliptic": "^6.6.1",
     "file-saver": "^2.0.5",
     "github-markdown-css": "^5.6.1",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "marked": "^14.0.0",
     "marked-alert": "^2.0.2",
     "mermaid": "^11.10.0",
