@@ -113,6 +113,7 @@ export class PuppeteerManagement {
     const devtoolsTargets = targets?.find((t) => {
       return t.type() === 'other' && t.url().startsWith('devtools://');
     });
+    console.log(targets);
     if (!devtoolsTargets) {
       throw new Error('DevTools targets not found.');
     }
