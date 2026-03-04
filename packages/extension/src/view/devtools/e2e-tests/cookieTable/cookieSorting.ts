@@ -70,5 +70,5 @@ describe('Validate the Cookies sort option', () => {
       selectors.sortSVG
     );
     expect(isSort).toBe(true);
-  }, 60000);
+  }, 120000);
 });

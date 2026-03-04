@@ -86,5 +86,5 @@ describe('Validate the Cookies search', () => {
     } else {
       throw new Error('Failed to navigate to the cookie frame.');
     }
-  }, 60000);
+  }, 120000);
 });

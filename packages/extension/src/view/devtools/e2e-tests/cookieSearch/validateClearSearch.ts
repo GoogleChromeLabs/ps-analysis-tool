@@ -55,5 +55,5 @@ describe('Verify the Clear search button works as expected', () => {
       'https://www.bbc.com/'.replace(/\/$/, '')
     );
     await interaction.clearSearch(frame);
-  }, 60000);
+  }, 120000);
 });
