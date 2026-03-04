@@ -9375,7 +9375,7 @@
     "message": "Remembers user preferences like language, search results per page, and SafeSearch settings"
   },
   "OCD_Secure_YEC_description": {
-    "message": "Serve a similar purpose for YouTube, including detecting and resolving problems"
+    "message": "Serve a similar purpose for , including detecting and resolving problems"
   },
   "OCD_CGIC_description": {
     "message": "Improves search results delivery by autocompleting queries based on user input"
@@ -9514,5 +9514,86 @@
   },
   "OCD_usprivacy_description": {
     "message": "This cookie stores the US privacy string."
+  },
+  "OCD___Secure_YNID_description": {
+    "message": "It's a YouTube cookie used to enhance user experience by storing video player preferences and aiding in secure log-ins and spam detectio"
+  },
+  "OCD__AspNetCore_Mvc_CookieTempDataProvider_description": {
+    "message": "This cookie is used to keep temporary session data while you are on the site. "
+  },
+  "OCD_x_ms_cpim_admin_description": {
+    "message": "Holds user membership data across tenants. The tenants a user is a member of and level of membership (Admin or User)."
+  },
+  "OCD_x_ms_cpim_slice_description": {
+    "message": "Used to route requests to the appropriate production instance."
+  },
+  "OCD_x_ms_cpim_trans_description": {
+    "message": "Used for tracking the transactions (number of authentication requests to Azure AD B2C) and the current transaction."
+  },
+  "OCD_x_ms_cpim_sso__description": {
+    "message": "Used for maintaining the SSO session. This cookie is set as persistent, when Keep Me Signed In is enabled."
+  },
+  "OCD_x_ms_cpim_cache__description": {
+    "message": "Used for maintaining the request state."
+  },
+  "OCD_x_ms_cpim_csrf_description": {
+    "message": "Cross-Site Request Forgery token used for CRSF protection. For more information, read the Cross-Site request forgery token section."
+  },
+  "OCD_x_ms_cpim_dc_description": {
+    "message": "Used for Azure AD B2C network routing."
+  },
+  "OCD_x_ms_cpim_ctx_description": {
+    "message": "Context"
+  },
+  "OCD_x_ms_cpim_rp_description": {
+    "message": "Used for storing membership data for the resource provider tenant."
+  },
+  "OCD_x_ms_cpim_rc_description": {
+    "message": "Used for storing the relay cookie."
+  },
+  "OCD_x_ms_cpim_geo_description": {
+    "message": "Used as a hint to determine the resource tenants home geographic location."
+  },
+  "OCD_Dynamics365PortalAnalytics_description": {
+    "message": "Used to uniquely distinguish one site visitor from another without storing any personal data or user identity. This cookie is essential for delivering reliable, secure, and maintainable service functionality across multiple Power Pages features."
+  },
+  "OCD__shopify_essential_description": {
+    "message": "Contains essential information for the correct functionality of a store such as session and checkout information and anti-tampering data."
+  },
+  "OCD__shopify_essential___description": {
+    "message": "Contains an opaque token that is used to identify a device for all essential purposes."
+  },
+  "OCD___txn___description": {
+    "message": "The __txn_ cookie is an Auth0 transaction cookie used during the login process to securely manage the authentication flow between your application and Auth0"
+  },
+  "OCD_igodigitalstdomain_description": {
+    "message": "This cookie is used to capture customer behavior to improve the quality of the experience of our online customers, including enhanced browsing experiences. It expires after one hour or upon the withdrawal of your consent."
+  },
+  "OCD_igodigitalst___description": {
+    "message": "This cookie is used to capture customer behavior to improve the quality of the experience of our online customers, including enhanced browsing experiences. It expires after one hour or upon the withdrawal of your consent."
+  },
+  "OCD_igodigitaltc2_description": {
+    "message": "This cookie is used to capture customer behavior to improve the quality of the experience of our online customers, including enhanced browsing experiences. It expires after 10 years or upon the withdrawal of your consent."
+  },
+  "OCD_logglytrackings­ession_description": {
+    "message": "Used by Loggly for performance and error tracking."
+  },
+  "OCD___exponea_etc___description": {
+    "message": "Exponea Bloomreach Engagement - This cookie is used to determine which products the visitor has viewed. This information is used to promote related products and optimize ad-efficiency."
+  },
+  "OCD___exponea_time2___description": {
+    "message": "Exponea Bloomreach Engagement - This cookie is used to determine which products the visitor has viewed. This information is used to promote related products and optimize ad-efficiency."
+  },
+  "OCD__rp_uid_description": {
+    "message": "This cookie is used to track users, and helps identify suspicious browsing and/or purchasing activity."
+  },
+  "OCD_aw_popup_viewed_page_description": {
+    "message": "Used in context with the website’s pop-up questionnaires and messengering."
+  },
+  "OCD___Secure_next_auth_callback_url_description": {
+    "message": "Used to store the callback URL which the user should be redirected to after login."
+  },
+  "OCD___Host_next_auth_csrf_token_description": {
+    "message": "Used to help with site security in preventing Cross-Site Request Forgery attacks."
   }
 }
