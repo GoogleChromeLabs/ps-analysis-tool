@@ -57,7 +57,7 @@ describe('Settings Page', () => {
       const iframe = await devtoolsTargets.waitForSelector(
         selectors.devtoolIframeSelector,
         {
-          timeout: 120000,
+          timeout: 60000,
         }
       );
       const frame = await iframe?.contentFrame();
@@ -107,6 +107,6 @@ describe('Settings Page', () => {
       if (blockCookiesElements.length >= 4) {
         await blockCookiesElements[3].click();
       }
-    }, 60000);
+    }, 120000);
   });
 });
