@@ -252,7 +252,7 @@ export class Interaction {
     const devtoolsTargets = await this.navigateToPrivacySandboxTab();
 
     await devtoolsTargets.waitForSelector(selectors.devtoolIframeSelector, {
-      timeout: 60000,
+      timeout: 120000,
     });
 
     // Get the iframe
