@@ -54,7 +54,9 @@ describe('Settings Page', () => {
       const devtoolsTargets = await interaction.navigateToSettingsTab();
 
       // Switch to the iframe of devtool
-      const iframe = await devtoolsTargets.$(selectors.devtoolIframeSelector);
+      const iframe = await devtoolsTargets.waitForSelector(
+        selectors.devtoolIframeSelector
+      );
       const frame = await iframe?.contentFrame();
       await interaction.delay(2000);
 
