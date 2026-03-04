@@ -70,9 +70,13 @@ export class Interaction {
   async navigateToCookieTab(): Promise<Frame | null | undefined> {
     const devtoolsPage = await this.navigateToPrivacySandboxTab();
 
-    devtoolsPage.waitForNavigation({
-      timeout: 60000,
-    });
+    devtoolsPage.waitForFrame(
+      (frame) => {
+        console.log(frame.url(), frame.name);
+        return frame.url().startsWith('chrome-extension://');
+      },
+      { timeout: 60000 }
+    );
 
     const iframeElement = await devtoolsPage.$(selectors.devtoolIframeSelector);
     const frame = await iframeElement?.contentFrame();
@@ -251,9 +255,13 @@ export class Interaction {
   async navigateToSettingsTab(): Promise<Page> {
     const devtoolsTargets = await this.navigateToPrivacySandboxTab();
 
-    devtoolsTargets.waitForNavigation({
-      timeout: 60000,
-    });
+    devtoolsTargets.waitForFrame(
+      (frame) => {
+        console.log(frame.url(), frame.name);
+        return frame.url().startsWith('chrome-extension://');
+      },
+      { timeout: 60000 }
+    );
 
     // Get the iframe
     const iframe = await devtoolsTargets.$(selectors.devtoolIframeSelector);
