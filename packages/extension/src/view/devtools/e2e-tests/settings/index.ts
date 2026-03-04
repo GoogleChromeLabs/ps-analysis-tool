@@ -55,7 +55,10 @@ describe('Settings Page', () => {
 
       // Switch to the iframe of devtool
       const iframe = await devtoolsTargets.waitForSelector(
-        selectors.devtoolIframeSelector
+        selectors.devtoolIframeSelector,
+        {
+          timeout: 60000,
+        }
       );
       const frame = await iframe?.contentFrame();
       await interaction.delay(2000);

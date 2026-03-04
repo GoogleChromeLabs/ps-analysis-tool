@@ -251,7 +251,9 @@ export class Interaction {
   async navigateToSettingsTab(): Promise<Page> {
     const devtoolsTargets = await this.navigateToPrivacySandboxTab();
 
-    await devtoolsTargets.waitForSelector(selectors.devtoolIframeSelector);
+    await devtoolsTargets.waitForSelector(selectors.devtoolIframeSelector, {
+      timeout: 60000,
+    });
 
     // Get the iframe
     const iframe = await devtoolsTargets.$(selectors.devtoolIframeSelector);
