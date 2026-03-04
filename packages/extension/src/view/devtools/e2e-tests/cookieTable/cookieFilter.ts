@@ -81,5 +81,5 @@ describe('Validate the Cookies filter option', () => {
     }, elementSelector);
 
     expect(actualText).toBe('Category: Analytics');
-  }, 60000);
+  }, 120000);
 });

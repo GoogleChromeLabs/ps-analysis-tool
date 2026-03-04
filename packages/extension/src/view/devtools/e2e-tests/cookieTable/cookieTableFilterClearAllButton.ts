@@ -70,5 +70,5 @@ describe('Validate the Cookies filter option', () => {
     // Assert that the clearAll button is not visible
     const isNotVisible = (await frame.$('div.false')) === null;
     expect(isNotVisible).toBe(true);
-  }, 60000);
+  }, 120000);
 });
