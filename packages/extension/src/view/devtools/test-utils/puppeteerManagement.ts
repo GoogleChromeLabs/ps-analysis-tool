@@ -98,7 +98,9 @@ export class PuppeteerManagement {
   }
 
   async navigateToURL(page: Page, url: string) {
-    await page.goto(url);
+    await page.goto(url, {
+      waitUntil: 'networkidle2',
+    });
   }
 
   /**
@@ -111,6 +113,7 @@ export class PuppeteerManagement {
     const devtoolsTargets = targets?.find((t) => {
       return t.type() === 'other' && t.url().startsWith('devtools://');
     });
+
     if (!devtoolsTargets) {
       throw new Error('DevTools targets not found.');
     }

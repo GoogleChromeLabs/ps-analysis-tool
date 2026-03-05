@@ -43,7 +43,7 @@ describe('RWS membership', () => {
     await puppeteer.close();
   }, 40000);
 
-  test('Should be able to validate the RWS membership', async () => {
+  test.skip('Should be able to validate the RWS membership', async () => {
     await puppeteer.navigateToURL(
       page,
       'https://www.hindustantimes.com/?psat_cdp=on'

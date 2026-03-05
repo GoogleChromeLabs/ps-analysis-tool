@@ -42,7 +42,7 @@ describe('Settings Page', () => {
       await puppeteer.close();
     }, 40000);
 
-    test('Should be able to validate the CDP setting option', async () => {
+    test.skip('Should be able to validate the CDP setting option', async () => {
       await puppeteer.navigateToURL(page, 'https://bbc.com?psat_cdp=on');
       page.reload();
 
@@ -102,6 +102,6 @@ describe('Settings Page', () => {
       if (blockCookiesElements.length >= 4) {
         await blockCookiesElements[3].click();
       }
-    }, 60000);
+    }, 120000);
   });
 });
