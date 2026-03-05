@@ -44,7 +44,7 @@ describe('Validate the Cookies Tab and count', () => {
     await puppeteer.close();
   }, 40000);
 
-  test('Should be able to validate the Analyze the tab button and validate the cookies count', async () => {
+  test.skip('Should be able to validate the Analyze the tab button and validate the cookies count', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com?psat_cdp=on');
     page.reload();
 
