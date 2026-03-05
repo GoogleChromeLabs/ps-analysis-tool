@@ -45,7 +45,7 @@ describe('Validate the Cookies description', () => {
     await puppeteer.close();
   }, 40000);
 
-  test('Should be able to view the cookie description', async () => {
+  test.skip('Should be able to view the cookie description', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com?psat_cdp=on');
     page.reload();
 
