@@ -1,6 +1,6 @@
 {
   "name": "@google-psat/explorable-explanations",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Explorable explanations for PSAT extension",
   "main": "dist/index.js",
   "customExports": {

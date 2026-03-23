@@ -870,6 +870,19 @@
       "wildcard": "0"
     }
   ],
+  "__Secure-YNID": [
+    {
+      "platform": "Google",
+      "category": "Functional",
+      "name": "__Secure-YNID",
+      "domain": "",
+      "description": "OCD___Secure_YNID_description",
+      "retention": "OCD_retention_180_days",
+      "dataController": "Google",
+      "gdprUrl": "https://business.safety.google/privacy/",
+      "wildcard": "0"
+    }
+  ],
   "AdID": [
     {
       "platform": "Google",
@@ -3474,6 +3487,175 @@
       "domain": "",
       "description": "OCD_VisitorStorageGuid_description",
       "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  ".AspNetCore.Mvc.CookieTempDataProvider": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": ".AspNetCore.Mvc.CookieTempDataProvider",
+      "domain": "",
+      "description": "OCD__AspNetCore_Mvc_CookieTempDataProvider_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-admin": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-admin",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_admin_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-slice": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-slice",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_slice_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-trans": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-trans",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_trans_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-sso*": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-sso*",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_sso__description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "x-ms-cpim-cache*": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-cache*",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_cache__description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "1"
+    }
+  ],
+  "x-ms-cpim-csrf": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-csrf",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_csrf_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-dc": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-dc",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_dc_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-ctx": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-ctx",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_ctx_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-rp": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-rp",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_rp_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-rc": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-rc",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_rc_description",
+      "retention": "OCD_retention_Session",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "x-ms-cpim-geo": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "x-ms-cpim-geo",
+      "domain": "",
+      "description": "OCD_x_ms_cpim_geo_description",
+      "retention": "OCD_retention_1_hour",
+      "dataController": "Microsoft",
+      "gdprUrl": "https://account.microsoft.com/privacy",
+      "wildcard": "0"
+    }
+  ],
+  "Dynamics365PortalAnalytics": [
+    {
+      "platform": "Azure / Microsoft",
+      "category": "Functional",
+      "name": "Dynamics365PortalAnalytics",
+      "domain": "",
+      "description": "OCD_Dynamics365PortalAnalytics_description",
+      "retention": "OCD_retention_90_days",
       "dataController": "Microsoft",
       "gdprUrl": "https://account.microsoft.com/privacy",
       "wildcard": "0"
@@ -11542,6 +11724,32 @@
       "wildcard": "0"
     }
   ],
+  "_shopify_essential": [
+    {
+      "platform": "Shopify",
+      "category": "Functional",
+      "name": "_shopify_essential",
+      "domain": "",
+      "description": "OCD__shopify_essential_description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Shopify.com",
+      "gdprUrl": "https://www.shopify.com/legal/cookies",
+      "wildcard": "0"
+    }
+  ],
+  "_shopify_essential_*": [
+    {
+      "platform": "Shopify",
+      "category": "Functional",
+      "name": "_shopify_essential_*",
+      "domain": "",
+      "description": "OCD__shopify_essential___description",
+      "retention": "OCD_retention_1_year",
+      "dataController": "Shopify.com",
+      "gdprUrl": "https://www.shopify.com/legal/cookies",
+      "wildcard": "1"
+    }
+  ],
   "__hs_opt_out": [
     {
       "platform": "Hubspot",
@@ -15321,6 +15529,19 @@
       "dataController": "Auth0",
       "gdprUrl": "",
       "wildcard": "0"
+    }
+  ],
+  "__txn_*": [
+    {
+      "platform": "Auth0",
+      "category": "Functional",
+      "name": "__txn_*",
+      "domain": "",
+      "description": "OCD___txn___description",
+      "retention": "OCD_retention_session",
+      "dataController": "Auth0",
+      "gdprUrl": "",
+      "wildcard": "1"
     }
   ],
   "atidvisitor": [
@@ -20291,6 +20512,45 @@
       "domain": "",
       "description": "OCD_SetupDomainProbePassed_description",
       "retention": "OCD_retention_Session",
+      "dataController": "Salesforce",
+      "gdprUrl": "https://www.salesforce.com/company/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "igodigitalstdomain": [
+    {
+      "platform": "Salesforce",
+      "category": "Marketing",
+      "name": "igodigitalstdomain",
+      "domain": "",
+      "description": "OCD_igodigitalstdomain_description",
+      "retention": "OCD_retention_1_hour",
+      "dataController": "Salesforce",
+      "gdprUrl": "https://www.salesforce.com/company/privacy/",
+      "wildcard": "0"
+    }
+  ],
+  "igodigitalst_*": [
+    {
+      "platform": "Salesforce",
+      "category": "Marketing",
+      "name": "igodigitalst_*",
+      "domain": "",
+      "description": "OCD_igodigitalst___description",
+      "retention": "OCD_retention_1_hour",
+      "dataController": "Salesforce",
+      "gdprUrl": "https://www.salesforce.com/company/privacy/",
+      "wildcard": "1"
+    }
+  ],
+  "igodigitaltc2": [
+    {
+      "platform": "Salesforce",
+      "category": "Marketing",
+      "name": "igodigitaltc2",
+      "domain": "",
+      "description": "OCD_igodigitaltc2_description",
+      "retention": "OCD_retention_10_years",
       "dataController": "Salesforce",
       "gdprUrl": "https://www.salesforce.com/company/privacy/",
       "wildcard": "0"
@@ -28666,7 +28926,7 @@
       "category": "Functional",
       "name": "logglytrackings­ession",
       "domain": "",
-      "description": "OCD_logglytrackingsession_description",
+      "description": "OCD_logglytrackings­ession_description",
       "retention": "OCD_retention_session",
       "dataController": "Solarwinds",
       "gdprUrl": "https://www.solarwinds.com/legal/privacy",
@@ -28709,6 +28969,84 @@
       "retention": "OCD_retention_1_year",
       "dataController": "PrivacyPillar",
       "gdprUrl": "https://privacypillar.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__exponea_etc__": [
+    {
+      "platform": "Exponea",
+      "category": "Marketing",
+      "name": "__exponea_etc__",
+      "domain": "",
+      "description": "OCD___exponea_etc___description",
+      "retention": "OCD_retention_3_years",
+      "dataController": "Exponea",
+      "gdprUrl": "https://exponea.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "__exponea_time2__": [
+    {
+      "platform": "Exponea",
+      "category": "Marketing",
+      "name": "__exponea_time2__",
+      "domain": "",
+      "description": "OCD___exponea_time2___description",
+      "retention": "OCD_retention_1_day",
+      "dataController": "Exponea",
+      "gdprUrl": "https://exponea.com/privacy-policy/",
+      "wildcard": "0"
+    }
+  ],
+  "_rp_uid": [
+    {
+      "platform": "Adyen",
+      "category": "Functional",
+      "name": "_rp_uid",
+      "domain": "",
+      "description": "OCD__rp_uid_description",
+      "retention": "OCD_retention_30_days",
+      "dataController": "Adyen",
+      "gdprUrl": "https://www.adyen.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "aw_popup_viewed_page": [
+    {
+      "platform": "AWS Cookies Popup",
+      "category": "Functional",
+      "name": "aw_popup_viewed_page",
+      "domain": "",
+      "description": "OCD_aw_popup_viewed_page_description",
+      "retention": "OCD_retention_session",
+      "dataController": "AddWeb Solution",
+      "gdprUrl": "https://www.addwebsolution.com/privacy-policy",
+      "wildcard": "0"
+    }
+  ],
+  "__Secure-next-auth.callback-url": [
+    {
+      "platform": "NextAuth.js",
+      "category": "Functional",
+      "name": "__Secure-next-auth.callback-url",
+      "domain": "",
+      "description": "OCD___Secure_next_auth_callback_url_description",
+      "retention": "OCD_retention_session",
+      "dataController": "NextAuth.js",
+      "gdprUrl": "",
+      "wildcard": "0"
+    }
+  ],
+  "__Host-next-auth.csrf-token": [
+    {
+      "platform": "NextAuth.js",
+      "category": "Functional",
+      "name": "__Host-next-auth.csrf-token",
+      "domain": "",
+      "description": "OCD___Host_next_auth_csrf_token_description",
+      "retention": "OCD_retention_session",
+      "dataController": "NextAuth.js",
+      "gdprUrl": "",
       "wildcard": "0"
     }
   ]

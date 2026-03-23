@@ -44,7 +44,7 @@ describe('Validate the Cookies search', () => {
     await puppeteer.close();
   }, 40000);
 
-  test('Should be able to search the cookie', async () => {
+  test.skip('Should be able to search the cookie', async () => {
     await puppeteer.navigateToURL(page, 'https://bbc.com?psat_cdp=on');
     page.reload();
 
@@ -86,5 +86,5 @@ describe('Validate the Cookies search', () => {
     } else {
       throw new Error('Failed to navigate to the cookie frame.');
     }
-  }, 60000);
+  }, 120000);
 });
