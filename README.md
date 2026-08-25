@@ -1,8 +1,8 @@
-<p><b>Some Privacy Sandbox technologies are being phased out</b>.</p>
+<p><b>No longer maintained</b>.</p>
 
-<p>Please see our <a href="https://privacysandbox.com/news/update-on-plans-for-privacy-sandbox-technologies/">Update on Plans for Privacy Sandbox Technologies</a>.</p>
+<p>Please see our <a href="https://privacysandbox.google.com/blog/update-on-plans-for-privacy-sandbox-technologies">Update on Plans for Privacy Sandbox Technologies</a>.</p>
 
-<p><a href="https://privacysandbox.google.com/overview/status">Privacy Sandbox feature status</a> provides more information about the status of individual APIs and platform features.</p>
+<p>As many of the Privacy Sandbox technologies have been phased out, this tool is no longer supported or maintained.</p>
 
 <br>
 
